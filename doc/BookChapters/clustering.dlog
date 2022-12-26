@@ -1,0 +1,37 @@
+Translating doconce text in clustering.do.txt to ipynb
+ERROR: 7 !bc do not match 6 !ec directives
+
+
+Two !bc after each other!
+
+!bc pycod
+fig = plt.figure()
+ax = fig.add_subplot()
+unique_cluster_labels = np.unique(cluster_labels)
+for i in unique_cluster_labels:
+    ax.scatter(data[cluster_labels == i, 0],
+               data[cluster_labels == i, 1],
+               label = i,
+               alpha = 0.2)
+    ax.scatter(centroids[:, 0], centroids[:, 1], c='black')
+
+ax.set_title("First Grouping of Points to Centroids")
+
+plt.show()
+
+So what do we have so far? We have 'picked' $k$ centroids at random from our
+data points. There are other ways of more intelligently choosing their
+initializations, however for our purposes randomly is fine. Then we have
+initialized an array 'distances' which holds the information of the distance,
+*or dissimilarity*, of every point to of our centroids. Finally, we have
+initialized an array 'cluster_labels' which according to our distances array
+holds the information of to which centroid every point is assigned. This was the
+first pass of our algorithm. Essentially, all we need to do now is repeat the
+distance and assignment steps above until we have reached a desired convergence
+or a maximum amount of iterations.
+
+
+!bc pycod
+Translating doconce text in clustering.do.txt to ipynb
+*** replacing \bm{...} by \boldsymbol{...} (\bm is not supported by MathJax)
+output in clustering.ipynb
