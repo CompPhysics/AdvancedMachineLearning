@@ -1,16 +1,16 @@
 # AdvancedMachineLearning
 This repository contains information about the course on Advanced Data Analysis and Machine Learning
 
-### Time: Each Tuesday at 1215pm-2pm CET (The sessions will be recorded)
+### Time: Each Wednesday at 1215pm-2pm CET (The sessions will be recorded)
 
 
 ## Week 3 Mathematical Tools 
 
-##  Week 4 Composite Systems and Entaglement
+##  Week 4
 
-## Week 5  Entropies and Information
+## Week 5
 
-## Week 6  Entropies and Information
+## Week 6
 
 ## Week 7
 
