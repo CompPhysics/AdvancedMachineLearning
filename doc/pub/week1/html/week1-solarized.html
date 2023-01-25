@@ -70,10 +70,49 @@ div.toc p,a {
               ('Practicalities and possible projects',
                2,
                None,
-               'practicalities-and-possible-projects')]}
+               'practicalities-and-possible-projects'),
+              ('Deep learning methods covered',
+               2,
+               None,
+               'deep-learning-methods-covered'),
+              ('"Autoencoders and Variational '
+               'Autoencoders":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/Autoencoders/ipynb/Autoencoders.ipynb"',
+               2,
+               None,
+               'autoencoders-and-variational-autoencoders-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-autoencoders-ipynb-autoencoders-ipynb'),
+              ('"GANs":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/GenerativeAdversarialNetworks/ipynb/GenerativeAdversarialNetworks.ipynb"',
+               2,
+               None,
+               'gans-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-generativeadversarialnetworks-ipynb-generativeadversarialnetworks-ipynb'),
+              ('"Kernel regression (Gaussian processes) and Bayesian '
+               'statistics":"https://jenfb.github.io/bkmr/overview.html"',
+               2,
+               None,
+               'kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html'),
+              ('"Physics informed machine '
+               'learning":"https://github.com/maziarraissi/PINNs"',
+               2,
+               None,
+               'physics-informed-machine-learning-https-github-com-maziarraissi-pinns')]}
 end of tocinfo -->
 
 <body>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+     equationNumbers: {  autoNumber: "AMS"  },
+     extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "color.js"]
+  }
+});
+</script>
+<script type="text/javascript" async
+ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- ------------------- main content ---------------------- -->
 <center>
 <h1>January 23-27: Advanced machine learning and data analysis for the physical sciences</h1>
@@ -122,7 +161,7 @@ end of tocinfo -->
 <ul>
  <li> Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research (<a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/EarlierProjects/2022" target="_blank">Higgs challenge for example</a>)</li>
  <li> Study autoencoders and variational autoencoders with application to own data</li>
- <li> GANS and applications to own data</li>
+ <li> GANs and applications to own data</li>
  <li> Solve quantum/or classical many-body problems with deep learning methods (overlaps with FYS4411)</li>
  <li> Physics informed Machine Learning, applications to for example solution of Navier-Stokes equations</li>
  <li> Bayesian Machine Learning and Gaussian processes</li>
@@ -131,6 +170,75 @@ end of tocinfo -->
 <li> Final oral examination to be agreed upon</li>
 <li> All info at the GitHub address <a href="https://github.com/CompPhysics/AdvancedMachineLearning" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning</tt></a></li>
 </ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="deep-learning-methods-covered">Deep learning methods covered </h2>
+
+<ol>
+<li> Feed forward neural networks (NNs)</li>
+<li> Convolutional neural networks (CNNs)</li>
+<li> Recurrent neural networks (RNNs)</li>
+<li> Autoencoders (AEs) and variational autoencoders (VAEe)</li>
+<li> Generative Adversarial Networks (GANs)</li>
+</ol>
+<p>The <a href="https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html" target="_blank">lecture notes</a> contain a more in depth discussion of these methods, in particular on neural networks, CNNs and RNNs.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="autoencoders-and-variational-autoencoders-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-autoencoders-ipynb-autoencoders-ipynb"><a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/Autoencoders/ipynb/Autoencoders.ipynb" target="_blank">Autoencoders and Variational Autoencoders</a> </h2>
+
+<p>Autoencoders are artificial neural networks capable of learning
+efficient representations of the input data (these representations are
+called codings) without any supervision (i.e., the training set is
+unlabeled). These codings typically have a much lower dimensionality
+than the input data, making autoencoders useful for dimensionality
+reduction.
+</p>
+
+<p>More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gans-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-generativeadversarialnetworks-ipynb-generativeadversarialnetworks-ipynb"><a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/GenerativeAdversarialNetworks/ipynb/GenerativeAdversarialNetworks.ipynb" target="_blank">GANs</a> </h2>
+
+<p>Generative modeling is an unsupervised learning task in machine
+learning that involves automatically discovering and learning the
+regularities or patterns in input data in such a way that the model
+can be used to generate or output new examples that plausibly could
+have been drawn from the original dataset.
+</p>
+
+<p><b>Generative models</b> describe a class of statistical models that are a contrast
+to <b>discriminative models</b>. Informally we say that generative models can
+generate new data instances while discriminative models discriminate between
+different kinds of data instances. A generative model could generate new photos
+of animals that look like 'real' animals while a discriminative model could tell
+a dog from a cat. More formally, given a data set \( x \) and a set of labels /
+targets \( y \). Generative models capture the joint probability \( p(x, y) \), or
+just \( p(x) \) if there are no labels, while discriminative models capture the
+conditional probability \( p(y | x) \). Discriminative models generally try to draw
+boundaries in the data space (often high dimensional), while generative models
+try to model how data is placed throughout the space.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html"><a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
+
+<p>Kernel machine regression (KMR), also called Gaussian process
+regression, is a popular tool in the machine learning literature. The
+main idea behind KMR is to flexibly model the relationship between a
+large number of variables and a particular outcome (dependent
+variable).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="physics-informed-machine-learning-https-github-com-maziarraissi-pinns"><a href="https://github.com/maziarraissi/PINNs" target="_blank">Physics informed machine learning</a> </h2>
+
+<p>Here we can discuss neural networks that are trained to solve
+supervised learning tasks while respecting any given law of physics
+described by general nonlinear partial differential equations. 
+</p>
+
+<p>See also <a href="https://arxiv.org/abs/2211.08064" target="_blank"><tt>https://arxiv.org/abs/2211.08064</tt></a>.</p>
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
 <!-- copyright --> &copy; 1999-2023, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
