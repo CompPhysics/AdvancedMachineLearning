@@ -16,6 +16,15 @@ Furthermore, all teaching material (it will be updated continuously) is availabl
 
 ## Week 3 Presentation of course and discussion of possible projects
 
+- Presentation of course and participants
+- Discussion of possible projects
+- Discussion of evaluation forms
+- Eventual start with theory discussions on deep learning methods
+
+Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
+Video of lecture at TBA
+Handwritten notes at TBA
+
 ##  Week 4
 
 ## Week 5
