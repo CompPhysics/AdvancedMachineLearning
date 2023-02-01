@@ -28,16 +28,14 @@ Furthermore, all teaching material (it will be updated continuously) is availabl
 - Eventual start with theory discussions on deep learning methods
 
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
-Video of lecture at TBA
-Handwritten notes at TBA
 
 ##  January 30-February 3: Review of Neural Networks and Deep Learning
 - Review of deep learning, basics of neural networks, see whiteboard notes
 - Discussion of paths for projects
 
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
-Video of lecture at TBA
-Handwritten notes at TBA
+Video of lecture at https://youtu.be/qC_UDtPROac
+Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb12023.pdf
 
 The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html contain a more in depth discussion of deep learning methods.
 
