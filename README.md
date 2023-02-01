@@ -10,7 +10,10 @@ https://msu.zoom.us/j/6424997467?pwd=TEhTL0lmTmpGbHlnejZQa1pCdzRKdz09
 
 Meeting ID: 642 499 7467
 Passcode: FYS4411
- 
+
+
+_Slack channel_ and invite link at https://join.slack.com/t/machinelearninguio/shared_invite/zt-1o6z020kn-rrx6OEveutBEg7_JPoVm2Q
+
 
 Furthermore, all teaching material (it will be updated continuously) is available from this GitHub link.
 
