@@ -1,0 +1,243 @@
+<!--
+HTML file automatically generated from DocOnce source
+(https://github.com/doconce/doconce/)
+doconce format html week2.do.txt --pygments_html_style=perldoc --html_style=solarized3 --html_links_in_new_window --html_output=week2-solarized --no_mako
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="January 30-February 3: Advanced machine learning and data analysis for the physical sciences">
+<title>January 30-February 3: Advanced machine learning and data analysis for the physical sciences</title>
+<link href="https://cdn.rawgit.com/doconce/doconce/master/bundled/html_styles/style_solarized_box/css/solarized_light_code.css" rel="stylesheet" type="text/css" title="light"/>
+<script src="https://cdn.rawgit.com/doconce/doconce/master/bundled/html_styles/style_solarized_box/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<link href="https://thomasf.github.io/solarized-css/solarized-light.min.css" rel="stylesheet">
+<style type="text/css">
+h1 {color: #b58900;}  /* yellow */
+/* h1 {color: #cb4b16;}  orange */
+/* h1 {color: #d33682;}  magenta, the original choice of thomasf */
+code { padding: 0px; background-color: inherit; }
+pre {
+  border: 0pt solid #93a1a1;
+  box-shadow: none;
+}
+.alert-text-small   { font-size: 80%;  }
+.alert-text-large   { font-size: 130%; }
+.alert-text-normal  { font-size: 90%;  }
+.alert {
+  padding:8px 35px 8px 14px; margin-bottom:18px;
+  text-shadow:0 1px 0 rgba(255,255,255,0.5);
+  border:1px solid #93a1a1;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  color: #555;
+  background-color: #eee8d5;
+  background-position: 10px 5px;
+  background-repeat: no-repeat;
+  background-size: 38px;
+  padding-left: 55px;
+  width: 75%;
+ }
+.alert-block {padding-top:14px; padding-bottom:14px}
+.alert-block > p, .alert-block > ul {margin-bottom:1em}
+.alert li {margin-top: 1em}
+.alert-block p+p {margin-top:5px}
+.alert-notice { background-image: url(https://cdn.rawgit.com/doconce/doconce/master/bundled/html_images/small_yellow_notice.png); }
+.alert-summary  { background-image:url(https://cdn.rawgit.com/doconce/doconce/master/bundled/html_images/small_yellow_summary.png); }
+.alert-warning { background-image: url(https://cdn.rawgit.com/doconce/doconce/master/bundled/html_images/small_yellow_warning.png); }
+.alert-question {background-image:url(https://cdn.rawgit.com/doconce/doconce/master/bundled/html_images/small_yellow_question.png); }
+div { text-align: justify; text-justify: inter-word; }
+.tab {
+  padding-left: 1.5em;
+}
+div.toc p,a {
+  line-height: 1.3;
+  margin-top: 1.1;
+  margin-bottom: 1.1;
+}
+</style>
+</head>
+
+<!-- tocinfo
+{'highest level': 2,
+ 'sections': [('Overview of second  week', 2, None, 'overview-of-second-week'),
+              ('Practicalities and possible projects',
+               2,
+               None,
+               'practicalities-and-possible-projects'),
+              ('Deep learning methods covered',
+               2,
+               None,
+               'deep-learning-methods-covered'),
+              ('"Autoencoders and Variational '
+               'Autoencoders":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/Autoencoders/ipynb/Autoencoders.ipynb"',
+               2,
+               None,
+               'autoencoders-and-variational-autoencoders-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-autoencoders-ipynb-autoencoders-ipynb'),
+              ('"GANs":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/GenerativeAdversarialNetworks/ipynb/GenerativeAdversarialNetworks.ipynb"',
+               2,
+               None,
+               'gans-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-generativeadversarialnetworks-ipynb-generativeadversarialnetworks-ipynb'),
+              ('"Kernel regression (Gaussian processes) and Bayesian '
+               'statistics":"https://jenfb.github.io/bkmr/overview.html"',
+               2,
+               None,
+               'kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html'),
+              ('"Physics informed machine '
+               'learning":"https://github.com/maziarraissi/PINNs"',
+               2,
+               None,
+               'physics-informed-machine-learning-https-github-com-maziarraissi-pinns')]}
+end of tocinfo -->
+
+<body>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+     equationNumbers: {  autoNumber: "AMS"  },
+     extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "color.js"]
+  }
+});
+</script>
+<script type="text/javascript" async
+ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- ------------------- main content ---------------------- -->
+<center>
+<h1>January 30-February 3: Advanced machine learning and data analysis for the physical sciences</h1>
+</center>  <!-- document title -->
+
+<!-- author(s): Morten Hjorth-Jensen -->
+<center>
+<b>Morten Hjorth-Jensen</b> [1, 2]
+</center>
+<!-- institution(s) -->
+<center>
+[1] <b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
+</center>
+<center>
+[2] <b>Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA</b>
+</center>
+<br>
+<center>
+<h4>Feb 1, 2023</h4>
+</center> <!-- date -->
+<br>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="overview-of-second-week">Overview of second  week  </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<ol>
+ <li> Review of deep learning, basics of neural networks, see whiteboard notes today</li>
+ <li> Discussion of paths for projects</li>
+</ol>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="practicalities-and-possible-projects">Practicalities and possible projects </h2>
+
+<ol>
+<li> Although the course is defined as a self-study course, we can have weekly lectures with small weekly exercise assignments</li>
+<li> We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants but the following topics could define an outline for possible projects and machine learning topics</li>
+<ul>
+ <li> Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research (<a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/EarlierProjects/2022" target="_blank">Higgs challenge for example</a>)</li>
+ <li> Study autoencoders and variational autoencoders with application to own data</li>
+ <li> GANs and applications to own data</li>
+ <li> Solve quantum/or classical many-body problems with deep learning methods (overlaps with FYS4411)</li>
+ <li> Physics informed Machine Learning, applications to for example solution of Navier-Stokes equations</li>
+ <li> Bayesian Machine Learning and Gaussian processes</li>
+ <li> and many other research paths and topics</li>
+</ul>
+<li> Final oral examination to be agreed upon</li>
+<li> All info at the GitHub address <a href="https://github.com/CompPhysics/AdvancedMachineLearning" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning</tt></a></li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="deep-learning-methods-covered">Deep learning methods covered </h2>
+
+<ol>
+<li> Feed forward neural networks (NNs)</li>
+<li> Convolutional neural networks (CNNs)</li>
+<li> Recurrent neural networks (RNNs)</li>
+<li> Autoencoders (AEs) and variational autoencoders (VAEe)</li>
+<li> Generative Adversarial Networks (GANs)</li>
+</ol>
+<p>The <a href="https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html" target="_blank">lecture notes</a> contain a more in depth discussion of these methods, in particular on neural networks, CNNs and RNNs.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="autoencoders-and-variational-autoencoders-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-autoencoders-ipynb-autoencoders-ipynb"><a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/Autoencoders/ipynb/Autoencoders.ipynb" target="_blank">Autoencoders and Variational Autoencoders</a> </h2>
+
+<p>Autoencoders are artificial neural networks capable of learning
+efficient representations of the input data (these representations are
+called codings) without any supervision (i.e., the training set is
+unlabeled). These codings typically have a much lower dimensionality
+than the input data, making autoencoders useful for dimensionality
+reduction.
+</p>
+
+<p>More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gans-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-generativeadversarialnetworks-ipynb-generativeadversarialnetworks-ipynb"><a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/GenerativeAdversarialNetworks/ipynb/GenerativeAdversarialNetworks.ipynb" target="_blank">GANs</a> </h2>
+
+<p>Generative modeling is an unsupervised learning task in machine
+learning that involves automatically discovering and learning the
+regularities or patterns in input data in such a way that the model
+can be used to generate or output new examples that plausibly could
+have been drawn from the original dataset.
+</p>
+
+<p><b>Generative models</b> describe a class of statistical models that are a contrast
+to <b>discriminative models</b>. Informally we say that generative models can
+generate new data instances while discriminative models discriminate between
+different kinds of data instances. A generative model could generate new photos
+of animals that look like 'real' animals while a discriminative model could tell
+a dog from a cat. More formally, given a data set \( x \) and a set of labels /
+targets \( y \). Generative models capture the joint probability \( p(x, y) \), or
+just \( p(x) \) if there are no labels, while discriminative models capture the
+conditional probability \( p(y | x) \). Discriminative models generally try to draw
+boundaries in the data space (often high dimensional), while generative models
+try to model how data is placed throughout the space.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html"><a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
+
+<p>Kernel machine regression (KMR), also called Gaussian process
+regression, is a popular tool in the machine learning literature. The
+main idea behind KMR is to flexibly model the relationship between a
+large number of variables and a particular outcome (dependent
+variable).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="physics-informed-machine-learning-https-github-com-maziarraissi-pinns"><a href="https://github.com/maziarraissi/PINNs" target="_blank">Physics informed machine learning</a> </h2>
+
+<p>Here we can discuss neural networks that are trained to solve
+supervised learning tasks while respecting any given law of physics
+described by general nonlinear partial differential equations. 
+</p>
+
+<p>The following website is also interesting on <a href="https://physicsbaseddeeplearning.org/intro.html" target="_blank">physics-based deep learning</a>.</p>
+
+<p>See also <a href="https://arxiv.org/abs/2211.08064" target="_blank"><tt>https://arxiv.org/abs/2211.08064</tt></a>.</p>
+<!-- ------------------- end of main content --------------- -->
+<center style="font-size:80%">
+<!-- copyright --> &copy; 1999-2023, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+</center>
+</body>
+</html>
+

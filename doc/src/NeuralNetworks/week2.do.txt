@@ -1,0 +1,97 @@
+TITLE: January 30-February 3: Advanced machine learning and data analysis for the physical sciences
+AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
+DATE: today
+
+
+
+!split
+===== Overview of second  week  =====
+
+!bblock 
+  o Review of deep learning, basics of neural networks, see whiteboard notes today
+  o Discussion of paths for projects
+!eblock
+
+
+!split
+===== Practicalities and possible projects =====
+
+o Although the course is defined as a self-study course, we can have weekly lectures with small weekly exercise assignments
+o We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants but the following topics could define an outline for possible projects and machine learning topics
+ * Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research ("Higgs challenge for example":"https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/EarlierProjects/2022")
+ * Study autoencoders and variational autoencoders with application to own data
+ * GANs and applications to own data
+ * Solve quantum/or classical many-body problems with deep learning methods (overlaps with FYS4411)
+ * Physics informed Machine Learning, applications to for example solution of Navier-Stokes equations
+ * Bayesian Machine Learning and Gaussian processes
+ * and many other research paths and topics
+o Final oral examination to be agreed upon
+o All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
+
+!split
+=====  Deep learning methods covered =====
+
+o Feed forward neural networks (NNs)
+o Convolutional neural networks (CNNs)
+o Recurrent neural networks (RNNs)
+o Autoencoders (AEs) and variational autoencoders (VAEe)
+o Generative Adversarial Networks (GANs)
+
+The "lecture notes":"https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html" contain a more in depth discussion of these methods, in particular on neural networks, CNNs and RNNs.
+
+
+!split
+===== "Autoencoders and Variational Autoencoders":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/Autoencoders/ipynb/Autoencoders.ipynb" =====
+
+Autoencoders are artificial neural networks capable of learning
+efficient representations of the input data (these representations are
+called codings) without any supervision (i.e., the training set is
+unlabeled). These codings typically have a much lower dimensionality
+than the input data, making autoencoders useful for dimensionality
+reduction.
+
+More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+
+!split
+===== "GANs":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/GenerativeAdversarialNetworks/ipynb/GenerativeAdversarialNetworks.ipynb" =====
+
+Generative modeling is an unsupervised learning task in machine
+learning that involves automatically discovering and learning the
+regularities or patterns in input data in such a way that the model
+can be used to generate or output new examples that plausibly could
+have been drawn from the original dataset.
+
+_Generative models_ describe a class of statistical models that are a contrast
+to _discriminative models_. Informally we say that generative models can
+generate new data instances while discriminative models discriminate between
+different kinds of data instances. A generative model could generate new photos
+of animals that look like 'real' animals while a discriminative model could tell
+a dog from a cat. More formally, given a data set $x$ and a set of labels /
+targets $y$. Generative models capture the joint probability $p(x, y)$, or
+just $p(x)$ if there are no labels, while discriminative models capture the
+conditional probability $p(y | x)$. Discriminative models generally try to draw
+boundaries in the data space (often high dimensional), while generative models
+try to model how data is placed throughout the space.
+
+
+!split
+===== "Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" =====
+
+Kernel machine regression (KMR), also called Gaussian process
+regression, is a popular tool in the machine learning literature. The
+main idea behind KMR is to flexibly model the relationship between a
+large number of variables and a particular outcome (dependent
+variable).
+
+!split
+===== "Physics informed machine learning":"https://github.com/maziarraissi/PINNs" =====
+
+Here we can discuss neural networks that are trained to solve
+supervised learning tasks while respecting any given law of physics
+described by general nonlinear partial differential equations. 
+
+The following website is also interesting on "physics-based deep learning":"https://physicsbaseddeeplearning.org/intro.html".
+
+See also URL:"https://arxiv.org/abs/2211.08064".
+
