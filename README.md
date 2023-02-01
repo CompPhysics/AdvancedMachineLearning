@@ -1,6 +1,9 @@
 # AdvancedMachineLearning
 This repository contains information about the course on Advanced Data Analysis and Machine Learning
 
+![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
+
+
 ### Time: Each Wednesday at 1215pm-2pm CET (The sessions will be recorded)
 
 This is a course based on self-studies but with weekly meetings which will also function as lectures and discussions of learning material and projects.  The permanent zoom link is (also accessible from the weekly schedule)
