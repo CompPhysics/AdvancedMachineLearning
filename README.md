@@ -51,6 +51,7 @@ Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob
 
 ## February 13-17
 
+- Discussion of project paths
 - Convolutional neural networks (CNNs)
 
 ## February 20-24
