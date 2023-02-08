@@ -45,7 +45,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Discussion of first data sets to be studied
 
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
-Video of lecture at https://youtu.be/
+Video of lecture at https://youtu.be/pB_WywRDnvg
 Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb82023.pdf
 
 
