@@ -54,6 +54,10 @@ Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob
 - Discussion of project paths
 - Convolutional neural networks (CNNs)
 
+Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week4.ipynb
+Video of lecture at TBA
+Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb152023.pdf
+
 ## February 20-24
 
 - Recurrent neural networks (RNNs)
