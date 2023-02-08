@@ -42,7 +42,12 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 
 ## February 6-10
 - Codes for feed forward neural networks (NNs)
-- Discussion of data sets to be studied
+- Discussion of first data sets to be studied
+
+Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
+Video of lecture at https://youtu.be/
+Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb82023.pdf
+
 
 ## February 13-17
 
