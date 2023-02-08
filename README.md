@@ -33,9 +33,9 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Review of deep learning, basics of neural networks, see whiteboard notes
 - Discussion of paths for projects
 
-Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
-Video of lecture at https://youtu.be/qC_UDtPROac
-Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb12023.pdf
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
+- Video of lecture at https://youtu.be/qC_UDtPROac
+- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb12023.pdf
 
 The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html contain a more in depth discussion of deep learning methods.
 
@@ -44,9 +44,9 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Codes for feed forward neural networks (NNs)
 - Discussion of first data sets to be studied
 
-Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
-Video of lecture at https://youtu.be/pB_WywRDnvg
-Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb82023.pdf
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
+- Video of lecture at https://youtu.be/pB_WywRDnvg
+- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb82023.pdf
 
 
 ## February 13-17
@@ -54,9 +54,9 @@ Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob
 - Discussion of project paths
 - Convolutional neural networks (CNNs)
 
-Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week4.ipynb
-Video of lecture at TBA
-Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb152023.pdf
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week4.ipynb
+- Video of lecture at TBA
+- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb152023.pdf
 
 ## February 20-24
 
