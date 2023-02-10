@@ -1,0 +1,64 @@
+
+This code is an example code that solves Newton's equations of motion with a given force and produces an output which in turn can be used to train a neural network
+
+
+!bc pycod
+# Common imports
+import numpy as np
+import pandas as pd
+from math import *
+import matplotlib.pyplot as plt
+import os
+
+# Where to save the figures and data files
+PROJECT_ROOT_DIR = "Results"
+FIGURE_ID = "Results/FigureFiles"
+DATA_ID = "DataFiles/"
+
+if not os.path.exists(PROJECT_ROOT_DIR):
+    os.mkdir(PROJECT_ROOT_DIR)
+
+if not os.path.exists(FIGURE_ID):
+    os.makedirs(FIGURE_ID)
+
+if not os.path.exists(DATA_ID):
+    os.makedirs(DATA_ID)
+
+def image_path(fig_id):
+    return os.path.join(FIGURE_ID, fig_id)
+
+def data_path(dat_id):
+    return os.path.join(DATA_ID, dat_id)
+
+def save_fig(fig_id):
+    plt.savefig(image_path(fig_id) + ".png", format='png')
+
+
+dt =0.01; tfinal = 8; t = np.arange(0,tfinal, dt)
+beta =8.0/3.0; rho = 28.0; sigma = 10.0
+
+nninput = np.zeros((100*len(t),3))
+nnoutput = np.zeros((100*len(t),3))
+
+
+def lorenz_derivative(xyz, t0, sigma=sigma,beta=beta,rho=rho):
+    x, y, z = xyz
+    return [sigma*(x-y), x*(rho-z)-y, x*y-beta*z]
+
+
+x0 = -15.0+30.0*np.random.random((100,3))
+x_t = np.asarray([integrate.odeint(lorenzderivative, x_0j, t) for x0_j in x0])
+
+"""
+# Plot position as function of time    
+fig, ax = plt.subplots()
+ax.set_ylabel('x[m]')
+ax.set_xlabel('t[s]')
+ax.plot(t, x)
+fig.tight_layout()
+save_fig("LorenzTrajectories")
+plt.show()
+"""
+!ec
+
+
