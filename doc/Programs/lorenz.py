@@ -1,3 +1,5 @@
+import numpy as np
+import matplotlib.pyplot as plt
 def lorenz(xyz, *, s=10, r=28, b=2.667):
     """
     Parameters

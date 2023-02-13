@@ -49,16 +49,7 @@ def lorenz_derivative(xyz, t0, sigma=sigma,beta=beta,rho=rho):
 x0 = -15.0+30.0*np.random.random((100,3))
 x_t = np.asarray([integrate.odeint(lorenzderivative, x_0j, t) for x0_j in x0])
 
-"""
-# Plot position as function of time    
-fig, ax = plt.subplots()
-ax.set_ylabel('x[m]')
-ax.set_xlabel('t[s]')
-ax.plot(t, x)
-fig.tight_layout()
-save_fig("LorenzTrajectories")
-plt.show()
-"""
+
 !ec
 
 
