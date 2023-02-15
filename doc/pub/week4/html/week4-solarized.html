@@ -64,6 +64,15 @@ div.toc p,a {
 <!-- tocinfo
 {'highest level': 2,
  'sections': [('Plans for February 13-17', 2, None, 'plans-for-february-13-17'),
+              ('First project', 2, None, 'first-project'),
+              ('Possible paths for project 1',
+               3,
+               None,
+               'possible-paths-for-project-1'),
+              ('Solving  differential equations with neural networks',
+               2,
+               None,
+               'solving-differential-equations-with-neural-networks'),
               ('Convolutional Neural Networks (recognizing images)',
                2,
                None,
@@ -200,7 +209,7 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>Feb 8, 2023</h4>
+<h4>Feb 14, 2023</h4>
 </center> <!-- date -->
 <br>
 <h2 id="plans-for-february-13-17">Plans for February 13-17  </h2>
@@ -209,8 +218,8 @@ MathJax.Hub.Config({
 <b></b>
 <p>
 <ul>
-<li> Convolutional  Neural Networks.</li>
 <li> Discussion of project paths</li>
+<li> Convolutional  Neural Networks.</li>
 <li> Reading recommendations:
 <ol type="a"></li>
  <li> For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications</li>
@@ -242,6 +251,283 @@ MathJax.Hub.Config({
 </ul>
 </div>
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="first-project">First project </h2>
+<h3 id="possible-paths-for-project-1">Possible paths for project 1  </h3>
+
+<p>We discuss here several paths as well as data sets for the first project (or as parts of a larger project)</p>
+
+<ol>
+<li> The computational path: Here we propose a path where you develop your own code for a convolutional or eventually recurrent neural network and apply this to data selects of your own selection. The code should be object oriented and flexible allowing for eventual extensions by including different Loss/Cost functions and other functionalities. Feel free to select data sets from those suggested below here. This code can also be extended upon by adding for example autoencoders. You can compare your own codes with implementations using TensorFlow(Keras)/PyTorch or other libraries.</li>
+<li> The differential equation path: Here we propose a set of differential equations (ordinary and/or partial) to be solved first using neural networks (using either your own code or TensorFlow/Pytorch or similar libraries). Thereafter we plan to extend the set of methods for solving these equations to recurrent neural networks and autoencoders (AE) and/or Generalized Adversarial Networks (GANs). All these approaches can be expanded into one large project. This project can also be extended into including <a href="https://github.com/maziarraissi/PINNs" target="_blank">Physics informed machine learning</a>. Here we can discuss neural networks that are trained to solve supervised learning tasks while respecting any given law of physics described by general nonlinear partial differential equations.</li> 
+<li> The application path: Here you can use the most relevant method(s) (say convolutional neural networks for images) and apply this(these) to data sets relevant for your own research.</li>
+<li> The Gaussian processes/Bayesian statistics path: <a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression (Gaussian processes) and Bayesian statistics</a> are  popular tools in the machine learning literature. The main idea behind these approaches is to flexibly model the relationship between a large number of variables and a particular outcome (dependent variable). This can form a second part of a project where for example standard Kernel regression methods are used on a specific data set. Alternatively, participants can opt to work on a large project relevant for their own research using gaussian processes and/or Bayesian machine Learning.</li> 
+</ol>
+<p>You can propose own data sets that relate to your research interests or just use existing data sets from say</p>
+<ol>
+<li> <a href="https://www.kaggle.com/datasets" target="_blank">Kaggle</a></li> 
+<li> The <a href="https://archive.ics.uci.edu/ml/index.php" target="_blank">University of California at Irvine (UCI) with its  machine learning repository</a>.</li>
+<li> For the differential equation problems, you can generate your own datasets, as described below.</li>
+<li> If possible, you should link the data sets with existing research and analyses thereof. Scientific articles which have used Machine Learning algorithms to analyze the data are highly welcome. Perhaps you can improve previous analyses and even publish a new article?</li> 
+<li> A critical assessment of the methods with ditto perspectives and recommendations is also something you need to include. For those of you familiar with report writing, the layouts discussed in for example <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Projects/EvaluationGrading/EvaluationForm.md" target="_blank">FYS-STK4155</a>.</li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="solving-differential-equations-with-neural-networks">Solving  differential equations with neural networks </h2>
+
+<p>Here we describe the possible differential equations we can study
+first with neural networks and thereafter with recurrent neural
+networks and/or AE and/or GANs.
+</p>
+
+<p>The differential equations are given by the so-called <a href="https://encyclopediaofmath.org/index.php?title=Lorenz_attractor" target="_blank">Lorenz attractor model</a>, and read</p>
+
+$$
+\frac{dx}{dt}=\sigma\left(y-x\right),
+$$
+
+<p>where \( \sigma =10 \) is a constant</p>
+$$
+\frac{dy}{dt}= x\left(\rho-z\right)-y,
+$$
+
+<p>with \( \rho=28 \) and</p>
+$$
+\frac{dz}{dt}=xy-\beta z
+$$
+
+<p>with \( \beta=8/3 \) as our final constant.</p>
+
+<p>The following function is a
+simple function which sets up the solution using the ordinary
+differential library which follows <b>NumPy</b>. Here we have fixed the
+time sted \( \Delta t=0.01 \) and the final time \( t_f=8 \).
+</p>
+
+<p>The program sets \( 100 \) random initial values and produces inputs and outputs for a neural network calculations.
+The inputs are given by the values of the array \( \boldsymbol{x} \) (which contains \( x,y,z \) as functions of time) for the time step \( \boldsymbol{x}_t \).
+The other array defined by \( \boldsymbol{x}_{t+1} \) contains the outputs (or targets) which we want the neural network to reproduce.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># Common imports</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">scipy.integrate</span> <span style="color: #8B008B; font-weight: bold">import</span> odeint
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+
+<span style="color: #228B22"># Where to save the figures and data files</span>
+PROJECT_ROOT_DIR = <span style="color: #CD5555">&quot;Results&quot;</span>
+FIGURE_ID = <span style="color: #CD5555">&quot;Results/FigureFiles&quot;</span>
+DATA_ID = <span style="color: #CD5555">&quot;DataFiles/&quot;</span>
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> os.path.exists(PROJECT_ROOT_DIR):
+    os.mkdir(PROJECT_ROOT_DIR)
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> os.path.exists(FIGURE_ID):
+    os.makedirs(FIGURE_ID)
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> os.path.exists(DATA_ID):
+    os.makedirs(DATA_ID)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">image_path</span>(fig_id):
+    <span style="color: #8B008B; font-weight: bold">return</span> os.path.join(FIGURE_ID, fig_id)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">data_path</span>(dat_id):
+    <span style="color: #8B008B; font-weight: bold">return</span> os.path.join(DATA_ID, dat_id)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">save_fig</span>(fig_id):
+    plt.savefig(image_path(fig_id) + <span style="color: #CD5555">&quot;.png&quot;</span>, <span style="color: #658b00">format</span>=<span style="color: #CD5555">&#39;png&#39;</span>)
+
+
+<span style="color: #228B22"># Selection of parameter values and setting array for time</span>
+dt =<span style="color: #B452CD">0.01</span>; tfinal = <span style="color: #B452CD">8</span>
+t = np.arange(<span style="color: #B452CD">0</span>,tfinal+dt, dt)
+beta =<span style="color: #B452CD">8.0</span>/<span style="color: #B452CD">3.0</span>; rho = <span style="color: #B452CD">28.0</span>; sigma = <span style="color: #B452CD">10.0</span>
+
+<span style="color: #228B22"># define the inputs and outputs for the neural networks</span>
+nninput = np.zeros((<span style="color: #B452CD">100</span>*<span style="color: #658b00">len</span>(t)-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">3</span>))
+nnoutput = np.zeros((<span style="color: #B452CD">100</span>*<span style="color: #658b00">len</span>(t)-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">3</span>))
+<span style="color: #228B22"># Define the equations to integrate</span>
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">lorenz_derivative</span>(xyz, t0, sigma=sigma,beta=beta,rho=rho):
+    x, y, z = xyz
+    <span style="color: #8B008B; font-weight: bold">return</span> [sigma*(x-y), x*(rho-z)-y, x*y-beta*z]
+
+<span style="color: #228B22"># generate 100 random initial values</span>
+x0 = -<span style="color: #B452CD">15.0</span>+<span style="color: #B452CD">30.0</span>*np.random.random((<span style="color: #B452CD">100</span>,<span style="color: #B452CD">3</span>))
+
+<span style="color: #228B22"># Use odeint functionality by sending in derivative function</span>
+<span style="color: #228B22"># Feel free to change the choice of integrator</span>
+x_t = np.asarray([odeint(lorenz_derivative, x0_j, t) 
+                  <span style="color: #8B008B; font-weight: bold">for</span> x0_j <span style="color: #8B008B">in</span> x0])
+
+<span style="color: #228B22"># define the inputs and outputs for the neural networks</span>
+<span style="color: #8B008B; font-weight: bold">for</span> j <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">100</span>):
+    nninput[j*(<span style="color: #658b00">len</span>(t)-<span style="color: #B452CD">1</span>):(j+<span style="color: #B452CD">1</span>)*(<span style="color: #658b00">len</span>(t)-<span style="color: #B452CD">1</span>),:] = x_t[j,:-<span style="color: #B452CD">1</span>,:]
+    nnoutput[j*(<span style="color: #658b00">len</span>(t)-<span style="color: #B452CD">1</span>):(j+<span style="color: #B452CD">1</span>)*(<span style="color: #658b00">len</span>(t)-<span style="color: #B452CD">1</span>),:] = x_t[j,<span style="color: #B452CD">1</span>:,:]
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The input and output variables are those we will start trying our
+network with. Your first taks is to set up a neural code (either using
+your own code or TensorFlow/PyTorch or similar libraries)) and use the
+above data to a prediction for the time evolution of Lorenz system for
+various values of the randomly chosen initial values.  Study the
+dependence of the fit as function of the architecture of the network
+(number of nodes, hidden layers and types of activation functions) and
+various regularization schemes and optimization methods like standard
+gradient descent with momentum, stochastic gradient descent with
+batches and with and without momentum and various schedulers for the
+learning rate.
+</p>
+
+<p>Feel free to change the above differential equations. As an example,
+consider the following harmonic oscillator equations solved with the
+Runge-Kutta to fourth order method. This is a one-dimensional problem
+and it produces a position \( x_t \) and velocity \( v_t \). You could now try
+to fit both the velocities and positions using much of the same recipe
+as for Lorenz attractor.  You will find it convenient to analyze one
+set of initial conditions first. The code is included here.
+</p>
+
+<p>This code is an example code that solves Newton's equations of motion
+with a given force and produces an output which in turn can be used to
+train a neural network
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># Common imports</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">pandas</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">pd</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">math</span> <span style="color: #8B008B; font-weight: bold">import</span> *
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+
+<span style="color: #228B22"># Where to save the figures and data files</span>
+PROJECT_ROOT_DIR = <span style="color: #CD5555">&quot;Results&quot;</span>
+FIGURE_ID = <span style="color: #CD5555">&quot;Results/FigureFiles&quot;</span>
+DATA_ID = <span style="color: #CD5555">&quot;DataFiles/&quot;</span>
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> os.path.exists(PROJECT_ROOT_DIR):
+    os.mkdir(PROJECT_ROOT_DIR)
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> os.path.exists(FIGURE_ID):
+    os.makedirs(FIGURE_ID)
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> os.path.exists(DATA_ID):
+    os.makedirs(DATA_ID)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">image_path</span>(fig_id):
+    <span style="color: #8B008B; font-weight: bold">return</span> os.path.join(FIGURE_ID, fig_id)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">data_path</span>(dat_id):
+    <span style="color: #8B008B; font-weight: bold">return</span> os.path.join(DATA_ID, dat_id)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">save_fig</span>(fig_id):
+    plt.savefig(image_path(fig_id) + <span style="color: #CD5555">&quot;.png&quot;</span>, <span style="color: #658b00">format</span>=<span style="color: #CD5555">&#39;png&#39;</span>)
+
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">SpringForce</span>(v,x,t):
+<span style="color: #228B22">#   note here that we have divided by mass and we return the acceleration</span>
+    <span style="color: #8B008B; font-weight: bold">return</span>  -<span style="color: #B452CD">2</span>*gamma*v-x+Ftilde*cos(t*Omegatilde)
+
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">RK4</span>(v,x,t,n,Force):
+    <span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(n-<span style="color: #B452CD">1</span>):
+<span style="color: #228B22"># Setting up k1</span>
+        k1x = DeltaT*v[i]
+        k1v = DeltaT*Force(v[i],x[i],t[i])
+<span style="color: #228B22"># Setting up k2</span>
+        vv = v[i]+k1v*<span style="color: #B452CD">0.5</span>
+        xx = x[i]+k1x*<span style="color: #B452CD">0.5</span>
+        k2x = DeltaT*vv
+        k2v = DeltaT*Force(vv,xx,t[i]+DeltaT*<span style="color: #B452CD">0.5</span>)
+<span style="color: #228B22"># Setting up k3</span>
+        vv = v[i]+k2v*<span style="color: #B452CD">0.5</span>
+        xx = x[i]+k2x*<span style="color: #B452CD">0.5</span>
+        k3x = DeltaT*vv
+        k3v = DeltaT*Force(vv,xx,t[i]+DeltaT*<span style="color: #B452CD">0.5</span>)
+<span style="color: #228B22"># Setting up k4</span>
+        vv = v[i]+k3v
+        xx = x[i]+k3x
+        k4x = DeltaT*vv
+        k4v = DeltaT*Force(vv,xx,t[i]+DeltaT)
+<span style="color: #228B22"># Final result</span>
+        x[i+<span style="color: #B452CD">1</span>] = x[i]+(k1x+<span style="color: #B452CD">2</span>*k2x+<span style="color: #B452CD">2</span>*k3x+k4x)/<span style="color: #B452CD">6.</span>
+        v[i+<span style="color: #B452CD">1</span>] = v[i]+(k1v+<span style="color: #B452CD">2</span>*k2v+<span style="color: #B452CD">2</span>*k3v+k4v)/<span style="color: #B452CD">6.</span>
+        t[i+<span style="color: #B452CD">1</span>] = t[i] + DeltaT
+
+
+<span style="color: #228B22"># Main part begins here</span>
+
+DeltaT = <span style="color: #B452CD">0.001</span>
+<span style="color: #228B22">#set up arrays </span>
+tfinal = <span style="color: #B452CD">20</span> <span style="color: #228B22"># in dimensionless time</span>
+n = ceil(tfinal/DeltaT)
+<span style="color: #228B22"># set up arrays for t, v, and x</span>
+t = np.zeros(n)
+v = np.zeros(n)
+x = np.zeros(n)
+<span style="color: #228B22"># Initial conditions (can change to more than one dim)</span>
+x0 =  <span style="color: #B452CD">1.0</span> 
+v0 = <span style="color: #B452CD">0.0</span>
+x[<span style="color: #B452CD">0</span>] = x0
+v[<span style="color: #B452CD">0</span>] = v0
+gamma = <span style="color: #B452CD">0.2</span>
+Omegatilde = <span style="color: #B452CD">0.5</span>
+Ftilde = <span style="color: #B452CD">1.0</span>
+<span style="color: #228B22"># Start integrating using Euler&#39;s method</span>
+<span style="color: #228B22"># Note that we define the force function as a SpringForce</span>
+RK4(v,x,t,n,SpringForce)
+
+<span style="color: #228B22"># Plot position as function of time    </span>
+fig, ax = plt.subplots()
+ax.set_ylabel(<span style="color: #CD5555">&#39;x[m]&#39;</span>)
+ax.set_xlabel(<span style="color: #CD5555">&#39;t[s]&#39;</span>)
+ax.plot(t, x)
+fig.tight_layout()
+save_fig(<span style="color: #CD5555">&quot;ForcedBlockRK4&quot;</span>)
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The next step is to include recurrent neural networks. These will be discussed in connection with coming lectures.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="convolutional-neural-networks-recognizing-images">Convolutional Neural Networks (recognizing images) </h2>

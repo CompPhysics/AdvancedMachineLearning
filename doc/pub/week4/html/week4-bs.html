@@ -37,6 +37,15 @@ doconce format html week4.do.txt --html_style=bootstrap --pygments_html_style=de
 <!-- tocinfo
 {'highest level': 2,
  'sections': [('Plans for February 13-17', 2, None, 'plans-for-february-13-17'),
+              ('First project', 2, None, 'first-project'),
+              ('Possible paths for project 1',
+               3,
+               None,
+               'possible-paths-for-project-1'),
+              ('Solving  differential equations with neural networks',
+               2,
+               None,
+               'solving-differential-equations-with-neural-networks'),
               ('Convolutional Neural Networks (recognizing images)',
                2,
                None,
@@ -170,49 +179,52 @@ MathJax.Hub.Config({
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
-     <!-- navigation toc: --> <li><a href="#plans-for-february-13-17" style="font-size: 80%;">Plans for February 13-17</a></li>
-     <!-- navigation toc: --> <li><a href="#convolutional-neural-networks-recognizing-images" style="font-size: 80%;">Convolutional Neural Networks (recognizing images)</a></li>
-     <!-- navigation toc: --> <li><a href="#what-is-the-difference" style="font-size: 80%;">What is the Difference</a></li>
-     <!-- navigation toc: --> <li><a href="#neural-networks-vs-cnns" style="font-size: 80%;">Neural Networks vs CNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#why-cnns-for-images-sound-files-medical-images-from-ct-scans-etc" style="font-size: 80%;">Why CNNS for images, sound files, medical images from CT scans etc?</a></li>
-     <!-- navigation toc: --> <li><a href="#regular-nns-don-t-scale-well-to-full-images" style="font-size: 80%;">Regular NNs don’t scale well to full images</a></li>
-     <!-- navigation toc: --> <li><a href="#3d-volumes-of-neurons" style="font-size: 80%;">3D volumes of neurons</a></li>
-     <!-- navigation toc: --> <li><a href="#layers-used-to-build-cnns" style="font-size: 80%;">Layers used to build CNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#transforming-images" style="font-size: 80%;">Transforming images</a></li>
-     <!-- navigation toc: --> <li><a href="#cnns-in-brief" style="font-size: 80%;">CNNs in brief</a></li>
-     <!-- navigation toc: --> <li><a href="#key-idea" style="font-size: 80%;">Key Idea</a></li>
-     <!-- navigation toc: --> <li><a href="#mathematics-of-cnns" style="font-size: 80%;">Mathematics of CNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#convolution-examples-polynomial-multiplication" style="font-size: 80%;">Convolution Examples: Polynomial multiplication</a></li>
-     <!-- navigation toc: --> <li><a href="#efficient-polynomial-multiplication" style="font-size: 80%;">Efficient Polynomial Multiplication</a></li>
-     <!-- navigation toc: --> <li><a href="#a-more-efficient-way-of-coding-the-above-convolution" style="font-size: 80%;">A more efficient way of coding the above Convolution</a></li>
-     <!-- navigation toc: --> <li><a href="#convolution-examples-principle-of-superposition-and-periodic-forces-fourier-transforms" style="font-size: 80%;">Convolution Examples: Principle of Superposition and Periodic Forces (Fourier Transforms)</a></li>
-     <!-- navigation toc: --> <li><a href="#principle-of-superposition" style="font-size: 80%;">Principle of Superposition</a></li>
-     <!-- navigation toc: --> <li><a href="#simple-code-example" style="font-size: 80%;">Simple Code Example</a></li>
-     <!-- navigation toc: --> <li><a href="#wrapping-up-fourier-transforms" style="font-size: 80%;">Wrapping up Fourier transforms</a></li>
-     <!-- navigation toc: --> <li><a href="#finding-the-coefficients" style="font-size: 80%;">Finding the Coefficients</a></li>
-     <!-- navigation toc: --> <li><a href="#final-words-on-fourier-transforms" style="font-size: 80%;">Final words on Fourier Transforms</a></li>
-     <!-- navigation toc: --> <li><a href="#two-dimensional-objects" style="font-size: 80%;">Two-dimensional Objects</a></li>
-     <!-- navigation toc: --> <li><a href="#cross-correlation" style="font-size: 80%;">Cross-Correlation</a></li>
-     <!-- navigation toc: --> <li><a href="#more-on-dimensionalities" style="font-size: 80%;">More on Dimensionalities</a></li>
-     <!-- navigation toc: --> <li><a href="#further-dimensionality-remarks" style="font-size: 80%;">Further Dimensionality Remarks</a></li>
-     <!-- navigation toc: --> <li><a href="#cnns-in-more-detail-lecture-from-in5400" style="font-size: 80%;">CNNs in more detail, Lecture from IN5400</a></li>
-     <!-- navigation toc: --> <li><a href="#cnns-in-more-detail-building-convolutional-neural-networks-in-tensorflow-and-keras" style="font-size: 80%;">CNNs in more detail, building convolutional neural networks in Tensorflow and Keras</a></li>
-     <!-- navigation toc: --> <li><a href="#setting-it-up" style="font-size: 80%;">Setting it up</a></li>
-     <!-- navigation toc: --> <li><a href="#the-mnist-dataset-again" style="font-size: 80%;">The MNIST dataset again</a></li>
-     <!-- navigation toc: --> <li><a href="#strong-correlations" style="font-size: 80%;">Strong correlations</a></li>
-     <!-- navigation toc: --> <li><a href="#layers-of-a-cnn" style="font-size: 80%;">Layers of a CNN</a></li>
-     <!-- navigation toc: --> <li><a href="#systematic-reduction" style="font-size: 80%;">Systematic reduction</a></li>
-     <!-- navigation toc: --> <li><a href="#prerequisites-collect-and-pre-process-data" style="font-size: 80%;">Prerequisites: Collect and pre-process data</a></li>
-     <!-- navigation toc: --> <li><a href="#importing-keras-and-tensorflow" style="font-size: 80%;">Importing Keras and Tensorflow</a></li>
-     <!-- navigation toc: --> <li><a href="#running-with-keras" style="font-size: 80%;">Running with Keras</a></li>
-     <!-- navigation toc: --> <li><a href="#final-part" style="font-size: 80%;">Final part</a></li>
-     <!-- navigation toc: --> <li><a href="#final-visualization" style="font-size: 80%;">Final visualization</a></li>
-     <!-- navigation toc: --> <li><a href="#the-cifar01-data-set" style="font-size: 80%;">The CIFAR01 data set</a></li>
-     <!-- navigation toc: --> <li><a href="#verifying-the-data-set" style="font-size: 80%;">Verifying the data set</a></li>
-     <!-- navigation toc: --> <li><a href="#set-up-the-model" style="font-size: 80%;">Set up  the model</a></li>
-     <!-- navigation toc: --> <li><a href="#add-dense-layers-on-top" style="font-size: 80%;">Add Dense layers on top</a></li>
-     <!-- navigation toc: --> <li><a href="#compile-and-train-the-model" style="font-size: 80%;">Compile and train the model</a></li>
-     <!-- navigation toc: --> <li><a href="#finally-evaluate-the-model" style="font-size: 80%;">Finally, evaluate the model</a></li>
+     <!-- navigation toc: --> <li><a href="#plans-for-february-13-17" style="font-size: 80%;"><b>Plans for February 13-17</b></a></li>
+     <!-- navigation toc: --> <li><a href="#first-project" style="font-size: 80%;"><b>First project</b></a></li>
+     <!-- navigation toc: --> <li><a href="#possible-paths-for-project-1" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Possible paths for project 1</a></li>
+     <!-- navigation toc: --> <li><a href="#solving-differential-equations-with-neural-networks" style="font-size: 80%;"><b>Solving  differential equations with neural networks</b></a></li>
+     <!-- navigation toc: --> <li><a href="#convolutional-neural-networks-recognizing-images" style="font-size: 80%;"><b>Convolutional Neural Networks (recognizing images)</b></a></li>
+     <!-- navigation toc: --> <li><a href="#what-is-the-difference" style="font-size: 80%;"><b>What is the Difference</b></a></li>
+     <!-- navigation toc: --> <li><a href="#neural-networks-vs-cnns" style="font-size: 80%;"><b>Neural Networks vs CNNs</b></a></li>
+     <!-- navigation toc: --> <li><a href="#why-cnns-for-images-sound-files-medical-images-from-ct-scans-etc" style="font-size: 80%;"><b>Why CNNS for images, sound files, medical images from CT scans etc?</b></a></li>
+     <!-- navigation toc: --> <li><a href="#regular-nns-don-t-scale-well-to-full-images" style="font-size: 80%;"><b>Regular NNs don’t scale well to full images</b></a></li>
+     <!-- navigation toc: --> <li><a href="#3d-volumes-of-neurons" style="font-size: 80%;"><b>3D volumes of neurons</b></a></li>
+     <!-- navigation toc: --> <li><a href="#layers-used-to-build-cnns" style="font-size: 80%;"><b>Layers used to build CNNs</b></a></li>
+     <!-- navigation toc: --> <li><a href="#transforming-images" style="font-size: 80%;"><b>Transforming images</b></a></li>
+     <!-- navigation toc: --> <li><a href="#cnns-in-brief" style="font-size: 80%;"><b>CNNs in brief</b></a></li>
+     <!-- navigation toc: --> <li><a href="#key-idea" style="font-size: 80%;"><b>Key Idea</b></a></li>
+     <!-- navigation toc: --> <li><a href="#mathematics-of-cnns" style="font-size: 80%;"><b>Mathematics of CNNs</b></a></li>
+     <!-- navigation toc: --> <li><a href="#convolution-examples-polynomial-multiplication" style="font-size: 80%;"><b>Convolution Examples: Polynomial multiplication</b></a></li>
+     <!-- navigation toc: --> <li><a href="#efficient-polynomial-multiplication" style="font-size: 80%;"><b>Efficient Polynomial Multiplication</b></a></li>
+     <!-- navigation toc: --> <li><a href="#a-more-efficient-way-of-coding-the-above-convolution" style="font-size: 80%;"><b>A more efficient way of coding the above Convolution</b></a></li>
+     <!-- navigation toc: --> <li><a href="#convolution-examples-principle-of-superposition-and-periodic-forces-fourier-transforms" style="font-size: 80%;"><b>Convolution Examples: Principle of Superposition and Periodic Forces (Fourier Transforms)</b></a></li>
+     <!-- navigation toc: --> <li><a href="#principle-of-superposition" style="font-size: 80%;"><b>Principle of Superposition</b></a></li>
+     <!-- navigation toc: --> <li><a href="#simple-code-example" style="font-size: 80%;"><b>Simple Code Example</b></a></li>
+     <!-- navigation toc: --> <li><a href="#wrapping-up-fourier-transforms" style="font-size: 80%;"><b>Wrapping up Fourier transforms</b></a></li>
+     <!-- navigation toc: --> <li><a href="#finding-the-coefficients" style="font-size: 80%;"><b>Finding the Coefficients</b></a></li>
+     <!-- navigation toc: --> <li><a href="#final-words-on-fourier-transforms" style="font-size: 80%;"><b>Final words on Fourier Transforms</b></a></li>
+     <!-- navigation toc: --> <li><a href="#two-dimensional-objects" style="font-size: 80%;"><b>Two-dimensional Objects</b></a></li>
+     <!-- navigation toc: --> <li><a href="#cross-correlation" style="font-size: 80%;"><b>Cross-Correlation</b></a></li>
+     <!-- navigation toc: --> <li><a href="#more-on-dimensionalities" style="font-size: 80%;"><b>More on Dimensionalities</b></a></li>
+     <!-- navigation toc: --> <li><a href="#further-dimensionality-remarks" style="font-size: 80%;"><b>Further Dimensionality Remarks</b></a></li>
+     <!-- navigation toc: --> <li><a href="#cnns-in-more-detail-lecture-from-in5400" style="font-size: 80%;"><b>CNNs in more detail, Lecture from IN5400</b></a></li>
+     <!-- navigation toc: --> <li><a href="#cnns-in-more-detail-building-convolutional-neural-networks-in-tensorflow-and-keras" style="font-size: 80%;"><b>CNNs in more detail, building convolutional neural networks in Tensorflow and Keras</b></a></li>
+     <!-- navigation toc: --> <li><a href="#setting-it-up" style="font-size: 80%;"><b>Setting it up</b></a></li>
+     <!-- navigation toc: --> <li><a href="#the-mnist-dataset-again" style="font-size: 80%;"><b>The MNIST dataset again</b></a></li>
+     <!-- navigation toc: --> <li><a href="#strong-correlations" style="font-size: 80%;"><b>Strong correlations</b></a></li>
+     <!-- navigation toc: --> <li><a href="#layers-of-a-cnn" style="font-size: 80%;"><b>Layers of a CNN</b></a></li>
+     <!-- navigation toc: --> <li><a href="#systematic-reduction" style="font-size: 80%;"><b>Systematic reduction</b></a></li>
+     <!-- navigation toc: --> <li><a href="#prerequisites-collect-and-pre-process-data" style="font-size: 80%;"><b>Prerequisites: Collect and pre-process data</b></a></li>
+     <!-- navigation toc: --> <li><a href="#importing-keras-and-tensorflow" style="font-size: 80%;"><b>Importing Keras and Tensorflow</b></a></li>
+     <!-- navigation toc: --> <li><a href="#running-with-keras" style="font-size: 80%;"><b>Running with Keras</b></a></li>
+     <!-- navigation toc: --> <li><a href="#final-part" style="font-size: 80%;"><b>Final part</b></a></li>
+     <!-- navigation toc: --> <li><a href="#final-visualization" style="font-size: 80%;"><b>Final visualization</b></a></li>
+     <!-- navigation toc: --> <li><a href="#the-cifar01-data-set" style="font-size: 80%;"><b>The CIFAR01 data set</b></a></li>
+     <!-- navigation toc: --> <li><a href="#verifying-the-data-set" style="font-size: 80%;"><b>Verifying the data set</b></a></li>
+     <!-- navigation toc: --> <li><a href="#set-up-the-model" style="font-size: 80%;"><b>Set up  the model</b></a></li>
+     <!-- navigation toc: --> <li><a href="#add-dense-layers-on-top" style="font-size: 80%;"><b>Add Dense layers on top</b></a></li>
+     <!-- navigation toc: --> <li><a href="#compile-and-train-the-model" style="font-size: 80%;"><b>Compile and train the model</b></a></li>
+     <!-- navigation toc: --> <li><a href="#finally-evaluate-the-model" style="font-size: 80%;"><b>Finally, evaluate the model</b></a></li>
 
         </ul>
       </li>
@@ -241,7 +253,7 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>Feb 8, 2023</h4>
+<h4>Feb 14, 2023</h4>
 </center> <!-- date -->
 <br>
 
@@ -253,8 +265,8 @@ MathJax.Hub.Config({
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 <ul>
-<li> Convolutional  Neural Networks.</li>
 <li> Discussion of project paths</li>
+<li> Convolutional  Neural Networks.</li>
 <li> Reading recommendations:
 <ol type="a"></li>
  <li> For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications</li>
@@ -289,6 +301,283 @@ MathJax.Hub.Config({
 </div>
 </div>
 
+
+<!-- !split -->
+<h2 id="first-project" class="anchor">First project </h2>
+<h3 id="possible-paths-for-project-1" class="anchor">Possible paths for project 1  </h3>
+
+<p>We discuss here several paths as well as data sets for the first project (or as parts of a larger project)</p>
+
+<ol>
+<li> The computational path: Here we propose a path where you develop your own code for a convolutional or eventually recurrent neural network and apply this to data selects of your own selection. The code should be object oriented and flexible allowing for eventual extensions by including different Loss/Cost functions and other functionalities. Feel free to select data sets from those suggested below here. This code can also be extended upon by adding for example autoencoders. You can compare your own codes with implementations using TensorFlow(Keras)/PyTorch or other libraries.</li>
+<li> The differential equation path: Here we propose a set of differential equations (ordinary and/or partial) to be solved first using neural networks (using either your own code or TensorFlow/Pytorch or similar libraries). Thereafter we plan to extend the set of methods for solving these equations to recurrent neural networks and autoencoders (AE) and/or Generalized Adversarial Networks (GANs). All these approaches can be expanded into one large project. This project can also be extended into including <a href="https://github.com/maziarraissi/PINNs" target="_self">Physics informed machine learning</a>. Here we can discuss neural networks that are trained to solve supervised learning tasks while respecting any given law of physics described by general nonlinear partial differential equations.</li> 
+<li> The application path: Here you can use the most relevant method(s) (say convolutional neural networks for images) and apply this(these) to data sets relevant for your own research.</li>
+<li> The Gaussian processes/Bayesian statistics path: <a href="https://jenfb.github.io/bkmr/overview.html" target="_self">Kernel regression (Gaussian processes) and Bayesian statistics</a> are  popular tools in the machine learning literature. The main idea behind these approaches is to flexibly model the relationship between a large number of variables and a particular outcome (dependent variable). This can form a second part of a project where for example standard Kernel regression methods are used on a specific data set. Alternatively, participants can opt to work on a large project relevant for their own research using gaussian processes and/or Bayesian machine Learning.</li> 
+</ol>
+<p>You can propose own data sets that relate to your research interests or just use existing data sets from say</p>
+<ol>
+<li> <a href="https://www.kaggle.com/datasets" target="_self">Kaggle</a></li> 
+<li> The <a href="https://archive.ics.uci.edu/ml/index.php" target="_self">University of California at Irvine (UCI) with its  machine learning repository</a>.</li>
+<li> For the differential equation problems, you can generate your own datasets, as described below.</li>
+<li> If possible, you should link the data sets with existing research and analyses thereof. Scientific articles which have used Machine Learning algorithms to analyze the data are highly welcome. Perhaps you can improve previous analyses and even publish a new article?</li> 
+<li> A critical assessment of the methods with ditto perspectives and recommendations is also something you need to include. For those of you familiar with report writing, the layouts discussed in for example <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Projects/EvaluationGrading/EvaluationForm.md" target="_self">FYS-STK4155</a>.</li>
+</ol>
+<!-- !split -->
+<h2 id="solving-differential-equations-with-neural-networks" class="anchor">Solving  differential equations with neural networks </h2>
+
+<p>Here we describe the possible differential equations we can study
+first with neural networks and thereafter with recurrent neural
+networks and/or AE and/or GANs.
+</p>
+
+<p>The differential equations are given by the so-called <a href="https://encyclopediaofmath.org/index.php?title=Lorenz_attractor" target="_self">Lorenz attractor model</a>, and read</p>
+
+$$
+\frac{dx}{dt}=\sigma\left(y-x\right),
+$$
+
+<p>where \( \sigma =10 \) is a constant</p>
+$$
+\frac{dy}{dt}= x\left(\rho-z\right)-y,
+$$
+
+<p>with \( \rho=28 \) and</p>
+$$
+\frac{dz}{dt}=xy-\beta z
+$$
+
+<p>with \( \beta=8/3 \) as our final constant.</p>
+
+<p>The following function is a
+simple function which sets up the solution using the ordinary
+differential library which follows <b>NumPy</b>. Here we have fixed the
+time sted \( \Delta t=0.01 \) and the final time \( t_f=8 \).
+</p>
+
+<p>The program sets \( 100 \) random initial values and produces inputs and outputs for a neural network calculations.
+The inputs are given by the values of the array \( \boldsymbol{x} \) (which contains \( x,y,z \) as functions of time) for the time step \( \boldsymbol{x}_t \).
+The other array defined by \( \boldsymbol{x}_{t+1} \) contains the outputs (or targets) which we want the neural network to reproduce.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Common imports</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scipy.integrate</span> <span style="color: #008000; font-weight: bold">import</span> odeint
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+
+<span style="color: #408080; font-style: italic"># Where to save the figures and data files</span>
+PROJECT_ROOT_DIR <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;Results&quot;</span>
+FIGURE_ID <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;Results/FigureFiles&quot;</span>
+DATA_ID <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;DataFiles/&quot;</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(PROJECT_ROOT_DIR):
+    os<span style="color: #666666">.</span>mkdir(PROJECT_ROOT_DIR)
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(FIGURE_ID):
+    os<span style="color: #666666">.</span>makedirs(FIGURE_ID)
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(DATA_ID):
+    os<span style="color: #666666">.</span>makedirs(DATA_ID)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">image_path</span>(fig_id):
+    <span style="color: #008000; font-weight: bold">return</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(FIGURE_ID, fig_id)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">data_path</span>(dat_id):
+    <span style="color: #008000; font-weight: bold">return</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(DATA_ID, dat_id)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">save_fig</span>(fig_id):
+    plt<span style="color: #666666">.</span>savefig(image_path(fig_id) <span style="color: #666666">+</span> <span style="color: #BA2121">&quot;.png&quot;</span>, <span style="color: #008000">format</span><span style="color: #666666">=</span><span style="color: #BA2121">&#39;png&#39;</span>)
+
+
+<span style="color: #408080; font-style: italic"># Selection of parameter values and setting array for time</span>
+dt <span style="color: #666666">=0.01</span>; tfinal <span style="color: #666666">=</span> <span style="color: #666666">8</span>
+t <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(<span style="color: #666666">0</span>,tfinal<span style="color: #666666">+</span>dt, dt)
+beta <span style="color: #666666">=8.0/3.0</span>; rho <span style="color: #666666">=</span> <span style="color: #666666">28.0</span>; sigma <span style="color: #666666">=</span> <span style="color: #666666">10.0</span>
+
+<span style="color: #408080; font-style: italic"># define the inputs and outputs for the neural networks</span>
+nninput <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #666666">100*</span><span style="color: #008000">len</span>(t)<span style="color: #666666">-1</span>,<span style="color: #666666">3</span>))
+nnoutput <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #666666">100*</span><span style="color: #008000">len</span>(t)<span style="color: #666666">-1</span>,<span style="color: #666666">3</span>))
+<span style="color: #408080; font-style: italic"># Define the equations to integrate</span>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">lorenz_derivative</span>(xyz, t0, sigma<span style="color: #666666">=</span>sigma,beta<span style="color: #666666">=</span>beta,rho<span style="color: #666666">=</span>rho):
+    x, y, z <span style="color: #666666">=</span> xyz
+    <span style="color: #008000; font-weight: bold">return</span> [sigma<span style="color: #666666">*</span>(x<span style="color: #666666">-</span>y), x<span style="color: #666666">*</span>(rho<span style="color: #666666">-</span>z)<span style="color: #666666">-</span>y, x<span style="color: #666666">*</span>y<span style="color: #666666">-</span>beta<span style="color: #666666">*</span>z]
+
+<span style="color: #408080; font-style: italic"># generate 100 random initial values</span>
+x0 <span style="color: #666666">=</span> <span style="color: #666666">-15.0+30.0*</span>np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>random((<span style="color: #666666">100</span>,<span style="color: #666666">3</span>))
+
+<span style="color: #408080; font-style: italic"># Use odeint functionality by sending in derivative function</span>
+<span style="color: #408080; font-style: italic"># Feel free to change the choice of integrator</span>
+x_t <span style="color: #666666">=</span> np<span style="color: #666666">.</span>asarray([odeint(lorenz_derivative, x0_j, t) 
+                  <span style="color: #008000; font-weight: bold">for</span> x0_j <span style="color: #AA22FF; font-weight: bold">in</span> x0])
+
+<span style="color: #408080; font-style: italic"># define the inputs and outputs for the neural networks</span>
+<span style="color: #008000; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">100</span>):
+    nninput[j<span style="color: #666666">*</span>(<span style="color: #008000">len</span>(t)<span style="color: #666666">-1</span>):(j<span style="color: #666666">+1</span>)<span style="color: #666666">*</span>(<span style="color: #008000">len</span>(t)<span style="color: #666666">-1</span>),:] <span style="color: #666666">=</span> x_t[j,:<span style="color: #666666">-1</span>,:]
+    nnoutput[j<span style="color: #666666">*</span>(<span style="color: #008000">len</span>(t)<span style="color: #666666">-1</span>):(j<span style="color: #666666">+1</span>)<span style="color: #666666">*</span>(<span style="color: #008000">len</span>(t)<span style="color: #666666">-1</span>),:] <span style="color: #666666">=</span> x_t[j,<span style="color: #666666">1</span>:,:]
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The input and output variables are those we will start trying our
+network with. Your first taks is to set up a neural code (either using
+your own code or TensorFlow/PyTorch or similar libraries)) and use the
+above data to a prediction for the time evolution of Lorenz system for
+various values of the randomly chosen initial values.  Study the
+dependence of the fit as function of the architecture of the network
+(number of nodes, hidden layers and types of activation functions) and
+various regularization schemes and optimization methods like standard
+gradient descent with momentum, stochastic gradient descent with
+batches and with and without momentum and various schedulers for the
+learning rate.
+</p>
+
+<p>Feel free to change the above differential equations. As an example,
+consider the following harmonic oscillator equations solved with the
+Runge-Kutta to fourth order method. This is a one-dimensional problem
+and it produces a position \( x_t \) and velocity \( v_t \). You could now try
+to fit both the velocities and positions using much of the same recipe
+as for Lorenz attractor.  You will find it convenient to analyze one
+set of initial conditions first. The code is included here.
+</p>
+
+<p>This code is an example code that solves Newton's equations of motion
+with a given force and produces an output which in turn can be used to
+train a neural network
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Common imports</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">pandas</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">pd</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">math</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+
+<span style="color: #408080; font-style: italic"># Where to save the figures and data files</span>
+PROJECT_ROOT_DIR <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;Results&quot;</span>
+FIGURE_ID <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;Results/FigureFiles&quot;</span>
+DATA_ID <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;DataFiles/&quot;</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(PROJECT_ROOT_DIR):
+    os<span style="color: #666666">.</span>mkdir(PROJECT_ROOT_DIR)
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(FIGURE_ID):
+    os<span style="color: #666666">.</span>makedirs(FIGURE_ID)
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(DATA_ID):
+    os<span style="color: #666666">.</span>makedirs(DATA_ID)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">image_path</span>(fig_id):
+    <span style="color: #008000; font-weight: bold">return</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(FIGURE_ID, fig_id)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">data_path</span>(dat_id):
+    <span style="color: #008000; font-weight: bold">return</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(DATA_ID, dat_id)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">save_fig</span>(fig_id):
+    plt<span style="color: #666666">.</span>savefig(image_path(fig_id) <span style="color: #666666">+</span> <span style="color: #BA2121">&quot;.png&quot;</span>, <span style="color: #008000">format</span><span style="color: #666666">=</span><span style="color: #BA2121">&#39;png&#39;</span>)
+
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">SpringForce</span>(v,x,t):
+<span style="color: #408080; font-style: italic">#   note here that we have divided by mass and we return the acceleration</span>
+    <span style="color: #008000; font-weight: bold">return</span>  <span style="color: #666666">-2*</span>gamma<span style="color: #666666">*</span>v<span style="color: #666666">-</span>x<span style="color: #666666">+</span>Ftilde<span style="color: #666666">*</span>cos(t<span style="color: #666666">*</span>Omegatilde)
+
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">RK4</span>(v,x,t,n,Force):
+    <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(n<span style="color: #666666">-1</span>):
+<span style="color: #408080; font-style: italic"># Setting up k1</span>
+        k1x <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>v[i]
+        k1v <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>Force(v[i],x[i],t[i])
+<span style="color: #408080; font-style: italic"># Setting up k2</span>
+        vv <span style="color: #666666">=</span> v[i]<span style="color: #666666">+</span>k1v<span style="color: #666666">*0.5</span>
+        xx <span style="color: #666666">=</span> x[i]<span style="color: #666666">+</span>k1x<span style="color: #666666">*0.5</span>
+        k2x <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>vv
+        k2v <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>Force(vv,xx,t[i]<span style="color: #666666">+</span>DeltaT<span style="color: #666666">*0.5</span>)
+<span style="color: #408080; font-style: italic"># Setting up k3</span>
+        vv <span style="color: #666666">=</span> v[i]<span style="color: #666666">+</span>k2v<span style="color: #666666">*0.5</span>
+        xx <span style="color: #666666">=</span> x[i]<span style="color: #666666">+</span>k2x<span style="color: #666666">*0.5</span>
+        k3x <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>vv
+        k3v <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>Force(vv,xx,t[i]<span style="color: #666666">+</span>DeltaT<span style="color: #666666">*0.5</span>)
+<span style="color: #408080; font-style: italic"># Setting up k4</span>
+        vv <span style="color: #666666">=</span> v[i]<span style="color: #666666">+</span>k3v
+        xx <span style="color: #666666">=</span> x[i]<span style="color: #666666">+</span>k3x
+        k4x <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>vv
+        k4v <span style="color: #666666">=</span> DeltaT<span style="color: #666666">*</span>Force(vv,xx,t[i]<span style="color: #666666">+</span>DeltaT)
+<span style="color: #408080; font-style: italic"># Final result</span>
+        x[i<span style="color: #666666">+1</span>] <span style="color: #666666">=</span> x[i]<span style="color: #666666">+</span>(k1x<span style="color: #666666">+2*</span>k2x<span style="color: #666666">+2*</span>k3x<span style="color: #666666">+</span>k4x)<span style="color: #666666">/6.</span>
+        v[i<span style="color: #666666">+1</span>] <span style="color: #666666">=</span> v[i]<span style="color: #666666">+</span>(k1v<span style="color: #666666">+2*</span>k2v<span style="color: #666666">+2*</span>k3v<span style="color: #666666">+</span>k4v)<span style="color: #666666">/6.</span>
+        t[i<span style="color: #666666">+1</span>] <span style="color: #666666">=</span> t[i] <span style="color: #666666">+</span> DeltaT
+
+
+<span style="color: #408080; font-style: italic"># Main part begins here</span>
+
+DeltaT <span style="color: #666666">=</span> <span style="color: #666666">0.001</span>
+<span style="color: #408080; font-style: italic">#set up arrays </span>
+tfinal <span style="color: #666666">=</span> <span style="color: #666666">20</span> <span style="color: #408080; font-style: italic"># in dimensionless time</span>
+n <span style="color: #666666">=</span> ceil(tfinal<span style="color: #666666">/</span>DeltaT)
+<span style="color: #408080; font-style: italic"># set up arrays for t, v, and x</span>
+t <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(n)
+v <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(n)
+x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(n)
+<span style="color: #408080; font-style: italic"># Initial conditions (can change to more than one dim)</span>
+x0 <span style="color: #666666">=</span>  <span style="color: #666666">1.0</span> 
+v0 <span style="color: #666666">=</span> <span style="color: #666666">0.0</span>
+x[<span style="color: #666666">0</span>] <span style="color: #666666">=</span> x0
+v[<span style="color: #666666">0</span>] <span style="color: #666666">=</span> v0
+gamma <span style="color: #666666">=</span> <span style="color: #666666">0.2</span>
+Omegatilde <span style="color: #666666">=</span> <span style="color: #666666">0.5</span>
+Ftilde <span style="color: #666666">=</span> <span style="color: #666666">1.0</span>
+<span style="color: #408080; font-style: italic"># Start integrating using Euler&#39;s method</span>
+<span style="color: #408080; font-style: italic"># Note that we define the force function as a SpringForce</span>
+RK4(v,x,t,n,SpringForce)
+
+<span style="color: #408080; font-style: italic"># Plot position as function of time    </span>
+fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots()
+ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&#39;x[m]&#39;</span>)
+ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&#39;t[s]&#39;</span>)
+ax<span style="color: #666666">.</span>plot(t, x)
+fig<span style="color: #666666">.</span>tight_layout()
+save_fig(<span style="color: #BA2121">&quot;ForcedBlockRK4&quot;</span>)
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The next step is to include recurrent neural networks. These will be discussed in connection with coming lectures.</p>
 
 <!-- !split -->
 <h2 id="convolutional-neural-networks-recognizing-images" class="anchor">Convolutional Neural Networks (recognizing images) </h2>
