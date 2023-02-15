@@ -55,7 +55,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Convolutional neural networks (CNNs)
 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week4.ipynb
-- Video of lecture at TBA
+- Video of lecture at https://youtu.be/ku3sZ1s4G0E
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb152023.pdf
 
 ## February 20-24
