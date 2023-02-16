@@ -7,7 +7,7 @@ DATE: February 20-24
 !bblock
 
 * Basics and mathematics of Convolutional  Neural Networks.
-* Discussion of first project 
+* Discussion of first project with examples
 * "Video of lecture":"https://youtu.be/"
 
 * Reading recommendations:
@@ -28,258 +28,6 @@ m
 * "Lectures from IN5400 spring 2021":"https://www.uio.no/studier/emner/matnat/ifi/IN5400/v21/lecture-slides/in5400_2021_w5_lecture_convolutions.pdf"
 * "See also Michael Nielsen's Lectures":"http://neuralnetworksanddeeplearning.com/chap6.html"
 !eblock
-
-
-!split
-===== First project =====
-
-
-=== Possible paths for project 1  ===
-
-We discuss here several paths as well as data sets for the first project (or as parts of a larger project)
-
-
-o The computational path: Here we propose a path where you develop your own code for a convolutional or eventually recurrent neural network and apply this to data selects of your own selection. The code should be object oriented and flexible allowing for eventual extensions by including different Loss/Cost functions and other functionalities. Feel free to select data sets from those suggested below here. This code can also be extended upon by adding for example autoencoders. You can compare your own codes with implementations using TensorFlow(Keras)/PyTorch or other libraries.
-
-o The differential equation path: Here we propose a set of differential equations (ordinary and/or partial) to be solved first using neural networks (using either your own code or TensorFlow/Pytorch or similar libraries). Thereafter we plan to extend the set of methods for solving these equations to recurrent neural networks and autoencoders (AE) and/or Generalized Adversarial Networks (GANs). All these approaches can be expanded into one large project. This project can also be extended into including "Physics informed machine learning":"https://github.com/maziarraissi/PINNs". Here we can discuss neural networks that are trained to solve supervised learning tasks while respecting any given law of physics described by general nonlinear partial differential equations. 
-
-o The application path: Here you can use the most relevant method(s) (say convolutional neural networks for images) and apply this(these) to data sets relevant for your own research.
-
-o The Gaussian processes/Bayesian statistics path: "Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" are  popular tools in the machine learning literature. The main idea behind these approaches is to flexibly model the relationship between a large number of variables and a particular outcome (dependent variable). This can form a second part of a project where for example standard Kernel regression methods are used on a specific data set. Alternatively, participants can opt to work on a large project relevant for their own research using gaussian processes and/or Bayesian machine Learning. 
-
-
-
-You can propose own data sets that relate to your research interests or just use existing data sets from say
-o "Kaggle":"https://www.kaggle.com/datasets" 
-o The "University of California at Irvine (UCI) with its  machine learning repository":"https://archive.ics.uci.edu/ml/index.php".
-o For the differential equation problems, you can generate your own datasets, as described below.
-
-o If possible, you should link the data sets with existing research and analyses thereof. Scientific articles which have used Machine Learning algorithms to analyze the data are highly welcome. Perhaps you can improve previous analyses and even publish a new article? 
-
-o A critical assessment of the methods with ditto perspectives and recommendations is also something you need to include. For those of you familiar with report writing, the layouts discussed in for example "FYS-STK4155":"https://github.com/CompPhysics/MachineLearning/blob/master/doc/Projects/EvaluationGrading/EvaluationForm.md".
-
-!split
-===== Solving  differential equations with neural networks =====
-
-Here we describe the possible differential equations we can study
-first with neural networks and thereafter with recurrent neural
-networks and/or AE and/or GANs.
-
-The differential equations are given by the so-called "Lorenz attractor model":"https://encyclopediaofmath.org/index.php?title=Lorenz_attractor", and read
-
-!bt
-\[
-\frac{dx}{dt}=\sigma\left(y-x\right),
-\]
-!et
-where $\sigma =10$ is a constant
-!bt
-\[
-\frac{dy}{dt}= x\left(\rho-z\right)-y,
-\]
-!et
-with $\rho=28$ and
-!bt
-\[
-\frac{dz}{dt}=xy-\beta z
-\]
-!et
-
-with $\beta=8/3$ as our final constant.
-
-The following function is a
-simple function which sets up the solution using the ordinary
-differential library which follows _NumPy_. Here we have fixed the
-time sted $\Delta t=0.01$ and the final time $t_f=8$.
-
-The program sets $100$ random initial values and produces inputs and outputs for a neural network calculations.
-The inputs are given by the values of the array $\bm{x}$ (which contains $x,y,z$ as functions of time) for the time step $\bm{x}_t$.
-The other array defined by $\bm{x}_{t+1}$ contains the outputs (or targets) which we want the neural network to reproduce.
-
-!bc pycod
-# Common imports
-import numpy as np
-from scipy.integrate import odeint
-import matplotlib.pyplot as plt
-import os
-
-# Where to save the figures and data files
-PROJECT_ROOT_DIR = "Results"
-FIGURE_ID = "Results/FigureFiles"
-DATA_ID = "DataFiles/"
-
-if not os.path.exists(PROJECT_ROOT_DIR):
-    os.mkdir(PROJECT_ROOT_DIR)
-
-if not os.path.exists(FIGURE_ID):
-    os.makedirs(FIGURE_ID)
-
-if not os.path.exists(DATA_ID):
-    os.makedirs(DATA_ID)
-
-def image_path(fig_id):
-    return os.path.join(FIGURE_ID, fig_id)
-
-def data_path(dat_id):
-    return os.path.join(DATA_ID, dat_id)
-
-def save_fig(fig_id):
-    plt.savefig(image_path(fig_id) + ".png", format='png')
-
-
-# Selection of parameter values and setting array for time
-dt =0.01; tfinal = 8
-t = np.arange(0,tfinal+dt, dt)
-beta =8.0/3.0; rho = 28.0; sigma = 10.0
-
-# define the inputs and outputs for the neural networks
-nninput = np.zeros((100*len(t)-1,3))
-nnoutput = np.zeros((100*len(t)-1,3))
-# Define the equations to integrate
-def lorenz_derivative(xyz, t0, sigma=sigma,beta=beta,rho=rho):
-    x, y, z = xyz
-    return [sigma*(x-y), x*(rho-z)-y, x*y-beta*z]
-
-# generate 100 random initial values
-x0 = -15.0+30.0*np.random.random((100,3))
-
-# Use odeint functionality by sending in derivative function
-# Feel free to change the choice of integrator
-x_t = np.asarray([odeint(lorenz_derivative, x0_j, t) 
-                  for x0_j in x0])
-
-# define the inputs and outputs for the neural networks
-for j in range(100):
-    nninput[j*(len(t)-1):(j+1)*(len(t)-1),:] = x_t[j,:-1,:]
-    nnoutput[j*(len(t)-1):(j+1)*(len(t)-1),:] = x_t[j,1:,:]
-
-!ec
-
-The input and output variables are those we will start trying our
-network with. Your first taks is to set up a neural code (either using
-your own code or TensorFlow/PyTorch or similar libraries)) and use the
-above data to a prediction for the time evolution of Lorenz system for
-various values of the randomly chosen initial values.  Study the
-dependence of the fit as function of the architecture of the network
-(number of nodes, hidden layers and types of activation functions) and
-various regularization schemes and optimization methods like standard
-gradient descent with momentum, stochastic gradient descent with
-batches and with and without momentum and various schedulers for the
-learning rate.
-
-Feel free to change the above differential equations. As an example,
-consider the following harmonic oscillator equations solved with the
-Runge-Kutta to fourth order method. This is a one-dimensional problem
-and it produces a position $x_t$ and velocity $v_t$. You could now try
-to fit both the velocities and positions using much of the same recipe
-as for Lorenz attractor.  You will find it convenient to analyze one
-set of initial conditions first. The code is included here.
-
-
-This code is an example code that solves Newton's equations of motion
-with a given force and produces an output which in turn can be used to
-train a neural network
-
-
-!bc pycod
-# Common imports
-import numpy as np
-import pandas as pd
-from math import *
-import matplotlib.pyplot as plt
-import os
-
-# Where to save the figures and data files
-PROJECT_ROOT_DIR = "Results"
-FIGURE_ID = "Results/FigureFiles"
-DATA_ID = "DataFiles/"
-
-if not os.path.exists(PROJECT_ROOT_DIR):
-    os.mkdir(PROJECT_ROOT_DIR)
-
-if not os.path.exists(FIGURE_ID):
-    os.makedirs(FIGURE_ID)
-
-if not os.path.exists(DATA_ID):
-    os.makedirs(DATA_ID)
-
-def image_path(fig_id):
-    return os.path.join(FIGURE_ID, fig_id)
-
-def data_path(dat_id):
-    return os.path.join(DATA_ID, dat_id)
-
-def save_fig(fig_id):
-    plt.savefig(image_path(fig_id) + ".png", format='png')
-
-
-def SpringForce(v,x,t):
-#   note here that we have divided by mass and we return the acceleration
-    return  -2*gamma*v-x+Ftilde*cos(t*Omegatilde)
-
-
-def RK4(v,x,t,n,Force):
-    for i in range(n-1):
-# Setting up k1
-        k1x = DeltaT*v[i]
-        k1v = DeltaT*Force(v[i],x[i],t[i])
-# Setting up k2
-        vv = v[i]+k1v*0.5
-        xx = x[i]+k1x*0.5
-        k2x = DeltaT*vv
-        k2v = DeltaT*Force(vv,xx,t[i]+DeltaT*0.5)
-# Setting up k3
-        vv = v[i]+k2v*0.5
-        xx = x[i]+k2x*0.5
-        k3x = DeltaT*vv
-        k3v = DeltaT*Force(vv,xx,t[i]+DeltaT*0.5)
-# Setting up k4
-        vv = v[i]+k3v
-        xx = x[i]+k3x
-        k4x = DeltaT*vv
-        k4v = DeltaT*Force(vv,xx,t[i]+DeltaT)
-# Final result
-        x[i+1] = x[i]+(k1x+2*k2x+2*k3x+k4x)/6.
-        v[i+1] = v[i]+(k1v+2*k2v+2*k3v+k4v)/6.
-        t[i+1] = t[i] + DeltaT
-
-
-# Main part begins here
-
-DeltaT = 0.001
-#set up arrays 
-tfinal = 20 # in dimensionless time
-n = ceil(tfinal/DeltaT)
-# set up arrays for t, v, and x
-t = np.zeros(n)
-v = np.zeros(n)
-x = np.zeros(n)
-# Initial conditions (can change to more than one dim)
-x0 =  1.0 
-v0 = 0.0
-x[0] = x0
-v[0] = v0
-gamma = 0.2
-Omegatilde = 0.5
-Ftilde = 1.0
-# Start integrating using Euler's method
-# Note that we define the force function as a SpringForce
-RK4(v,x,t,n,SpringForce)
-
-# Plot position as function of time    
-fig, ax = plt.subplots()
-ax.set_ylabel('x[m]')
-ax.set_xlabel('t[s]')
-ax.plot(t, x)
-fig.tight_layout()
-save_fig("ForcedBlockRK4")
-plt.show()
-
-!ec
-
-The next step is to include recurrent neural networks. These will be discussed in connection with coming lectures.
-
-
 
 
 
@@ -334,144 +82,6 @@ image, a sound clip or an unordered collection of features: whatever their
 dimensionality, their representation can always be flattened into a vector
 before the transformation.
 
-
-!split
-===== Why CNNS for images, sound files, medical images from CT scans etc? =====
-
-However, when we consider images, sound clips and many other similar kinds of data, these data  have an intrinsic
-structure. More formally, they share these important properties:
-* They are stored as multi-dimensional arrays (think of the pixels of a figure) .
-* They feature one or more axes for which ordering matters (e.g., width and height axes for an image, time axis for a sound clip).
-* One axis, called the channel axis, is used to access different views of the data (e.g., the red, green and blue channels of a color image, or the left and right channels of a stereo audio track).
-
-These properties are not exploited when an affine transformation is applied; in
-fact, all the axes are treated in the same way and the topological information
-is not taken into account. Still, taking advantage of the implicit structure of
-the data may prove very handy in solving some tasks, like computer vision and
-speech recognition, and in these cases it would be best to preserve it. This is
-where discrete convolutions come into play.
-
-A discrete convolution is a linear transformation that preserves this notion of
-ordering. It is sparse (only a few input units contribute to a given output
-unit) and reuses parameters (the same weights are applied to multiple locations
-in the input).
-
-
-
-
-!split
-===== Regular NNs don’t scale well to full images =====
-
-As an example, consider
-an image of size $32\times 32\times 3$ (32 wide, 32 high, 3 color channels), so a
-single fully-connected neuron in a first hidden layer of a regular
-Neural Network would have $32\times 32\times 3 = 3072$ weights. This amount still
-seems manageable, but clearly this fully-connected structure does not
-scale to larger images. For example, an image of more respectable
-size, say $200\times 200\times 3$, would lead to neurons that have 
-$200\times 200\times 3 = 120,000$ weights. 
-
-We could have
-several such neurons, and the parameters would add up quickly! Clearly,
-this full connectivity is wasteful and the huge number of parameters
-would quickly lead to possible overfitting.
-
-FIGURE: [figslides/nn.jpeg, width=500 frac=0.6]  A regular 3-layer Neural Network.
-
-!split
-===== 3D volumes of neurons ===== 
-
-Convolutional Neural Networks take advantage of the fact that the
-input consists of images and they constrain the architecture in a more
-sensible way. 
-
-In particular, unlike a regular Neural Network, the
-layers of a CNN have neurons arranged in 3 dimensions: width,
-height, depth. (Note that the word depth here refers to the third
-dimension of an activation volume, not to the depth of a full Neural
-Network, which can refer to the total number of layers in a network.)
-
-To understand it better, the above example of an image 
-with an input volume of
-activations has dimensions $32\times 32\times 3$ (width, height,
-depth respectively). 
-
-The neurons in a layer will
-only be connected to a small region of the layer before it, instead of
-all of the neurons in a fully-connected manner. Moreover, the final
-output layer could  for this specific image have dimensions $1\times 1 \times 10$, 
-because by the
-end of the CNN architecture we will reduce the full image into a
-single vector of class scores, arranged along the depth
-dimension. 
-
-FIGURE: [figslides/cnn.jpeg, width=500 frac=0.6]  A CNN arranges its neurons in three dimensions (width, height, depth), as visualized in one of the layers. Every layer of a CNN transforms the 3D input volume to a 3D output volume of neuron activations. In this example, the red input layer holds the image, so its width and height would be the dimensions of the image, and the depth would be 3 (Red, Green, Blue channels).
-
-
-
-!split 
-===== Layers used to build CNNs =====
-
-
-A simple CNN is a sequence of layers, and every layer of a CNN
-transforms one volume of activations to another through a
-differentiable function. We use three main types of layers to build
-CNN architectures: Convolutional Layer, Pooling Layer, and
-Fully-Connected Layer (exactly as seen in regular Neural Networks). We
-will stack these layers to form a full CNN architecture.
-
-A simple CNN for image classification could have the architecture:
-
-* _INPUT_ ($32\times 32 \times 3$) will hold the raw pixel values of the image, in this case an image of width 32, height 32, and with three color channels R,G,B.
-* _CONV_ (convolutional )layer will compute the output of neurons that are connected to local regions in the input, each computing a dot product between their weights and a small region they are connected to in the input volume. This may result in volume such as $[32\times 32\times 12]$ if we decided to use 12 filters.
-* _RELU_ layer will apply an elementwise activation function, such as the $max(0,x)$ thresholding at zero. This leaves the size of the volume unchanged ($[32\times 32\times 12]$).
-* _POOL_ (pooling) layer will perform a downsampling operation along the spatial dimensions (width, height), resulting in volume such as $[16\times 16\times 12]$.
-* _FC_ (i.e. fully-connected) layer will compute the class scores, resulting in volume of size $[1\times 1\times 10]$, where each of the 10 numbers correspond to a class score, such as among the 10 categories of the MNIST images we considered above . As with ordinary Neural Networks and as the name implies, each neuron in this layer will be connected to all the numbers in the previous volume.
-
-
-!split
-===== Transforming images =====
-
-CNNs transform the original image layer by layer from the original
-pixel values to the final class scores. 
-
-Observe that some layers contain
-parameters and other don’t. In particular, the CNN layers perform
-transformations that are a function of not only the activations in the
-input volume, but also of the parameters (the weights and biases of
-the neurons). On the other hand, the RELU/POOL layers will implement a
-fixed function. The parameters in the CONV/FC layers will be trained
-with gradient descent so that the class scores that the CNN computes
-are consistent with the labels in the training set for each image.
-
-
-!split
-===== CNNs in brief =====
-
-In summary:
-
-* A CNN architecture is in the simplest case a list of Layers that transform the image volume into an output volume (e.g. holding the class scores)
-* There are a few distinct types of Layers (e.g. CONV/FC/RELU/POOL are by far the most popular)
-* Each Layer accepts an input 3D volume and transforms it to an output 3D volume through a differentiable function
-* Each Layer may or may not have parameters (e.g. CONV/FC do, RELU/POOL don’t)
-* Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn’t)
-
-For more material on convolutional networks, we strongly recommend
-the course
-"IN5400 – Machine Learning for Image Analysis":"https://www.uio.no/studier/emner/matnat/ifi/IN5400/index-eng.html"
-and the slides of "CS231":"http://cs231n.github.io/convolutional-networks/" which is taught at Stanford University (consistently ranked as one of the top computer science programs in the world). "Michael Nielsen's book is a must read, in particular chapter 6 which deals with CNNs":"http://neuralnetworksanddeeplearning.com/chap6.html".
-
-The textbook by Goodfellow et al, see chapter 9 contains an in depth discussion as well.
-
-!split
-===== Key Idea =====
-
-A dense neural network is representd by an affine operation (like matrix-matrix multiplication) where all parameters are included.
-
-The key idea in CNNs for say imaging is that in images neighbor pixels tend to be related! So we connect
-only neighboring neurons in the input instead of connecting all with the first hidden layer.
-
-We say we perform a filtering (convolution is the mathematical operation). 
 
 
 !split
@@ -610,6 +220,11 @@ When implementing the above equation we do not encode (and allocate memory) the 
 We rather code the convolutions in the minimal memory footprint that they require.
 
 Does the number of floating point operations change here when we use the commutative property?
+
+
+!split
+===== Toeplitz matrices and convolution =====
+Add material here.
 
 !split
 ===== Convolution Examples: Principle of Superposition and Periodic Forces (Fourier Transforms) =====
@@ -832,6 +447,12 @@ plt.show()
 !ec
 
 
+
+!split
+===== Fourier transforms and convolution =====
+
+Add material here
+
 !split
 =====  Two-dimensional Objects =====
 
@@ -917,9 +538,12 @@ principles then apply to images and other similar data.
 
 
 !split
-===== CNNs in more detail, Lecture from IN5400 =====
+===== CNNs in more detail =====
 
-* "Lectures from IN5400 spring 2019":"https://www.uio.no/studier/emner/matnat/ifi/IN5400/v19/material/week5/in5400_2019_week5_convolutional_nerual_networks.pdf"
+Add material here
+
+
+
 
 
 !split
