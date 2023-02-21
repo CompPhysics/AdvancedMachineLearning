@@ -70,7 +70,6 @@ doconce format html week5.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'fourier-transforms-and-convolution'),
               ('Two-dimensional Objects', 2, None, 'two-dimensional-objects'),
-              ('Cross-Correlation', 2, None, 'cross-correlation'),
               ('More on Dimensionalities', 2, None, 'more-on-dimensionalities'),
               ('Further Dimensionality Remarks',
                2,
@@ -156,7 +155,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#final-words-on-fourier-transforms" style="font-size: 80%;"><b>Final words on Fourier Transforms</b></a></li>
      <!-- navigation toc: --> <li><a href="#fourier-transforms-and-convolution" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Fourier transforms and convolution</a></li>
      <!-- navigation toc: --> <li><a href="#two-dimensional-objects" style="font-size: 80%;"><b>Two-dimensional Objects</b></a></li>
-     <!-- navigation toc: --> <li><a href="#cross-correlation" style="font-size: 80%;"><b>Cross-Correlation</b></a></li>
      <!-- navigation toc: --> <li><a href="#more-on-dimensionalities" style="font-size: 80%;"><b>More on Dimensionalities</b></a></li>
      <!-- navigation toc: --> <li><a href="#further-dimensionality-remarks" style="font-size: 80%;"><b>Further Dimensionality Remarks</b></a></li>
      <!-- navigation toc: --> <li><a href="#cnns-in-more-detail" style="font-size: 80%;"><b>CNNs in more detail</b></a></li>
@@ -729,21 +727,18 @@ $$
 S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i-m,j-n)K(m,n).
 $$
 
-<p>Normally the latter is more straightforward to implement in  a machine elarning library since there is less variation in the range of values of \( m \) and \( n \).</p>
+<p>Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of \( m \) and \( n \).</p>
 
-<!-- !split -->
-<h2 id="cross-correlation" class="anchor">Cross-Correlation </h2>
-
-<p>Many deep learning libraries implement cross-correlation instead of convolution</p>
+<p>Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
 $$
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i+m,j-+)K(m,n).
+S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i+m,j+n)K(m,n).
 $$
 
 
 <!-- !split -->
 <h2 id="more-on-dimensionalities" class="anchor">More on Dimensionalities </h2>
 
-<p>In feilds like signal processing (and imaging as well), one designs
+<p>In fields like signal processing (and imaging as well), one designs
 so-called filters. These filters are defined by the convolutions and
 are often hand-crafted. One may specify filters for smoothing, edge
 detection, frequency reshaping, and similar operations. However with
@@ -793,7 +788,35 @@ principles then apply to images and other similar data.
 <!-- !split -->
 <h2 id="cnns-in-more-detail" class="anchor">CNNs in more detail </h2>
 
-<p>Add material here</p>
+<p>Let assume we have an input matrix \( I \) of dimensionality \( 3\times 3 \)
+and a \( 2\times 2 \) filter \( W \) given by the following matrices
+</p>
+
+$$
+\boldsymbol{I}=\begin{bmatrix}i_{00} & i_{01} & i_{02}  \\
+                      i_{10} & i_{11} & i_{12}  \\
+	              i_{20} & i_{21} & i{22} \end{bmatrix},
+$$
+
+<p>and </p>
+$$
+\boldsymbol{W}=\begin{bmatrix}w_{00} & w_{01} \\
+	              i_{10} & i_{11}\end{bmatrix}.
+$$
+
+<p>We introduce now the hyperparameter \( S \) <b>stride</b>. Stride represents how the filter \( W \) moves the convolution process on the matrix \( I \). Here we set the stride equal to \( S=1 \), which means that, starting with the element \( i_{00} \), the filter will act on \( 2\times \) submatrices at a time, starting with upper corner and moving according to the stride value column by column. </p>
+
+<p>Here we perform the operation</p>
+$$
+S_(i,j)=(I * W)(i,j) = \sum_m\sum_n I(i-m,j-n)W(m,n),
+$$
+
+<p>and obtain</p>
+$$
+\boldsymbol{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+ & w_{01} \\
+	              i_{10} & i_{11}\end{bmatrix}.
+$$
+
 
 <ol>
 <li> pooling</li>
