@@ -32,56 +32,6 @@ m
 
 
 
-!split
-===== Convolutional Neural Networks (recognizing images) =====
-
-
-Convolutional neural networks (CNNs) were developed during the last
-decade of the previous century, with a focus on character recognition
-tasks. Nowadays, CNNs are a central element in the spectacular success
-of deep learning methods. The success in for example image
-classifications have made them a central tool for most machine
-learning practitioners.
-
-CNNs are very similar to ordinary Neural Networks.
-They are made up of neurons that have learnable weights and
-biases. Each neuron receives some inputs, performs a dot product and
-optionally follows it with a non-linearity. The whole network still
-expresses a single differentiable score function: from the raw image
-pixels on one end to class scores at the other. And they still have a
-loss function (for example Softmax) on the last (fully-connected) layer
-and all the tips/tricks we developed for learning regular Neural
-Networks still apply (back propagation, gradient descent etc etc).
-
-!split
-===== What is the Difference =====
-
-_CNN architectures make the explicit assumption that
-the inputs are images, which allows us to encode certain properties
-into the architecture. These then make the forward function more
-efficient to implement and vastly reduce the amount of parameters in
-the network._
-
-Here we provide only a superficial overview, for the more interested, we recommend highly the course
-"IN5400 – Machine Learning for Image Analysis":"https://www.uio.no/studier/emner/matnat/ifi/IN5400/index-eng.html"
-and the slides of "CS231":"http://cs231n.github.io/convolutional-networks/".
-
-Another good read is the article here URL:"https://arxiv.org/pdf/1603.07285.pdf". 
-
-
-
-
-!split
-===== Neural Networks vs CNNs =====
-
-Neural networks are defined as _affine transformations_, that is 
-a vector is received as input and is multiplied with a matrix of so-called weights (our unknown paramters) to produce an
-output (to which a bias vector is usually added before passing the result
-through a nonlinear activation function). This is applicable to any type of input, be it an
-image, a sound clip or an unordered collection of features: whatever their
-dimensionality, their representation can always be flattened into a vector
-before the transformation.
-
 
 
 !split
@@ -89,10 +39,13 @@ before the transformation.
 
 The mathematics of CNNs is based on the mathematical operation of
 _convolution_.  In mathematics (in particular in functional analysis),
-convolution is represented by mathematical operation (integration,
-summation etc) on two function in order to produce a third function
+convolution is represented by mathematical operations (integration,
+summation etc) on two functions in order to produce a third function
 that expresses how the shape of one gets modified by the other.
-Convolution has a plethora of applications in a variety of disciplines, spanning from statistics to signal processing, computer vision, solutions of differential equations,linear algebra, engineering,  and yes, machine learning.
+Convolution has a plethora of applications in a variety of
+disciplines, spanning from statistics to signal processing, computer
+vision, solutions of differential equations,linear algebra,
+engineering, and yes, machine learning.
 
 Mathematically, convolution is defined as follows (one-dimensional example):
 Let us define a continuous function $y(t)$ given by
@@ -116,7 +69,7 @@ The discretized version reads
 y(t) = \sum_{a=-\infty}^{a=\infty}x(a)w(t-a).
 \]
 !et
-Computing the inverse of the above convolution operations is known as deconvolution.
+Computing the inverse of the above convolution operations is known as deconvolution and the process is commutative.
 
 How can we use this? And what does it mean? Let us study some familiar examples first.
 
@@ -124,9 +77,13 @@ How can we use this? And what does it mean? Let us study some familiar examples 
 !split
 ===== Convolution Examples: Polynomial multiplication =====
 
-We have already met such an example in project 1 when we tried to set
-up the design matrix for a two-dimensional function. This was an
-example of polynomial multiplication.  Let us recast such a problem in terms of the convolution operation.
+Our first example is that of a multiplication between two polynomials,
+which we will rewrite in terms of the mathematics of convolution. In
+the final stage, since the problem here is a discrete one, we will
+recats the final expression in terms of a matrix-vector
+multiplication, where the matrix is a so-called "Toeplitz matrix
+":"https://link.springer.com/book/10.1007/978-93-86279-04-0".
+
 Let us look a the following polynomials to second and third order, respectively:
 !bt
 \[
@@ -156,7 +113,7 @@ We note first that the new coefficients are given as
 !bt
 \begin{split}
 \delta_0=&\alpha_0\beta_0\\
-\delta_1=&\alpha_1\beta_0+\alpha_1\beta_0\\
+\delta_1=&\alpha_1\beta_0+\alpha_0\beta_1\\
 \delta_2=&\alpha_0\beta_2+\alpha_1\beta_1+\alpha_2\beta_0\\
 \delta_3=&\alpha_1\beta_2+\alpha_2\beta_1+\alpha_0\beta_3\\
 \delta_4=&\alpha_2\beta_2+\alpha_1\beta_3\\
