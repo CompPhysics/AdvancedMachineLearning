@@ -836,16 +836,20 @@ and a \( 2\times 2 \) filter \( W \) given by the following matrices
 $$
 \boldsymbol{I}=\begin{bmatrix}i_{00} & i_{01} & i_{02}  \\
                       i_{10} & i_{11} & i_{12}  \\
-	              i_{20} & i_{21} & i{22} \end{bmatrix},
+	              i_{20} & i_{21} & i_{22} \end{bmatrix},
 $$
 
 <p>and </p>
 $$
 \boldsymbol{W}=\begin{bmatrix}w_{00} & w_{01} \\
-	              i_{10} & i_{11}\end{bmatrix}.
+	              w_{10} & w_{11}\end{bmatrix}.
 $$
 
-<p>We introduce now the hyperparameter \( S \) <b>stride</b>. Stride represents how the filter \( W \) moves the convolution process on the matrix \( I \). Here we set the stride equal to \( S=1 \), which means that, starting with the element \( i_{00} \), the filter will act on \( 2\times \) submatrices at a time, starting with upper corner and moving according to the stride value column by column. </p>
+<p>We introduce now the hyperparameter \( S \) <b>stride</b>. Stride represents how the filter \( W \) moves the convolution process on the matrix \( I \).
+We strongly recommend the repository on <a href="https://github.com/vdumoulin/conv_arithmetic" target="_blank">Arithmetic of deep learning by Dumoulin and Visin</a> 
+</p>
+
+<p>Here we set the stride equal to \( S=1 \), which means that, starting with the element \( i_{00} \), the filter will act on \( 2\times \) submatrices at a time, starting with the upper corner and moving according to the stride value column by column. </p>
 
 <p>Here we perform the operation</p>
 $$
@@ -854,8 +858,37 @@ $$
 
 <p>and obtain</p>
 $$
-\boldsymbol{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+ & w_{01} \\
-	              i_{10} & i_{11}\end{bmatrix}.
+\boldsymbol{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+i_{10}w_{10}+i_{11}w_{11} & i_{01}w_{00}+i_{02}w_{01}+i_{11}w_{10}+i_{12}w_{11}  \\
+	              i_{10}w_{00}+i_{11}w_{01}+i_{20}w_{10}+i_{21}w_{11} & i_{11}w_{00}+i_{12}w_{01}+i_{21}w_{10}+i_{22}w_{11}\end{bmatrix}.
+$$
+
+<p>We can rewrite this operation in terms of a matrix-vector multiplication by defining a new vector where we flatten out the inputs as a vector \( \boldsymbol{I}' \) of length \( 9 \) and
+a matrix \( \boldsymbol{W}' \) with dimension \( 4\times 9 \) as
+</p>
+
+$$
+[\boldsymbol{I}^']^T=\begin{bmatrix}i_{00} & i_{01} & i_{02} & i_{10} & i_{11} & i_{12} & i_{20} & i_{21} & i_{22} \end{bmatrix},
+$$
+
+<p>and the new matrix</p>
+$$
+\boldsymbol{W}'=\begin{bmatrix} w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 & 0 \\
+                        0  & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 \\
+			0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0  \\
+                        0 & 0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11}\end{bmatrix},
+$$
+
+<p>which is a so-called <b>circular Toeplitz matrix</b>.</p>
+
+<p>We see easily that performing the matrix-vector multiplication \( \boldsymbol{W}'\boldsymbol{I}' \) is the same as the above convolution with stride \( S=1 \), that is</p>
+
+$$
+S=(\boldsymbol{W}*\boldsymbol{I}),
+$$
+
+<p>is now given by \( \boldsymbol{W}'\boldsymbol{I}' \) which is a vector of length \( 4 \) instead of the originally resulting  \( 2\times 2 \) output matrix,</p>
+$$
+\boldsymbol{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+i_{10}w_{10}+i_{11}w_{11} & i_{01}w_{00}+i_{02}w_{01}+i_{11}w_{10}+i_{12}w_{11} &i_{10}w_{00}+i_{11}w_{01}+i_{20}w_{10}+i_{21}w_{11} & i_{11}w_{00}+i_{12}w_{01}+i_{21}w_{10}+i_{22}w_{11}\end{bmatrix}.
 $$
 
 
