@@ -565,7 +565,7 @@ and
 We introduce now the hyperparameter $S$ _stride_. Stride represents how the filter $W$ moves the convolution process on the matrix $I$.
 We strongly recommend the repository on "Arithmetic of deep learning by Dumoulin and Visin":"https://github.com/vdumoulin/conv_arithmetic" 
 
-Here we set the stride equal to $S=1$, which means that, starting with the element $i_{00}$, the filter will act on $2\times$ submatrices at a time, starting with the upper corner and moving according to the stride value column by column. 
+Here we set the stride equal to $S=1$, which means that, starting with the element $i_{00}$, the filter will act on $2\times 2$ submatrices each time, starting with the upper corner and moving according to the stride value column by column. 
 
 Here we perform the operation
 !bt

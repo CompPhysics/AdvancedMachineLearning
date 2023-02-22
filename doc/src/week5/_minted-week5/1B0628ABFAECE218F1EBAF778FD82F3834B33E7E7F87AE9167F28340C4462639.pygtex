@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{()}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2D}\PYG{p}{(}\PYG{l+m+mi}{32}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{),} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}relu\PYGZsq{}}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{32}\PYG{p}{,} \PYG{l+m+mi}{32}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)))}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{MaxPooling2D}\PYG{p}{((}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)))}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2D}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{),} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}relu\PYGZsq{}}\PYG{p}{))}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{MaxPooling2D}\PYG{p}{((}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)))}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2D}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{),} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}relu\PYGZsq{}}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} Let\PYGZsq{}s display the architecture of our model so far.}
+
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{()}
+
+\end{Verbatim}

@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import} \PYG{n+nn}{tensorflow} \PYG{k}{as} \PYG{n+nn}{tf}
+
+\PYG{k+kn}{from} \PYG{n+nn}{tensorflow.keras} \PYG{k+kn}{import} \PYG{n}{datasets}\PYG{p}{,} \PYG{n}{layers}\PYG{p}{,} \PYG{n}{models}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+\PYG{c+c1}{\PYGZsh{} We import the data set}
+\PYG{p}{(}\PYG{n}{train\PYGZus{}images}\PYG{p}{,} \PYG{n}{train\PYGZus{}labels}\PYG{p}{),} \PYG{p}{(}\PYG{n}{test\PYGZus{}images}\PYG{p}{,} \PYG{n}{test\PYGZus{}labels}\PYG{p}{)} \PYG{o}{=} \PYG{n}{datasets}\PYG{o}{.}\PYG{n}{cifar10}\PYG{o}{.}\PYG{n}{load\PYGZus{}data}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} Normalize pixel values to be between 0 and 1 by dividing by 255.}
+\PYG{n}{train\PYGZus{}images}\PYG{p}{,} \PYG{n}{test\PYGZus{}images} \PYG{o}{=} \PYG{n}{train\PYGZus{}images} \PYG{o}{/} \PYG{l+m+mf}{255.0}\PYG{p}{,} \PYG{n}{test\PYGZus{}images} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+
+
+\end{Verbatim}
