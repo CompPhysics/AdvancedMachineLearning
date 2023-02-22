@@ -586,7 +586,7 @@ a matrix $\bm{W}'$ with dimension $4\times 9$ as
 
 !bt
 \[
-[\bm{I}^']^T=\begin{bmatrix}i_{00} & i_{01} & i_{02} & i_{10} & i_{11} & i_{12} & i_{20} & i_{21} & i_{22} \end{bmatrix},
+\bm{I}'=\begin{bmatrix}i_{00} \\ i_{01} \\ i_{02} \\ i_{10} \\ i_{11} \\ i_{12} \\ i_{20} \\ i_{21} \\ i_{22} \end{bmatrix},
 \]
 !et
 
@@ -596,10 +596,9 @@ and the new matrix
 \bm{W}'=\begin{bmatrix} w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 & 0 \\
                         0  & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 \\
 			0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0  \\
-                        0 & 0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11}\end{bmatrix},
+                        0 & 0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11}\end{bmatrix}.
 \]
 !et
-which is a so-called _circular Toeplitz matrix_.
 
 We see easily that performing the matrix-vector multiplication $\bm{W}'\bm{I}'$ is the same as the above convolution with stride $S=1$, that is
 
@@ -608,23 +607,176 @@ We see easily that performing the matrix-vector multiplication $\bm{W}'\bm{I}'$ 
 S=(\bm{W}*\bm{I}),
 \]
 !et
-is now given by $\bm{W}'\bm{I}'$ which is a vector of length $4$ instead of the originally resulting  $2\times 2$ output matrix,
+is now given by $\bm{W}'\bm{I}'$ which is a vector of length $4$ instead of the originally resulting  $2\times 2$ output matrix.
+
+
+The collection of kernels/filters $W$ defining a discrete convolution has a shape
+corresponding to some permutation of $(n, m, k_1, \ldots, k_N)$, where
+
 !bt
-\[
-\bm{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+i_{10}w_{10}+i_{11}w_{11} & i_{01}w_{00}+i_{02}w_{01}+i_{11}w_{10}+i_{12}w_{11} &i_{10}w_{00}+i_{11}w_{01}+i_{20}w_{10}+i_{21}w_{11} & i_{11}w_{00}+i_{12}w_{01}+i_{21}w_{10}+i_{22}w_{11}\end{bmatrix}.
-\]
+\begin{equation*}
+\begin{split}
+    n &\equiv \text{number of output feature maps},\\
+    m &\equiv \text{number of input feature maps},\\
+    k_j &\equiv \text{kernel size along axis $j$}.
+\end{split}
+\end{equation*}
+!et
+
+The following properties affect the output size $o_j$ of a convolutional layer
+along axis $j$:
+
+o $i_j$: input size along axis $j$,
+o $k_j$: kernel/filter size along axis $j$,
+o stride (distance between two consecutive positions of the kernel/filter) along axis $j$,
+o zero padding (number of zeros concatenated at the beginning and at the end of an axis) along axis $j$.
+
+For instance, the above examples shows a  $2\times 2$ kernel/filter $\bm{W}$  applied to a $3 \times 3$ input padded with a $0 \times 0$
+border of zeros using $1 \times 1$ strides.
+
+Note that strides constitute a form of _subsampling_. As an alternative to
+being interpreted as a measure of how much the kernel/filter is translated, strides
+can also be viewed as how much of the output is retained. For instance, moving
+the kernel by hops of two is equivalent to moving the kernel by hops of one but
+retaining only odd output elements.
+
+!split
+===== Pooling =====
+
+In addition to discrete convolutions themselves, {\em pooling\/} operations
+make up another important building block in CNNs. Pooling operations reduce
+the size of feature maps by using some function to summarize subregions, such
+as taking the average or the maximum value.
+
+Pooling works by sliding a window across the input and feeding the content of
+the window to a {\em pooling function}. In some sense, pooling works very much
+like a discrete convolution, but replaces the linear combination described by
+the kernel with some other function. Poolin
+provides an example for average pooling, and 
+does the same for max pooling.
+
+The following properties affect the output size $o_j$ of a pooling layer
+along axis $j$:
+
+
+o $i_j$: input size along axis $j$,
+o $k_j$: pooling window size along axis $j$,
+o $s_j$: stride (distance between two consecutive positions of the pooling window) along axis $j$.
+
+
+
+The analysis of the relationship between convolutional layer properties is eased
+by the fact that they don't interact across axes, i.e., the choice of kernel
+size, stride and zero padding along axis $j$ only affects the output size of
+axis $j$. Because of that, we will focus on the following simplified
+setting:
+
+
+o 2-D discrete convolutions ($N = 2$),
+o square inputs ($i_1 = i_2 = i$),
+o square kernel size ($k_1 = k_2 = k$),
+o same strides along both axes ($s_1 = s_2 = s$),
+o same zero padding along both axes ($p_1 = p_2 = p$).
+
+This facilitates the analysis and the visualization, but keep in mind that the
+results outlined here also generalize to the N-D and non-square cases.
+
+!split
+===== No zero padding, unit strides =====
+
+The simplest case to analyze is when the kernel just slides across every
+position of the input (i.e., $s = 1$ and $p = 0$).
+
+
+
+For any $i$ and $k$, and for $s = 1$ and $p = 0$,
+!bt
+\begin{equation*}
+    o = (i - k) + 1.
+\end{equation*}
+!et
+
+!split
+===== Zero padding, unit strides =====
+
+To factor in zero padding (i.e., only restricting to $s = 1$), let's consider
+its effect on the effective input size: padding with $p$ zeros changes the
+effective input size from $i$ to $i + 2p$. In the general case, we can infer the following
+relationship
+
+For any $i$, $k$ and $p$, and for $s = 1$,
+!bt
+\begin{equation*}
+    o = (i - k) + 2p + 1.
+\end{equation*}
+!et
+
+!split
+===== Half (same) padding =====
+
+Having the output size be the same as the input size (i.e., $o = i$) can be a
+desirable property:
+
+For any $i$ and for $k$ odd ($k = 2n + 1, \quad n \in \mathbb{N}$), $s = 1$ and
+$p = \lfloor k / 2 \rfloor = n$,
+!bt
+\begin{equation*}
+\begin{split}
+    o &= i + 2 \lfloor k / 2 \rfloor - (k - 1) \\
+      &= i + 2n - 2n \\
+      &= i.
+\end{split}
+\end{equation*}
 !et
 
 
-o pooling
-o dropout
-o strides and padding
-o relu layer and fc part, flattening
+!split
+===== Full padding =====
+
+While convolving a kernel generally decreases the output size with
+respect to the input size, sometimes the opposite is required. This can be
+achieved with proper zero padding:
+
+
+For any $i$ and $k$, and for $p = k - 1$ and $s = 1$,
+!bt
+\begin{equation*}
+\begin{split}
+    o &= i + 2(k - 1) - (k - 1) \\
+      &= i + (k - 1).
+\end{split}
+\end{equation*}
+!et
+
+This is sometimes referred to as full padding, because in this
+setting every possible partial or complete superimposition of the kernel on the
+input feature map is taken into account. 
+
+!split
+===== Pooling arithmetic =====
+
+In a neural network, pooling layers provide invariance to small translations of
+the input. The most common kind of pooling is _max pooling_, which
+consists in splitting the input in (usually non-overlapping) patches and
+outputting the maximum value of each patch. Other kinds of pooling exist, e.g.,
+mean or average pooling, which all share the same idea of aggregating the input
+locally by applying a non-linearity to the content of some patches.
+
+Since pooling does not involve
+zero padding, the relationship describing the general case is as follows:
+
+
+For any $i$, $k$ and $s$,
+!bt
+\begin{equation*}
+    o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
+\end{equation*}
+!et
 
 
 
 !split
-===== CNNs in more detail, building convolutional neural networks in Tensorflow and Keras =====
+===== Building convolutional neural networks in Tensorflow and Keras =====
 
   
 As discussed above, CNNs are neural networks built from the assumption that the inputs
@@ -998,6 +1150,9 @@ test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 print(test_acc)
 
 !ec
+
+
+
 
 
 
