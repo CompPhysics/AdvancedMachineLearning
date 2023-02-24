@@ -1,18 +1,18 @@
-TITLE: February 20-24: Advanced machine learning and data analysis for the physical sciences
+TITLE: February 27-March 3: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: February 20-24, 2023
+DATE: February 27-March 3, 2023
 
 ===== Plans for February 20-24  =====
 
 !bblock
 
-* Basics and mathematics of Convolutional  Neural Networks.
-* Discussion of first project with examples
-* "Video of lecture":"https://youtu.be/QHHXOm5TKpw/"
+* Finalizing discussion of Convolutional  Neural Networks (CNNs)
+* Discussion of recurrent neural networks (RNNs)
+* Video of lecture TBA
 
 * Reading recommendations:
-  o For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications
-  o Reading suggestions for implementation of CNNs: "Aurelien Geron's chapter 13":"https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf". 
+  o For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9 and for RNNs, see chapter 10. See also chapter 11 and 12 on practicalities and applications
+  o Reading suggestions for implementation of CNNs and RNNs: "Aurelien Geron's chapters 13 and 14":"https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf". 
 !eblock
 
 
@@ -32,513 +32,6 @@ m
 
 
 
-
-
-!split
-===== Mathematics of CNNs =====
-
-The mathematics of CNNs is based on the mathematical operation of
-_convolution_.  In mathematics (in particular in functional analysis),
-convolution is represented by mathematical operations (integration,
-summation etc) on two functions in order to produce a third function
-that expresses how the shape of one gets modified by the other.
-Convolution has a plethora of applications in a variety of
-disciplines, spanning from statistics to signal processing, computer
-vision, solutions of differential equations,linear algebra,
-engineering, and yes, machine learning.
-
-Mathematically, convolution is defined as follows (one-dimensional example):
-Let us define a continuous function $y(t)$ given by
-!bt
-\[
-y(t) = \int x(a) w(t-a) da,
-\]
-!et
-where $x(a)$ represents a so-called input and $w(t-a)$ is normally called the weight function or kernel.
-
-The above integral is written in  a more compact form as
-!bt
-\[
-y(t) = \left(x * w\right)(t).
-\]
-!et
-
-The discretized version reads
-!bt
-\[
-y(t) = \sum_{a=-\infty}^{a=\infty}x(a)w(t-a).
-\]
-!et
-Computing the inverse of the above convolution operations is known as deconvolution and the process is commutative.
-
-How can we use this? And what does it mean? Let us study some familiar examples first.
-
-
-!split
-===== Convolution Examples: Polynomial multiplication =====
-
-Our first example is that of a multiplication between two polynomials,
-which we will rewrite in terms of the mathematics of convolution. In
-the final stage, since the problem here is a discrete one, we will
-recats the final expression in terms of a matrix-vector
-multiplication, where the matrix is a so-called "Toeplitz matrix
-":"https://link.springer.com/book/10.1007/978-93-86279-04-0".
-
-Let us look a the following polynomials to second and third order, respectively:
-!bt
-\[
-p(t) = \alpha_0+\alpha_1 t+\alpha_2 t^2,
-\]
-!et
-and
-!bt
-\[
-s(t) = \beta_0+\beta_1 t+\beta_2 t^2+\beta_3 t^3.
-\]
-!et
-
-The polynomial multiplication gives us a new polynomial of degree $5$
-!bt
-\[
-z(t) = \delta_0+\delta_1 t+\delta_2 t^2+\delta_3 t^3+\delta_4 t^4+\delta_5 t^5.
-\]
-!et
-
-!split
-===== Efficient Polynomial Multiplication =====
-
-Computing polynomial products can be implemented efficiently if we rewrite the more brute force multiplications using convolution.
-We note first that the new coefficients are given as
-
-!bt
-\begin{split}
-\delta_0=&\alpha_0\beta_0\\
-\delta_1=&\alpha_1\beta_0+\alpha_0\beta_1\\
-\delta_2=&\alpha_0\beta_2+\alpha_1\beta_1+\alpha_2\beta_0\\
-\delta_3=&\alpha_1\beta_2+\alpha_2\beta_1+\alpha_0\beta_3\\
-\delta_4=&\alpha_2\beta_2+\alpha_1\beta_3\\
-\delta_5=&\alpha_2\beta_3.\\
-\end{split}
-!et
-
-
-We note that $\alpha_i=0$ except for $i\in \left\{0,1,2\right\}$ and $\beta_i=0$ except for $i\in\left\{0,1,2,3\right\}$.
-
-We can then rewrite the coefficients $\delta_j$ using a discrete convolution as
-!bt
-\[
-\delta_j = \sum_{i=-\infty}^{i=\infty}\alpha_i\beta_{j-i}=(\alpha * \beta)_j,
-\]
-!et
-or as a double sum with restriction $l=i+j$
-!bt
-\[
-\delta_l = \sum_{ij}\alpha_i\beta_{j}.
-\]
-!et
-
-
-!split
-===== A more efficient way of coding the above Convolution =====
-
-Since we only have a finite number of $\alpha$ and $\beta$ values
-which are non-zero, we can rewrite the above convolution expressions
-as a matrix-vector multiplication
-
-!bt
-\[
-\bm{\delta}=\begin{bmatrix}\alpha_0 & 0 & 0 & 0 \\
-                            \alpha_1 & \alpha_0 & 0 & 0 \\
-			    \alpha_2 & \alpha_1 & \alpha_0 & 0 \\
-			    0 & \alpha_2 & \alpha_1 & \alpha_0 \\
-			    0 & 0 & \alpha_2 & \alpha_1 \\
-			    0 & 0 & 0 & \alpha_2
-			    \end{bmatrix}\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \beta_3\end{bmatrix}.
-\]
-!et
-
-The process is commutative and we can easily see that we can rewrite the multiplication in terms of  a matrix holding $\beta$ and a vector holding $\alpha$.
-In this case we have
-!bt
-\[
-\bm{\delta}=\begin{bmatrix}\beta_0 & 0 & 0  \\
-                            \beta_1 & \beta_0 & 0  \\
-			    \beta_2 & \beta_1 & \beta_0  \\
-			    \beta_3 & \beta_2 & \beta_1 \\
-			    0 & \beta_3 & \beta_2 \\
-			    0 & 0 & \beta_3
-			    \end{bmatrix}\begin{bmatrix} \alpha_0 \\ \alpha_1 \\ \alpha_2\end{bmatrix}.
-\]
-!et
-
-Note that the use of these matrices is for mathematical purposes only
-and not implementation purposes.  When implementing the above equation
-we do not encode (and allocate memory) the matrices explicitely.  We
-rather code the convolutions in the minimal memory footprint that they
-require.
-
-The above matrices are examples of so-called "Toeplitz
-matrices":"https://link.springer.com/book/10.1007/978-93-86279-04-0". A
-Toeplitz matrix is a matrix in which each descending diagonal from
-left to right is constant. For instance the last matrix, which we
-rewrite as
-!bt
-\[
-\bm{A}=\begin{bmatrix}a_0 & 0 & 0  \\
-                            a_1 & a_0 & 0  \\
-			    a_2 & a_1 & a_0  \\
-			    a_3 & a_2 & a_1 \\
-			    0 & a_3 & a_2 \\
-			    0 & 0 & a_3
-			    \end{bmatrix},
-\]
-!et
-with elements $a_{ii}=a_{i+1,j+1}=a_{i-j}$ is an example of a Toeplitz
-matrix. Such a matrix does not need to be a square matrix.  Toeplitz
-matrices are also closely connected with Fourier series discussed
-below, because the multiplication operator by a trigonometric
-polynomial, compressed to a finite-dimensional space, can be
-represented by such a matrix. The example above shows that we can
-represent linear convolution as multiplication of a Toeplitz matrix by
-a vector.
-
-!split
-===== Convolution Examples: Principle of Superposition and Periodic Forces (Fourier Transforms) =====
-
-For problems with so-called harmonic oscillations, given by for example the following differential equation
-!bt
-\[
-m\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
-\]
-!et
-where $F(t)$ is an applied external force acting on the system (often
-called a driving force), one can use the theory of Fourier
-transformations to find the solutions of this type of equations.
-
-If one has several driving forces, $F(t)=\sum_n F_n(t)$, one can find
-the particular solution $x_{pn}(t)$ to the above differential equation for each $F_n$. The particular
-solution for the entire driving force is then given by a series like
-
-!bt
-\begin{equation}
-x_p(t)=\sum_nx_{pn}(t).
-\end{equation}
-!et
-
-This is known as the principle of superposition. It only applies when
-the homogenous equation is linear. 
-Superposition is especially useful when $F(t)$ can be written
-as a sum of sinusoidal terms, because the solutions for each
-sinusoidal (sine or cosine)  term is analytic. 
-
-Driving forces are often periodic, even when they are not
-sinusoidal. Periodicity implies that for some time $t$ our function repeats itself periodically after a period $\tau$, that is
-
-!bt
-\begin{eqnarray}
-F(t+\tau)=F(t). 
-\end{eqnarray}
-!et
-
-One example of a non-sinusoidal periodic force is a square wave. Many
-components in electric circuits are non-linear, for example diodes. This 
-makes many wave forms non-sinusoidal even when the circuits are being
-driven by purely sinusoidal sources.
-
-!split
-===== Simple Code Example =====
-
-The code here shows a typical example of such a square wave generated
-using the functionality included in the _scipy_ Python package. We
-have used a period of $\tau=0.2$.
-
-!bc pycod
-import numpy as np
-import math
-from scipy import signal
-import matplotlib.pyplot as plt
-
-# number of points                                                                                       
-n = 500
-# start and final times                                                                                  
-t0 = 0.0
-tn = 1.0
-# Period                                                                                                 
-t = np.linspace(t0, tn, n, endpoint=False)
-SqrSignal = np.zeros(n)
-SqrSignal = 1.0+signal.square(2*np.pi*5*t)
-plt.plot(t, SqrSignal)
-plt.ylim(-0.5, 2.5)
-plt.show()
-!ec
-
-
-For the sinusoidal example the
-period is $\tau=2\pi/\omega$. However, higher harmonics can also
-satisfy the periodicity requirement. In general, any force that
-satisfies the periodicity requirement can be expressed as a sum over
-harmonics,
-
-!bt
-\begin{equation}
-F(t)=\frac{f_0}{2}+\sum_{n>0} f_n\cos(2n\pi t/\tau)+g_n\sin(2n\pi t/\tau).
-\end{equation}
-!et
-
-!split
-===== Wrapping up Fourier transforms =====
-
-We can write down the answer for
-$x_{pn}(t)$, by substituting $f_n/m$ or $g_n/m$ for $F_0/m$. By
-writing each factor $2n\pi t/\tau$ as $n\omega t$, with $\omega\equiv
-2\pi/\tau$,
-
-!bt
-\begin{equation}
-label{eq:fourierdef1}
-F(t)=\frac{f_0}{2}+\sum_{n>0}f_n\cos(n\omega t)+g_n\sin(n\omega t).
-\end{equation}
-!et
-
-The solutions for $x(t)$ then come from replacing $\omega$ with
-$n\omega$ for each term in the particular solution,
-
-!bt
-\begin{eqnarray}
-x_p(t)&=&\frac{f_0}{2k}+\sum_{n>0} \alpha_n\cos(n\omega t-\delta_n)+\beta_n\sin(n\omega t-\delta_n),\\
-\nonumber
-\alpha_n&=&\frac{f_n/m}{\sqrt{((n\omega)^2-\omega_0^2)+4\beta^2n^2\omega^2}},\\
-\nonumber
-\beta_n&=&\frac{g_n/m}{\sqrt{((n\omega)^2-\omega_0^2)+4\beta^2n^2\omega^2}},\\
-\nonumber
-\delta_n&=&\tan^{-1}\left(\frac{2\beta n\omega}{\omega_0^2-n^2\omega^2}\right).
-\end{eqnarray}
-!et
-
-!split
-===== Finding the Coefficients =====
-
-Because the forces have been applied for a long time, any non-zero
-damping eliminates the homogenous parts of the solution. We need then 
-only consider the particular solution for each $n$.
-
-The problem is considered solved if one can find expressions for the
-coefficients $f_n$ and $g_n$, even though the solutions are expressed
-as an infinite sum. The coefficients can be extracted from the
-function $F(t)$ by
-
-!bt
-\begin{eqnarray}
-label{eq:fourierdef2}
-f_n&=&\frac{2}{\tau}\int_{-\tau/2}^{\tau/2} dt~F(t)\cos(2n\pi t/\tau),\\
-\nonumber
-g_n&=&\frac{2}{\tau}\int_{-\tau/2}^{\tau/2} dt~F(t)\sin(2n\pi t/\tau).
-\end{eqnarray}
-!et
-
-To check the consistency of these expressions and to verify
-Eq. (ref{eq:fourierdef2}), one can insert the expansion of $F(t)$ in
-Eq. (ref{eq:fourierdef1}) into the expression for the coefficients in
-Eq. (ref{eq:fourierdef2}) and see whether
-
-!bt
-\[
-f_n=\frac{2}{\tau}\int_{-\tau/2}^{\tau/2} dt~\left\{\frac{f_0}{2}+\sum_{m>0}f_m\cos(m\omega t)+g_m\sin(m\omega t)\right\}\cos(n\omega t).
-\]
-!et
-
-Immediately, one can throw away all the terms with $g_m$ because they
-convolute an even and an odd function. The term with $f_0/2$
-disappears because $\cos(n\omega t)$ is equally positive and negative
-over the interval and will integrate to zero. For all the terms
-$f_m\cos(m\omega t)$ appearing in the sum, one can use angle addition
-formulas to see that $\cos(m\omega t)\cos(n\omega
-t)=(1/2)(\cos[(m+n)\omega t]+\cos[(m-n)\omega t]$. This will integrate
-to zero unless $m=n$. In that case the $m=n$ term gives
-
-!bt
-\begin{equation}
-\int_{-\tau/2}^{\tau/2}dt~\cos^2(m\omega t)=\frac{\tau}{2},
-\end{equation}
-!et
-
-and
-
-!bt
-\[
-f_n=\frac{2}{\tau}\int_{-\tau/2}^{\tau/2} dt~f_n/2=f_n.
-\]
-!et
-
-The same method can be used to check for the consistency of $g_n$.
-
-
-
-!split
-===== Final words on Fourier Transforms =====
-
-The code here uses the Fourier series applied to a 
-square wave signal. The code here
-visualizes the various approximations given by Fourier series compared
-with a square wave with period $T=0.2$ (dimensionless time), width $0.1$ and max value of the force $F=2$. We
-see that when we increase the number of components in the Fourier
-series, the Fourier series approximation gets closer and closer to the
-square wave signal.
-
-!bc pycod
-import numpy as np
-import math
-from scipy import signal
-import matplotlib.pyplot as plt
-
-# number of points                                                                                       
-n = 500
-# start and final times                                                                                  
-t0 = 0.0
-tn = 1.0
-# Period                                                                                                 
-T =0.2
-# Max value of square signal                                                                             
-Fmax= 2.0
-# Width of signal   
-Width = 0.1
-t = np.linspace(t0, tn, n, endpoint=False)
-SqrSignal = np.zeros(n)
-FourierSeriesSignal = np.zeros(n)
-SqrSignal = 1.0+signal.square(2*np.pi*5*t+np.pi*Width/T)
-a0 = Fmax*Width/T
-FourierSeriesSignal = a0
-Factor = 2.0*Fmax/np.pi
-for i in range(1,500):
-    FourierSeriesSignal += Factor/(i)*np.sin(np.pi*i*Width/T)*np.cos(i*t*2*np.pi/T)
-plt.plot(t, SqrSignal)
-plt.plot(t, FourierSeriesSignal)
-plt.ylim(-0.5, 2.5)
-plt.show()
-!ec
-
-=== Fourier transforms and convolution ===
-
-We can use Fourier transforms in our studies of convolution as well. To see this, assume we have two functions $f$ and $g$ and their corresponding Fourier transforms $\hat{f}$ and $\hat{g}$. We remind the reader that the Fourier transform reads (say for the function $f$)
-
-!bt
-\[
-\hat{f}(y)=\bm{F}[f(y)]=\frac{1}{2\pi}\int_{-\infty}^{\infty} d\omega \exp{-i\omega y} f(\omega),
-\]
-!et
-and similarly we have
-!bt
-\[
-\hat{g}(y)=\bm{F}[g(y)]=\frac{1}{2\pi}\int_{-\infty}^{\infty} d\omega \exp{-i\omega y} g(\omega).
-\]
-!et
-The inverse Fourier transform is given by
-!bt
-\[
-\bm{F}^{-1}[g(y)]=\frac{1}{2\pi}\int_{-\infty}^{\infty} d\omega \exp{i\omega y} g(\omega).
-\]
-!et
-
-
-The inverse Fourier transform of the product of the two functions $\hat{f}\hat{g}$ can be written as
-!bt
-\[
-\bm{F}^{-1}[(\hat{f}\hat{g})(x)]=\frac{1}{2\pi}\int_{-\infty}^{\infty} d\omega \exp{i\omega x} \hat{f}(\omega)\hat{g}(\omega).
-\]
-!et
-We can rewrite the latter as
-!bt
-\[
-\bm{F}^{-1}[(\hat{f}\hat{g})(x)]=\int_{-\infty}^{\infty} d\omega \exp{i\omega x} \hat{f}(\omega)\left[\frac{1}{2\pi}\int_{-\infty}^{\infty}g(y)dy \exp{-i\omega y}\right]=\frac{1}{2\pi}\int_{-\infty}^{\infty}dy g(y)\int_{-\infty}^{\infty} d\omega \hat{f}(\omega) \exp{i\omega(x- y)},
-\]
-!et
-which is simply 
-!bt
-\[
-\bm{F}^{-1}[(\hat{f}\hat{g})(x)]=\int_{-\infty}^{\infty}dy g(y)f(x-y)=(f*g)(x),
-\]
-!et
-the convolution of the functions $f$ and $g$.
-
-
-=====  Two-dimensional Objects =====
-
-We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
-We often use convolutions over more than one dimension at a time. If
-we have a two-dimensional image $I$ as input, we can have a _filter_
-defined by a two-dimensional _kernel_ $K$. This leads to an output $S$
-
-!bt
-\[
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(m,n)K(i-m,j-n).
-\]
-!et
-
-Convolution is a commutatitave process, which means we can rewrite this equation as
-!bt
-\[
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i-m,j-n)K(m,n).
-\]
-!et
-
-Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of $m$ and $n$.
-
-
-Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)
-!bt
-\[
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i+m,j+n)K(m,n).
-\]
-!et
-
-
-!split
-===== More on Dimensionalities =====
-
-In fields like signal processing (and imaging as well), one designs
-so-called filters. These filters are defined by the convolutions and
-are often hand-crafted. One may specify filters for smoothing, edge
-detection, frequency reshaping, and similar operations. However with
-neural networks the idea is to automatically learn the filters and use
-many of them in conjunction with non-linear operations (activation
-functions).
-
-As an example consider a neural network operating on sound sequence
-data.  Assume that we an input vector $\bm{x}$ of length $d=10^6$.  We
-construct then a neural network with onle hidden layer only with
-$10^4$ nodes. This means that we will have a weight matrix with
-$10^4\times 10^6=10^{10}$ weights to be determined, together with $10^4$ biases.
-
-Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
-It means that we have only one output node. But since this output node connects to $10^4$ nodes in the hidden layer, there are in total $10^4$ weights to be determined for the output layer, plus one bias. In total we have
-
-!bt
-\[
-\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
-\]
-!et
-that is ten billion parameters to determine. 
-
-
-!split
-===== Further Dimensionality Remarks =====
-
-In today’s architecture one can train such neural networks, however
-this is a huge number of parameters for the task at hand. In general,
-it is a very wasteful and inefficient use of dense matrices as
-parameters. Just as importantly, such trained network parameters are
-very specific for the type of input data on which they were trained
-and the network is not likely to generalize easily to variations in
-the input.
-
-
-The main principles that justify convolutions is locality of
-information and repetion of patterns within the signal. Sound samples
-of the input in adjacent spots are much more likely to affect each
-other than those that are very far away. Similarly, sounds are
-repeated in multiple times in the signal. While slightly simplistic,
-reasoning about such a sound example demonstrates this. The same
-principles then apply to images and other similar data.
 
 
 !split
@@ -772,6 +265,10 @@ For any $i$, $k$ and $s$,
     o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
 \end{equation*}
 !et
+
+
+!split
+===== Strategies for CNNs =====
 
 
 
@@ -1156,11 +653,673 @@ print(test_acc)
 
 
 
+!split
+===== Recurrent neural networks (RNNs): Overarching view =====
+
+Till now our focus has been, including convolutional neural networks
+as well, on feedforward neural networks. The output or the activations
+flow only in one direction, from the input layer to the output layer.
+
+A recurrent neural network (RNN) looks very much like a feedforward
+neural network, except that it also has connections pointing
+backward. 
+
+RNNs are used to analyze time series data such as stock prices, and
+tell you when to buy or sell. In autonomous driving systems, they can
+anticipate car trajectories and help avoid accidents. More generally,
+they can work on sequences of arbitrary lengths, rather than on
+fixed-sized inputs like all the nets we have discussed so far. For
+example, they can take sentences, documents, or audio samples as
+input, making them extremely useful for natural language processing
+systems such as automatic translation and speech-to-text.
 
 
 
+!split
+===== A simple example first =====
+
+!bc pycod
+# Start importing packages
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras import datasets, layers, models
+from tensorflow.keras.layers import Input
+from tensorflow.keras.models import Model, Sequential 
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, GRU
+from tensorflow.keras import optimizers     
+from tensorflow.keras import regularizers           
+from tensorflow.keras.utils import to_categorical 
+
+# convert into dataset matrix
+def convertToMatrix(data, step):
+ X, Y =[], []
+ for i in range(len(data)-step):
+  d=i+step  
+  X.append(data[i:d,])
+  Y.append(data[d,])
+ return np.array(X), np.array(Y)
+
+step = 4
+N = 1000    
+Tp = 800    
+
+t=np.arange(0,N)
+x=np.sin(0.02*t)+2*np.random.rand(N)
+df = pd.DataFrame(x)
+df.head()
+
+plt.plot(df)
+plt.show()
+
+values=df.values
+train,test = values[0:Tp,:], values[Tp:N,:]
+
+# add step elements into train and test
+test = np.append(test,np.repeat(test[-1,],step))
+train = np.append(train,np.repeat(train[-1,],step))
+ 
+trainX,trainY =convertToMatrix(train,step)
+testX,testY =convertToMatrix(test,step)
+trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
+testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
+
+model = Sequential()
+model.add(SimpleRNN(units=32, input_shape=(1,step), activation="relu"))
+model.add(Dense(8, activation="relu")) 
+model.add(Dense(1))
+model.compile(loss='mean_squared_error', optimizer='rmsprop')
+model.summary()
+model.fit(trainX,trainY, epochs=100, batch_size=16, verbose=2)
+trainPredict = model.predict(trainX)
+testPredict= model.predict(testX)
+predicted=np.concatenate((trainPredict,testPredict),axis=0)
+
+trainScore = model.evaluate(trainX, trainY, verbose=0)
+print(trainScore)
 
 
+df = pd.DataFrame(x)
+pred = pd.DataFrame(predicted)
+plt.plot(df,c="b")
+plt.plot(pred,c="r")
+plt.show()
+
+!ec
+
+
+!split
+===== Basics of RNNs with examples: Ordinary differential equation =====
+
+
+
+!split
+=====  An extrapolation example =====
+
+The following code provides an example of how recurrent neural
+networks can be used to extrapolate to unknown values of physics data
+sets.  Specifically, the data sets used in this program come from
+a quantum mechanical many-body calculation of energies as functions of the number of particles.
+
+
+!bc pycod
+
+# For matrices and calculations
+import numpy as np
+# For machine learning (backend for keras)
+import tensorflow as tf
+# User-friendly machine learning library
+# Front end for TensorFlow
+import tensorflow.keras
+# Different methods from Keras needed to create an RNN
+# This is not necessary but it shortened function calls 
+# that need to be used in the code.
+from tensorflow.keras import datasets, layers, models
+from tensorflow.keras.layers import Input
+from tensorflow.keras import regularizers
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, GRU
+# For timing the code
+from timeit import default_timer as timer
+# For plotting
+import matplotlib.pyplot as plt
+
+
+# The data set
+datatype='VaryDimension'
+X_tot = np.arange(2, 42, 2)
+y_tot = np.array([-0.03077640549, -0.08336233266, -0.1446729567, -0.2116753732, -0.2830637392, -0.3581341341, -0.436462435, -0.5177783846,
+	-0.6019067271, -0.6887363571, -0.7782028952, -0.8702784034, -0.9649652536, -1.062292565, -1.16231451, 
+	-1.265109911, -1.370782966, -1.479465113, -1.591317992, -1.70653767])
+
+!ec
+
+!split
+===== Formatting the Data =====
+
+The way the recurrent neural networks are trained in this program
+differs from how machine learning algorithms are usually trained.
+Typically a machine learning algorithm is trained by learning the
+relationship between the $x$ data and the $y$ data.  In this program, the
+recurrent neural network will be trained to recognize the relationship
+in a sequence of $y$ values.  This is type of data formatting is
+typically used for time series forecasting, but it can also be used in any
+extrapolation (time series forecasting is just a specific type of
+extrapolation along the time axis).  This method of data formatting
+does not use the $x$ data and assumes that the $y$ data are evenly spaced.
+
+For a standard machine learning algorithm, the training data has the
+form of $(x,y)$ so the machine learning algorithm learns to associate a
+$y$ value with a given $x$ value.  This is useful when the test data has $x$
+values within the same range as the training data.  However, for this
+application, the x values of the test data are outside of the x values
+of the training data and the traditional method of training a machine
+learning algorithm does not work as well.  For this reason, the
+recurrent neural network is trained on sequences of y values of the
+form $((y1, y2), y3)$, so that the network is concerned with learning
+the pattern of the y data and not the relation between the x and y
+data.  As long as the pattern of y data outside of the training region
+stays relatively stable compared to what was inside the training
+region, this method of training can produce accurate extrapolations to
+y values far removed from the training data set.
+
+
+# 
+# The idea behind formatting the data in this way comes from [this resource](https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/) and [this one](https://fairyonice.github.io/Understand-Keras%27s-RNN-behind-the-scenes-with-a-sin-wave-example.html).
+# 
+# The following method takes in a y data set and formats it so the "x data" are of the form (y1, y2) and the "y data" are of the form y3, with extra brackets added in to make the resulting arrays compatable with both Keras and Tensorflow.
+# 
+# Note: Using a sequence length of two is not required for time series forecasting so any lenght of sequence could be used (for example instead of ((y1, y2) y3) you could change the length of sequence to be 4 and the resulting data points would have the form ((y1, y2, y3, y4), y5)).  While the following method can be used to create a data set of any sequence length, the remainder of the code expects the length of sequence to be 2.  This is because the data sets are very small and the higher the lenght of the sequence the less resulting data points.
+
+!bc pycod
+# FORMAT_DATA
+def format_data(data, length_of_sequence = 2):  
+    """
+        Inputs:
+            data(a numpy array): the data that will be the inputs to the recurrent neural
+                network
+            length_of_sequence (an int): the number of elements in one iteration of the
+                sequence patter.  For a function approximator use length_of_sequence = 2.
+        Returns:
+            rnn_input (a 3D numpy array): the input data for the recurrent neural network.  Its
+                dimensions are length of data - length of sequence, length of sequence, 
+                dimnsion of data
+            rnn_output (a numpy array): the training data for the neural network
+        Formats data to be used in a recurrent neural network.
+    """
+
+    X, Y = [], []
+    for i in range(len(data)-length_of_sequence):
+        # Get the next length_of_sequence elements
+        a = data[i:i+length_of_sequence]
+        # Get the element that immediately follows that
+        b = data[i+length_of_sequence]
+        # Reshape so that each data point is contained in its own array
+        a = np.reshape (a, (len(a), 1))
+        X.append(a)
+        Y.append(b)
+    rnn_input = np.array(X)
+    rnn_output = np.array(Y)
+
+    return rnn_input, rnn_output
+
+
+# ## Defining the Recurrent Neural Network Using Keras
+# 
+# The following method defines a simple recurrent neural network in keras consisting of one input layer, one hidden layer, and one output layer.
+
+def rnn(length_of_sequences, batch_size = None, stateful = False):
+    """
+        Inputs:
+            length_of_sequences (an int): the number of y values in "x data".  This is determined
+                when the data is formatted
+            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
+            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
+        Returns:
+            model (a Keras model): The recurrent neural network that is built and compiled by this
+                method
+        Builds and compiles a recurrent neural network with one hidden layer and returns the model.
+    """
+    # Number of neurons in the input and output layers
+    in_out_neurons = 1
+    # Number of neurons in the hidden layer
+    hidden_neurons = 200
+    # Define the input layer
+    inp = Input(batch_shape=(batch_size, 
+                length_of_sequences, 
+                in_out_neurons))  
+    # Define the hidden layer as a simple RNN layer with a set number of neurons and add it to 
+    # the network immediately after the input layer
+    rnn = SimpleRNN(hidden_neurons, 
+                    return_sequences=False,
+                    stateful = stateful,
+                    name="RNN")(inp)
+    # Define the output layer as a dense neural network layer (standard neural network layer)
+    #and add it to the network immediately after the hidden layer.
+    dens = Dense(in_out_neurons,name="dense")(rnn)
+    # Create the machine learning model starting with the input layer and ending with the 
+    # output layer
+    model = Model(inputs=[inp],outputs=[dens])
+    # Compile the machine learning model using the mean squared error function as the loss 
+    # function and an Adams optimizer.
+    model.compile(loss="mean_squared_error", optimizer="adam")  
+    return model
+
+!ec
+
+!split
+===== Predicting New Points With A Trained Recurrent Neural Network =====
+
+!bc pycod
+def test_rnn (x1, y_test, plot_min, plot_max):
+    """
+        Inputs:
+            x1 (a list or numpy array): The complete x component of the data set
+            y_test (a list or numpy array): The complete y component of the data set
+            plot_min (an int or float): the smallest x value used in the training data
+            plot_max (an int or float): the largest x valye used in the training data
+        Returns:
+            None.
+        Uses a trained recurrent neural network model to predict future points in the 
+        series.  Computes the MSE of the predicted data set from the true data set, saves
+        the predicted data set to a csv file, and plots the predicted and true data sets w
+        while also displaying the data range used for training.
+    """
+    # Add the training data as the first dim points in the predicted data array as these
+    # are known values.
+    y_pred = y_test[:dim].tolist()
+    # Generate the first input to the trained recurrent neural network using the last two 
+    # points of the training data.  Based on how the network was trained this means that it
+    # will predict the first point in the data set after the training data.  All of the 
+    # brackets are necessary for Tensorflow.
+    next_input = np.array([[[y_test[dim-2]], [y_test[dim-1]]]])
+    # Save the very last point in the training data set.  This will be used later.
+    last = [y_test[dim-1]]
+
+    # Iterate until the complete data set is created.
+    for i in range (dim, len(y_test)):
+        # Predict the next point in the data set using the previous two points.
+        next = model.predict(next_input)
+        # Append just the number of the predicted data set
+        y_pred.append(next[0][0])
+        # Create the input that will be used to predict the next data point in the data set.
+        next_input = np.array([[last, next[0]]], dtype=np.float64)
+        last = next
+
+    # Print the mean squared error between the known data set and the predicted data set.
+    print('MSE: ', np.square(np.subtract(y_test, y_pred)).mean())
+    # Save the predicted data set as a csv file for later use
+    name = datatype + 'Predicted'+str(dim)+'.csv'
+    np.savetxt(name, y_pred, delimiter=',')
+    # Plot the known data set and the predicted data set.  The red box represents the region that was used
+    # for the training data.
+    fig, ax = plt.subplots()
+    ax.plot(x1, y_test, label="true", linewidth=3)
+    ax.plot(x1, y_pred, 'g-.',label="predicted", linewidth=4)
+    ax.legend()
+    # Created a red region to represent the points used in the training data.
+    ax.axvspan(plot_min, plot_max, alpha=0.25, color='red')
+    plt.show()
+
+# Check to make sure the data set is complete
+assert len(X_tot) == len(y_tot)
+
+# This is the number of points that will be used in as the training data
+dim=12
+
+# Separate the training data from the whole data set
+X_train = X_tot[:dim]
+y_train = y_tot[:dim]
+
+
+# Generate the training data for the RNN, using a sequence of 2
+rnn_input, rnn_training = format_data(y_train, 2)
+
+
+# Create a recurrent neural network in Keras and produce a summary of the 
+# machine learning model
+model = rnn(length_of_sequences = rnn_input.shape[1])
+model.summary()
+
+# Start the timer.  Want to time training+testing
+start = timer()
+# Fit the model using the training data genenerated above using 150 training iterations and a 5%
+# validation split.  Setting verbose to True prints information about each training iteration.
+hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
+                 verbose=True,validation_split=0.05)
+
+for label in ["loss","val_loss"]:
+    plt.plot(hist.history[label],label=label)
+
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
+plt.legend()
+plt.show()
+
+# Use the trained neural network to predict more points of the data set
+test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
+# Stop the timer and calculate the total time needed.
+end = timer()
+print('Time: ', end-start)
+!ec
+
+!split
+===== Other Things to Try =====
+
+
+Changing the size of the recurrent neural network and its parameters
+can drastically change the results you get from the model.  The below
+code takes the simple recurrent neural network from above and adds a
+second hidden layer, changes the number of neurons in the hidden
+layer, and explicitly declares the activation function of the hidden
+layers to be a sigmoid function.  The loss function and optimizer can
+also be changed but are kept the same as the above network.  These
+parameters can be tuned to provide the optimal result from the
+network.  For some ideas on how to improve the performance of a
+"recurrent neural network":"https://danijar.com/tips-for-training-recurrent-neural-networks".
+
+!bc pycod
+def rnn_2layers(length_of_sequences, batch_size = None, stateful = False):
+    """
+        Inputs:
+            length_of_sequences (an int): the number of y values in "x data".  This is determined
+                when the data is formatted
+            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
+            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
+        Returns:
+            model (a Keras model): The recurrent neural network that is built and compiled by this
+                method
+        Builds and compiles a recurrent neural network with two hidden layers and returns the model.
+    """
+    # Number of neurons in the input and output layers
+    in_out_neurons = 1
+    # Number of neurons in the hidden layer, increased from the first network
+    hidden_neurons = 500
+    # Define the input layer
+    inp = Input(batch_shape=(batch_size, 
+                length_of_sequences, 
+                in_out_neurons))  
+    # Create two hidden layers instead of one hidden layer.  Explicitly set the activation
+    # function to be the sigmoid function (the default value is hyperbolic tangent)
+    rnn1 = SimpleRNN(hidden_neurons, 
+                    return_sequences=True,  # This needs to be True if another hidden layer is to follow
+                    stateful = stateful, activation = 'sigmoid',
+                    name="RNN1")(inp)
+    rnn2 = SimpleRNN(hidden_neurons, 
+                    return_sequences=False, activation = 'sigmoid',
+                    stateful = stateful,
+                    name="RNN2")(rnn1)
+    # Define the output layer as a dense neural network layer (standard neural network layer)
+    #and add it to the network immediately after the hidden layer.
+    dens = Dense(in_out_neurons,name="dense")(rnn2)
+    # Create the machine learning model starting with the input layer and ending with the 
+    # output layer
+    model = Model(inputs=[inp],outputs=[dens])
+    # Compile the machine learning model using the mean squared error function as the loss 
+    # function and an Adams optimizer.
+    model.compile(loss="mean_squared_error", optimizer="adam")  
+    return model
+
+# Check to make sure the data set is complete
+assert len(X_tot) == len(y_tot)
+
+# This is the number of points that will be used in as the training data
+dim=12
+
+# Separate the training data from the whole data set
+X_train = X_tot[:dim]
+y_train = y_tot[:dim]
+
+
+# Generate the training data for the RNN, using a sequence of 2
+rnn_input, rnn_training = format_data(y_train, 2)
+
+
+# Create a recurrent neural network in Keras and produce a summary of the 
+# machine learning model
+model = rnn_2layers(length_of_sequences = 2)
+model.summary()
+
+# Start the timer.  Want to time training+testing
+start = timer()
+# Fit the model using the training data genenerated above using 150 training iterations and a 5%
+# validation split.  Setting verbose to True prints information about each training iteration.
+hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
+                 verbose=True,validation_split=0.05)
+
+
+# This section plots the training loss and the validation loss as a function of training iteration.
+# This is not required for analyzing the couple cluster data but can help determine if the network is
+# being overtrained.
+for label in ["loss","val_loss"]:
+    plt.plot(hist.history[label],label=label)
+
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
+plt.legend()
+plt.show()
+
+# Use the trained neural network to predict more points of the data set
+test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
+# Stop the timer and calculate the total time needed.
+end = timer()
+print('Time: ', end-start)
+!ec
+
+!split
+===== Other Types of Recurrent Neural Networks =====
+
+Besides a simple recurrent neural network layer, there are two other
+commonly used types of recurrent neural network layers: Long Short
+Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
+introduction to these layers see URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b"
+and URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b".
+
+The first network created below is similar to the previous network,
+but it replaces the SimpleRNN layers with LSTM layers.  The second
+network below has two hidden layers made up of GRUs, which are
+preceeded by two dense (feeddorward) neural network layers.  These
+dense layers "preprocess" the data before it reaches the recurrent
+layers.  This architecture has been shown to improve the performance
+of recurrent neural networks (see the link above and also
+URL:"https://arxiv.org/pdf/1807.02857.pdf".
+
+!bc pycod
+def lstm_2layers(length_of_sequences, batch_size = None, stateful = False):
+    """
+        Inputs:
+            length_of_sequences (an int): the number of y values in "x data".  This is determined
+                when the data is formatted
+            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
+            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
+        Returns:
+            model (a Keras model): The recurrent neural network that is built and compiled by this
+                method
+        Builds and compiles a recurrent neural network with two LSTM hidden layers and returns the model.
+    """
+    # Number of neurons on the input/output layer and the number of neurons in the hidden layer
+    in_out_neurons = 1
+    hidden_neurons = 250
+    # Input Layer
+    inp = Input(batch_shape=(batch_size, 
+                length_of_sequences, 
+                in_out_neurons)) 
+    # Hidden layers (in this case they are LSTM layers instead if SimpleRNN layers)
+    rnn= LSTM(hidden_neurons, 
+                    return_sequences=True,
+                    stateful = stateful,
+                    name="RNN", use_bias=True, activation='tanh')(inp)
+    rnn1 = LSTM(hidden_neurons, 
+                    return_sequences=False,
+                    stateful = stateful,
+                    name="RNN1", use_bias=True, activation='tanh')(rnn)
+    # Output layer
+    dens = Dense(in_out_neurons,name="dense")(rnn1)
+    # Define the midel
+    model = Model(inputs=[inp],outputs=[dens])
+    # Compile the model
+    model.compile(loss='mean_squared_error', optimizer='adam')  
+    # Return the model
+    return model
+
+def dnn2_gru2(length_of_sequences, batch_size = None, stateful = False):
+    """
+        Inputs:
+            length_of_sequences (an int): the number of y values in "x data".  This is determined
+                when the data is formatted
+            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
+            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
+        Returns:
+            model (a Keras model): The recurrent neural network that is built and compiled by this
+                method
+        Builds and compiles a recurrent neural network with four hidden layers (two dense followed by
+        two GRU layers) and returns the model.
+    """    
+    # Number of neurons on the input/output layers and hidden layers
+    in_out_neurons = 1
+    hidden_neurons = 250
+    # Input layer
+    inp = Input(batch_shape=(batch_size, 
+                length_of_sequences, 
+                in_out_neurons)) 
+    # Hidden Dense (feedforward) layers
+    dnn = Dense(hidden_neurons/2, activation='relu', name='dnn')(inp)
+    dnn1 = Dense(hidden_neurons/2, activation='relu', name='dnn1')(dnn)
+    # Hidden GRU layers
+    rnn1 = GRU(hidden_neurons, 
+                    return_sequences=True,
+                    stateful = stateful,
+                    name="RNN1", use_bias=True)(dnn1)
+    rnn = GRU(hidden_neurons, 
+                    return_sequences=False,
+                    stateful = stateful,
+                    name="RNN", use_bias=True)(rnn1)
+    # Output layer
+    dens = Dense(in_out_neurons,name="dense")(rnn)
+    # Define the model
+    model = Model(inputs=[inp],outputs=[dens])
+    # Compile the mdoel
+    model.compile(loss='mean_squared_error', optimizer='adam')  
+    # Return the model
+    return model
+
+# Check to make sure the data set is complete
+assert len(X_tot) == len(y_tot)
+
+# This is the number of points that will be used in as the training data
+dim=12
+
+# Separate the training data from the whole data set
+X_train = X_tot[:dim]
+y_train = y_tot[:dim]
+
+
+# Generate the training data for the RNN, using a sequence of 2
+rnn_input, rnn_training = format_data(y_train, 2)
+
+
+# Create a recurrent neural network in Keras and produce a summary of the 
+# machine learning model
+# Change the method name to reflect which network you want to use
+model = dnn2_gru2(length_of_sequences = 2)
+model.summary()
+
+# Start the timer.  Want to time training+testing
+start = timer()
+# Fit the model using the training data genenerated above using 150 training iterations and a 5%
+# validation split.  Setting verbose to True prints information about each training iteration.
+hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
+                 verbose=True,validation_split=0.05)
+
+
+# This section plots the training loss and the validation loss as a function of training iteration.
+# This is not required for analyzing the couple cluster data but can help determine if the network is
+# being overtrained.
+for label in ["loss","val_loss"]:
+    plt.plot(hist.history[label],label=label)
+
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
+plt.legend()
+plt.show()
+
+# Use the trained neural network to predict more points of the data set
+test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
+# Stop the timer and calculate the total time needed.
+end = timer()
+print('Time: ', end-start)
+
+
+# ### Training Recurrent Neural Networks in the Standard Way (i.e. learning the relationship between the X and Y data)
+# 
+# Finally, comparing the performace of a recurrent neural network using the standard data formatting to the performance of the network with time sequence data formatting shows the benefit of this type of data formatting with extrapolation.
+
+# Check to make sure the data set is complete
+assert len(X_tot) == len(y_tot)
+
+# This is the number of points that will be used in as the training data
+dim=12
+
+# Separate the training data from the whole data set
+X_train = X_tot[:dim]
+y_train = y_tot[:dim]
+
+# Reshape the data for Keras specifications
+X_train = X_train.reshape((dim, 1))
+y_train = y_train.reshape((dim, 1))
+
+
+# Create a recurrent neural network in Keras and produce a summary of the 
+# machine learning model
+# Set the sequence length to 1 for regular data formatting 
+model = rnn(length_of_sequences = 1)
+model.summary()
+
+# Start the timer.  Want to time training+testing
+start = timer()
+# Fit the model using the training data genenerated above using 150 training iterations and a 5%
+# validation split.  Setting verbose to True prints information about each training iteration.
+hist = model.fit(X_train, y_train, batch_size=None, epochs=150, 
+                 verbose=True,validation_split=0.05)
+
+
+# This section plots the training loss and the validation loss as a function of training iteration.
+# This is not required for analyzing the couple cluster data but can help determine if the network is
+# being overtrained.
+for label in ["loss","val_loss"]:
+    plt.plot(hist.history[label],label=label)
+
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
+plt.legend()
+plt.show()
+
+# Use the trained neural network to predict the remaining data points
+X_pred = X_tot[dim:]
+X_pred = X_pred.reshape((len(X_pred), 1))
+y_model = model.predict(X_pred)
+y_pred = np.concatenate((y_tot[:dim], y_model.flatten()))
+
+# Plot the known data set and the predicted data set.  The red box represents the region that was used
+# for the training data.
+fig, ax = plt.subplots()
+ax.plot(X_tot, y_tot, label="true", linewidth=3)
+ax.plot(X_tot, y_pred, 'g-.',label="predicted", linewidth=4)
+ax.legend()
+# Created a red region to represent the points used in the training data.
+ax.axvspan(X_tot[0], X_tot[dim], alpha=0.25, color='red')
+plt.show()
+
+# Stop the timer and calculate the total time needed.
+end = timer()
+print('Time: ', end-start)
+
+!ec
 
 
 
