@@ -245,6 +245,49 @@ This is sometimes referred to as full padding, because in this
 setting every possible partial or complete superimposition of the kernel on the
 input feature map is taken into account. 
 
+
+!split
+===== More on strides =====
+
+
+Smaller spatial filter size is more
+parameter efficient
+
+• A network with many parameters
+generally need more training data and
+computation time
+• A larger receptive field per parameter is
+good
+• More layers can give more reuse
+
+
+By skipping positions we can cover a
+larger area with less computation
+• The effect of the receptive field for the
+next layer is important
+
+With strides, spatial dimensions will
+become smaller
+• Usually some of the of the network
+capacity is preserved through an
+increasing number of channels
+
+
+!split
+===== Dilated convolution =====
+
+Larger receptive field, without
+reducing spatial dimension or
+increasing the parameters
+Dilated convolutions
+• Skipping values in the kernel
+• Same as filling the kernel with every
+other value as zero
+• Still cover all inputs
+• Larger kernel with no extra
+parameters
+
+
 !split
 ===== Pooling arithmetic =====
 
