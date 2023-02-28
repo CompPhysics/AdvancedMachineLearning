@@ -64,8 +64,8 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb222023.pdf
 
 ## February 27-March 3
-
-- Recurrent neural networks
+- Summary on CCNs
+- Introduction to recurrent neural networks and links with the first part of the project
 
 ## March 6-10
 
