@@ -277,128 +277,15 @@ plt.show()
 
 
 
-!split
-===== The CIFAR01 data set =====
-
-The CIFAR10 dataset contains 60,000 color images in 10 classes, with
-6,000 images in each class. The dataset is divided into 50,000
-training images and 10,000 testing images. The classes are mutually
-exclusive and there is no overlap between them.
-
-!bc pycod
-import tensorflow as tf
-
-from tensorflow.keras import datasets, layers, models
-import matplotlib.pyplot as plt
-
-# We import the data set
-(train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
-
-# Normalize pixel values to be between 0 and 1 by dividing by 255. 
-train_images, test_images = train_images / 255.0, test_images / 255.0
-
-!ec
-
-
-
-!split
-===== Verifying the data set =====
-
-To verify that the dataset looks correct, let's plot the first 25 images from the training set and display the class name below each image.
-
-!bc pycod
-class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
-               'dog', 'frog', 'horse', 'ship', 'truck']
-​
-plt.figure(figsize=(10,10))
-for i in range(25):
-    plt.subplot(5,5,i+1)
-    plt.xticks([])
-    plt.yticks([])
-    plt.grid(False)
-    plt.imshow(train_images[i], cmap=plt.cm.binary)
-    # The CIFAR labels happen to be arrays, 
-    # which is why you need the extra index
-    plt.xlabel(class_names[train_labels[i][0]])
-plt.show()
-!ec
-
-!split
-===== Set up  the model =====
-
-The 6 lines of code below define the convolutional base using a common pattern: a stack of Conv2D and MaxPooling2D layers.
-
-As input, a CNN takes tensors of shape (image_height, image_width, color_channels), ignoring the batch size. If you are new to these dimensions, color_channels refers to (R,G,B). In this example, you will configure our CNN to process inputs of shape (32, 32, 3), which is the format of CIFAR images. You can do this by passing the argument input_shape to our first layer.
-
-!bc pycod
-model = models.Sequential()
-model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-
-# Let's display the architecture of our model so far.
-
-model.summary()
-!ec
-
-You can see that the output of every Conv2D and MaxPooling2D layer is a 3D tensor of shape (height, width, channels). The width and height dimensions tend to shrink as you go deeper in the network. The number of output channels for each Conv2D layer is controlled by the first argument (e.g., 32 or 64). Typically, as the width and height shrink, you can afford (computationally) to add more output channels in each Conv2D layer.
 
 
 
 
-!split
-===== Add Dense layers on top =====
+KnowwhatdifferentiatesRNNsfrommultilayerperceptronsandmem- oryless models.
+Be able to design RNNs by hand to perform simple computations.
+Know how to compute the loss derivatives for an RNN using backprop through time.
+Know how RNN architectures can be applied to sequence prediction problems such as language modeling and machine translation.
 
-To complete our model, you will feed the last output tensor from the
-convolutional base (of shape (4, 4, 64)) into one or more Dense layers
-to perform classification. Dense layers take vectors as input (which
-are 1D), while the current output is a 3D tensor. First, you will
-flatten (or unroll) the 3D output to 1D, then add one or more Dense
-layers on top. CIFAR has 10 output classes, so you use a final Dense
-layer with 10 outputs and a softmax activation.
-
-!bc pycod
-model.add(layers.Flatten())
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dense(10))
-Here's the complete architecture of our model.
-
-model.summary()
-!ec
-As you can see, our (4, 4, 64) outputs were flattened into vectors of shape (1024) before going through two Dense layers.
-
-!split
-===== Compile and train the model =====
-
-!bc pycod
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
-​
-history = model.fit(train_images, train_labels, epochs=10, 
-                    validation_data=(test_images, test_labels))
-
-!ec
-
-
-!split
-===== Finally, evaluate the model =====
-
-!bc pycod
-plt.plot(history.history['accuracy'], label='accuracy')
-plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.ylim([0.5, 1])
-plt.legend(loc='lower right')
-
-test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-
-print(test_acc)
-
-!ec
 
 
 !split
@@ -423,299 +310,18 @@ systems such as automatic translation and speech-to-text.
 
 
 
+!split
+===== More examples =====
 
-When applying machine learning to sequences, we often want to turn an input
-sequence into an output sequence that lives in a different domain.
-– E. g. turn a sequence of sound pressures into a sequence of word identities.
-• When there is no separate target sequence, we can get a teaching signal by trying
-to predict the next term in the input sequence.
-– The target output sequence is the input sequence with an advance of 1 step.
-– This seems much more natural than trying to predict one pixel in an image
-from the other pixels, or one patch of an image from the rest of the image.
-– For temporal sequences there is a natural order for the predictions.
-• Predicting the next term in a sequence blurs the distinction between supervised
-and unsupervised learning.
-– It uses methods designed for supervised learning, but it doesn’t require a
-separate teaching signal. 
-
-
-
-=== Memoryless models ===
-Autoregressive models
-Predict the next term in a
-sequence from a fixed number of
-previous terms using “delay taps”.
-• Feed-forward neural nets
-These generalize autoregressive
-models by using one or more
-layers of non-linear hidden units. 
-
-
-If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-– It can store information in its hidden state for a long time.
-– If the dynamics is noisy and the way it generates outputs from its
-hidden state is noisy, we can never know its exact hidden state.
-– The best we can do is to infer a probability distribution over the
-space of hidden state vectors.
-• This inference is only tractable for two types of hidden state model.
-
-
-=== Linear dynamical model ===
-
-If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-– It can store information in its hidden state for a long time.
-– If the dynamics is noisy and the way it generates outputs from its
-hidden state is noisy, we can never know its exact hidden state.
-– The best we can do is to infer a probability distribution over the
-space of hidden state vectors.
-• This inference is only tractable for two types of hidden state model.
-
-
-=== Hidden Markov Models ===
-• Hidden Markov Models have a discrete oneof-N hidden state. Transitions between states
-are stochastic and controlled by a transition
-matrix. The outputs produced by a state are
-stochastic.
-– We cannot be sure which state produced a
-given output. So the state is “hidden”.
-– It is easy to represent a probability distribution
-across N states with N numbers.
-• To predict the next output we need to infer the
-probability distribution over hidden states.
-– HMMs have efficient algorithms for
-inference and learning
-
-=== RNNs ===
-
-RNNs are very powerful, because they
-combine two properties:
-– Distributed hidden state that allows
-them to store a lot of information
-about the past efficiently.
-– Non-linear dynamics that allows
-them to update their hidden state in
-complicated ways.
-• With enough neurons and time, RNNs
-can compute anything that can be
-computed by your computer.
-
-=== Do generative models need to be stochastic? ===
-• Linear dynamical systems and
-hidden Markov models are
-stochastic models.
-– But the posterior probability
-distribution over their
-hidden states given the
-observed data so far is a
-deterministic function of the
-data.
-• Recurrent neural networks are
-deterministic.
-– So think of the hidden state
-of an RNN as the
-equivalent of the
-deterministic probability
-distribution over hidden
-states in a linear dynamical
-system or hidden Markov
-model.
-
-
-=== What kinds of behaviour can RNNs exhibit? ===
-– They can oscillate. Good for motor control?
-– They can settle to point attractors. Good for retrieving memories?
-– They can behave chaotically. Bad for information processing?
-– RNNs could potentially learn to implement lots of small programs
-that each capture a nugget of knowledge and run in parallel,
-interacting to produce very complicated effects.
-• But the computational power of RNNs makes them very hard to train.
-– For many years we could not exploit the computational power of
-RNNs despite some heroic efforts (e.g. Tony Robinson’s speech
-recognizer). 
-
-
-The equivalence between feedforward nets and recurrent
-nets
-w1 w4
-w2 w3
-w1 w2 W3 W4
-time=0
-time=2
-time=1
-time=3
-Assume that there is a time
-delay of 1 in using each
-connection.
-The recurrent net is just a
-layered net that keeps
-reusing the same weights.
-
-
-=== Backpropagation through time ===
-• We can think of the recurrent net as a layered, feed-forward
-net with shared weights and then train the feed-forward net
-with weight constraints.
-• We can also think of this training algorithm in the time domain:
-– The forward pass builds up a stack of the activities of all
-the units at each time step.
-– The backward pass peels activities off the stack to
-compute the error derivatives at each time step.
-– After the backward pass we add together the derivatives at
-all the different times for each weight. 
-
-
-
-=== We need to specify the initial activity state of all the hidden and output ===
-units.
-• We could just fix these initial states to have some default value like 0.5.
-• But it is better to treat the initial states as learned parameters.
-• We learn them in the same way as we learn the weights.
-– Start off with an initial random guess for the initial states.
-– At the end of each training sequence, backpropagate through time
-all the way to the initial states to get the gradient of the error function
-with respect to each initial state.
-– Adjust the initial states by following the negative gradient. 
-
-
-
-=== We can specify inputs in several ===
-ways:
-– Specify the initial states of all
-the units.
-– Specify the initial states of a
-subset of the units.
-– Specify the states of the same
-subset of the units at every time
-step.
-• This is the natural way to
-model most sequential data. 
-
-
-=== We can specify targets in several ===
-ways:
-– Specify desired final activities of
-all the units
-– Specify desired activities of all
-units for the last few steps
-• Good for learning attractors
-• It is easy to add in extra error
-derivatives as we
-backpropagate.
-– Specify the desired activity of a
-subset of the units.
-• The other units are input or
-hidden units. 
-
-
-=== The backward pass is linear ===
-• There is a big difference between the
-forward and backward passes.
-• In the forward pass we use squashing
-functions (like the logistic) to prevent the
-activity vectors from exploding.
-• The backward pass, is completely linear. If
-you double the error derivatives at the final
-layer, all the error derivatives will double.
-– The forward pass determines the slope
-of the linear function used for
-backpropagating through each neuron
-
-
-=== The problem of exploding or vanishing gradients ===
-• What happens to the magnitude of the
-gradients as we backpropagate
-through many layers?
-– If the weights are small, the
-gradients shrink exponentially.
-– If the weights are big the gradients
-grow exponentially.
-• Typical feed-forward neural nets can
-cope with these exponential effects
-because they only have a few hidden
-layers.
-• In an RNN trained on long sequences
-(e.g. 100 time steps) the gradients
-can easily explode or vanish.
-– We can avoid this by initializing
-the weights very carefully.
-• Even with good initial weights, its very
-hard to detect that the current target
-output depends on an input from
-many time-steps ago.
-– So RNNs have difficulty dealing
-with long-range dependencies. 
-
-
-
-=== Four effective ways to learn an RNN ===
-• Long Short Term Memory
-Make the RNN out of little
-modules that are designed to
-remember values for a long time.
-• Hessian Free Optimization: Deal
-with the vanishing gradients
-problem by using a fancy
-optimizer that can detect
-directions with a tiny gradient but
-even smaller curvature.
-– The HF optimizer ( Martens &
-Sutskever, 2011) is good at
-this.
-• Echo State Networks: Initialize the
-inputàhidden and hiddenàhidden and
-outputàhidden connections very
-carefully so that the hidden state has a
-huge reservoir of weakly coupled
-oscillators which can be selectively driven
-by the input.
-– ESNs only need to learn the
-hiddenàoutput connections.
-• Good initialization with momentum
-Initialize like in Echo State Networks, but
-then learn all of the connections using
-momentum
-
-
-=== Long Short Term Memory (LSTM) ===
-• Hochreiter & Schmidhuber
-(1997) solved the problem of
-getting an RNN to remember
-things for a long time (like
-hundreds of time steps).
-• They designed a memory cell
-using logistic and linear units
-with multiplicative interactions.
-• Information gets into the cell
-whenever its “write” gate is on.
-• The information stays in the
-cell so long as its “keep” gate
-is on.
-• Information can be read from
-the cell by turning on its “read”
-gate. 
-
-
-=== Implementing a memory cell in a neural network ===
-To preserve information for a long time in
-the activities of an RNN, we use a circuit
-that implements an analog memory cell.
-– A linear unit that has a self-link with a
-weight of 1 will maintain its state.
-– Information is stored in the cell by
-activating its write gate.
-– Information is retrieved by activating
-the read gate.
-– We can backpropagate through this
-circuit because logistics are have nice
-derivatives. 
-
+When applying machine learning to sequences, we often want to turn an input sequence into an output sequence that lives in a different domain.
+* As example, consider turning a sequence of sound pressures into a sequence of word identities.
+  o When there is no separate target sequence, we can get a teaching signal by trying to predict the next term in the input sequence.
+  o The target output sequence is the input sequence with an advance of 1 step.
+  o This seems much more natural than trying to predict one pixel in an image from the other pixels, or one patch of an image from the rest of the image.
+  o For temporal sequences there is a natural order for the predictions.
 
 !split
-===== A simple example first =====
+===== A simple example =====
 
 !bc pycod
 # Start importing packages
@@ -730,6 +336,8 @@ from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, GRU
 from tensorflow.keras import optimizers     
 from tensorflow.keras import regularizers           
 from tensorflow.keras.utils import to_categorical 
+
+
 
 # convert into dataset matrix
 def convertToMatrix(data, step):
@@ -749,9 +357,6 @@ x=np.sin(0.02*t)+2*np.random.rand(N)
 df = pd.DataFrame(x)
 df.head()
 
-plt.plot(df)
-plt.show()
-
 values=df.values
 train,test = values[0:Tp,:], values[Tp:N,:]
 
@@ -770,6 +375,7 @@ model.add(Dense(8, activation="relu"))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='rmsprop')
 model.summary()
+
 model.fit(trainX,trainY, epochs=100, batch_size=16, verbose=2)
 trainPredict = model.predict(trainX)
 testPredict= model.predict(testX)
@@ -777,19 +383,241 @@ predicted=np.concatenate((trainPredict,testPredict),axis=0)
 
 trainScore = model.evaluate(trainX, trainY, verbose=0)
 print(trainScore)
-
-
-df = pd.DataFrame(x)
-pred = pd.DataFrame(predicted)
-plt.plot(df,c="b")
-plt.plot(pred,c="r")
+plt.plot(df)
+plt.plot(predicted)
 plt.show()
-
 !ec
 
 
-!split
-===== Basics of RNNs with examples: Ordinary differential equation =====
+
+=== Memoryless models ===
+
+Autoregressive models Predict the next term in a sequence from a fixed number of
+previous terms using _delay taps_.
+
+!bblock Feed-forward neural networks
+These generalize autoregressive
+models by using one or more
+layers of non-linear hidden units. 
+!eblock
+
+If we give our generative model some hidden state, and if we give
+this hidden state its own internal dynamics, we get a much more
+interesting kind of model.
+o It can store information in its hidden state for a long time.
+o If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.
+o The best we can do is to infer a probability distribution over the
+space of hidden state vectors.
+
+
+This inference is only tractable for two types of hidden state model.
+
+
+=== Linear dynamical model ===
+
+If we give our generative model some hidden state, and if we give
+this hidden state its own internal dynamics, we get a much more
+interesting kind of model.
+o It can store information in its hidden state for a long time.
+o  If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.
+o The best we can do is to infer a probability distribution over the space of hidden state vectors.
+
+
+=== Hidden Markov Models ===
+Hidden Markov Models have a discrete oneof-$N$ hidden state. Transitions between states
+are stochastic and controlled by a transition
+matrix. The outputs produced by a state are
+stochastic.
+* We cannot be sure which state produced a given output. So the state is “hidden”.
+* It is easy to represent a probability distribution across N states with N numbers.
+* To predict the next output we need to infer the probability distribution over hidden states.
+
+HMMs have efficient algorithms for inference and learning
+
+=== RNNs ===
+
+RNNs are very powerful, because they
+combine two properties:
+o Distributed hidden state that allows them to store a lot of information about the past efficiently.
+o Non-linear dynamics that allows them to update their hidden state in complicated ways.
+
+With enough neurons and time, RNNs
+can compute anything that can be
+computed by your computer.
+
+
+=== Do generative models need to be stochastic? ===
+
+!bblock Linear dynamical systems and hidden Markov models are stochastic models.
+
+But the posterior probability
+distribution over their
+hidden states given the
+observed data so far is a
+deterministic function of the
+data.
+!eblock 
+
+
+!bblock Recurrent neural networks are deterministic.
+Think of the hidden state
+of an RNN as the
+equivalent of the
+deterministic probability
+distribution over hidden
+states in a linear dynamical
+system or hidden Markov
+model.
+!eblock
+
+=== What kinds of behaviour can RNNs exhibit? ===
+o They can oscillate. Good for motor control?
+o They can settle to point attractors. Good for retrieving memories?
+o They can behave chaotically. Bad for information processing?
+o RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.
+
+But the computational power of RNNs makes them very hard to train.
+
+
+=== Backpropagation through time ===
+
+!bblock
+We can think of the recurrent net as a layered, feed-forward
+net with shared weights and then train the feed-forward net
+with weight constraints.
+!eblock
+
+We can also think of this training algorithm in the time domain:
+o The forward pass builds up a stack of the activities of all the units at each time step.
+o The backward pass peels activities off the stack to compute the error derivatives at each time step.
+o After the backward pass we add together the derivatives at all the different times for each weight. 
+
+FIGURE: [figslides/RNN1.png, width=700 frac=0.9]
+
+FIGURE: [figslides/RNN2.png, width=700 frac=0.9]
+
+FIGURE: [figslides/RNN3.png, width=700 frac=0.9]
+
+FIGURE: [figslides/RNN4.png, width=700 frac=0.9]
+
+FIGURE: [figslides/RNN5.png, width=700 frac=0.9]
+
+
+
+=== We need to specify the initial activity state of all the hidden and output units ===
+o We could just fix these initial states to have some default value like 0.5.
+o But it is better to treat the initial states as learned parameters.
+o We learn them in the same way as we learn the weights.
+
+* Start off with an initial random guess for the initial states.
+  o At the end of each training sequence, backpropagate through time all the way to the initial states to get the gradient of the error function with respect to each initial state.
+  o Adjust the initial states by following the negative gradient. 
+
+
+
+=== We can specify inputs in several ways ===
+
+o Specify the initial states of all the units.
+o Specify the initial states of a subset of the units.
+o Specify the states of the same subset of the units at every time step.
+
+This is the natural way to model most sequential data. 
+
+
+=== We can specify targets in several ways ===
+
+o Specify desired final activities of all the units
+o Specify desired activities of all units for the last few steps
+
+* Good for learning attractors
+* It is easy to add in extra error derivatives as we backpropagate.
+  * Specify the desired activity of a subset of the units.
+* The other units are input or hidden units. 
+
+
+=== The backward pass is linear ===
+
+* There is a big difference between the forward and backward passes.
+* In the forward pass we use squashing functions (like the logistic) to prevent the activity vectors from exploding.
+* The backward pass, is completely linear. If you double the error derivatives at the final layer, all the error derivatives will double.
+
+The forward pass determines the slope of the linear function used for
+backpropagating through each neuron
+
+
+
+
+FIGURE: [figslides/RNN6.png, width=700 frac=0.9]
+
+
+
+FIGURE: [figslides/RNN7.png, width=700 frac=0.9]
+
+
+
+
+FIGURE: [figslides/RNN8.png, width=700 frac=0.9]
+
+
+
+
+FIGURE: [figslides/RNN9.png, width=700 frac=0.9]
+
+
+
+FIGURE: [figslides/RNN10.png, width=700 frac=0.9]
+
+
+
+FIGURE: [figslides/RNN11.png, width=700 frac=0.9]
+
+
+
+FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
+
+
+
+
+=== The problem of exploding or vanishing gradients ===
+* What happens to the magnitude of the gradients as we backpropagate through many layers?
+  o If the weights are small, the gradients shrink exponentially.
+  o If the weights are big the gradients grow exponentially.
+* Typical feed-forward neural nets can cope with these exponential effects because they only have a few hidden layers.
+* In an RNN trained on long sequences (e.g. 100 time steps) the gradients can easily explode or vanish.
+  o We can avoid this by initializing the weights very carefully.
+* Even with good initial weights, its very hard to detect that the current target output depends on an input from many time-steps ago.
+
+
+RNNs have difficulty dealing with long-range dependencies. 
+
+
+
+=== Four effective ways to learn an RNN ===
+o Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.
+o Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.
+o Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.
+  * ESNs only need to learn the hidden-output connections.
+o Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum
+
+
+=== Long Short Term Memory (LSTM) ===
+o Hochreiter and Schmidhuber (1997) solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).
+o They designed a memory cell using logistic and linear units with multiplicative interactions.
+o Information gets into the cell whenever its “write” gate is on.
+o The information stays in the cell so long as its _keep_ gate is on.
+o Information can be read from the cell by turning on its _read_ gate. 
+
+
+=== Implementing a memory cell in a neural network ===
+To preserve information for a long time in
+the activities of an RNN, we use a circuit
+that implements an analog memory cell.
+
+o A linear unit that has a self-link with a weight of 1 will maintain its state.
+o Information is stored in the cell by activating its write gate.
+o Information is retrieved by activating the read gate.
+o We can backpropagate through this circuit because logistics are have nice derivatives. 
+
 
 
 
@@ -840,23 +668,23 @@ y_tot = np.array([-0.03077640549, -0.08336233266, -0.1446729567, -0.2116753732, 
 The way the recurrent neural networks are trained in this program
 differs from how machine learning algorithms are usually trained.
 Typically a machine learning algorithm is trained by learning the
-relationship between the $x$ data and the $y$ data.  In this program, the
+relationship between the x data and the y data.  In this program, the
 recurrent neural network will be trained to recognize the relationship
-in a sequence of $y$ values.  This is type of data formatting is
-typically used for time series forecasting, but it can also be used in any
+in a sequence of y values.  This is type of data formatting is
+typically used time series forcasting, but it can also be used in any
 extrapolation (time series forecasting is just a specific type of
 extrapolation along the time axis).  This method of data formatting
-does not use the $x$ data and assumes that the $y$ data are evenly spaced.
+does not use the x data and assumes that the y data are evenly spaced.
 
 For a standard machine learning algorithm, the training data has the
-form of $(x,y)$ so the machine learning algorithm learns to associate a
-$y$ value with a given $x$ value.  This is useful when the test data has $x$
+form of (x,y) so the machine learning algorithm learns to assiciate a
+y value with a given x value.  This is useful when the test data has x
 values within the same range as the training data.  However, for this
 application, the x values of the test data are outside of the x values
 of the training data and the traditional method of training a machine
 learning algorithm does not work as well.  For this reason, the
 recurrent neural network is trained on sequences of y values of the
-form $((y1, y2), y3)$, so that the network is concerned with learning
+form ((y1, y2), y3), so that the network is concerned with learning
 the pattern of the y data and not the relation between the x and y
 data.  As long as the pattern of y data outside of the training region
 stays relatively stable compared to what was inside the training
@@ -1359,6 +1187,14 @@ end = timer()
 print('Time: ', end-start)
 
 !ec
+
+
+
+
+
+
+
+
 
 
 
