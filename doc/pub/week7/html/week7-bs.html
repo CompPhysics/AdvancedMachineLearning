@@ -64,7 +64,6 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'recurrent-neural-networks-rnns-overarching-view'),
-              ('More examples', 2, None, 'more-examples'),
               ('A simple example', 2, None, 'a-simple-example'),
               ('Memoryless models', 3, None, 'memoryless-models'),
               ('Linear dynamical model', 3, None, 'linear-dynamical-model'),
@@ -78,10 +77,7 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                3,
                None,
                'what-kinds-of-behaviour-can-rnns-exhibit'),
-              ('Backpropagation through time',
-               3,
-               None,
-               'backpropagation-through-time'),
+              ('Basic layout', 2, None, 'basic-layout'),
               ('We need to specify the initial activity state of all the '
                'hidden and output units',
                3,
@@ -95,16 +91,20 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                3,
                None,
                'we-can-specify-targets-in-several-ways'),
+              ('Backpropagation through time',
+               3,
+               None,
+               'backpropagation-through-time'),
               ('The backward pass is linear',
                3,
                None,
                'the-backward-pass-is-linear'),
               ('The problem of exploding or vanishing gradients',
-               3,
+               2,
                None,
                'the-problem-of-exploding-or-vanishing-gradients'),
               ('Four effective ways to learn an RNN',
-               3,
+               2,
                None,
                'four-effective-ways-to-learn-an-rnn'),
               ('Long Short Term Memory (LSTM)',
@@ -173,7 +173,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#final-part" style="font-size: 80%;"><b>Final part</b></a></li>
      <!-- navigation toc: --> <li><a href="#final-visualization" style="font-size: 80%;"><b>Final visualization</b></a></li>
      <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;"><b>Recurrent neural networks (RNNs): Overarching view</b></a></li>
-     <!-- navigation toc: --> <li><a href="#more-examples" style="font-size: 80%;"><b>More examples</b></a></li>
      <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;"><b>A simple example</b></a></li>
      <!-- navigation toc: --> <li><a href="#memoryless-models" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Memoryless models</a></li>
      <!-- navigation toc: --> <li><a href="#linear-dynamical-model" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Linear dynamical model</a></li>
@@ -181,13 +180,14 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;RNNs</a></li>
      <!-- navigation toc: --> <li><a href="#do-generative-models-need-to-be-stochastic" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Do generative models need to be stochastic?</a></li>
      <!-- navigation toc: --> <li><a href="#what-kinds-of-behaviour-can-rnns-exhibit" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;What kinds of behaviour can RNNs exhibit?</a></li>
-     <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Backpropagation through time</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;"><b>Basic layout</b></a></li>
      <!-- navigation toc: --> <li><a href="#we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;We need to specify the initial activity state of all the hidden and output units</a></li>
      <!-- navigation toc: --> <li><a href="#we-can-specify-inputs-in-several-ways" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;We can specify inputs in several ways</a></li>
      <!-- navigation toc: --> <li><a href="#we-can-specify-targets-in-several-ways" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;We can specify targets in several ways</a></li>
+     <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Backpropagation through time</a></li>
      <!-- navigation toc: --> <li><a href="#the-backward-pass-is-linear" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;The backward pass is linear</a></li>
-     <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;The problem of exploding or vanishing gradients</a></li>
-     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Four effective ways to learn an RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;"><b>The problem of exploding or vanishing gradients</b></a></li>
+     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn" style="font-size: 80%;"><b>Four effective ways to learn an RNN</b></a></li>
      <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Long Short Term Memory (LSTM)</a></li>
      <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Implementing a memory cell in a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#an-extrapolation-example" style="font-size: 80%;"><b>An extrapolation example</b></a></li>
@@ -616,11 +616,6 @@ plt<span style="color: #666666">.</span>show()
   </div>
 </div>
 
-<p>KnowwhatdifferentiatesRNNsfrommultilayerperceptronsandmem- oryless models.
-Be able to design RNNs by hand to perform simple computations.
-Know how to compute the loss derivatives for an RNN using backprop through time.
-Know how RNN architectures can be applied to sequence prediction problems such as language modeling and machine translation.
-</p>
 
 <!-- !split -->
 <h2 id="recurrent-neural-networks-rnns-overarching-view" class="anchor">Recurrent neural networks (RNNs): Overarching view </h2>
@@ -645,19 +640,6 @@ input, making them extremely useful for natural language processing
 systems such as automatic translation and speech-to-text.
 </p>
 
-<!-- !split -->
-<h2 id="more-examples" class="anchor">More examples </h2>
-
-<p>When applying machine learning to sequences, we often want to turn an input sequence into an output sequence that lives in a different domain.</p>
-<ul>
-<li> As example, consider turning a sequence of sound pressures into a sequence of word identities.
-<ol type="a"></li>
- <li> When there is no separate target sequence, we can get a teaching signal by trying to predict the next term in the input sequence.</li>
- <li> The target output sequence is the input sequence with an advance of 1 step.</li>
- <li> This seems much more natural than trying to predict one pixel in an image from the other pixels, or one patch of an image from the rest of the image.</li>
- <li> For temporal sequences there is a natural order for the predictions.</li>
-</ol>
-</ul>
 <!-- !split -->
 <h2 id="a-simple-example" class="anchor">A simple example </h2>
 
@@ -746,9 +728,7 @@ plt<span style="color: #666666">.</span>show()
 </div>
 <h3 id="memoryless-models" class="anchor">Memoryless models </h3>
 
-<p>Autoregressive models Predict the next term in a sequence from a fixed number of
-previous terms using <b>delay taps</b>.
-</p>
+<p>Autoregressive models Predict the next term in a sequence from a fixed number of previous terms using <b>delay taps</b>.</p>
 
 <div class="panel panel-default">
 <div class="panel-body">
@@ -845,61 +825,23 @@ model.
 
 <h3 id="what-kinds-of-behaviour-can-rnns-exhibit" class="anchor">What kinds of behaviour can RNNs exhibit? </h3>
 <ol>
-<li> They can oscillate. Good for motor control?</li>
-<li> They can settle to point attractors. Good for retrieving memories?</li>
-<li> They can behave chaotically. Bad for information processing?</li>
+<li> They can oscillate.</li> 
+<li> They can settle to point attractors.</li>
+<li> They can behave chaotically.</li>
 <li> RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.</li>
 </ol>
 <p>But the computational power of RNNs makes them very hard to train.</p>
-<h3 id="backpropagation-through-time" class="anchor">Backpropagation through time </h3>
 
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>We can think of the recurrent net as a layered, feed-forward
-net with shared weights and then train the feed-forward net
-with weight constraints.
-</p>
-</div>
-</div>
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
 
-
-<p>We can also think of this training algorithm in the time domain:</p>
-<ol>
-<li> The forward pass builds up a stack of the activities of all the units at each time step.</li>
-<li> The backward pass peels activities off the stack to compute the error derivatives at each time step.</li>
-<li> After the backward pass we add together the derivatives at all the different times for each weight.</li> 
-</ol>
 <br/><br/>
 <center>
 <p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN3.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
 <h3 id="we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units" class="anchor">We need to specify the initial activity state of all the hidden and output units </h3>
+
 <ol>
 <li> We could just fix these initial states to have some default value like 0.5.</li>
 <li> But it is better to treat the initial states as learned parameters.</li>
@@ -930,13 +872,55 @@ with weight constraints.
 </ul>
 <li> The other units are input or hidden units.</li> 
 </ol>
+<br/><br/>
+<center>
+<p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN3.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+<h3 id="backpropagation-through-time" class="anchor">Backpropagation through time </h3>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>We can think of the recurrent net as a layered, feed-forward
+net with shared weights and then train the feed-forward net
+with weight constraints.
+</p>
+</div>
+</div>
+
+
+<p>We can also think of this training algorithm in the time domain:</p>
+<ol>
+<li> The forward pass builds up a stack of the activities of all the units at each time step.</li>
+<li> The backward pass peels activities off the stack to compute the error derivatives at each time step.</li>
+<li> After the backward pass we add together the derivatives at all the different times for each weight.</li> 
+</ol>
 <h3 id="the-backward-pass-is-linear" class="anchor">The backward pass is linear </h3>
 
-<ul>
+<ol>
 <li> There is a big difference between the forward and backward passes.</li>
 <li> In the forward pass we use squashing functions (like the logistic) to prevent the activity vectors from exploding.</li>
 <li> The backward pass, is completely linear. If you double the error derivatives at the final layer, all the error derivatives will double.</li>
-</ul>
+</ol>
 <p>The forward pass determines the slope of the linear function used for
 backpropagating through each neuron
 </p>
@@ -982,7 +966,9 @@ backpropagating through each neuron
 <p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
-<h3 id="the-problem-of-exploding-or-vanishing-gradients" class="anchor">The problem of exploding or vanishing gradients </h3>
+
+<!-- !split  -->
+<h2 id="the-problem-of-exploding-or-vanishing-gradients" class="anchor">The problem of exploding or vanishing gradients </h2>
 <ul>
 <li> What happens to the magnitude of the gradients as we backpropagate through many layers?
 <ol type="a"></li>
@@ -997,7 +983,9 @@ backpropagating through each neuron
 <li> Even with good initial weights, its very hard to detect that the current target output depends on an input from many time-steps ago.</li>
 </ul>
 <p>RNNs have difficulty dealing with long-range dependencies. </p>
-<h3 id="four-effective-ways-to-learn-an-rnn" class="anchor">Four effective ways to learn an RNN </h3>
+
+<!-- !split -->
+<h2 id="four-effective-ways-to-learn-an-rnn" class="anchor">Four effective ways to learn an RNN </h2>
 <ol>
 <li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
 <li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
