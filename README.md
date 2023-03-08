@@ -63,9 +63,11 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Video of lecture at  https://youtu.be/QHHXOm5TKpw
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesFeb222023.pdf
 
-## February 27-March 3
+## February 27-March 10
 - Summary on CCNs
-- Introduction to recurrent neural networks and links with the first part of the project
+- Recurrent neural networks and links with the first part of the project
+- Video of lectyre at https://youtu.be/_K8PEN0M0g8
+- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar82023.pdf
 
 ## March 6-10
 
@@ -73,7 +75,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 
 ## March 13-17
 
-- Variational autoencoders (VAEe)
+- Autoencoders (AE) and Variational autoencoders (VAEe)
 
 ## March 20-24
 
@@ -84,6 +86,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Generative Adversarial Networks
 
 ## April 10-14
+
 
 ## April 17-21
 
