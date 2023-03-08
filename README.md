@@ -70,7 +70,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar82023.pdf
 
 ## March 6-10
-
+- Summary of RNNs and discussion of Long-Short-Term memory
 - Autoencoders (AEs)
 
 ## March 13-17
@@ -87,15 +87,18 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 
 ## April 10-14
 
-
+- Project work
 ## April 17-21
 
+- Project work
 # April 24-28
 
+- Project work
 # May 1-5
 
+- Project work
 # May 8-12
-
+- Project work and last session
 
 ## Recommended textbooks:
 
