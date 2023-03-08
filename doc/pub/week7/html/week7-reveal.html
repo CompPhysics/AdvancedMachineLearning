@@ -980,8 +980,14 @@ backpropagating through each neuron
 </ol>
 <p>
 <h3 id="long-short-term-memory-lstm">Long Short Term Memory (LSTM) </h3>
+
+<p>LSTM uses a memory cell for 
+ modeling long-range dependencies and avoid vanishing gradient
+ problems.
+</p>
+
 <ol>
-<p><li> Hochreiter and Schmidhuber (1997) solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).</li>
+<p><li> Introduced by Hochreiter and Schmidhuber (1997) who solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).</li>
 <p><li> They designed a memory cell using logistic and linear units with multiplicative interactions.</li>
 <p><li> Information gets into the cell whenever its &#8220;write&#8221; gate is on.</li>
 <p><li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
@@ -1000,6 +1006,66 @@ that implements an analog memory cell.
 <p><li> Information is retrieved by activating the read gate.</li>
 <p><li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
 </ol>
+<p>
+<br/><br/>
+<center>
+<p><img src="figslides/RNN13.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN14.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN15.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN16.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN17.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN18.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN19.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN20.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN21.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN22.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
 </section>
 
 <section>
