@@ -5,14 +5,17 @@ DATE: March 13-17, 2023
 ===== Plans for the week March 13-17  =====
 
 !bblock
-
 * Summary of RNNs and discussion of Long-Short-Term memory with examples
-* Discussion of Autoencoders
+* Discussion of Autoencoders (AEs)
 
 * Reading recommendations:
   o For RNNs see Goodfellow et al chapter 10. See also chapter 11 and 12 on practicalities and applications
   o Reading suggestions for implementation of RNNs: "Aurelien Geron's chapter 14":"https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf". 
-  o "Mathematics of autoencoders":"https://arxiv.org/abs/2201.03898"
+  o "Deep Learning Tutorial on AEs from Stanford University":"http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/"
+  o "Building AEs in Keras":"https://blog.keras.io/building-autoencoders-in-keras.html"
+  o "Introduction to AEs in TensorFlow":"https://www.tensorflow.org/tutorials/generative/autoencoder"
+  o "Grosse, University of Toronto, Lecture on AEs":"http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf"
+  o "Bank et al on AEs":"https://arxiv.org/abs/2003.05991"  
 !eblock
 
 
@@ -21,7 +24,7 @@ DATE: March 13-17, 2023
 
 === Long Short Term Memory (LSTM) ===
 
-LSTM uses a memory cell for   modeling long-range dependencies and avoid vanishing gradient  problems.
+LSTM uses a memory cell for  modeling long-range dependencies and avoid vanishing gradient  problems.
 
 o Introduced by Hochreiter and Schmidhuber (1997) who solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).
 o They designed a memory cell using logistic and linear units with multiplicative interactions.
@@ -1293,32 +1296,6 @@ On \url{https://adl.toelt.ai} you will find examples of autoencoders, anomaly de
 
 
 
-
-\begin{itemize}
-\item Deep Learning Tutorial from Stanford University
-
-\url{http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/} 
-
-
-\item Building autoencoders in Keras
-
-\url{https://blog.keras.io/building-autoencoders-in-keras.html}
-
-
-\item Introduction to autoencoders in TensorFlow
-
-\url{https://www.tensorflow.org/tutorials/generative/autoencoder}
-
-
-\item Bank, D., Koenigstein, N., and Giryes, R., ``Autoencoders", arXiv e-prints, 2020,
-
-\url{https://arxiv.org/abs/2003.05991} 
-
-
-\item R. Grosse, University of Toronto, Lecture on autoencoders
-
-\url{http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf} 
-\end{itemize}
 
 
 
