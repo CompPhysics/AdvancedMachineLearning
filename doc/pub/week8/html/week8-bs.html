@@ -40,10 +40,12 @@ doconce format html week8.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'plans-for-the-week-march-13-17'),
-              ('Long Short Term Memory (LSTM)',
-               3,
+              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
+              ('A typical RNN', 2, None, 'a-typical-rnn'),
+              ('Gating mechanism: Long Short Term Memory (LSTM)',
+               2,
                None,
-               'long-short-term-memory-lstm'),
+               'gating-mechanism-long-short-term-memory-lstm'),
               ('Implementing a memory cell in a neural network',
                3,
                None,
@@ -63,13 +65,33 @@ doconce format html week8.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'autoencoders-overarching-view'),
-              ('Simple examples of Autoencoders',
+              ('From supervised to unsupervised training',
                2,
                None,
-               'simple-examples-of-autoencoders')]}
+               'from-supervised-to-unsupervised-training'),
+              ('First introduction of AEs',
+               2,
+               None,
+               'first-introduction-of-aes')]}
 end of tocinfo -->
 
 <body>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+     equationNumbers: {  autoNumber: "AMS"  },
+     extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "color.js"]
+  }
+});
+</script>
+<script type="text/javascript" async
+ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- Bootstrap navigation bar -->
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="navbar-header">
@@ -86,7 +108,9 @@ end of tocinfo -->
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-march-13-17" style="font-size: 80%;"><b>Plans for the week March 13-17</b></a></li>
-     <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Long Short Term Memory (LSTM)</a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;"><b>Summary of RNNs</b></a></li>
+     <!-- navigation toc: --> <li><a href="#a-typical-rnn" style="font-size: 80%;"><b>A typical RNN</b></a></li>
+     <!-- navigation toc: --> <li><a href="#gating-mechanism-long-short-term-memory-lstm" style="font-size: 80%;"><b>Gating mechanism: Long Short Term Memory (LSTM)</b></a></li>
      <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Implementing a memory cell in a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#an-extrapolation-example" style="font-size: 80%;"><b>An extrapolation example</b></a></li>
      <!-- navigation toc: --> <li><a href="#formatting-the-data" style="font-size: 80%;"><b>Formatting the Data</b></a></li>
@@ -94,7 +118,8 @@ end of tocinfo -->
      <!-- navigation toc: --> <li><a href="#other-things-to-try" style="font-size: 80%;"><b>Other Things to Try</b></a></li>
      <!-- navigation toc: --> <li><a href="#other-types-of-recurrent-neural-networks" style="font-size: 80%;"><b>Other Types of Recurrent Neural Networks</b></a></li>
      <!-- navigation toc: --> <li><a href="#autoencoders-overarching-view" style="font-size: 80%;"><b>Autoencoders: Overarching view</b></a></li>
-     <!-- navigation toc: --> <li><a href="#simple-examples-of-autoencoders" style="font-size: 80%;"><b>Simple examples of Autoencoders</b></a></li>
+     <!-- navigation toc: --> <li><a href="#from-supervised-to-unsupervised-training" style="font-size: 80%;"><b>From supervised to unsupervised training</b></a></li>
+     <!-- navigation toc: --> <li><a href="#first-introduction-of-aes" style="font-size: 80%;"><b>First introduction of AEs</b></a></li>
 
         </ul>
       </li>
@@ -134,25 +159,67 @@ end of tocinfo -->
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-
 <ul>
 <li> Summary of RNNs and discussion of Long-Short-Term memory with examples</li>
-<li> Discussion of Autoencoders</li>
+<li> Discussion of Autoencoders (AEs)</li>
 <li> Reading recommendations:
 <ol type="a"></li>
  <li> For RNNs see Goodfellow et al chapter 10. See also chapter 11 and 12 on practicalities and applications</li>
  <li> Reading suggestions for implementation of RNNs: <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf" target="_self">Aurelien Geron's chapter 14</a>.</li> 
- <li> <a href="https://arxiv.org/abs/2201.03898" target="_self">Mathematics of autoencoders</a></li>
+ <li> <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_self">Deep Learning Tutorial on AEs from Stanford University</a></li>
+ <li> <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_self">Building AEs in Keras</a></li>
+ <li> <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_self">Introduction to AEs in TensorFlow</a></li>
+ <li> <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_self">Grosse, University of Toronto, Lecture on AEs</a></li>
+ <li> <a href="https://arxiv.org/abs/2003.05991" target="_self">Bank et al on AEs</a></li>  
 </ol>
 </ul>
 </div>
 </div>
 
-<h3 id="long-short-term-memory-lstm" class="anchor">Long Short Term Memory (LSTM) </h3>
+
+<!-- !split -->
+<h2 id="summary-of-rnns" class="anchor">Summary of RNNs </h2>
+
+<p>Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+</p>
+
+<p>In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
+</p>
+
+<!-- !split -->
+<h2 id="a-typical-rnn" class="anchor">A typical RNN </h2>
+
+<ol>
+<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
+<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b \) with \( b \) a bias value</li>
+<li> The output from the hidden layer produces \( \tilde{y}_t=g(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
+<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
+</ol>
+<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
+The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+</p>
+
+<!-- !split -->
+<h2 id="gating-mechanism-long-short-term-memory-lstm" class="anchor">Gating mechanism: Long Short Term Memory (LSTM) </h2>
+
+<p>Besides a simple recurrent neural network layer, as discussed above, there are two other
+commonly used types of recurrent neural network layers: Long Short
+Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
+introduction to these layers see <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>
+and <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>.
+</p>
 
 <p>LSTM uses a memory cell for 
- modeling long-range dependencies and avoid vanishing gradient
+modeling long-range dependencies and avoid vanishing gradient
  problems.
+Capable of modeling longer term dependencies by having
+memory cells and gates that controls the information flow along
+with the memory cells.
 </p>
 
 <ol>
@@ -671,13 +738,6 @@ end <span style="color: #666666">=</span> timer()
 <!-- !split -->
 <h2 id="other-types-of-recurrent-neural-networks" class="anchor">Other Types of Recurrent Neural Networks </h2>
 
-<p>Besides a simple recurrent neural network layer, there are two other
-commonly used types of recurrent neural network layers: Long Short
-Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
-introduction to these layers see <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>
-and <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>.
-</p>
-
 <p>The first network created below is similar to the previous network,
 but it replaces the SimpleRNN layers with LSTM layers.  The second
 network below has two hidden layers made up of GRUs, which are
@@ -932,7 +992,58 @@ learn the identity function under some constraints.
 </p>
 
 <!-- !split -->
-<h2 id="simple-examples-of-autoencoders" class="anchor">Simple examples of Autoencoders </h2>
+<h2 id="from-supervised-to-unsupervised-training" class="anchor">From supervised to unsupervised training </h2>
+
+<p>Neural networks are typically used in a supervised setting. Meaning
+that for each training observation we will
+have one label or target/output value. During training,
+the neural network model will learn the relationship between the input
+data and the expected labels. Now suppose we have only unlabeled
+observations, meaning we only have our training dataset \( S_{T} \) made of the \( M \) observations \( \mathbf{x}_{i} \)
+with \( i =1,\ldots ,M \)
+</p>
+
+$$
+\begin{equation}
+S_{T} =\left\{\mathbf{x}_{i} \vert  i = 1,\ldots ,M\right\}
+\label{_auto1}
+\end{equation}
+$$
+
+<p>where in general \( \mathbf{x}_{i}\in\mathbb{R}^{n} \) with \( n\in\mathbb{N} \).</p>
+
+<!-- !split -->
+<h2 id="first-introduction-of-aes" class="anchor">First introduction of AEs </h2>
+
+<p>Autoencoders were first introduced by Rumelhart, Hinton, and Williams
+in 1986 with the goal of learning to reconstruct the input
+observations \(\mathbf{x}_{i}\) with the lowest error possible.
+</p>
+
+<p>Why would one want to learn to reconstruct the input observations? If
+you have problems imagining what that means, think of having a dataset
+made of images. An autoencoder would be an algorithm that can give as
+output an image that is as similar as possible to the input one. You
+may be confused, as there is no apparent reason of doing so. To better
+understand why autoencoders are useful we need a more informative
+(although not yet unambiguous) definition.
+</p>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications (<a href="https://arxiv.org/abs/2003.05991" target="_self">see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders</a>) by learning to reconstruct a set of input observations well enough.</p>
+</div>
+</div>
+
+
+<p>To better understand autoencoders we need to refer to their typical
+architecture, visualized in Figure (to be added). The autoencoders'
+main components are three: an encoder, a latent feature
+representation, and a decoder. The encoder and decoder are simply
+functions, while with the name <b>latent feature representation</b>,
+one typically intends a tensor of real numbers.
+</p>
 
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
