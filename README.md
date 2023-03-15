@@ -77,18 +77,16 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 
 ## March 20-24
 
-- Generative Adversarial Networks (GANs)
+- Autoencoders and discussions of codes and links with PCA
 
 ## March 27-31
-
-- Generative Adversarial Networks
+- Generative Adversarial Networks (GANs)
 
 ## April 10-14
+- Generative Adversarial Networks (GANs) and Boltzmann machines
 
-- Project work
 ## April 17-21
-
-- Project work
+- Generative Adversarial Networks (GANs) and Boltzmann machines
 # April 24-28
 
 - Project work
