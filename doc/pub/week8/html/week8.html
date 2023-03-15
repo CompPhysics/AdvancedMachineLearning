@@ -1174,7 +1174,7 @@ networks.
 </p>
 
 <p>If the function \( f \) and \( g \) are given by a linear dependence on the weight matrices \( \boldsymbol{W} \) and \( \boldsymbol{V} \), we can show that for a regression case, by miminizing 
-the mean squared error between \( \boldsymbol{x} \) and \( \tilde{\bm}x} \), the autoencoder learns the same subspace as the standard principal component analysis (PCA).
+the mean squared error between \( \boldsymbol{x} \) and \( \tilde{\boldsymbol{x}} \), the autoencoder learns the same subspace as the standard principal component analysis (PCA).
 </p>
 
 <p>In order to see this, we define then</p>
@@ -1193,7 +1193,7 @@ $$
 
 <p>With the above linear dependence we can in turn define our optimization problem in terms of the optimization of the mean-squared error, that is we wish to optimize</p>
 $$
-\min_{\boldsymbol{W},\boldsymbol{V}\in {\mathbb{R}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2==\frac{1}{n}\vert\vert \boldsymbol{x}-\boldsymbol{V}\boldsymbol{W}\boldsymbol{x}\vert\vert_2^2,
+\min_{\boldsymbol{W},\boldsymbol{V}\in {\mathbb{R}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \boldsymbol{x}-\boldsymbol{V}\boldsymbol{W}\boldsymbol{x}\vert\vert_2^2,
 $$
 
 <p>where we have used the definition of  a norm-2 vector, that is</p>
