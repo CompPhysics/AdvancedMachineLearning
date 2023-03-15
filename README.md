@@ -69,13 +69,11 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Video of lectyre at https://youtu.be/_K8PEN0M0g8
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar82023.pdf
 
-## March 6-10
-- Summary of RNNs and discussion of Long-Short-Term memory
-- Autoencoders (AEs)
-
 ## March 13-17
-
-- Autoencoders (AE) and Variational autoencoders (VAEe)
+- Summary of RNNs and discussion of Long-Short-Term memory
+- Start discussions of Autoencoders (AEs)
+- Video of lecture at https://youtu.be/F11o2W4OBqU
+- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar152023.pdf
 
 ## March 20-24
 
