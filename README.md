@@ -76,17 +76,24 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar152023.pdf
 
 ## March 20-24
-
 - Autoencoders and discussions of codes and links with PCA
-
+  - Reading recommendation: Goodfellow et al chapters 14
 ## March 27-31
-- Generative Adversarial Networks (GANs)
+- Deep generative models
+  - Monte Carlo methods and structured probabilistic models for deep learning
+  - Partition function and Boltzmann machines
+  - Reading recommendation: Goodfellow et al chapters 16-18
 
 ## April 10-14
-- Generative Adversarial Networks (GANs) and Boltzmann machines
+
+- Deep generative models and Boltzmann machines
+  - Reading recommendation: Goodfellow et al chapter 20.1-20.7
 
 ## April 17-21
-- Generative Adversarial Networks (GANs) and Boltzmann machines
+- Deep generative models and Boltzmann machines
+  - Generative Adversarial Networks (GANs)
+  - Reading recommendation: Goodfellow et al chapter 20.10-20.14
+
 # April 24-28
 
 - Project work
