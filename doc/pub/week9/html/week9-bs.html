@@ -115,7 +115,8 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
               ('Incremental PCA', 2, None, 'incremental-pca'),
               ('Randomized PCA', 3, None, 'randomized-pca'),
               ('Kernel PCA', 3, None, 'kernel-pca'),
-              ('Other techniques', 2, None, 'other-techniques')]}
+              ('Other techniques', 2, None, 'other-techniques'),
+              ('Coding Autoencoders', 2, None, 'coding-autoencoders')]}
 end of tocinfo -->
 
 <body>
@@ -188,6 +189,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#randomized-pca" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Randomized PCA</a></li>
      <!-- navigation toc: --> <li><a href="#kernel-pca" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Kernel PCA</a></li>
      <!-- navigation toc: --> <li><a href="#other-techniques" style="font-size: 80%;"><b>Other techniques</b></a></li>
+     <!-- navigation toc: --> <li><a href="#coding-autoencoders" style="font-size: 80%;"><b>Coding Autoencoders</b></a></li>
 
         </ul>
       </li>
@@ -1564,6 +1566,119 @@ X_reduced <span style="color: #666666">=</span> rbf_pca<span style="color: #6666
 <li> <b>t-Distributed Stochastic Neighbor Embedding</b> (t-SNE) reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space (e.g., to visualize the MNIST images in 2D).</li>
 <li> Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.</li>
 </ul>
+<!-- !split -->
+<h2 id="coding-autoencoders" class="anchor">Coding Autoencoders </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Python ≥3.5 is required</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sys</span>
+<span style="color: #008000; font-weight: bold">assert</span> sys<span style="color: #666666">.</span>version_info <span style="color: #666666">&gt;=</span> (<span style="color: #666666">3</span>, <span style="color: #666666">5</span>)
+
+<span style="color: #408080; font-style: italic"># Is this notebook running on Colab or Kaggle?</span>
+IS_COLAB <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;google.colab&quot;</span> <span style="color: #AA22FF; font-weight: bold">in</span> sys<span style="color: #666666">.</span>modules
+IS_KAGGLE <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;kaggle_secrets&quot;</span> <span style="color: #AA22FF; font-weight: bold">in</span> sys<span style="color: #666666">.</span>modules
+
+<span style="color: #408080; font-style: italic"># Scikit-Learn ≥0.20 is required</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sklearn</span>
+<span style="color: #008000; font-weight: bold">assert</span> sklearn<span style="color: #666666">.</span>__version__ <span style="color: #666666">&gt;=</span> <span style="color: #BA2121">&quot;0.20&quot;</span>
+
+<span style="color: #408080; font-style: italic"># TensorFlow ≥2.0 is required</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">import</span> keras
+<span style="color: #008000; font-weight: bold">assert</span> tf<span style="color: #666666">.</span>__version__ <span style="color: #666666">&gt;=</span> <span style="color: #BA2121">&quot;2.0&quot;</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> tf<span style="color: #666666">.</span>config<span style="color: #666666">.</span>list_physical_devices(<span style="color: #BA2121">&#39;GPU&#39;</span>):
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;No GPU was detected. LSTMs and CNNs can be very slow without a GPU.&quot;</span>)
+    <span style="color: #008000; font-weight: bold">if</span> IS_COLAB:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go to Runtime &gt; Change runtime and select a GPU hardware accelerator.&quot;</span>)
+    <span style="color: #008000; font-weight: bold">if</span> IS_KAGGLE:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go to Settings &gt; Accelerator and select GPU.&quot;</span>)
+
+<span style="color: #408080; font-style: italic"># Common imports</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+
+<span style="color: #408080; font-style: italic"># to make this notebook&#39;s output stable across runs</span>
+np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
+tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
+
+<span style="color: #408080; font-style: italic"># To plot pretty figures</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">mpl</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+mpl<span style="color: #666666">.</span>rc(<span style="color: #BA2121">&#39;axes&#39;</span>, labelsize<span style="color: #666666">=14</span>)
+mpl<span style="color: #666666">.</span>rc(<span style="color: #BA2121">&#39;xtick&#39;</span>, labelsize<span style="color: #666666">=12</span>)
+mpl<span style="color: #666666">.</span>rc(<span style="color: #BA2121">&#39;ytick&#39;</span>, labelsize<span style="color: #666666">=12</span>)
+
+<span style="color: #408080; font-style: italic"># Where to save the figures</span>
+PROJECT_ROOT_DIR <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;.&quot;</span>
+CHAPTER_ID <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;autoencoders&quot;</span>
+IMAGES_PATH <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(PROJECT_ROOT_DIR, <span style="color: #BA2121">&quot;images&quot;</span>, CHAPTER_ID)
+os<span style="color: #666666">.</span>makedirs(IMAGES_PATH, exist_ok<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">save_fig</span>(fig_id, tight_layout<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, fig_extension<span style="color: #666666">=</span><span style="color: #BA2121">&quot;png&quot;</span>, resolution<span style="color: #666666">=300</span>):
+    path <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(IMAGES_PATH, fig_id <span style="color: #666666">+</span> <span style="color: #BA2121">&quot;.&quot;</span> <span style="color: #666666">+</span> fig_extension)
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Saving figure&quot;</span>, fig_id)
+    <span style="color: #008000; font-weight: bold">if</span> tight_layout:
+        plt<span style="color: #666666">.</span>tight_layout()
+    plt<span style="color: #666666">.</span>savefig(path, <span style="color: #008000">format</span><span style="color: #666666">=</span>fig_extension, dpi<span style="color: #666666">=</span>resolution)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">plot_image</span>(image):
+    plt<span style="color: #666666">.</span>imshow(image, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary&quot;</span>)
+    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&quot;off&quot;</span>)
+
+
+np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">4</span>)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">generate_3d_data</span>(m, w1<span style="color: #666666">=0.1</span>, w2<span style="color: #666666">=0.3</span>, noise<span style="color: #666666">=0.1</span>):
+    angles <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>rand(m) <span style="color: #666666">*</span> <span style="color: #666666">3</span> <span style="color: #666666">*</span> np<span style="color: #666666">.</span>pi <span style="color: #666666">/</span> <span style="color: #666666">2</span> <span style="color: #666666">-</span> <span style="color: #666666">0.5</span>
+    data <span style="color: #666666">=</span> np<span style="color: #666666">.</span>empty((m, <span style="color: #666666">3</span>))
+    data[:, <span style="color: #666666">0</span>] <span style="color: #666666">=</span> np<span style="color: #666666">.</span>cos(angles) <span style="color: #666666">+</span> np<span style="color: #666666">.</span>sin(angles)<span style="color: #666666">/2</span> <span style="color: #666666">+</span> noise <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(m) <span style="color: #666666">/</span> <span style="color: #666666">2</span>
+    data[:, <span style="color: #666666">1</span>] <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sin(angles) <span style="color: #666666">*</span> <span style="color: #666666">0.7</span> <span style="color: #666666">+</span> noise <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(m) <span style="color: #666666">/</span> <span style="color: #666666">2</span>
+    data[:, <span style="color: #666666">2</span>] <span style="color: #666666">=</span> data[:, <span style="color: #666666">0</span>] <span style="color: #666666">*</span> w1 <span style="color: #666666">+</span> data[:, <span style="color: #666666">1</span>] <span style="color: #666666">*</span> w2 <span style="color: #666666">+</span> noise <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(m)
+    <span style="color: #008000; font-weight: bold">return</span> data
+
+X_train <span style="color: #666666">=</span> generate_3d_data(<span style="color: #666666">60</span>)
+X_train <span style="color: #666666">=</span> X_train <span style="color: #666666">-</span> X_train<span style="color: #666666">.</span>mean(axis<span style="color: #666666">=0</span>, keepdims<span style="color: #666666">=0</span>)
+
+
+np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
+tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
+
+encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">2</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">3</span>])])
+decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">3</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">2</span>])])
+autoencoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([encoder, decoder])
+
+autoencoder<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;mse&quot;</span>, optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=1.5</span>))
+
+codings <span style="color: #666666">=</span> encoder<span style="color: #666666">.</span>predict(X_train)
+fig <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">4</span>,<span style="color: #666666">3</span>))
+plt<span style="color: #666666">.</span>plot(codings[:,<span style="color: #666666">0</span>], codings[:, <span style="color: #666666">1</span>], <span style="color: #BA2121">&quot;b.&quot;</span>)
+plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;$z_1$&quot;</span>, fontsize<span style="color: #666666">=18</span>)
+plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;$z_2$&quot;</span>, fontsize<span style="color: #666666">=18</span>, rotation<span style="color: #666666">=0</span>)
+plt<span style="color: #666666">.</span>grid(<span style="color: #008000; font-weight: bold">True</span>)
+save_fig(<span style="color: #BA2121">&quot;linear_autoencoder_pca_plot&quot;</span>)
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->

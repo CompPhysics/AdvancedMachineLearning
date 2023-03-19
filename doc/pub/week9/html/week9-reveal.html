@@ -1633,6 +1633,120 @@ X_reduced = rbf_pca.fit_transform(X)
 </ul>
 </section>
 
+<section>
+<h2 id="coding-autoencoders">Coding Autoencoders </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #228B22"># Python ≥3.5 is required</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sys</span>
+<span style="color: #8B008B; font-weight: bold">assert</span> sys.version_info &gt;= (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">5</span>)
+
+<span style="color: #228B22"># Is this notebook running on Colab or Kaggle?</span>
+IS_COLAB = <span style="color: #CD5555">&quot;google.colab&quot;</span> <span style="color: #8B008B">in</span> sys.modules
+IS_KAGGLE = <span style="color: #CD5555">&quot;kaggle_secrets&quot;</span> <span style="color: #8B008B">in</span> sys.modules
+
+<span style="color: #228B22"># Scikit-Learn ≥0.20 is required</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sklearn</span>
+<span style="color: #8B008B; font-weight: bold">assert</span> sklearn.__version__ &gt;= <span style="color: #CD5555">&quot;0.20&quot;</span>
+
+<span style="color: #228B22"># TensorFlow ≥2.0 is required</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">tensorflow</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">tf</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow</span> <span style="color: #8B008B; font-weight: bold">import</span> keras
+<span style="color: #8B008B; font-weight: bold">assert</span> tf.__version__ &gt;= <span style="color: #CD5555">&quot;2.0&quot;</span>
+
+<span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> tf.config.list_physical_devices(<span style="color: #CD5555">&#39;GPU&#39;</span>):
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;No GPU was detected. LSTMs and CNNs can be very slow without a GPU.&quot;</span>)
+    <span style="color: #8B008B; font-weight: bold">if</span> IS_COLAB:
+        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Go to Runtime &gt; Change runtime and select a GPU hardware accelerator.&quot;</span>)
+    <span style="color: #8B008B; font-weight: bold">if</span> IS_KAGGLE:
+        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Go to Settings &gt; Accelerator and select GPU.&quot;</span>)
+
+<span style="color: #228B22"># Common imports</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+
+<span style="color: #228B22"># to make this notebook&#39;s output stable across runs</span>
+np.random.seed(<span style="color: #B452CD">42</span>)
+tf.random.set_seed(<span style="color: #B452CD">42</span>)
+
+<span style="color: #228B22"># To plot pretty figures</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">mpl</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+mpl.rc(<span style="color: #CD5555">&#39;axes&#39;</span>, labelsize=<span style="color: #B452CD">14</span>)
+mpl.rc(<span style="color: #CD5555">&#39;xtick&#39;</span>, labelsize=<span style="color: #B452CD">12</span>)
+mpl.rc(<span style="color: #CD5555">&#39;ytick&#39;</span>, labelsize=<span style="color: #B452CD">12</span>)
+
+<span style="color: #228B22"># Where to save the figures</span>
+PROJECT_ROOT_DIR = <span style="color: #CD5555">&quot;.&quot;</span>
+CHAPTER_ID = <span style="color: #CD5555">&quot;autoencoders&quot;</span>
+IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, <span style="color: #CD5555">&quot;images&quot;</span>, CHAPTER_ID)
+os.makedirs(IMAGES_PATH, exist_ok=<span style="color: #8B008B; font-weight: bold">True</span>)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">save_fig</span>(fig_id, tight_layout=<span style="color: #8B008B; font-weight: bold">True</span>, fig_extension=<span style="color: #CD5555">&quot;png&quot;</span>, resolution=<span style="color: #B452CD">300</span>):
+    path = os.path.join(IMAGES_PATH, fig_id + <span style="color: #CD5555">&quot;.&quot;</span> + fig_extension)
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Saving figure&quot;</span>, fig_id)
+    <span style="color: #8B008B; font-weight: bold">if</span> tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, <span style="color: #658b00">format</span>=fig_extension, dpi=resolution)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">plot_image</span>(image):
+    plt.imshow(image, cmap=<span style="color: #CD5555">&quot;binary&quot;</span>)
+    plt.axis(<span style="color: #CD5555">&quot;off&quot;</span>)
+
+
+np.random.seed(<span style="color: #B452CD">4</span>)
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">generate_3d_data</span>(m, w1=<span style="color: #B452CD">0.1</span>, w2=<span style="color: #B452CD">0.3</span>, noise=<span style="color: #B452CD">0.1</span>):
+    angles = np.random.rand(m) * <span style="color: #B452CD">3</span> * np.pi / <span style="color: #B452CD">2</span> - <span style="color: #B452CD">0.5</span>
+    data = np.empty((m, <span style="color: #B452CD">3</span>))
+    data[:, <span style="color: #B452CD">0</span>] = np.cos(angles) + np.sin(angles)/<span style="color: #B452CD">2</span> + noise * np.random.randn(m) / <span style="color: #B452CD">2</span>
+    data[:, <span style="color: #B452CD">1</span>] = np.sin(angles) * <span style="color: #B452CD">0.7</span> + noise * np.random.randn(m) / <span style="color: #B452CD">2</span>
+    data[:, <span style="color: #B452CD">2</span>] = data[:, <span style="color: #B452CD">0</span>] * w1 + data[:, <span style="color: #B452CD">1</span>] * w2 + noise * np.random.randn(m)
+    <span style="color: #8B008B; font-weight: bold">return</span> data
+
+X_train = generate_3d_data(<span style="color: #B452CD">60</span>)
+X_train = X_train - X_train.mean(axis=<span style="color: #B452CD">0</span>, keepdims=<span style="color: #B452CD">0</span>)
+
+
+np.random.seed(<span style="color: #B452CD">42</span>)
+tf.random.set_seed(<span style="color: #B452CD">42</span>)
+
+encoder = keras.models.Sequential([keras.layers.Dense(<span style="color: #B452CD">2</span>, input_shape=[<span style="color: #B452CD">3</span>])])
+decoder = keras.models.Sequential([keras.layers.Dense(<span style="color: #B452CD">3</span>, input_shape=[<span style="color: #B452CD">2</span>])])
+autoencoder = keras.models.Sequential([encoder, decoder])
+
+autoencoder.compile(loss=<span style="color: #CD5555">&quot;mse&quot;</span>, optimizer=keras.optimizers.SGD(learning_rate=<span style="color: #B452CD">1.5</span>))
+
+codings = encoder.predict(X_train)
+fig = plt.figure(figsize=(<span style="color: #B452CD">4</span>,<span style="color: #B452CD">3</span>))
+plt.plot(codings[:,<span style="color: #B452CD">0</span>], codings[:, <span style="color: #B452CD">1</span>], <span style="color: #CD5555">&quot;b.&quot;</span>)
+plt.xlabel(<span style="color: #CD5555">&quot;$z_1$&quot;</span>, fontsize=<span style="color: #B452CD">18</span>)
+plt.ylabel(<span style="color: #CD5555">&quot;$z_2$&quot;</span>, fontsize=<span style="color: #B452CD">18</span>, rotation=<span style="color: #B452CD">0</span>)
+plt.grid(<span style="color: #8B008B; font-weight: bold">True</span>)
+save_fig(<span style="color: #CD5555">&quot;linear_autoencoder_pca_plot&quot;</span>)
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
 
 
 </div> <!-- class="slides" -->
