@@ -74,11 +74,13 @@ An autoencoder is a type of algorithm with the primary purpose of learning an "i
 !split
 ===== Autoencoder structure =====
 
-See also whiteboard notes. These will be added later.
 
-Autoencoders are neural networks where the outputs are its own inputs. They are split (see whiteboard drawing) into an _encoder part_ which
-maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this is the encoder part) to a _so-called code part_ (or intermediate part) with the result
-$\bm{h}$
+Autoencoders are neural networks where the outputs are its own
+inputs. They are split (see whiteboard drawing) into an _encoder part_
+which maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this
+is the encoder part) to a _so-called code part_ (or intermediate part)
+with the result $\bm{h}$
+
 !bt
 \[
 \bm{h} = f(\bm{x},\bm{W})),
@@ -103,8 +105,11 @@ only single-layer neural networks (although deep networks can improve
 the training) and are essentially given by feed forward neural
 networks.
 
-If the function $f$ and $g$ are given by a linear dependence on the weight matrices $\bm{W}$ and $\bm{V}$, we can show that for a regression case, by miminizing 
-the mean squared error between $\bm{x}$ and $\tilde{\bm{x}}$, the autoencoder learns the same subspace as the standard principal component analysis (PCA).
+If the function $f$ and $g$ are given by a linear dependence on the
+weight matrices $\bm{W}$ and $\bm{V}$, we can show that for a
+regression case, by miminizing the mean squared error between $\bm{x}$
+and $\tilde{\bm{x}}$, the autoencoder learns the same subspace as the
+standard principal component analysis (PCA).
 
 In order to see this, we define then
 !bt
@@ -122,7 +127,10 @@ and
 !split
 ===== AE mean-squared error =====
 
-With the above linear dependence we can in turn define our optimization problem in terms of the optimization of the mean-squared error, that is we wish to optimize
+With the above linear dependence we can in turn define our
+optimization problem in terms of the optimization of the mean-squared
+error, that is we wish to optimize
+
 !bt
 \[
 \min_{\bm{W},\bm{V}\in {\mathbb{R}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \bm{x}-\bm{V}\bm{W}\bm{x}\vert\vert_2^2,
@@ -134,8 +142,11 @@ where we have used the definition of  a norm-2 vector, that is
 \vert\vert \bm{x}\vert\vert_2 = \sqrt{\sum_i x_i^2}. 
 \]
 !et
-This is equivalent to our functions learning the the same subspace as the PCA method. This means that we can interpret AEs as a dimensionality reduction method.
-To see this, we need to remind ourselves about the PCA method.
+
+This is equivalent to our functions learning the same subspace as
+the PCA method. This means that we can interpret AEs as a
+dimensionality reduction method.  To see this, we need to remind
+ourselves about the PCA method.
 
 
 !split
