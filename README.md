@@ -78,7 +78,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 ## March 20-24
 - Autoencoders and discussions of codes and links with PCA
   - Reading recommendation: Goodfellow et al chapters 14
-- Video of lecture at https://youtu.be/
+- Video of lecture at https://youtu.be/1lrHvjr4Gu4
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar222023.pdf
 
 ## March 27-31
