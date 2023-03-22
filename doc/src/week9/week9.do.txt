@@ -133,7 +133,7 @@ error, that is we wish to optimize
 
 !bt
 \[
-\min_{\bm{W},\bm{V}\in {\mathbb{R}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \bm{x}-\bm{V}\bm{W}\bm{x}\vert\vert_2^2,
+\min_{\bm{W},\bm{V}\in {\mathbb{R}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \bm{x}-\bm{V}\bm{W}\bm{x}\vert\vert_2^2,
 \]
 !et
 where we have used the definition of  a norm-2 vector, that is
@@ -403,65 +403,6 @@ print(Xpd)
 correlation_matrix = Xpd.corr()
 print(correlation_matrix)
 !ec
-
-!split
-===== And then the Franke Function =====
-
-We expand this model to the Franke function discussed above.
-
-
-!bc pycod
-# Common imports
-import numpy as np
-import pandas as pd
-
-
-def FrankeFunction(x,y):
-	term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
-	term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
-	term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
-	term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-	return term1 + term2 + term3 + term4
-
-
-def create_X(x, y, n ):
-	if len(x.shape) > 1:
-		x = np.ravel(x)
-		y = np.ravel(y)
-
-	N = len(x)
-	l = int((n+1)*(n+2)/2)		# Number of elements in beta
-	X = np.ones((N,l))
-
-	for i in range(1,n+1):
-		q = int((i)*(i+1)/2)
-		for k in range(i+1):
-			X[:,q+k] = (x**(i-k))*(y**k)
-
-	return X
-
-
-# Making meshgrid of datapoints and compute Franke's function
-n = 4
-N = 100
-x = np.sort(np.random.uniform(0, 1, N))
-y = np.sort(np.random.uniform(0, 1, N))
-z = FrankeFunction(x, y)
-X = create_X(x, y, n=n)    
-
-Xpd = pd.DataFrame(X)
-# subtract the mean values and set up the covariance matrix
-Xpd = Xpd - Xpd.mean()
-covariance_matrix = Xpd.cov()
-print(covariance_matrix)
-!ec
-
-We note here that the covariance is zero for the first rows and
-columns since all matrix elements in the design matrix were set to one
-(we are fitting the function in terms of a polynomial of degree $n$). We would however not include the intercept
-and wee can simply
-drop these elements and construct a correlation
-matrix without them by centering our matrix elements by subtracting the mean of each column. 
 
 !split
 ===== Lnks with the Design Matrix =====
@@ -913,8 +854,8 @@ available via the $explained\_variance\_ratio$ variable. It indicates the propor
 variance that lies along the axis of each principal component. 
 
 !split
-===== Back to the Cancer Data =====
-We can now repeat the above but applied to real data, in this case our breast cancer data.
+===== Example of Cancer Data =====
+We can now repeat the above but applied to real data, in this case the Wisconsin breast cancer data.
 Here we compute performance scores on the training data using logistic regression.
 !bc pycod
 import matplotlib.pyplot as plt
@@ -959,7 +900,7 @@ The following code computes PCA without reducing dimensionality, then computes t
 of dimensions required to preserve 95% of the training set’s variance:
 !bc pycod
 pca = PCA()
-pca.fit(X)
+pca.fit(X_train)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
 d = np.argmax(cumsum >= 0.95) + 1
 !ec
@@ -968,7 +909,7 @@ of specifying the number of principal components you want to preserve, you can s
 a float between 0.0 and 1.0, indicating the ratio of variance you wish to preserve:
 !bc pycod
 pca = PCA(n_components=0.95)
-X_reduced = pca.fit_transform(X)
+X_reduced = pca.fit_transform(X_train)
 !ec
 
 !split
@@ -1022,9 +963,12 @@ Here are some of the most popular:
 
 
 !split
-===== Coding Autoencoders =====
+===== Linear Autoencoders =====
 
-These examples here are based the codes from  A. Geron's textbook. They have been slightly modified and adapted to different data sets.
+These examples here are based the codes from A. Geron's textbook. They
+can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
+
+
 
 !bc pycod
 # Python ≥3.5 is required
@@ -1116,4 +1060,220 @@ plt.grid(True)
 save_fig("linear_autoencoder_pca_plot")
 plt.show()
 
+!ec
+
+!split
+===== More advanced features, stacked AEs =====
+
+!bc pycod
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+X_train_full = X_train_full.astype(np.float32) / 255
+X_test = X_test.astype(np.float32) / 255
+X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
+y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
+!ec
+
+We can now train all layers at once by building a stacked AE with 3 hidden layers and 1 output layer (i.e., 2 stacked Autoencoders).
+
+!bc pycod
+def rounded_accuracy(y_true, y_pred):
+    return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
+tf.random.set_seed(42)
+np.random.seed(42)
+
+stacked_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu"),
+])
+stacked_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+stacked_ae = keras.models.Sequential([stacked_encoder, stacked_decoder])
+stacked_ae.compile(loss="binary_crossentropy",
+                   optimizer=keras.optimizers.SGD(learning_rate=1.5), metrics=[rounded_accuracy])
+history = stacked_ae.fit(X_train, X_train, epochs=20,
+                         validation_data=(X_valid, X_valid))
+!ec
+
+
+This function processes a few test images through the autoencoder and
+displays the original images and their reconstructions.
+
+!bc pycod
+def show_reconstructions(model, images=X_valid, n_images=5):
+    reconstructions = model.predict(images[:n_images])
+    fig = plt.figure(figsize=(n_images * 1.5, 3))
+    for image_index in range(n_images):
+        plt.subplot(2, n_images, 1 + image_index)
+        plot_image(images[image_index])
+        plt.subplot(2, n_images, 1 + n_images + image_index)
+        plot_image(reconstructions[image_index])
+show_reconstructions(stacked_ae)
+save_fig("reconstruction_plot")
+!ec
+
+Then visualize 
+!bc pycod
+np.random.seed(42)
+from sklearn.manifold import TSNE
+X_valid_compressed = stacked_encoder.predict(X_valid)
+tsne = TSNE()
+X_valid_2D = tsne.fit_transform(X_valid_compressed)
+X_valid_2D = (X_valid_2D - X_valid_2D.min()) / (X_valid_2D.max() - X_valid_2D.min())
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap="tab10")
+plt.axis("off")
+plt.show()
+!ec
+And visualize in a nicer way
+!bc pycod
+# adapted from https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html
+plt.figure(figsize=(10, 8))
+cmap = plt.cm.tab10
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap=cmap)
+image_positions = np.array([[1., 1.]])
+for index, position in enumerate(X_valid_2D):
+    dist = np.sum((position - image_positions) ** 2, axis=1)
+    if np.min(dist) > 0.02: # if far enough from other images
+        image_positions = np.r_[image_positions, [position]]
+        imagebox = mpl.offsetbox.AnnotationBbox(
+            mpl.offsetbox.OffsetImage(X_valid[index], cmap="binary"),
+            position, bboxprops={"edgecolor": cmap(y_valid[index]), "lw": 2})
+        plt.gca().add_artist(imagebox)
+plt.axis("off")
+save_fig("fashion_mnist_visualization_plot")
+plt.show()
+!ec
+
+!split
+===== Using Convolutional Layers Instead of Dense Layers =====
+
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+conv_encoder = keras.models.Sequential([
+    keras.layers.Reshape([28, 28, 1], input_shape=[28, 28]),
+    keras.layers.Conv2D(16, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2),
+    keras.layers.Conv2D(32, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2),
+    keras.layers.Conv2D(64, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2)
+])
+conv_decoder = keras.models.Sequential([
+    keras.layers.Conv2DTranspose(32, kernel_size=3, strides=2, padding="VALID", activation="selu",
+                                 input_shape=[3, 3, 64]),
+    keras.layers.Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2DTranspose(1, kernel_size=3, strides=2, padding="SAME", activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+conv_ae = keras.models.Sequential([conv_encoder, conv_decoder])
+
+conv_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                metrics=[rounded_accuracy])
+history = conv_ae.fit(X_train, X_train, epochs=5,
+                      validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+conv_encoder.summary()
+conv_decoder.summary()
+!ec
+
+!bc pycod
+show_reconstructions(conv_ae)
+plt.show()
+!ec
+
+!split
+===== Recurrent Autoencoders =====
+
+!bc pycod
+recurrent_encoder = keras.models.Sequential([
+    keras.layers.LSTM(100, return_sequences=True, input_shape=[28, 28]),
+    keras.layers.LSTM(30)
+])
+recurrent_decoder = keras.models.Sequential([
+    keras.layers.RepeatVector(28, input_shape=[30]),
+    keras.layers.LSTM(100, return_sequences=True),
+    keras.layers.TimeDistributed(keras.layers.Dense(28, activation="sigmoid"))
+])
+recurrent_ae = keras.models.Sequential([recurrent_encoder, recurrent_decoder])
+recurrent_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(0.1),
+                     metrics=[rounded_accuracy])
+history = recurrent_ae.fit(X_train, X_train, epochs=10, validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+show_reconstructions(recurrent_ae)
+plt.show()
+!ec
+!split
+===== Stacked denoising Autoencoder with Gaussian noise =====
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+denoising_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.GaussianNoise(0.2),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+denoising_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+denoising_ae = keras.models.Sequential([denoising_encoder, denoising_decoder])
+denoising_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                     metrics=[rounded_accuracy])
+history = denoising_ae.fit(X_train, X_train, epochs=10,
+                           validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+noise = keras.layers.GaussianNoise(0.2)
+show_reconstructions(denoising_ae, noise(X_valid, training=True))
+plt.show()
+!ec
+And using dropout
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+dropout_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+dropout_ae = keras.models.Sequential([dropout_encoder, dropout_decoder])
+dropout_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                   metrics=[rounded_accuracy])
+history = dropout_ae.fit(X_train, X_train, epochs=10,
+                         validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout = keras.layers.Dropout(0.5)
+show_reconstructions(dropout_ae, dropout(X_valid, training=True))
+save_fig("dropout_denoising_plot", tight_layout=False)
 !ec
