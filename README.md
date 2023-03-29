@@ -86,7 +86,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
   - Monte Carlo methods and structured probabilistic models for deep learning
   - Partition function and Boltzmann machines
   - Reading recommendation: Goodfellow et al chapters 16-18
-- Video of lecture at https://youtu.be/
+- Video of lecture at https://youtu.be/DMZP54-tPxc
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar292023.pdf
 
 ## April 10-14
