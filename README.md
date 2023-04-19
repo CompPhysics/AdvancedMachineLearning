@@ -92,39 +92,41 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 ## April 10-14
 
 - Deep generative models and Boltzmann machines
-  - Reading recommendation: Goodfellow et al chapter 20.1-20.7
+  - Reading recommendation: Goodfellow et al chapters, 17, 18
 - Project work
-- Video of lecture at https://youtu.be/
-- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr122023.pdf
+- Video of lecture at https://youtu.be/KeTW6klG50w
 
 ## April 17-21
 - Deep generative models and Boltzmann machines
-  - Generative Adversarial Networks (GANs)
-  - Reading recommendation: Goodfellow et al chapter 20.10-20.14
+  - Bolztmann machines
+  - Reading recommendation: Goodfellow et al chapters 17, 18  and 20.1-20.7
 - Project work
-- Video of lecture at https://youtu.be/
+- Video of lecture at https://youtu.be/KeTW6klG50w
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr192023.pdf
 
 
 # April 24-28
-- Gaussian processes and Bayesian statitics
+- Deep generative models and Boltzmann machines
+  - Boltzmann machines
+  - Generative Adversarial Networks (GANs)
+  - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - Project work
 - Video of lecture at https://youtu.be/
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr262023.pdf
 
 
 # May 1-5
-- Gaussian processes and Bayesian statistics
+- Deep generative models and Boltzmann machines
+  - Variational autoencoders
+  - Generative Adversarial Networks (GANs)
+  - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - Project work
 - Video of lecture at https://youtu.be/
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMay32023.pdf
 
 
-# May 8-12
-- Gaussian processes and Bayesian statistics and last session
-- Project work
-- Video of lecture at https://youtu.be/
-- Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMay102023.pdf
+# May 8-31
+- Project work only
 
 ## Recommended textbooks:
 
