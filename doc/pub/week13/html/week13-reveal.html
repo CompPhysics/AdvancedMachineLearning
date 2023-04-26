@@ -1557,7 +1557,7 @@ discriminator_optimizer = tf.keras.optimizers.Adam(<span style="color: #B452CD">
   </div>
 </div>
 
-<p>The first object, <em>cross_entropy</em> is our loss function and the two others are
+<p>The first object, \( cross\_entropy \) is our loss function and the two others are
 our optimizers. Notice we use the same learning rate for both \( g \) and \( d \). This
 is because they need to improve their accuracy at approximately equal speeds to
 get convergence (not necessarily exactly equal). Now we define our loss
@@ -2064,14 +2064,6 @@ generated_images = generate_images(generate_latent_points(number=plot_number,
 <p>A pretty cool result! We see that our generator indeed has learned a
 distribution which qualitatively looks a whole lot like the MNIST dataset.
 </p>
-<h2 id="interpolating-between-mnist-digits">Interpolating Between MNIST Digits </h2>
-<p>Another interesting way to explore the latent space of our generator model is by
-interpolating between the MNIST digits. This section is largely based on
-"this excellent blogpost": <a href="https://machinelearningmastery.com/how-to-interpolate-and-perform-vector-arithmetic-with-faces-using-a-generative-adversarial-network/" target="_blank"><tt>https://machinelearningmastery.com/how-to-interpolate-and-perform-vector-arithmetic-with-faces-using-a-generative-adversarial-network/</tt></a>
-by Jason Brownlee.
-</p>
-
-<p>So let us start</p>
 </section>
 
 

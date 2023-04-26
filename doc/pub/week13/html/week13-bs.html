@@ -98,11 +98,7 @@ doconce format html week13.do.txt --html_style=bootstrap --pygments_html_style=d
               ('Exploring the Latent Space',
                2,
                None,
-               'exploring-the-latent-space'),
-              ('Interpolating Between MNIST Digits',
-               2,
-               None,
-               'interpolating-between-mnist-digits')]}
+               'exploring-the-latent-space')]}
 end of tocinfo -->
 
 <body>
@@ -158,7 +154,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#generative-adversarial-networks" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Generative Adversarial Networks</a></li>
      <!-- navigation toc: --> <li><a href="#writing-our-first-generative-adversarial-network" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Writing Our First Generative Adversarial Network</a></li>
      <!-- navigation toc: --> <li><a href="#exploring-the-latent-space" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Exploring the Latent Space</a></li>
-     <!-- navigation toc: --> <li><a href="#interpolating-between-mnist-digits" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Interpolating Between MNIST Digits</a></li>
 
         </ul>
       </li>
@@ -1464,7 +1459,7 @@ discriminator_optimizer <span style="color: #666666">=</span> tf<span style="col
   </div>
 </div>
 
-<p>The first object, <em>cross_entropy</em> is our loss function and the two others are
+<p>The first object, \( cross\_entropy \) is our loss function and the two others are
 our optimizers. Notice we use the same learning rate for both \( g \) and \( d \). This
 is because they need to improve their accuracy at approximately equal speeds to
 get convergence (not necessarily exactly equal). Now we define our loss
@@ -1971,14 +1966,6 @@ generated_images <span style="color: #666666">=</span> generate_images(generate_
 <p>A pretty cool result! We see that our generator indeed has learned a
 distribution which qualitatively looks a whole lot like the MNIST dataset.
 </p>
-<h2 id="interpolating-between-mnist-digits" class="anchor">Interpolating Between MNIST Digits </h2>
-<p>Another interesting way to explore the latent space of our generator model is by
-interpolating between the MNIST digits. This section is largely based on
-"this excellent blogpost": <a href="https://machinelearningmastery.com/how-to-interpolate-and-perform-vector-arithmetic-with-faces-using-a-generative-adversarial-network/" target="_self"><tt>https://machinelearningmastery.com/how-to-interpolate-and-perform-vector-arithmetic-with-faces-using-a-generative-adversarial-network/</tt></a>
-by Jason Brownlee.
-</p>
-
-<p>So let us start</p>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
