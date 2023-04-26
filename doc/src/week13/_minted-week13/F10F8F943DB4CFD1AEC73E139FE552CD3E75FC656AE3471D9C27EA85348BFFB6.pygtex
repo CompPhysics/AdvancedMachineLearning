@@ -1,0 +1,61 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{def} \PYG{n+nf}{generator\PYGZus{}model}\PYG{p}{():}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    The generator uses upsampling layers tf.keras.layers.Conv2DTranspose() to}
+\PYG{l+s+sd}{    produce an image from a random seed. We start with a Dense layer taking this}
+\PYG{l+s+sd}{    random sample as an input and subsequently upsample through multiple}
+\PYG{l+s+sd}{    convolutional layers.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{c+c1}{\PYGZsh{} we define our model}
+    \PYG{n}{model} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{()}
+
+
+    \PYG{c+c1}{\PYGZsh{} adding our input layer. Dense means that every neuron is connected and}
+    \PYG{c+c1}{\PYGZsh{} the input shape is the shape of our random noise. The units need to match}
+    \PYG{c+c1}{\PYGZsh{} in some sense the upsampling strides to reach our desired output shape.}
+    \PYG{c+c1}{\PYGZsh{} we are using 100 random numbers as our seed}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{n}{units}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{o}{*}\PYG{l+m+mi}{7}\PYG{o}{*}\PYG{n}{BATCH\PYGZus{}SIZE}\PYG{p}{,}
+                           \PYG{n}{use\PYGZus{}bias}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+                           \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{p}{)))}
+    \PYG{c+c1}{\PYGZsh{} we normalize the output form the Dense layer}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{BatchNormalization}\PYG{p}{())}
+    \PYG{c+c1}{\PYGZsh{} and add an activation function to our \PYGZsq{}layer\PYGZsq{}. LeakyReLU avoids vanishing}
+    \PYG{c+c1}{\PYGZsh{} gradient problem}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{LeakyReLU}\PYG{p}{())}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Reshape}\PYG{p}{((}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{BATCH\PYGZus{}SIZE}\PYG{p}{)))}
+    \PYG{k}{assert} \PYG{n}{model}\PYG{o}{.}\PYG{n}{output\PYGZus{}shape} \PYG{o}{==} \PYG{p}{(}\PYG{k+kc}{None}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{BATCH\PYGZus{}SIZE}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} even though we just added four keras layers we think of everything above}
+    \PYG{c+c1}{\PYGZsh{} as \PYGZsq{}one\PYGZsq{} layer}
+
+    \PYG{c+c1}{\PYGZsh{} next we add our upscaling convolutional layers}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2DTranspose}\PYG{p}{(}\PYG{n}{filters}\PYG{o}{=}\PYG{l+m+mi}{128}\PYG{p}{,}
+                                     \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{),}
+                                     \PYG{n}{strides}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{),}
+                                     \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}same\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{use\PYGZus{}bias}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{))}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{BatchNormalization}\PYG{p}{())}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{LeakyReLU}\PYG{p}{())}
+    \PYG{k}{assert} \PYG{n}{model}\PYG{o}{.}\PYG{n}{output\PYGZus{}shape} \PYG{o}{==} \PYG{p}{(}\PYG{k+kc}{None}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{)}
+
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2DTranspose}\PYG{p}{(}\PYG{n}{filters}\PYG{o}{=}\PYG{l+m+mi}{64}\PYG{p}{,}
+                                     \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{),}
+                                     \PYG{n}{strides}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{),}
+                                     \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}same\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{use\PYGZus{}bias}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{))}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{BatchNormalization}\PYG{p}{())}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{LeakyReLU}\PYG{p}{())}
+    \PYG{k}{assert} \PYG{n}{model}\PYG{o}{.}\PYG{n}{output\PYGZus{}shape} \PYG{o}{==} \PYG{p}{(}\PYG{k+kc}{None}\PYG{p}{,} \PYG{l+m+mi}{14}\PYG{p}{,} \PYG{l+m+mi}{14}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{)}
+
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2DTranspose}\PYG{p}{(}\PYG{n}{filters}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,}
+                                     \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{),}
+                                     \PYG{n}{strides}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{),}
+                                     \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}same\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{use\PYGZus{}bias}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+                                     \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}tanh\PYGZsq{}}\PYG{p}{))}
+    \PYG{k}{assert} \PYG{n}{model}\PYG{o}{.}\PYG{n}{output\PYGZus{}shape} \PYG{o}{==} \PYG{p}{(}\PYG{k+kc}{None}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{n}{model}
+
+
+\end{Verbatim}
