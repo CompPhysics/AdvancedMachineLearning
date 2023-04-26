@@ -111,7 +111,7 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
   - Generative Adversarial Networks (GANs)
   - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - Project work
-- Video of lecture at https://youtu.be/
+- Video of lecture at https://youtu.be/0VBmdP_iCzA
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr262023.pdf
 
 
