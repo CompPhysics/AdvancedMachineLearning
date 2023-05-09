@@ -125,8 +125,17 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 - Handwritten notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMay32023.pdf
 
 
-# May 8-31
-- Project work only
+# May 8-12
+- Project work only, no lecture
+
+# May 15-19
+- Project work only, meeting if wanted
+
+# May 22-26
+- Project work only, meeting if wanted
+
+
+
 
 ## Recommended textbooks:
 
