@@ -126,13 +126,13 @@ The lecture notes at https://compphysics.github.io/MachineLearning/doc/LectureNo
 
 
 # May 8-12
-- Project work only, no lecture
+- Project work only, meeting if wanted, zoom or in-person
 
 # May 15-19
 - Project work only, meeting if wanted, zoom or in-person
 
 # May 22-26
-- Project work only, meeting if wanted
+- Project work only, meeting if wanted, zoom or in-person
 
 
 
