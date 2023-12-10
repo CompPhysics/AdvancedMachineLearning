@@ -13,42 +13,42 @@ Meeting ID: 642 499 7467
 Passcode: FYS4411
 
 
-Furthermore, all teaching material (it will be updated continuously) is available from this GitHub link.
+Furthermore, all teaching material is available from this GitHub link.
 
-## January 15-19: Presentation of couse, Review of Neural Networks and Deep Learning and discussion of possible projects
+## January 15-19: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
 - Presentation of course and participants
 - Discussion of possible projects
 - Deep learning, neural networks, basic equations
+- Recommende reading Goodfellow et al chapters 6 and 7
 
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 
-##  January 22-26: Review of Neural Networks and Deep Learning
-- Review of deep learning, basics of neural networks
+##  January 22-26: Mathematics  of Neural Networks and Deep Learning
+- Mathematics  of deep learning, basics of neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
+- Recommended reading Goodfellow et al chapters 6 and 7
 
 
-## February 6-10
-- Codes for feed forward neural networks (NNs), see https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Programs/nn.ipynb and the slides for week 3 here.
-- Discussion of first data sets to be studied
+## January 29-February 2
+- Implementing neural networks with applications to differential equations
+- Discussion of first project
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
 
 
-## February 13-17
-
-- Discussion of project paths
-- Convolutional neural networks (CNNs)
+## February 5-9
+- Convolutional neural networks (CNNs), basic mathematics
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 
-## February 20-24
-- Convolutional neural networks (CNNs)
+## February 12-16
+- Convolutional neural networks (CNNs), buidling our own code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 
-## February 27-March 10
-- Summary on CCNs
-- Recurrent neural networks and links with the first part of the project
+## February 19-23
+- Examples of applications of CNNs
+- Recurrent neural networks
 
-## March 13-17
+## February 
 - Summary of RNNs and discussion of Long-Short-Term memory
 - Start discussions of Autoencoders (AEs)
 
