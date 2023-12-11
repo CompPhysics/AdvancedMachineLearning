@@ -6,7 +6,8 @@ material and various reading assignments.  The emphasis is on deep
 learning algorithms, starting with the mathematics of neural networks
 (NNs), moving on to convolutional NNs (CNNs) and recurrent NNs (RNNs),
 autoencoders and other dimensionality reduction methods to finally
-generative methods.
+discuss generative methods. These will include Boltzmann machines,
+variational autoencoders, generalized adversarial networks and more.
 
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
@@ -72,50 +73,47 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Recommended reading Goodfellow et al chapter 14
 
 
-## March 11-15
-- Deep generative models
-  - Monte Carlo methods and structured probabilistic models for deep learning
-  - Partition function and Boltzmann machines
+## March 11-15: Deep generative models
+- Monte Carlo methods and structured probabilistic models for deep learning
+- Partition function and Boltzmann machines
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
 - Reading recommendation: Goodfellow et al chapters 16-18
 
 
-## March 18-22
-- Deep generative models and Boltzmann machines
+## March 18-22: Deep generative models
+- Monte Carlo methods and structured probabilistic models for deep learning
+- Boltzmann machines
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters, 17, 18
 
 
-## April 1-5
-- Deep generative models and Boltzmann machines
-  - Bolztmann machines
+## April 1-5: Deep generative models
+- Boltzmann machines
+- Variational autoencoders
 - Reading recommendation: Goodfellow et al chapters 17, 18  and 20.1-20.7
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
 
-## April 8-12
-- Deep generative models and Boltzmann machines
-  - Boltzmann machines
-  - Generative Adversarial Networks (GANs)
-  - Reading recommendation: Goodfellow et al chapter 20.10-20.14
+## April 8-12: Deep generative models
+- Variational autoencoders
+- Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb  
 
 
-## April 15-19
-- Deep generative models and Boltzmann machines
-  - Variational autoencoders
-  - Generative Adversarial Networks (GANs)
-  - Reading recommendation: Goodfellow et al chapter 20.10-20.14
+## April 15-19: Deep generative models
+- Variational autoencoders
+- Generative Adversarial Networks (GANs)
+- Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
 
-## April 22-26
+## April 22-26: Deep generative models
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
-## April 29-May 3
+## April 29-May 3: Deep generative models
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 
-## May 6-10 
+## May 6-10: Deep generative models
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
 
@@ -127,7 +125,7 @@ o Goodfellow, Bengio and Courville, Deep Learning at https://www.deeplearningboo
 
 o Brunton and Kutz, Data driven Science and Engineering at https://www.cambridge.org/highereducation/books/data-driven-science-and-engineering/6F9A730B7A9A9F43F68CF21A24BEC339#overview
 
-
+o Sebastian Raschka et al Machine Learning with PyTorch and Scikit-Learn at https://sebastianraschka.com/blog/2022/ml-pytorch-book.html
 
 
 
