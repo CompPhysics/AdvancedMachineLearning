@@ -1,5 +1,12 @@
-# AdvancedMachineLearning
-This repository contains information about the course on Advanced Data Analysis and Machine Learning
+# Advanced Machine Learning
+
+This repository contains information about the course on Advanced Data
+Analysis and Machine Learning, spanning from weekly plans to lecture
+material and various reading assignments.  The emphasis is on deep
+learning algorithms, starting with the mathematics of neural networks
+(NNs), moving on to convolutional NNs (CNNs) and recurrent NNs (RNNs),
+autoencoders and other dimensionality reduction methods to finally
+generative methods.
 
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
@@ -17,10 +24,10 @@ Furthermore, all teaching material is available from this GitHub link.
 
 ## January 15-19: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
-- Presentation of course and participants
+- Presentation of course
 - Discussion of possible projects
 - Deep learning, neural networks, basic equations
-- Recommende reading Goodfellow et al chapters 6 and 7
+- Recommended reading Goodfellow et al chapters 6 and 7
 
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 
@@ -39,61 +46,78 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 ## February 5-9
 - Convolutional neural networks (CNNs), basic mathematics
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
+- Recommended reading Goodfellow et al chapter 9
 
 ## February 12-16
-- Convolutional neural networks (CNNs), buidling our own code
+- Convolutional neural networks (CNNs), building our own code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
+- Recommended reading Goodfellow et al chapter 9
 
 ## February 19-23
 - Examples of applications of CNNs
 - Recurrent neural networks
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
+- Recommended reading Goodfellow et al chapters 9 and 10
 
-## February 
+## February 26-March 1
 - Summary of RNNs and discussion of Long-Short-Term memory
 - Start discussions of Autoencoders (AEs)
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
+- Recommended reading Goodfellow et al chapters 10 and 14
 
-## March 20-24
+
+## March 4-8
 - Autoencoders and discussions of codes and links with PCA
-  - Reading recommendation: Goodfellow et al chapters 14
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
+- Recommended reading Goodfellow et al chapter 14
 
 
-## March 27-31
+## March 11-15
 - Deep generative models
   - Monte Carlo methods and structured probabilistic models for deep learning
   - Partition function and Boltzmann machines
-  - Reading recommendation: Goodfellow et al chapters 16-18
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
+- Reading recommendation: Goodfellow et al chapters 16-18
 
 
-## April 10-14
-
+## March 18-22
 - Deep generative models and Boltzmann machines
-  - Reading recommendation: Goodfellow et al chapters, 17, 18
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
+- Reading recommendation: Goodfellow et al chapters, 17, 18
 
-## April 17-21
+
+## April 1-5
 - Deep generative models and Boltzmann machines
   - Bolztmann machines
-  - Reading recommendation: Goodfellow et al chapters 17, 18  and 20.1-20.7
-- Project work
+- Reading recommendation: Goodfellow et al chapters 17, 18  and 20.1-20.7
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
 
-
-# April 24-28
+# April 8-12
 - Deep generative models and Boltzmann machines
   - Boltzmann machines
   - Generative Adversarial Networks (GANs)
   - Reading recommendation: Goodfellow et al chapter 20.10-20.14
-- Project work
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb  
 
 
-# May 1-5
+# April 15-19
 - Deep generative models and Boltzmann machines
   - Variational autoencoders
   - Generative Adversarial Networks (GANs)
   - Reading recommendation: Goodfellow et al chapter 20.10-20.14
-- Project work
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
 
+# April 22-26
+- Generative Adversarial Networks (GANs)
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
-# May 8-12
-- Project work only, meeting if wanted, zoom or in-person
+# April 29-May 3
+- Generative Adversarial Networks (GANs)
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+
+# May 6-10 
+- Generative Adversarial Networks (GANs)
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
 
 
 
