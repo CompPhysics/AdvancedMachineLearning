@@ -34,15 +34,17 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 
 ##  January 22-26
 - Mathematics  of deep learning, basics of neural networks
+- Introducing TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
-- Recommended reading Goodfellow et al chapters 6 and 7
+- Recommended reading Goodfellow et al chapters 6 and 7. For Pytorch see Raschka et al chapter 11.
 
 
 ## January 29-February 2
 - Implementing neural networks with applications to differential equations
 - Discussion of first project
+- More on TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
-
+- Recommended reading Goodfellow et al chapters 6 and 7. For Pytorch see Raschka et al chapter 11.
 
 ## February 5-9
 - Convolutional neural networks (CNNs), basic mathematics
