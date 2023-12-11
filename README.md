@@ -61,8 +61,8 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Recommended reading Goodfellow et al chapters 9 and 10
 
 ## February 26-March 1
-- Summary of RNNs and discussion of Long-Short-Term memory
-- Start discussions of Autoencoders (AEs)
+- Summary of RNNs and discussion of Long-Short-Term memory and short excursion into transformers
+- Start discussions of Autoencoders
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Recommended reading Goodfellow et al chapters 10 and 14
 
