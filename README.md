@@ -53,6 +53,7 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 
 ## February 12-16
 - Convolutional neural networks (CNNs), building our own code
+- Excursion into Graph CNNs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9
 
