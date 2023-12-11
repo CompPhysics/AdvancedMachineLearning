@@ -31,7 +31,7 @@ Furthermore, all teaching material is available from this GitHub link.
 
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 
-##  January 22-26: Mathematics  of Neural Networks and Deep Learning
+##  January 22-26
 - Mathematics  of deep learning, basics of neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7
@@ -92,7 +92,7 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Reading recommendation: Goodfellow et al chapters 17, 18  and 20.1-20.7
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
 
-# April 8-12
+## April 8-12
 - Deep generative models and Boltzmann machines
   - Boltzmann machines
   - Generative Adversarial Networks (GANs)
@@ -100,22 +100,22 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb  
 
 
-# April 15-19
+## April 15-19
 - Deep generative models and Boltzmann machines
   - Variational autoencoders
   - Generative Adversarial Networks (GANs)
   - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
 
-# April 22-26
+## April 22-26
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
-# April 29-May 3
+## April 29-May 3
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 
-# May 6-10 
+## May 6-10 
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
 
