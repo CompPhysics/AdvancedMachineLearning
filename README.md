@@ -128,8 +128,9 @@ o Goodfellow, Bengio and Courville, Deep Learning at https://www.deeplearningboo
 
 o Brunton and Kutz, Data driven Science and Engineering at https://www.cambridge.org/highereducation/books/data-driven-science-and-engineering/6F9A730B7A9A9F43F68CF21A24BEC339#overview
 
-o Sebastian Raschka et al Machine Learning with PyTorch and Scikit-Learn at https://sebastianraschka.com/blog/2022/ml-pytorch-book.html
+o Sebastian Raschka, Yuxi Lie, and Vahid Mirjalili,  Machine Learning with PyTorch and Scikit-Learn at https://www.packtpub.com/product/machine-learning-with-pytorch-and-scikit-learn/9781801819312, see also https://sebastianraschka.com/blog/2022/ml-pytorch-book.html
 
+o David Foster, Generative Deep Learning, https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/
 
 
 
