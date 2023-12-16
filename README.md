@@ -36,7 +36,7 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Mathematics  of deep learning, basics of neural networks
 - Introducing TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
-- Recommended reading Goodfellow et al chapters 6 and 7. For Pytorch see Raschka et al chapter 11.
+- Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 
 
 ## January 29-February 2
@@ -44,18 +44,18 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 - Discussion of first project
 - More on TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
-- Recommended reading Goodfellow et al chapters 6 and 7. For Pytorch see Raschka et al chapter 11.
+- Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 
 ## February 5-9
 - Convolutional neural networks (CNNs), basic mathematics
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
-- Recommended reading Goodfellow et al chapter 9
+- Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
 ## February 12-16
 - Convolutional neural networks (CNNs), building our own code
 - Excursion into Graph CNNs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
-- Recommended reading Goodfellow et al chapter 9
+- Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
 ## February 19-23
 - Examples of applications of CNNs
