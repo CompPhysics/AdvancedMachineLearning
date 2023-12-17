@@ -77,6 +77,7 @@ Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/p
 
 
 ## March 11-15: Deep generative models
+- Autoencoders and discussions of codes and links with PCA
 - Monte Carlo methods and structured probabilistic models for deep learning
 - Partition function and Boltzmann machines
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
