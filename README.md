@@ -12,7 +12,7 @@ variational autoencoders, generalized adversarial networks and more.
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
 
-### Time: Each Tuesday at 1015am-12pm CET (The sessions will be recorded), first time January 16
+### Time: Each Tuesday at 1015am-12pm CET (The sessions will be recorded), first time January 16, 2024
 
 FYS5429 zoom link
 https://msu.zoom.us/j/6424997467?pwd=TEhTL0lmTmpGbHlnejZQa1pCdzRKdz09
