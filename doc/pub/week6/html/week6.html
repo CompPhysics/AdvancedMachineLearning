@@ -8,8 +8,8 @@ doconce format html week6.do.txt --pygments_html_style=default --html_style=bloo
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="February 27-March 3: Advanced machine learning and data analysis for the physical sciences">
-<title>February 27-March 3: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="February 19-23: Advanced machine learning and data analysis for the physical sciences">
+<title>February 19-23: Advanced machine learning and data analysis for the physical sciences</title>
 <style type="text/css">
 /* bloodish style */
 body {
@@ -140,21 +140,10 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for February 20-24', 2, None, 'plans-for-february-20-24'),
-              ('CNNs in more detail', 2, None, 'cnns-in-more-detail'),
-              ('Pooling', 2, None, 'pooling'),
-              ('No zero padding, unit strides',
+ 'sections': [('Plans for the weeks February 19-23',
                2,
                None,
-               'no-zero-padding-unit-strides'),
-              ('Zero padding, unit strides',
-               2,
-               None,
-               'zero-padding-unit-strides'),
-              ('Half (same) padding', 2, None, 'half-same-padding'),
-              ('Full padding', 2, None, 'full-padding'),
-              ('Pooling arithmetic', 2, None, 'pooling-arithmetic'),
-              ('Strategies for CNNs', 2, None, 'strategies-for-cnns'),
+               'plans-for-the-weeks-february-19-23'),
               ('Building convolutional neural networks in Tensorflow and Keras',
                2,
                None,
@@ -191,6 +180,55 @@ div.toc p,a {
                2,
                None,
                'recurrent-neural-networks-rnns-overarching-view'),
+              ('Memoryless models', 3, None, 'memoryless-models'),
+              ('Linear dynamical model', 3, None, 'linear-dynamical-model'),
+              ('Hidden Markov Models', 3, None, 'hidden-markov-models'),
+              ('RNNs', 3, None, 'rnns'),
+              ('Do generative models need to be stochastic?',
+               3,
+               None,
+               'do-generative-models-need-to-be-stochastic'),
+              ('What kinds of behaviour can RNNs exhibit?',
+               3,
+               None,
+               'what-kinds-of-behaviour-can-rnns-exhibit'),
+              ('Backpropagation through time',
+               3,
+               None,
+               'backpropagation-through-time'),
+              ('We need to specify the initial activity state of all the '
+               'hidden and output',
+               3,
+               None,
+               'we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output'),
+              ('We can specify inputs in several',
+               3,
+               None,
+               'we-can-specify-inputs-in-several'),
+              ('We can specify targets in several',
+               3,
+               None,
+               'we-can-specify-targets-in-several'),
+              ('The backward pass is linear',
+               3,
+               None,
+               'the-backward-pass-is-linear'),
+              ('The problem of exploding or vanishing gradients',
+               3,
+               None,
+               'the-problem-of-exploding-or-vanishing-gradients'),
+              ('Four effective ways to learn an RNN',
+               3,
+               None,
+               'four-effective-ways-to-learn-an-rnn'),
+              ('Long Short Term Memory (LSTM)',
+               3,
+               None,
+               'long-short-term-memory-lstm'),
+              ('Implementing a memory cell in a neural network',
+               3,
+               None,
+               'implementing-a-memory-cell-in-a-neural-network'),
               ('A simple example first', 2, None, 'a-simple-example-first'),
               ('Basics of RNNs with examples: Ordinary differential equation',
                2,
@@ -228,7 +266,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------- main content ---------------------- -->
 <center>
-<h1>February 27-March 3: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>February 19-23: Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
@@ -244,10 +282,10 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>February 27-March 3, 2023</h4>
+<h4>February 19-23, 2023</h4>
 </center> <!-- date -->
 <br>
-<h2 id="plans-for-february-20-24">Plans for February 20-24  </h2>
+<h2 id="plans-for-the-weeks-february-19-23">Plans for the weeks February 19-23  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
@@ -256,7 +294,6 @@ MathJax.Hub.Config({
 <ul>
 <li> Finalizing discussion of Convolutional  Neural Networks (CNNs)</li>
 <li> Discussion of recurrent neural networks (RNNs)</li>
-<li> Video of lecture TBA</li>
 <li> Reading recommendations:
 <ol type="a"></li>
  <li> For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9 and for RNNs, see chapter 10. See also chapter 11 and 12 on practicalities and applications</li>
@@ -276,259 +313,6 @@ MathJax.Hub.Config({
 </ul>
 </div>
 
-<p>m</p>
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b>And Lecture material on CNNs</b>
-<p>
-<ul>
-<li> <a href="https://www.uio.no/studier/emner/matnat/ifi/IN5400/v19/material/week5/in5400_2019_week5_convolutional_nerual_networks.pdf" target="_blank">Lectures from IN5400 spring 2019</a></li>
-<li> <a href="https://www.uio.no/studier/emner/matnat/ifi/IN5400/v21/lecture-slides/in5400_2021_w5_lecture_convolutions.pdf" target="_blank">Lectures from IN5400 spring 2021</a></li>
-<li> <a href="http://neuralnetworksanddeeplearning.com/chap6.html" target="_blank">See also Michael Nielsen's Lectures</a></li>
-</ul>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="cnns-in-more-detail">CNNs in more detail </h2>
-
-<p>Let assume we have an input matrix \( I \) of dimensionality \( 3\times 3 \)
-and a \( 2\times 2 \) filter \( W \) given by the following matrices
-</p>
-
-$$
-\boldsymbol{I}=\begin{bmatrix}i_{00} & i_{01} & i_{02}  \\
-                      i_{10} & i_{11} & i_{12}  \\
-	              i_{20} & i_{21} & i_{22} \end{bmatrix},
-$$
-
-<p>and </p>
-$$
-\boldsymbol{W}=\begin{bmatrix}w_{00} & w_{01} \\
-	              w_{10} & w_{11}\end{bmatrix}.
-$$
-
-<p>We introduce now the hyperparameter \( S \) <b>stride</b>. Stride represents how the filter \( W \) moves the convolution process on the matrix \( I \).
-We strongly recommend the repository on <a href="https://github.com/vdumoulin/conv_arithmetic" target="_blank">Arithmetic of deep learning by Dumoulin and Visin</a> 
-</p>
-
-<p>Here we set the stride equal to \( S=1 \), which means that, starting with the element \( i_{00} \), the filter will act on \( 2\times 2 \) submatrices each time, starting with the upper corner and moving according to the stride value column by column. </p>
-
-<p>Here we perform the operation</p>
-$$
-S_(i,j)=(I * W)(i,j) = \sum_m\sum_n I(i-m,j-n)W(m,n),
-$$
-
-<p>and obtain</p>
-$$
-\boldsymbol{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+i_{10}w_{10}+i_{11}w_{11} & i_{01}w_{00}+i_{02}w_{01}+i_{11}w_{10}+i_{12}w_{11}  \\
-	              i_{10}w_{00}+i_{11}w_{01}+i_{20}w_{10}+i_{21}w_{11} & i_{11}w_{00}+i_{12}w_{01}+i_{21}w_{10}+i_{22}w_{11}\end{bmatrix}.
-$$
-
-<p>We can rewrite this operation in terms of a matrix-vector multiplication by defining a new vector where we flatten out the inputs as a vector \( \boldsymbol{I}' \) of length \( 9 \) and
-a matrix \( \boldsymbol{W}' \) with dimension \( 4\times 9 \) as
-</p>
-
-$$
-\boldsymbol{I}'=\begin{bmatrix}i_{00} \\ i_{01} \\ i_{02} \\ i_{10} \\ i_{11} \\ i_{12} \\ i_{20} \\ i_{21} \\ i_{22} \end{bmatrix},
-$$
-
-<p>and the new matrix</p>
-$$
-\boldsymbol{W}'=\begin{bmatrix} w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 & 0 \\
-                        0  & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 \\
-			0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0  \\
-                        0 & 0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11}\end{bmatrix}.
-$$
-
-<p>We see easily that performing the matrix-vector multiplication \( \boldsymbol{W}'\boldsymbol{I}' \) is the same as the above convolution with stride \( S=1 \), that is</p>
-
-$$
-S=(\boldsymbol{W}*\boldsymbol{I}),
-$$
-
-<p>is now given by \( \boldsymbol{W}'\boldsymbol{I}' \) which is a vector of length \( 4 \) instead of the originally resulting  \( 2\times 2 \) output matrix.</p>
-
-<p>The collection of kernels/filters \( W \) defining a discrete convolution has a shape
-corresponding to some permutation of \( (n, m, k_1, \ldots, k_N) \), where
-</p>
-
-$$
-\begin{equation*}
-\begin{split}
-    n &\equiv \text{number of output feature maps},\\
-    m &\equiv \text{number of input feature maps},\\
-    k_j &\equiv \text{kernel size along axis $j$}.
-\end{split}
-\end{equation*}
-$$
-
-<p>The following properties affect the output size \( o_j \) of a convolutional layer
-along axis \( j \):
-</p>
-
-<ol>
-<li> \( i_j \): input size along axis \( j \),</li>
-<li> \( k_j \): kernel/filter size along axis \( j \),</li>
-<li> stride (distance between two consecutive positions of the kernel/filter) along axis \( j \),</li>
-<li> zero padding (number of zeros concatenated at the beginning and at the end of an axis) along axis \( j \).</li>
-</ol>
-<p>For instance, the above examples shows a  \( 2\times 2 \) kernel/filter \( \boldsymbol{W} \)  applied to a \( 3 \times 3 \) input padded with a \( 0 \times 0 \)
-border of zeros using \( 1 \times 1 \) strides.
-</p>
-
-<p>Note that strides constitute a form of <b>subsampling</b>. As an alternative to
-being interpreted as a measure of how much the kernel/filter is translated, strides
-can also be viewed as how much of the output is retained. For instance, moving
-the kernel by hops of two is equivalent to moving the kernel by hops of one but
-retaining only odd output elements.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="pooling">Pooling </h2>
-
-<p>In addition to discrete convolutions themselves, {\em pooling\/} operations
-make up another important building block in CNNs. Pooling operations reduce
-the size of feature maps by using some function to summarize subregions, such
-as taking the average or the maximum value.
-</p>
-
-<p>Pooling works by sliding a window across the input and feeding the content of
-the window to a {\em pooling function}. In some sense, pooling works very much
-like a discrete convolution, but replaces the linear combination described by
-the kernel with some other function. Poolin
-provides an example for average pooling, and 
-does the same for max pooling.
-</p>
-
-<p>The following properties affect the output size \( o_j \) of a pooling layer
-along axis \( j \):
-</p>
-
-<ol>
-<li> \( i_j \): input size along axis \( j \),</li>
-<li> \( k_j \): pooling window size along axis \( j \),</li>
-<li> \( s_j \): stride (distance between two consecutive positions of the pooling window) along axis \( j \).</li>
-</ol>
-<p>The analysis of the relationship between convolutional layer properties is eased
-by the fact that they don't interact across axes, i.e., the choice of kernel
-size, stride and zero padding along axis \( j \) only affects the output size of
-axis \( j \). Because of that, we will focus on the following simplified
-setting:
-</p>
-
-<ol>
-<li> 2-D discrete convolutions (\( N = 2 \)),</li>
-<li> square inputs (\( i_1 = i_2 = i \)),</li>
-<li> square kernel size (\( k_1 = k_2 = k \)),</li>
-<li> same strides along both axes (\( s_1 = s_2 = s \)),</li>
-<li> same zero padding along both axes (\( p_1 = p_2 = p \)).</li>
-</ol>
-<p>This facilitates the analysis and the visualization, but keep in mind that the
-results outlined here also generalize to the N-D and non-square cases.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="no-zero-padding-unit-strides">No zero padding, unit strides </h2>
-
-<p>The simplest case to analyze is when the kernel just slides across every
-position of the input (i.e., \( s = 1 \) and \( p = 0 \)).
-</p>
-
-<p>For any \( i \) and \( k \), and for \( s = 1 \) and \( p = 0 \),</p>
-$$
-\begin{equation*}
-    o = (i - k) + 1.
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="zero-padding-unit-strides">Zero padding, unit strides </h2>
-
-<p>To factor in zero padding (i.e., only restricting to \( s = 1 \)), let's consider
-its effect on the effective input size: padding with \( p \) zeros changes the
-effective input size from \( i \) to \( i + 2p \). In the general case, we can infer the following
-relationship
-</p>
-
-<p>For any \( i \), \( k \) and \( p \), and for \( s = 1 \),</p>
-$$
-\begin{equation*}
-    o = (i - k) + 2p + 1.
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="half-same-padding">Half (same) padding </h2>
-
-<p>Having the output size be the same as the input size (i.e., \( o = i \)) can be a
-desirable property:
-</p>
-
-<p>For any \( i \) and for \( k \) odd (\( k = 2n + 1, \quad n \in \mathbb{N} \)), \( s = 1 \) and
-\( p = \lfloor k / 2 \rfloor = n \),
-</p>
-$$
-\begin{equation*}
-\begin{split}
-    o &= i + 2 \lfloor k / 2 \rfloor - (k - 1) \\
-      &= i + 2n - 2n \\
-      &= i.
-\end{split}
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="full-padding">Full padding </h2>
-
-<p>While convolving a kernel generally decreases the output size with
-respect to the input size, sometimes the opposite is required. This can be
-achieved with proper zero padding:
-</p>
-
-<p>For any \( i \) and \( k \), and for \( p = k - 1 \) and \( s = 1 \),</p>
-$$
-\begin{equation*}
-\begin{split}
-    o &= i + 2(k - 1) - (k - 1) \\
-      &= i + (k - 1).
-\end{split}
-\end{equation*}
-$$
-
-<p>This is sometimes referred to as full padding, because in this
-setting every possible partial or complete superimposition of the kernel on the
-input feature map is taken into account. 
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="pooling-arithmetic">Pooling arithmetic </h2>
-
-<p>In a neural network, pooling layers provide invariance to small translations of
-the input. The most common kind of pooling is <b>max pooling</b>, which
-consists in splitting the input in (usually non-overlapping) patches and
-outputting the maximum value of each patch. Other kinds of pooling exist, e.g.,
-mean or average pooling, which all share the same idea of aggregating the input
-locally by applying a non-linearity to the content of some patches.
-</p>
-
-<p>Since pooling does not involve
-zero padding, the relationship describing the general case is as follows:
-</p>
-
-<p>For any \( i \), \( k \) and \( s \),</p>
-$$
-\begin{equation*}
-    o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="strategies-for-cnns">Strategies for CNNs </h2>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>
@@ -1142,6 +926,279 @@ fixed-sized inputs like all the nets we have discussed so far. For
 example, they can take sentences, documents, or audio samples as
 input, making them extremely useful for natural language processing
 systems such as automatic translation and speech-to-text.
+</p>
+
+<p>When applying machine learning to sequences, we often want to turn an input
+sequence into an output sequence that lives in a different domain.
+&#8211; E. g. turn a sequence of sound pressures into a sequence of word identities.
+&#8226; When there is no separate target sequence, we can get a teaching signal by trying
+to predict the next term in the input sequence.
+&#8211; The target output sequence is the input sequence with an advance of 1 step.
+&#8211; This seems much more natural than trying to predict one pixel in an image
+from the other pixels, or one patch of an image from the rest of the image.
+&#8211; For temporal sequences there is a natural order for the predictions.
+&#8226; Predicting the next term in a sequence blurs the distinction between supervised
+and unsupervised learning.
+&#8211; It uses methods designed for supervised learning, but it doesn&#8217;t require a
+separate teaching signal. 
+</p>
+<h3 id="memoryless-models">Memoryless models </h3>
+<p>Autoregressive models
+Predict the next term in a
+sequence from a fixed number of
+previous terms using &#8220;delay taps&#8221;.
+&#8226; Feed-forward neural nets
+These generalize autoregressive
+models by using one or more
+layers of non-linear hidden units. 
+</p>
+
+<p>If we give our generative model some hidden state, and if we give
+this hidden state its own internal dynamics, we get a much more
+interesting kind of model.
+&#8211; It can store information in its hidden state for a long time.
+&#8211; If the dynamics is noisy and the way it generates outputs from its
+hidden state is noisy, we can never know its exact hidden state.
+&#8211; The best we can do is to infer a probability distribution over the
+space of hidden state vectors.
+&#8226; This inference is only tractable for two types of hidden state model.
+</p>
+<h3 id="linear-dynamical-model">Linear dynamical model </h3>
+
+<p>If we give our generative model some hidden state, and if we give
+this hidden state its own internal dynamics, we get a much more
+interesting kind of model.
+&#8211; It can store information in its hidden state for a long time.
+&#8211; If the dynamics is noisy and the way it generates outputs from its
+hidden state is noisy, we can never know its exact hidden state.
+&#8211; The best we can do is to infer a probability distribution over the
+space of hidden state vectors.
+&#8226; This inference is only tractable for two types of hidden state model.
+</p>
+<h3 id="hidden-markov-models">Hidden Markov Models </h3>
+<p>&#8226; Hidden Markov Models have a discrete oneof-N hidden state. Transitions between states
+are stochastic and controlled by a transition
+matrix. The outputs produced by a state are
+stochastic.
+&#8211; We cannot be sure which state produced a
+given output. So the state is &#8220;hidden&#8221;.
+&#8211; It is easy to represent a probability distribution
+across N states with N numbers.
+&#8226; To predict the next output we need to infer the
+probability distribution over hidden states.
+&#8211; HMMs have efficient algorithms for
+inference and learning
+</p>
+<h3 id="rnns">RNNs </h3>
+
+<p>RNNs are very powerful, because they
+combine two properties:
+&#8211; Distributed hidden state that allows
+them to store a lot of information
+about the past efficiently.
+&#8211; Non-linear dynamics that allows
+them to update their hidden state in
+complicated ways.
+&#8226; With enough neurons and time, RNNs
+can compute anything that can be
+computed by your computer.
+</p>
+<h3 id="do-generative-models-need-to-be-stochastic">Do generative models need to be stochastic? </h3>
+<p>&#8226; Linear dynamical systems and
+hidden Markov models are
+stochastic models.
+&#8211; But the posterior probability
+distribution over their
+hidden states given the
+observed data so far is a
+deterministic function of the
+data.
+&#8226; Recurrent neural networks are
+deterministic.
+&#8211; So think of the hidden state
+of an RNN as the
+equivalent of the
+deterministic probability
+distribution over hidden
+states in a linear dynamical
+system or hidden Markov
+model.
+</p>
+<h3 id="what-kinds-of-behaviour-can-rnns-exhibit">What kinds of behaviour can RNNs exhibit? </h3>
+<p>&#8211; They can oscillate. Good for motor control?
+&#8211; They can settle to point attractors. Good for retrieving memories?
+&#8211; They can behave chaotically. Bad for information processing?
+&#8211; RNNs could potentially learn to implement lots of small programs
+that each capture a nugget of knowledge and run in parallel,
+interacting to produce very complicated effects.
+&#8226; But the computational power of RNNs makes them very hard to train.
+&#8211; For many years we could not exploit the computational power of
+RNNs despite some heroic efforts (e.g. Tony Robinson&#8217;s speech
+recognizer). 
+</p>
+
+<p>The equivalence between feedforward nets and recurrent
+nets
+w1 w4
+w2 w3
+w1 w2 W3 W4
+time=0
+time=2
+time=1
+time=3
+Assume that there is a time
+delay of 1 in using each
+connection.
+The recurrent net is just a
+layered net that keeps
+reusing the same weights.
+</p>
+<h3 id="backpropagation-through-time">Backpropagation through time </h3>
+<p>&#8226; We can think of the recurrent net as a layered, feed-forward
+net with shared weights and then train the feed-forward net
+with weight constraints.
+&#8226; We can also think of this training algorithm in the time domain:
+&#8211; The forward pass builds up a stack of the activities of all
+the units at each time step.
+&#8211; The backward pass peels activities off the stack to
+compute the error derivatives at each time step.
+&#8211; After the backward pass we add together the derivatives at
+all the different times for each weight. 
+</p>
+<h3 id="we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output">We need to specify the initial activity state of all the hidden and output </h3>
+<p>units.
+&#8226; We could just fix these initial states to have some default value like 0.5.
+&#8226; But it is better to treat the initial states as learned parameters.
+&#8226; We learn them in the same way as we learn the weights.
+&#8211; Start off with an initial random guess for the initial states.
+&#8211; At the end of each training sequence, backpropagate through time
+all the way to the initial states to get the gradient of the error function
+with respect to each initial state.
+&#8211; Adjust the initial states by following the negative gradient. 
+</p>
+<h3 id="we-can-specify-inputs-in-several">We can specify inputs in several </h3>
+<p>ways:
+&#8211; Specify the initial states of all
+the units.
+&#8211; Specify the initial states of a
+subset of the units.
+&#8211; Specify the states of the same
+subset of the units at every time
+step.
+&#8226; This is the natural way to
+model most sequential data. 
+</p>
+<h3 id="we-can-specify-targets-in-several">We can specify targets in several </h3>
+<p>ways:
+&#8211; Specify desired final activities of
+all the units
+&#8211; Specify desired activities of all
+units for the last few steps
+&#8226; Good for learning attractors
+&#8226; It is easy to add in extra error
+derivatives as we
+backpropagate.
+&#8211; Specify the desired activity of a
+subset of the units.
+&#8226; The other units are input or
+hidden units. 
+</p>
+<h3 id="the-backward-pass-is-linear">The backward pass is linear </h3>
+<p>&#8226; There is a big difference between the
+forward and backward passes.
+&#8226; In the forward pass we use squashing
+functions (like the logistic) to prevent the
+activity vectors from exploding.
+&#8226; The backward pass, is completely linear. If
+you double the error derivatives at the final
+layer, all the error derivatives will double.
+&#8211; The forward pass determines the slope
+of the linear function used for
+backpropagating through each neuron
+</p>
+<h3 id="the-problem-of-exploding-or-vanishing-gradients">The problem of exploding or vanishing gradients </h3>
+<p>&#8226; What happens to the magnitude of the
+gradients as we backpropagate
+through many layers?
+&#8211; If the weights are small, the
+gradients shrink exponentially.
+&#8211; If the weights are big the gradients
+grow exponentially.
+&#8226; Typical feed-forward neural nets can
+cope with these exponential effects
+because they only have a few hidden
+layers.
+&#8226; In an RNN trained on long sequences
+(e.g. 100 time steps) the gradients
+can easily explode or vanish.
+&#8211; We can avoid this by initializing
+the weights very carefully.
+&#8226; Even with good initial weights, its very
+hard to detect that the current target
+output depends on an input from
+many time-steps ago.
+&#8211; So RNNs have difficulty dealing
+with long-range dependencies. 
+</p>
+<h3 id="four-effective-ways-to-learn-an-rnn">Four effective ways to learn an RNN </h3>
+<p>&#8226; Long Short Term Memory
+Make the RNN out of little
+modules that are designed to
+remember values for a long time.
+&#8226; Hessian Free Optimization: Deal
+with the vanishing gradients
+problem by using a fancy
+optimizer that can detect
+directions with a tiny gradient but
+even smaller curvature.
+&#8211; The HF optimizer ( Martens &
+Sutskever, 2011) is good at
+this.
+&#8226; Echo State Networks: Initialize the
+input&#224;hidden and hidden&#224;hidden and
+output&#224;hidden connections very
+carefully so that the hidden state has a
+huge reservoir of weakly coupled
+oscillators which can be selectively driven
+by the input.
+&#8211; ESNs only need to learn the
+hidden&#224;output connections.
+&#8226; Good initialization with momentum
+Initialize like in Echo State Networks, but
+then learn all of the connections using
+momentum
+</p>
+<h3 id="long-short-term-memory-lstm">Long Short Term Memory (LSTM) </h3>
+<p>&#8226; Hochreiter &amp; Schmidhuber
+(1997) solved the problem of
+getting an RNN to remember
+things for a long time (like
+hundreds of time steps).
+&#8226; They designed a memory cell
+using logistic and linear units
+with multiplicative interactions.
+&#8226; Information gets into the cell
+whenever its &#8220;write&#8221; gate is on.
+&#8226; The information stays in the
+cell so long as its &#8220;keep&#8221; gate
+is on.
+&#8226; Information can be read from
+the cell by turning on its &#8220;read&#8221;
+gate. 
+</p>
+<h3 id="implementing-a-memory-cell-in-a-neural-network">Implementing a memory cell in a neural network </h3>
+<p>To preserve information for a long time in
+the activities of an RNN, we use a circuit
+that implements an analog memory cell.
+&#8211; A linear unit that has a self-link with a
+weight of 1 will maintain its state.
+&#8211; Information is stored in the cell by
+activating its write gate.
+&#8211; Information is retrieved by activating
+the read gate.
+&#8211; We can backpropagate through this
+circuit because logistics are have nice
+derivatives. 
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
