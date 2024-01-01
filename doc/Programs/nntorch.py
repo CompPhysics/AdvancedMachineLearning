@@ -1,3 +1,4 @@
+# Simple neural-network (NN) code using pytorch
 import numpy as np
 import torch
 import torch.nn as nn
@@ -12,7 +13,7 @@ X = torch.tensor(X, dtype=torch.float32)
 y = torch.tensor(y, dtype=torch.float32).reshape(-1, 1)
 
 # define the model
-class PimaClassifier(nn.Module):
+class NNClassifier(nn.Module):
     def __init__(self):
         super().__init__()
         self.hidden1 = nn.Linear(8, 12)
