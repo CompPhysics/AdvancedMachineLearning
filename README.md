@@ -25,7 +25,7 @@ Furthermore, all teaching material is available from this GitHub link.
 
 ## January 15-19: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
-- Presentation of course
+- Presentation of course and overview
 - Discussion of possible projects
 - Deep learning, neural networks, basic equations
 - Recommended reading Goodfellow et al chapters 6 and 7
