@@ -36,24 +36,33 @@ doconce format html week1.do.txt --html_style=bootstrap --pygments_html_style=de
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Overview of first week, January 15-21, 2024',
+ 'sections': [('Overview of first week, January 15-19, 2024',
                2,
                None,
-               'overview-of-first-week-january-15-21-2024'),
-              ('Practicalities and possible projects',
-               2,
-               None,
-               'practicalities-and-possible-projects'),
+               'overview-of-first-week-january-15-19-2024'),
+              ('Practicalities', 2, None, 'practicalities'),
               ('Deep learning methods covered, tentative',
                2,
                None,
                'deep-learning-methods-covered-tentative'),
-              ('"Additionally Kernel regression (Gaussian processes) and '
-               'Bayesian '
+              ('"Additional topics:  Kernel regression (Gaussian processes) '
+               'and Bayesian '
                'statistics":"https://jenfb.github.io/bkmr/overview.html"',
                2,
                None,
-               'additionally-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html'),
+               'additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html'),
+              ('Scientific Machine Learning',
+               2,
+               None,
+               'scientific-machine-learning'),
+              ('Physics driven Machine Learning',
+               2,
+               None,
+               'physics-driven-machine-learning'),
+              ('Good books with hands-on material and codes',
+               2,
+               None,
+               'good-books-with-hands-on-material-and-codes'),
               ('Machine learning. A simple perspective on the interface '
                'between ML and Physics, HPC is essential',
                2,
@@ -125,22 +134,11 @@ doconce format html week1.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'from-ols-to-ridge-and-lasso'),
               ('Lasso regression', 2, None, 'lasso-regression'),
-              ('Good books with hands-on material and codes',
+              ('Examples: Many-body physics, Quantum Monte Carlo and deep '
+               'learning',
                2,
                None,
-               'good-books-with-hands-on-material-and-codes'),
-              ('Scientific Machine Learning',
-               2,
-               None,
-               'scientific-machine-learning'),
-              ('Physics driven Machine Learning',
-               2,
-               None,
-               'physics-driven-machine-learning'),
-              ('Many-body physics, Quantum Monte Carlo and deep learning',
-               2,
-               None,
-               'many-body-physics-quantum-monte-carlo-and-deep-learning'),
+               'examples-many-body-physics-quantum-monte-carlo-and-deep-learning'),
               ('Quantum Monte Carlo Motivation',
                2,
                None,
@@ -196,7 +194,7 @@ doconce format html week1.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'representing-the-wave-function'),
-              ('Choose the cost function', 2, None, 'choose-the-cost-function'),
+              ('Define the cost function', 2, None, 'define-the-cost-function'),
               ('Extrapolations and model interpretability',
                2,
                None,
@@ -249,10 +247,13 @@ MathJax.Hub.Config({
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
-     <!-- navigation toc: --> <li><a href="#overview-of-first-week-january-15-21-2024" style="font-size: 80%;">Overview of first week, January 15-21, 2024</a></li>
-     <!-- navigation toc: --> <li><a href="#practicalities-and-possible-projects" style="font-size: 80%;">Practicalities and possible projects</a></li>
+     <!-- navigation toc: --> <li><a href="#overview-of-first-week-january-15-19-2024" style="font-size: 80%;">Overview of first week, January 15-19, 2024</a></li>
+     <!-- navigation toc: --> <li><a href="#practicalities" style="font-size: 80%;">Practicalities</a></li>
      <!-- navigation toc: --> <li><a href="#deep-learning-methods-covered-tentative" style="font-size: 80%;">Deep learning methods covered, tentative</a></li>
-     <!-- navigation toc: --> <li><a href="#additionally-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html" style="font-size: 80%;">"Additionally Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html"</a></li>
+     <!-- navigation toc: --> <li><a href="#additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html" style="font-size: 80%;">"Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html"</a></li>
+     <!-- navigation toc: --> <li><a href="#scientific-machine-learning" style="font-size: 80%;">Scientific Machine Learning</a></li>
+     <!-- navigation toc: --> <li><a href="#physics-driven-machine-learning" style="font-size: 80%;">Physics driven Machine Learning</a></li>
+     <!-- navigation toc: --> <li><a href="#good-books-with-hands-on-material-and-codes" style="font-size: 80%;">Good books with hands-on material and codes</a></li>
      <!-- navigation toc: --> <li><a href="#machine-learning-a-simple-perspective-on-the-interface-between-ml-and-physics-hpc-is-essential" style="font-size: 80%;">Machine learning. A simple perspective on the interface between ML and Physics, HPC is essential</a></li>
      <!-- navigation toc: --> <li><a href="#ai-ml-and-some-statements-you-may-have-heard-and-what-do-they-mean" style="font-size: 80%;">AI/ML and some statements you may have heard (and what do they mean?)</a></li>
      <!-- navigation toc: --> <li><a href="#types-of-machine-learning" style="font-size: 80%;">Types of machine learning</a></li>
@@ -273,10 +274,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#ridge-and-lasso-regression" style="font-size: 80%;">Ridge and LASSO Regression</a></li>
      <!-- navigation toc: --> <li><a href="#from-ols-to-ridge-and-lasso" style="font-size: 80%;">From OLS to Ridge and Lasso</a></li>
      <!-- navigation toc: --> <li><a href="#lasso-regression" style="font-size: 80%;">Lasso regression</a></li>
-     <!-- navigation toc: --> <li><a href="#good-books-with-hands-on-material-and-codes" style="font-size: 80%;">Good books with hands-on material and codes</a></li>
-     <!-- navigation toc: --> <li><a href="#scientific-machine-learning" style="font-size: 80%;">Scientific Machine Learning</a></li>
-     <!-- navigation toc: --> <li><a href="#physics-driven-machine-learning" style="font-size: 80%;">Physics driven Machine Learning</a></li>
-     <!-- navigation toc: --> <li><a href="#many-body-physics-quantum-monte-carlo-and-deep-learning" style="font-size: 80%;">Many-body physics, Quantum Monte Carlo and deep learning</a></li>
+     <!-- navigation toc: --> <li><a href="#examples-many-body-physics-quantum-monte-carlo-and-deep-learning" style="font-size: 80%;">Examples: Many-body physics, Quantum Monte Carlo and deep learning</a></li>
      <!-- navigation toc: --> <li><a href="#quantum-monte-carlo-motivation" style="font-size: 80%;">Quantum Monte Carlo Motivation</a></li>
      <!-- navigation toc: --> <li><a href="#quantum-monte-carlo-motivation" style="font-size: 80%;">Quantum Monte Carlo Motivation</a></li>
      <!-- navigation toc: --> <li><a href="#energy-derivatives" style="font-size: 80%;">Energy derivatives</a></li>
@@ -293,7 +291,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#defining-different-types-of-rbms-energy-based-models" style="font-size: 80%;">Defining different types of RBMs (Energy based models)</a></li>
      <!-- navigation toc: --> <li><a href="#gaussian-binary" style="font-size: 80%;">Gaussian binary</a></li>
      <!-- navigation toc: --> <li><a href="#representing-the-wave-function" style="font-size: 80%;">Representing the wave function</a></li>
-     <!-- navigation toc: --> <li><a href="#choose-the-cost-function" style="font-size: 80%;">Choose the cost function</a></li>
+     <!-- navigation toc: --> <li><a href="#define-the-cost-function" style="font-size: 80%;">Define the cost function</a></li>
      <!-- navigation toc: --> <li><a href="#extrapolations-and-model-interpretability" style="font-size: 80%;">Extrapolations and model interpretability</a></li>
      <!-- navigation toc: --> <li><a href="#physics-based-statistical-learning-and-data-analysis" style="font-size: 80%;">Physics based statistical learning and data analysis</a></li>
      <!-- navigation toc: --> <li><a href="#bayes-theorem" style="font-size: 80%;">Bayes' Theorem</a></li>
@@ -335,7 +333,7 @@ MathJax.Hub.Config({
 </div> <!-- end jumbotron -->
 
 <!-- !split -->
-<h2 id="overview-of-first-week-january-15-21-2024" class="anchor">Overview of first week, January 15-21, 2024  </h2>
+<h2 id="overview-of-first-week-january-15-19-2024" class="anchor">Overview of first week, January 15-19, 2024  </h2>
 
 <div class="panel panel-default">
 <div class="panel-body">
@@ -350,20 +348,11 @@ MathJax.Hub.Config({
 
 
 <!-- !split -->
-<h2 id="practicalities-and-possible-projects" class="anchor">Practicalities and possible projects </h2>
+<h2 id="practicalities" class="anchor">Practicalities  </h2>
 
 <ol>
-<li> Although the course is defined as a self-study course, we will have weekly lectures with small weekly exercise assignments</li>
-<li> We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants but the following topics could define an outline for possible projects and machine learning topics</li>
-<ul>
- <li> Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research (<a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/2023" target="_self">Higgs challenge for example</a>)</li>
- <li> Study autoencoders and variational autoencoders with application to own data</li>
- <li> GANs and applications to own data</li>
- <li> Solve quantum/or classical many-body problems with deep learning methods (overlaps with FYS4411)</li>
- <li> Physics informed Machine Learning, applications to for example solution of Navier-Stokes equations</li>
- <li> Bayesian Machine Learning and Gaussian processes</li>
- <li> and many other research paths and topics</li>
-</ul>
+<li> Lectures Tuesday 1015am-12pm, room F&#216;434, Department of Physics</li>
+<li> We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants</li>
 <li> No exam, only two projects. Each projects counts 1/2 of the final grade.</li>
 <li> All info at the GitHub address <a href="https://github.com/CompPhysics/AdvancedMachineLearning" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning</tt></a></li>
 </ol>
@@ -371,15 +360,14 @@ MathJax.Hub.Config({
 <h2 id="deep-learning-methods-covered-tentative" class="anchor">Deep learning methods covered, tentative </h2>
 
 <ol>
-<li> Deep learning, classics
+<li> <b>Deep learning, classics</b>
 <ol type="a"></li>
  <li> Feed forward neural networks and its mathematics (NNs)</li>
  <li> Convolutional neural networks (CNNs)</li>
  <li> Recurrent neural networks (RNNs)</li>
  <li> Autoencoders and principal component analysis</li>
- <li> Physical Sciences informed machine learning</li>
 </ol>
-<li> Deeep learning, generative methods
+<li> <b>Deep learning, generative methods</b>
 <ol type="a"></li>
  <li> Basics of generative models</li>
  <li> Boltzmann machines and energy based methods</li>
@@ -388,15 +376,70 @@ MathJax.Hub.Config({
  <li> Generative Adversarial Networks (GANs)</li>
  <li> Autoregressive methods (tentative)</li>
 </ol>
+<li> <b>Physical Sciences informed machine learning</b></li>
 </ol>
 <!-- !split -->
-<h2 id="additionally-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html" class="anchor"><a href="https://jenfb.github.io/bkmr/overview.html" target="_self">Additionally Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
+<h2 id="additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html" class="anchor"><a href="https://jenfb.github.io/bkmr/overview.html" target="_self">Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
 
 <p>Kernel machine regression (KMR), also called Gaussian process
 regression, is a popular tool in the machine learning literature. The
 main idea behind KMR is to flexibly model the relationship between a
 large number of variables and a particular outcome (dependent
 variable).
+</p>
+
+<!-- !split -->
+<h2 id="scientific-machine-learning" class="anchor">Scientific Machine Learning </h2>
+
+<p>An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al <a href="https://doi.org/10.3389/fdata.2022.787421" target="_self">Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)</a></p>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>The authors discuss applications and techniques for fast machine
+learning (ML) in science &ndash; the concept of integrating power ML
+methods into the real-time experimental data processing loop to
+accelerate scientific discovery. The report covers three main areas
+</p>
+
+<ol>
+<li> applications for fast ML across a number of scientific domains;</li>
+<li> techniques for training and implementing performant and resource-efficient ML algorithms;</li>
+<li> and computing architectures, platforms, and technologies for deploying these algorithms.</li>
+</ol>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="physics-driven-machine-learning" class="anchor">Physics driven Machine Learning </h2>
+
+<p>Another hot topic is what has loosely been dubbed <b>Physics-driven deep learning</b>. See the recent work on <a href="https://www.nature.com/articles/s42256-021-00302-5" target="_self">Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)</a>.</p>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. </p>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="good-books-with-hands-on-material-and-codes" class="anchor">Good books with hands-on material and codes </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<ul>
+<li> <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_self">Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a></li>
+<li> <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_self">David Foster, Generative Deep Learning with TensorFlow</a></li>
+<li> <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2" target="_self">Bali and Gavras, Generative AI with Python and TensorFlow 2</a></li>
+</ul>
+</div>
+</div>
+
+
+<p>All three books have GitHub addresses from where  one can download all codes. We will borrow most of the material from these three texts as well as 
+from Goodfellow, Bengio and Courville's text <a href="https://www.deeplearningbook.org/" target="_self">Deep Learning</a>
 </p>
 
 <!-- !split -->
@@ -700,59 +743,7 @@ $$
 
 
 <!-- !split -->
-<h2 id="good-books-with-hands-on-material-and-codes" class="anchor">Good books with hands-on material and codes </h2>
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<ul>
-<li> <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_self">Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a></li>
-<li> <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_self">David Foster, Generative Deep Learning with TensorFlow</a></li>
-<li> <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2" target="_self">Bali and Gavras, Generative AI with Python and TensorFlow 2</a></li>
-</ul>
-</div>
-</div>
-
-
-<p>All three books have GitHub addresses from which one download all codes.</p>
-
-<!-- !split -->
-<h2 id="scientific-machine-learning" class="anchor">Scientific Machine Learning </h2>
-
-<p>An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al <a href="https://doi.org/10.3389/fdata.2022.787421" target="_self">Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)</a></p>
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>The authors discuss applications and techniques for fast machine
-learning (ML) in science &ndash; the concept of integrating power ML
-methods into the real-time experimental data processing loop to
-accelerate scientific discovery. The report covers three main areas
-</p>
-
-<ol>
-<li> applications for fast ML across a number of scientific domains;</li>
-<li> techniques for training and implementing performant and resource-efficient ML algorithms;</li>
-<li> and computing architectures, platforms, and technologies for deploying these algorithms.</li>
-</ol>
-</div>
-</div>
-
-
-<!-- !split -->
-<h2 id="physics-driven-machine-learning" class="anchor">Physics driven Machine Learning </h2>
-
-<p>Another hot topic is what has loosely been dubbed <b>Physics-driven deep learning</b>. See the recent work on <a href="https://www.nature.com/articles/s42256-021-00302-5" target="_self">Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)</a>.</p>
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. </p>
-</div>
-</div>
-
-
-<!-- !split -->
-<h2 id="many-body-physics-quantum-monte-carlo-and-deep-learning" class="anchor">Many-body physics, Quantum Monte Carlo and deep learning </h2>
+<h2 id="examples-many-body-physics-quantum-monte-carlo-and-deep-learning" class="anchor">Examples: Many-body physics, Quantum Monte Carlo and deep learning </h2>
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
@@ -1045,7 +1036,7 @@ $$
 <p>or we could square the wave function.</p>
 
 <!-- !split -->
-<h2 id="choose-the-cost-function" class="anchor">Choose the cost function </h2>
+<h2 id="define-the-cost-function" class="anchor">Define the cost function </h2>
 
 <p>Now we don't necessarily have training data (unless we generate it by
 using some other method). However, what we do have is the variational
@@ -1095,7 +1086,7 @@ concerned about the underlying patterns that were learned in order
 to make these predictions.
 </p>
 
-<p>Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics.</p>
+<p>Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.</p>
 
 <!-- !split -->
 <h2 id="bayes-theorem" class="anchor">Bayes' Theorem </h2>
@@ -1127,6 +1118,7 @@ necessarily normalized and is normally called the likelihood function.
 <!-- !split -->
 <h2 id="mathematics-of-deep-learning-and-neural-networks" class="anchor">Mathematics of deep learning and neural networks </h2>
 
+<p>Material to be added</p>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->

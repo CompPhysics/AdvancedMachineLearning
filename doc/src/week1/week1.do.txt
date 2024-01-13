@@ -5,7 +5,8 @@ DATE: FYS5429/9429, Spring 2024
 
 
 !split
-===== Overview of first week, January 15-21, 2024  =====
+===== Overview of first week, January 15-19, 2024  =====
+
 
 !bblock 
   o Presentation of course with  general overview of methods
@@ -15,48 +16,81 @@ DATE: FYS5429/9429, Spring 2024
 
 
 !split
-===== Practicalities and possible projects =====
+===== Practicalities  =====
 
-o Although the course is defined as a self-study course, we will have weekly lectures with small weekly exercise assignments
-o We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants but the following topics could define an outline for possible projects and machine learning topics
- * Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research ("Higgs challenge for example":"https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/2023")
- * Study autoencoders and variational autoencoders with application to own data
- * GANs and applications to own data
- * Solve quantum/or classical many-body problems with deep learning methods (overlaps with FYS4411)
- * Physics informed Machine Learning, applications to for example solution of Navier-Stokes equations
- * Bayesian Machine Learning and Gaussian processes
- * and many other research paths and topics
+o Lectures Tuesday 1015am-12pm, room FØ434, Department of Physics
+o We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
 o No exam, only two projects. Each projects counts 1/2 of the final grade.
 o All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
 
 !split
 =====  Deep learning methods covered, tentative =====
 
-o Deep learning, classics
+o _Deep learning, classics_
   o Feed forward neural networks and its mathematics (NNs)
   o Convolutional neural networks (CNNs)
   o Recurrent neural networks (RNNs)
   o Autoencoders and principal component analysis
-  o Physical Sciences informed machine learning
-o Deeep learning, generative methods
+o _Deep learning, generative methods_
   o Basics of generative models
   o Boltzmann machines and energy based methods
   o Diffusion models (tentative)
   o Variational autoencoders (VAEe)
   o Generative Adversarial Networks (GANs)
   o Autoregressive methods (tentative)
-
+o _Physical Sciences informed machine learning_
 
 
 
 !split
-===== "Additionally Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" =====
+===== "Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" =====
 
 Kernel machine regression (KMR), also called Gaussian process
 regression, is a popular tool in the machine learning literature. The
 main idea behind KMR is to flexibly model the relationship between a
 large number of variables and a particular outcome (dependent
 variable).
+
+!split
+===== Scientific Machine Learning =====
+
+An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al "Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)":"https://doi.org/10.3389/fdata.2022.787421"
+
+!bblock
+The authors discuss applications and techniques for fast machine
+learning (ML) in science -- the concept of integrating power ML
+methods into the real-time experimental data processing loop to
+accelerate scientific discovery. The report covers three main areas
+
+o applications for fast ML across a number of scientific domains;
+o techniques for training and implementing performant and resource-efficient ML algorithms;
+o and computing architectures, platforms, and technologies for deploying these algorithms.
+
+!eblock
+
+
+!split
+===== Physics driven Machine Learning =====
+
+Another hot topic is what has loosely been dubbed _Physics-driven deep learning_. See the recent work on "Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)":"https://www.nature.com/articles/s42256-021-00302-5".
+
+!bblock From their abstract
+A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. 
+!eblock
+
+
+
+!split
+===== Good books with hands-on material and codes =====
+!bblock
+* "Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
+* "David Foster, Generative Deep Learning with TensorFlow":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"
+* "Bali and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
+!eblock
+
+All three books have GitHub addresses from where  one can download all codes. We will borrow most of the material from these three texts as well as 
+from Goodfellow, Bengio and Courville's text "Deep Learning":"https://www.deeplearningbook.org/"
+
 
 !split
 ===== Machine learning. A simple perspective on the interface between ML and Physics, HPC is essential =====
@@ -356,50 +390,14 @@ Here we have defined the norm-1 as
 
 
 
-!split
-===== Good books with hands-on material and codes =====
-!bblock
-* "Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
-* "David Foster, Generative Deep Learning with TensorFlow":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"
-* "Bali and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
-!eblock
 
-All three books have GitHub addresses from which one download all codes.
 
 
 
 
 
 !split
-===== Scientific Machine Learning =====
-
-An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al "Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)":"https://doi.org/10.3389/fdata.2022.787421"
-
-!bblock
-The authors discuss applications and techniques for fast machine
-learning (ML) in science -- the concept of integrating power ML
-methods into the real-time experimental data processing loop to
-accelerate scientific discovery. The report covers three main areas
-
-o applications for fast ML across a number of scientific domains;
-o techniques for training and implementing performant and resource-efficient ML algorithms;
-o and computing architectures, platforms, and technologies for deploying these algorithms.
-
-!eblock
-
-
-!split
-===== Physics driven Machine Learning =====
-
-Another hot topic is what has loosely been dubbed _Physics-driven deep learning_. See the recent work on "Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)":"https://www.nature.com/articles/s42256-021-00302-5".
-
-!bblock From their abstract
-A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. 
-!eblock
-
-
-!split
-===== Many-body physics, Quantum Monte Carlo and deep learning =====
+===== Examples: Many-body physics, Quantum Monte Carlo and deep learning =====
 !bblock
 Given a hamiltonian $H$ and a trial wave function $\Psi_T$, the variational principle states that the expectation value of $\langle H \rangle$, defined through 
 !bt
@@ -678,7 +676,7 @@ Now this is what we use to represent the wave function, calling it a neural-netw
 or we could square the wave function.
 
 !split
-===== Choose the cost function =====
+===== Define the cost function =====
 
 Now we don't necessarily have training data (unless we generate it by
 using some other method). However, what we do have is the variational
@@ -701,9 +699,6 @@ where the local energy is given by
 	E_L = \frac{1}{\Psi} \hat{\mathbf{H}} \Psi.
 \]
 !et
-
-
-
 
 
 
@@ -733,7 +728,7 @@ is the quality of the predictions or assessments, and we are less
 concerned about the underlying patterns that were learned in order
 to make these predictions.
 
-Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics.
+Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.
 
 
 
@@ -768,5 +763,5 @@ FIGURE: [figures/landscape.jpg, width=800 frac=1.0]
 !split
 ===== Mathematics of deep learning and neural networks =====
 
-
+Material to be added
 
