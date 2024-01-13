@@ -184,27 +184,26 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>Dec 21, 2023</h4>
+<h4>FYS5429/9429, Spring 2024</h4>
 </center> <!-- date -->
 <br>
 
 
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2023, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </section>
 
 <section>
-<h2 id="overview-of-week-first-week">Overview of week first week  </h2>
+<h2 id="overview-of-first-week-january-15-21-2024">Overview of first week, January 15-21, 2024  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
 <ol>
- <p><li> Presentation of course and participants</li>
- <p><li> Discussion of possible projects</li>
- <p><li> Discussion of evaluation forms</li>
- <p><li> Eventual start with theory discussions on deep learning methods</li>
+ <p><li> Presentation of course with  general overview of methods</li>
+ <p><li> Discussion of possible projects and presentation of participants</li>
+ <p><li> Deep learning methods, review of neural networks</li>
 </ol>
 </div>
 </section>
@@ -213,10 +212,10 @@ MathJax.Hub.Config({
 <h2 id="practicalities-and-possible-projects">Practicalities and possible projects </h2>
 
 <ol>
-<p><li> Although the course is defined as a self-study course, we can have weekly lectures with small weekly exercise assignments</li>
+<p><li> Although the course is defined as a self-study course, we will have weekly lectures with small weekly exercise assignments</li>
 <p><li> We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants but the following topics could define an outline for possible projects and machine learning topics</li>
 <ul>
- <p><li> Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research (<a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/EarlierProjects/2022" target="_blank">Higgs challenge for example</a>)</li>
+ <p><li> Deep learning with the aim to develop a code for CNNs and/or RNNs and study data of relevance for own research (<a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/2023" target="_blank">Higgs challenge for example</a>)</li>
  <p><li> Study autoencoders and variational autoencoders with application to own data</li>
  <p><li> GANs and applications to own data</li>
  <p><li> Solve quantum/or classical many-body problems with deep learning methods (overlaps with FYS4411)</li>
@@ -225,13 +224,13 @@ MathJax.Hub.Config({
  <p><li> and many other research paths and topics</li>
 </ul>
 <p>
-<p><li> No exam, only two projects whoch count 1/2 of the final grade each</li>
+<p><li> No exam, only two projects. Each projects counts 1/2 of the final grade.</li>
 <p><li> All info at the GitHub address <a href="https://github.com/CompPhysics/AdvancedMachineLearning" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning</tt></a></li>
 </ol>
 </section>
 
 <section>
-<h2 id="deep-learning-methods-covered">Deep learning methods covered </h2>
+<h2 id="deep-learning-methods-covered-tentative">Deep learning methods covered, tentative </h2>
 
 <ol>
 <p><li> Deep learning, classics
@@ -240,63 +239,24 @@ MathJax.Hub.Config({
  <p><li> Convolutional neural networks (CNNs)</li>
  <p><li> Recurrent neural networks (RNNs)</li>
  <p><li> Autoencoders and principal component analysis</li>
- <p><li> Physics informed neural networks</li>
+ <p><li> Physical Sciences informed machine learning</li>
 </ol>
 <p>
 <p><li> Deeep learning, generative methods
 <ol type="a"></li>
+ <p><li> Basics of generative models</li>
  <p><li> Boltzmann machines and energy based methods</li>
- <p><li> Autoencodervariational autoencoders (VAEe)</li>
+ <p><li> Diffusion models (tentative)</li>
+ <p><li> Variational autoencoders (VAEe)</li>
  <p><li> Generative Adversarial Networks (GANs)</li>
+ <p><li> Autoregressive methods (tentative)</li>
 </ol>
 <p>
 </ol>
-<p>
-<p>The <a href="https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html" target="_blank">lecture notes</a> contain a more in depth discussion of these methods, in particular on neural networks, CNNs and RNNs.</p>
 </section>
 
 <section>
-<h2 id="autoencoders-and-variational-autoencoders-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-autoencoders-ipynb-autoencoders-ipynb"><a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/Autoencoders/ipynb/Autoencoders.ipynb" target="_blank">Autoencoders and Variational Autoencoders</a> </h2>
-
-<p>Autoencoders are artificial neural networks capable of learning
-efficient representations of the input data (these representations are
-called codings) without any supervision (i.e., the training set is
-unlabeled). These codings typically have a much lower dimensionality
-than the input data, making autoencoders useful for dimensionality
-reduction.
-</p>
-
-<p>More importantly, autoencoders act as powerful feature detectors, and
-they can be used for unsupervised pretraining of deep neural networks.
-</p>
-</section>
-
-<section>
-<h2 id="gans-https-github-com-compphysics-advancedmachinelearning-blob-main-doc-pub-generativeadversarialnetworks-ipynb-generativeadversarialnetworks-ipynb"><a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/GenerativeAdversarialNetworks/ipynb/GenerativeAdversarialNetworks.ipynb" target="_blank">GANs</a> </h2>
-
-<p>Generative modeling is an unsupervised learning task in machine
-learning that involves automatically discovering and learning the
-regularities or patterns in input data in such a way that the model
-can be used to generate or output new examples that plausibly could
-have been drawn from the original dataset.
-</p>
-
-<p><b>Generative models</b> describe a class of statistical models that are a contrast
-to <b>discriminative models</b>. Informally we say that generative models can
-generate new data instances while discriminative models discriminate between
-different kinds of data instances. A generative model could generate new photos
-of animals that look like 'real' animals while a discriminative model could tell
-a dog from a cat. More formally, given a data set \( x \) and a set of labels /
-targets \( y \). Generative models capture the joint probability \( p(x, y) \), or
-just \( p(x) \) if there are no labels, while discriminative models capture the
-conditional probability \( p(y | x) \). Discriminative models generally try to draw
-boundaries in the data space (often high dimensional), while generative models
-try to model how data is placed throughout the space.
-</p>
-</section>
-
-<section>
-<h2 id="kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html"><a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
+<h2 id="additionally-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html"><a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Additionally Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
 
 <p>Kernel machine regression (KMR), also called Gaussian process
 regression, is a popular tool in the machine learning literature. The
@@ -307,14 +267,818 @@ variable).
 </section>
 
 <section>
-<h2 id="physics-informed-machine-learning-https-github-com-maziarraissi-pinns"><a href="https://github.com/maziarraissi/PINNs" target="_blank">Physics informed machine learning</a> </h2>
+<h2 id="machine-learning-a-simple-perspective-on-the-interface-between-ml-and-physics-hpc-is-essential">Machine learning. A simple perspective on the interface between ML and Physics, HPC is essential </h2>
 
-<p>Here we can discuss neural networks that are trained to solve
-supervised learning tasks while respecting any given law of physics
-described by general nonlinear partial differential equations. 
+<br/><br/>
+<center>
+<p><img src="figures/mlimage.png" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="ai-ml-and-some-statements-you-may-have-heard-and-what-do-they-mean">AI/ML and some statements you may have heard (and what do they mean?)  </h2>
+
+<ol>
+<p><li> Fei-Fei Li on ImageNet: <b>map out the entire world of objects</b> (<a href="https://cacm.acm.org/news/219702-the-data-that-transformed-ai-research-and-possibly-the-world/fulltext" target="_blank">The data that transformed AI research</a>)</li>
+<p><li> Russell and Norvig in their popular textbook: <b>relevant to any intellectual task; it is truly a universal field</b> (<a href="http://aima.cs.berkeley.edu/" target="_blank">Artificial Intelligence, A modern approach</a>)</li>
+<p><li> Woody Bledsoe puts it more bluntly: <b>in the long run, AI is the only science</b> (quoted in Pamilla McCorduck, <a href="https://www.pamelamccorduck.com/machines-who-think" target="_blank">Machines who think</a>)</li>
+</ol>
+<p>
+<p>If you wish to have a critical read on AI/ML from a societal point of view, see <a href="https://www.katecrawford.net/" target="_blank">Kate Crawford's recent text Atlas of AI</a>. See also <a href="https://www.nationaldefensemagazine.org/articles/2023/3/24/ukraine-a-living-lab-for-ai-warfare" target="_blank"><tt>https://www.nationaldefensemagazine.org/articles/2023/3/24/ukraine-a-living-lab-for-ai-warfare</tt></a></p>
+
+<b>Here: with AI/ML we intend a collection of machine learning methods with an emphasis on statistical learning and data analysis</b>
+</section>
+
+<section>
+<h2 id="types-of-machine-learning">Types of machine learning </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>The approaches to machine learning are many, but are often split into two main categories. 
+In <em>supervised learning</em> we know the answer to a problem,
+and let the computer deduce the logic behind it. On the other hand, <em>unsupervised learning</em>
+is a method for finding patterns and relationship in data sets without any prior knowledge of the system.
 </p>
 
-<p>See also <a href="https://arxiv.org/abs/2211.08064" target="_blank"><tt>https://arxiv.org/abs/2211.08064</tt></a>.</p>
+<p>An emerging  third category is  <em>reinforcement learning</em>. This is a paradigm 
+of learning inspired by behavioural psychology, where learning is achieved by trial-and-error, 
+solely from rewards and punishment.
+</p>
+</div>
+</section>
+
+<section>
+<h2 id="main-categories">Main categories </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>Another way to categorize machine learning tasks is to consider the desired output of a system.
+Some of the most common tasks are:
+</p>
+
+<ul>
+
+<p><li> Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.</li>
+
+<p><li> Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.</li>
+
+<p><li> Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.</li>
+</ul>
+</div>
+</section>
+
+<section>
+<h2 id="the-plethora-of-machine-learning-algorithms-methods">The plethora  of machine learning algorithms/methods </h2>
+
+<ol>
+<p><li> Deep learning: Neural Networks (NNs), Convolutional NNs, Recurrent NNs, Transformers, Boltzmann machines, autoencoders and variational autoencoders  and generative adversarial networks and other generative models</li> 
+<p><li> Bayesian statistics and Bayesian Machine Learning, Bayesian experimental design, Bayesian Regression models, Bayesian neural networks, Gaussian processes and much more</li>
+<p><li> Dimensionality reduction (Principal component analysis), Clustering Methods and more</li>
+<p><li> Ensemble Methods, Random forests, bagging and voting methods, gradient boosting approaches</li> 
+<p><li> Linear and logistic regression, Kernel methods, support vector machines and more</li>
+<p><li> Reinforcement Learning; Transfer Learning and more</li> 
+</ol>
+</section>
+
+<section>
+<h2 id="what-is-generative-modeling">What Is Generative Modeling? </h2>
+
+<p>Generative modeling can be broadly defined as follows:</p>
+
+<p>Generative modeling is a branch of machine learning that involves
+training a model to produce new data that is similar to a given
+dataset.
+</p>
+
+<p>What does this mean in practice? Suppose we have a dataset containing
+photos of horses. We can train a generative model on this dataset to
+capture the rules that govern the complex relationships between pixels
+in images of horses. Then we can sample from this model to create
+novel, realistic images of horses that did not exist in the original
+dataset. 
+</p>
+</section>
+
+<section>
+<h2 id="example-of-generative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Example of generative modeling, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deeep Learning by David Foster</a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/generativelearning.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="generative-modeling">Generative Modeling </h2>
+
+<p>In order to build a generative model, we require a dataset consisting
+of many examples of the entity we are trying to generate. This is
+known as the training data, and one such data point is called an
+observation.
+</p>
+
+<p>Each observation consists of many features. For an image generation
+problem, the features are usually the individual pixel values; for a
+text generation problem, the features could be individual words or
+groups of letters. It is our goal to build a model that can generate
+new sets of features that look as if they have been created using the
+same rules as the original data. Conceptually, for image generation
+this is an incredibly difficult task, considering the vast number of
+ways that individual pixel values can be assigned and the relatively
+tiny number of such arrangements that constitute an image of the
+entity we are trying to generate.
+</p>
+</section>
+
+<section>
+<h2 id="generative-versus-discriminative-modeling">Generative Versus Discriminative Modeling </h2>
+
+<p>In order to truly understand what generative modeling aims to achieve
+and why this is important, it is useful to compare it to its
+counterpart, discriminative modeling. If you have studied machine
+learning, most problems you will have faced will have most likely been
+discriminative in nature. 
+</p>
+</section>
+
+<section>
+<h2 id="example-of-discriminative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Example of discriminative modeling, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deeep Learning by David Foster</a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/standarddeeplearning.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="discriminative-modeling">Discriminative Modeling </h2>
+
+<p>When performing discriminative modeling, each observation in the
+training data has a label. For a binary classification problem such as
+our data could be labeled as ones and zeros. Our model then learns how to
+discriminate between these two groups and outputs the probability that
+a new observation has label 1 or 0
+</p>
+
+<p>In contrast, generative modeling doesn&#8217;t require the dataset to be
+labeled because it concerns itself with generating entirely new
+data (for example an image), rather than trying to predict a label for say  a given image.
+</p>
+</section>
+
+<section>
+<h2 id="taxonomy-of-generative-deep-learning-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Taxonomy of generative deep learning, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deep Learning by David Foster</a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/generativemodels.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="what-are-the-basic-ingredients">What are the basic ingredients? </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>Almost every problem in ML and data science starts with the same ingredients:</p>
+<ul>
+<p><li> The dataset \( \mathbf{x} \) (could be some observable quantity of the system we are studying)</li>
+<p><li> A model which is a function of a set of parameters \( \mathbf{\alpha} \) that relates to the dataset, say a likelihood  function \( p(\mathbf{x}\vert \mathbf{\alpha}) \) or just a simple model \( f(\mathbf{\alpha}) \)</li>
+<p><li> A so-called <b>loss/cost/risk</b> function \( \mathcal{C} (\mathbf{x}, f(\mathbf{\alpha})) \) which allows us to decide how well our model represents the dataset.</li> 
+</ul>
+<p>
+<p>We seek to minimize the function \( \mathcal{C} (\mathbf{x}, f(\mathbf{\alpha})) \) by finding the parameter values which minimize \( \mathcal{C} \). This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. </p>
+</div>
+</section>
+
+<section>
+<h2 id="low-level-machine-learning-the-family-of-ordinary-least-squares-methods">Low-level machine learning, the family of ordinary least squares methods  </h2>
+
+<p>Our data which we want to apply a machine learning method on, consist
+of a set of inputs \( \boldsymbol{x}^T=[x_0,x_1,x_2,\dots,x_{n-1}] \) and the
+outputs we want to model \( \boldsymbol{y}^T=[y_0,y_1,y_2,\dots,y_{n-1}] \).
+We assume  that the output data can be represented (for a regression case) by a continuous function \( f \)
+through
+</p>
+<p>&nbsp;<br>
+$$
+\boldsymbol{y}=f(\boldsymbol{x})+\boldsymbol{\epsilon}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="setting-up-the-equations">Setting up the equations </h2>
+
+<p>In linear regression we approximate the unknown function with another
+continuous function \( \tilde{\boldsymbol{y}}(\boldsymbol{x}) \) which depends linearly on
+some unknown parameters
+\( \boldsymbol{\theta}^T=[\theta_0,\theta_1,\theta_2,\dots,\theta_{p-1}] \).
+</p>
+
+<p>The input data can be organized in terms of a so-called design matrix 
+with an approximating function \( \boldsymbol{\tilde{y}} \) 
+</p>
+<p>&nbsp;<br>
+$$
+\boldsymbol{\tilde{y}}= \boldsymbol{X}\boldsymbol{\theta},
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="the-objective-cost-loss-function">The objective/cost/loss function </h2>
+
+<p>The  simplest approach is the mean squared error</p>
+<p>&nbsp;<br>
+$$
+C(\boldsymbol{\Theta})=\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\left\{\left(\boldsymbol{y}-\boldsymbol{\tilde{y}}\right)^T\left(\boldsymbol{y}-\boldsymbol{\tilde{y}}\right)\right\},
+$$
+<p>&nbsp;<br>
+
+<p>or using the matrix \( \boldsymbol{X} \) and in a more compact matrix-vector notation as</p>
+<p>&nbsp;<br>
+$$
+C(\boldsymbol{\Theta})=\frac{1}{n}\left\{\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)^T\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)\right\}.
+$$
+<p>&nbsp;<br>
+
+<p>This function represents one of many possible ways to define the so-called cost function.</p>
+</section>
+
+<section>
+<h2 id="training-solution">Training solution  </h2>
+
+<p>Optimizing with respect to the unknown paramters \( \theta_j \) we get </p>
+<p>&nbsp;<br>
+$$
+\boldsymbol{X}^T\boldsymbol{y} = \boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta},  
+$$
+<p>&nbsp;<br>
+
+<p>and if the matrix \( \boldsymbol{X}^T\boldsymbol{X} \) is invertible we have the optimal values</p>
+<p>&nbsp;<br>
+$$
+\hat{\boldsymbol{\theta}} =\left(\boldsymbol{X}^T\boldsymbol{X}\right)^{-1}\boldsymbol{X}^T\boldsymbol{y}.
+$$
+<p>&nbsp;<br>
+
+<p>We say we 'learn' the unknown paramters \( \boldsymbol{\theta} \) from the last equation.</p>
+</section>
+
+<section>
+<h2 id="ridge-and-lasso-regression">Ridge and LASSO Regression </h2>
+
+<p>Our optimization problem is</p>
+<p>&nbsp;<br>
+$$
+{\displaystyle \min_{\boldsymbol{\theta}\in {\mathbb{R}}^{p}}}\frac{1}{n}\left\{\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)^T\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)\right\}.
+$$
+<p>&nbsp;<br>
+
+<p>or we can state it as</p>
+<p>&nbsp;<br>
+$$
+{\displaystyle \min_{\boldsymbol{\theta}\in
+{\mathbb{R}}^{p}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\vert\vert \boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\vert\vert_2^2,
+$$
+<p>&nbsp;<br>
+
+<p>where we have used the definition of  a norm-2 vector, that is</p>
+<p>&nbsp;<br>
+$$
+\vert\vert \boldsymbol{x}\vert\vert_2 = \sqrt{\sum_i x_i^2}. 
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="from-ols-to-ridge-and-lasso">From OLS to Ridge and Lasso </h2>
+
+<p>By minimizing the above equation with respect to the parameters
+\( \boldsymbol{\theta} \) we could then obtain an analytical expression for the
+parameters \( \boldsymbol{\theta} \).  We can add a regularization parameter \( \lambda \) by
+defining a new cost function to be optimized, that is
+</p>
+
+<p>&nbsp;<br>
+$$
+{\displaystyle \min_{\boldsymbol{\theta}\in
+{\mathbb{R}}^{p}}}\frac{1}{n}\vert\vert \boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\vert\vert_2^2+\lambda\vert\vert \boldsymbol{\theta}\vert\vert_2^2
+$$
+<p>&nbsp;<br>
+
+<p>which leads to the Ridge regression minimization problem where we
+require that \( \vert\vert \boldsymbol{\theta}\vert\vert_2^2\le t \), where \( t \) is
+a finite number larger than zero. We do not include such a constraints in the discussions here.
+</p>
+</section>
+
+<section>
+<h2 id="lasso-regression">Lasso regression  </h2>
+
+<p>Defining</p>
+
+<p>&nbsp;<br>
+$$
+C(\boldsymbol{X},\boldsymbol{\theta})=\frac{1}{n}\vert\vert \boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\vert\vert_2^2+\lambda\vert\vert \boldsymbol{\theta}\vert\vert_1,
+$$
+<p>&nbsp;<br>
+
+<p>we have a new optimization equation</p>
+<p>&nbsp;<br>
+$$
+{\displaystyle \min_{\boldsymbol{\theta}\in
+{\mathbb{R}}^{p}}}\frac{1}{n}\vert\vert \boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\vert\vert_2^2+\lambda\vert\vert \boldsymbol{\theta}\vert\vert_1
+$$
+<p>&nbsp;<br>
+
+<p>which leads to Lasso regression. Lasso stands for least absolute shrinkage and selection operator. 
+Here we have defined the norm-1 as 
+</p>
+<p>&nbsp;<br>
+$$
+\vert\vert \boldsymbol{x}\vert\vert_1 = \sum_i \vert x_i\vert. 
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="good-books-with-hands-on-material-and-codes">Good books with hands-on material and codes </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<ul>
+<p><li> <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a></li>
+<p><li> <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">David Foster, Generative Deep Learning with TensorFlow</a></li>
+<p><li> <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2" target="_blank">Bali and Gavras, Generative AI with Python and TensorFlow 2</a></li>
+</ul>
+</div>
+
+<p>All three books have GitHub addresses from which one download all codes.</p>
+</section>
+
+<section>
+<h2 id="scientific-machine-learning">Scientific Machine Learning </h2>
+
+<p>An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al <a href="https://doi.org/10.3389/fdata.2022.787421" target="_blank">Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)</a></p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>The authors discuss applications and techniques for fast machine
+learning (ML) in science &ndash; the concept of integrating power ML
+methods into the real-time experimental data processing loop to
+accelerate scientific discovery. The report covers three main areas
+</p>
+
+<ol>
+<p><li> applications for fast ML across a number of scientific domains;</li>
+<p><li> techniques for training and implementing performant and resource-efficient ML algorithms;</li>
+<p><li> and computing architectures, platforms, and technologies for deploying these algorithms.</li>
+</ol>
+</div>
+</section>
+
+<section>
+<h2 id="physics-driven-machine-learning">Physics driven Machine Learning </h2>
+
+<p>Another hot topic is what has loosely been dubbed <b>Physics-driven deep learning</b>. See the recent work on <a href="https://www.nature.com/articles/s42256-021-00302-5" target="_blank">Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)</a>.</p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>From their abstract</b>
+<p>
+<p>A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. </p>
+</div>
+</section>
+
+<section>
+<h2 id="many-body-physics-quantum-monte-carlo-and-deep-learning">Many-body physics, Quantum Monte Carlo and deep learning </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>Given a hamiltonian \( H \) and a trial wave function \( \Psi_T \), the variational principle states that the expectation value of \( \langle H \rangle \), defined through </p>
+<p>&nbsp;<br>
+$$
+   \langle E \rangle =
+   \frac{\int d\boldsymbol{R}\Psi^{\ast}_T(\boldsymbol{R})H(\boldsymbol{R})\Psi_T(\boldsymbol{R})}
+        {\int d\boldsymbol{R}\Psi^{\ast}_T(\boldsymbol{R})\Psi_T(\boldsymbol{R})},
+$$
+<p>&nbsp;<br>
+
+<p>is an upper bound to the ground state energy \( E_0 \) of the hamiltonian \( H \), that is </p>
+<p>&nbsp;<br>
+$$
+    E_0 \le \langle E \rangle.
+$$
+<p>&nbsp;<br>
+
+<p>In general, the integrals involved in the calculation of various  expectation values  are multi-dimensional ones. Traditional integration methods such as the Gauss-Legendre will not be adequate for say the  computation of the energy of a many-body system.  <b>Basic philosophy: Let a neural network find the optimal wave function</b></p>
+</div>
+</section>
+
+<section>
+<h2 id="quantum-monte-carlo-motivation">Quantum Monte Carlo Motivation </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Basic steps</b>
+<p>
+<p>Choose a trial wave function
+\( \psi_T(\boldsymbol{R}) \).
+</p>
+<p>&nbsp;<br>
+$$
+   P(\boldsymbol{R},\boldsymbol{\alpha})= \frac{\left|\psi_T(\boldsymbol{R},\boldsymbol{\alpha})\right|^2}{\int \left|\psi_T(\boldsymbol{R},\boldsymbol{\alpha})\right|^2d\boldsymbol{R}}.
+$$
+<p>&nbsp;<br>
+
+<p>This is our model, or likelihood/probability distribution function  (PDF). It depends on some variational parameters \( \boldsymbol{\alpha} \).
+The approximation to the expectation value of the Hamiltonian is now 
+</p>
+<p>&nbsp;<br>
+$$
+   \langle E[\boldsymbol{\alpha}] \rangle = 
+   \frac{\int d\boldsymbol{R}\Psi^{\ast}_T(\boldsymbol{R},\boldsymbol{\alpha})H(\boldsymbol{R})\Psi_T(\boldsymbol{R},\boldsymbol{\alpha})}
+        {\int d\boldsymbol{R}\Psi^{\ast}_T(\boldsymbol{R},\boldsymbol{\alpha})\Psi_T(\boldsymbol{R},\boldsymbol{\alpha})}.
+$$
+<p>&nbsp;<br>
+</div>
+</section>
+
+<section>
+<h2 id="quantum-monte-carlo-motivation">Quantum Monte Carlo Motivation </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Define a new quantity</b>
+<p>
+<p>&nbsp;<br>
+$$
+   E_L(\boldsymbol{R},\boldsymbol{\alpha})=\frac{1}{\psi_T(\boldsymbol{R},\boldsymbol{\alpha})}H\psi_T(\boldsymbol{R},\boldsymbol{\alpha}),
+$$
+<p>&nbsp;<br>
+
+<p>called the local energy, which, together with our trial PDF yields</p>
+<p>&nbsp;<br>
+$$
+  \langle E[\boldsymbol{\alpha}] \rangle=\int P(\boldsymbol{R})E_L(\boldsymbol{R},\boldsymbol{\alpha}) d\boldsymbol{R}\approx \frac{1}{N}\sum_{i=1}^NE_L(\boldsymbol{R_i},\boldsymbol{\alpha})
+$$
+<p>&nbsp;<br>
+
+<p>with \( N \) being the number of Monte Carlo samples.</p>
+</div>
+</section>
+
+<section>
+<h2 id="energy-derivatives">Energy derivatives </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>The local energy as function of the variational parameters defines now our <b>objective/cost</b> function.</p>
+
+<p>To find the derivatives of the local energy expectation value as function of the variational parameters, we can use the chain rule and the hermiticity of the Hamiltonian.  </p>
+
+<p>Let us define (with the notation \( \langle E[\boldsymbol{\alpha}]\rangle =\langle  E_L\rangle \))</p>
+<p>&nbsp;<br>
+$$
+\bar{E}_{\alpha_i}=\frac{d\langle  E_L\rangle}{d\alpha_i},
+$$
+<p>&nbsp;<br>
+
+<p>as the derivative of the energy with respect to the variational parameter \( \alpha_i \)
+We define also the derivative of the trial function (skipping the subindex \( T \)) as 
+</p>
+<p>&nbsp;<br>
+$$
+\bar{\Psi}_{i}=\frac{d\Psi}{d\alpha_i}.
+$$
+<p>&nbsp;<br>
+</div>
+</section>
+
+<section>
+<h2 id="derivatives-of-the-local-energy">Derivatives of the local energy </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>The elements of the gradient of the local energy are </p>
+<p>&nbsp;<br>
+$$
+\bar{E}_{i}= 2\left( \langle \frac{\bar{\Psi}_{i}}{\Psi}E_L\rangle -\langle \frac{\bar{\Psi}_{i}}{\Psi}\rangle\langle E_L \rangle\right).
+$$
+<p>&nbsp;<br>
+
+<p>From a computational point of view it means that you need to compute the expectation values of </p>
+<p>&nbsp;<br>
+$$
+\langle \frac{\bar{\Psi}_{i}}{\Psi}E_L\rangle,
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\langle \frac{\bar{\Psi}_{i}}{\Psi}\rangle\langle E_L\rangle
+$$
+<p>&nbsp;<br>
+
+<p>These integrals are evaluted using MC intergration (with all its possible error sources). Use methods like stochastic gradient or other minimization methods to find the optimal parameters.</p>
+</div>
+</section>
+
+<section>
+<h2 id="why-feed-forward-neural-networks-ffnn">Why Feed Forward Neural Networks (FFNN)?  </h2>
+
+<p>According to the <em>Universal approximation theorem</em>, a feed-forward
+neural network with just a single hidden layer containing a finite
+number of neurons can approximate a continuous multidimensional
+function to arbitrary accuracy, assuming the activation function for
+the hidden layer is a <b>non-constant, bounded and
+monotonically-increasing continuous function</b>.
+</p>
+</section>
+
+<section>
+<h2 id="dilute-neutron-star-matter-from-neural-network-quantum-states-by-fore-et-al-physical-review-research-5-033062-2023-https-journals-aps-org-prresearch-pdf-10-1103-physrevresearch-5-033062-at-density-rho-0-04-fm-3"><a href="https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062" target="_blank">Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)</a> at density \( \rho=0.04 \) fm$^{-3}$ </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<br/><br/>
+<center>
+<p><img src="figures/nmatter.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</div>
+</section>
+
+<section>
+<h2 id="the-electron-gas-in-three-dimensions-with-n-14-electrons-wigner-seitz-radius-r-s-2-a-u-gabriel-pescia-jane-kim-et-al-arxiv-2305-07240-https-doi-org-10-48550-arxiv-2305-07240">The electron gas in three dimensions with \( N=14 \) electrons (Wigner-Seitz radius \( r_s=2 \) a.u.), <a href="https://doi.org/10.48550/arXiv.2305.07240" target="_blank">Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,</a> </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<br/><br/>
+<center>
+<p><img src="figures/elgasnew.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</div>
+</section>
+
+<section>
+<h2 id="generative-models-why-boltzmann-machines">Generative models: Why Boltzmann machines? </h2>
+
+<p>What is known as restricted Boltzmann Machines (RMB) have received a
+lot of attention lately.  One of the major reasons is that they can be
+stacked layer-wise to build deep neural networks that capture
+complicated statistics.
+</p>
+
+<p>The original RBMs had just one visible layer and a hidden layer, but
+recently so-called Gaussian-binary RBMs have gained quite some
+popularity in imaging since they are capable of modeling continuous
+data that are common to natural images.
+</p>
+
+<p>Furthermore, they have been used to solve complicated quantum
+mechanical many-particle problems or classical statistical physics
+problems like the Ising and Potts classes of models.
+</p>
+</section>
+
+<section>
+<h2 id="the-structure-of-the-rbm-network">The structure of the RBM network </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/RBM.png" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="the-network">The network </h2>
+
+<b>The network layers</b>:
+<ol>
+ <p><li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
+ <p><li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
+</ol>
+</section>
+
+<section>
+<h2 id="goals">Goals </h2>
+
+<p>The goal of the hidden layer is to increase the model's expressive
+power. We encode complex interactions between visible variables by
+introducing additional, hidden variables that interact with visible
+degrees of freedom in a simple manner, yet still reproduce the complex
+correlations between visible degrees in the data once marginalized
+over (integrated out).
+</p>
+
+<b>The network parameters, to be optimized/learned</b>:
+<ol>
+ <p><li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
+ <p><li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
+ <p><li> \( W \) represents the interaction weights, a matrix of size \( M\times N \).</li>
+</ol>
+</section>
+
+<section>
+<h2 id="joint-distribution">Joint distribution </h2>
+<p>The restricted Boltzmann machine is described by a Bolztmann distribution</p>
+<p>&nbsp;<br>
+$$
+	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
+$$
+<p>&nbsp;<br>
+
+<p>where \( Z \) is the normalization constant or partition function, defined as </p>
+<p>&nbsp;<br>
+$$
+	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+$$
+<p>&nbsp;<br>
+
+<p>It is common to ignore \( T_0 \) by setting it to one. </p>
+</section>
+
+<section>
+<h2 id="network-elements-the-energy-function">Network Elements, the energy function  </h2>
+
+<p>The function \( E(\mathbf{x},\mathbf{h}) \) gives the <b>energy</b> of a
+configuration (pair of vectors) \( (\mathbf{x}, \mathbf{h}) \). The lower
+the energy of a configuration, the higher the probability of it. This
+function also depends on the parameters \( \mathbf{a} \), \( \mathbf{b} \) and
+\( W \). Thus, when we adjust them during the learning procedure, we are
+adjusting the energy function to best fit our problem.
+</p>
+</section>
+
+<section>
+<h2 id="defining-different-types-of-rbms-energy-based-models">Defining different types of RBMs (Energy based models) </h2>
+
+<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\mathbf{x},\mathbf{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Binary-Binary RBM:</b>
+<p>
+
+<p>RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:</p>
+<p>&nbsp;<br>
+$$
+	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+$$
+<p>&nbsp;<br>
+
+<p>where the binary values taken on by the nodes are most commonly 0 and 1.</p>
+</div>
+</section>
+
+<section>
+<h2 id="gaussian-binary">Gaussian binary </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Gaussian-Binary RBM:</b>
+<p>
+
+<p>Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:</p>
+<p>&nbsp;<br>
+$$
+	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+$$
+<p>&nbsp;<br>
+</div>
+</section>
+
+<section>
+<h2 id="representing-the-wave-function">Representing the wave function </h2>
+
+<p>The wavefunction should be a probability amplitude depending on
+ \( \boldsymbol{x} \). The RBM model is given by the joint distribution of
+ \( \boldsymbol{x} \) and \( \boldsymbol{h} \)
+</p>
+
+<p>&nbsp;<br>
+$$
+        F_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})}.
+$$
+<p>&nbsp;<br>
+
+<p>To find the marginal distribution of \( \boldsymbol{x} \) we set:</p>
+
+<p>&nbsp;<br>
+$$
+        F_{rbm}(\mathbf{x}) =\frac{1}{Z}\sum_\mathbf{h} e^{-E(\mathbf{x}, \mathbf{h})}.
+$$
+<p>&nbsp;<br>
+
+<p>Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)</p>
+<p>&nbsp;<br>
+$$
+        \Psi (\mathbf{X}) = F_{rbm}(\mathbf{x}),
+$$
+<p>&nbsp;<br>
+
+<p>or we could square the wave function.</p>
+</section>
+
+<section>
+<h2 id="choose-the-cost-function">Choose the cost function </h2>
+
+<p>Now we don't necessarily have training data (unless we generate it by
+using some other method). However, what we do have is the variational
+principle which allows us to obtain the ground state wave function by
+minimizing the expectation value of the energy of a trial wavefunction
+(corresponding to the untrained NQS). Similarly to the traditional
+variational Monte Carlo method then, it is the local energy we wish to
+minimize. The gradient to use for the stochastic gradient descent
+procedure is
+</p>
+
+<p>&nbsp;<br>
+$$
+	C_i = \frac{\partial \langle E_L \rangle}{\partial \theta_i}
+	= 2(\langle E_L \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle - \langle E_L \rangle \langle \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle ),
+$$
+<p>&nbsp;<br>
+
+<p>where the local energy is given by</p>
+<p>&nbsp;<br>
+$$
+	E_L = \frac{1}{\Psi} \hat{\mathbf{H}} \Psi.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="extrapolations-and-model-interpretability">Extrapolations and model interpretability  </h2>
+
+<p>When you hear phrases like <b>predictions and estimations</b> and
+<b>correlations and causations</b>, what do you think of?  May be you think
+of the difference between classifying new data points and generating
+new data points.
+Or perhaps you consider that correlations represent some kind of symmetric statements like
+if \( A \) is correlated with \( B \), then \( B \) is correlated with
+\( A \). Causation on the other hand is directional, that is if \( A \) causes \( B \), \( B \) does not
+necessarily cause \( A \).
+</p>
+</section>
+
+<section>
+<h2 id="physics-based-statistical-learning-and-data-analysis">Physics based statistical learning and data analysis </h2>
+
+<p>The above concepts are in some sense the difference between <b>old-fashioned</b> machine
+learning and statistics and Bayesian learning. In machine learning and prediction based
+tasks, we are often interested in developing algorithms that are
+capable of learning patterns from given data in an automated fashion,
+and then using these learned patterns to make predictions or
+assessments of newly given data. In many cases, our primary concern
+is the quality of the predictions or assessments, and we are less
+concerned about the underlying patterns that were learned in order
+to make these predictions.
+</p>
+
+<p>Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics.</p>
+</section>
+
+<section>
+<h2 id="bayes-theorem">Bayes' Theorem </h2>
+
+<p>Bayes' theorem</p>
+<p>&nbsp;<br>
+$$
+p(X\vert Y)= \frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}=\frac{p(Y\vert X)p(X)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}.
+$$
+<p>&nbsp;<br>
+
+<p>The quantity \( p(Y\vert X) \) on the right-hand side of the theorem is
+evaluated for the observed data \( Y \) and can be viewed as a function of
+the parameter space represented by \( X \). This function is not
+necessarily normalized and is normally called the likelihood function.
+</p>
+
+<p>The function \( p(X) \) on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.</p>
+</section>
+
+<section>
+<h2 id="quantified-limits-of-the-nuclear-landscape-https-journals-aps-org-prc-abstract-10-1103-physrevc-101-044307"><a href="https://journals.aps.org/prc/abstract/10.1103/PhysRevC.101.044307" target="_blank">Quantified limits of the nuclear landscape</a> </h2>
+
+<p>Predictions made with eleven global mass model and Bayesian model averaging</p>
+
+<br/><br/>
+<center>
+<p><img src="figures/landscape.jpg" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="mathematics-of-deep-learning-and-neural-networks">Mathematics of deep learning and neural networks </h2>
 </section>
 
 

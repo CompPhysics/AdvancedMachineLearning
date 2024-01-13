@@ -5,11 +5,11 @@ DATE: FYS5429/9429, Spring 2024
 
 
 !split
-===== Overview of week first week, January 16, 2024  =====
+===== Overview of first week, January 15-21, 2024  =====
 
 !bblock 
   o Presentation of course with  general overview of methods
-  o Discussion of possible projects
+  o Discussion of possible projects and presentation of participants
   o Deep learning methods, review of neural networks
 !eblock
 
@@ -26,29 +26,31 @@ o We plan to work on two projects which will define the content of the course, t
  * Physics informed Machine Learning, applications to for example solution of Navier-Stokes equations
  * Bayesian Machine Learning and Gaussian processes
  * and many other research paths and topics
-o No exam, only two projects which count 1/2 of the final grade each
+o No exam, only two projects. Each projects counts 1/2 of the final grade.
 o All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
 
 !split
-=====  Deep learning methods covered =====
+=====  Deep learning methods covered, tentative =====
 
 o Deep learning, classics
   o Feed forward neural networks and its mathematics (NNs)
   o Convolutional neural networks (CNNs)
   o Recurrent neural networks (RNNs)
   o Autoencoders and principal component analysis
-  o Physics informed neural networks
+  o Physical Sciences informed machine learning
 o Deeep learning, generative methods
   o Basics of generative models
   o Boltzmann machines and energy based methods
-  o variational autoencoders (VAEe)
+  o Diffusion models (tentative)
+  o Variational autoencoders (VAEe)
   o Generative Adversarial Networks (GANs)
+  o Autoregressive methods (tentative)
 
 
 
 
 !split
-===== "Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" =====
+===== "Additionally Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" =====
 
 Kernel machine regression (KMR), also called Gaussian process
 regression, is a popular tool in the machine learning literature. The
@@ -57,7 +59,7 @@ large number of variables and a particular outcome (dependent
 variable).
 
 !split
-===== Machine learning. A simple perspective on the interface between ML and Physics =====
+===== Machine learning. A simple perspective on the interface between ML and Physics, HPC is essential =====
 
 FIGURE: [figures/mlimage.png, width=800 frac=1.0]
 
@@ -135,7 +137,7 @@ novel, realistic images of horses that did not exist in the original
 dataset. 
 
 !split
-===== Example of generative modeling, "adapted from Generative Deeep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
+===== Example of generative modeling, "taken from Generative Deeep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
 
 FIGURE: [figures/generativelearning.png, width=900 frac=1.0]
 
@@ -171,7 +173,7 @@ discriminative in nature.
 
 
 !split
-===== Example of discriminative modeling, "adapted from Generative Deeep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
+===== Example of discriminative modeling, "taken from Generative Deeep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
 
 
 FIGURE: [figures/standarddeeplearning.png, width=900 frac=1.0]
@@ -197,7 +199,7 @@ data (for example an image), rather than trying to predict a label for say  a gi
 
 
 !split
-===== Taxonomy of generative deep learning, "adapted from Generative Deep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
+===== Taxonomy of generative deep learning, "taken from Generative Deep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
 
 FIGURE: [figures/generativemodels.png, width=900 frac=1.0]
 
@@ -252,13 +254,13 @@ with an approximating function $\bm{\tilde{y}}$
 The  simplest approach is the mean squared error
 !bt
 \[
-C(\bm{\beta})=\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\left\{\left(\bm{y}-\bm{\tilde{y}}\right)^T\left(\bm{y}-\bm{\tilde{y}}\right)\right\},
+C(\bm{\Theta})=\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\left\{\left(\bm{y}-\bm{\tilde{y}}\right)^T\left(\bm{y}-\bm{\tilde{y}}\right)\right\},
 \]
 !et
 or using the matrix $\bm{X}$ and in a more compact matrix-vector notation as
 !bt
 \[
-C(\bm{\beta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
+C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
 \]
 !et
 This function represents one of many possible ways to define the so-called cost function.
@@ -267,7 +269,7 @@ This function represents one of many possible ways to define the so-called cost 
 !split
 ===== Training solution  =====
 
-Optimizing wrt to the unknown paramters $\theta_j$ we get 
+Optimizing with respect to the unknown paramters $\theta_j$ we get 
 !bt
 \[
 \bm{X}^T\bm{y} = \bm{X}^T\bm{X}\bm{\theta},  
@@ -362,6 +364,7 @@ Here we have defined the norm-1 as
 * "Bali and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
 !eblock
 
+All three books have GitHub addresses from which one download all codes.
 
 
 
