@@ -9,7 +9,7 @@ DATE: FYS5429/9429, Spring 2024
 !bblock 
   o Presentation of course
   o Discussion of possible projects and presentation of participants
-  o Deep learning methods, review of neural networks
+  o Deep learning methods, mathematics and  review of neural networks
 !eblock
 
 
@@ -762,14 +762,14 @@ FIGURE: [figures/landscape.jpg, width=800 frac=1.0]
 ===== Mathematics of deep learning and neural networks =====
 
 Throughout this course we will use the following notations. Vectors,
-Matrices and higher-order tensors are always boldfaced, with vectors
-given by lower case letter letters.
+matrices and higher-order tensors are always boldfaced, with vectors
+given by lower case letter letters and matrices and higher-order tensors given by upper case letters.
 
 Unless otherwise stated, the elements $v_i$ of a vector $\bm{v}$ are assumed to be real. That is a vector of length $n$ is defined as
 $\bm{x}\in \mathbb{R}^{n}$ and if we have a complex vector we have $\bm{x}\in \mathbb{C}^{n}$.
 
 For a matrix of dimension $n\times n$ we have 
-$\bm{A}\in \mathbb{R}^{n\times n}$
+$\bm{A}\in \mathbb{R}^{n\times n}$ and the first matrix element starts with row element (row-wise ordering) zero and column element zero.
 
 !split
 ===== Vectors =====
@@ -819,39 +819,45 @@ defined as
 	       x_{n-1}y_0 & x_{n-1}y_1 & x_{n-1}y_2 & \dots & \dots & x_{n-1}y_{n-2} & x_{n-1}y_{n-1} \end{bmatrix}	       
 \]
 !et
-
+The latter defines also our basic matrix layout.
 
 !split
 ===== Basic Matrix Features =====
 
-!bblock Matrix properties reminder
+
+A general $n\times n$ matrix is given by 
 !bt
 \[
  \mathbf{A} =
-      \begin{bmatrix} a_{11} & a_{12} & a_{13} & a_{14} \\
-                                 a_{21} & a_{22} & a_{23} & a_{24} \\
-                                   a_{31} & a_{32} & a_{33} & a_{34} \\
-                                  a_{41} & a_{42} & a_{43} & a_{44}
-             \end{bmatrix}\qquad
-\mathbf{I} =
-      \begin{bmatrix} 1 & 0 & 0 & 0 \\
-                                 0 & 1 & 0 & 0 \\
-                                 0 & 0 & 1 & 0 \\
-                                 0 & 0 & 0 & 1
-             \end{bmatrix}
+\begin{bmatrix}
+               a_{00} & a_{01} & a_{02} & \dots & \dots & a_{0n-2} & a_{0n-1} \\
+               a_{10} & a_{11} & a_{12} & \dots & \dots & a_{1n-2} & a_{1n-1} \\
+               \dots &   \dots   & \dots  & \dots & \dots & \dots & \dots \\
+               \dots &   \dots   & \dots  & \dots & \dots & \dots & \dots \\	       
+               a_{n-20} & a_{n-21} & a_{n-22} & \dots & \dots & a_{n-2n-2} & a_{n-2n-1} \\
+               a_{n-10} & a_{n-11} & a_{n-12} & \dots & \dots & a_{n-1n-2} & a_{n-1n-1} \end{bmatrix},	       
 \]
 !et
-!eblock
+or in terms of its column vectors $\bm{a}_i$ as
+!bt
+\[
+ \mathbf{A} =
+\begin{bmatrix}\bm{a}_{0} & \bm{a}_{1} & \bm{a}_{2} & \dots & \dots & \bm{a}_{n-2} & \bm{a}_{n-1}\end{bmatrix}.	       
+\]
+!et
+
+
 !split
-===== Basic Matrix Features =====
+===== The inverse of a matrix  =====
 !bblock
-The inverse of a matrix is defined by
+The inverse of a matrix (if it exists) is defined by
 
 !bt
 \[
-\mathbf{A}^{-1} \cdot \mathbf{A} = I
+\mathbf{A}^{-1} \cdot \mathbf{A} = I,
 \]
 !et
+where $\bm{I}$ is the unit matrix.
 !eblock
 
 !split
@@ -885,7 +891,7 @@ The inverse of a matrix is defined by
   * Banded, block upper triangular, block lower triangular....
 
 !split
-===== Basic Matrix Features =====
+===== Matrix Features =====
 
 !bblock Some Equivalent Statements
 For an $N\times N$ matrix  $\mathbf{A}$ the following properties are all equivalent
@@ -919,14 +925,14 @@ scalar-matrix multiplication
 vector-matrix multiplication
 
 !split
-===== Important Mathematical Operations =====
+===== Matrix-matrix multiplication =====
 !bt
 \begin{equation}
 \mathbf{y}=\mathbf{Ax}   \Longrightarrow y_{i} = \sum_{j=1}^{n} a_{ij}x_j,
 label{eq:vecmtx}
 \end{equation}
 !et
-matrix-matrix multiplication
+and
 
 !bt
 \begin{equation}
@@ -962,7 +968,7 @@ scalar-vector multiplication
 vector-vector multiplication (called Hadamard multiplication)
 
 !split
-===== Important Mathematical Operations =====
+===== More on important mathematical operations =====
 !bt
 \begin{equation}
 \mathbf{x}=\mathbf{yz}   \Longrightarrow x_{i} = y_{i}z_i,
@@ -985,7 +991,8 @@ label{eq:outerprod}
 \end{equation}
 !et
 
-
+!split
+===== Setting up the basic equations for neural networks =====
 
 
 
