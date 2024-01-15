@@ -957,7 +957,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-        F_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})}.
+        P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})}.
 $$
 <p>&nbsp;<br>
 
@@ -965,18 +965,16 @@ $$
 
 <p>&nbsp;<br>
 $$
-        F_{rbm}(\mathbf{x}) =\frac{1}{Z}\sum_\mathbf{h} e^{-E(\mathbf{x}, \mathbf{h})}.
+        P_{rbm}(\mathbf{x}) =\frac{1}{Z}\sum_\mathbf{h} e^{-E(\mathbf{x}, \mathbf{h})}.
 $$
 <p>&nbsp;<br>
 
 <p>Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)</p>
 <p>&nbsp;<br>
 $$
-        \Psi (\mathbf{X}) = F_{rbm}(\mathbf{x}),
+        \vert\Psi (\mathbf{X})\vert^2 = P_{rbm}(\mathbf{x}).
 $$
 <p>&nbsp;<br>
-
-<p>or we could square the wave function.</p>
 </section>
 
 <section>
@@ -1162,10 +1160,12 @@ $$
 <p>or in terms of its column vectors \( \boldsymbol{a}_i \) as</p>
 <p>&nbsp;<br>
 $$
- \mathbf{A} =
+ \boldsymbol{A} =
 \begin{bmatrix}\boldsymbol{a}_{0} & \boldsymbol{a}_{1} & \boldsymbol{a}_{2} & \dots & \dots & \boldsymbol{a}_{n-2} & \boldsymbol{a}_{n-1}\end{bmatrix}.	       
 $$
 <p>&nbsp;<br>
+
+<p>We can think of a matrix as a diagram of in general \( n \) rowns and \( m \) columns. In the example here we have a square matrix.</p>
 </section>
 
 <section>
@@ -1173,11 +1173,11 @@ $$
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
-<p>The inverse of a matrix (if it exists) is defined by</p>
+<p>The inverse of a square matrix (if it exists) is defined by</p>
 
 <p>&nbsp;<br>
 $$
-\mathbf{A}^{-1} \cdot \mathbf{A} = I,
+\boldsymbol{A}^{-1} \cdot \boldsymbol{A} = I,
 $$
 <p>&nbsp;<br>
 
@@ -1238,21 +1238,21 @@ $$
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Some Equivalent Statements</b>
 <p>
-<p>For an \( N\times N \) matrix  \( \mathbf{A} \) the following properties are all equivalent</p>
+<p>For an \( n\times n \) matrix  \( \boldsymbol{A} \) the following properties are all equivalent</p>
 
 <ul>
 
-<p><li> If the inverse of \( \mathbf{A} \) exists, \( \mathbf{A} \) is nonsingular.</li>
+<p><li> If the inverse of \( \boldsymbol{A} \) exists, \( \boldsymbol{A} \) is nonsingular.</li>
 
-<p><li> The equation \( \mathbf{Ax}=0 \) implies \( \mathbf{x}=0 \).</li>
+<p><li> The equation \( \boldsymbol{Ax}=0 \) implies \( \boldsymbol{x}=0 \).</li>
 
-<p><li> The rows of \( \mathbf{A} \) form a basis of \( R^N \).</li>
+<p><li> The rows of \( \boldsymbol{A} \) form a basis of \( R^N \).</li>
 
-<p><li> The columns of \( \mathbf{A} \) form a basis of \( R^N \).</li>
+<p><li> The columns of \( \boldsymbol{A} \) form a basis of \( R^N \).</li>
 
-<p><li> \( \mathbf{A} \) is a product of elementary matrices.</li>
+<p><li> \( \boldsymbol{A} \) is a product of elementary matrices.</li>
 
-<p><li> \( 0 \) is not eigenvalue of \( \mathbf{A} \).</li>
+<p><li> \( 0 \) is not an eigenvalue of \( \boldsymbol{A} \).</li>
 </ul>
 </div>
 </section>
@@ -1264,7 +1264,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{A}= \mathbf{B}\pm\mathbf{C}  \Longrightarrow a_{ij} = b_{ij}\pm c_{ij},
+\boldsymbol{A}= \boldsymbol{B}\pm\boldsymbol{C}  \Longrightarrow a_{ij} = b_{ij}\pm c_{ij},
 $$
 <p>&nbsp;<br>
 
@@ -1272,7 +1272,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{A}= \gamma\mathbf{B}  \Longrightarrow a_{ij} = \gamma b_{ij}.
+\boldsymbol{A}= \gamma\boldsymbol{B}  \Longrightarrow a_{ij} = \gamma b_{ij}.
 $$
 <p>&nbsp;<br>
 </section>
@@ -1283,7 +1283,7 @@ $$
 <p>We have also vector-matrix multiplications </p>
 <p>&nbsp;<br>
 $$
-\mathbf{y}=\mathbf{Ax}   \Longrightarrow y_{i} = \sum_{j=1}^{n} a_{ij}x_j,
+\boldsymbol{y}=\boldsymbol{Ax}   \Longrightarrow y_{i} = \sum_{j=1}^{n} a_{ij}x_j,
 $$
 <p>&nbsp;<br>
 
@@ -1291,7 +1291,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{A}=\mathbf{BC}   \Longrightarrow a_{ij} = \sum_{k=1}^{n} b_{ik}c_{kj},
+\boldsymbol{A}=\boldsymbol{BC}   \Longrightarrow a_{ij} = \sum_{k=1}^{n} b_{ik}c_{kj},
 $$
 <p>&nbsp;<br>
 
@@ -1299,7 +1299,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{A}=\mathbf{B}^T   \Longrightarrow a_{ij} = b_{ji}.
+\boldsymbol{A}=\boldsymbol{B}^T   \Longrightarrow a_{ij} = b_{ji}.
 $$
 <p>&nbsp;<br>
 </section>
@@ -1311,7 +1311,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{x}= \mathbf{y}\pm\mathbf{z}  \Longrightarrow x_{i} = y_{i}\pm z_{i},
+\boldsymbol{x}= \boldsymbol{y}\pm\boldsymbol{z}  \Longrightarrow x_{i} = y_{i}\pm z_{i},
 $$
 <p>&nbsp;<br>
 
@@ -1319,7 +1319,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{x}= \gamma\mathbf{y}  \Longrightarrow x_{i} = \gamma y_{i},
+\boldsymbol{x}= \gamma\boldsymbol{y}  \Longrightarrow x_{i} = \gamma y_{i},
 $$
 <p>&nbsp;<br>
 </section>
@@ -1329,7 +1329,7 @@ $$
 <p>and vector-vector multiplication (called Hadamard multiplication)</p>
 <p>&nbsp;<br>
 $$
-\mathbf{x}=\mathbf{yz}   \Longrightarrow x_{i} = y_{i}z_i.
+\boldsymbol{x}=\boldsymbol{yz}   \Longrightarrow x_{i} = y_{i}z_i.
 $$
 <p>&nbsp;<br>
 
@@ -1337,7 +1337,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-x=\mathbf{y}^T\mathbf{z}   \Longrightarrow x = \sum_{j=1}^{n} y_{j}z_{j},
+x=\boldsymbol{y}^T\boldsymbol{z}   \Longrightarrow x = \sum_{j=1}^{n} y_{j}z_{j},
 $$
 <p>&nbsp;<br>
 
@@ -1345,20 +1345,130 @@ $$
 
 <p>&nbsp;<br>
 $$
-\mathbf{A}=  \mathbf{yz}^T \Longrightarrow  a_{ij} = y_{i}z_{j},
+\boldsymbol{A}=  \boldsymbol{y}\boldsymbol{z}^T \Longrightarrow  a_{ij} = y_{i}z_{j},
 $$
 <p>&nbsp;<br>
 </section>
 
 <section>
+<h2 id="further-mathematical-notations">Further mathematical notations </h2>
+<ol>
+<p><li> For all/any  \( \forall \)</li>
+<p><li> Implies \( \implies \)</li>
+<p><li> Equivalent \( \equiv \)</li>
+<p><li> Real variable \( \mathbb{R} \)</li>
+<p><li> Integer variable \( \mathbb{I} \)</li>
+<p><li> Complex  variable \( \mathbb{C} \)</li>
+</ol>
+</section>
+
+<section>
 <h2 id="setting-up-the-basic-equations-for-neural-networks">Setting up the basic equations for neural networks </h2>
 
-<p>Neural networks, its so-called feed-forward form, where each
+<p>Neural networks, in its so-called feed-forward form, where each
 iterations contains a feed-forward stage and a back-propgagation
 stage, consist of series of affine matrix-matrix and matrix-vector
 multiplications. The unknown parameters (the so-called biases and
-weights which deternine the architecture of a neural network), are uptaded iteratively 
+weights which deternine the architecture of a neural network), are
+uptaded iteratively using the so-called back-propagation algorithm.
+This algorithm corresponds to the so-called reverse mode of the
+automatic differentation algorithm. These algorithms will be discussed
+in more detail below.
 </p>
+
+<p>We start however first with the  definitions of the various variables which make up a neural network.</p>
+</section>
+
+<section>
+<h2 id="overarching-view-of-a-neural-network">Overarching view of a neural network </h2>
+
+<p>The architecture of a neural network defines our model. This model
+aims at describing some function \( f(\boldsymbol{x} \) which aims at describing
+some final result (outputs or tagrget values) given a specific inpput
+\( \boldsymbol{x} \). Note that here \( \boldsymbol{y} \) and \( \boldsymbol{x} \) are not limited to be
+vectors.
+</p>
+
+<p>The architecture consists of</p>
+<ol>
+<p><li> An input and an output layer where the input layer is defined by the inputs \( \boldsymbol{x} \). The output layer produces the model ouput \( \boldsymbol{\tilde{y}} \) which is compared with the target value \( \boldsymbol{y} \)</li>
+<p><li> A given number of hidden layers and neurons/nodes/units for each layer (this may vary)</li>
+<p><li> A given activation function \( \sigma(\boldsymbol{z}) \) with arguments \( \boldsymbol{z} \) to be defined below. The activation functions may differ from layer to layer.</li>
+<p><li> The last layer, normally called <b>output</b> layer has normally an activation function tailored to the specific problem</li>
+<p><li> Finally we define a so-called cost or loss function which is used to gauge the quality of our model.</li> 
+</ol>
+</section>
+
+<section>
+<h2 id="the-optimzation-problem">The optimzation problem </h2>
+
+<p>The cost function is a function of the unknown parameters
+\( \boldsymbol{\Theta} \) where the latter is a container for all possible
+parameters needed to define a neural network
+</p>
+
+<p>If we are dealing with a regression task a typical cost/loss function
+is the mean squared error
+</p>
+<p>&nbsp;<br>
+$$
+C(\boldsymbol{\Theta})=\frac{1}{n}\left\{\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)^T\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)\right\}.
+$$
+<p>&nbsp;<br>
+
+<p>This function represents one of many possible ways to define
+the so-called cost function.
+</p>
+
+<p>For neural networks the parameters
+\( \boldsymbol{\Theta} \) are given by the so-called weights and biases (to be
+defined below).
+</p>
+
+<p>The weights are given by matrix elements \( w_{ij}^{(l)} \) where the
+superscript indicates the layer number. The biases are typically given
+by vector elements representing each single node of a given layer,
+that is \( b_j^{(l)} \).
+</p>
+</section>
+
+<section>
+<h2 id="other-ingredients-of-a-neural-network">Other ingredients of a neural network </h2>
+
+<p>Having defined the architecture of a neural network, the optimization
+of the cost function with respect to the parameters \( \boldsymbol{\Theta} \),
+involves the calculations of gradients and their optimization. The
+gradients represent the derivatives of a multidimensional object and
+are often approximated by various gradient methods, including
+</p>
+<ol>
+<p><li> various quasi-Newton methods,</li>
+<p><li> plain gradient descent (GD) with a constant learning rate \( \eta \),</li>
+<p><li> GD with momentum and other approximations to the learning rates such as</li>
+<ul>
+
+<p><li> Adapative gradient (ADAgrad)</li>
+
+<p><li> Root mean-square propagation (RMSprop)</li>
+
+<p><li> Adaptive gradient with momentum (ADAM) and many other</li>
+</ul>
+<p>
+<p><li> Stochastic gradient descent and various families of learning rate approximations</li>
+</ol>
+</section>
+
+<section>
+<h2 id="other-parameters">Other parameters </h2>
+
+<p>In addition to the above, there are often additional hyperparamaters
+which are included in the setup of a neural network. These will be
+discussed below.
+</p>
+</section>
+
+<section>
+<h2 id="setting-up-the-equations-for-a-neural-network">Setting up the equations for a neural network </h2>
 </section>
 
 
