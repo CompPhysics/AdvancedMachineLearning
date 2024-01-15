@@ -1,0 +1,20 @@
+\frametitle{Overarching view of a neural network}
+
+The architecture of a neural network defines our model. This model
+aims at describing some function $f(\bm{x}$ which aims at describing
+some final result (outputs or tagrget values) given a specific inpput
+$\bm{x}$. Note that here $\bm{y}$ and $\bm{x}$ are not limited to be
+vectors.
+
+The architecture consists of
+\begin{enumerate}
+\item An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with target value $\bm{y}$.
+
+\item A given number of hidden layers and neurons for each larers (or nodes or units we will use these namings interchangeably here)
+
+\item A given activation function $\sigma{\bm{z}}$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer and are normally different at elast for the output layer.
+
+\item Finally we define a so-called cost or loss function which is used to gauged the quality of our model
+\end{enumerate}
+
+\noindent

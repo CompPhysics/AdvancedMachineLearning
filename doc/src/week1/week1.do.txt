@@ -844,7 +844,7 @@ or in terms of its column vectors $\bm{a}_i$ as
 \begin{bmatrix}\bm{a}_{0} & \bm{a}_{1} & \bm{a}_{2} & \dots & \dots & \bm{a}_{n-2} & \bm{a}_{n-1}\end{bmatrix}.	       
 \]
 !et
-
+We can think of a matrix as a diagram of in general $n$ rowns and $m$ columns.
 
 !split
 ===== The inverse of a matrix  =====
@@ -893,7 +893,7 @@ where $\bm{I}$ is the unit matrix.
 ===== Matrix Features =====
 
 !bblock Some Equivalent Statements
-For an $N\times N$ matrix  $\mathbf{A}$ the following properties are all equivalent
+For an $n\times n$ matrix  $\mathbf{A}$ the following properties are all equivalent
 
   * If the inverse of $\mathbf{A}$ exists, $\mathbf{A}$ is nonsingular.
   * The equation $\mathbf{Ax}=0$ implies $\mathbf{x}=0$.
@@ -989,14 +989,48 @@ and the outer product, which yields a matrix,
 !et
 
 !split
+===== Further mathematical notations =====
+o For all/any  $\forall$
+o Implies $\righarrow$
+o Equivalent $\equiv$
+o Real variable $\mathbb{R}$
+o Integer variable $\mathbb{I}$
+o Complex  variable $\mathbb{C}$
+
+
+
+!split
 ===== Setting up the basic equations for neural networks =====
 
-Neural networks, its so-called feed-forward form, where each
+Neural networks, in its so-called feed-forward form, where each
 iterations contains a feed-forward stage and a back-propgagation
 stage, consist of series of affine matrix-matrix and matrix-vector
 multiplications. The unknown parameters (the so-called biases and
-weights which deternine the architecture of a neural network), are uptaded iteratively 
+weights which deternine the architecture of a neural network), are
+uptaded iteratively using the so-called back-propagation algorithm.
+This algorithm corresponds to the so-called reverse mode of the
+automatic differentation algorithm. These algorithms will be discussed
+in more detail below.
 
+We start however first with the  definitions of the various variables which make up a neural network.
+
+!split
+===== Overarching view of a neural network =====
+
+The architecture of a neural network defines our model. This model
+aims at describing some function $f(\bm{x}$ which aims at describing
+some final result (outputs or tagrget values) given a specific inpput
+$\bm{x}$. Note that here $\bm{y}$ and $\bm{x}$ are not limited to be
+vectors.
+
+The architecture consists of
+o An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with target value $\bm{y}$.
+o A given number of hidden layers and neurons for each larers (or nodes or units we will use these namings interchangeably here)
+o A given activation function $\sigma{\bm{z}}$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer and are normally different at elast for the output layer.
+o Finally we define a so-called cost or loss function which is used to gauged the quality of our model
+
+!split
+===== Other ingredients of a neural network =====
 
 
 
