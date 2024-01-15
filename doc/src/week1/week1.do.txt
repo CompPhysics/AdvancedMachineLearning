@@ -1083,4 +1083,375 @@ discussed below.
 !split
 ===== Setting up the equations for a neural network =====
 
+The questions we want to ask are how do changes in the biases and the
+weights in our network change the cost function and how can we use the
+final output to modify the weights?
+
+To derive these equations let us start with a plain regression problem
+and define our cost function as
+
+!bt
+\[
+{\cal C}(\hat{W})  =  \frac{1}{2}\sum_{i=1}^n\left(y_i - t_i\right)^2, 
+\]
+!et
+
+where the $t_i$s are our $n$ targets (the values we want to
+reproduce), while the outputs of the network after having propagated
+all inputs $\hat{x}$ are given by $y_i$.  Below we will demonstrate
+how the basic equations arising from the back propagation algorithm
+can be modified in order to study classification problems with $K$
+classes.
+
+!split
+===== Definitions =====
+
+With our definition of the targets $\hat{t}$, the outputs of the
+network $\hat{y}$ and the inputs $\hat{x}$ we
+define now the activation $z_j^l$ of node/neuron/unit $j$ of the
+$l$-th layer as a function of the bias, the weights which add up from
+the previous layer $l-1$ and the forward passes/outputs
+$\hat{a}^{l-1}$ from the previous layer as
+
+
+!bt
+\[
+z_j^l = \sum_{i=1}^{M_{l-1}}w_{ij}^la_i^{l-1}+b_j^l,
+\]
+!et
+
+where $b_k^l$ are the biases from layer $l$.  Here $M_{l-1}$
+represents the total number of nodes/neurons/units of layer $l-1$. The
+figure here illustrates this equation.  We can rewrite this in a more
+compact form as the matrix-vector products we discussed earlier,
+
+!bt
+\[
+\hat{z}^l = \left(\hat{W}^l\right)^T\hat{a}^{l-1}+\hat{b}^l.
+\]
+!et
+
+With the activation values $\hat{z}^l$ we can in turn define the
+output of layer $l$ as $\hat{a}^l = f(\hat{z}^l)$ where $f$ is our
+activation function. In the examples here we will use the sigmoid
+function discussed in our logistic regression lectures. We will also use the same activation function $f$ for all layers
+and their nodes.  It means we have
+
+!bt
+\[
+a_j^l = f(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
+\]
+!et
+
+
+!split
+===== Derivatives and the chain rule =====
+
+From the definition of the activation $z_j^l$ we have
+!bt
+\[
+\frac{\partial z_j^l}{\partial w_{ij}^l} = a_i^{l-1},
+\]
+!et
+and
+!bt
+\[
+\frac{\partial z_j^l}{\partial a_i^{l-1}} = w_{ji}^l. 
+\]
+!et
+
+With our definition of the activation function we have that (note that this function depends only on $z_j^l$)
+!bt
+\[
+\frac{\partial a_j^l}{\partial z_j^{l}} = a_j^l(1-a_j^l)=f(z_j^l)(1-f(z_j^l)). 
+\]
+!et
+
+
+!split
+===== Derivative of the cost function =====
+
+With these definitions we can now compute the derivative of the cost function in terms of the weights.
+
+Let us specialize to the output layer $l=L$. Our cost function is
+!bt
+\[
+{\cal C}(\hat{W^L})  =  \frac{1}{2}\sum_{i=1}^n\left(y_i - t_i\right)^2=\frac{1}{2}\sum_{i=1}^n\left(a_i^L - t_i\right)^2, 
+\]
+!et
+The derivative of this function with respect to the weights is
+
+!bt
+\[
+\frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \left(a_j^L - t_j\right)\frac{\partial a_j^L}{\partial w_{jk}^{L}}, 
+\]
+!et
+The last partial derivative can easily be computed and reads (by applying the chain rule)
+!bt
+\[
+\frac{\partial a_j^L}{\partial w_{jk}^{L}} = \frac{\partial a_j^L}{\partial z_{j}^{L}}\frac{\partial z_j^L}{\partial w_{jk}^{L}}=a_j^L(1-a_j^L)a_k^{L-1},  
+\]
+!et
+
+
+
+!split
+===== Bringing it together, first back propagation equation =====
+
+We have thus
+!bt
+\[
+\frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \left(a_j^L - t_j\right)a_j^L(1-a_j^L)a_k^{L-1}, 
+\]
+!et
+
+Defining
+!bt
+\[
+\delta_j^L = a_j^L(1-a_j^L)\left(a_j^L - t_j\right) = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
+\]
+!et
+and using the Hadamard product of two vectors we can write this as
+!bt
+\[
+\hat{\delta}^L = f'(\hat{z}^L)\circ\frac{\partial {\cal C}}{\partial (\hat{a}^L)}.
+\]
+!et
+
+This is an important expression. The second term on the right handside
+measures how fast the cost function is changing as a function of the $j$th
+output activation.  If, for example, the cost function doesn't depend
+much on a particular output node $j$, then $\delta_j^L$ will be small,
+which is what we would expect. The first term on the right, measures
+how fast the activation function $f$ is changing at a given activation
+value $z_j^L$.
+
+!split
+===== More considerations =====
+
+
+Notice that everything in the above equations is easily computed.  In
+particular, we compute $z_j^L$ while computing the behaviour of the
+network, and it is only a small additional overhead to compute
+$f'(z^L_j)$.  The exact form of the derivative with respect to the
+output depends on the form of the cost function.
+However, provided the cost function is known there should be little
+trouble in calculating
+
+!bt
+\[
+\frac{\partial {\cal C}}{\partial (a_j^L)}
+\]
+!et
+
+With the definition of $\delta_j^L$ we have a more compact definition of the derivative of the cost function in terms of the weights, namely
+!bt
+\[
+\frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1}.
+\]
+!et
+
+!split
+===== Derivatives in terms of $z_j^L$ =====
+
+It is also easy to see that our previous equation can be written as
+
+!bt
+\[
+\delta_j^L =\frac{\partial {\cal C}}{\partial z_j^L}= \frac{\partial {\cal C}}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L},
+\]
+!et
+which can also be interpreted as the partial derivative of the cost function with respect to the biases $b_j^L$, namely
+!bt
+\[
+\delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L}\frac{\partial b_j^L}{\partial z_j^L}=\frac{\partial {\cal C}}{\partial b_j^L},
+\]
+!et
+That is, the error $\delta_j^L$ is exactly equal to the rate of change of the cost function as a function of the bias. 
+
+!split
+===== Bringing it together =====
+
+We have now three equations that are essential for the computations of the derivatives of the cost function at the output layer. These equations are needed to start the algorithm and they are
+
+!bblock The starting equations
+
+!bt
+\begin{equation}
+\frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1},
+\end{equation}
+!et
+and
+!bt
+\begin{equation}
+\delta_j^L = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
+\end{equation}
+!et
+and
+
+!bt
+\begin{equation}
+\delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L},
+\end{equation}
+!et
+!eblock
+
+
+
+!split
+===== Final back propagating equation =====
+
+We have that (replacing $L$ with a general layer $l$)
+!bt
+\[
+\delta_j^l =\frac{\partial {\cal C}}{\partial z_j^l}.
+\]
+!et
+We want to express this in terms of the equations for layer $l+1$. Using the chain rule and summing over all $k$ entries we have
+
+!bt
+\[
+\delta_j^l =\sum_k \frac{\partial {\cal C}}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^{l}}=\sum_k \delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^{l}},
+\]
+!et
+and recalling that
+!bt
+\[
+z_j^{l+1} = \sum_{i=1}^{M_{l}}w_{ij}^{l+1}a_i^{l}+b_j^{l+1},
+\]
+!et
+with $M_l$ being the number of nodes in layer $l$, we obtain
+!bt
+\[
+\delta_j^l =\sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l),
+\]
+!et
+This is our final equation.
+
+We are now ready to set up the algorithm for back propagation and learning the weights and biases.
+
+!split
+===== Setting up the Back propagation algorithm =====
+
+
+
+The four equations  provide us with a way of computing the gradient of the cost function. Let us write this out in the form of an algorithm.
+
+!bblock
+First, we set up the input data $\hat{x}$ and the activations
+$\hat{z}_1$ of the input layer and compute the activation function and
+the pertinent outputs $\hat{a}^1$.
+!eblock
+
+!bblock
+Secondly, we perform then the feed forward till we reach the output
+layer and compute all $\hat{z}_l$ of the input layer and compute the
+activation function and the pertinent outputs $\hat{a}^l$ for
+$l=2,3,\dots,L$.
+!eblock
+
+!split
+===== Setting up the Back propagation algorithm, part 2 =====
+
+
+!bblock
+Thereafter we compute the ouput error $\hat{\delta}^L$ by computing all
+!bt
+\[
+\delta_j^L = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
+\]
+!et
+!eblock
+
+!bblock
+Then we compute the back propagate error for each $l=L-1,L-2,\dots,2$ as
+!bt
+\[
+\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l).
+\]
+!et
+!eblock
+
+!split
+===== Setting up the Back propagation algorithm, part 3 =====
+
+
+!bblock
+Finally, we update the weights and the biases using gradient descent for each $l=L-1,L-2,\dots,2$ and update the weights and biases according to the rules
+!bt
+\[
+w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
+\]
+!et
+
+!bt
+\[
+b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
+\]
+!et
+!eblock
+
+The parameter $\eta$ is the learning parameter discussed in connection with the gradient descent methods.
+Here it is convenient to use stochastic gradient descent (see the examples below) with mini-batches with an outer loop that steps through multiple epochs of training.
+
+
+!split
+===== Setting up the Back propagation algorithm, final considerations =====
+
+
+
+The four equations  above  provide us with a way of computing the gradient of the cost function. Let us write this out in the form of an algorithm.
+
+!bblock
+First, we set up the input data $\bm{x}$ and the activations
+$\bm{z}_1$ of the input layer and compute the activation function and
+the pertinent outputs $\bm{a}^1$.
+!eblock
+
+!bblock
+Secondly, we perform then the feed forward till we reach the output
+layer and compute all $\bm{z}_l$ of the input layer and compute the
+activation function and the pertinent outputs $\bm{a}^l$ for
+$l=2,3,\dots,L$.
+!eblock
+
+!bblock
+Thereafter we compute the ouput error $\bm{\delta}^L$ by computing all
+!bt
+\[
+\delta_j^L = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
+\]
+!et
+!eblock
+
+!split
+===== Updating the gradients  =====
+
+
+!bblock
+Then we compute the back propagate error for each $l=L-1,L-2,\dots,2$ as
+!bt
+\[
+\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l).
+\]
+!et
+!eblock
+
+!bblock
+Finally, we update the weights and the biases using gradient descent for each $l=L-1,L-2,\dots,2$ and update the weights and biases according to the rules
+!bt
+\[
+w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
+\]
+!et
+
+!bt
+\[
+b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
+\]
+!et
+!eblock
+
+The parameter $\eta$ is the learning parameter discussed in connection with the gradient descent methods.
+Here it is convenient to use stochastic gradient descent (see the examples below) with mini-batches with an outer loop that steps through multiple epochs of training.
 
