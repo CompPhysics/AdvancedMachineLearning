@@ -765,7 +765,61 @@ Throughout this course we will use the following notations. Vectors,
 Matrices and higher-order tensors are always boldfaced, with vectors
 given by lower case letter letters.
 
-Unless otherwise stated, the elements $v_i$ of a vector $\bm{v}$ are assumed to be real. That is a vector of length $n$
+Unless otherwise stated, the elements $v_i$ of a vector $\bm{v}$ are assumed to be real. That is a vector of length $n$ is defined as
+$\bm{x}\in \mathbb{R}^{n}$ and if we have a complex vector we have $\bm{x}\in \mathbb{C}^{n}$.
+
+For a matrix of dimension $n\times n$ we have 
+$\bm{A}\in \mathbb{R}^{n\times n}$
+
+!split
+===== Vectors =====
+
+We start by defining a vector $\bm{x}$  with $n$ components, with $x_0$ as our first element, as
+
+!bt
+\[
+\bm{x} = \begin{bmatrix} x_0\\ x_1 \\ x_2 \\ \dots \\ \dots \\ x_{n-1} \end{bmatrix}.
+\]
+!et
+and its transpose 
+!bt
+\[
+\bm{x}^{T} = \begin{bmatrix} x_0 & x_1 & x_2 & \dots & \dots & x_{n-1} \end{bmatrix},
+\]
+!et
+In case we have a complex vector we define the hermitian conjugate
+!bt
+\[
+\bm{x}^{\dagger} = \begin{bmatrix} x_0^* & x_1^* & x_2^* & \dots & \dots & x_{n-1}^* \end{bmatrix},
+\]
+!et
+
+With a given vector $\bm{x}$, we define the inner product as
+!bt
+\[
+\bm{x}^T \bm{x} = \sum_{i=0}^{n-1} x_i^x_i=x_0^2+x_1^2+\dots + x_{n-1}^2. 
+\]
+!et
+
+!split
+===== Outer products =====
+
+In addition to inner products between vectors/states, the outer
+product plays a central role in many applications. It is
+defined as
+!bt
+\[
+\bm{x}\bm{y}^T = \begin{bmatrix}
+               x_0y_0 & x_0y_1 & x_0y_2 & \dots & \dots & x_0y_{n-2} & x_0y_{n-1} \\
+	       x_1y_0 & x_1y_1 & x_1y_2 & \dots & \dots & x_1y_{n-2} & x_1y_{n-1} \\
+	       x_2y_0 & x_2y_1 & x_2y_2 & \dots & \dots & x_2y_{n-2} & x_2y_{n-1} \\	       
+               \dots &   \dots   & \dots  & \dots & \dots & \dots & \dots \\
+               \dots &   \dots   & \dots  & \dots & \dots & \dots & \dots \\	       
+	       x_{n-2}y_0 & x_{n-2}y_1 & x_{n-2}y_2 & \dots & \dots & x_{n-2}y_{n-2} & x_{n-2}y_{n-1} \\
+	       x_{n-1}y_0 & x_{n-1}y_1 & x_{n-1}y_2 & \dots & \dots & x_{n-1}y_{n-2} & x_{n-1}y_{n-1} \end{bmatrix}	       
+\]
+!et
+
 
 !split
 ===== Basic Matrix Features =====
@@ -906,6 +960,7 @@ scalar-vector multiplication
 \end{equation}
 !et
 vector-vector multiplication (called Hadamard multiplication)
+
 !split
 ===== Important Mathematical Operations =====
 !bt
@@ -929,6 +984,10 @@ and the outer product, which yields a matrix,
 label{eq:outerprod}
 \end{equation}
 !et
+
+
+
+
 
 
 
