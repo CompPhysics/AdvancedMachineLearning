@@ -488,12 +488,12 @@ data (for example an image), rather than trying to predict a label for say  a gi
 <p>
 <p>Almost every problem in ML and data science starts with the same ingredients:</p>
 <ul>
-<p><li> The dataset \( \mathbf{x} \) (could be some observable quantity of the system we are studying)</li>
-<p><li> A model which is a function of a set of parameters \( \mathbf{\alpha} \) that relates to the dataset, say a likelihood  function \( p(\mathbf{x}\vert \mathbf{\alpha}) \) or just a simple model \( f(\mathbf{\alpha}) \)</li>
-<p><li> A so-called <b>loss/cost/risk</b> function \( \mathcal{C} (\mathbf{x}, f(\mathbf{\alpha})) \) which allows us to decide how well our model represents the dataset.</li> 
+<p><li> The dataset \( \boldsymbol{x} \) (could be some observable quantity of the system we are studying)</li>
+<p><li> A model which is a function of a set of parameters \( \boldsymbol{\alpha} \) that relates to the dataset, say a likelihood  function \( p(\boldsymbol{x}\vert \boldsymbol{\alpha}) \) or just a simple model \( f(\boldsymbol{\alpha}) \)</li>
+<p><li> A so-called <b>loss/cost/risk</b> function \( \mathcal{C} (\boldsymbol{x}, f(\boldsymbol{\alpha})) \) which allows us to decide how well our model represents the dataset.</li> 
 </ul>
 <p>
-<p>We seek to minimize the function \( \mathcal{C} (\mathbf{x}, f(\mathbf{\alpha})) \) by finding the parameter values which minimize \( \mathcal{C} \). This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. </p>
+<p>We seek to minimize the function \( \mathcal{C} (\boldsymbol{x}, f(\boldsymbol{\alpha})) \) by finding the parameter values which minimize \( \mathcal{C} \). This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. </p>
 </div>
 </section>
 
@@ -856,8 +856,8 @@ problems like the Ising and Potts classes of models.
 
 <b>The network layers</b>:
 <ol>
- <p><li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
- <p><li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
+ <p><li> A function \( \boldsymbol{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
+ <p><li> The function \( \boldsymbol{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
 </ol>
 </section>
 
@@ -874,8 +874,8 @@ over (integrated out).
 
 <b>The network parameters, to be optimized/learned</b>:
 <ol>
- <p><li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
- <p><li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
+ <p><li> \( \boldsymbol{a} \) represents the visible bias, a vector of same length as \( \boldsymbol{x} \).</li>
+ <p><li> \( \boldsymbol{b} \) represents the hidden bias, a vector of same lenght as \( \boldsymbol{h} \).</li>
  <p><li> \( W \) represents the interaction weights, a matrix of size \( M\times N \).</li>
 </ol>
 </section>
@@ -885,27 +885,27 @@ over (integrated out).
 <p>The restricted Boltzmann machine is described by a Bolztmann distribution</p>
 <p>&nbsp;<br>
 $$
-	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
+	P_{\mathrm{rbm}}(\boldsymbol{x},\boldsymbol{h}) = \frac{1}{Z} \exp{-E(\boldsymbol{x},\boldsymbol{h})},
 $$
 <p>&nbsp;<br>
 
 <p>where \( Z \) is the normalization constant or partition function, defined as </p>
 <p>&nbsp;<br>
 $$
-	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+	Z = \int \int \exp{-E(\boldsymbol{x},\boldsymbol{h})} d\boldsymbol{x} d\boldsymbol{h}.
 $$
 <p>&nbsp;<br>
 
-<p>It is common to ignore \( T_0 \) by setting it to one. </p>
+<p>Note the absence of the inverse temperature in these equations.</p>
 </section>
 
 <section>
 <h2 id="network-elements-the-energy-function">Network Elements, the energy function  </h2>
 
-<p>The function \( E(\mathbf{x},\mathbf{h}) \) gives the <b>energy</b> of a
-configuration (pair of vectors) \( (\mathbf{x}, \mathbf{h}) \). The lower
+<p>The function \( E(\boldsymbol{x},\boldsymbol{h}) \) gives the <b>energy</b> of a
+configuration (pair of vectors) \( (\boldsymbol{x}, \boldsymbol{h}) \). The lower
 the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters \( \mathbf{a} \), \( \mathbf{b} \) and
+function also depends on the parameters \( \boldsymbol{a} \), \( \boldsymbol{b} \) and
 \( W \). Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 </p>
@@ -914,7 +914,7 @@ adjusting the energy function to best fit our problem.
 <section>
 <h2 id="defining-different-types-of-rbms-energy-based-models">Defining different types of RBMs (Energy based models) </h2>
 
-<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\mathbf{x},\mathbf{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
+<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\boldsymbol{x},\boldsymbol{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Binary-Binary RBM:</b>
@@ -923,7 +923,7 @@ adjusting the energy function to best fit our problem.
 <p>RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:</p>
 <p>&nbsp;<br>
 $$
-	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+	E(\boldsymbol{x}, \boldsymbol{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 $$
 <p>&nbsp;<br>
 
@@ -941,7 +941,7 @@ $$
 <p>Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:</p>
 <p>&nbsp;<br>
 $$
-	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+	E(\boldsymbol{x}, \boldsymbol{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 $$
 <p>&nbsp;<br>
 </div>
@@ -957,7 +957,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-        P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})}.
+        P_{\mathrm{rbm}}(\boldsymbol{x},\boldsymbol{h}) = \frac{1}{Z} \exp{-E(\boldsymbol{x},\boldsymbol{h})}.
 $$
 <p>&nbsp;<br>
 
@@ -965,14 +965,14 @@ $$
 
 <p>&nbsp;<br>
 $$
-        P_{rbm}(\mathbf{x}) =\frac{1}{Z}\sum_\mathbf{h} e^{-E(\mathbf{x}, \mathbf{h})}.
+        P_{\mathrm{rbm}}(\boldsymbol{x}) =\frac{1}{Z}\sum_{\boldsymbol{h}} \exp{-E(\boldsymbol{x}, \boldsymbol{h})}.
 $$
 <p>&nbsp;<br>
 
 <p>Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)</p>
 <p>&nbsp;<br>
 $$
-        \vert\Psi (\mathbf{X})\vert^2 = P_{rbm}(\mathbf{x}).
+        \vert\Psi (\boldsymbol{X})\vert^2 = P_{\mathrm{rbm}}(\boldsymbol{x}).
 $$
 <p>&nbsp;<br>
 </section>
@@ -1000,7 +1000,7 @@ $$
 <p>where the local energy is given by</p>
 <p>&nbsp;<br>
 $$
-	E_L = \frac{1}{\Psi} \hat{\mathbf{H}} \Psi.
+	E_L = \frac{1}{\Psi} \hat{\boldsymbol{H}} \Psi.
 $$
 <p>&nbsp;<br>
 </section>
@@ -1085,6 +1085,18 @@ given by lower case letter letters and matrices and higher-order tensors given b
 </section>
 
 <section>
+<h2 id="some-mathematical-notations">Some  mathematical notations </h2>
+<ol>
+<p><li> For all/any  \( \forall \)</li>
+<p><li> Implies \( \implies \)</li>
+<p><li> Equivalent \( \equiv \)</li>
+<p><li> Real variable \( \mathbb{R} \)</li>
+<p><li> Integer variable \( \mathbb{I} \)</li>
+<p><li> Complex  variable \( \mathbb{C} \)</li>
+</ol>
+</section>
+
+<section>
 <h2 id="vectors">Vectors </h2>
 
 <p>We start by defining a vector \( \boldsymbol{x} \)  with \( n \) components, with \( x_0 \) as our first element, as</p>
@@ -1146,7 +1158,7 @@ $$
 <p>A general \( n\times n \) matrix is given by </p>
 <p>&nbsp;<br>
 $$
- \mathbf{A} =
+ \boldsymbol{A} =
 \begin{bmatrix}
                a_{00} & a_{01} & a_{02} & \dots & \dots & a_{0n-2} & a_{0n-1} \\
                a_{10} & a_{11} & a_{12} & \dots & \dots & a_{1n-2} & a_{1n-1} \\
@@ -1348,18 +1360,6 @@ $$
 \boldsymbol{A}=  \boldsymbol{y}\boldsymbol{z}^T \Longrightarrow  a_{ij} = y_{i}z_{j},
 $$
 <p>&nbsp;<br>
-</section>
-
-<section>
-<h2 id="further-mathematical-notations">Further mathematical notations </h2>
-<ol>
-<p><li> For all/any  \( \forall \)</li>
-<p><li> Implies \( \implies \)</li>
-<p><li> Equivalent \( \equiv \)</li>
-<p><li> Real variable \( \mathbb{R} \)</li>
-<p><li> Integer variable \( \mathbb{I} \)</li>
-<p><li> Complex  variable \( \mathbb{C} \)</li>
-</ol>
 </section>
 
 <section>

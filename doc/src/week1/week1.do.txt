@@ -241,11 +241,11 @@ FIGURE: [figures/generativemodels.png, width=900 frac=1.0]
 ===== What are the basic ingredients? =====
 !bblock
 Almost every problem in ML and data science starts with the same ingredients:
-* The dataset $\mathbf{x}$ (could be some observable quantity of the system we are studying)
-* A model which is a function of a set of parameters $\mathbf{\alpha}$ that relates to the dataset, say a likelihood  function $p(\mathbf{x}\vert \mathbf{\alpha})$ or just a simple model $f(\mathbf{\alpha})$
-* A so-called _loss/cost/risk_ function $\mathcal{C} (\mathbf{x}, f(\mathbf{\alpha}))$ which allows us to decide how well our model represents the dataset. 
+* The dataset $\bm{x}$ (could be some observable quantity of the system we are studying)
+* A model which is a function of a set of parameters $\bm{\alpha}$ that relates to the dataset, say a likelihood  function $p(\bm{x}\vert \bm{\alpha})$ or just a simple model $f(\bm{\alpha})$
+* A so-called _loss/cost/risk_ function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ which allows us to decide how well our model represents the dataset. 
 
-We seek to minimize the function $\mathcal{C} (\mathbf{x}, f(\mathbf{\alpha}))$ by finding the parameter values which minimize $\mathcal{C}$. This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. 
+We seek to minimize the function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ by finding the parameter values which minimize $\mathcal{C}$. This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. 
 !eblock
 
 !split
@@ -566,8 +566,8 @@ FIGURE: [figures/RBM.pdf, width=800 frac=1.0]
 ===== The network =====
 
 _The network layers_:
-  o A function $\mathbf{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
-  o The function $\mathbf{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
+  o A function $\bm{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
+  o The function $\bm{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
 
 !split
 ===== Goals =====
@@ -580,8 +580,8 @@ correlations between visible degrees in the data once marginalized
 over (integrated out).
 
 _The network parameters, to be optimized/learned_:
-  o $\mathbf{a}$ represents the visible bias, a vector of same length as $\mathbf{x}$.
-  o $\mathbf{b}$ represents the hidden bias, a vector of same lenght as $\mathbf{h}$.
+  o $\bm{a}$ represents the visible bias, a vector of same length as $\bm{x}$.
+  o $\bm{b}$ represents the hidden bias, a vector of same lenght as $\bm{h}$.
   o $W$ represents the interaction weights, a matrix of size $M\times N$.
 
 
@@ -590,24 +590,24 @@ _The network parameters, to be optimized/learned_:
 The restricted Boltzmann machine is described by a Bolztmann distribution
 !bt
 \[
-	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
+	P_{\mathrm{rbm}}(\bm{x},\bm{h}) = \frac{1}{Z} \exp{-E(\bm{x},\bm{h})},
 \]
 !et
 where $Z$ is the normalization constant or partition function, defined as 
 !bt
 \[
-	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+	Z = \int \int \exp{-E(\bm{x},\bm{h})} d\bm{x} d\bm{h}.
 \]
 !et
-It is common to ignore $T_0$ by setting it to one. 
+Note the absence of the inverse temperature in these equations.
 
 !split
 ===== Network Elements, the energy function  =====
 
-The function $E(\mathbf{x},\mathbf{h})$ gives the _energy_ of a
-configuration (pair of vectors) $(\mathbf{x}, \mathbf{h})$. The lower
+The function $E(\bm{x},\bm{h})$ gives the _energy_ of a
+configuration (pair of vectors) $(\bm{x}, \bm{h})$. The lower
 the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters $\mathbf{a}$, $\mathbf{b}$ and
+function also depends on the parameters $\bm{a}$, $\bm{b}$ and
 $W$. Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 
@@ -615,14 +615,14 @@ adjusting the energy function to best fit our problem.
 !split
 ===== Defining different types of RBMs (Energy based models) =====
 
-There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\mathbf{x},\mathbf{h})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
+There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\bm{x},\bm{h})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
 
 !bblock Binary-Binary RBM:
 
 RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:
 !bt
 \[
-	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+	E(\bm{x}, \bm{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 \]
 !et
 where the binary values taken on by the nodes are most commonly 0 and 1.
@@ -638,7 +638,7 @@ where the binary values taken on by the nodes are most commonly 0 and 1.
 Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
 !bt
 \[
-	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+	E(\bm{x}, \bm{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \]
 !et
 !eblock
@@ -652,7 +652,7 @@ The wavefunction should be a probability amplitude depending on
 
 !bt
 \[
-        P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})}.
+        P_{\mathrm{rbm}}(\bm{x},\bm{h}) = \frac{1}{Z} \exp{-E(\bm{x},\bm{h})}.
 \]
 !et
 
@@ -660,14 +660,14 @@ To find the marginal distribution of $\bm{x}$ we set:
 
 !bt
 \[
-        P_{rbm}(\mathbf{x}) =\frac{1}{Z}\sum_\mathbf{h} e^{-E(\mathbf{x}, \mathbf{h})}.
+        P_{\mathrm{rbm}}(\bm{x}) =\frac{1}{Z}\sum_{\bm{h}} \exp{-E(\bm{x}, \bm{h})}.
 \]
 !et
 
 Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)
 !bt
 \[
-        \vert\Psi (\mathbf{X})\vert^2 = P_{rbm}(\mathbf{x}).
+        \vert\Psi (\bm{X})\vert^2 = P_{\mathrm{rbm}}(\bm{x}).
 \]
 !et
 
@@ -692,7 +692,7 @@ procedure is
 where the local energy is given by
 !bt
 \[
-	E_L = \frac{1}{\Psi} \hat{\mathbf{H}} \Psi.
+	E_L = \frac{1}{\Psi} \hat{\bm{H}} \Psi.
 \]
 !et
 
@@ -769,6 +769,18 @@ $\bm{x}\in \mathbb{R}^{n}$ and if we have a complex vector we have $\bm{x}\in \m
 For a matrix of dimension $n\times n$ we have 
 $\bm{A}\in \mathbb{R}^{n\times n}$ and the first matrix element starts with row element (row-wise ordering) zero and column element zero.
 
+
+!split
+===== Some  mathematical notations =====
+o For all/any  $\forall$
+o Implies $\implies$
+o Equivalent $\equiv$
+o Real variable $\mathbb{R}$
+o Integer variable $\mathbb{I}$
+o Complex  variable $\mathbb{C}$
+
+
+
 !split
 ===== Vectors =====
 
@@ -826,7 +838,7 @@ The latter defines also our basic matrix layout.
 A general $n\times n$ matrix is given by 
 !bt
 \[
- \mathbf{A} =
+ \bm{A} =
 \begin{bmatrix}
                a_{00} & a_{01} & a_{02} & \dots & \dots & a_{0n-2} & a_{0n-1} \\
                a_{10} & a_{11} & a_{12} & \dots & \dots & a_{1n-2} & a_{1n-1} \\
@@ -986,15 +998,6 @@ and the outer product, which yields a matrix,
 \bm{A}=  \bm{y}\bm{z}^T \Longrightarrow  a_{ij} = y_{i}z_{j},
 \]
 !et
-
-!split
-===== Further mathematical notations =====
-o For all/any  $\forall$
-o Implies $\implies$
-o Equivalent $\equiv$
-o Real variable $\mathbb{R}$
-o Integer variable $\mathbb{I}$
-o Complex  variable $\mathbb{C}$
 
 
 
