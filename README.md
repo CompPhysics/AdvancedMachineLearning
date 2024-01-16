@@ -29,7 +29,7 @@ Furthermore, all teaching material is available from this GitHub link.
 - Discussion of possible projects
 - Deep learning, neural networks, basic equations
 - Recommended reading Goodfellow et al chapters 6 and 7
-
+- Video of first lecture at https://youtu.be/dP8g_tjQ_9c
 Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 
 ##  January 22-26
