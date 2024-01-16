@@ -235,11 +235,68 @@ data (for example an image), rather than trying to predict a label for say  a gi
 
 FIGURE: [figures/generativemodels.png, width=900 frac=1.0]
 
+!split
+===== Possible paths for the projects =====
 
+The differential equation path: Here we propose a set of differential
+equations (ordinary and/or partial) to be solved first using neural
+networks (using either your own code or TensorFlow/Pytorch or similar
+libraries). Thereafter we can extend the set of methods for
+solving these equations to recurrent neural networks and autoencoders
+(AE) and/or Generalized Adversarial Networks (GANs). All these
+approaches can be expanded into one large project. This project can
+also be extended into including "Physics informed machine
+learning":"https://github.com/maziarraissi/PINNs". Here we can discuss
+neural networks that are trained to solve supervised learning tasks
+while respecting any given law of physics described by general
+nonlinear partial differential equations.
 
+For those interested in mathematical aspects of deep learning, this could also be included.
 
 !split
-===== What are the basic ingredients? =====
+===== Paths for projects, writing own codes =====
+
+The computational path: Here we propose a path where you develop your
+own code for a convolutional or eventually recurrent neural network
+and apply this to data selects of your own selection. The code should
+be object oriented and flexible allowing for eventual extensions by
+including different Loss/Cost functions and other
+functionalities. Feel free to select data sets from those suggested
+below here. This code can also be extended upon by adding for example
+autoencoders. You can compare your own codes with implementations
+using TensorFlow(Keras)/PyTorch or other libraries.
+
+!split
+===== The application path =====
+
+The application path: Here you can use the most relevant method(s)
+(say convolutional neural networks for images) and apply this(these)
+to data sets relevant for your own research.
+
+!split
+===== Gaussian processes and Bayesian analysis =====
+
+The Gaussian processes/Bayesian statistics path: "Kernel regression
+(Gaussian processes) and Bayesian
+statistics":"https://jenfb.github.io/bkmr/overview.html" are popular
+tools in the machine learning literature. The main idea behind these
+approaches is to flexibly model the relationship between a large
+number of variables and a particular outcome (dependent
+variable). This can form a second part of a project where for example
+standard Kernel regression methods are used on a specific data
+set. Alternatively, participants can opt to work on a large project
+relevant for their own research using gaussian processes and/or
+Bayesian machine Learning.
+
+!split
+===== HPC path =====
+
+Another alternative is to study high-performance computing aspects in
+designing ML codes. This can also be linked with an exploration of
+mathematical aspects of deep learning methods.
+
+!split
+===== What are the basic Machine Learning ingredients? =====
 !bblock
 Almost every problem in ML and data science starts with the same ingredients:
 * The dataset $\bm{x}$ (could be some observable quantity of the system we are studying)
