@@ -44,6 +44,10 @@ doconce format html week2.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'videos-on-neural-networks'),
+              ('Mathematics of deep learning',
+               2,
+               None,
+               'mathematics-of-deep-learning'),
               ('Reminder on books with hands-on material and codes',
                2,
                None,
@@ -156,20 +160,22 @@ doconce format html week2.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'limitations-of-supervised-learning-with-deep-networks'),
+              ('Limitations of NNs', 2, None, 'limitations-of-nns'),
+              ('More limitations', 2, None, 'more-limitations'),
               ('Building a neural network code',
                2,
                None,
                'building-a-neural-network-code'),
-              ('Learning rate methods', 3, None, 'learning-rate-methods'),
+              ('Learning rate methods', 2, None, 'learning-rate-methods'),
               ('Usage of the above learning rate schedulers',
-               3,
+               2,
                None,
                'usage-of-the-above-learning-rate-schedulers'),
-              ('Cost functions', 3, None, 'cost-functions'),
-              ('Activation functions', 3, None, 'activation-functions'),
-              ('The Neural Network', 3, None, 'the-neural-network'),
+              ('Cost functions', 2, None, 'cost-functions'),
+              ('Activation functions', 2, None, 'activation-functions'),
+              ('The Neural Network', 2, None, 'the-neural-network'),
               ('Multiclass classification',
-               3,
+               2,
                None,
                'multiclass-classification'),
               ('Testing the XOR gate and other gates',
@@ -220,57 +226,60 @@ MathJax.Hub.Config({
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
-     <!-- navigation toc: --> <li><a href="#overview-of-second-week-january-22-26" style="font-size: 80%;"><b>Overview of second  week, January 22-26</b></a></li>
-     <!-- navigation toc: --> <li><a href="#videos-on-neural-networks" style="font-size: 80%;"><b>Videos on Neural Networks</b></a></li>
-     <!-- navigation toc: --> <li><a href="#reminder-on-books-with-hands-on-material-and-codes" style="font-size: 80%;"><b>Reminder on books with hands-on material and codes</b></a></li>
-     <!-- navigation toc: --> <li><a href="#reading-recommendations" style="font-size: 80%;"><b>Reading recommendations</b></a></li>
-     <!-- navigation toc: --> <li><a href="#mathematics-of-deep-learning-and-neural-networks" style="font-size: 80%;"><b>Mathematics of deep learning and neural networks</b></a></li>
-     <!-- navigation toc: --> <li><a href="#overarching-view-of-a-neural-network" style="font-size: 80%;"><b>Overarching view of a neural network</b></a></li>
-     <!-- navigation toc: --> <li><a href="#the-optimzation-problem" style="font-size: 80%;"><b>The optimzation problem</b></a></li>
-     <!-- navigation toc: --> <li><a href="#other-ingredients-of-a-neural-network" style="font-size: 80%;"><b>Other ingredients of a neural network</b></a></li>
-     <!-- navigation toc: --> <li><a href="#other-parameters" style="font-size: 80%;"><b>Other parameters</b></a></li>
-     <!-- navigation toc: --> <li><a href="#setting-up-the-equations-for-a-neural-network" style="font-size: 80%;"><b>Setting up the equations for a neural network</b></a></li>
-     <!-- navigation toc: --> <li><a href="#definitions" style="font-size: 80%;"><b>Definitions</b></a></li>
-     <!-- navigation toc: --> <li><a href="#inputs-to-tje-activation-function" style="font-size: 80%;"><b>Inputs to tje activation function</b></a></li>
-     <!-- navigation toc: --> <li><a href="#derivatives-and-the-chain-rule" style="font-size: 80%;"><b>Derivatives and the chain rule</b></a></li>
-     <!-- navigation toc: --> <li><a href="#derivative-of-the-cost-function" style="font-size: 80%;"><b>Derivative of the cost function</b></a></li>
-     <!-- navigation toc: --> <li><a href="#bringing-it-together-first-back-propagation-equation" style="font-size: 80%;"><b>Bringing it together, first back propagation equation</b></a></li>
-     <!-- navigation toc: --> <li><a href="#analyzing-the-last-results" style="font-size: 80%;"><b>Analyzing the last results</b></a></li>
-     <!-- navigation toc: --> <li><a href="#more-considerations" style="font-size: 80%;"><b>More considerations</b></a></li>
-     <!-- navigation toc: --> <li><a href="#derivatives-in-terms-of-z-j-l" style="font-size: 80%;"><b>Derivatives in terms of \( z_j^L \)</b></a></li>
-     <!-- navigation toc: --> <li><a href="#bringing-it-together" style="font-size: 80%;"><b>Bringing it together</b></a></li>
-     <!-- navigation toc: --> <li><a href="#final-back-propagating-equation" style="font-size: 80%;"><b>Final back propagating equation</b></a></li>
-     <!-- navigation toc: --> <li><a href="#using-the-chain-rule-and-summing-over-all-k-entries" style="font-size: 80%;"><b>Using the chain rule and summing over all \( k \) entries</b></a></li>
-     <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm" style="font-size: 80%;"><b>Setting up the back propagation algorithm</b></a></li>
-     <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-2" style="font-size: 80%;"><b>Setting up the back propagation algorithm, part 2</b></a></li>
-     <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-3" style="font-size: 80%;"><b>Setting up the Back propagation algorithm, part 3</b></a></li>
-     <!-- navigation toc: --> <li><a href="#updating-the-gradients" style="font-size: 80%;"><b>Updating the gradients</b></a></li>
-     <!-- navigation toc: --> <li><a href="#fine-tuning-neural-network-hyperparameters" style="font-size: 80%;"><b>Fine-tuning neural network hyperparameters</b></a></li>
-     <!-- navigation toc: --> <li><a href="#hidden-layers" style="font-size: 80%;"><b>Hidden layers</b></a></li>
-     <!-- navigation toc: --> <li><a href="#which-activation-function-should-i-use" style="font-size: 80%;"><b>Which activation function should I use?</b></a></li>
-     <!-- navigation toc: --> <li><a href="#is-the-logistic-activation-function-sigmoid-our-choice" style="font-size: 80%;"><b>Is the Logistic activation function (Sigmoid)  our choice?</b></a></li>
-     <!-- navigation toc: --> <li><a href="#the-derivative-of-the-logistic-funtion" style="font-size: 80%;"><b>The derivative of the Logistic funtion</b></a></li>
-     <!-- navigation toc: --> <li><a href="#the-relu-function-family" style="font-size: 80%;"><b>The RELU function family</b></a></li>
-     <!-- navigation toc: --> <li><a href="#which-activation-function-should-we-use" style="font-size: 80%;"><b>Which activation function should we use?</b></a></li>
-     <!-- navigation toc: --> <li><a href="#more-on-activation-functions-output-layers" style="font-size: 80%;"><b>More on activation functions, output layers</b></a></li>
-     <!-- navigation toc: --> <li><a href="#batch-normalization" style="font-size: 80%;"><b>Batch Normalization</b></a></li>
-     <!-- navigation toc: --> <li><a href="#dropout" style="font-size: 80%;"><b>Dropout</b></a></li>
-     <!-- navigation toc: --> <li><a href="#gradient-clipping" style="font-size: 80%;"><b>Gradient Clipping</b></a></li>
-     <!-- navigation toc: --> <li><a href="#a-very-nice-website-on-neural-networks" style="font-size: 80%;"><b>A very nice website on Neural Networks</b></a></li>
-     <!-- navigation toc: --> <li><a href="#a-top-down-perspective-on-neural-networks" style="font-size: 80%;"><b>A top-down perspective on Neural networks</b></a></li>
-     <!-- navigation toc: --> <li><a href="#limitations-of-supervised-learning-with-deep-networks" style="font-size: 80%;"><b>Limitations of supervised learning with deep networks</b></a></li>
-     <!-- navigation toc: --> <li><a href="#building-a-neural-network-code" style="font-size: 80%;"><b>Building a neural network code</b></a></li>
-     <!-- navigation toc: --> <li><a href="#learning-rate-methods" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Learning rate methods</a></li>
-     <!-- navigation toc: --> <li><a href="#usage-of-the-above-learning-rate-schedulers" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Usage of the above learning rate schedulers</a></li>
-     <!-- navigation toc: --> <li><a href="#cost-functions" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Cost functions</a></li>
-     <!-- navigation toc: --> <li><a href="#activation-functions" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Activation functions</a></li>
-     <!-- navigation toc: --> <li><a href="#the-neural-network" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;The Neural Network</a></li>
-     <!-- navigation toc: --> <li><a href="#multiclass-classification" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Multiclass classification</a></li>
-     <!-- navigation toc: --> <li><a href="#testing-the-xor-gate-and-other-gates" style="font-size: 80%;"><b>Testing the XOR gate and other gates</b></a></li>
-     <!-- navigation toc: --> <li><a href="#building-neural-networks-in-tensorflow-and-keras" style="font-size: 80%;"><b>Building neural networks in Tensorflow and Keras</b></a></li>
-     <!-- navigation toc: --> <li><a href="#tensorflow" style="font-size: 80%;"><b>Tensorflow</b></a></li>
-     <!-- navigation toc: --> <li><a href="#using-keras" style="font-size: 80%;"><b>Using Keras</b></a></li>
-     <!-- navigation toc: --> <li><a href="#collect-and-pre-process-data" style="font-size: 80%;"><b>Collect and pre-process data</b></a></li>
+     <!-- navigation toc: --> <li><a href="#overview-of-second-week-january-22-26" style="font-size: 80%;">Overview of second  week, January 22-26</a></li>
+     <!-- navigation toc: --> <li><a href="#videos-on-neural-networks" style="font-size: 80%;">Videos on Neural Networks</a></li>
+     <!-- navigation toc: --> <li><a href="#mathematics-of-deep-learning" style="font-size: 80%;">Mathematics of deep learning</a></li>
+     <!-- navigation toc: --> <li><a href="#reminder-on-books-with-hands-on-material-and-codes" style="font-size: 80%;">Reminder on books with hands-on material and codes</a></li>
+     <!-- navigation toc: --> <li><a href="#reading-recommendations" style="font-size: 80%;">Reading recommendations</a></li>
+     <!-- navigation toc: --> <li><a href="#mathematics-of-deep-learning-and-neural-networks" style="font-size: 80%;">Mathematics of deep learning and neural networks</a></li>
+     <!-- navigation toc: --> <li><a href="#overarching-view-of-a-neural-network" style="font-size: 80%;">Overarching view of a neural network</a></li>
+     <!-- navigation toc: --> <li><a href="#the-optimzation-problem" style="font-size: 80%;">The optimzation problem</a></li>
+     <!-- navigation toc: --> <li><a href="#other-ingredients-of-a-neural-network" style="font-size: 80%;">Other ingredients of a neural network</a></li>
+     <!-- navigation toc: --> <li><a href="#other-parameters" style="font-size: 80%;">Other parameters</a></li>
+     <!-- navigation toc: --> <li><a href="#setting-up-the-equations-for-a-neural-network" style="font-size: 80%;">Setting up the equations for a neural network</a></li>
+     <!-- navigation toc: --> <li><a href="#definitions" style="font-size: 80%;">Definitions</a></li>
+     <!-- navigation toc: --> <li><a href="#inputs-to-tje-activation-function" style="font-size: 80%;">Inputs to tje activation function</a></li>
+     <!-- navigation toc: --> <li><a href="#derivatives-and-the-chain-rule" style="font-size: 80%;">Derivatives and the chain rule</a></li>
+     <!-- navigation toc: --> <li><a href="#derivative-of-the-cost-function" style="font-size: 80%;">Derivative of the cost function</a></li>
+     <!-- navigation toc: --> <li><a href="#bringing-it-together-first-back-propagation-equation" style="font-size: 80%;">Bringing it together, first back propagation equation</a></li>
+     <!-- navigation toc: --> <li><a href="#analyzing-the-last-results" style="font-size: 80%;">Analyzing the last results</a></li>
+     <!-- navigation toc: --> <li><a href="#more-considerations" style="font-size: 80%;">More considerations</a></li>
+     <!-- navigation toc: --> <li><a href="#derivatives-in-terms-of-z-j-l" style="font-size: 80%;">Derivatives in terms of \( z_j^L \)</a></li>
+     <!-- navigation toc: --> <li><a href="#bringing-it-together" style="font-size: 80%;">Bringing it together</a></li>
+     <!-- navigation toc: --> <li><a href="#final-back-propagating-equation" style="font-size: 80%;">Final back propagating equation</a></li>
+     <!-- navigation toc: --> <li><a href="#using-the-chain-rule-and-summing-over-all-k-entries" style="font-size: 80%;">Using the chain rule and summing over all \( k \) entries</a></li>
+     <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm" style="font-size: 80%;">Setting up the back propagation algorithm</a></li>
+     <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-2" style="font-size: 80%;">Setting up the back propagation algorithm, part 2</a></li>
+     <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-3" style="font-size: 80%;">Setting up the Back propagation algorithm, part 3</a></li>
+     <!-- navigation toc: --> <li><a href="#updating-the-gradients" style="font-size: 80%;">Updating the gradients</a></li>
+     <!-- navigation toc: --> <li><a href="#fine-tuning-neural-network-hyperparameters" style="font-size: 80%;">Fine-tuning neural network hyperparameters</a></li>
+     <!-- navigation toc: --> <li><a href="#hidden-layers" style="font-size: 80%;">Hidden layers</a></li>
+     <!-- navigation toc: --> <li><a href="#which-activation-function-should-i-use" style="font-size: 80%;">Which activation function should I use?</a></li>
+     <!-- navigation toc: --> <li><a href="#is-the-logistic-activation-function-sigmoid-our-choice" style="font-size: 80%;">Is the Logistic activation function (Sigmoid)  our choice?</a></li>
+     <!-- navigation toc: --> <li><a href="#the-derivative-of-the-logistic-funtion" style="font-size: 80%;">The derivative of the Logistic funtion</a></li>
+     <!-- navigation toc: --> <li><a href="#the-relu-function-family" style="font-size: 80%;">The RELU function family</a></li>
+     <!-- navigation toc: --> <li><a href="#which-activation-function-should-we-use" style="font-size: 80%;">Which activation function should we use?</a></li>
+     <!-- navigation toc: --> <li><a href="#more-on-activation-functions-output-layers" style="font-size: 80%;">More on activation functions, output layers</a></li>
+     <!-- navigation toc: --> <li><a href="#batch-normalization" style="font-size: 80%;">Batch Normalization</a></li>
+     <!-- navigation toc: --> <li><a href="#dropout" style="font-size: 80%;">Dropout</a></li>
+     <!-- navigation toc: --> <li><a href="#gradient-clipping" style="font-size: 80%;">Gradient Clipping</a></li>
+     <!-- navigation toc: --> <li><a href="#a-very-nice-website-on-neural-networks" style="font-size: 80%;">A very nice website on Neural Networks</a></li>
+     <!-- navigation toc: --> <li><a href="#a-top-down-perspective-on-neural-networks" style="font-size: 80%;">A top-down perspective on Neural networks</a></li>
+     <!-- navigation toc: --> <li><a href="#limitations-of-supervised-learning-with-deep-networks" style="font-size: 80%;">Limitations of supervised learning with deep networks</a></li>
+     <!-- navigation toc: --> <li><a href="#limitations-of-nns" style="font-size: 80%;">Limitations of NNs</a></li>
+     <!-- navigation toc: --> <li><a href="#more-limitations" style="font-size: 80%;">More limitations</a></li>
+     <!-- navigation toc: --> <li><a href="#building-a-neural-network-code" style="font-size: 80%;">Building a neural network code</a></li>
+     <!-- navigation toc: --> <li><a href="#learning-rate-methods" style="font-size: 80%;">Learning rate methods</a></li>
+     <!-- navigation toc: --> <li><a href="#usage-of-the-above-learning-rate-schedulers" style="font-size: 80%;">Usage of the above learning rate schedulers</a></li>
+     <!-- navigation toc: --> <li><a href="#cost-functions" style="font-size: 80%;">Cost functions</a></li>
+     <!-- navigation toc: --> <li><a href="#activation-functions" style="font-size: 80%;">Activation functions</a></li>
+     <!-- navigation toc: --> <li><a href="#the-neural-network" style="font-size: 80%;">The Neural Network</a></li>
+     <!-- navigation toc: --> <li><a href="#multiclass-classification" style="font-size: 80%;">Multiclass classification</a></li>
+     <!-- navigation toc: --> <li><a href="#testing-the-xor-gate-and-other-gates" style="font-size: 80%;">Testing the XOR gate and other gates</a></li>
+     <!-- navigation toc: --> <li><a href="#building-neural-networks-in-tensorflow-and-keras" style="font-size: 80%;">Building neural networks in Tensorflow and Keras</a></li>
+     <!-- navigation toc: --> <li><a href="#tensorflow" style="font-size: 80%;">Tensorflow</a></li>
+     <!-- navigation toc: --> <li><a href="#using-keras" style="font-size: 80%;">Using Keras</a></li>
+     <!-- navigation toc: --> <li><a href="#collect-and-pre-process-data" style="font-size: 80%;">Collect and pre-process data</a></li>
 
         </ul>
       </li>
@@ -329,6 +338,20 @@ MathJax.Hub.Config({
 <li> <a href="https://www.youtube.com/watch?v=Ilg3gGewQ5U" target="_self">Video on the back propagation algorithm</a></li>
 </ul>
 <!-- !split -->
+<h2 id="mathematics-of-deep-learning" class="anchor">Mathematics of deep learning </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<ol>
+<li> <a href="https://arxiv.org/abs/2105.04026" target="_self">The Modern Mathematics of Deep Learning, by Julius Berner, Philipp Grohs, Gitta Kutyniok, Philipp Petersen</a>, published as <a href="https://doi.org/10.1017/9781009025096.002" target="_self">Mathematical Aspects of Deep Learning, pp. 1-111. Cambridge University Press, 2022</a></li>
+<li> <a href="https://doi.org/10.48550/arXiv.2310.20360" target="_self">Mathematical Introduction to Deep Learning: Methods, Implementations, and Theory, Arnulf Jentzen, Benno Kuckuck, Philippe von Wurstemberger</a></li>
+</ol>
+</div>
+</div>
+
+
+<!-- !split -->
 <h2 id="reminder-on-books-with-hands-on-material-and-codes" class="anchor">Reminder on books with hands-on material and codes </h2>
 <div class="panel panel-default">
 <div class="panel-body">
@@ -350,8 +373,8 @@ from Goodfellow, Bengio and Courville's text <a href="https://www.deeplearningbo
 <h2 id="reading-recommendations" class="anchor">Reading recommendations </h2>
 
 <ol>
-<li> Rashkca et al., chapter 11, jupyter-notebook sent separately</li> 
-<li> Goodfellow et al, chapter 6 and 7 contain most of the neural network background</li>
+<li> Rashkca et al., chapter 11, jupyter-notebook sent separately, from <a href="https://github.com/rasbt/machine-learning-book" target="_self">GitHub</a></li>
+<li> Goodfellow et al, chapter 6 and 7 contain most of the neural network background.</li>
 </ol>
 <!-- !split -->
 <h2 id="mathematics-of-deep-learning-and-neural-networks" class="anchor">Mathematics of deep learning and neural networks </h2>
@@ -1049,12 +1072,20 @@ hand-engineered features (or even a collection of random
 features). 
 </p>
 
+<!-- !split -->
+<h2 id="limitations-of-nns" class="anchor">Limitations of NNs </h2>
+
 <p>Here we list some of the important limitations of supervised neural network based models. </p>
 
 <ul>
 <li> <b>Need labeled data</b>. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g. one must pay for human experts to label images).</li>
 <li> <b>Supervised neural networks are extremely data intensive.</b> DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.</li>
 <li> <b>Homogeneous data.</b> Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.&nbsp;some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.</li>
+</ul>
+<!-- !split -->
+<h2 id="more-limitations" class="anchor">More limitations </h2>
+
+<ul>
 <li> <b>Many problems are not about prediction.</b> In natural science we are often interested in learning something about the underlying distribution that generates the data. In this case, it is often difficult to cast these ideas in a supervised learning setting. While the problems are related, it is possible to make good predictions with a <em>wrong</em> model. The model might or might not be useful for understanding the underlying science.</li>
 </ul>
 <p>Some of these remarks are particular to DNNs, others are shared by all supervised learning methods. This motivates the use of unsupervised methods which in part circumvent these problems.</p>
@@ -1071,16 +1102,17 @@ neural network.
 </p>
 
 <p>The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.</p>
-<h3 id="learning-rate-methods" class="anchor">Learning rate methods  </h3>
+
+<!-- !split -->
+<h2 id="learning-rate-methods" class="anchor">Learning rate methods  </h2>
 
 <p>The code below shows object oriented implementations of the Constant,
 Momentum, Adagrad, AdagradMomentum, RMS prop and Adam schedulers. All
 of the classes belong to the shared abstract Scheduler class, and
-share the update_change() and reset() methods allowing for any of the
+share the update$\_$change() and reset() methods allowing for any of the
 schedulers to be seamlessly used during the training stage, as will
 later be shown in the fit() method of the neural
-network. Update_change() only has one parameter, the gradient
-(\( &#948;^l_ja^{l&#8722;1}_k \)), and returns the change which will be subtracted
+network. Update$\_$change() only has one parameter, the gradient, and returns the change which will be subtracted
 from the weights. The reset() function takes no parameters, and resets
 the desired variables. For Constant and Momentum, reset does nothing.
 </p>
@@ -1236,7 +1268,10 @@ the desired variables. For Constant and Momentum, reset does nothing.
     </div>
   </div>
 </div>
-<h3 id="usage-of-the-above-learning-rate-schedulers" class="anchor">Usage of the above learning rate schedulers </h3>
+
+
+<!-- !split -->
+<h2 id="usage-of-the-above-learning-rate-schedulers" class="anchor">Usage of the above learning rate schedulers </h2>
 
 <p>To initalize a scheduler, simply create the object and pass in the
 necessary parameters such as the learning rate and the momentum as
@@ -1304,7 +1339,10 @@ epochs <span style="color: #666666">=</span> <span style="color: #666666">10</sp
     </div>
   </div>
 </div>
-<h3 id="cost-functions" class="anchor">Cost functions </h3>
+
+
+<!-- !split -->
+<h2 id="cost-functions" class="anchor">Cost functions </h2>
 
 <p>Here we discuss cost functions that can be used when creating the
 neural network. Every cost function takes the target vector as its
@@ -1397,7 +1435,10 @@ valued_at_a <span style="color: #666666">=</span> cost_func_derivative(a)
     </div>
   </div>
 </div>
-<h3 id="activation-functions" class="anchor">Activation functions </h3>
+
+
+<!-- !split -->
+<h2 id="activation-functions" class="anchor">Activation functions </h2>
 
 <p>Finally, before we look at the neural network, we will look at the
 activation functions which can be specified between the hidden layers
@@ -1512,7 +1553,10 @@ valued_at_z <span style="color: #666666">=</span> act_func_derivative(a)
     </div>
   </div>
 </div>
-<h3 id="the-neural-network" class="anchor">The Neural Network </h3>
+
+
+<!-- !split -->
+<h2 id="the-neural-network" class="anchor">The Neural Network </h2>
 
 <p>Now that we have gotten a good understanding of the implementation of
 some important components, we can take a look at an object oriented
@@ -2132,7 +2176,7 @@ scores <span style="color: #666666">=</span> linear_regression<span style="color
   </div>
 </div>
 
-<p>Due to the progress bar we can see the MSE (train_error) throughout
+<p>Due to the progress bar we can see the MSE (train$\_$error) throughout
 the FFNN's training. Note that the fit() function has some optional
 parameters with defualt arguments. For example, the regularization
 hyperparameter can be left ignored if not needed, and equally the FFNN
@@ -2312,7 +2356,10 @@ scores <span style="color: #666666">=</span> neural_network<span style="color: #
     </div>
   </div>
 </div>
-<h3 id="multiclass-classification" class="anchor">Multiclass classification </h3>
+
+
+<!-- !split -->
+<h2 id="multiclass-classification" class="anchor">Multiclass classification </h2>
 
 <p>Finally, we will demonstrate the use case of multiclass classification
 using our FFNN with the famous MNIST dataset, which contain images of

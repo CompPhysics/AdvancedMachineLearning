@@ -218,6 +218,19 @@ MathJax.Hub.Config({
 </section>
 
 <section>
+<h2 id="mathematics-of-deep-learning">Mathematics of deep learning </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Two recent books online</b>
+<p>
+<ol>
+<p><li> <a href="https://arxiv.org/abs/2105.04026" target="_blank">The Modern Mathematics of Deep Learning, by Julius Berner, Philipp Grohs, Gitta Kutyniok, Philipp Petersen</a>, published as <a href="https://doi.org/10.1017/9781009025096.002" target="_blank">Mathematical Aspects of Deep Learning, pp. 1-111. Cambridge University Press, 2022</a></li>
+<p><li> <a href="https://doi.org/10.48550/arXiv.2310.20360" target="_blank">Mathematical Introduction to Deep Learning: Methods, Implementations, and Theory, Arnulf Jentzen, Benno Kuckuck, Philippe von Wurstemberger</a></li>
+</ol>
+</div>
+</section>
+
+<section>
 <h2 id="reminder-on-books-with-hands-on-material-and-codes">Reminder on books with hands-on material and codes </h2>
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
@@ -238,8 +251,8 @@ from Goodfellow, Bengio and Courville's text <a href="https://www.deeplearningbo
 <h2 id="reading-recommendations">Reading recommendations </h2>
 
 <ol>
-<p><li> Rashkca et al., chapter 11, jupyter-notebook sent separately</li> 
-<p><li> Goodfellow et al, chapter 6 and 7 contain most of the neural network background</li>
+<p><li> Rashkca et al., chapter 11, jupyter-notebook sent separately, from <a href="https://github.com/rasbt/machine-learning-book" target="_blank">GitHub</a></li>
+<p><li> Goodfellow et al, chapter 6 and 7 contain most of the neural network background.</li>
 </ol>
 </section>
 
@@ -1036,6 +1049,10 @@ better performance on a task can be achieved by using a few
 hand-engineered features (or even a collection of random
 features). 
 </p>
+</section>
+
+<section>
+<h2 id="limitations-of-nns">Limitations of NNs </h2>
 
 <p>Here we list some of the important limitations of supervised neural network based models. </p>
 
@@ -1043,6 +1060,13 @@ features).
 <p><li> <b>Need labeled data</b>. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g. one must pay for human experts to label images).</li>
 <p><li> <b>Supervised neural networks are extremely data intensive.</b> DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.</li>
 <p><li> <b>Homogeneous data.</b> Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.&nbsp;some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.</li>
+</ul>
+</section>
+
+<section>
+<h2 id="more-limitations">More limitations </h2>
+
+<ul>
 <p><li> <b>Many problems are not about prediction.</b> In natural science we are often interested in learning something about the underlying distribution that generates the data. In this case, it is often difficult to cast these ideas in a supervised learning setting. While the problems are related, it is possible to make good predictions with a <em>wrong</em> model. The model might or might not be useful for understanding the underlying science.</li>
 </ul>
 <p>
@@ -1061,16 +1085,18 @@ neural network.
 </p>
 
 <p>The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.</p>
-<h3 id="learning-rate-methods">Learning rate methods  </h3>
+</section>
+
+<section>
+<h2 id="learning-rate-methods">Learning rate methods  </h2>
 
 <p>The code below shows object oriented implementations of the Constant,
 Momentum, Adagrad, AdagradMomentum, RMS prop and Adam schedulers. All
 of the classes belong to the shared abstract Scheduler class, and
-share the update_change() and reset() methods allowing for any of the
+share the update$\_$change() and reset() methods allowing for any of the
 schedulers to be seamlessly used during the training stage, as will
 later be shown in the fit() method of the neural
-network. Update_change() only has one parameter, the gradient
-(\( &#948;^l_ja^{l&#8722;1}_k \)), and returns the change which will be subtracted
+network. Update$\_$change() only has one parameter, the gradient, and returns the change which will be subtracted
 from the weights. The reset() function takes no parameters, and resets
 the desired variables. For Constant and Momentum, reset does nothing.
 </p>
@@ -1226,7 +1252,10 @@ the desired variables. For Constant and Momentum, reset does nothing.
     </div>
   </div>
 </div>
-<h3 id="usage-of-the-above-learning-rate-schedulers">Usage of the above learning rate schedulers </h3>
+</section>
+
+<section>
+<h2 id="usage-of-the-above-learning-rate-schedulers">Usage of the above learning rate schedulers </h2>
 
 <p>To initalize a scheduler, simply create the object and pass in the
 necessary parameters such as the learning rate and the momentum as
@@ -1294,7 +1323,10 @@ epochs = <span style="color: #B452CD">10</span>
     </div>
   </div>
 </div>
-<h3 id="cost-functions">Cost functions </h3>
+</section>
+
+<section>
+<h2 id="cost-functions">Cost functions </h2>
 
 <p>Here we discuss cost functions that can be used when creating the
 neural network. Every cost function takes the target vector as its
@@ -1387,7 +1419,10 @@ valued_at_a = cost_func_derivative(a)
     </div>
   </div>
 </div>
-<h3 id="activation-functions">Activation functions </h3>
+</section>
+
+<section>
+<h2 id="activation-functions">Activation functions </h2>
 
 <p>Finally, before we look at the neural network, we will look at the
 activation functions which can be specified between the hidden layers
@@ -1502,7 +1537,10 @@ valued_at_z = act_func_derivative(a)
     </div>
   </div>
 </div>
-<h3 id="the-neural-network">The Neural Network </h3>
+</section>
+
+<section>
+<h2 id="the-neural-network">The Neural Network </h2>
 
 <p>Now that we have gotten a good understanding of the implementation of
 some important components, we can take a look at an object oriented
@@ -2122,7 +2160,7 @@ scores = linear_regression.fit(X_train, t_train, scheduler)
   </div>
 </div>
 
-<p>Due to the progress bar we can see the MSE (train_error) throughout
+<p>Due to the progress bar we can see the MSE (train$\_$error) throughout
 the FFNN's training. Note that the fit() function has some optional
 parameters with defualt arguments. For example, the regularization
 hyperparameter can be left ignored if not needed, and equally the FFNN
@@ -2302,7 +2340,10 @@ scores = neural_network.fit(X_train, t_train, scheduler, epochs=<span style="col
     </div>
   </div>
 </div>
-<h3 id="multiclass-classification">Multiclass classification </h3>
+</section>
+
+<section>
+<h2 id="multiclass-classification">Multiclass classification </h2>
 
 <p>Finally, we will demonstrate the use case of multiclass classification
 using our FFNN with the famous MNIST dataset, which contain images of

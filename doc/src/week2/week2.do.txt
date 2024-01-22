@@ -20,6 +20,15 @@ DATE: today
 
 * "Video on the back propagation algorithm":"https://www.youtube.com/watch?v=Ilg3gGewQ5U"
 
+!split
+===== Mathematics of deep learning =====
+
+!bblock Two recent books online
+o "The Modern Mathematics of Deep Learning, by Julius Berner, Philipp Grohs, Gitta Kutyniok, Philipp Petersen":"https://arxiv.org/abs/2105.04026", published as "Mathematical Aspects of Deep Learning, pp. 1-111. Cambridge University Press, 2022":"https://doi.org/10.1017/9781009025096.002"
+
+o "Mathematical Introduction to Deep Learning: Methods, Implementations, and Theory, Arnulf Jentzen, Benno Kuckuck, Philippe von Wurstemberger":"https://doi.org/10.48550/arXiv.2310.20360"
+!eblock
+
 
 !split
 ===== Reminder on books with hands-on material and codes =====
@@ -36,8 +45,8 @@ from Goodfellow, Bengio and Courville's text "Deep Learning":"https://www.deeple
 !split
 ===== Reading recommendations =====
 
-o Rashkca et al., chapter 11, jupyter-notebook sent separately 
-o Goodfellow et al, chapter 6 and 7 contain most of the neural network background
+o Rashkca et al., chapter 11, jupyter-notebook sent separately, from "GitHub":"https://github.com/rasbt/machine-learning-book"
+o Goodfellow et al, chapter 6 and 7 contain most of the neural network background.
 
 !split
 ===== Mathematics of deep learning and neural networks =====
@@ -120,6 +129,9 @@ o Stochastic gradient descent and various families of learning rate approximatio
 In addition to the above, there are often additional hyperparamaters
 which are included in the setup of a neural network. These will be
 discussed below.
+
+
+
 
 
 !split
@@ -453,11 +465,6 @@ b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta 
 
 
 
-
-
-
-
-
 !split
 ===== Fine-tuning neural network hyperparameters =====
 
@@ -749,6 +756,10 @@ better performance on a task can be achieved by using a few
 hand-engineered features (or even a collection of random
 features). 
 
+
+!split
+===== Limitations of NNs =====
+
 Here we list some of the important limitations of supervised neural network based models. 
 
 
@@ -756,6 +767,11 @@ Here we list some of the important limitations of supervised neural network base
 * _Need labeled data_. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g. one must pay for human experts to label images).
 * _Supervised neural networks are extremely data intensive._ DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.
 * _Homogeneous data._ Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.~some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.
+
+!split
+===== More limitations =====
+
+
 * _Many problems are not about prediction._ In natural science we are often interested in learning something about the underlying distribution that generates the data. In this case, it is often difficult to cast these ideas in a supervised learning setting. While the problems are related, it is possible to make good predictions with a *wrong* model. The model might or might not be useful for understanding the underlying science.
 
 Some of these remarks are particular to DNNs, others are shared by all supervised learning methods. This motivates the use of unsupervised methods which in part circumvent these problems.
@@ -774,16 +790,16 @@ neural network.
 
 The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.
 
-=== Learning rate methods  ===
+!split
+===== Learning rate methods  =====
 
 The code below shows object oriented implementations of the Constant,
 Momentum, Adagrad, AdagradMomentum, RMS prop and Adam schedulers. All
 of the classes belong to the shared abstract Scheduler class, and
-share the update_change() and reset() methods allowing for any of the
+share the update$\_$change() and reset() methods allowing for any of the
 schedulers to be seamlessly used during the training stage, as will
 later be shown in the fit() method of the neural
-network. Update_change() only has one parameter, the gradient
-($δ^l_ja^{l−1}_k$), and returns the change which will be subtracted
+network. Update$\_$change() only has one parameter, the gradient, and returns the change which will be subtracted
 from the weights. The reset() function takes no parameters, and resets
 the desired variables. For Constant and Momentum, reset does nothing.
 
@@ -922,7 +938,8 @@ class Adam(Scheduler):
 
 !ec
 
-=== Usage of the above learning rate schedulers ===
+!split
+===== Usage of the above learning rate schedulers =====
 
 To initalize a scheduler, simply create the object and pass in the
 necessary parameters such as the learning rate and the momentum as
@@ -951,8 +968,8 @@ for e in range(epochs):
 print(f"\nAfter scheduler:\n{weights=}")
 !ec
 
-
-=== Cost functions ===
+!split
+===== Cost functions =====
 
 Here we discuss cost functions that can be used when creating the
 neural network. Every cost function takes the target vector as its
@@ -1008,8 +1025,8 @@ valued_at_a = cost_func_derivative(a)
 print(f"Derivative of cost function {cost_func.__name__} valued at a:\n{valued_at_a}")
 !ec
 
-
-=== Activation functions ===
+!split
+===== Activation functions =====
 
 Finally, before we look at the neural network, we will look at the
 activation functions which can be specified between the hidden layers
@@ -1085,7 +1102,8 @@ valued_at_z = act_func_derivative(a)
 print(f"\nDerivative of {act_func.__name__} activation function valued at z:\n{valued_at_z}")
 !ec
 
-=== The Neural Network ===
+!split
+===== The Neural Network =====
 
 Now that we have gotten a good understanding of the implementation of
 some important components, we can take a look at an object oriented
@@ -1631,7 +1649,7 @@ scores = linear_regression.fit(X_train, t_train, scheduler)
 
 !ec
 
-Due to the progress bar we can see the MSE (train_error) throughout
+Due to the progress bar we can see the MSE (train$\_$error) throughout
 the FFNN's training. Note that the fit() function has some optional
 parameters with defualt arguments. For example, the regularization
 hyperparameter can be left ignored if not needed, and equally the FFNN
@@ -1713,7 +1731,8 @@ scores = neural_network.fit(X_train, t_train, scheduler, epochs=1000, X_val=X_va
 
 !ec
 
-=== Multiclass classification ===
+!split
+===== Multiclass classification =====
 
 Finally, we will demonstrate the use case of multiclass classification
 using our FFNN with the famous MNIST dataset, which contain images of
