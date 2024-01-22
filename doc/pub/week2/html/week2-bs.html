@@ -72,10 +72,11 @@ doconce format html week2.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'setting-up-the-equations-for-a-neural-network'),
               ('Definitions', 2, None, 'definitions'),
-              ('Inputs to tje activation function',
+              ('Inputs to the activation function',
                2,
                None,
-               'inputs-to-tje-activation-function'),
+               'inputs-to-the-activation-function'),
+              ('Basics of an NN', 2, None, 'basics-of-an-nn'),
               ('Derivatives and the chain rule',
                2,
                None,
@@ -238,7 +239,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#other-parameters" style="font-size: 80%;">Other parameters</a></li>
      <!-- navigation toc: --> <li><a href="#setting-up-the-equations-for-a-neural-network" style="font-size: 80%;">Setting up the equations for a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#definitions" style="font-size: 80%;">Definitions</a></li>
-     <!-- navigation toc: --> <li><a href="#inputs-to-tje-activation-function" style="font-size: 80%;">Inputs to tje activation function</a></li>
+     <!-- navigation toc: --> <li><a href="#inputs-to-the-activation-function" style="font-size: 80%;">Inputs to the activation function</a></li>
+     <!-- navigation toc: --> <li><a href="#basics-of-an-nn" style="font-size: 80%;">Basics of an NN</a></li>
      <!-- navigation toc: --> <li><a href="#derivatives-and-the-chain-rule" style="font-size: 80%;">Derivatives and the chain rule</a></li>
      <!-- navigation toc: --> <li><a href="#derivative-of-the-cost-function" style="font-size: 80%;">Derivative of the cost function</a></li>
      <!-- navigation toc: --> <li><a href="#bringing-it-together-first-back-propagation-equation" style="font-size: 80%;">Bringing it together, first back propagation equation</a></li>
@@ -506,7 +508,7 @@ $$
 
 <p>where \( b_k^l \) are the biases from layer \( l \).  Here \( M_{l-1} \)
 represents the total number of nodes/neurons/units of layer \( l-1 \). The
-figure here illustrates this equation.  We can rewrite this in a more
+figure in the whiteboard notes illustrates this equation.  We can rewrite this in a more
 compact form as the matrix-vector products we discussed earlier,
 </p>
 
@@ -516,7 +518,7 @@ $$
 
 
 <!-- !split -->
-<h2 id="inputs-to-tje-activation-function" class="anchor">Inputs to tje activation function </h2>
+<h2 id="inputs-to-the-activation-function" class="anchor">Inputs to the activation function </h2>
 
 <p>With the activation values \( \boldsymbol{z}^l \) we can in turn define the
 output of layer \( l \) as \( \boldsymbol{a}^l = f(\boldsymbol{z}^l) \) where \( f \) is our
@@ -529,6 +531,24 @@ $$
 a_j^l = f(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
 $$
 
+
+<!-- !split -->
+<h2 id="basics-of-an-nn" class="anchor">Basics of an NN </h2>
+
+<p>A neural network consists of a series of hidden layers, in addition to
+the input and output layers.  Each layer \( l \) has a set of parameters
+\( \boldsymbol{\Theta}^{(l)}=\{bm{W}^{(l)},\boldsymbol{b}^{(l)} \) which are related to the
+parameters in other layers through a series of affine transformations,
+for a standard NN these are matrix-matrix and matrix-vector
+multiplications.  For all layers we will simplye use a collective variable \( \boldsymbol{\Theta} \).
+</p>
+
+<p>It consist of two basic steps:</p>
+<ol>
+<li> a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.</li>
+<li> a back-propagation state where the unknown parameters \( \boldsymbol{\Theta} \) are updated through the optimization of the their gradients. The expressions for the gradients are obtained via the chain rule, starting from the derivative of the cost/function.</li>
+</ol>
+<p>These two steps make up one iteration. This iterative process is continued till we reac an eventual stopping criterion.</p>
 
 <!-- !split -->
 <h2 id="derivatives-and-the-chain-rule" class="anchor">Derivatives and the chain rule </h2>
