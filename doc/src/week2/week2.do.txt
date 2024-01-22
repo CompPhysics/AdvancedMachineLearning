@@ -132,8 +132,6 @@ discussed below.
 
 
 
-
-
 !split
 ===== Setting up the equations for a neural network =====
 
@@ -173,7 +171,7 @@ z_j^l = \sum_{i=1}^{M_{l-1}}w_{ij}^la_i^{l-1}+b_j^l,
 
 where $b_k^l$ are the biases from layer $l$.  Here $M_{l-1}$
 represents the total number of nodes/neurons/units of layer $l-1$. The
-figure here illustrates this equation.  We can rewrite this in a more
+figure in the whiteboard notes illustrates this equation.  We can rewrite this in a more
 compact form as the matrix-vector products we discussed earlier,
 
 !bt
@@ -183,7 +181,7 @@ compact form as the matrix-vector products we discussed earlier,
 !et
 
 !split
-===== Inputs to tje activation function =====
+===== Inputs to the activation function =====
 
 With the activation values $\bm{z}^l$ we can in turn define the
 output of layer $l$ as $\bm{a}^l = f(\bm{z}^l)$ where $f$ is our
@@ -196,6 +194,23 @@ and their nodes.  It means we have
 a_j^l = f(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
 \]
 !et
+
+
+!split
+===== Basics of an NN =====
+
+A neural network consists of a series of hidden layers, in addition to
+the input and output layers.  Each layer $l$ has a set of parameters
+$\bm{\Theta}^{(l)}=\{bm{W}^{(l)},\bm{b}^{(l)}$ which are related to the
+parameters in other layers through a series of affine transformations,
+for a standard NN these are matrix-matrix and matrix-vector
+multiplications.  For all layers we will simplye use a collective variable $\bm{\Theta}$.
+
+It consist of two basic steps:
+o a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.
+o a back-propagation state where the unknown parameters $\bm{\Theta}$ are updated through the optimization of the their gradients. The expressions for the gradients are obtained via the chain rule, starting from the derivative of the cost/function.
+
+These two steps make up one iteration. This iterative process is continued till we reac an eventual stopping criterion.
 
 
 !split
