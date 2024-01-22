@@ -29,7 +29,7 @@ class NNClassifier(nn.Module):
         x = self.act_output(self.output(x))
         return x
  
-model = PimaClassifier()
+model = NNClassifier()
 print(model)
  
 # train the model
