@@ -704,6 +704,29 @@ fast to compute).
 
 
 !split
+===== Example to illustrate dying gradients =====
+
+Consider a simple NN in which the inputs $\bm{x}, the weights
+$\bm{W}$, the biases $\bm{b}$ and the ouputs
+$\bm{\tilde{y}}=f(\bm{x};\bm{\Theta})$ are just scalars and that we
+have two layers only, that is the output layer is labeled with $L=2$.
+
+Our output is then (no boldfaced symbols since all quantities are scalars)
+!bt
+\[
+\tilde{y}=f(x;Theta))=\sigma_{L=2}(w_2\sigma_1(w_1x+b_1)+b_2). 
+\]
+!et
+
+For the back-propagation algorithm we will need various partial derivatives. One of these is
+!bt
+\[
+\frac{\partial f(x;\Theta)}{\partial w_1)=\sigma_2^'(w_2\sigma_1(w_1x+b_1)+b_2)\times w_2\sigma_1^'(w_1x+b_1)x.
+\]
+!et
+
+_See whiteboard notes for rest_.
+!split
 ===== The RELU function family =====
 
 The ReLU activation function suffers from a problem known as the dying
