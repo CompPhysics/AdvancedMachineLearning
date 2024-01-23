@@ -103,10 +103,22 @@ div.toc p,a {
                2,
                None,
                'universal-approximation-theorem'),
+              ('Some parallels from real analysis',
+               2,
+               None,
+               'some-parallels-from-real-analysis'),
               ('The approximation theorem in words',
                2,
                None,
                'the-approximation-theorem-in-words'),
+              ('More on the general approximation theorem',
+               2,
+               None,
+               'more-on-the-general-approximation-theorem'),
+              ('Class of functions we can approximate',
+               2,
+               None,
+               'class-of-functions-we-can-approximate'),
               ('Setting up the equations for a neural network',
                2,
                None,
@@ -176,6 +188,10 @@ div.toc p,a {
                2,
                None,
                'the-derivative-of-the-logistic-funtion'),
+              ('Insights from the paper by Glorot and Bengio',
+               2,
+               None,
+               'insights-from-the-paper-by-glorot-and-bengio'),
               ('The RELU function family', 2, None, 'the-relu-function-family'),
               ('Which activation function should we use?',
                2,
@@ -196,11 +212,16 @@ div.toc p,a {
                2,
                None,
                'a-top-down-perspective-on-neural-networks'),
+              ('More top-down perspectives',
+               2,
+               None,
+               'more-top-down-perspectives'),
               ('Limitations of supervised learning with deep networks',
                2,
                None,
                'limitations-of-supervised-learning-with-deep-networks'),
               ('Limitations of NNs', 2, None, 'limitations-of-nns'),
+              ('Homogeneous data', 2, None, 'homogeneous-data'),
               ('More limitations', 2, None, 'more-limitations'),
               ('Building a neural network code',
                2,
@@ -349,10 +370,10 @@ automatic differentation.
 
 <p>A neural network consists of a series of hidden layers, in addition to
 the input and output layers.  Each layer \( l \) has a set of parameters
-\( \boldsymbol{\Theta}^{(l)}=\{bm{W}^{(l)},\boldsymbol{b}^{(l)} \) which are related to the
+\( \boldsymbol{\Theta}^{(l)}=(\boldsymbol{W}^{(l)},\boldsymbol{b}^{(l)}) \) which are related to the
 parameters in other layers through a series of affine transformations,
 for a standard NN these are matrix-matrix and matrix-vector
-multiplications.  For all layers we will simplye use a collective variable \( \boldsymbol{\Theta} \).
+multiplications.  For all layers we will simply use a collective variable \( \boldsymbol{\Theta} \).
 </p>
 
 <p>It consist of two basic steps:</p>
@@ -396,7 +417,7 @@ C(\boldsymbol{\Theta})=\frac{1}{n}\left\{\left(\boldsymbol{y}-\boldsymbol{X}\bol
 $$
 
 <p>This function represents one of many possible ways to define
-the so-called cost function.
+the so-called cost function. Note that here we have assumed a linear dependence in terms of the paramters \( \boldsymbol{\Theta} \). This is in general not the case.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -459,14 +480,24 @@ $$
 <p>Given a continuous and deterministic function \( F(\boldsymbol{x}) \) on the unit
 cube in \( d \)-dimensions \( F\in [0,1]^d \), \( x\in [0,1]^d \) and a parameter
 \( \epsilon >0 \), there is a one-layer (hidden) neural network
-\( f(\boldsymbol{x};bm{\Theta}) \) with \( bm{\Theta}=\boldsymbol{W},\boldsymbol{b} \) and \( \boldsymbol{W}\in
+\( f(\boldsymbol{x};bm{\Theta}) \) with \( \boldsymbol{\Theta}=(\boldsymbol{W},\boldsymbol{b}) \) and \( \boldsymbol{W}\in
 \mathbb{R}^{m\times n} \) and \( \boldsymbol{b}\in \mathbb{R}^{n} \), for which
 </p>
 $$
-\vert F(\boldsymbol{x})-f(\boldsymbol{x};bm{\Theta})\vert < \epsilon \forall \boldsymbol{x}\in[0,1]^d.
+\vert F(\boldsymbol{x})-f(\boldsymbol{x};\boldsymbol{\Theta})\vert < \epsilon \hspace{0.1cm} \forall \boldsymbol{x}\in[0,1]^d.
 $$
 </div>
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="some-parallels-from-real-analysis">Some parallels from real analysis </h2>
+
+<p>For those of you familiar with for example the <a href="https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem" target="_blank">Stone-Weierstrass
+theorem</a>
+for polynomial approximations or the convergence criterion for Fourier
+series, there are similarities in the derivation of the proof for
+neural networks. See hand whiteboard notes.
+</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="the-approximation-theorem-in-words">The approximation theorem in words </h2>
@@ -485,6 +516,35 @@ $$
 $$
 \mathbb{E}[\vert F(\boldsymbol{x})-f(\boldsymbol{x};\boldsymbol{\Theta})\vert^2] =\int_{\boldsymbol{x}\in D} \vert F(\boldsymbol{x})-f(\boldsymbol{x};\boldsymbol{\Theta})\vert^2p(\boldsymbol{x})d\boldsymbol{x} < \epsilon.
 $$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-on-the-general-approximation-theorem">More on the general approximation theorem </h2>
+
+<p>None of the proofs give any insight into the relation between the
+number of of hidden layers and nodes and the approximation error
+\( \epsilon \), nor the magnitudes of \( \boldsymbol{W} \) and \( \boldsymbol{b} \).
+</p>
+
+<p>Neural networks (NNs) have what we may call a kind of universality no matter what function we want to compute.</p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>It does not mean that an NN can be used to exactly compute any function. Rather, we get an approximation that is as good as we want. </p>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="class-of-functions-we-can-approximate">Class of functions we can approximate </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>The class of functions that can be approximated are the continuous ones.
+If the function \( F(\boldsymbol{x}) \) is discontinuous, it won't in general be possible to approximate it. However, an NN may still give an approximation even if we fail in some points.
+</p>
+</div>
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -912,6 +972,9 @@ its inputs, and we also need the gradients to have equal variance
 before and after flowing through a layer in the reverse direction.
 </p>
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="insights-from-the-paper-by-glorot-and-bengio">Insights from the paper by Glorot and Bengio </h2>
+
 <p>One of the insights in the 2010 paper by Glorot and Bengio was that
 the vanishing/exploding gradients problems were in part due to a poor
 choice of activation function. Until then most people had assumed that
@@ -1037,7 +1100,7 @@ Normalization is preferred.
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="a-very-nice-website-on-neural-networks">A very nice website on Neural Networks </h2>
 
-<p>You may find this <a href="https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.29243&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false" target="_blank">website</a> very useful. </p>
+<p><a href="https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.29243&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false" target="_blank">You may find this website</a> very useful. </p>
 
 <!-- !split  -->
 <h2 id="a-top-down-perspective-on-neural-networks">A top-down perspective on Neural networks </h2>
@@ -1058,6 +1121,9 @@ cardinal sin in ML. Then:
 <li> Minimize underfitting (bias) on training data set.</li>
 <li> Make sure you are not overfitting.</li>
 </ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-top-down-perspectives">More top-down perspectives </h2>
+
 <p>If the validation and test sets are drawn from the same distributions,
 then a good performance on the validation set should lead to similarly
 good performance on the test set. 
@@ -1099,6 +1165,11 @@ features).
 <ul>
 <li> <b>Need labeled data</b>. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g. one must pay for human experts to label images).</li>
 <li> <b>Supervised neural networks are extremely data intensive.</b> DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.</li>
+</ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="homogeneous-data">Homogeneous data </h2>
+
+<ul>
 <li> <b>Homogeneous data.</b> Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.&nbsp;some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.</li>
 </ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -1120,7 +1191,9 @@ functions and activation functions that can be used together with the
 neural network.
 </p>
 
-<p>The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.</p>
+<p>The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.
+After these codes we present the TensorFlow inplementation. Pytorch will be discussed next week.
+</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="learning-rate-methods">Learning rate methods  </h2>

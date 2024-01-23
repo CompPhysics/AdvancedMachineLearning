@@ -66,10 +66,10 @@ automatic differentation.
 
 A neural network consists of a series of hidden layers, in addition to
 the input and output layers.  Each layer $l$ has a set of parameters
-$\bm{\Theta}^{(l)}=\{bm{W}^{(l)},\bm{b}^{(l)}$ which are related to the
+$\bm{\Theta}^{(l)}=(\bm{W}^{(l)},\bm{b}^{(l)})$ which are related to the
 parameters in other layers through a series of affine transformations,
 for a standard NN these are matrix-matrix and matrix-vector
-multiplications.  For all layers we will simplye use a collective variable $\bm{\Theta}$.
+multiplications.  For all layers we will simply use a collective variable $\bm{\Theta}$.
 
 It consist of two basic steps:
 o a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.
@@ -110,7 +110,7 @@ C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\b
 \]
 !et
 This function represents one of many possible ways to define
-the so-called cost function.
+the so-called cost function. Note that here we have assumed a linear dependence in terms of the paramters $\bm{\Theta}$. This is in general not the case.
 
 
 !split
@@ -165,15 +165,24 @@ Let $\sigma$ be any continuous sigmoidal function such that
 Given a continuous and deterministic function $F(\bm{x})$ on the unit
 cube in $d$-dimensions $F\in [0,1]^d$, $x\in [0,1]^d$ and a parameter
 $\epsilon >0$, there is a one-layer (hidden) neural network
-$f(\bm{x};bm{\Theta})$ with $bm{\Theta}=\bm{W},\bm{b}$ and $\bm{W}\in
+$f(\bm{x};bm{\Theta})$ with $\bm{\Theta}=(\bm{W},\bm{b})$ and $\bm{W}\in
 \mathbb{R}^{m\times n}$ and $\bm{b}\in \mathbb{R}^{n}$, for which
 !bt
 \[
-\vert F(\bm{x})-f(\bm{x};bm{\Theta})\vert < \epsilon \forall \bm{x}\in[0,1]^d.
+\vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert < \epsilon \hspace{0.1cm} \forall \bm{x}\in[0,1]^d.
 \]
 !et
 
 !eblock
+
+!split
+===== Some parallels from real analysis =====
+
+For those of you familiar with for example the "Stone-Weierstrass
+theorem":"https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem"
+for polynomial approximations or the convergence criterion for Fourier
+series, there are similarities in the derivation of the proof for
+neural networks. See hand whiteboard notes.
 
 !split
 ===== The approximation theorem in words =====
@@ -194,6 +203,28 @@ Then we have
 \mathbb{E}[\vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2p(\bm{x})d\bm{x} < \epsilon.
 \]
 !et
+
+
+!split
+===== More on the general approximation theorem =====
+
+None of the proofs give any insight into the relation between the
+number of of hidden layers and nodes and the approximation error
+$\epsilon$, nor the magnitudes of $\bm{W}$ and $\bm{b}$.
+
+Neural networks (NNs) have what we may call a kind of universality no matter what function we want to compute.
+
+!bblock
+It does not mean that an NN can be used to exactly compute any function. Rather, we get an approximation that is as good as we want. 
+!eblock
+
+!split
+===== Class of functions we can approximate =====
+
+!bblock
+The class of functions that can be approximated are the continuous ones.
+If the function $F(\bm{x})$ is discontinuous, it won't in general be possible to approximate it. However, an NN may still give an approximation even if we fail in some points.
+!eblock
 
 
 
@@ -650,6 +681,8 @@ its inputs, and we also need the gradients to have equal variance
 before and after flowing through a layer in the reverse direction.
 
 
+!split
+===== Insights from the paper by Glorot and Bengio =====
 
 One of the insights in the 2010 paper by Glorot and Bengio was that
 the vanishing/exploding gradients problems were in part due to a poor
@@ -768,7 +801,7 @@ Normalization is preferred.
 !split
 =====  A very nice website on Neural Networks =====
 
-You may find this "website":"https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.29243&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false" very useful. 
+"You may find this website":"https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.29243&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false" very useful. 
 
 !split 
 ===== A top-down perspective on Neural networks =====
@@ -790,6 +823,11 @@ cardinal sin in ML. Then:
 * Minimize underfitting (bias) on training data set.
 
 * Make sure you are not overfitting.
+
+
+
+!split
+===== More top-down perspectives =====
 
 If the validation and test sets are drawn from the same distributions,
 then a good performance on the validation set should lead to similarly
@@ -831,6 +869,11 @@ Here we list some of the important limitations of supervised neural network base
 
 * _Need labeled data_. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g. one must pay for human experts to label images).
 * _Supervised neural networks are extremely data intensive._ DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.
+
+
+!split
+===== Homogeneous data =====
+
 * _Homogeneous data._ Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.~some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.
 
 !split
@@ -854,6 +897,7 @@ functions and activation functions that can be used together with the
 neural network.
 
 The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.
+After these codes we present the TensorFlow inplementation. Pytorch will be discussed next week.
 
 !split
 ===== Learning rate methods  =====
