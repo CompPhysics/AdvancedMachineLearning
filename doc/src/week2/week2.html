@@ -180,6 +180,10 @@ div.toc p,a {
                2,
                None,
                'universal-approximation-theorem'),
+              ('The approximation theorem in words',
+               2,
+               None,
+               'the-approximation-theorem-in-words'),
               ('Setting up the equations for a neural network',
                2,
                None,
@@ -515,9 +519,12 @@ discussed below.
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="universal-approximation-theorem">Universal approximation theorem </h2>
-<p>The universal approximation theorem plays a central role in deep learning.
-<a href="https://link.springer.com/article/10.1007/BF02551274" target="_blank">Cybenko (1989)</a> showed the following:
+
+<p>The universal approximation theorem plays a central role in deep
+learning.  <a href="https://link.springer.com/article/10.1007/BF02551274" target="_blank">Cybenko (1989)</a> showed
+the following:
 </p>
+
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
@@ -525,7 +532,36 @@ discussed below.
 $$
 \sigma(z) = \left\{\begin{array}{cc} 1 & z\rightarrow \infty\\ 0 & \rightarrow -\infty \end{array}\right.
 $$
+
+<p>Given a continuous and deterministic function \( F(\boldsymbol{x}) \) on the unit
+cube in \( d \)-dimensions \( F\in [0,1]^d \), \( x\in [0,1]^d \) and a parameter
+\( \epsilon >0 \), there is a one-layer (hidden) neural network
+\( f(\boldsymbol{x};bm{\Theta}) \) with \( bm{\Theta}=\boldsymbol{W},\boldsymbol{b} \) and \( \boldsymbol{W}\in
+\mathbb{R}^{m\times n} \) and \( \boldsymbol{b}\in \mathbb{R}^{n} \), for which
+</p>
+$$
+\vert F(\boldsymbol{x})-f(\boldsymbol{x};bm{\Theta})\vert < \epsilon \forall \boldsymbol{x}\in[0,1]^d.
+$$
 </div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-approximation-theorem-in-words">The approximation theorem in words </h2>
+
+<p><b>Any continuous function \( y=F(\boldsymbol{x}) \) supported on the unit cube in
+\( d \)-dimensions can be approximated by a one-layer sigmoidal network to
+arbitrary accuracy.</b>
+</p>
+
+<p><a href="https://www.sciencedirect.com/science/article/abs/pii/089360809190009T" target="_blank">Hornik (1991)</a> extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value</p>
+$$
+\mathbb{E}[\vert F(\boldsymbol{x})\vert^2] =\int_{\boldsymbol{x}\in D} \vert F(\boldsymbol{x})\vert^2p(\boldsymbol{x})d\boldsymbol{x} < \infty.
+$$
+
+<p>Then we have</p>
+$$
+\mathbb{E}[\vert F(\boldsymbol{x})-f(\boldsymbol{x};\boldsymbol{\Theta})\vert^2] =\int_{\boldsymbol{x}\in D} \vert F(\boldsymbol{x})-f(\boldsymbol{x};\boldsymbol{\Theta})\vert^2p(\boldsymbol{x})d\boldsymbol{x} < \epsilon.
+$$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>

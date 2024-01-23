@@ -175,6 +175,27 @@ $f(\bm{x};bm{\Theta})$ with $bm{\Theta}=\bm{W},\bm{b}$ and $\bm{W}\in
 
 !eblock
 
+!split
+===== The approximation theorem in words =====
+
+_Any continuous function $y=F(\bm{x})$ supported on the unit cube in
+$d$-dimensions can be approximated by a one-layer sigmoidal network to
+arbitrary accuracy._
+
+"Hornik (1991)":"https://www.sciencedirect.com/science/article/abs/pii/089360809190009T" extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value
+!bt
+\[
+\mathbb{E}[\vert F(\bm{x})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})\vert^2p(\bm{x})d\bm{x} < \infty.
+\]
+!et
+Then we have
+!bt
+\[
+\mathbb{E}[\vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2p(\bm{x})d\bm{x} < \epsilon.
+\]
+!et
+
+
 
 !split
 ===== Setting up the equations for a neural network =====

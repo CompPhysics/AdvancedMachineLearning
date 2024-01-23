@@ -473,14 +473,42 @@ discussed below.
 
 % !split
 \subsection{Universal approximation theorem}
-The universal approximation theorem plays a central role in deep learning.
-\href{{https://link.springer.com/article/10.1007/BF02551274}}{Cybenko (1989)} showed the following:
+
+The universal approximation theorem plays a central role in deep
+learning.  \href{{https://link.springer.com/article/10.1007/BF02551274}}{Cybenko (1989)} showed
+the following:
+
 \begin{block}{}
 Let $\sigma$ be any continuous sigmoidal function such that
 \[
 \sigma(z) = \left\{\begin{array}{cc} 1 & z\rightarrow \infty\\ 0 & \rightarrow -\infty \end{array}\right.
 \]
+Given a continuous and deterministic function $F(\bm{x})$ on the unit
+cube in $d$-dimensions $F\in [0,1]^d$, $x\in [0,1]^d$ and a parameter
+$\epsilon >0$, there is a one-layer (hidden) neural network
+$f(\bm{x};bm{\Theta})$ with $bm{\Theta}=\bm{W},\bm{b}$ and $\bm{W}\in
+\mathbb{R}^{m\times n}$ and $\bm{b}\in \mathbb{R}^{n}$, for which
+\[
+\vert F(\bm{x})-f(\bm{x};bm{\Theta})\vert < \epsilon \forall \bm{x}\in[0,1]^d.
+\]
+
 \end{block}
+
+% !split
+\subsection{The approximation theorem in words}
+
+\textbf{Any continuous function $y=F(\bm{x})$ supported on the unit cube in
+$d$-dimensions can be approximated by a one-layer sigmoidal network to
+arbitrary accuracy.}
+
+\href{{https://www.sciencedirect.com/science/article/abs/pii/089360809190009T}}{Hornik (1991)} extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value
+\[
+\mathbb{E}[\vert F(\bm{x})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})\vert^2p(\bm{x})d\bm{x} < \infty.
+\]
+Then we have
+\[
+\mathbb{E}[\vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2p(\bm{x})d\bm{x} < \epsilon.
+\]
 
 % !split
 \subsection{Setting up the equations for a neural network}
