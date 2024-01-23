@@ -1,6 +1,6 @@
 TITLE: January 22-26: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: today
+DATE: January 23
 
 
 
@@ -82,8 +82,8 @@ These two steps make up one iteration. This iterative process is continued till 
 ===== Overarching view of a neural network =====
 
 The architecture of a neural network defines our model. This model
-aims at describing some function $f(\bm{x}$ which aims at describing
-some final result (outputs or tagrget values) given a specific inpput
+aims at describing some function $f(\bm{x}$ that is meant to describe
+some final result (outputs or target values $bm{y}$) given a specific input
 $\bm{x}$. Note that here $\bm{y}$ and $\bm{x}$ are not limited to be
 vectors.
 
@@ -91,8 +91,8 @@ The architecture consists of
 o An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with the target value $\bm{y}$
 o A given number of hidden layers and neurons/nodes/units for each layer (this may vary)
 o A given activation function $\sigma(\bm{z})$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer.
-o The last layer, normally called _output_ layer has normally an activation function tailored to the specific problem
-o Finally we define a so-called cost or loss function which is used to gauge the quality of our model. 
+o The last layer, normally called _output_ layer has an activation function tailored to the specific problem
+o Finally, we define a so-called cost or loss function which is used to gauge the quality of our model. 
 
 
 !split
