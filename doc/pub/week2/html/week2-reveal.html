@@ -501,11 +501,11 @@ all inputs \( \boldsymbol{x} \) are given by \( \boldsymbol{\tilde{y}}_i \).
 </section>
 
 <section>
-<h2 id="layout-of-a-neural-network">Layout of a neural network </h2>
+<h2 id="layout-of-a-neural-network-with-three-hidden-layers">Layout of a neural network with three hidden layers </h2>
 
 <br/><br/>
 <center>
-<p><img src="figures/nnmodel.png" width="900" align="bottom"></p>
+<p><img src="figures/nn1.png" width="900" align="bottom"></p>
 </center>
 <br/><br/>
 </section>
@@ -786,8 +786,10 @@ the pertinent outputs \( \hat{a}^1 \).
 <p><b>Secondly</b>, we perform then the feed forward till we reach the output
 layer and compute all \( \hat{z}_l \) of the input layer and compute the
 activation function and the pertinent outputs \( \hat{a}^l \) for
-\( l=2,3,\dots,L \).
+\( l=1,2,3,\dots,L \).
 </p>
+
+<p><b>Notation</b>: The first hidden layer has \( l=1 \) as label and the final output layer has \( l=L \).</p>
 </section>
 
 <section>
@@ -800,7 +802,7 @@ $$
 $$
 <p>&nbsp;<br>
 
-<p>Then we compute the back propagate error for each \( l=L-1,L-2,\dots,2 \) as</p>
+<p>Then we compute the back propagate error for each \( l=L-1,L-2,\dots,1 \) as</p>
 <p>&nbsp;<br>
 $$
 \delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l).
