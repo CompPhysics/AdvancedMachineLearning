@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.datasets} \PYG{k+kn}{import} \PYG{n}{load\PYGZus{}breast\PYGZus{}cancer}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.preprocessing} \PYG{k+kn}{import} \PYG{n}{MinMaxScaler}
+
+\PYG{n}{wisconsin} \PYG{o}{=} \PYG{n}{load\PYGZus{}breast\PYGZus{}cancer}\PYG{p}{()}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{wisconsin}\PYG{o}{.}\PYG{n}{data}
+\PYG{n}{target} \PYG{o}{=} \PYG{n}{wisconsin}\PYG{o}{.}\PYG{n}{target}
+\PYG{n}{target} \PYG{o}{=} \PYG{n}{target}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{target}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{1}\PYG{p}{)}
+
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}val}\PYG{p}{,} \PYG{n}{t\PYGZus{}train}\PYG{p}{,} \PYG{n}{t\PYGZus{}val} \PYG{o}{=} \PYG{n}{train\PYGZus{}test\PYGZus{}split}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{target}\PYG{p}{)}
+
+\PYG{n}{scaler} \PYG{o}{=} \PYG{n}{MinMaxScaler}\PYG{p}{()}
+\PYG{n}{scaler}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{scaler}\PYG{o}{.}\PYG{n}{transform}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{X\PYGZus{}val} \PYG{o}{=} \PYG{n}{scaler}\PYG{o}{.}\PYG{n}{transform}\PYG{p}{(}\PYG{n}{X\PYGZus{}val}\PYG{p}{)}
+
+
+
+\end{Verbatim}

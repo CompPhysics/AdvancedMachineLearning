@@ -58,11 +58,25 @@ stage, consist of series of affine matrix-matrix and matrix-vector
 multiplications. The unknown parameters (the so-called biases and
 weights which deternine the architecture of a neural network), are
 uptaded iteratively using the so-called back-propagation algorithm.
-This algorithm corresponds to the so-called reverse mode of the
-automatic differentation algorithm. These algorithms will be discussed
-in more detail below.
+This algorithm corresponds to the so-called reverse mode of 
+automatic differentation. 
 
-We start however first with the  definitions of the various variables which make up a neural network.
+!split
+===== Basics of an NN =====
+
+A neural network consists of a series of hidden layers, in addition to
+the input and output layers.  Each layer $l$ has a set of parameters
+$\bm{\Theta}^{(l)}=\{bm{W}^{(l)},\bm{b}^{(l)}$ which are related to the
+parameters in other layers through a series of affine transformations,
+for a standard NN these are matrix-matrix and matrix-vector
+multiplications.  For all layers we will simplye use a collective variable $\bm{\Theta}$.
+
+It consist of two basic steps:
+o a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.
+o a back-propagation state where the unknown parameters $\bm{\Theta}$ are updated through the optimization of the their gradients. The expressions for the gradients are obtained via the chain rule, starting from the derivative of the cost/function.
+
+These two steps make up one iteration. This iterative process is continued till we reach an eventual stopping criterion.
+
 
 !split
 ===== Overarching view of a neural network =====
@@ -82,7 +96,7 @@ o Finally we define a so-called cost or loss function which is used to gauge the
 
 
 !split
-===== The optimzation problem =====
+===== The optimization problem =====
 
 The cost function is a function of the unknown parameters
 $\bm{\Theta}$ where the latter is a container for all possible
@@ -98,6 +112,9 @@ C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\b
 This function represents one of many possible ways to define
 the so-called cost function.
 
+
+!split
+===== Parameters of neural networks =====
 For neural networks the parameters
 $\bm{\Theta}$ are given by the so-called weights and biases (to be
 defined below).
@@ -131,13 +148,40 @@ which are included in the setup of a neural network. These will be
 discussed below.
 
 
+!split
+===== Universal approximation theorem =====
+
+The universal approximation theorem plays a central role in deep
+learning.  "Cybenko (1989)":"https://link.springer.com/article/10.1007/BF02551274" showed
+the following:
+
+!bblock
+Let $\sigma$ be any continuous sigmoidal function such that
+!bt
+\[
+\sigma(z) = \left\{\begin{array}{cc} 1 & z\rightarrow \infty\\ 0 & \rightarrow -\infty \end{array}\right.
+\]
+!et
+Given a continuous and deterministic function $F(\bm{x})$ on the unit
+cube in $d$-dimensions $F\in [0,1]^d$, $x\in [0,1]^d$ and a parameter
+$\epsilon >0$, there is a one-layer (hidden) neural network
+$f(\bm{x};bm{\Theta})$ with $bm{\Theta}=\bm{W},\bm{b}$ and $\bm{W}\in
+\mathbb{R}^{m\times n}$ and $\bm{b}\in \mathbb{R}^{n}$, for which
+!bt
+\[
+\vert F(\bm{x})-f(\bm{x};bm{\Theta})\vert < \epsilon \forall \bm{x}\in[0,1]^d.
+\]
+!et
+
+!eblock
+
 
 !split
 ===== Setting up the equations for a neural network =====
 
 The questions we want to ask are how do changes in the biases and the
 weights in our network change the cost function and how can we use the
-final output to modify the weights?
+final output to modify the weights and biases?
 
 To derive these equations let us start with a plain regression problem
 and define our cost function as
@@ -196,21 +240,6 @@ a_j^l = f(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
 !et
 
 
-!split
-===== Basics of an NN =====
-
-A neural network consists of a series of hidden layers, in addition to
-the input and output layers.  Each layer $l$ has a set of parameters
-$\bm{\Theta}^{(l)}=\{bm{W}^{(l)},\bm{b}^{(l)}$ which are related to the
-parameters in other layers through a series of affine transformations,
-for a standard NN these are matrix-matrix and matrix-vector
-multiplications.  For all layers we will simplye use a collective variable $\bm{\Theta}$.
-
-It consist of two basic steps:
-o a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.
-o a back-propagation state where the unknown parameters $\bm{\Theta}$ are updated through the optimization of the their gradients. The expressions for the gradients are obtained via the chain rule, starting from the derivative of the cost/function.
-
-These two steps make up one iteration. This iterative process is continued till we reac an eventual stopping criterion.
 
 
 !split
