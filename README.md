@@ -30,14 +30,15 @@ Furthermore, all teaching material is available from this GitHub link.
 - Deep learning, neural networks, basic equations
 - Recommended reading Goodfellow et al chapters 6 and 7
 - Video of first lecture at https://youtu.be/dP8g_tjQ_9c
-Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 
 ##  January 22-26
 - Mathematics  of deep learning, basics of neural networks
 - Introducing TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
-
+- Link to video of ledture at https://youtu.be/SEYuOoMws_k
+- Link to whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesJanuary23.pdf
 
 ## January 29-February 2
 - Implementing neural networks with applications to differential equations
