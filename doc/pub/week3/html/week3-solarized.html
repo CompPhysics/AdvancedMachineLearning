@@ -142,10 +142,27 @@ div.toc p,a {
                None,
                'reminder-on-the-chain-rule-and-gradients'),
               ('Multivariable functions', 2, None, 'multivariable-functions'),
-              ('Bringing it together, first back propagation equation',
+              ('Automatic differentiation through examples',
                2,
                None,
-               'bringing-it-together-first-back-propagation-equation'),
+               'automatic-differentiation-through-examples'),
+              ('Simple example', 2, None, 'simple-example'),
+              ('Smarter way of evaluating the above function',
+               2,
+               None,
+               'smarter-way-of-evaluating-the-above-function'),
+              ('Reducing the number of operations',
+               2,
+               None,
+               'reducing-the-number-of-operations'),
+              ('Chain rule, forward and reverse modes',
+               2,
+               None,
+               'chain-rule-forward-and-reverse-modes'),
+              ('First back propagation equation',
+               2,
+               None,
+               'first-back-propagation-equation'),
               ('Analyzing the last results',
                2,
                None,
@@ -696,7 +713,129 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="bringing-it-together-first-back-propagation-equation">Bringing it together, first back propagation equation </h2>
+<h2 id="automatic-differentiation-through-examples">Automatic differentiation through examples </h2>
+
+<p>A great introduction to automatic differentiation is given by Baydin et al., see <a href="https://arxiv.org/abs/1502.05767" target="_blank"><tt>https://arxiv.org/abs/1502.05767</tt></a>.</p>
+
+<p>Automatic differentiation is a represented by a repeated application
+of the chain rule on well-known functions and allows for the
+calculation of derivatives to numerical precision. It is not the same
+as the calculation of symbolic derivatives via for example SymPy, nor
+does it use approximative formulae based on Taylor-expansions of a
+function around a given value. The latter are error prone due to
+truncation errors and values of the step size \( \Delta \).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="simple-example">Simple example </h2>
+
+<p>Our first example is rather simple,</p>
+$$
+f(x) \exp{x^2},
+$$
+
+<p>with derivative</p>
+$$
+f'(x) 2x\exp{x^2}.
+$$
+
+<p>We can use SymPy to extract the pertinent lines of Python code through the following simple example</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">__future__</span> <span style="color: #8B008B; font-weight: bold">import</span> division
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">sympy</span> <span style="color: #8B008B; font-weight: bold">import</span> *
+x = symbols(<span style="color: #CD5555">&#39;x&#39;</span>)
+expr = sqrt(x*x+exp(x*x))
+simplify(expr)
+derivative = diff(expr,x)
+<span style="color: #658b00">print</span>(python(expr))
+<span style="color: #658b00">print</span>(python(derivative))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="smarter-way-of-evaluating-the-above-function">Smarter way of evaluating the above function </h2>
+<p>If we study this function, we note that we can reduce the number of operations by introducing an intermediate variable</p>
+$$
+a = x^2,
+$$
+
+<p>leading to </p>
+$$
+f(x) = f(a(x)) = b= \exp{a}.
+$$
+
+<p>We now assume that all operations can be counted in terms of equal
+floating point operations. This means that in order to calculate
+\( f(x) \) we need first to square \( x \) and the compute the exponential. We
+have thus two floating point operations only.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reducing-the-number-of-operations">Reducing the number of operations </h2>
+
+<p>With the introduction of a precalculated quantity \( a \) and thereby \( f(x) \) we have that the derivative can be written as</p>
+
+$$
+f'(x) = 2xb,
+$$
+
+<p>which reduces the number of operations from four in the orginal
+expression to two. This means that if we need to compute \( f(x) \) and
+its derivative (a common task in optimizations), we have reduced the
+number of operations from six to four in total.
+</p>
+
+<p><b>Note</b> that the usage of a symbolic software like SymPy does not
+include such simplifications and the calculations of the function and
+the derivatives yield in general more floating point operations.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="chain-rule-forward-and-reverse-modes">Chain rule, forward and reverse modes </h2>
+
+<p>In the above example we have introduced the variables \( a \) and \( b \), and our function is</p>
+$$
+f(x) = f(a(x)) = b= \exp{a},
+$$
+
+<p>with \( a=x^2 \). We can decompose the derivative of \( f \) with respect to \( x \) as</p>
+$$
+\frac{df}{dx}=\frac{df}{db}\frac{db}{da}\frac{da}{dx}.
+$$
+
+<p>We note that since \( b=f(x) \) that</p>
+$$
+\frac{df}{db}=1,
+$$
+
+<p>leading to</p>
+$$
+\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=\exp{x^2},
+$$
+
+<p>as before.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="first-back-propagation-equation">First back propagation equation </h2>
 
 <p>We have thus</p>
 $$

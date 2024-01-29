@@ -648,7 +648,151 @@ $$
 </section>
 
 <section>
-<h2 id="bringing-it-together-first-back-propagation-equation">Bringing it together, first back propagation equation </h2>
+<h2 id="automatic-differentiation-through-examples">Automatic differentiation through examples </h2>
+
+<p>A great introduction to automatic differentiation is given by Baydin et al., see <a href="https://arxiv.org/abs/1502.05767" target="_blank"><tt>https://arxiv.org/abs/1502.05767</tt></a>.</p>
+
+<p>Automatic differentiation is a represented by a repeated application
+of the chain rule on well-known functions and allows for the
+calculation of derivatives to numerical precision. It is not the same
+as the calculation of symbolic derivatives via for example SymPy, nor
+does it use approximative formulae based on Taylor-expansions of a
+function around a given value. The latter are error prone due to
+truncation errors and values of the step size \( \Delta \).
+</p>
+</section>
+
+<section>
+<h2 id="simple-example">Simple example </h2>
+
+<p>Our first example is rather simple,</p>
+<p>&nbsp;<br>
+$$
+f(x) \exp{x^2},
+$$
+<p>&nbsp;<br>
+
+<p>with derivative</p>
+<p>&nbsp;<br>
+$$
+f'(x) 2x\exp{x^2}.
+$$
+<p>&nbsp;<br>
+
+<p>We can use SymPy to extract the pertinent lines of Python code through the following simple example</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">__future__</span> <span style="color: #8B008B; font-weight: bold">import</span> division
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">sympy</span> <span style="color: #8B008B; font-weight: bold">import</span> *
+x = symbols(<span style="color: #CD5555">&#39;x&#39;</span>)
+expr = sqrt(x*x+exp(x*x))
+simplify(expr)
+derivative = diff(expr,x)
+<span style="color: #658b00">print</span>(python(expr))
+<span style="color: #658b00">print</span>(python(derivative))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="smarter-way-of-evaluating-the-above-function">Smarter way of evaluating the above function </h2>
+<p>If we study this function, we note that we can reduce the number of operations by introducing an intermediate variable</p>
+<p>&nbsp;<br>
+$$
+a = x^2,
+$$
+<p>&nbsp;<br>
+
+<p>leading to </p>
+<p>&nbsp;<br>
+$$
+f(x) = f(a(x)) = b= \exp{a}.
+$$
+<p>&nbsp;<br>
+
+<p>We now assume that all operations can be counted in terms of equal
+floating point operations. This means that in order to calculate
+\( f(x) \) we need first to square \( x \) and the compute the exponential. We
+have thus two floating point operations only.
+</p>
+</section>
+
+<section>
+<h2 id="reducing-the-number-of-operations">Reducing the number of operations </h2>
+
+<p>With the introduction of a precalculated quantity \( a \) and thereby \( f(x) \) we have that the derivative can be written as</p>
+
+<p>&nbsp;<br>
+$$
+f'(x) = 2xb,
+$$
+<p>&nbsp;<br>
+
+<p>which reduces the number of operations from four in the orginal
+expression to two. This means that if we need to compute \( f(x) \) and
+its derivative (a common task in optimizations), we have reduced the
+number of operations from six to four in total.
+</p>
+
+<p><b>Note</b> that the usage of a symbolic software like SymPy does not
+include such simplifications and the calculations of the function and
+the derivatives yield in general more floating point operations.
+</p>
+</section>
+
+<section>
+<h2 id="chain-rule-forward-and-reverse-modes">Chain rule, forward and reverse modes </h2>
+
+<p>In the above example we have introduced the variables \( a \) and \( b \), and our function is</p>
+<p>&nbsp;<br>
+$$
+f(x) = f(a(x)) = b= \exp{a},
+$$
+<p>&nbsp;<br>
+
+<p>with \( a=x^2 \). We can decompose the derivative of \( f \) with respect to \( x \) as</p>
+<p>&nbsp;<br>
+$$
+\frac{df}{dx}=\frac{df}{db}\frac{db}{da}\frac{da}{dx}.
+$$
+<p>&nbsp;<br>
+
+<p>We note that since \( b=f(x) \) that</p>
+<p>&nbsp;<br>
+$$
+\frac{df}{db}=1,
+$$
+<p>&nbsp;<br>
+
+<p>leading to</p>
+<p>&nbsp;<br>
+$$
+\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=\exp{x^2},
+$$
+<p>&nbsp;<br>
+
+<p>as before.</p>
+</section>
+
+<section>
+<h2 id="first-back-propagation-equation">First back propagation equation </h2>
 
 <p>We have thus</p>
 <p>&nbsp;<br>

@@ -390,7 +390,118 @@ the gradient of $f$ with respect to $t$ and $s$ (without the explicit unit vecto
 
 
 !split
-===== Bringing it together, first back propagation equation =====
+===== Automatic differentiation through examples =====
+
+A great introduction to automatic differentiation is given by Baydin et al., see URL:"https://arxiv.org/abs/1502.05767".
+
+Automatic differentiation is a represented by a repeated application
+of the chain rule on well-known functions and allows for the
+calculation of derivatives to numerical precision. It is not the same
+as the calculation of symbolic derivatives via for example SymPy, nor
+does it use approximative formulae based on Taylor-expansions of a
+function around a given value. The latter are error prone due to
+truncation errors and values of the step size $\Delta$.
+
+!split
+===== Simple example =====
+
+Our first example is rather simple,
+!bt
+\[
+f(x) \exp{x^2},
+\]
+!et
+with derivative
+!bt
+\[
+f'(x) 2x\exp{x^2}.
+\]
+!et
+We can use SymPy to extract the pertinent lines of Python code through the following simple example
+!bc pycod
+from __future__ import division
+from sympy import *
+x = symbols('x')
+expr = sqrt(x*x+exp(x*x))
+simplify(expr)
+derivative = diff(expr,x)
+print(python(expr))
+print(python(derivative))
+!ec
+
+!split
+===== Smarter way of evaluating the above function =====
+If we study this function, we note that we can reduce the number of operations by introducing an intermediate variable
+!bt
+\[
+a = x^2,
+\]
+!et
+leading to 
+!bt
+\[
+f(x) = f(a(x)) = b= \exp{a}.
+\]
+!et
+
+We now assume that all operations can be counted in terms of equal
+floating point operations. This means that in order to calculate
+$f(x)$ we need first to square $x$ and the compute the exponential. We
+have thus two floating point operations only.
+
+!split
+===== Reducing the number of operations =====
+
+With the introduction of a precalculated quantity $a$ and thereby $f(x)$ we have that the derivative can be written as
+
+!bt
+\[
+f'(x) = 2xb,
+\]
+!et
+
+which reduces the number of operations from four in the orginal
+expression to two. This means that if we need to compute $f(x)$ and
+its derivative (a common task in optimizations), we have reduced the
+number of operations from six to four in total.
+
+_Note_ that the usage of a symbolic software like SymPy does not
+include such simplifications and the calculations of the function and
+the derivatives yield in general more floating point operations.
+
+!split
+===== Chain rule, forward and reverse modes =====
+
+In the above example we have introduced the variables $a$ and $b$, and our function is
+!bt
+\[
+f(x) = f(a(x)) = b= \exp{a},
+\]
+!et
+with $a=x^2$. We can decompose the derivative of $f$ with respect to $x$ as
+!bt
+\[
+\frac{df}{dx}=\frac{df}{db}\frac{db}{da}\frac{da}{dx}.
+\]
+!et
+
+We note that since $b=f(x)$ that
+!bt
+\[
+\frac{df}{db}=1,
+\]
+!et
+leading to
+!bt
+\[
+\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=\exp{x^2},
+\]
+!et
+as before.
+
+
+!split
+===== First back propagation equation =====
 
 We have thus
 !bt
