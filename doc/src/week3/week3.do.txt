@@ -346,7 +346,7 @@ The last partial derivative can easily be computed and reads (by applying the ch
 
 
 !split
-===== Simpler examples first and automatic differentiation =====
+===== Simpler examples first, and automatic differentiation =====
 
 In order to understand the back propagation algorithm and its
 derivation (an implementation of the chain rule), let us first digress
@@ -530,11 +530,12 @@ network).  In the context of deep learning this is computationally
 more efficient since the output of a neural network consists of either
 one or some few other output variables.
 
-The second equation is called forward mode.
+The second equation defines the so-called  _forward mode_.
 
 
 !split
 ===== More complicated function =====
+
 We increase our ambitions and introduce a slightly more complicated function
 !bt
 \[
@@ -563,10 +564,50 @@ print(python(derivative))
 ===== Counting the number of floating point operations =====
 
 A simple count of operations shows that we need five operations for
-the function itself and ten for the derivative.  Can we reduce this to
+the function itself and ten for the derivative.  Fifteen operations in total if we wish to proceed with the above codes.
+
+Can we reduce this to
 say half the number of operations?
 
-Indeed we can. 
+!split
+=====  Defining intermediate operations =====
+
+We can indeed reduce the number of operation to half of those listed in the bruce force approach above.
+We dedine the following quantities
+!bt
+\[
+a = x^2,
+\]
+!et
+and
+!bt
+\[
+b = \exp{x^2} = \exp{a},
+\]
+!et
+and
+!bt
+\[
+c= a+b,
+\]
+!et
+and
+!bt
+\[
+d=f(x)=\sqrt{c}.
+\]
+!et
+
+!split
+===== New expression for the derivative =====
+
+With the above definitions we can in write the derivative of $f$ with respect to $x$ as
+!bt
+\[
+
+\]
+!et
+
 
 !split
 ===== First back propagation equation =====
