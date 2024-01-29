@@ -210,7 +210,7 @@ div.toc p,a {
                2,
                None,
                'derivative-of-the-cost-function'),
-              ('Simpler examples first and automatic differentiation',
+              ('Simpler examples first, and automatic differentiation',
                2,
                None,
                'simpler-examples-first-and-automatic-differentiation'),
@@ -248,6 +248,15 @@ div.toc p,a {
                2,
                None,
                'counting-the-number-of-floating-point-operations'),
+              ('Defining intermediate operations',
+               2,
+               None,
+               'defining-intermediate-operations'),
+              ('New expression for the derivative',
+               2,
+               None,
+               'new-expression-for-the-derivative'),
+              ('Final derivatives', 2, None, 'final-derivatives'),
               ('First back propagation equation',
                2,
                None,
@@ -765,7 +774,7 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="simpler-examples-first-and-automatic-differentiation">Simpler examples first and automatic differentiation </h2>
+<h2 id="simpler-examples-first-and-automatic-differentiation">Simpler examples first, and automatic differentiation </h2>
 
 <p>In order to understand the back propagation algorithm and its
 derivation (an implementation of the chain rule), let us first digress
@@ -950,10 +959,11 @@ more efficient since the output of a neural network consists of either
 one or some few other output variables.
 </p>
 
-<p>The second equation is called forward mode.</p>
+<p>The second equation defines the so-called  <b>forward mode</b>.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="more-complicated-function">More complicated function </h2>
+
 <p>We increase our ambitions and introduce a slightly more complicated function</p>
 $$
 f(x) =\sqrt{x^2+exp{x^2}},
@@ -1000,11 +1010,100 @@ derivative <span style="color: #666666">=</span> diff(expr,x)
 <h2 id="counting-the-number-of-floating-point-operations">Counting the number of floating point operations </h2>
 
 <p>A simple count of operations shows that we need five operations for
-the function itself and ten for the derivative.  Can we reduce this to
+the function itself and ten for the derivative.  Fifteen operations in total if we wish to proceed with the above codes.
+</p>
+
+<p>Can we reduce this to
 say half the number of operations?
 </p>
 
-<p>Indeed we can. </p>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="defining-intermediate-operations">Defining intermediate operations </h2>
+
+<p>We can indeed reduce the number of operation to half of those listed in the brute force approach above.
+We define the following quantities
+</p>
+$$
+a = x^2,
+$$
+
+<p>and</p>
+$$
+b = \exp{x^2} = \exp{a},
+$$
+
+<p>and</p>
+$$
+c= a+b,
+$$
+
+<p>and</p>
+$$
+d=f(x)=\sqrt{c}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="new-expression-for-the-derivative">New expression for the derivative </h2>
+
+<p>With these definitions we obtain the following partial derivatives </p>
+$$
+\frac{\partial a}{\partial x} = 2x,
+$$
+
+<p>and</p>
+$$
+\frac{\partial b}{\partial a} = \exp{a},
+$$
+
+<p>and</p>
+$$
+\frac{\partial c}{\partial a} = 1,
+$$
+
+<p>and</p>
+$$
+\frac{\partial c}{\partial b} = 1,
+$$
+
+<p>and</p>
+$$
+\frac{\partial d}{\partial c} = \frac{1}{2\sqrt{c}},
+$$
+
+<p>and finally</p>
+$$
+\frac{\partial f}{\partial d} = 1.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="final-derivatives">Final derivatives </h2>
+<p>Our final derivatives are thus</p>
+$$
+\frac{\partial f}{\partial c} = \frac{\partial f}{\partial d} \frac{\partial d}{\partial c}  = \frac{1}{2\sqrt{c}},
+$$
+
+$$
+\frac{\partial f}{\partial b} = \frac{\partial f}{\partial c} \frac{\partial c}{\partial b}  = \frac{1}{2\sqrt{c}},
+$$
+
+$$
+\frac{\partial f}{\partial a} = \frac{\partial f}{\partial c} \frac{\partial c}{\partial a}+
+\frac{\partial f}{\partial b} \frac{\partial b}{\partial a}  = \frac{1+\exp{a}}{2\sqrt{c}},
+$$
+
+<p>and finally </p>
+$$
+\frac{\partial f}{\partial x} = \frac{\partial f}{\partial a} \frac{\partial a}{\partial x}  = \frac{x(1+\exp{a})}{\sqrt{c}},
+$$
+
+<p>which is just</p>
+$$
+\frac{\partial f}{\partial x} = \frac{x(1+b)}{d},
+$$
+
+<p>and requires only three operations if we can reuse all intermediate variables.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="first-back-propagation-equation">First back propagation equation </h2>
