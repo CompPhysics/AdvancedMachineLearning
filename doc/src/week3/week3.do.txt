@@ -356,10 +356,34 @@ the link with back propagation and "automatic differentiation":"https://en.wikip
 !split
 ===== Reminder on the chain rule and gradients =====
 
-If we have a multivariate function $f(x,y)$ and $x=x(t)$ and $y=y(t)$ are functions of a variable $t$, we have that the gradient of $f$ with respect to $t$
+If we have a multivariate function $f(x,y)$ where $x=x(t)$ and $y=y(t)$ are functions of a variable $t$, we have that the gradient of $f$ with respect to $t$ (without the explicit unit vector components)
 !bt
 \[
-\nabla_t f = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial t} \end{bmatrix}=\frac{\partial f}{\partial x} \frac{\partial x}{\partial t} +\frac{\partial f}{\partial y} \frac{\partial y}{\partial t} 
+\frac{df}{dt} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial t} \end{bmatrix}=\frac{\partial f}{\partial x} \frac{\partial x}{\partial t} +\frac{\partial f}{\partial y} \frac{\partial y}{\partial t}. 
+\]
+!et
+
+
+!split
+===== Multivariable functions =====
+
+If we have a multivariate function $f(x,y)$ where $x=x(t,s)$ and $y=y(t,s)$ are functions of the variables $t$ and $s$, we have that the partial derivatives
+!bt
+\[
+\frac{\partial f}{\partial s}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial s}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial s},
+\]
+!et
+and
+!bt
+\[
+\frac{\partial f}{\partial t}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial t}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial t}.
+\]
+!et
+
+the gradient of $f$ with respect to $t$ and $s$ (without the explicit unit vector components)
+!bt
+\[
+\frac{df}{d(s,t)} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial s}  &\frac{\partial x}{\partial t} \\ \frac{\partial x}{\partial s} & \frac{\partial y}{\partial t} \end{bmatrix}.
 \]
 !et
 

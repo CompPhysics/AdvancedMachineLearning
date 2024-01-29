@@ -114,6 +114,7 @@ doconce format html week3.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'reminder-on-the-chain-rule-and-gradients'),
+              ('Multivariable functions', 2, None, 'multivariable-functions'),
               ('Bringing it together, first back propagation equation',
                2,
                None,
@@ -289,6 +290,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#derivative-of-the-cost-function" style="font-size: 80%;">Derivative of the cost function</a></li>
      <!-- navigation toc: --> <li><a href="#simpler-examples-first-and-automatic-differentiation" style="font-size: 80%;">Simpler examples first and automatic differentiation</a></li>
      <!-- navigation toc: --> <li><a href="#reminder-on-the-chain-rule-and-gradients" style="font-size: 80%;">Reminder on the chain rule and gradients</a></li>
+     <!-- navigation toc: --> <li><a href="#multivariable-functions" style="font-size: 80%;">Multivariable functions</a></li>
      <!-- navigation toc: --> <li><a href="#bringing-it-together-first-back-propagation-equation" style="font-size: 80%;">Bringing it together, first back propagation equation</a></li>
      <!-- navigation toc: --> <li><a href="#analyzing-the-last-results" style="font-size: 80%;">Analyzing the last results</a></li>
      <!-- navigation toc: --> <li><a href="#more-considerations" style="font-size: 80%;">More considerations</a></li>
@@ -742,9 +744,28 @@ the link with back propagation and <a href="https://en.wikipedia.org/wiki/Automa
 <!-- !split -->
 <h2 id="reminder-on-the-chain-rule-and-gradients" class="anchor">Reminder on the chain rule and gradients </h2>
 
-<p>If we have a multivariate function \( f(x,y) \) and \( x=x(t) \) and \( y=y(t) \) are functions of a variable \( t \), we have that the gradient of \( f \) with respect to \( t \)</p>
+<p>If we have a multivariate function \( f(x,y) \) where \( x=x(t) \) and \( y=y(t) \) are functions of a variable \( t \), we have that the gradient of \( f \) with respect to \( t \) (without the explicit unit vector components)</p>
 $$
-\nabla_t f = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial t} \end{bmatrix}=\frac{\partial f}{\partial x} \frac{\partial x}{\partial t} +\frac{\partial f}{\partial y} \frac{\partial y}{\partial t} 
+\frac{df}{dt} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial t} \end{bmatrix}=\frac{\partial f}{\partial x} \frac{\partial x}{\partial t} +\frac{\partial f}{\partial y} \frac{\partial y}{\partial t}. 
+$$
+
+
+<!-- !split -->
+<h2 id="multivariable-functions" class="anchor">Multivariable functions </h2>
+
+<p>If we have a multivariate function \( f(x,y) \) where \( x=x(t,s) \) and \( y=y(t,s) \) are functions of the variables \( t \) and \( s \), we have that the partial derivatives</p>
+$$
+\frac{\partial f}{\partial s}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial s}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial s},
+$$
+
+<p>and</p>
+$$
+\frac{\partial f}{\partial t}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial t}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial t}.
+$$
+
+<p>the gradient of \( f \) with respect to \( t \) and \( s \) (without the explicit unit vector components)</p>
+$$
+\frac{df}{d(s,t)} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial s}  &\frac{\partial x}{\partial t} \\ \frac{\partial x}{\partial s} & \frac{\partial y}{\partial t} \end{bmatrix}.
 $$
 
 
