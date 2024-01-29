@@ -1,50 +1,212 @@
-TITLE: January 29-February 2 : Advanced machine learning and data analysis for the physical sciences
-AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: January 30
+
+% LaTeX Beamer file automatically generated from DocOnce
+% https://github.com/doconce/doconce
+
+%-------------------- begin beamer-specific preamble ----------------------
+
+\documentclass{beamer}
+
+\usetheme{red_plain}
+\usecolortheme{default}
+
+% turn off the almost invisible, yet disturbing, navigation symbols:
+\setbeamertemplate{navigation symbols}{}
+
+% Examples on customization:
+%\usecolortheme[named=RawSienna]{structure}
+%\usetheme[height=7mm]{Rochester}
+%\setbeamerfont{frametitle}{family=\rmfamily,shape=\itshape}
+%\setbeamertemplate{items}[ball]
+%\setbeamertemplate{blocks}[rounded][shadow=true]
+%\useoutertheme{infolines}
+%
+%\usefonttheme{}
+%\useinntertheme{}
+%
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
+
+% fine for B/W printing:
+%\usecolortheme{seahorse}
+
+\usepackage{pgf}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{relsize}
+
+\usepackage{fancybox}  % make sure fancybox is loaded before fancyvrb
+
+\usepackage{fancyvrb}
+\usepackage{minted} % requires pygments and latex -shell-escape filename
+%\usepackage{anslistings}
+%\usepackage{listingsutf8}
+
+\usepackage{amsmath,amssymb,bm}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{colortbl}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{framed}
+% Use some nice templates
+\beamertemplatetransparentcovereddynamic
+
+% --- begin table of contents based on sections ---
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each section:
+% (Only section headings can enter the table of contents in Beamer
+% slides generated from DocOnce source, while subsections are used
+% for the title in ordinary slides.)
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>[plain]
+  \frametitle{}
+  %\frametitle{Outline}
+  \tableofcontents[currentsection]
+  \end{frame}
+}
+% --- end table of contents based on sections ---
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command:
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\newcommand{\shortinlinecomment}[3]{\note{\textbf{#1}: #2}}
+\newcommand{\longinlinecomment}[3]{\shortinlinecomment{#1}{#2}{#3}}
+
+\definecolor{linkcolor}{rgb}{0,0,0.4}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    pdfmenubar=true,
+    pdftoolbar=true,
+    bookmarksdepth=3
+    }
+\setlength{\parskip}{0pt}  % {1em}
+
+\newenvironment{doconceexercise}{}{}
+\newcounter{doconceexercisecounter}
+\newenvironment{doconce:movie}{}{}
+\newcounter{doconce:movie:counter}
+
+\newcommand{\subex}[1]{\noindent\textbf{#1}}  % for subexercises: a), b), etc
+
+\logo{{\tiny \copyright\ 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license}}
+
+%-------------------- end beamer-specific preamble ----------------------
+
+% Add user's preamble
 
 
 
-!split
-===== Overview of third  week  =====
 
-!bblock 
-  o Discussion of possible projects
-  o Review of neural networks and automatic differentiation
-  o Discussion of codes
-!eblock
+% insert custom LaTeX commands...
 
+\raggedbottom
+\makeindex
 
-!split
-===== Mathematics of deep learning =====
+%-------------------- end preamble ----------------------
 
-!bblock Two recent books online
-o "The Modern Mathematics of Deep Learning, by Julius Berner, Philipp Grohs, Gitta Kutyniok, Philipp Petersen":"https://arxiv.org/abs/2105.04026", published as "Mathematical Aspects of Deep Learning, pp. 1-111. Cambridge University Press, 2022":"https://doi.org/10.1017/9781009025096.002"
+\begin{document}
 
-o "Mathematical Introduction to Deep Learning: Methods, Implementations, and Theory, Arnulf Jentzen, Benno Kuckuck, Philippe von Wurstemberger":"https://doi.org/10.48550/arXiv.2310.20360"
-!eblock
+% matching end for #ifdef PREAMBLE
+
+\newcommand{\exercisesection}[1]{\subsection*{#1}}
 
 
-!split
-===== Reminder on books with hands-on material and codes =====
-!bblock
-* "Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
-* "David Foster, Generative Deep Learning with TensorFlow":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"
-* "Bali and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
-!eblock
+
+% ------------------- main content ----------------------
+
+
+
+% ----------------- title -------------------------
+
+\title{January 29-February 2 : Advanced machine learning and data analysis for the physical sciences}
+
+% ----------------- author(s) -------------------------
+
+\author{Morten Hjorth-Jensen\inst{1,2}}
+\institute{Department of Physics and Center for Computing in Science Education, University of Oslo, Norway\inst{1}
+\and
+Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA\inst{2}}
+% ----------------- end author(s) -------------------------
+
+\date{January 30
+% <optional titlepage figure>
+\ \\ 
+{\tiny \copyright\ 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license}
+}
+
+\begin{frame}[plain,fragile]
+\titlepage
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Overview of third  week}
+
+\begin{block}{}
+\begin{enumerate}
+ \item Discussion of possible projects
+
+ \item Review of neural networks and automatic differentiation
+
+ \item Discussion of codes
+\end{enumerate}
+
+\noindent
+\end{block}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Mathematics of deep learning}
+
+\begin{block}{Two recent books online }
+\begin{enumerate}
+\item \href{{https://arxiv.org/abs/2105.04026}}{The Modern Mathematics of Deep Learning, by Julius Berner, Philipp Grohs, Gitta Kutyniok, Philipp Petersen}, published as \href{{https://doi.org/10.1017/9781009025096.002}}{Mathematical Aspects of Deep Learning, pp. 1-111. Cambridge University Press, 2022}
+
+\item \href{{https://doi.org/10.48550/arXiv.2310.20360}}{Mathematical Introduction to Deep Learning: Methods, Implementations, and Theory, Arnulf Jentzen, Benno Kuckuck, Philippe von Wurstemberger}
+\end{enumerate}
+
+\noindent
+\end{block}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Reminder on books with hands-on material and codes}
+
+\begin{block}{}
+\begin{itemize}
+\item \href{{https://sebastianraschka.com/blog/2022/ml-pytorch-book.html}}{Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch}
+
+\item \href{{https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html}}{David Foster, Generative Deep Learning with TensorFlow}
+
+\item \href{{https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2}}{Bali and Gavras, Generative AI with Python and TensorFlow 2}
+\end{itemize}
+
+\noindent
+\end{block}
 
 All three books have GitHub addresses from where  one can download all codes. We will borrow most of the material from these three texts as well as 
-from Goodfellow, Bengio and Courville's text "Deep Learning":"https://www.deeplearningbook.org/"
+from Goodfellow, Bengio and Courville's text \href{{https://www.deeplearningbook.org/}}{Deep Learning}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Reading recommendations}
 
-!split
-===== Reading recommendations =====
+\begin{enumerate}
+\item Rashkca et al., chapter 11, jupyter-notebook sent separately, from \href{{https://github.com/rasbt/machine-learning-book}}{GitHub}
 
-o Rashkca et al., chapter 11, jupyter-notebook sent separately, from "GitHub":"https://github.com/rasbt/machine-learning-book"
-o Goodfellow et al, chapter 6 and 7 contain most of the neural network background.
+\item Goodfellow et al, chapter 6 and 7 contain most of the neural network background.
+\end{enumerate}
 
-!split
-===== Mathematics of deep learning and neural networks =====
+\noindent
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Mathematics of deep learning and neural networks}
 
 Neural networks, in its so-called feed-forward form, where each
 iterations contains a feed-forward stage and a back-propgagation
@@ -53,10 +215,11 @@ multiplications. The unknown parameters (the so-called biases and
 weights which deternine the architecture of a neural network), are
 uptaded iteratively using the so-called back-propagation algorithm.
 This algorithm corresponds to the so-called reverse mode of 
-automatic differentation. 
+automatic differentation.
+\end{frame}
 
-!split
-===== Basics of an NN =====
+\begin{frame}[plain,fragile]
+\frametitle{Basics of an NN}
 
 A neural network consists of a series of hidden layers, in addition to
 the input and output layers.  Each layer $l$ has a set of parameters
@@ -66,14 +229,18 @@ for a standard NN these are matrix-matrix and matrix-vector
 multiplications.  For all layers we will simply use a collective variable $\bm{\Theta}$.
 
 It consist of two basic steps:
-o a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.
-o a back-propagation state where the unknown parameters $\bm{\Theta}$ are updated through the optimization of the their gradients. The expressions for the gradients are obtained via the chain rule, starting from the derivative of the cost/function.
+\begin{enumerate}
+\item a feed forward stage which takes a given input and produces a final output which is compared with the target values through our cost/loss function.
 
+\item a back-propagation state where the unknown parameters $\bm{\Theta}$ are updated through the optimization of the their gradients. The expressions for the gradients are obtained via the chain rule, starting from the derivative of the cost/function.
+\end{enumerate}
+
+\noindent
 These two steps make up one iteration. This iterative process is continued till we reach an eventual stopping criterion.
+\end{frame}
 
-
-!split
-===== Overarching view of a neural network =====
+\begin{frame}[plain,fragile]
+\frametitle{Overarching view of a neural network}
 
 The architecture of a neural network defines our model. This model
 aims at describing some function $f(\bm{x}$ which represents
@@ -82,15 +249,23 @@ $\bm{x}$. Note that here $\bm{y}$ and $\bm{x}$ are not limited to be
 vectors.
 
 The architecture consists of
-o An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with the target value $\bm{y}$
-o A given number of hidden layers and neurons/nodes/units for each layer (this may vary)
-o A given activation function $\sigma(\bm{z})$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer.
-o The last layer, normally called _output_ layer has normally an activation function tailored to the specific problem
-o Finally we define a so-called cost or loss function which is used to gauge the quality of our model. 
+\begin{enumerate}
+\item An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with the target value $\bm{y}$
 
+\item A given number of hidden layers and neurons/nodes/units for each layer (this may vary)
 
-!split
-===== The optimization problem =====
+\item A given activation function $\sigma(\bm{z})$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer.
+
+\item The last layer, normally called \textbf{output} layer has normally an activation function tailored to the specific problem
+
+\item Finally we define a so-called cost or loss function which is used to gauge the quality of our model. 
+\end{enumerate}
+
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{The optimization problem}
 
 The cost function is a function of the unknown parameters
 $\bm{\Theta}$ where the latter is a container for all possible
@@ -98,17 +273,16 @@ parameters needed to define a neural network
 
 If we are dealing with a regression task a typical cost/loss function
 is the mean squared error
-!bt
 \[
 C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
 \]
-!et
 This function represents one of many possible ways to define
 the so-called cost function. Note that here we have assumed a linear dependence in terms of the paramters $\bm{\Theta}$. This is in general not the case.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Parameters of neural networks}
 
-!split
-===== Parameters of neural networks =====
 For neural networks the parameters
 $\bm{\Theta}$ are given by the so-called weights and biases (to be
 defined below).
@@ -117,90 +291,100 @@ The weights are given by matrix elements $w_{ij}^{(l)}$ where the
 superscript indicates the layer number. The biases are typically given
 by vector elements representing each single node of a given layer,
 that is $b_j^{(l)}$.
+\end{frame}
 
-!split
-===== Other ingredients of a neural network =====
+\begin{frame}[plain,fragile]
+\frametitle{Other ingredients of a neural network}
 
 Having defined the architecture of a neural network, the optimization
 of the cost function with respect to the parameters $\bm{\Theta}$,
 involves the calculations of gradients and their optimization. The
 gradients represent the derivatives of a multidimensional object and
 are often approximated by various gradient methods, including
-o various quasi-Newton methods,
-o plain gradient descent (GD) with a constant learning rate $\eta$,
-o GD with momentum and other approximations to the learning rates such as
-  * Adapative gradient (ADAgrad)
-  * Root mean-square propagation (RMSprop)
-  * Adaptive gradient with momentum (ADAM) and many other
-o Stochastic gradient descent and various families of learning rate approximations
+\begin{enumerate}
+\item various quasi-Newton methods,
 
-!split
-===== Other parameters =====
+\item plain gradient descent (GD) with a constant learning rate $\eta$,
+
+\item GD with momentum and other approximations to the learning rates such as
+\begin{itemize}
+
+  \item Adapative gradient (ADAgrad)
+
+  \item Root mean-square propagation (RMSprop)
+
+  \item Adaptive gradient with momentum (ADAM) and many other
+
+\end{itemize}
+
+\noindent
+\item Stochastic gradient descent and various families of learning rate approximations
+\end{enumerate}
+
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Other parameters}
 
 In addition to the above, there are often additional hyperparamaters
 which are included in the setup of a neural network. These will be
 discussed below.
+\end{frame}
 
-
-!split
-===== Universal approximation theorem =====
+\begin{frame}[plain,fragile]
+\frametitle{Universal approximation theorem}
 
 The universal approximation theorem plays a central role in deep
-learning.  "Cybenko (1989)":"https://link.springer.com/article/10.1007/BF02551274" showed
+learning.  \href{{https://link.springer.com/article/10.1007/BF02551274}}{Cybenko (1989)} showed
 the following:
 
-!bblock
+\begin{block}{}
 Let $\sigma$ be any continuous sigmoidal function such that
-!bt
 \[
 \sigma(z) = \left\{\begin{array}{cc} 1 & z\rightarrow \infty\\ 0 & z \rightarrow -\infty \end{array}\right.
 \]
-!et
 Given a continuous and deterministic function $F(\bm{x})$ on the unit
 cube in $d$-dimensions $F\in [0,1]^d$, $x\in [0,1]^d$ and a parameter
 $\epsilon >0$, there is a one-layer (hidden) neural network
 $f(\bm{x};\bm{\Theta})$ with $\bm{\Theta}=(\bm{W},\bm{b})$ and $\bm{W}\in
 \mathbb{R}^{m\times n}$ and $\bm{b}\in \mathbb{R}^{n}$, for which
-!bt
 \[
 \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert < \epsilon \hspace{0.1cm} \forall \bm{x}\in[0,1]^d.
 \]
-!et
 
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== Some parallels from real analysis =====
+\begin{frame}[plain,fragile]
+\frametitle{Some parallels from real analysis}
 
-For those of you familiar with for example the "Stone-Weierstrass
-theorem":"https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem"
+For those of you familiar with for example the \href{{https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem}}{Stone-Weierstrass
+theorem}
 for polynomial approximations or the convergence criterion for Fourier
 series, there are similarities in the derivation of the proof for
-neural networks. 
+neural networks.
+\end{frame}
 
-!split
-===== The approximation theorem in words =====
+\begin{frame}[plain,fragile]
+\frametitle{The approximation theorem in words}
 
-_Any continuous function $y=F(\bm{x})$ supported on the unit cube in
+\textbf{Any continuous function $y=F(\bm{x})$ supported on the unit cube in
 $d$-dimensions can be approximated by a one-layer sigmoidal network to
-arbitrary accuracy._
+arbitrary accuracy.}
 
-"Hornik (1991)":"https://www.sciencedirect.com/science/article/abs/pii/089360809190009T" extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value
-!bt
+\href{{https://www.sciencedirect.com/science/article/abs/pii/089360809190009T}}{Hornik (1991)} extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value
 \[
 \mathbb{E}[\vert F(\bm{x})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})\vert^2p(\bm{x})d\bm{x} < \infty.
 \]
-!et
 Then we have
-!bt
 \[
 \mathbb{E}[\vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2p(\bm{x})d\bm{x} < \epsilon.
 \]
-!et
+\end{frame}
 
-
-!split
-===== More on the general approximation theorem =====
+\begin{frame}[plain,fragile]
+\frametitle{More on the general approximation theorem}
 
 None of the proofs give any insight into the relation between the
 number of of hidden layers and nodes and the approximation error
@@ -208,22 +392,22 @@ $\epsilon$, nor the magnitudes of $\bm{W}$ and $\bm{b}$.
 
 Neural networks (NNs) have what we may call a kind of universality no matter what function we want to compute.
 
-!bblock
+\begin{block}{}
 It does not mean that an NN can be used to exactly compute any function. Rather, we get an approximation that is as good as we want. 
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== Class of functions we can approximate =====
+\begin{frame}[plain,fragile]
+\frametitle{Class of functions we can approximate}
 
-!bblock
+\begin{block}{}
 The class of functions that can be approximated are the continuous ones.
 If the function $F(\bm{x})$ is discontinuous, it won't in general be possible to approximate it. However, an NN may still give an approximation even if we fail in some points.
-!eblock
+\end{block}
+\end{frame}
 
-
-
-!split
-===== Setting up the equations for a neural network =====
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the equations for a neural network}
 
 The questions we want to ask are how do changes in the biases and the
 weights in our network change the cost function and how can we use the
@@ -232,24 +416,28 @@ final output to modify the weights and biases?
 To derive these equations let us start with a plain regression problem
 and define our cost function as
 
-!bt
 \[
 {\cal C}(\bm{\Theta})  =  \frac{1}{2}\sum_{i=1}^n\left(y_i - \tilde{y}_i\right)^2, 
 \]
-!et
 
 where the $y_i$s are our $n$ targets (the values we want to
 reproduce), while the outputs of the network after having propagated
 all inputs $\bm{x}$ are given by $\bm{\tilde{y}}_i$.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Layout of a neural network with three hidden layers}
 
-!split
-===== Layout of a neural network with three hidden layers =====
+\vspace{6mm}
 
-FIGURE: [figures/nn1.pdf, width=900 frac=1.0]
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/nn1.pdf}}
 
-!split
-===== Definitions =====
+\vspace{6mm}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Definitions}
 
 With our definition of the targets $\bm{y}$, the outputs of the
 network $\bm{\tilde{y}}$ and the inputs $\bm{x}$ we
@@ -258,26 +446,22 @@ $l$-th layer as a function of the bias, the weights which add up from
 the previous layer $l-1$ and the forward passes/outputs
 $\hat{a}^{l-1}$ from the previous layer as
 
-
-!bt
 \[
 z_j^l = \sum_{i=1}^{M_{l-1}}w_{ij}^la_i^{l-1}+b_j^l,
 \]
-!et
 
 where $b_k^l$ are the biases from layer $l$.  Here $M_{l-1}$
 represents the total number of nodes/neurons/units of layer $l-1$. The
 figure in the whiteboard notes illustrates this equation.  We can rewrite this in a more
 compact form as the matrix-vector products we discussed earlier,
 
-!bt
 \[
 \hat{z}^l = \left(\hat{W}^l\right)^T\hat{a}^{l-1}+\hat{b}^l.
 \]
-!et
+\end{frame}
 
-!split
-===== Inputs to the activation function =====
+\begin{frame}[plain,fragile]
+\frametitle{Inputs to the activation function}
 
 With the activation values $\bm{z}^l$ we can in turn define the
 output of layer $l$ as $\bm{a}^l = f(\bm{z}^l)$ where $f$ is our
@@ -285,114 +469,89 @@ activation function. In the examples here we will use the sigmoid
 function discussed in our logistic regression lectures. We will also use the same activation function $f$ for all layers
 and their nodes.  It means we have
 
-!bt
 \[
 a_j^l = \sigma(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
 \]
-!et
+\end{frame}
 
-
-
-
-!split
-===== Derivatives and the chain rule =====
+\begin{frame}[plain,fragile]
+\frametitle{Derivatives and the chain rule}
 
 From the definition of the activation $z_j^l$ we have
-!bt
 \[
 \frac{\partial z_j^l}{\partial w_{ij}^l} = a_i^{l-1},
 \]
-!et
 and
-!bt
 \[
 \frac{\partial z_j^l}{\partial a_i^{l-1}} = w_{ji}^l. 
 \]
-!et
 
 With our definition of the activation function we have that (note that this function depends only on $z_j^l$)
-!bt
 \[
 \frac{\partial a_j^l}{\partial z_j^{l}} = a_j^l(1-a_j^l)=\sigma(z_j^l)(1-\sigma(z_j^l)). 
 \]
-!et
+\end{frame}
 
-
-!split
-===== Derivative of the cost function =====
+\begin{frame}[plain,fragile]
+\frametitle{Derivative of the cost function}
 
 With these definitions we can now compute the derivative of the cost function in terms of the weights.
 
 Let us specialize to the output layer $l=L$. Our cost function is
-!bt
 \[
 {\cal C}(\bm{\Theta}^L)  =  \frac{1}{2}\sum_{i=1}^n\left(y_i - \tilde{y}_i\right)^2=\frac{1}{2}\sum_{i=1}^n\left(a_i^L - y_i\right)^2, 
 \]
-!et
 The derivative of this function with respect to the weights is
 
-!bt
 \[
 \frac{\partial{\cal C}(\bm{\Theta}^L)}{\partial w_{jk}^L}  =  \left(a_j^L - y_j\right)\frac{\partial a_j^L}{\partial w_{jk}^{L}}, 
 \]
-!et
 The last partial derivative can easily be computed and reads (by applying the chain rule)
-!bt
 \[
 \frac{\partial a_j^L}{\partial w_{jk}^{L}} = \frac{\partial a_j^L}{\partial z_{j}^{L}}\frac{\partial z_j^L}{\partial w_{jk}^{L}}=a_j^L(1-a_j^L)a_k^{L-1}.  
 \]
-!et
+\end{frame}
 
-
-
-!split
-===== Simpler examples first, and automatic differentiation =====
+\begin{frame}[plain,fragile]
+\frametitle{Simpler examples first, and automatic differentiation}
 
 In order to understand the back propagation algorithm and its
 derivation (an implementation of the chain rule), let us first digress
 with some simple examples. These examples are also meant to motivate
-the link with back propagation and "automatic differentiation":"https://en.wikipedia.org/wiki/Automatic_differentiation".
+the link with back propagation and \href{{https://en.wikipedia.org/wiki/Automatic_differentiation}}{automatic differentiation}.
+\end{frame}
 
-!split
-===== Reminder on the chain rule and gradients =====
+\begin{frame}[plain,fragile]
+\frametitle{Reminder on the chain rule and gradients}
 
 If we have a multivariate function $f(x,y)$ where $x=x(t)$ and $y=y(t)$ are functions of a variable $t$, we have that the gradient of $f$ with respect to $t$ (without the explicit unit vector components)
-!bt
 \[
 \frac{df}{dt} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial t} \end{bmatrix}=\frac{\partial f}{\partial x} \frac{\partial x}{\partial t} +\frac{\partial f}{\partial y} \frac{\partial y}{\partial t}. 
 \]
-!et
+\end{frame}
 
-
-!split
-===== Multivariable functions =====
+\begin{frame}[plain,fragile]
+\frametitle{Multivariable functions}
 
 If we have a multivariate function $f(x,y)$ where $x=x(t,s)$ and $y=y(t,s)$ are functions of the variables $t$ and $s$, we have that the partial derivatives
-!bt
 \[
 \frac{\partial f}{\partial s}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial s}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial s},
 \]
-!et
 and
-!bt
 \[
 \frac{\partial f}{\partial t}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial t}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial t}.
 \]
-!et
 
 the gradient of $f$ with respect to $t$ and $s$ (without the explicit unit vector components)
-!bt
 \[
 \frac{df}{d(s,t)} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial s}  &\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial s} & \frac{\partial y}{\partial t} \end{bmatrix}.
 \]
-!et
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Automatic differentiation through examples}
 
-
-!split
-===== Automatic differentiation through examples =====
-
-A great introduction to automatic differentiation is given by Baydin et al., see URL:"https://arxiv.org/abs/1502.05767".
+A great introduction to automatic differentiation is given by Baydin et al., see \href{{https://arxiv.org/abs/1502.05767}}{\nolinkurl{https://arxiv.org/abs/1502.05767}}.
 
 Automatic differentiation is a represented by a repeated application
 of the chain rule on well-known functions and allows for the
@@ -401,24 +560,30 @@ as the calculation of symbolic derivatives via for example SymPy, nor
 does it use approximative formulae based on Taylor-expansions of a
 function around a given value. The latter are error prone due to
 truncation errors and values of the step size $\Delta$.
+\end{frame}
 
-!split
-===== Simple example =====
+\begin{frame}[plain,fragile]
+\frametitle{Simple example}
 
 Our first example is rather simple,
-!bt
 \[
 f(x) =\exp{x^2},
 \]
-!et
 with derivative
-!bt
 \[
 f'(x) =2x\exp{x^2}.
 \]
-!et
 We can use SymPy to extract the pertinent lines of Python code through the following simple example
-!bc pycod
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 from __future__ import division
 from sympy import *
 x = symbols('x')
@@ -427,100 +592,85 @@ simplify(expr)
 derivative = diff(expr,x)
 print(python(expr))
 print(python(derivative))
-!ec
 
-!split
-===== Smarter way of evaluating the above function =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Smarter way of evaluating the above function}
+
 If we study this function, we note that we can reduce the number of operations by introducing an intermediate variable
-!bt
 \[
 a = x^2,
 \]
-!et
 leading to 
-!bt
 \[
 f(x) = f(a(x)) = b= \exp{a}.
 \]
-!et
 
 We now assume that all operations can be counted in terms of equal
 floating point operations. This means that in order to calculate
 $f(x)$ we need first to square $x$ and then compute the exponential. We
 have thus two floating point operations only.
+\end{frame}
 
-!split
-===== Reducing the number of operations =====
+\begin{frame}[plain,fragile]
+\frametitle{Reducing the number of operations}
 
 With the introduction of a precalculated quantity $a$ and thereby $f(x)$ we have that the derivative can be written as
 
-!bt
 \[
 f'(x) = 2xb,
 \]
-!et
 
 which reduces the number of operations from four in the orginal
 expression to two. This means that if we need to compute $f(x)$ and
 its derivative (a common task in optimizations), we have reduced the
 number of operations from six to four in total.
 
-_Note_ that the usage of a symbolic software like SymPy does not
+\textbf{Note} that the usage of a symbolic software like SymPy does not
 include such simplifications and the calculations of the function and
 the derivatives yield in general more floating point operations.
+\end{frame}
 
-!split
-===== Chain rule, forward and reverse modes =====
+\begin{frame}[plain,fragile]
+\frametitle{Chain rule, forward and reverse modes}
 
 In the above example we have introduced the variables $a$ and $b$, and our function is
-!bt
 \[
 f(x) = f(a(x)) = b= \exp{a},
 \]
-!et
 with $a=x^2$. We can decompose the derivative of $f$ with respect to $x$ as
-!bt
 \[
 \frac{df}{dx}=\frac{df}{db}\frac{db}{da}\frac{da}{dx}.
 \]
-!et
 
 We note that since $b=f(x)$ that
-!bt
 \[
 \frac{df}{db}=1,
 \]
-!et
 leading to
-!bt
 \[
 \frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=2x\exp{x^2},
 \]
-!et
 as before.
+\end{frame}
 
-
-!split
-===== Forward and reverse modes =====
+\begin{frame}[plain,fragile]
+\frametitle{Forward and reverse modes}
 
 We have that 
-!bt
 \[
 \frac{df}{dx}=\frac{df}{db}\frac{db}{da}\frac{da}{dx},
 \]
-!et
 which we can rewrite either as
-!bt
 \[
 \frac{df}{dx}=\left[\frac{df}{db}\frac{db}{da}\right]\frac{da}{dx},
 \]
-!et
 or
-!bt
 \[
 \frac{df}{dx}=\frac{df}{db}\left[\frac{db}{da}\frac{da}{dx}\right].
 \]
-!et
 
 The first expression is called reverse mode (or back propagation)
 since we start by evaluating the derivatives at the end point and then
@@ -530,26 +680,31 @@ network).  In the context of deep learning this is computationally
 more efficient since the output of a neural network consists of either
 one or some few other output variables.
 
-The second equation defines the so-called  _forward mode_.
+The second equation defines the so-called  \textbf{forward mode}.
+\end{frame}
 
-
-!split
-===== More complicated function =====
+\begin{frame}[plain,fragile]
+\frametitle{More complicated function}
 
 We increase our ambitions and introduce a slightly more complicated function
-!bt
 \[
 f(x) =\sqrt{x^2+exp{x^2}},
 \]
-!et
 with derivative
-!bt
 \[
 f'(x) =\frac{x(1+\exp{x^2})}{\sqrt{x^2+exp{x^2}}}.
 \]
-!et
 The corresponding SymPy code reads
-!bc pycod
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 from __future__ import division
 from sympy import *
 x = symbols('x')
@@ -558,144 +713,116 @@ simplify(expr)
 derivative = diff(expr,x)
 print(python(expr))
 print(python(derivative))
-!ec
 
-!split
-===== Counting the number of floating point operations =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Counting the number of floating point operations}
 
 A simple count of operations shows that we need five operations for
 the function itself and ten for the derivative.  Fifteen operations in total if we wish to proceed with the above codes.
 
 Can we reduce this to
 say half the number of operations?
+\end{frame}
 
-!split
-=====  Defining intermediate operations =====
+\begin{frame}[plain,fragile]
+\frametitle{Defining intermediate operations}
 
 We can indeed reduce the number of operation to half of those listed in the brute force approach above.
 We define the following quantities
-!bt
 \[
 a = x^2,
 \]
-!et
 and
-!bt
 \[
 b = \exp{x^2} = \exp{a},
 \]
-!et
 and
-!bt
 \[
 c= a+b,
 \]
-!et
 and
-!bt
 \[
 d=f(x)=\sqrt{c}.
 \]
-!et
+\end{frame}
 
-!split
-===== New expression for the derivative =====
+\begin{frame}[plain,fragile]
+\frametitle{New expression for the derivative}
 
 With these definitions we obtain the following partial derivatives 
-!bt
 \[
 \frac{\partial a}{\partial x} = 2x,
 \]
-!et
 and
-!bt
 \[
 \frac{\partial b}{\partial a} = \exp{a},
 \]
-!et
 and
-!bt
 \[
 \frac{\partial c}{\partial a} = 1,
 \]
-!et
 and
-!bt
 \[
 \frac{\partial c}{\partial b} = 1,
 \]
-!et
 and
-!bt
 \[
 \frac{\partial d}{\partial c} = \frac{1}{2\srqt{c}},
 \]
-!et
 and finally
-!bt
 \[
 \frac{\partial f}{\partial d} = 1.
 \]
-!et
+\end{frame}
 
-!split
-===== Final derivatives =====
+\begin{frame}[plain,fragile]
+\frametitle{Final derivatives}
+
 Our final derivatives are thus
-!bt
 \[
 \frac{\partial f}{\partial c} = \frac{\partial f}{\partial d} \frac{\partial d}{\partial c}  = \frac{1}{2\srqt{c}},
 \]
-!et
-!bt
 \[
 \frac{\partial f}{\partial b} = \frac{\partial f}{\partial c} \frac{\partial c}{\partial b}  = \frac{1}{2\srqt{c}},
 \]
-!et
-!bt
 \[
 \frac{\partial f}{\partial a} = \frac{\partial f}{\partial c} \frac{\partial c}{\partial a}+
 \frac{\partial f}{\partial b} \frac{\partial b}{\partial a}  = \frac{1+\exp{a}}{2\srqt{c}},
 \]
-!et
 and finally 
-!bt
 \[
 \frac{\partial f}{\partial x} = \frac{\partial f}{\partial a} \frac{\partial a}{\partial x}  = \frac{x(1+\exp{a})}{\srqt{c}},
 \]
-!et
 which is just
-!bt
 \[
 \frac{\partial f}{\partial x} = \frac{x(1+b)}{d},
 \]
-!et
 and requires only three operations if we can reuse all intermediate variables.
+\end{frame}
 
-!split
-===== First back propagation equation =====
+\begin{frame}[plain,fragile]
+\frametitle{First back propagation equation}
 
 We have thus
-!bt
 \[
 \frac{\partial{\cal C}((\bm{\Theta}^L)}{\partial w_{jk}^L}  =  \left(a_j^L - y_j\right)a_j^L(1-a_j^L)a_k^{L-1}, 
 \]
-!et
 
 Defining
-!bt
 \[
 \delta_j^L = a_j^L(1-a_j^L)\left(a_j^L - y_j\right) = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
 \]
-!et
 and using the Hadamard product of two vectors we can write this as
-!bt
 \[
 \bm{\delta}^L = \sigma'(\hat{z}^L)\circ\frac{\partial {\cal C}}{\partial (\bm{a}^L)}.
 \]
-!et
+\end{frame}
 
-!split
-===== Analyzing the last results =====
+\begin{frame}[plain,fragile]
+\frametitle{Analyzing the last results}
 
 This is an important expression. The second term on the right handside
 measures how fast the cost function is changing as a function of the $j$th
@@ -704,10 +831,10 @@ much on a particular output node $j$, then $\delta_j^L$ will be small,
 which is what we would expect. The first term on the right, measures
 how fast the activation function $f$ is changing at a given activation
 value $z_j^L$.
+\end{frame}
 
-!split
-===== More considerations =====
-
+\begin{frame}[plain,fragile]
+\frametitle{More considerations}
 
 Notice that everything in the above equations is easily computed.  In
 particular, we compute $z_j^L$ while computing the behaviour of the
@@ -717,180 +844,147 @@ output depends on the form of the cost function.
 However, provided the cost function is known there should be little
 trouble in calculating
 
-!bt
 \[
 \frac{\partial {\cal C}}{\partial (a_j^L)}
 \]
-!et
 
 With the definition of $\delta_j^L$ we have a more compact definition of the derivative of the cost function in terms of the weights, namely
-!bt
 \[
 \frac{\partial{\cal C}}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1}.
 \]
-!et
+\end{frame}
 
-!split
-===== Derivatives in terms of $z_j^L$ =====
+\begin{frame}[plain,fragile]
+\frametitle{Derivatives in terms of $z_j^L$}
 
 It is also easy to see that our previous equation can be written as
 
-!bt
 \[
 \delta_j^L =\frac{\partial {\cal C}}{\partial z_j^L}= \frac{\partial {\cal C}}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L},
 \]
-!et
 which can also be interpreted as the partial derivative of the cost function with respect to the biases $b_j^L$, namely
-!bt
 \[
 \delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L}\frac{\partial b_j^L}{\partial z_j^L}=\frac{\partial {\cal C}}{\partial b_j^L},
 \]
-!et
-That is, the error $\delta_j^L$ is exactly equal to the rate of change of the cost function as a function of the bias. 
+That is, the error $\delta_j^L$ is exactly equal to the rate of change of the cost function as a function of the bias.
+\end{frame}
 
-!split
-===== Bringing it together =====
+\begin{frame}[plain,fragile]
+\frametitle{Bringing it together}
 
 We have now three equations that are essential for the computations of the derivatives of the cost function at the output layer. These equations are needed to start the algorithm and they are
 
-!bt
 \begin{equation}
 \frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1},
 \end{equation}
-!et
 and
-!bt
 \begin{equation}
 \delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
 \end{equation}
-!et
 and
 
-!bt
 \begin{equation}
 \delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L},
 \end{equation}
-!et
+\end{frame}
 
-
-!split
-===== Final back propagating equation =====
+\begin{frame}[plain,fragile]
+\frametitle{Final back propagating equation}
 
 We have that (replacing $L$ with a general layer $l$)
-!bt
 \[
 \delta_j^l =\frac{\partial {\cal C}}{\partial z_j^l}.
 \]
-!et
 We want to express this in terms of the equations for layer $l+1$.
+\end{frame}
 
-!split
-===== Using the chain rule and summing over all $k$ entries =====
+\begin{frame}[plain,fragile]
+\frametitle{Using the chain rule and summing over all $k$ entries}
 
 We obtain
-!bt
 \[
 \delta_j^l =\sum_k \frac{\partial {\cal C}}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^{l}}=\sum_k \delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^{l}},
 \]
-!et
 and recalling that
-!bt
 \[
 z_j^{l+1} = \sum_{i=1}^{M_{l}}w_{ij}^{l+1}a_i^{l}+b_j^{l+1},
 \]
-!et
 with $M_l$ being the number of nodes in layer $l$, we obtain
-!bt
 \[
 \delta_j^l =\sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l),
 \]
-!et
 This is our final equation.
 
 We are now ready to set up the algorithm for back propagation and learning the weights and biases.
+\end{frame}
 
-!split
-===== Setting up the back propagation algorithm =====
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the back propagation algorithm}
 
 The four equations  provide us with a way of computing the gradient of the cost function. Let us write this out in the form of an algorithm.
 
-_First_, we set up the input data $\hat{x}$ and the activations
+\textbf{First}, we set up the input data $\hat{x}$ and the activations
 $\hat{z}_1$ of the input layer and compute the activation function and
 the pertinent outputs $\hat{a}^1$.
 
-_Secondly_, we perform then the feed forward till we reach the output
+\textbf{Secondly}, we perform then the feed forward till we reach the output
 layer and compute all $\hat{z}_l$ of the input layer and compute the
 activation function and the pertinent outputs $\hat{a}^l$ for
 $l=1,2,3,\dots,L$.
 
+\textbf{Notation}: The first hidden layer has $l=1$ as label and the final output layer has $l=L$.
+\end{frame}
 
-_Notation_: The first hidden layer has $l=1$ as label and the final output layer has $l=L$.
-
-!split
-===== Setting up the back propagation algorithm, part 2 =====
-
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the back propagation algorithm, part 2}
 
 Thereafter we compute the ouput error $\hat{\delta}^L$ by computing all
-!bt
 \[
 \delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
 \]
-!et
 
 Then we compute the back propagate error for each $l=L-1,L-2,\dots,1$ as
-!bt
 \[
 \delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
 \]
-!et
+\end{frame}
 
-!split
-===== Setting up the Back propagation algorithm, part 3 =====
-
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the Back propagation algorithm, part 3}
 
 Finally, we update the weights and the biases using gradient descent
 for each $l=L-1,L-2,\dots,1$ and update the weights and biases
 according to the rules
 
-!bt
 \[
 w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
 \]
-!et
 
-!bt
 \[
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 \]
-!et
 with $\eta$ being the learning rate.
+\end{frame}
 
-!split
-===== Updating the gradients  =====
+\begin{frame}[plain,fragile]
+\frametitle{Updating the gradients}
 
 With the back propagate error for each $l=L-1,L-2,\dots,1$ as
-!bt
 \[
 \delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}sigma'(z_j^l),
 \]
-!et
 we update the weights and the biases using gradient descent for each $l=L-1,L-2,\dots,1$ and update the weights and biases according to the rules
-!bt
 \[
 w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
 \]
-!et
 
-!bt
 \[
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 \]
-!et
+\end{frame}
 
-
-
-!split
-===== Fine-tuning neural network hyperparameters =====
+\begin{frame}[plain,fragile]
+\frametitle{Fine-tuning neural network hyperparameters}
 
 The flexibility of neural networks is also one of their main
 drawbacks: there are many hyperparameters to tweak. Not only can you
@@ -901,25 +995,31 @@ function to use in each layer, the weight initialization logic, the
 stochastic gradient optmized and much more. How do you know what
 combination of hyperparameters is the best for your task?
 
-* You can use grid search with cross-validation to find the right hyperparameters.
+\begin{itemize}
+\item You can use grid search with cross-validation to find the right hyperparameters.
+\end{itemize}
 
+\noindent
 However,since there are many hyperparameters to tune, and since
 training a neural network on a large dataset takes a lot of time, you
 will only be able to explore a tiny part of the hyperparameter space.
 
+\begin{itemize}
+\item You can use randomized search.
 
-* You can use randomized search.
-* Or use tools like "Oscar":"http://oscar.calldesk.ai/", which implements more complex algorithms to help you find a good set of hyperparameters quickly.  
+\item Or use tools like \href{{http://oscar.calldesk.ai/}}{Oscar}, which implements more complex algorithms to help you find a good set of hyperparameters quickly.  
+\end{itemize}
 
-!split
-===== Hidden layers =====
+\noindent
+\end{frame}
 
-
+\begin{frame}[plain,fragile]
+\frametitle{Hidden layers}
 
 For many problems you can start with just one or two hidden layers and
 it will work just fine.  For the MNIST data set you ca easily get a
 high accuracy using just one hidden layer with a few hundred neurons.
-You can reach for this data set above 98% accuracy using two hidden
+You can reach for this data set above 98\% accuracy using two hidden
 layers with the same total amount of neurons, in roughly the same
 amount of training time.
 
@@ -931,12 +1031,10 @@ need a huge amount of training data. However, you will rarely have to
 train such networks from scratch: it is much more common to reuse
 parts of a pretrained state-of-the-art network that performs a similar
 task.
+\end{frame}
 
-
-
-
-!split 
-===== Which activation function should I use? =====
+\begin{frame}[plain,fragile]
+\frametitle{Which activation function should I use?}
 
 The Back propagation algorithm we derived above works by going from
 the output layer to the input layer, propagating the error gradient on
@@ -944,33 +1042,31 @@ the way. Once the algorithm has computed the gradient of the cost
 function with regards to each parameter in the network, it uses these
 gradients to update each parameter with a Gradient Descent (GD) step.
 
-
 Unfortunately for us, the gradients often get smaller and smaller as
 the algorithm progresses down to the first hidden layers. As a result,
 the GD update leaves the lower layer connection weights virtually
 unchanged, and training never converges to a good solution. This is
-known in the literature as _the vanishing gradients problem_.
+known in the literature as \textbf{the vanishing gradients problem}.
 
 In other cases, the opposite can happen, namely the the gradients can
 grow bigger and bigger. The result is that many of the layers get
 large updates of the weights the algorithm diverges. This is the
-_exploding gradients problem_, which is mostly encountered in
+\textbf{exploding gradients problem}, which is mostly encountered in
 recurrent neural networks. More generally, deep neural networks suffer
 from unstable gradients, different layers may learn at widely
 different speeds
+\end{frame}
 
-
-
-!split 
-===== Is the Logistic activation function (Sigmoid)  our choice? =====
+\begin{frame}[plain,fragile]
+\frametitle{Is the Logistic activation function (Sigmoid)  our choice?}
 
 Although this unfortunate behavior has been empirically observed for
 quite a while (it was one of the reasons why deep neural networks were
 mostly abandoned for a long time), it is only around 2010 that
 significant progress was made in understanding it.
 
-A paper titled "Understanding the Difficulty of Training Deep
-Feedforward Neural Networks by Xavier Glorot and Yoshua Bengio":"http://proceedings.mlr.press/v9/glorot10a.html" found that
+A paper titled \href{{http://proceedings.mlr.press/v9/glorot10a.html}}{Understanding the Difficulty of Training Deep
+Feedforward Neural Networks by Xavier Glorot and Yoshua Bengio} found that
 the problems with the popular logistic
 sigmoid activation function and the weight initialization technique
 that was most popular at the time, namely random initialization using
@@ -985,10 +1081,10 @@ activation function saturates at the top layers. This is actually made
 worse by the fact that the logistic function has a mean of 0.5, not 0
 (the hyperbolic tangent function has a mean of 0 and behaves slightly
 better than the logistic function in deep networks).
+\end{frame}
 
-
-!split
-===== The derivative of the Logistic funtion =====
+\begin{frame}[plain,fragile]
+\frametitle{The derivative of the Logistic funtion}
 
 Looking at the logistic activation function, when inputs become large
 (negative or positive), the function saturates at 0 or 1, with a
@@ -1007,10 +1103,10 @@ the signal to flow properly, the authors argue that we need the
 variance of the outputs of each layer to be equal to the variance of
 its inputs, and we also need the gradients to have equal variance
 before and after flowing through a layer in the reverse direction.
+\end{frame}
 
-
-!split
-===== Insights from the paper by Glorot and Bengio =====
+\begin{frame}[plain,fragile]
+\frametitle{Insights from the paper by Glorot and Bengio}
 
 One of the insights in the 2010 paper by Glorot and Bengio was that
 the vanishing/exploding gradients problems were in part due to a poor
@@ -1021,11 +1117,10 @@ that other activation functions behave much better in deep neural
 networks, in particular the ReLU activation function, mostly because
 it does not saturate for positive values (and also because it is quite
 fast to compute).
+\end{frame}
 
-
-
-!split
-===== The RELU function family =====
+\begin{frame}[plain,fragile]
+\frametitle{The RELU function family}
 
 The ReLU activation function suffers from a problem known as the dying
 ReLUs: during training, some neurons effectively die, meaning they
@@ -1042,15 +1137,13 @@ To solve this problem, nowadays practitioners use a variant of the
 ReLU function, such as the leaky ReLU discussed above or the so-called
 exponential linear unit (ELU) function
 
-
-!bt
 \[
 ELU(z) = \left\{\begin{array}{cc} \alpha\left( \exp{(z)}-1\right) & z < 0,\\  z & z \ge 0.\end{array}\right. 
 \]
-!et
+\end{frame}
 
-!split
-===== Which activation function should we use? =====
+\begin{frame}[plain,fragile]
+\frametitle{Which activation function should we use?}
 
 In general it seems that the ELU activation function is better than
 the leaky ReLU function (and its variants), which is better than
@@ -1063,10 +1156,10 @@ another hyperparameter, you may just use the default $\alpha$ of
 $0.01$ for the leaky ReLU, and $1$ for ELU. If you have spare time and
 computing power, you can use cross-validation or bootstrap to evaluate
 other activation functions.
+\end{frame}
 
-
-!split
-=====  More on activation functions, output layers =====
+\begin{frame}[plain,fragile]
+\frametitle{More on activation functions, output layers}
 
 In most cases you can use the ReLU activation function in the hidden
 layers (or one of its variants).
@@ -1074,16 +1167,19 @@ layers (or one of its variants).
 It is a bit faster to compute than other activation functions, and the
 gradient descent optimization does in general not get stuck.
 
-_For the output layer:_
+\textbf{For the output layer:}
 
-* For classification the softmax activation function is generally a good choice for classification tasks (when the classes are mutually exclusive).
-* For regression tasks, you can simply use no activation function at all.
+\begin{itemize}
+\item For classification the softmax activation function is generally a good choice for classification tasks (when the classes are mutually exclusive).
 
+\item For regression tasks, you can simply use no activation function at all.
+\end{itemize}
 
+\noindent
+\end{frame}
 
-
-!split
-===== Batch Normalization =====
+\begin{frame}[plain,fragile]
+\frametitle{Batch Normalization}
 
 Batch Normalization aims to address the vanishing/exploding gradients
 problems, and more generally the problem that the distribution of each
@@ -1100,9 +1196,10 @@ normalize the inputs, the algorithm needs to estimate the inputs’ mean
 and standard deviation. It does so by evaluating the mean and standard
 deviation of the inputs over the current mini-batch, from this the
 name batch normalization.
+\end{frame}
 
-!split
-===== Dropout =====
+\begin{frame}[plain,fragile]
+\frametitle{Dropout}
 
 It is a fairly simple algorithm: at every training step, every neuron
 (including the input neurons but excluding the output neurons) has a
@@ -1111,11 +1208,12 @@ entirely ignored during this training step, but it may be active
 during the next step.
 
 The hyperparameter $p$ is called the dropout rate, and it is typically
-set to 50%. After training, the neurons are not dropped anymore.  It
+set to 50\%. After training, the neurons are not dropped anymore.  It
 is viewed as one of the most popular regularization techniques.
+\end{frame}
 
-!split
-===== Gradient Clipping =====
+\begin{frame}[plain,fragile]
+\frametitle{Gradient Clipping}
 
 A popular technique to lessen the exploding gradients problem is to
 simply clip the gradients during backpropagation so that they never
@@ -1126,10 +1224,10 @@ This technique is called Gradient Clipping.
 
 In general however, Batch
 Normalization is preferred.
+\end{frame}
 
-!split 
-===== A top-down perspective on Neural networks =====
-
+\begin{frame}[plain,fragile]
+\frametitle{A top-down perspective on Neural networks}
 
 The first thing we would like to do is divide the data into two or
 three parts. A training set, a validation or dev (development) set,
@@ -1141,17 +1239,19 @@ test error in order to make tweaks to our model. It is crucial that we
 do not use any of the test data to train the algorithm. This is a
 cardinal sin in ML. Then:
 
- 
-* Estimate optimal error rate
+\begin{itemize}
+\item Estimate optimal error rate
 
-* Minimize underfitting (bias) on training data set.
+\item Minimize underfitting (bias) on training data set.
 
-* Make sure you are not overfitting.
+\item Make sure you are not overfitting.
+\end{itemize}
 
+\noindent
+\end{frame}
 
-
-!split
-===== More top-down perspectives =====
+\begin{frame}[plain,fragile]
+\frametitle{More top-down perspectives}
 
 If the validation and test sets are drawn from the same distributions,
 then a good performance on the validation set should lead to similarly
@@ -1171,9 +1271,10 @@ the test data. The difference between the performance of the algorithm
 on these two validation sets quantifies the train-test mismatch. This
 can serve as another important diagnostic when using DNNs for
 supervised learning.
+\end{frame}
 
-!split
-===== Limitations of supervised learning with deep networks =====
+\begin{frame}[plain,fragile]
+\frametitle{Limitations of supervised learning with deep networks}
 
 Like all statistical methods, supervised learning using neural
 networks has important limitations. This is especially important when
@@ -1181,37 +1282,46 @@ one seeks to apply these methods, especially to physics problems. Like
 all tools, DNNs are not a universal solution. Often, the same or
 better performance on a task can be achieved by using a few
 hand-engineered features (or even a collection of random
-features). 
+features).
+\end{frame}
 
-
-!split
-===== Limitations of NNs =====
+\begin{frame}[plain,fragile]
+\frametitle{Limitations of NNs}
 
 Here we list some of the important limitations of supervised neural network based models. 
 
+\begin{itemize}
+\item \textbf{Need labeled data}. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g.~one must pay for human experts to label images).
 
+\item \textbf{Supervised neural networks are extremely data intensive.} DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.
+\end{itemize}
 
-* _Need labeled data_. All supervised learning methods, DNNs for supervised learning require labeled data. Often, labeled data is harder to acquire than unlabeled data (e.g. one must pay for human experts to label images).
-* _Supervised neural networks are extremely data intensive._ DNNs are data hungry. They perform best when data is plentiful. This is doubly so for supervised methods where the data must also be labeled. The utility of DNNs is extremely limited if data is hard to acquire or the datasets are small (hundreds to a few thousand samples). In this case, the performance of other methods that utilize hand-engineered features can exceed that of DNNs.
+\noindent
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Homogeneous data}
 
-!split
-===== Homogeneous data =====
+\begin{itemize}
+\item \textbf{Homogeneous data.} Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.~some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.
+\end{itemize}
 
-* _Homogeneous data._ Almost all DNNs deal with homogeneous data of one type. It is very hard to design architectures that mix and match data types (i.e.~some continuous variables, some discrete variables, some time series). In applications beyond images, video, and language, this is often what is required. In contrast, ensemble models like random forests or gradient-boosted trees have no difficulty handling mixed data types.
+\noindent
+\end{frame}
 
-!split
-===== More limitations =====
+\begin{frame}[plain,fragile]
+\frametitle{More limitations}
 
+\begin{itemize}
+\item \textbf{Many problems are not about prediction.} In natural science we are often interested in learning something about the underlying distribution that generates the data. In this case, it is often difficult to cast these ideas in a supervised learning setting. While the problems are related, it is possible to make good predictions with a \emph{wrong} model. The model might or might not be useful for understanding the underlying science.
+\end{itemize}
 
-* _Many problems are not about prediction._ In natural science we are often interested in learning something about the underlying distribution that generates the data. In this case, it is often difficult to cast these ideas in a supervised learning setting. While the problems are related, it is possible to make good predictions with a *wrong* model. The model might or might not be useful for understanding the underlying science.
-
+\noindent
 Some of these remarks are particular to DNNs, others are shared by all supervised learning methods. This motivates the use of unsupervised methods which in part circumvent these problems.
+\end{frame}
 
-
-
-!split
-===== Building a neural network code =====
+\begin{frame}[plain,fragile]
+\frametitle{Building a neural network code}
 
 Here we  present a flexible object oriented codebase
 for a feed forward neural network, along with a demonstration of how
@@ -1222,13 +1332,14 @@ neural network.
 
 The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.
 After these codes we present the TensorFlow inplementation. Pytorch will be discussed next week.
+\end{frame}
 
-!split
-===== Learning rate methods  =====
+\begin{frame}[plain,fragile]
+\frametitle{Learning rate methods}
 
 The code below shows object oriented implementations of the Constant,
 Momentum, Adagrad, AdagradMomentum, RMS prop and Adam schedulers. All
-of the classes belong to the shared abstract _Scheduler class_, and
+of the classes belong to the shared abstract \textbf{Scheduler class}, and
 share the update$\_$change() and reset() methods allowing for any of the
 schedulers to be seamlessly used during the training stage, as will
 later be shown in the fit() method of the neural
@@ -1237,7 +1348,138 @@ from the weights. The reset() function takes no parameters, and resets
 the desired variables. For Constant and Momentum, reset does nothing.
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import autograd.numpy as np
 
 class Scheduler:
@@ -1369,25 +1611,44 @@ class Adam(Scheduler):
         self.moment = 0
         self.second = 0
 
-!ec
 
-!split
-===== Usage of the above learning rate schedulers =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Usage of the above learning rate schedulers}
 
 To initalize a scheduler, simply create the object and pass in the
 necessary parameters such as the learning rate and the momentum as
 shown below. As the Scheduler class is an abstract class it should not
 called directly, and will raise an error upon usage.
 
-!bc pycod
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 momentum_scheduler = Momentum(eta=1e-3, momentum=0.9)
 adam_scheduler = Adam(eta=1e-3, rho=0.9, rho2=0.999)
-!ec
+
+\end{minted}
+
 
 Here is a small example for how a segment of code using schedulers
 could look. Switching out the schedulers is simple.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 weights = np.ones((3,3))
 print(f"Before scheduler:\n{weights=}")
 
@@ -1399,10 +1660,12 @@ for e in range(epochs):
     adam_scheduler.reset()
 
 print(f"\nAfter scheduler:\n{weights=}")
-!ec
 
-!split
-===== Cost functions =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Cost functions}
 
 Here we discuss cost functions that can be used when creating the
 neural network. Every cost function takes the target vector as its
@@ -1410,7 +1673,34 @@ parameter, and returns a function valued only at $x$ such that it may
 easily be differentiated.
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import autograd.numpy as np
 
 def CostOLS(target):
@@ -1438,14 +1728,26 @@ def CostCrossEntropy(target):
         return -(1.0 / target.size) * np.sum(target * np.log(X + 10e-10))
 
     return func
-!ec
+
+\end{minted}
 
 
 Below we give a short example of how these cost function may be used
 to obtain results if you wish to test them out on your own using
 AutoGrad's automatics differentiation.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 from autograd import grad
 
 target = np.array([[1, 2, 3]]).T
@@ -1456,17 +1758,67 @@ cost_func_derivative = grad(cost_func(target))
 
 valued_at_a = cost_func_derivative(a)
 print(f"Derivative of cost function {cost_func.__name__} valued at a:\n{valued_at_a}")
-!ec
 
-!split
-===== Activation functions =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Activation functions}
 
 Finally, before we look at the neural network, we will look at the
 activation functions which can be specified between the hidden layers
 and as the output function. Each function can be valued for any given
 vector or matrix X, and can be differentiated via derivate().
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import autograd.numpy as np
 from autograd import elementwise_grad
 
@@ -1514,7 +1866,9 @@ def derivate(func):
 
     else:
         return elementwise_grad(func)
-!ec
+
+\end{minted}
+
 
 Below follows a short demonstration of how to use an activation
 function. The derivative of the activation function will be important
@@ -1522,7 +1876,18 @@ when calculating the output delta term during backpropagation. Note
 that derivate() can also be used for cost functions for a more
 generalized approach.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 z = np.array([[4, 5, 6]]).T
 print(f"Input to activation function:\n{z}")
 
@@ -1533,10 +1898,12 @@ print(f"\nOutput from {act_func.__name__} activation function:\n{a}")
 act_func_derivative = derivate(act_func)
 valued_at_z = act_func_derivative(a)
 print(f"\nDerivative of {act_func.__name__} activation function valued at z:\n{valued_at_z}")
-!ec
 
-!split
-===== The Neural Network =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{The Neural Network}
 
 Now that we have gotten a good understanding of the implementation of
 some important components, we can take a look at an object oriented
@@ -1551,7 +1918,469 @@ code present, it makes for an easy to use and generalizeable interface
 for creating many types of neural networks as will be demonstrated
 below.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import math
 import autograd.numpy as np
 import sys
@@ -2013,12 +2842,49 @@ class FFNN:
         if n >= decimals - 1:
             return str(round(value))
         return f"{value:.{decimals-n-1}f}"
-!ec
+
+\end{minted}
+
 
 Before we make a model, we will quickly generate a dataset we can use
 for our linear regression problem as shown below
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import autograd.numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -2053,7 +2919,9 @@ X = create_X(x, y, poly_degree)
 
 X_train, X_test, t_train, t_test = train_test_split(X, target)
 
-!ec
+
+\end{minted}
+
 
 Now that we have our dataset ready for the regression, we can create
 our regressor. Note that with the seed parameter, we can make sure our
@@ -2063,24 +2931,40 @@ of input nodes to be equal to the datapoints, and the output to
 predict one value).
 
 
-!bc pycod
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 input_nodes = X_train.shape[1]
 output_nodes = 1
 
 linear_regression = FFNN((input_nodes, output_nodes), output_func=identity, cost_func=CostOLS, seed=2023)
 
-!ec
+
+\end{minted}
+
 
 We then fit our model with our training data using the scheduler of our choice.
 
-!bc pycod
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 linear_regression.reset_weights() # reset weights such that previous runs or reruns don't affect the weights
 
 scheduler = Constant(eta=1e-3)
 scores = linear_regression.fit(X_train, t_train, scheduler)
 
 
-!ec
+
+\end{minted}
+
 
 Due to the progress bar we can see the MSE (train$\_$error) throughout
 the FFNN's training. Note that the fit() function has some optional
@@ -2089,12 +2973,19 @@ hyperparameter can be left ignored if not needed, and equally the FFNN
 will by default run for 100 epochs. These can easily be changed, such
 as for example:
 
-!bc pycod
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 linear_regression.reset_weights() # reset weights such that previous runs or reruns don't affect the weights
 
 scores = linear_regression.fit(X_train, t_train, scheduler, lam=1e-4, epochs=1000)
 
-!ec
+
+\end{minted}
+
 
 We see that given more epochs to train on, the regressor reaches a lower MSE.
 
@@ -2104,7 +2995,22 @@ case.
 
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 from sklearn.datasets import load_breast_cancer
 from sklearn.preprocessing import MinMaxScaler
 
@@ -2121,29 +3027,59 @@ X_train = scaler.transform(X_train)
 X_val = scaler.transform(X_val)
 
 
-!ec
 
-!bc pycod
+\end{minted}
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 input_nodes = X_train.shape[1]
 output_nodes = 1
 
 logistic_regression = FFNN((input_nodes, output_nodes), output_func=sigmoid, cost_func=CostLogReg, seed=2023)
 
-!ec
+
+\end{minted}
+
 
 We will now make use of our validation data by passing it into our fit function as a keyword argument
 
-!bc pycod
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 logistic_regression.reset_weights() # reset weights such that previous runs or reruns don't affect the weights
 
 scheduler = Adam(eta=1e-3, rho=0.9, rho2=0.999)
 scores = logistic_regression.fit(X_train, t_train, scheduler, epochs=1000, X_val=X_val, t_val=t_val)
 
 
-!ec
+
+\end{minted}
+
 
 Finally, we will create a neural network with 2 hidden layers with activation functions.
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 input_nodes = X_train.shape[1]
 hidden_nodes1 = 100
 hidden_nodes2 = 30
@@ -2154,25 +3090,62 @@ dims = (input_nodes, hidden_nodes1, hidden_nodes2, output_nodes)
 neural_network = FFNN(dims, hidden_func=RELU, output_func=sigmoid, cost_func=CostLogReg, seed=2023)
 
 
-!ec
 
-!bc pycod
+\end{minted}
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 neural_network.reset_weights() # reset weights such that previous runs or reruns don't affect the weights
 
 scheduler = Adam(eta=1e-4, rho=0.9, rho2=0.999)
 scores = neural_network.fit(X_train, t_train, scheduler, epochs=1000, X_val=X_val, t_val=t_val)
 
-!ec
 
-!split
-===== Multiclass classification =====
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Multiclass classification}
 
 Finally, we will demonstrate the use case of multiclass classification
 using our FFNN with the famous MNIST dataset, which contain images of
 digits between the range of 0 to 9.
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 from sklearn.datasets import load_digits
 
 def onehot(target: np.ndarray):
@@ -2200,16 +3173,29 @@ multiclass.reset_weights() # reset weights such that previous runs or reruns don
 scheduler = Adam(eta=1e-4, rho=0.9, rho2=0.999)
 scores = multiclass.fit(X, target, scheduler, epochs=1000)
 
-!ec
 
+\end{minted}
+\end{frame}
 
-
-!split
-===== Testing the XOR gate and other gates =====
+\begin{frame}[plain,fragile]
+\frametitle{Testing the XOR gate and other gates}
 
 Let us now use our code to test the XOR gate.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 X = np.array([ [0, 0], [0, 1], [1, 0],[1, 1]],dtype=np.float64)
 
 # The XOR gate
@@ -2222,83 +3208,147 @@ logistic_regression = FFNN((input_nodes, output_nodes), output_func=sigmoid, cos
 logistic_regression.reset_weights() # reset weights such that previous runs or reruns don't affect the weights
 scheduler = Adam(eta=1e-1, rho=0.9, rho2=0.999)
 scores = logistic_regression.fit(X, yXOR, scheduler, epochs=1000)
-!ec
+
+\end{minted}
+
 Not bad, but the results depend strongly on the learning reate. Try different learning rates.
+\end{frame}
 
-
-
-
-!split
-===== Building neural networks in Tensorflow and Keras =====
+\begin{frame}[plain,fragile]
+\frametitle{Building neural networks in Tensorflow and Keras}
 
 Now we want  to build on the experience gained from our neural network implementation in NumPy and scikit-learn
 and use it to construct a neural network in Tensorflow. Once we have constructed a neural network in NumPy
 and Tensorflow, building one in Keras is really quite trivial, though the performance may suffer.  
-  
+
 In our previous example we used only one hidden layer, and in this we will use two. From this it should be quite
 clear how to build one using an arbitrary number of hidden layers, using data structures such as Python lists or
 NumPy arrays.
+\end{frame}
 
-!split
-===== Tensorflow =====
-  
+\begin{frame}[plain,fragile]
+\frametitle{Tensorflow}
+
 Tensorflow is an open source library machine learning library
 developed by the Google Brain team for internal use. It was released
 under the Apache 2.0 open source license in November 9, 2015.
-  
+
 Tensorflow is a computational framework that allows you to construct
 machine learning models at different levels of abstraction, from
 high-level, object-oriented APIs like Keras, down to the C++ kernels
 that Tensorflow is built upon. The higher levels of abstraction are
 simpler to use, but less flexible, and our choice of implementation
 should reflect the problems we are trying to solve.
-  
-"Tensorflow uses":"https://www.tensorflow.org/guide/graphs" so-called graphs to represent your computation
-in terms of the dependencies between individual operations, such that you first build a Tensorflow *graph*
-to represent your model, and then create a Tensorflow *session* to run the graph.
-  
+
+\href{{https://www.tensorflow.org/guide/graphs}}{Tensorflow uses} so-called graphs to represent your computation
+in terms of the dependencies between individual operations, such that you first build a Tensorflow \emph{graph}
+to represent your model, and then create a Tensorflow \emph{session} to run the graph.
+
 In this guide we will analyze the same data as we did in our NumPy and
 scikit-learn tutorial, gathered from the MNIST database of images. We
 will give an introduction to the lower level Python Application
 Program Interfaces (APIs), and see how we use them to build our graph.
 Then we will build (effectively) the same graph in Keras, to see just
 how simple solving a machine learning problem can be.
-  
+
 To install tensorflow on Unix/Linux systems, use pip as
-!bc pycod
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 pip3 install tensorflow
-!ec
-and/or if you use _anaconda_, just write (or install from the graphical user interface)
+
+\end{minted}
+
+and/or if you use \textbf{anaconda}, just write (or install from the graphical user interface)
 (current release of CPU-only TensorFlow)
-!bc pycod 
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 conda create -n tf tensorflow
 conda activate tf
-!ec
+
+\end{minted}
+
 To install the current release of GPU TensorFlow
-!bc pycod
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 conda create -n tf-gpu tensorflow-gpu
 conda activate tf-gpu
-!ec
 
-!split
-===== Using Keras =====
-  
-Keras is a high level "neural network":"https://en.wikipedia.org/wiki/Application_programming_interface"
+\end{minted}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Using Keras}
+
+Keras is a high level \href{{https://en.wikipedia.org/wiki/Application_programming_interface}}{neural network}
 that supports Tensorflow, CTNK and Theano as backends.  
 If you have Anaconda installed you may run the following command
-!bc pycod
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 conda install keras
-!ec
-You can look up the "instructions here":"https://keras.io/" for more information.
 
-We will to a large extent use _keras_ in this course. 
+\end{minted}
 
-!split
-===== Collect and pre-process data =====
+You can look up the \href{{https://keras.io/}}{instructions here} for more information.
+
+We will to a large extent use \textbf{keras} in this course.
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Collect and pre-process data}
 
 Let us look again at the MINST data set.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 # import necessary packages
 import numpy as np
 import matplotlib.pyplot as plt
@@ -2342,9 +3392,29 @@ for i, image in enumerate(digits.images[random_indices]):
     plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
     plt.title("Label: %d" % digits.target[random_indices[i]])
 plt.show()
-!ec
 
-!bc pycod
+\end{minted}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Sequential      #This allows appending layers to existing models
 from tensorflow.keras.layers import Dense           #This allows defining the characteristics of a particular layer
@@ -2362,11 +3432,30 @@ train_size = 0.8
 test_size = 1 - train_size
 X_train, X_test, Y_train, Y_test = train_test_split(inputs, labels, train_size=train_size,
                                                     test_size=test_size)
-!ec
+
+\end{minted}
 
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 
 epochs = 100
 batch_size = 100
@@ -2385,9 +3474,27 @@ def create_neural_network_keras(n_neurons_layer1, n_neurons_layer2, n_categories
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
     
     return model
-!ec
 
-!bc pycod
+\end{minted}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 DNN_keras = np.zeros((len(eta_vals), len(lmbd_vals)), dtype=object)
         
 for i, eta in enumerate(eta_vals):
@@ -2403,11 +3510,43 @@ for i, eta in enumerate(eta_vals):
         print("Lambda = ", lmbd)
         print("Test accuracy: %.3f" % scores[1])
         print()
-!ec
+
+\end{minted}
 
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 # optional
 # visual representation of grid search
 # uses seaborn heatmap, could probably do this in matplotlib
@@ -2439,14 +3578,14 @@ ax.set_title("Test Accuracy")
 ax.set_ylabel("$\eta$")
 ax.set_xlabel("$\lambda$")
 plt.show()
-!ec
 
+\end{minted}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{And using PyTorch (more discussions to follow)}
 
-!split
-===== And using PyTorch (more discussions to follow) =====
-
-!bc pycod
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 # Simple neural-network (NN) code using pytorch
 import numpy as np
 import torch
@@ -2507,9 +3646,8 @@ predictions = (model(X) > 0.5).int()
 for i in range(5):
     print('%s => %d (expected %d)' % (X[i].tolist(), predictions[i], y[i]))
 
-!ec
 
+\end{minted}
+\end{frame}
 
-
-
-
+\end{document}
