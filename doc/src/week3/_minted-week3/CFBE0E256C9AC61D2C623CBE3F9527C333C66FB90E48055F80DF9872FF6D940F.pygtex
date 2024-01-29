@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n}{weights} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{))}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Before scheduler:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{weights}\PYG{l+s+si}{=\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{epochs} \PYG{o}{=} \PYG{l+m+mi}{10}
+\PYG{k}{for} \PYG{n}{e} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{):}
+    \PYG{n}{gradient} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+    \PYG{n}{change} \PYG{o}{=} \PYG{n}{adam\PYGZus{}scheduler}\PYG{o}{.}\PYG{n}{update\PYGZus{}change}\PYG{p}{(}\PYG{n}{gradient}\PYG{p}{)}
+    \PYG{n}{weights} \PYG{o}{=} \PYG{n}{weights} \PYG{o}{\PYGZhy{}} \PYG{n}{change}
+    \PYG{n}{adam\PYGZus{}scheduler}\PYG{o}{.}\PYG{n}{reset}\PYG{p}{()}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{After scheduler:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{weights}\PYG{l+s+si}{=\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\end{Verbatim}

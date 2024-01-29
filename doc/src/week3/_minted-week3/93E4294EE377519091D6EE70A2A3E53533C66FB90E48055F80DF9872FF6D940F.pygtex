@@ -1,0 +1,464 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import} \PYG{n+nn}{math}
+\PYG{k+kn}{import} \PYG{n+nn}{autograd.numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{sys}
+\PYG{k+kn}{import} \PYG{n+nn}{warnings}
+\PYG{k+kn}{from} \PYG{n+nn}{autograd} \PYG{k+kn}{import} \PYG{n}{grad}\PYG{p}{,} \PYG{n}{elementwise\PYGZus{}grad}
+\PYG{k+kn}{from} \PYG{n+nn}{random} \PYG{k+kn}{import} \PYG{n}{random}\PYG{p}{,} \PYG{n}{seed}
+\PYG{k+kn}{from} \PYG{n+nn}{copy} \PYG{k+kn}{import} \PYG{n}{deepcopy}\PYG{p}{,} \PYG{n}{copy}
+\PYG{k+kn}{from} \PYG{n+nn}{typing} \PYG{k+kn}{import} \PYG{n}{Tuple}\PYG{p}{,} \PYG{n}{Callable}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.utils} \PYG{k+kn}{import} \PYG{n}{resample}
+
+\PYG{n}{warnings}\PYG{o}{.}\PYG{n}{simplefilter}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}error\PYGZdq{}}\PYG{p}{)}
+
+
+\PYG{k}{class} \PYG{n+nc}{FFNN}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Description:}
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{        Feed Forward Neural Network with interface enabling flexible design of a}
+\PYG{l+s+sd}{        nerual networks architecture and the specification of activation function}
+\PYG{l+s+sd}{        in the hidden layers and output layer respectively. This model can be used}
+\PYG{l+s+sd}{        for both regression and classification problems, depending on the output function.}
+
+\PYG{l+s+sd}{    Attributes:}
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{        I   dimensions (tuple[int]): A list of positive integers, which specifies the}
+\PYG{l+s+sd}{            number of nodes in each of the networks layers. The first integer in the array}
+\PYG{l+s+sd}{            defines the number of nodes in the input layer, the second integer defines number}
+\PYG{l+s+sd}{            of nodes in the first hidden layer and so on until the last number, which}
+\PYG{l+s+sd}{            specifies the number of nodes in the output layer.}
+\PYG{l+s+sd}{        II  hidden\PYGZus{}func (Callable): The activation function for the hidden layers}
+\PYG{l+s+sd}{        III output\PYGZus{}func (Callable): The activation function for the output layer}
+\PYG{l+s+sd}{        IV  cost\PYGZus{}func (Callable): Our cost function}
+\PYG{l+s+sd}{        V   seed (int): Sets random seed, makes results reproducible}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}
+        \PYG{n+nb+bp}{self}\PYG{p}{,}
+        \PYG{n}{dimensions}\PYG{p}{:} \PYG{n+nb}{tuple}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{],}
+        \PYG{n}{hidden\PYGZus{}func}\PYG{p}{:} \PYG{n}{Callable} \PYG{o}{=} \PYG{n}{sigmoid}\PYG{p}{,}
+        \PYG{n}{output\PYGZus{}func}\PYG{p}{:} \PYG{n}{Callable} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{p}{,}
+        \PYG{n}{cost\PYGZus{}func}\PYG{p}{:} \PYG{n}{Callable} \PYG{o}{=} \PYG{n}{CostOLS}\PYG{p}{,}
+        \PYG{n}{seed}\PYG{p}{:} \PYG{n+nb}{int} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+    \PYG{p}{):}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{dimensions} \PYG{o}{=} \PYG{n}{dimensions}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{hidden\PYGZus{}func} \PYG{o}{=} \PYG{n}{hidden\PYGZus{}func}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}func} \PYG{o}{=} \PYG{n}{output\PYGZus{}func}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost\PYGZus{}func} \PYG{o}{=} \PYG{n}{cost\PYGZus{}func}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{seed} \PYG{o}{=} \PYG{n}{seed}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}weight} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}bias} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{classification} \PYG{o}{=} \PYG{k+kc}{None}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{reset\PYGZus{}weights}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}set\PYGZus{}classification}\PYG{p}{()}
+
+    \PYG{k}{def} \PYG{n+nf}{fit}\PYG{p}{(}
+        \PYG{n+nb+bp}{self}\PYG{p}{,}
+        \PYG{n}{X}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{,}
+        \PYG{n}{t}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{,}
+        \PYG{n}{scheduler}\PYG{p}{:} \PYG{n}{Scheduler}\PYG{p}{,}
+        \PYG{n}{batches}\PYG{p}{:} \PYG{n+nb}{int} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,}
+        \PYG{n}{epochs}\PYG{p}{:} \PYG{n+nb}{int} \PYG{o}{=} \PYG{l+m+mi}{100}\PYG{p}{,}
+        \PYG{n}{lam}\PYG{p}{:} \PYG{n+nb}{float} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,}
+        \PYG{n}{X\PYGZus{}val}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+        \PYG{n}{t\PYGZus{}val}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+    \PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            This function performs the training the neural network by performing the feedforward and backpropagation}
+\PYG{l+s+sd}{            algorithm to update the networks weights.}
+
+\PYG{l+s+sd}{        Parameters:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            I    X (np.ndarray) : training data}
+\PYG{l+s+sd}{            II   t (np.ndarray) : target data}
+\PYG{l+s+sd}{            III  scheduler (Scheduler) : specified scheduler (algorithm for optimization of gradient descent)}
+\PYG{l+s+sd}{            IV   scheduler\PYGZus{}args (list[int]) : list of all arguments necessary for scheduler}
+
+\PYG{l+s+sd}{        Optional Parameters:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            V    batches (int) : number of batches the datasets are split into, default equal to 1}
+\PYG{l+s+sd}{            VI   epochs (int) : number of iterations used to train the network, default equal to 100}
+\PYG{l+s+sd}{            VII  lam (float) : regularization hyperparameter lambda}
+\PYG{l+s+sd}{            VIII X\PYGZus{}val (np.ndarray) : validation set}
+\PYG{l+s+sd}{            IX   t\PYGZus{}val (np.ndarray) : validation target set}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            I   scores (dict) : A dictionary containing the performance metrics of the model.}
+\PYG{l+s+sd}{                The number of the metrics depends on the parameters passed to the fit\PYGZhy{}function.}
+
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+        \PYG{c+c1}{\PYGZsh{} setup}
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{seed} \PYG{o+ow}{is} \PYG{o+ow}{not} \PYG{k+kc}{None}\PYG{p}{:}
+            \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{)}
+
+        \PYG{n}{val\PYGZus{}set} \PYG{o}{=} \PYG{k+kc}{False}
+        \PYG{k}{if} \PYG{n}{X\PYGZus{}val} \PYG{o+ow}{is} \PYG{o+ow}{not} \PYG{k+kc}{None} \PYG{o+ow}{and} \PYG{n}{t\PYGZus{}val} \PYG{o+ow}{is} \PYG{o+ow}{not} \PYG{k+kc}{None}\PYG{p}{:}
+            \PYG{n}{val\PYGZus{}set} \PYG{o}{=} \PYG{k+kc}{True}
+
+        \PYG{c+c1}{\PYGZsh{} creating arrays for score metrics}
+        \PYG{n}{train\PYGZus{}errors} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{)}
+        \PYG{n}{train\PYGZus{}errors}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}
+        \PYG{n}{val\PYGZus{}errors} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{)}
+        \PYG{n}{val\PYGZus{}errors}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}
+
+        \PYG{n}{train\PYGZus{}accs} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{)}
+        \PYG{n}{train\PYGZus{}accs}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}
+        \PYG{n}{val\PYGZus{}accs} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{)}
+        \PYG{n}{val\PYGZus{}accs}\PYG{o}{.}\PYG{n}{fill}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}weight} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}bias} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+
+        \PYG{n}{batch\PYGZus{}size} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{//} \PYG{n}{batches}
+
+        \PYG{n}{X}\PYG{p}{,} \PYG{n}{t} \PYG{o}{=} \PYG{n}{resample}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} this function returns a function valued only at X}
+        \PYG{n}{cost\PYGZus{}function\PYGZus{}train} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost\PYGZus{}func}\PYG{p}{(}\PYG{n}{t}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{val\PYGZus{}set}\PYG{p}{:}
+            \PYG{n}{cost\PYGZus{}function\PYGZus{}val} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost\PYGZus{}func}\PYG{p}{(}\PYG{n}{t\PYGZus{}val}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} create schedulers for each weight matrix}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{)):}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}weight}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{scheduler}\PYG{p}{))}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}bias}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{scheduler}\PYG{p}{))}
+
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{scheduler}\PYG{o}{.}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}class\PYGZus{}\PYGZus{}}\PYG{o}{.}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{: Eta=}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{scheduler}\PYG{o}{.}\PYG{n}{eta}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, Lambda=}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{lam}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+        \PYG{k}{try}\PYG{p}{:}
+            \PYG{k}{for} \PYG{n}{e} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{):}
+                \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{batches}\PYG{p}{):}
+                    \PYG{c+c1}{\PYGZsh{} allows for minibatch gradient descent}
+                    \PYG{k}{if} \PYG{n}{i} \PYG{o}{==} \PYG{n}{batches} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{:}
+                        \PYG{c+c1}{\PYGZsh{} If the for loop has reached the last batch, take all thats left}
+                        \PYG{n}{X\PYGZus{}batch} \PYG{o}{=} \PYG{n}{X}\PYG{p}{[}\PYG{n}{i} \PYG{o}{*} \PYG{n}{batch\PYGZus{}size} \PYG{p}{:,} \PYG{p}{:]}
+                        \PYG{n}{t\PYGZus{}batch} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{i} \PYG{o}{*} \PYG{n}{batch\PYGZus{}size} \PYG{p}{:,} \PYG{p}{:]}
+                    \PYG{k}{else}\PYG{p}{:}
+                        \PYG{n}{X\PYGZus{}batch} \PYG{o}{=} \PYG{n}{X}\PYG{p}{[}\PYG{n}{i} \PYG{o}{*} \PYG{n}{batch\PYGZus{}size} \PYG{p}{:} \PYG{p}{(}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{*} \PYG{n}{batch\PYGZus{}size}\PYG{p}{,} \PYG{p}{:]}
+                        \PYG{n}{t\PYGZus{}batch} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{i} \PYG{o}{*} \PYG{n}{batch\PYGZus{}size} \PYG{p}{:} \PYG{p}{(}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{*} \PYG{n}{batch\PYGZus{}size}\PYG{p}{,} \PYG{p}{:]}
+
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}feedforward}\PYG{p}{(}\PYG{n}{X\PYGZus{}batch}\PYG{p}{)}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}backpropagate}\PYG{p}{(}\PYG{n}{X\PYGZus{}batch}\PYG{p}{,} \PYG{n}{t\PYGZus{}batch}\PYG{p}{,} \PYG{n}{lam}\PYG{p}{)}
+
+                \PYG{c+c1}{\PYGZsh{} reset schedulers for each epoch (some schedulers pass in this call)}
+                \PYG{k}{for} \PYG{n}{scheduler} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}weight}\PYG{p}{:}
+                    \PYG{n}{scheduler}\PYG{o}{.}\PYG{n}{reset}\PYG{p}{()}
+
+                \PYG{k}{for} \PYG{n}{scheduler} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}bias}\PYG{p}{:}
+                    \PYG{n}{scheduler}\PYG{o}{.}\PYG{n}{reset}\PYG{p}{()}
+
+                \PYG{c+c1}{\PYGZsh{} computing performance metrics}
+                \PYG{n}{pred\PYGZus{}train} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+                \PYG{n}{train\PYGZus{}error} \PYG{o}{=} \PYG{n}{cost\PYGZus{}function\PYGZus{}train}\PYG{p}{(}\PYG{n}{pred\PYGZus{}train}\PYG{p}{)}
+
+                \PYG{n}{train\PYGZus{}errors}\PYG{p}{[}\PYG{n}{e}\PYG{p}{]} \PYG{o}{=} \PYG{n}{train\PYGZus{}error}
+                \PYG{k}{if} \PYG{n}{val\PYGZus{}set}\PYG{p}{:}
+
+                    \PYG{n}{pred\PYGZus{}val} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X\PYGZus{}val}\PYG{p}{)}
+                    \PYG{n}{val\PYGZus{}error} \PYG{o}{=} \PYG{n}{cost\PYGZus{}function\PYGZus{}val}\PYG{p}{(}\PYG{n}{pred\PYGZus{}val}\PYG{p}{)}
+                    \PYG{n}{val\PYGZus{}errors}\PYG{p}{[}\PYG{n}{e}\PYG{p}{]} \PYG{o}{=} \PYG{n}{val\PYGZus{}error}
+
+                \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{classification}\PYG{p}{:}
+                    \PYG{n}{train\PYGZus{}acc} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}accuracy}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X}\PYG{p}{),} \PYG{n}{t}\PYG{p}{)}
+                    \PYG{n}{train\PYGZus{}accs}\PYG{p}{[}\PYG{n}{e}\PYG{p}{]} \PYG{o}{=} \PYG{n}{train\PYGZus{}acc}
+                    \PYG{k}{if} \PYG{n}{val\PYGZus{}set}\PYG{p}{:}
+                        \PYG{n}{val\PYGZus{}acc} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}accuracy}\PYG{p}{(}\PYG{n}{pred\PYGZus{}val}\PYG{p}{,} \PYG{n}{t\PYGZus{}val}\PYG{p}{)}
+                        \PYG{n}{val\PYGZus{}accs}\PYG{p}{[}\PYG{n}{e}\PYG{p}{]} \PYG{o}{=} \PYG{n}{val\PYGZus{}acc}
+
+                \PYG{c+c1}{\PYGZsh{} printing progress bar}
+                \PYG{n}{progression} \PYG{o}{=} \PYG{n}{e} \PYG{o}{/} \PYG{n}{epochs}
+                \PYG{n}{print\PYGZus{}length} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}progress\PYGZus{}bar}\PYG{p}{(}
+                    \PYG{n}{progression}\PYG{p}{,}
+                    \PYG{n}{train\PYGZus{}error}\PYG{o}{=}\PYG{n}{train\PYGZus{}errors}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+                    \PYG{n}{train\PYGZus{}acc}\PYG{o}{=}\PYG{n}{train\PYGZus{}accs}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+                    \PYG{n}{val\PYGZus{}error}\PYG{o}{=}\PYG{n}{val\PYGZus{}errors}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+                    \PYG{n}{val\PYGZus{}acc}\PYG{o}{=}\PYG{n}{val\PYGZus{}accs}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+                \PYG{p}{)}
+        \PYG{k}{except} \PYG{n+ne}{KeyboardInterrupt}\PYG{p}{:}
+            \PYG{c+c1}{\PYGZsh{} allows for stopping training at any point and seeing the result}
+            \PYG{k}{pass}
+
+        \PYG{c+c1}{\PYGZsh{} visualization of training progression (similiar to tensorflow progression bar)}
+        \PYG{n}{sys}\PYG{o}{.}\PYG{n}{stdout}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}r}\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}} \PYG{o}{*} \PYG{n}{print\PYGZus{}length}\PYG{p}{)}
+        \PYG{n}{sys}\PYG{o}{.}\PYG{n}{stdout}\PYG{o}{.}\PYG{n}{flush}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}progress\PYGZus{}bar}\PYG{p}{(}
+            \PYG{l+m+mi}{1}\PYG{p}{,}
+            \PYG{n}{train\PYGZus{}error}\PYG{o}{=}\PYG{n}{train\PYGZus{}errors}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+            \PYG{n}{train\PYGZus{}acc}\PYG{o}{=}\PYG{n}{train\PYGZus{}accs}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+            \PYG{n}{val\PYGZus{}error}\PYG{o}{=}\PYG{n}{val\PYGZus{}errors}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+            \PYG{n}{val\PYGZus{}acc}\PYG{o}{=}\PYG{n}{val\PYGZus{}accs}\PYG{p}{[}\PYG{n}{e}\PYG{p}{],}
+        \PYG{p}{)}
+        \PYG{n}{sys}\PYG{o}{.}\PYG{n}{stdout}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} return performance metrics for the entire run}
+        \PYG{n}{scores} \PYG{o}{=} \PYG{n+nb}{dict}\PYG{p}{()}
+
+        \PYG{n}{scores}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}train\PYGZus{}errors\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{train\PYGZus{}errors}
+
+        \PYG{k}{if} \PYG{n}{val\PYGZus{}set}\PYG{p}{:}
+            \PYG{n}{scores}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}val\PYGZus{}errors\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{val\PYGZus{}errors}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{classification}\PYG{p}{:}
+            \PYG{n}{scores}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}train\PYGZus{}accs\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{train\PYGZus{}accs}
+
+            \PYG{k}{if} \PYG{n}{val\PYGZus{}set}\PYG{p}{:}
+                \PYG{n}{scores}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}val\PYGZus{}accs\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{val\PYGZus{}accs}
+
+        \PYG{k}{return} \PYG{n}{scores}
+
+    \PYG{k}{def} \PYG{n+nf}{predict}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{X}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{,} \PYG{o}{*}\PYG{p}{,} \PYG{n}{threshold}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{         Description:}
+\PYG{l+s+sd}{         \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{             Performs prediction after training of the network has been finished.}
+
+\PYG{l+s+sd}{         Parameters:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{             I   X (np.ndarray): The design matrix, with n rows of p features each}
+
+\PYG{l+s+sd}{         Optional Parameters:}
+\PYG{l+s+sd}{         \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{             II  threshold (float) : sets minimal value for a prediction to be predicted as the positive class}
+\PYG{l+s+sd}{                 in classification problems}
+
+\PYG{l+s+sd}{         Returns:}
+\PYG{l+s+sd}{         \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{             I   z (np.ndarray): A prediction vector (row) for each row in our design matrix}
+\PYG{l+s+sd}{                 This vector is thresholded if regression=False, meaning that classification results}
+\PYG{l+s+sd}{                 in a vector of 1s and 0s, while regressions in an array of decimal numbers}
+
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+        \PYG{n}{predict} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}feedforward}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{classification}\PYG{p}{:}
+            \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{where}\PYG{p}{(}\PYG{n}{predict} \PYG{o}{\PYGZgt{}} \PYG{n}{threshold}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{k}{return} \PYG{n}{predict}
+
+    \PYG{k}{def} \PYG{n+nf}{reset\PYGZus{}weights}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Resets/Reinitializes the weights in order to train the network for a new problem.}
+
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{seed} \PYG{o+ow}{is} \PYG{o+ow}{not} \PYG{k+kc}{None}\PYG{p}{:}
+            \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{)}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{dimensions}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{):}
+            \PYG{n}{weight\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{dimensions}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{dimensions}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+            \PYG{p}{)}
+            \PYG{n}{weight\PYGZus{}array}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{dimensions}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{])} \PYG{o}{*} \PYG{l+m+mf}{0.01}
+
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{weight\PYGZus{}array}\PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}feedforward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{X}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Calculates the activation of each layer starting at the input and ending at the output.}
+\PYG{l+s+sd}{            Each following activation is calculated from a weighted sum of each of the preceeding}
+\PYG{l+s+sd}{            activations (except in the case of the input layer).}
+
+\PYG{l+s+sd}{        Parameters:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            I   X (np.ndarray): The design matrix, with n rows of p features each}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            I   z (np.ndarray): A prediction vector (row) for each row in our design matrix}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+        \PYG{c+c1}{\PYGZsh{} reset matrices}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{()}
+
+        \PYG{c+c1}{\PYGZsh{} if X is just a vector, make it into a matrix}
+        \PYG{k}{if} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{1}\PYG{p}{:}
+            \PYG{n}{X} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]))}
+
+        \PYG{c+c1}{\PYGZsh{} Add a coloumn of zeros as the first coloumn of the design matrix, in order}
+        \PYG{c+c1}{\PYGZsh{} to add bias to our data}
+        \PYG{n}{bias} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{1}\PYG{p}{))} \PYG{o}{*} \PYG{l+m+mf}{0.01}
+        \PYG{n}{X} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{hstack}\PYG{p}{([}\PYG{n}{bias}\PYG{p}{,} \PYG{n}{X}\PYG{p}{])}
+
+        \PYG{c+c1}{\PYGZsh{} a\PYGZca{}0, the nodes in the input layer (one a\PYGZca{}0 for each row in X \PYGZhy{} where the}
+        \PYG{c+c1}{\PYGZsh{} exponent indicates layer number).}
+        \PYG{n}{a} \PYG{o}{=} \PYG{n}{X}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{a}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{a}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} The feed forward algorithm}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{)):}
+            \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{:}
+                \PYG{n}{z} \PYG{o}{=} \PYG{n}{a} \PYG{o}{@} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{z}\PYG{p}{)}
+                \PYG{n}{a} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{hidden\PYGZus{}func}\PYG{p}{(}\PYG{n}{z}\PYG{p}{)}
+                \PYG{c+c1}{\PYGZsh{} bias column again added to the data here}
+                \PYG{n}{bias} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{n}{a}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{1}\PYG{p}{))} \PYG{o}{*} \PYG{l+m+mf}{0.01}
+                \PYG{n}{a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{hstack}\PYG{p}{([}\PYG{n}{bias}\PYG{p}{,} \PYG{n}{a}\PYG{p}{])}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{a}\PYG{p}{)}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{k}{try}\PYG{p}{:}
+                    \PYG{c+c1}{\PYGZsh{} a\PYGZca{}L, the nodes in our output layers}
+                    \PYG{n}{z} \PYG{o}{=} \PYG{n}{a} \PYG{o}{@} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+                    \PYG{n}{a} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}func}\PYG{p}{(}\PYG{n}{z}\PYG{p}{)}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{a}\PYG{p}{)}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{z}\PYG{p}{)}
+                \PYG{k}{except} \PYG{n+ne}{Exception} \PYG{k}{as} \PYG{n+ne}{OverflowError}\PYG{p}{:}
+                    \PYG{n+nb}{print}\PYG{p}{(}
+                        \PYG{l+s+s2}{\PYGZdq{}OverflowError in fit() in FFNN}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{HOW TO DEBUG ERROR: Consider lowering your learning rate or scheduler specific parameters such as momentum, or check if your input values need scaling\PYGZdq{}}
+                    \PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} this will be a\PYGZca{}L}
+        \PYG{k}{return} \PYG{n}{a}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}backpropagate}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{t}\PYG{p}{,} \PYG{n}{lam}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Performs the backpropagation algorithm. In other words, this method}
+\PYG{l+s+sd}{            calculates the gradient of all the layers starting at the}
+\PYG{l+s+sd}{            output layer, and moving from right to left accumulates the gradient until}
+\PYG{l+s+sd}{            the input layer is reached. Each layers respective weights are updated while}
+\PYG{l+s+sd}{            the algorithm propagates backwards from the output layer (auto\PYGZhy{}differentation in reverse mode).}
+
+\PYG{l+s+sd}{        Parameters:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            I   X (np.ndarray): The design matrix, with n rows of p features each.}
+\PYG{l+s+sd}{            II  t (np.ndarray): The target vector, with n rows of p targets.}
+\PYG{l+s+sd}{            III lam (float32): regularization parameter used to punish the weights in case of overfitting}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            No return value.}
+
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{out\PYGZus{}derivative} \PYG{o}{=} \PYG{n}{derivate}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}func}\PYG{p}{)}
+        \PYG{n}{hidden\PYGZus{}derivative} \PYG{o}{=} \PYG{n}{derivate}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{hidden\PYGZus{}func}\PYG{p}{)}
+
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+            \PYG{c+c1}{\PYGZsh{} delta terms for output}
+            \PYG{k}{if} \PYG{n}{i} \PYG{o}{==} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{:}
+                \PYG{c+c1}{\PYGZsh{} for multi\PYGZhy{}class classification}
+                \PYG{k}{if} \PYG{p}{(}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}func}\PYG{o}{.}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}softmax\PYGZdq{}}
+                \PYG{p}{):}
+                    \PYG{n}{delta\PYGZus{}matrix} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{t}
+                \PYG{c+c1}{\PYGZsh{} for single class classification}
+                \PYG{k}{else}\PYG{p}{:}
+                    \PYG{n}{cost\PYGZus{}func\PYGZus{}derivative} \PYG{o}{=} \PYG{n}{grad}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost\PYGZus{}func}\PYG{p}{(}\PYG{n}{t}\PYG{p}{))}
+                    \PYG{n}{delta\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{out\PYGZus{}derivative}\PYG{p}{(}
+                        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+                    \PYG{p}{)} \PYG{o}{*} \PYG{n}{cost\PYGZus{}func\PYGZus{}derivative}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{])}
+
+            \PYG{c+c1}{\PYGZsh{} delta terms for hidden layer}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{delta\PYGZus{}matrix} \PYG{o}{=} \PYG{p}{(}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{:,} \PYG{p}{:]} \PYG{o}{@} \PYG{n}{delta\PYGZus{}matrix}\PYG{o}{.}\PYG{n}{T}
+                \PYG{p}{)}\PYG{o}{.}\PYG{n}{T} \PYG{o}{*} \PYG{n}{hidden\PYGZus{}derivative}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{z\PYGZus{}matrices}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{])}
+
+            \PYG{c+c1}{\PYGZsh{} calculate gradient}
+            \PYG{n}{gradient\PYGZus{}weights} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{a\PYGZus{}matrices}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][:,} \PYG{l+m+mi}{1}\PYG{p}{:]}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{n}{delta\PYGZus{}matrix}
+            \PYG{n}{gradient\PYGZus{}bias} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{delta\PYGZus{}matrix}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}
+                \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{delta\PYGZus{}matrix}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+            \PYG{p}{)}
+
+            \PYG{c+c1}{\PYGZsh{} regularization term}
+            \PYG{n}{gradient\PYGZus{}weights} \PYG{o}{+=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{:,} \PYG{p}{:]} \PYG{o}{*} \PYG{n}{lam}
+
+            \PYG{c+c1}{\PYGZsh{} use scheduler}
+            \PYG{n}{update\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{vstack}\PYG{p}{(}
+                \PYG{p}{[}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}bias}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{update\PYGZus{}change}\PYG{p}{(}\PYG{n}{gradient\PYGZus{}bias}\PYG{p}{),}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{schedulers\PYGZus{}weight}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{update\PYGZus{}change}\PYG{p}{(}\PYG{n}{gradient\PYGZus{}weights}\PYG{p}{),}
+                \PYG{p}{]}
+            \PYG{p}{)}
+
+            \PYG{c+c1}{\PYGZsh{} update weights and bias}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{weights}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{\PYGZhy{}=} \PYG{n}{update\PYGZus{}matrix}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}accuracy}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{prediction}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{,} \PYG{n}{target}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Calculates accuracy of given prediction to target}
+
+\PYG{l+s+sd}{        Parameters:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            I   prediction (np.ndarray): vector of predicitons output network}
+\PYG{l+s+sd}{                (1s and 0s in case of classification, and real numbers in case of regression)}
+\PYG{l+s+sd}{            II  target (np.ndarray): vector of true values (What the network ideally should predict)}
+
+\PYG{l+s+sd}{        Returns:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            A floating point number representing the percentage of correctly classified instances.}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{k}{assert} \PYG{n}{prediction}\PYG{o}{.}\PYG{n}{size} \PYG{o}{==} \PYG{n}{target}\PYG{o}{.}\PYG{n}{size}
+        \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{average}\PYG{p}{((}\PYG{n}{target} \PYG{o}{==} \PYG{n}{prediction}\PYG{p}{))}
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}set\PYGZus{}classification}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Decides if FFNN acts as classifier (True) og regressor (False),}
+\PYG{l+s+sd}{            sets self.classification during init()}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{classification} \PYG{o}{=} \PYG{k+kc}{False}
+        \PYG{k}{if} \PYG{p}{(}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost\PYGZus{}func}\PYG{o}{.}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}CostLogReg\PYGZdq{}}
+            \PYG{o+ow}{or} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost\PYGZus{}func}\PYG{o}{.}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}CostCrossEntropy\PYGZdq{}}
+        \PYG{p}{):}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{classification} \PYG{o}{=} \PYG{k+kc}{True}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}progress\PYGZus{}bar}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{progression}\PYG{p}{,} \PYG{o}{**}\PYG{n}{kwargs}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Displays progress of training}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{print\PYGZus{}length} \PYG{o}{=} \PYG{l+m+mi}{40}
+        \PYG{n}{num\PYGZus{}equals} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{progression} \PYG{o}{*} \PYG{n}{print\PYGZus{}length}\PYG{p}{)}
+        \PYG{n}{num\PYGZus{}not} \PYG{o}{=} \PYG{n}{print\PYGZus{}length} \PYG{o}{\PYGZhy{}} \PYG{n}{num\PYGZus{}equals}
+        \PYG{n}{arrow} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZgt{}\PYGZdq{}} \PYG{k}{if} \PYG{n}{num\PYGZus{}equals} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{k}{else} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{bar} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}[\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}=\PYGZdq{}} \PYG{o}{*} \PYG{p}{(}\PYG{n}{num\PYGZus{}equals} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{+} \PYG{n}{arrow} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}\PYGZhy{}\PYGZdq{}} \PYG{o}{*} \PYG{n}{num\PYGZus{}not} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}]\PYGZdq{}}
+        \PYG{n}{perc\PYGZus{}print} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}format}\PYG{p}{(}\PYG{n}{progression} \PYG{o}{*} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{)}
+        \PYG{n}{line} \PYG{o}{=} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}  }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{bar}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{perc\PYGZus{}print}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZpc{} \PYGZdq{}}
+
+        \PYG{k}{for} \PYG{n}{key} \PYG{o+ow}{in} \PYG{n}{kwargs}\PYG{p}{:}
+            \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{np}\PYG{o}{.}\PYG{n}{isnan}\PYG{p}{(}\PYG{n}{kwargs}\PYG{p}{[}\PYG{n}{key}\PYG{p}{]):}
+                \PYG{n}{value} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}format}\PYG{p}{(}\PYG{n}{kwargs}\PYG{p}{[}\PYG{n}{key}\PYG{p}{],} \PYG{n}{decimals}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{)}
+                \PYG{n}{line} \PYG{o}{+=} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}| }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{key}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{value}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ \PYGZdq{}}
+        \PYG{n}{sys}\PYG{o}{.}\PYG{n}{stdout}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}r}\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{n}{line}\PYG{p}{)}
+        \PYG{n}{sys}\PYG{o}{.}\PYG{n}{stdout}\PYG{o}{.}\PYG{n}{flush}\PYG{p}{()}
+        \PYG{k}{return} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{line}\PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}format}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{value}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{):}
+\PYG{+w}{        }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{        Description:}
+\PYG{l+s+sd}{        \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{            Formats decimal numbers for progress bar}
+\PYG{l+s+sd}{        \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{k}{if} \PYG{n}{value} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{v} \PYG{o}{=} \PYG{n}{value}
+        \PYG{k}{elif} \PYG{n}{value} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{v} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{10} \PYG{o}{*} \PYG{n}{value}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{v} \PYG{o}{=} \PYG{l+m+mi}{1}
+        \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{math}\PYG{o}{.}\PYG{n}{floor}\PYG{p}{(}\PYG{n}{math}\PYG{o}{.}\PYG{n}{log10}\PYG{p}{(}\PYG{n}{v}\PYG{p}{))}
+        \PYG{k}{if} \PYG{n}{n} \PYG{o}{\PYGZgt{}=} \PYG{n}{decimals} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{:}
+            \PYG{k}{return} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n+nb}{round}\PYG{p}{(}\PYG{n}{value}\PYG{p}{))}
+        \PYG{k}{return} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{value}\PYG{l+s+si}{:}\PYG{l+s+s2}{.}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{decimals}\PYG{o}{\PYGZhy{}}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+
+\end{Verbatim}
