@@ -285,7 +285,7 @@ multiplications.  For all layers we will simply use a collective variable \( \bo
 <h2 id="overarching-view-of-a-neural-network">Overarching view of a neural network </h2>
 
 <p>The architecture of a neural network defines our model. This model
-aims at describing some function \( f(\boldsymbol{x} \) which aims at describing
+aims at describing some function \( f(\boldsymbol{x} \) which represents
 some final result (outputs or tagrget values) given a specific inpput
 \( \boldsymbol{x} \). Note that here \( \boldsymbol{y} \) and \( \boldsymbol{x} \) are not limited to be
 vectors.
@@ -543,7 +543,7 @@ and their nodes.  It means we have
 
 <p>&nbsp;<br>
 $$
-a_j^l = f(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
+a_j^l = \sigma(z_j^l) = \frac{1}{1+\exp{-(z_j^l)}}.
 $$
 <p>&nbsp;<br>
 </section>
@@ -568,7 +568,7 @@ $$
 <p>With our definition of the activation function we have that (note that this function depends only on \( z_j^l \))</p>
 <p>&nbsp;<br>
 $$
-\frac{\partial a_j^l}{\partial z_j^{l}} = a_j^l(1-a_j^l)=f(z_j^l)(1-f(z_j^l)). 
+\frac{\partial a_j^l}{\partial z_j^{l}} = a_j^l(1-a_j^l)=\sigma(z_j^l)(1-\sigma(z_j^l)). 
 $$
 <p>&nbsp;<br>
 </section>
@@ -602,6 +602,27 @@ $$
 </section>
 
 <section>
+<h2 id="simpler-examples-first-and-automatic-differentiation">Simpler examples first and automatic differentiation </h2>
+
+<p>In order to understand the back propagation algorithm and its
+derivation (an implementation of the chain rule), let us first digress
+with some simple examples. These examples are also meant to motivate
+the link with back propagation and <a href="https://en.wikipedia.org/wiki/Automatic_differentiation" target="_blank">automatic differentiation</a>.
+</p>
+</section>
+
+<section>
+<h2 id="reminder-on-the-chain-rule-and-gradients">Reminder on the chain rule and gradients </h2>
+
+<p>If we have a multivariate function \( f(x,y) \) and \( x=x(t) \) and \( y=y(t) \) are functions of a variable \( t \), we have that the gradient of \( f \) with respect to \( t \)</p>
+<p>&nbsp;<br>
+$$
+\nabla_t f = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial t} \end{bmatrix}=\frac{\partial f}{\partial x} \frac{\partial x}{\partial t} +\frac{\partial f}{\partial y} \frac{\partial y}{\partial t} 
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
 <h2 id="bringing-it-together-first-back-propagation-equation">Bringing it together, first back propagation equation </h2>
 
 <p>We have thus</p>
@@ -614,14 +635,14 @@ $$
 <p>Defining</p>
 <p>&nbsp;<br>
 $$
-\delta_j^L = a_j^L(1-a_j^L)\left(a_j^L - y_j\right) = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
+\delta_j^L = a_j^L(1-a_j^L)\left(a_j^L - y_j\right) = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
 $$
 <p>&nbsp;<br>
 
 <p>and using the Hadamard product of two vectors we can write this as</p>
 <p>&nbsp;<br>
 $$
-\boldsymbol{\delta}^L = f'(\hat{z}^L)\circ\frac{\partial {\cal C}}{\partial (\boldsymbol{a}^L)}.
+\boldsymbol{\delta}^L = \sigma'(\hat{z}^L)\circ\frac{\partial {\cal C}}{\partial (\boldsymbol{a}^L)}.
 $$
 <p>&nbsp;<br>
 </section>
@@ -645,7 +666,7 @@ value \( z_j^L \).
 <p>Notice that everything in the above equations is easily computed.  In
 particular, we compute \( z_j^L \) while computing the behaviour of the
 network, and it is only a small additional overhead to compute
-\( f'(z^L_j) \).  The exact form of the derivative with respect to the
+\( \sigma'(z^L_j) \).  The exact form of the derivative with respect to the
 output depends on the form of the cost function.
 However, provided the cost function is known there should be little
 trouble in calculating
@@ -704,7 +725,7 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{equation}
-\delta_j^L = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
+\delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
 \tag{2}
 \end{equation}
 $$
@@ -755,7 +776,7 @@ $$
 <p>with \( M_l \) being the number of nodes in layer \( l \), we obtain</p>
 <p>&nbsp;<br>
 $$
-\delta_j^l =\sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l),
+\delta_j^l =\sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l),
 $$
 <p>&nbsp;<br>
 
@@ -789,14 +810,14 @@ activation function and the pertinent outputs \( \hat{a}^l \) for
 <p>Thereafter we compute the ouput error \( \hat{\delta}^L \) by computing all</p>
 <p>&nbsp;<br>
 $$
-\delta_j^L = f'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
+\delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
 $$
 <p>&nbsp;<br>
 
 <p>Then we compute the back propagate error for each \( l=L-1,L-2,\dots,1 \) as</p>
 <p>&nbsp;<br>
 $$
-\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l).
+\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
 $$
 <p>&nbsp;<br>
 </section>
@@ -830,7 +851,7 @@ $$
 <p>With the back propagate error for each \( l=L-1,L-2,\dots,1 \) as</p>
 <p>&nbsp;<br>
 $$
-\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}f'(z_j^l),
+\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}sigma'(z_j^l),
 $$
 <p>&nbsp;<br>
 
