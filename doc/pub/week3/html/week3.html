@@ -236,6 +236,18 @@ div.toc p,a {
                2,
                None,
                'chain-rule-forward-and-reverse-modes'),
+              ('Forward and reverse modes',
+               2,
+               None,
+               'forward-and-reverse-modes'),
+              ('More complicated function',
+               2,
+               None,
+               'more-complicated-function'),
+              ('Counting the number of floating point operations',
+               2,
+               None,
+               'counting-the-number-of-floating-point-operations'),
               ('First back propagation equation',
                2,
                None,
@@ -589,7 +601,7 @@ $$
 theorem</a>
 for polynomial approximations or the convergence criterion for Fourier
 series, there are similarities in the derivation of the proof for
-neural networks. See whiteboard notes for week 2.
+neural networks. 
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -785,7 +797,7 @@ $$
 
 <p>the gradient of \( f \) with respect to \( t \) and \( s \) (without the explicit unit vector components)</p>
 $$
-\frac{df}{d(s,t)} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial s}  &\frac{\partial x}{\partial t} \\ \frac{\partial x}{\partial s} & \frac{\partial y}{\partial t} \end{bmatrix}.
+\frac{df}{d(s,t)} = \begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} \end{bmatrix} \begin{bmatrix}\frac{\partial x}{\partial s}  &\frac{\partial x}{\partial t} \\ \frac{\partial y}{\partial s} & \frac{\partial y}{\partial t} \end{bmatrix}.
 $$
 
 
@@ -808,12 +820,12 @@ truncation errors and values of the step size \( \Delta \).
 
 <p>Our first example is rather simple,</p>
 $$
-f(x) \exp{x^2},
+f(x) =\exp{x^2},
 $$
 
 <p>with derivative</p>
 $$
-f'(x) 2x\exp{x^2}.
+f'(x) =2x\exp{x^2}.
 $$
 
 <p>We can use SymPy to extract the pertinent lines of Python code through the following simple example</p>
@@ -827,7 +839,7 @@ $$
   <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">__future__</span> <span style="color: #008000; font-weight: bold">import</span> division
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sympy</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
 x <span style="color: #666666">=</span> symbols(<span style="color: #BA2121">&#39;x&#39;</span>)
-expr <span style="color: #666666">=</span> sqrt(x<span style="color: #666666">*</span>x<span style="color: #666666">+</span>exp(x<span style="color: #666666">*</span>x))
+expr <span style="color: #666666">=</span> exp(x<span style="color: #666666">*</span>x)
 simplify(expr)
 derivative <span style="color: #666666">=</span> diff(expr,x)
 <span style="color: #008000">print</span>(python(expr))
@@ -862,7 +874,7 @@ $$
 
 <p>We now assume that all operations can be counted in terms of equal
 floating point operations. This means that in order to calculate
-\( f(x) \) we need first to square \( x \) and the compute the exponential. We
+\( f(x) \) we need first to square \( x \) and then compute the exponential. We
 have thus two floating point operations only.
 </p>
 
@@ -906,10 +918,93 @@ $$
 
 <p>leading to</p>
 $$
-\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=\exp{x^2},
+\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=2x\exp{x^2},
 $$
 
 <p>as before.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="forward-and-reverse-modes">Forward and reverse modes </h2>
+
+<p>We have that </p>
+$$
+\frac{df}{dx}=\frac{df}{db}\frac{db}{da}\frac{da}{dx},
+$$
+
+<p>which we can rewrite either as</p>
+$$
+\frac{df}{dx}=\left[\frac{df}{db}\frac{db}{da}\right]\frac{da}{dx},
+$$
+
+<p>or</p>
+$$
+\frac{df}{dx}=\frac{df}{db}\left[\frac{db}{da}\frac{da}{dx}\right].
+$$
+
+<p>The first expression is called reverse mode (or back propagation)
+since we start by evaluating the derivatives at the end point and then
+propagate backwards. This is the standard way of evaluating
+derivatives (gradients) when optimizing the parameters of a neural
+network).  In the context of deep learning this is computationally
+more efficient since the output of a neural network consists of either
+one or some few other output variables.
+</p>
+
+<p>The second equation is called forward mode.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-complicated-function">More complicated function </h2>
+<p>We increase our ambitions and introduce a slightly more complicated function</p>
+$$
+f(x) =\sqrt{x^2+exp{x^2}},
+$$
+
+<p>with derivative</p>
+$$
+f'(x) =\frac{x(1+\exp{x^2})}{\sqrt{x^2+exp{x^2}}}.
+$$
+
+<p>The corresponding SymPy code reads</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">__future__</span> <span style="color: #008000; font-weight: bold">import</span> division
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sympy</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+x <span style="color: #666666">=</span> symbols(<span style="color: #BA2121">&#39;x&#39;</span>)
+expr <span style="color: #666666">=</span> sqrt(x<span style="color: #666666">*</span>x<span style="color: #666666">+</span>exp(x<span style="color: #666666">*</span>x))
+simplify(expr)
+derivative <span style="color: #666666">=</span> diff(expr,x)
+<span style="color: #008000">print</span>(python(expr))
+<span style="color: #008000">print</span>(python(derivative))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="counting-the-number-of-floating-point-operations">Counting the number of floating point operations </h2>
+
+<p>A simple count of operations shows that we need five operations for
+the function itself and ten for the derivative.  Can we reduce this to
+say half the number of operations?
+</p>
+
+<p>Indeed we can. </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="first-back-propagation-equation">First back propagation equation </h2>

@@ -176,7 +176,7 @@ For those of you familiar with for example the "Stone-Weierstrass
 theorem":"https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem"
 for polynomial approximations or the convergence criterion for Fourier
 series, there are similarities in the derivation of the proof for
-neural networks. See whiteboard notes for week 2.
+neural networks. 
 
 !split
 ===== The approximation theorem in words =====
@@ -422,7 +422,7 @@ We can use SymPy to extract the pertinent lines of Python code through the follo
 from __future__ import division
 from sympy import *
 x = symbols('x')
-expr = sqrt(x*x+exp(x*x))
+expr = exp(x*x)
 simplify(expr)
 derivative = diff(expr,x)
 print(python(expr))
@@ -494,7 +494,7 @@ We note that since $b=f(x)$ that
 leading to
 !bt
 \[
-\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=\exp{x^2},
+\frac{df}{dx}=\frac{db}{da}\frac{da}{dx}=2x\exp{x^2},
 \]
 !et
 as before.
@@ -512,7 +512,7 @@ We have that
 which we can rewrite either as
 !bt
 \[
-\frac{df}{dx}=left[\frac{df}{db}\frac{db}{da}\right]\frac{da}{dx},
+\frac{df}{dx}=\left[\frac{df}{db}\frac{db}{da}\right]\frac{da}{dx},
 \]
 !et
 or
@@ -526,12 +526,47 @@ The first expression is called reverse mode (or back propagation)
 since we start by evaluating the derivatives at the end point and then
 propagate backwards. This is the standard way of evaluating
 derivatives (gradients) when optimizing the parameters of a neural
-network).  In the context of deep learning this is computationally more efficient since the output of a neural network consists of either one or some few other output variables.
+network).  In the context of deep learning this is computationally
+more efficient since the output of a neural network consists of either
+one or some few other output variables.
 
 The second equation is called forward mode.
 
 
+!split
+===== More complicated function =====
+We increase our ambitions and introduce a slightly more complicated function
+!bt
+\[
+f(x) =\sqrt{x^2+exp{x^2}},
+\]
+!et
+with derivative
+!bt
+\[
+f'(x) =\frac{x(1+\exp{x^2})}{\sqrt{x^2+exp{x^2}}}.
+\]
+!et
+The corresponding SymPy code reads
+!bc pycod
+from __future__ import division
+from sympy import *
+x = symbols('x')
+expr = sqrt(x*x+exp(x*x))
+simplify(expr)
+derivative = diff(expr,x)
+print(python(expr))
+print(python(derivative))
+!ec
 
+!split
+===== Counting the number of floating point operations =====
+
+A simple count of operations shows that we need five operations for
+the function itself and ten for the derivative.  Can we reduce this to
+say half the number of operations?
+
+Indeed we can. 
 
 !split
 ===== First back propagation equation =====
