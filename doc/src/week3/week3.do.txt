@@ -697,29 +697,7 @@ it does not saturate for positive values (and also because it is quite
 fast to compute).
 
 
-!split
-===== Example to illustrate dying gradients =====
 
-Consider a simple NN in which the inputs $\bm{x}, the weights
-$\bm{W}$, the biases $\bm{b}$ and the ouputs
-$\bm{\tilde{y}}=f(\bm{x};\bm{\Theta})$ are just scalars and that we
-have two layers only, that is the output layer is labeled with $L=2$.
-
-Our output is then (no boldfaced symbols since all quantities are scalars)
-!bt
-\[
-\tilde{y}=f(x;Theta))=\sigma_{L=2}(w_2\sigma_1(w_1x+b_1)+b_2). 
-\]
-!et
-
-For the back-propagation algorithm we will need various partial derivatives. One of these is
-!bt
-\[
-\frac{\partial f(x;\Theta)}{\partial w_1)=\sigma_2^'(w_2\sigma_1(w_1x+b_1)+b_2)\times w_2\sigma_1^'(w_1x+b_1)x.
-\]
-!et
-
-_See whiteboard notes for rest_.
 !split
 ===== The RELU function family =====
 
@@ -924,7 +902,7 @@ After these codes we present the TensorFlow inplementation. Pytorch will be disc
 
 The code below shows object oriented implementations of the Constant,
 Momentum, Adagrad, AdagradMomentum, RMS prop and Adam schedulers. All
-of the classes belong to the shared abstract Scheduler class, and
+of the classes belong to the shared abstract _Scheduler class_, and
 share the update$\_$change() and reset() methods allowing for any of the
 schedulers to be seamlessly used during the training stage, as will
 later be shown in the fit() method of the neural
@@ -2139,7 +2117,71 @@ plt.show()
 
 
 
+!split
+===== And using PyTorch (more discussions to follow) =====
 
+!bc pycod
+# Simple neural-network (NN) code using pytorch
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+ 
+# load the dataset, split into input (X) and output (y) variables
+dataset = np.loadtxt('yourdata.csv', delimiter=',')
+X = dataset[:,0:8]
+y = dataset[:,8]
+ 
+X = torch.tensor(X, dtype=torch.float32)
+y = torch.tensor(y, dtype=torch.float32).reshape(-1, 1)
+
+# define the model
+class NNClassifier(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.hidden1 = nn.Linear(8, 12)
+        self.act1 = nn.ReLU()
+        self.hidden2 = nn.Linear(12, 8)
+        self.act2 = nn.ReLU()
+        self.output = nn.Linear(8, 1)
+        self.act_output = nn.Sigmoid()
+ 
+    def forward(self, x):
+        x = self.act1(self.hidden1(x))
+        x = self.act2(self.hidden2(x))
+        x = self.act_output(self.output(x))
+        return x
+ 
+model = NNClassifier()
+print(model)
+ 
+# train the model
+loss_fn   = nn.BCELoss()  # binary cross entropy
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+n_epochs = 100
+batch_size = 10
+ 
+for epoch in range(n_epochs):
+    for i in range(0, len(X), batch_size):
+        Xbatch = X[i:i+batch_size]
+        y_pred = model(Xbatch)
+        ybatch = y[i:i+batch_size]
+        loss = loss_fn(y_pred, ybatch)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+ 
+# compute accuracy
+y_pred = model(X)
+accuracy = (y_pred.round() == y).float().mean()
+print(f"Accuracy {accuracy}")
+
+# make class predictions with the model
+predictions = (model(X) > 0.5).int()
+for i in range(5):
+    print('%s => %d (expected %d)' % (X[i].tolist(), predictions[i], y[i]))
+
+!ec
 
 
 
