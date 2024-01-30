@@ -1,0 +1,18 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usetikzlibrary{positioning,chains}
+\begin{document}
+\usetikzlibrary {graphs}
+\tikz \graph [math nodes]{x [red, draw,circle] -> ()^2 [blue, draw]-> a [red, draw, circle] -> {
+        -> [,
+        x1 [as=$\exp{()}$,blue, draw]-> b [red, draw, circle]
+    } -> + [blue, draw] -> c [red, draw, circle] -> x2 [as=$\sqrt{}$, blue,draw] -> d=f [red, draw, circle]};
+\end{document}
+
+
+\usetikzlibrary {graphs}
+\tikz \graph {
+  a -> {
+    b -> c,
+    d -> e
+  } -> f
+};
