@@ -787,7 +787,7 @@ z_1 = w_1x+b_1 \hspace{0.1cm} a_1 = \sigma_1(z_1),
 !et
 !bt
 \[
-z_2 = w_wa_1+b_2 \hspace{0.1cm} a_2 = \sigma_2(z_2),
+z_2 = w_2a_1+b_2 \hspace{0.1cm} a_2 = \sigma_2(z_2),
 \]
 !et
 and the cost function
@@ -857,6 +857,8 @@ b_i \leftarrow b_i-\eta \delta_i,
 with $\eta$ is the learning rate.
 
 One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters $\bm{\Theta}$.
+
+For the first hidden layer $a_{i-1}=x$ for this simple model.
 
 !split
 ===== Getting serious, the  back propagation equations for a neural network =====
