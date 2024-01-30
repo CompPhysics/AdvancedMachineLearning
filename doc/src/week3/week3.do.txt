@@ -526,7 +526,7 @@ The first expression is called reverse mode (or back propagation)
 since we start by evaluating the derivatives at the end point and then
 propagate backwards. This is the standard way of evaluating
 derivatives (gradients) when optimizing the parameters of a neural
-network).  In the context of deep learning this is computationally
+network.  In the context of deep learning this is computationally
 more efficient since the output of a neural network consists of either
 one or some few other output variables.
 
@@ -691,7 +691,7 @@ In the above example we have only one input variable, $l=1$ and four intermediat
 Furthemore, for $i=l+1, \dots, L$ (here $i=2,3,4,5$ and $f=x_L=d$), we
 define the elementary functions $g_i(x_{Pa(x_i)})$ where $x_{Pa(x_i)}$ are the parent nodes of the variable $x_i$.
 
-In our case, we have for example for $x_3=g_3(x_{Pa(x_i)})=\exp{a}$ that $g_3=\exp{()}$ and $x_{Pa(x_3)}=a$.
+In our case, we have for example for $x_3=g_3(x_{Pa(x_i)})=\exp{a}$, that $g_3=\exp{()}$ and $x_{Pa(x_3)}=a$.
 
 !split
 ===== Chain rule =====
@@ -772,9 +772,63 @@ which we later will just define as
 !et
 
 
+!split
+===== Adding a hidden layer =====
+
+We change our simple model to a (see graph on whiteboard notes)
+network with on hidden layer but still with scalar variables only.
+
+Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node.
+We have then
+!bt
+\[
+z_1 = w_1x+b_1 \hspace{0.1cm} a_1 = \sigma_1(z_1),
+\]
+!et
+!bt
+\[
+z_2 = w_wa_1+b_2 \hspace{0.1cm} a_2 = \sigma_2(z_2),
+\]
+!et
+and the cost function
+!bt
+\[
+C(x;\bm{\Theta})=\frac{1}{2}(a_2-y)^2,
+\]
+!et
+with $\bm{\Theta}=[w_1,w_2,b_1,b_2]$.
 
 !split
-===== First back propagation equation =====
+===== The derivatives =====
+
+The derivatives are now, using the chain rule again
+
+!bt
+\[
+\frac{\partial C}{\partial w_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial w_2}=(a_2-y)\sigma_2'a_1=\delta_2a_1,
+\]
+!et
+!bt
+\[
+\frac{\partial C}{\partial b_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial b_2}=(a_2-y)\sigma_2'=\delta_2,
+\]
+!et
+!bt
+\[
+\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_2-y)\sigma_2'a_1\sigma_1'x,
+\]
+!et
+!bt
+\[
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'.
+\]
+!et
+
+Can you generalize this to more than one hidden layer?
+
+
+!split
+===== Getting serious, the  back propagation equations for a neural network =====
 
 We have thus
 !bt

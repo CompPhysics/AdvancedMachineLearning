@@ -193,10 +193,13 @@ div.toc p,a {
                2,
                None,
                'optimizing-the-parameters'),
-              ('First back propagation equation',
+              ('Adding a hidden layer', 2, None, 'adding-a-hidden-layer'),
+              ('The derivatives', 2, None, 'the-derivatives'),
+              ('Getting serious, the  back propagation equations for a neural '
+               'network',
                2,
                None,
-               'first-back-propagation-equation'),
+               'getting-serious-the-back-propagation-equations-for-a-neural-network'),
               ('Analyzing the last results',
                2,
                None,
@@ -890,7 +893,7 @@ $$
 since we start by evaluating the derivatives at the end point and then
 propagate backwards. This is the standard way of evaluating
 derivatives (gradients) when optimizing the parameters of a neural
-network).  In the context of deep learning this is computationally
+network.  In the context of deep learning this is computationally
 more efficient since the output of a neural network consists of either
 one or some few other output variables.
 </p>
@@ -1060,7 +1063,7 @@ $$
 define the elementary functions \( g_i(x_{Pa(x_i)}) \) where \( x_{Pa(x_i)} \) are the parent nodes of the variable \( x_i \).
 </p>
 
-<p>In our case, we have for example for \( x_3=g_3(x_{Pa(x_i)})=\exp{a} \) that \( g_3=\exp{()} \) and \( x_{Pa(x_3)}=a \).</p>
+<p>In our case, we have for example for \( x_3=g_3(x_{Pa(x_i)})=\exp{a} \), that \( g_3=\exp{()} \) and \( x_{Pa(x_3)}=a \).</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="chain-rule">Chain rule </h2>
@@ -1135,7 +1138,55 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="first-back-propagation-equation">First back propagation equation </h2>
+<h2 id="adding-a-hidden-layer">Adding a hidden layer </h2>
+
+<p>We change our simple model to a (see graph on whiteboard notes)
+network with on hidden layer but still with scalar variables only.
+</p>
+
+<p>Our output variable changes to \( a_2 \) and \( a_1 \) is now the output from the hidden node.
+We have then
+</p>
+$$
+z_1 = w_1x+b_1 \hspace{0.1cm} a_1 = \sigma_1(z_1),
+$$
+
+$$
+z_2 = w_wa_1+b_2 \hspace{0.1cm} a_2 = \sigma_2(z_2),
+$$
+
+<p>and the cost function</p>
+$$
+C(x;\boldsymbol{\Theta})=\frac{1}{2}(a_2-y)^2,
+$$
+
+<p>with \( \boldsymbol{\Theta}=[w_1,w_2,b_1,b_2] \).</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-derivatives">The derivatives </h2>
+
+<p>The derivatives are now, using the chain rule again</p>
+
+$$
+\frac{\partial C}{\partial w_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial w_2}=(a_2-y)\sigma_2'a_1=\delta_2a_1,
+$$
+
+$$
+\frac{\partial C}{\partial b_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial b_2}=(a_2-y)\sigma_2'=\delta_2,
+$$
+
+$$
+\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_2-y)\sigma_2'a_1\sigma_1'x,
+$$
+
+$$
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'.
+$$
+
+<p>Can you generalize this to more than one hidden layer?</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="getting-serious-the-back-propagation-equations-for-a-neural-network">Getting serious, the  back propagation equations for a neural network </h2>
 
 <p>We have thus</p>
 $$
