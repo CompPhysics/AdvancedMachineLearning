@@ -1008,6 +1008,58 @@ $$
 </section>
 
 <section>
+<h2 id="automatic-differentiation">Automatic differentiation </h2>
+
+<p>We can make this example more formal. Automatic differentiation is a
+formalization of the previous example (see graph from whiteboard
+notes).
+</p>
+
+<p>We define \( \boldsymbol{x}\in x_1,\dots, x_l \) input variables to a given function \( f(\boldsymbol{x}) \) and \( x_{l+1},\dots, x_L \) intermediate variables.</p>
+
+<p>In the above example we have only one input variable, \( l=1 \) and four intermediate variables, that is</p>
+<p>&nbsp;<br>
+$$
+\begin{bmatrix} x_1=x & x_2 = x^2=a & x_3 =\exp{a}= b & x_4=c=a+b & x_5 = \sqrt{c}=d=f(x) \end{bmatrix}.
+$$
+<p>&nbsp;<br>
+
+<p>Furthemore, for \( i=l+1, \dots, L \) (here \( i=2,3,4,5 \) and \( f=x_L=d \), we
+define the elementary functions \( g_i(x_{Pa(x_i)}) \) where \( x_{Pa(x_i)} \) are the parent nodes of of the variable \( x_i \).
+</p>
+
+<p>In our case, we have for example for \( x_3=g_3(x_{Pa(x_i)})=\exp{a} \) that \( g_3=\exp{()} \) and \( x_{Pa(x_3)}=a \).</p>
+</section>
+
+<section>
+<h2 id="chain-rule">Chain rule </h2>
+
+<p>We can now compute the gradients by back-propagating the derivatives using the chain rule.
+We have defined
+</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial f}{\partial x_L} = 1,
+$$
+<p>&nbsp;<br>
+
+<p>which allows us to find the derivatives of the various variables \( x_i \) as</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial f}{\partial x_i} = \sum_{x_j:x_i\in Pa(x_j)}\frac{\partial f}{\partial x_j} \frac{\partial x_j}{\partial x_i}=\sum_{x_j:x_i\in Pa(x_j)}\frac{\partial f}{\partial x_j} \frac{\partial g_i}{\partial x_i}.
+$$
+<p>&nbsp;<br>
+
+<p>Whenever we have a function which can be expressed as a computation
+graph and the various functions can be expressed in terms of
+elementary functions that are differentiable, then automatic
+differentiation works.  The functions may not need to be elementary
+functions, they could also be computer programs, although not all
+programs can be automatically differentiated.
+</p>
+</section>
+
+<section>
 <h2 id="first-back-propagation-equation">First back propagation equation </h2>
 
 <p>We have thus</p>
