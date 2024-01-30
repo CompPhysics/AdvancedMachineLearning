@@ -820,7 +820,7 @@ The derivatives are now, using the chain rule again
 !et
 !bt
 \[
-\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'.
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'=\delta_1.
 \]
 !et
 
@@ -828,7 +828,40 @@ Can you generalize this to more than one hidden layer?
 
 
 !split
+===== Important observations =====
+
+!bblock
+From the above equations we see that the derivatives of the activation
+functions play a central role. If they vanish, the training may
+stop. This is called the vanishing gradient problem. If they become
+large, the parameters $w_i$ and $b_i$ may simply go to infinity. This
+is, pretty obvious, called the exploding gradient problem.
+!eblock
+
+!split
+===== The training =====
+
+The training of the parameters is done through various gradient descent approximations with
+
+!bt
+\[
+w_{i}\leftarrow  = w_{i}- \eta \delta_i a_{i-1},
+\]
+!et
+and
+!bt
+\[
+b_i \leftarrow b_i-\eta \delta_i,
+\]
+!et
+with $\eta$ is the learning rate.
+
+One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters $\bm{\Theta}$.
+
+!split
 ===== Getting serious, the  back propagation equations for a neural network =====
+
+Now it is time to move away from one node in each layer only. Our inputs are also represented either by several inputs.
 
 We have thus
 !bt

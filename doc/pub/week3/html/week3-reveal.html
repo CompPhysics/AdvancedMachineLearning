@@ -1177,7 +1177,7 @@ $$
 
 <p>&nbsp;<br>
 $$
-\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'.
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'=\delta_1.
 $$
 <p>&nbsp;<br>
 
@@ -1185,7 +1185,47 @@ $$
 </section>
 
 <section>
+<h2 id="important-observations">Important observations </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>From the above equations we see that the derivatives of the activation
+functions play a central role. If they vanish, the training may
+stop. This is called the vanishing gradient problem. If they become
+large, the parameters \( w_i \) and \( b_i \) may simply go to infinity. This
+is, pretty obvious, called the exploding gradient problem.
+</p>
+</div>
+</section>
+
+<section>
+<h2 id="the-training">The training </h2>
+
+<p>The training of the parameters is done through various gradient descent approximations with</p>
+
+<p>&nbsp;<br>
+$$
+w_{i}\leftarrow  = w_{i}- \eta \delta_i a_{i-1},
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+b_i \leftarrow b_i-\eta \delta_i,
+$$
+<p>&nbsp;<br>
+
+<p>with \( \eta \) is the learning rate.</p>
+
+<p>One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
+</section>
+
+<section>
 <h2 id="getting-serious-the-back-propagation-equations-for-a-neural-network">Getting serious, the  back propagation equations for a neural network </h2>
+
+<p>Now it is time to move away from one node in each layer only. Our inputs are also represented either by several inputs.</p>
 
 <p>We have thus</p>
 <p>&nbsp;<br>

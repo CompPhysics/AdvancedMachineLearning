@@ -168,6 +168,8 @@ doconce format html week3.do.txt --html_style=bootstrap --pygments_html_style=de
                'optimizing-the-parameters'),
               ('Adding a hidden layer', 2, None, 'adding-a-hidden-layer'),
               ('The derivatives', 2, None, 'the-derivatives'),
+              ('Important observations', 2, None, 'important-observations'),
+              ('The training', 2, None, 'the-training'),
               ('Getting serious, the  back propagation equations for a neural '
                'network',
                2,
@@ -362,6 +364,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#optimizing-the-parameters" style="font-size: 80%;">Optimizing the parameters</a></li>
      <!-- navigation toc: --> <li><a href="#adding-a-hidden-layer" style="font-size: 80%;">Adding a hidden layer</a></li>
      <!-- navigation toc: --> <li><a href="#the-derivatives" style="font-size: 80%;">The derivatives</a></li>
+     <!-- navigation toc: --> <li><a href="#important-observations" style="font-size: 80%;">Important observations</a></li>
+     <!-- navigation toc: --> <li><a href="#the-training" style="font-size: 80%;">The training</a></li>
      <!-- navigation toc: --> <li><a href="#getting-serious-the-back-propagation-equations-for-a-neural-network" style="font-size: 80%;">Getting serious, the  back propagation equations for a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#analyzing-the-last-results" style="font-size: 80%;">Analyzing the last results</a></li>
      <!-- navigation toc: --> <li><a href="#more-considerations" style="font-size: 80%;">More considerations</a></li>
@@ -1271,13 +1275,49 @@ $$
 $$
 
 $$
-\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'.
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'=\delta_1.
 $$
 
 <p>Can you generalize this to more than one hidden layer?</p>
 
 <!-- !split -->
+<h2 id="important-observations" class="anchor">Important observations </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>From the above equations we see that the derivatives of the activation
+functions play a central role. If they vanish, the training may
+stop. This is called the vanishing gradient problem. If they become
+large, the parameters \( w_i \) and \( b_i \) may simply go to infinity. This
+is, pretty obvious, called the exploding gradient problem.
+</p>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="the-training" class="anchor">The training </h2>
+
+<p>The training of the parameters is done through various gradient descent approximations with</p>
+
+$$
+w_{i}\leftarrow  = w_{i}- \eta \delta_i a_{i-1},
+$$
+
+<p>and</p>
+$$
+b_i \leftarrow b_i-\eta \delta_i,
+$$
+
+<p>with \( \eta \) is the learning rate.</p>
+
+<p>One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
+
+<!-- !split -->
 <h2 id="getting-serious-the-back-propagation-equations-for-a-neural-network" class="anchor">Getting serious, the  back propagation equations for a neural network </h2>
+
+<p>Now it is time to move away from one node in each layer only. Our inputs are also represented either by several inputs.</p>
 
 <p>We have thus</p>
 $$
