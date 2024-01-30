@@ -1020,12 +1020,12 @@ notes).
 <p>In the above example we have only one input variable, \( l=1 \) and four intermediate variables, that is</p>
 <p>&nbsp;<br>
 $$
-\begin{bmatrix} x_1=x & x_2 = x^2=a & x_3 =\exp{a}= b & x_4=c=a+b & x_5 = \sqrt{c}=d=f(x) \end{bmatrix}.
+\begin{bmatrix} x_1=x & x_2 = x^2=a & x_3 =\exp{a}= b & x_4=c=a+b & x_5 = \sqrt{c}=d \end{bmatrix}.
 $$
 <p>&nbsp;<br>
 
-<p>Furthemore, for \( i=l+1, \dots, L \) (here \( i=2,3,4,5 \) and \( f=x_L=d \), we
-define the elementary functions \( g_i(x_{Pa(x_i)}) \) where \( x_{Pa(x_i)} \) are the parent nodes of of the variable \( x_i \).
+<p>Furthemore, for \( i=l+1, \dots, L \) (here \( i=2,3,4,5 \) and \( f=x_L=d \)), we
+define the elementary functions \( g_i(x_{Pa(x_i)}) \) where \( x_{Pa(x_i)} \) are the parent nodes of the variable \( x_i \).
 </p>
 
 <p>In our case, we have for example for \( x_3=g_3(x_{Pa(x_i)})=\exp{a} \) that \( g_3=\exp{()} \) and \( x_{Pa(x_3)}=a \).</p>
@@ -1046,7 +1046,7 @@ $$
 <p>which allows us to find the derivatives of the various variables \( x_i \) as</p>
 <p>&nbsp;<br>
 $$
-\frac{\partial f}{\partial x_i} = \sum_{x_j:x_i\in Pa(x_j)}\frac{\partial f}{\partial x_j} \frac{\partial x_j}{\partial x_i}=\sum_{x_j:x_i\in Pa(x_j)}\frac{\partial f}{\partial x_j} \frac{\partial g_i}{\partial x_i}.
+\frac{\partial f}{\partial x_i} = \sum_{x_j:x_i\in Pa(x_j)}\frac{\partial f}{\partial x_j} \frac{\partial x_j}{\partial x_i}=\sum_{x_j:x_i\in Pa(x_j)}\frac{\partial f}{\partial x_j} \frac{\partial g_j}{\partial x_i}.
 $$
 <p>&nbsp;<br>
 
@@ -1057,6 +1057,67 @@ differentiation works.  The functions may not need to be elementary
 functions, they could also be computer programs, although not all
 programs can be automatically differentiated.
 </p>
+</section>
+
+<section>
+<h2 id="first-network-example-simple-percepetron-with-one-input">First network example, simple percepetron with one input </h2>
+
+<p>As yet another example we define now a simple perceptron model with all quantities given by scalars. We consider only one input variable \( x \) and one target value \( y \).  We define an activation function \( \sigma_1 \) which takes as input</p>
+<p>&nbsp;<br>
+$$
+z_1 = w_1x+b_1,
+$$
+<p>&nbsp;<br>
+
+<p>where \( w_1 \) is the weight and \( b_1 \) is the bias. These are the
+parameters we want to optimize.  The output is \( a_1=\sigma(z_1) \) (see
+graph from whiteboard notes). This output is then fed into the
+<b>cost/loss</b> function, which we here for the sake of simplicity just
+define as the squared error
+</p>
+
+<p>&nbsp;<br>
+$$
+C(x;w_1,b_1)=\frac{1}{2}(a_1-y)^2.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="optimizing-the-parameters">Optimizing the parameters </h2>
+
+<p>In setting up the feed forward and back propagation parts of the
+algorithm, we need now the derivative of the various variables we want
+to train.
+</p>
+
+<p>We need</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_1} \hspace{0.1cm}\mathrm{and}\hspace{0.1cm}\frac{\partial C}{\partial b_1}. 
+$$
+<p>&nbsp;<br>
+
+<p>Using the chain rule we find </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_1-y)\sigma_1'x,
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_1-y)\sigma_1',
+$$
+<p>&nbsp;<br>
+
+<p>which we later will just define as</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}=\delta_1.
+$$
+<p>&nbsp;<br>
 </section>
 
 <section>
