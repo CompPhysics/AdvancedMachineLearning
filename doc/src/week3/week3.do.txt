@@ -776,18 +776,18 @@ which we later will just define as
 ===== Adding a hidden layer =====
 
 We change our simple model to a (see graph on whiteboard notes)
-network with on hidden layer but still with scalar variables only.
+network with just one hidden layer but with scalar variables only.
 
-Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node.
+Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node and $a_0=x$.
 We have then
 !bt
 \[
-z_1 = w_1x+b_1 \hspace{0.1cm} a_1 = \sigma_1(z_1),
+z_1 = w_1a_0+b_1 \hspace{0.1cm} \wedge a_1 = \sigma_1(z_1),
 \]
 !et
 !bt
 \[
-z_2 = w_2a_1+b_2 \hspace{0.1cm} a_2 = \sigma_2(z_2),
+z_2 = w_2a_1+b_2 \hspace{0.1cm} \wedge a_2 = \sigma_2(z_2),
 \]
 !et
 and the cost function
@@ -815,7 +815,7 @@ The derivatives are now, using the chain rule again
 !et
 !bt
 \[
-\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_2-y)\sigma_2'a_1\sigma_1'x,
+\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_2-y)\sigma_2'a_1\sigma_1'a_0,
 \]
 !et
 !bt
@@ -858,7 +858,7 @@ with $\eta$ is the learning rate.
 
 One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters $\bm{\Theta}$.
 
-For the first hidden layer $a_{i-1}=x$ for this simple model.
+For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
 
 !split
 ===== Getting serious, the  back propagation equations for a neural network =====
