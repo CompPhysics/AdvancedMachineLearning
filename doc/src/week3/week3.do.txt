@@ -676,11 +676,19 @@ and requires only three operations if we can reuse all intermediate variables.
 
 
 !split
+===== In general not this simple =====
+
+In general, see the generalization below, unless we can obtain simple
+analytical expressions which we can simplify further, the final
+implementation of automatic differentiation involves repeated
+calculations (and thereby operations) of derivatives of elementary
+functions.
+
+!split
 ===== Automatic differentiation =====
 
 We can make this example more formal. Automatic differentiation is a
-formalization of the previous example (see graph from whiteboard
-notes).
+formalization of the previous example (see graph).
 
 We define $\bm{x}\in x_1,\dots, x_l$ input variables to a given function $f(\bm{x})$ and $x_{l+1},\dots, x_L$ intermediate variables.
 
@@ -841,6 +849,9 @@ large, the parameters $w_i$ and $b_i$ may simply go to infinity. This
 is, pretty obvious, called the exploding gradient problem.
 !eblock
 
+
+
+
 !split
 ===== The training =====
 
@@ -848,7 +859,7 @@ The training of the parameters is done through various gradient descent approxim
 
 !bt
 \[
-w_{i}\leftarrow  = w_{i}- \eta \delta_i a_{i-1},
+w_{i}\leftarrow w_{i}- \eta \delta_i a_{i-1},
 \]
 !et
 and
@@ -862,6 +873,87 @@ with $\eta$ is the learning rate.
 One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters $\bm{\Theta}$.
 
 For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
+
+
+!split
+===== Code examples for the simple models =====
+
+!split
+===== Simple neural network and the  back propagation equations  =====
+
+Let us now try to increase our level of ambitions and attempt to set up the equations for a neural network  with two input nodes, one hidden layer with two hidden nodes and one utput layers.
+
+We need to define the following parameters and variables
+!bblock input layer (layer $(0)$) 
+Input nodes $x_0$ and $x_1$)
+!bt
+\[
+x_0 = a_0^{(0)} \wedge x_1 = a_1^{(0)}.
+\]
+!et
+!eblock
+
+!bblock hidden layer (layer $(1)$)
+with hidden nodes yielding the outputs $a_0^{(1)}$ and $a_1^{(1)}$) and weights $\bm{w}$ and biases $\bm{b}$
+!bt
+\[
+w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left{ b_0^{(1)},b_1^{(1)}\right\}.
+\]
+!et
+!eblock
+
+!split
+===== The ouput layer =====
+
+Finally, we have the ouput layer given by layer label $(2)$ with output $a^{(2)}$ and weights and biases
+!bt
+\[
+w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}\right\}.
+\]
+!et
+
+
+Our output is $\tilde{y}=a^{(2)}$ and we define a generic cost function $C(a^{(2)},y;\bm{\Theta})$ where $y$ is the target value (a scalar here).
+The parameters we need to optimize are given by
+!bt
+\[
+\bm{\Theta}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)},w_{0}^{(2)},w_{1}^{(2)},b_0^{(1)},b_1^{(1)},b^{(2)}\right\}.
+\]
+!et
+
+!split
+===== Compact expressions =====
+
+We can define the inputs to the activation functions for the various layers in terms of various matrix-vector multiplications and vector additions.
+The inputs to the first hidden layer are
+!bt
+\[
+\begin{bmatrix}z_0^{(1)} \\ z_1^{(1)} \end{bmatrix}=\begin{bmatrix}w_{00}^{(1)} & w_{01}^{(1)}\\ w_{10}^{(1)} &w_{11}^{(1)} \end{bmatrix}\begin{bmatrix}a_0^{(0)} \\ a_1^{(0)} \end{bmatrix}+\begin{bmatrix}b_0^{(1)} \\ b_1^{(1)} \end{bmatrix},
+\]
+!et
+with outputs
+!bt
+\[
+\begin{bmatrix}a_0^{(1)} \\ a_1^{(1)} \end{bmatrix}=\begin{bmatrix}\sigma^{(1)}(z_0^{(1)}) \\ \sigma^{(1)}(z_1^{(1)}) \end{bmatrix}.
+\]
+!et
+
+!split
+===== For the output layer =====
+
+
+
+!split
+===== Explicit derivatives =====
+
+Since we have only nine quantities we want to optimize for this system, we can for pedagogical reasons spell all out all of them.
+Using the chain rule (or just the back propagation algorithm) we can find all derivatives. For the output and hidden layer we have thus
+
+
+!split
+===== Setting up the equations for the optimization =====
+
+For th
 
 !split
 ===== Getting serious, the  back propagation equations for a neural network =====
