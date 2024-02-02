@@ -180,6 +180,10 @@ div.toc p,a {
                None,
                'new-expression-for-the-derivative'),
               ('Final derivatives', 2, None, 'final-derivatives'),
+              ('In general not this simple',
+               2,
+               None,
+               'in-general-not-this-simple'),
               ('Automatic differentiation',
                2,
                None,
@@ -197,6 +201,22 @@ div.toc p,a {
               ('The derivatives', 2, None, 'the-derivatives'),
               ('Important observations', 2, None, 'important-observations'),
               ('The training', 2, None, 'the-training'),
+              ('Code examples for the simple models',
+               2,
+               None,
+               'code-examples-for-the-simple-models'),
+              ('Simple neural network and the  back propagation equations',
+               2,
+               None,
+               'simple-neural-network-and-the-back-propagation-equations'),
+              ('The ouput layer', 2, None, 'the-ouput-layer'),
+              ('Compact expressions', 2, None, 'compact-expressions'),
+              ('For the output layer', 2, None, 'for-the-output-layer'),
+              ('Explicit derivatives', 2, None, 'explicit-derivatives'),
+              ('Setting up the equations for the optimization',
+               2,
+               None,
+               'setting-up-the-equations-for-the-optimization'),
               ('Getting serious, the  back propagation equations for a neural '
                'network',
                2,
@@ -1049,11 +1069,20 @@ $$
 <p>and requires only three operations if we can reuse all intermediate variables.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="in-general-not-this-simple">In general not this simple </h2>
+
+<p>In general, see the generalization below, unless we can obtain simple
+analytical expressions which we can simplify further, the final
+implementation of automatic differentiation involves repeated
+calculations (and thereby operations) of derivatives of elementary
+functions.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="automatic-differentiation">Automatic differentiation </h2>
 
 <p>We can make this example more formal. Automatic differentiation is a
-formalization of the previous example (see graph from whiteboard
-notes).
+formalization of the previous example (see graph).
 </p>
 
 <p>We define \( \boldsymbol{x}\in x_1,\dots, x_l \) input variables to a given function \( f(\boldsymbol{x}) \) and \( x_{l+1},\dots, x_L \) intermediate variables.</p>
@@ -1095,7 +1124,12 @@ programs can be automatically differentiated.
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="first-network-example-simple-percepetron-with-one-input">First network example, simple percepetron with one input </h2>
 
-<p>As yet another example we define now a simple perceptron model with all quantities given by scalars. We consider only one input variable \( x \) and one target value \( y \).  We define an activation function \( \sigma_1 \) which takes as input</p>
+<p>As yet another example we define now a simple perceptron model with
+all quantities given by scalars. We consider only one input variable
+\( x \) and one target value \( y \).  We define an activation function
+\( \sigma_1 \) which takes as input
+</p>
+
 $$
 z_1 = w_1x+b_1,
 $$
@@ -1144,7 +1178,7 @@ $$
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="adding-a-hidden-layer">Adding a hidden layer </h2>
 
-<p>We change our simple model to a (see graph on whiteboard notes)
+<p>We change our simple model to (see graph)
 network with just one hidden layer but with scalar variables only.
 </p>
 
@@ -1210,7 +1244,7 @@ is, pretty obvious, called the exploding gradient problem.
 <p>The training of the parameters is done through various gradient descent approximations with</p>
 
 $$
-w_{i}\leftarrow  = w_{i}- \eta \delta_i a_{i-1},
+w_{i}\leftarrow w_{i}- \eta \delta_i a_{i-1},
 $$
 
 <p>and</p>
@@ -1223,6 +1257,88 @@ $$
 <p>One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
 
 <p>For the first hidden layer \( a_{i-1}=a_0=x \) for this simple model.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="code-examples-for-the-simple-models">Code examples for the simple models </h2>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="simple-neural-network-and-the-back-propagation-equations">Simple neural network and the  back propagation equations  </h2>
+
+<p>Let us now try to increase our level of ambitions and attempt to set
+up the equations for a neural network with two input nodes, one hidden
+layer with two hidden nodes and one utput layers.
+</p>
+
+<p>We need to define the following parameters and variables with the input layer (layer \( (0) \)) 
+where we label the  nodes \( x_0 \) and \( x_1 \)
+</p>
+$$
+x_0 = a_0^{(0)} \wedge x_1 = a_1^{(0)}.
+$$
+
+<p>The  hidden layer (layer \( (1) \)) has  nodes which yield the outputs \( a_0^{(1)} \) and \( a_1^{(1)} \)) with  weight \( \boldsymbol{w} \) and bias \( \boldsymbol{b} \) parameters</p>
+$$
+w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-ouput-layer">The ouput layer </h2>
+
+<p>Finally, we have the ouput layer given by layer label \( (2) \) with output \( a^{(2)} \) and weights and biases to be determined </p>
+$$
+w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
+$$
+
+<p>Our output is \( \tilde{y}=a^{(2)} \) and we define a generic cost function \( C(a^{(2)},y;\boldsymbol{\Theta}) \) where \( y \) is the target value (a scalar here).
+The parameters we need to optimize are given by
+</p>
+$$
+\boldsymbol{\Theta}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)},w_{0}^{(2)},w_{1}^{(2)},b_0^{(1)},b_1^{(1)},b^{(2)}\right\}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="compact-expressions">Compact expressions </h2>
+
+<p>We can define the inputs to the activation functions for the various layers in terms of various matrix-vector multiplications and vector additions.
+The inputs to the first hidden layer are
+</p>
+$$
+\begin{bmatrix}z_0^{(1)} \\ z_1^{(1)} \end{bmatrix}=\begin{bmatrix}w_{00}^{(1)} & w_{01}^{(1)}\\ w_{10}^{(1)} &w_{11}^{(1)} \end{bmatrix}\begin{bmatrix}a_0^{(0)} \\ a_1^{(0)} \end{bmatrix}+\begin{bmatrix}b_0^{(1)} \\ b_1^{(1)} \end{bmatrix},
+$$
+
+<p>with outputs</p>
+$$
+\begin{bmatrix}a_0^{(1)} \\ a_1^{(1)} \end{bmatrix}=\begin{bmatrix}\sigma^{(1)}(z_0^{(1)}) \\ \sigma^{(1)}(z_1^{(1)}) \end{bmatrix}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="for-the-output-layer">For the output layer </h2>
+
+<p>For the final output layer we have the inputs to the final activation function </p>
+$$
+z^{(2)} = w_{0}^{(2)}a_0^{(1)} +w_{1}^{(2)}a_1^{(1)}+b^{(2)},
+$$
+
+<p>resulting in the  output</p>
+$$
+a^{(2)}=\sigma^{(2)}(z^{(2)}).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="explicit-derivatives">Explicit derivatives </h2>
+
+<p>In total we have nine parameters which we need to train.
+Using the chain rule (or just the back propagation algorithm) we can find all derivatives. For the output layer we have then
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="setting-up-the-equations-for-the-optimization">Setting up the equations for the optimization </h2>
+
+<p>For th</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="getting-serious-the-back-propagation-equations-for-a-neural-network">Getting serious, the  back propagation equations for a neural network </h2>

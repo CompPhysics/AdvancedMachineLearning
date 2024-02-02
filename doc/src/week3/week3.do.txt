@@ -731,7 +731,11 @@ programs can be automatically differentiated.
 !split
 ===== First network example, simple percepetron with one input =====
 
-As yet another example we define now a simple perceptron model with all quantities given by scalars. We consider only one input variable $x$ and one target value $y$.  We define an activation function $\sigma_1$ which takes as input
+As yet another example we define now a simple perceptron model with
+all quantities given by scalars. We consider only one input variable
+$x$ and one target value $y$.  We define an activation function
+$\sigma_1$ which takes as input
+
 !bt
 \[
 z_1 = w_1x+b_1,
@@ -786,7 +790,7 @@ which we later will just define as
 !split
 ===== Adding a hidden layer =====
 
-We change our simple model to a (see graph on whiteboard notes)
+We change our simple model to (see graph)
 network with just one hidden layer but with scalar variables only.
 
 Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node and $a_0=x$.
@@ -881,34 +885,32 @@ For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
 !split
 ===== Simple neural network and the  back propagation equations  =====
 
-Let us now try to increase our level of ambitions and attempt to set up the equations for a neural network  with two input nodes, one hidden layer with two hidden nodes and one utput layers.
+Let us now try to increase our level of ambitions and attempt to set
+up the equations for a neural network with two input nodes, one hidden
+layer with two hidden nodes and one utput layers.
 
-We need to define the following parameters and variables
-!bblock input layer (layer $(0)$) 
-Input nodes $x_0$ and $x_1$)
+We need to define the following parameters and variables with the input layer (layer $(0)$) 
+where we label the  nodes $x_0$ and $x_1$
 !bt
 \[
 x_0 = a_0^{(0)} \wedge x_1 = a_1^{(0)}.
 \]
 !et
-!eblock
 
-!bblock hidden layer (layer $(1)$)
-with hidden nodes yielding the outputs $a_0^{(1)}$ and $a_1^{(1)}$) and weights $\bm{w}$ and biases $\bm{b}$
+The  hidden layer (layer $(1)$) has  nodes which yield the outputs $a_0^{(1)}$ and $a_1^{(1)}$) with  weight $\bm{w}$ and bias $\bm{b}$ parameters
 !bt
 \[
-w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left{ b_0^{(1)},b_1^{(1)}\right\}.
+w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
 \]
 !et
-!eblock
 
 !split
 ===== The ouput layer =====
 
-Finally, we have the ouput layer given by layer label $(2)$ with output $a^{(2)}$ and weights and biases
+Finally, we have the ouput layer given by layer label $(2)$ with output $a^{(2)}$ and weights and biases to be determined 
 !bt
 \[
-w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}\right\}.
+w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
 \]
 !et
 
@@ -941,13 +943,28 @@ with outputs
 !split
 ===== For the output layer =====
 
+For the final output layer we have the inputs to the final activation function 
+!bt
+\[
+z^{(2)} = w_{0}^{(2)}a_0^{(1)} +w_{1}^{(2)}a_1^{(1)}+b^{(2)},
+\]
+!et
+resulting in the  output
+!bt
+\[
+a^{(2)}=\sigma^{(2)}(z^{(2)}).
+\]
+!et
+
+
+
 
 
 !split
 ===== Explicit derivatives =====
 
-Since we have only nine quantities we want to optimize for this system, we can for pedagogical reasons spell all out all of them.
-Using the chain rule (or just the back propagation algorithm) we can find all derivatives. For the output and hidden layer we have thus
+In total we have nine parameters which we need to train.
+Using the chain rule (or just the back propagation algorithm) we can find all derivatives. For the output layer we have then
 
 
 !split
