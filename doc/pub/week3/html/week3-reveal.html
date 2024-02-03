@@ -1151,7 +1151,7 @@ $$
 <h2 id="adding-a-hidden-layer">Adding a hidden layer </h2>
 
 <p>We change our simple model to (see graph)
-network with just one hidden layer but with scalar variables only.
+a network with just one hidden layer but with scalar variables only.
 </p>
 
 <p>Our output variable changes to \( a_2 \) and \( a_1 \) is now the output from the hidden node and \( a_0=x \).
@@ -1229,9 +1229,9 @@ $$
 <p>
 <p>From the above equations we see that the derivatives of the activation
 functions play a central role. If they vanish, the training may
-stop. This is called the vanishing gradient problem. If they become
+stop. This is called the vanishing gradient problem, see discussions below. If they become
 large, the parameters \( w_i \) and \( b_i \) may simply go to infinity. This
-is, pretty obvious, called the exploding gradient problem.
+is referenced as  the exploding gradient problem.
 </p>
 </div>
 </section>
@@ -1268,9 +1268,9 @@ $$
 <section>
 <h2 id="simple-neural-network-and-the-back-propagation-equations">Simple neural network and the  back propagation equations  </h2>
 
-<p>Let us now try to increase our level of ambitions and attempt to set
+<p>Let us now try to increase our level of ambition and attempt at setting 
 up the equations for a neural network with two input nodes, one hidden
-layer with two hidden nodes and one utput layers.
+layer with two hidden nodes and one output layer with one output node/neuron only (see graph)..
 </p>
 
 <p>We need to define the following parameters and variables with the input layer (layer \( (0) \)) 
@@ -1291,7 +1291,7 @@ $$
 </section>
 
 <section>
-<h2 id="layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer">Layout of a simple neural network with two input nodes and one  hidden layer  </h2>
+<h2 id="layout-of-a-simple-neural-network-with-two-input-nodes-one-hidden-layer-and-one-output-node">Layout of a simple neural network with two input nodes, one  hidden layer and one output node  </h2>
 
 <br/><br/>
 <center>
@@ -1303,7 +1303,7 @@ $$
 <section>
 <h2 id="the-ouput-layer">The ouput layer </h2>
 
-<p>Finally, we have the ouput layer given by layer label \( (2) \) with output \( a^{(2)} \) and weights and biases to be determined </p>
+<p>Finally, we have the ouput layer given by layer label \( (2) \) with output \( a^{(2)} \) and weights and biases to be determined given by the variables</p>
 <p>&nbsp;<br>
 $$
 w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
@@ -1341,7 +1341,7 @@ $$
 </section>
 
 <section>
-<h2 id="for-the-output-layer">For the output layer </h2>
+<h2 id="output-layer">Output layer </h2>
 
 <p>For the final output layer we have the inputs to the final activation function </p>
 <p>&nbsp;<br>
@@ -1386,6 +1386,48 @@ $$
 \frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="derivatives-of-the-hidden-layer">Derivatives of the hidden layer </h2>
+
+<p>Using the chain rule we have the following expressions for say one of the weight parameters (it is easy to generalize to the other weight parameters)</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{00}^{(1)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=    \delta^{(2)}\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}},
+$$
+<p>&nbsp;<br>
+
+<p>which, noting that</p>
+<p>&nbsp;<br>
+$$
+z^{(2)} =w_0^{(2)}a_0^{(1)}+w_1^{(2)}a_1^{(1)}+b^{(2)},
+$$
+<p>&nbsp;<br>
+
+<p>which allows us to rewrite </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}a_0^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>and defining</p>
+<p>&nbsp;<br>
+$$
+\delta_0^{(1)}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}\delta^{(2)},
+$$
+<p>&nbsp;<br>
+
+<p>we have </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{00}^{(1)}}=\delta_0^{(1)}a_0^{(1)}.
+$$
+<p>&nbsp;<br>
+
+<p>We obtain similar expressions for the other derivatives.</p>
 </section>
 
 <section>

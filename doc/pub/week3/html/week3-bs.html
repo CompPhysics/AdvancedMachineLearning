@@ -190,15 +190,19 @@ doconce format html week3.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'simple-neural-network-and-the-back-propagation-equations'),
-              ('Layout of a simple neural network with two input nodes and '
-               'one  hidden layer',
+              ('Layout of a simple neural network with two input nodes, one  '
+               'hidden layer and one output node',
                2,
                None,
-               'layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer'),
+               'layout-of-a-simple-neural-network-with-two-input-nodes-one-hidden-layer-and-one-output-node'),
               ('The ouput layer', 2, None, 'the-ouput-layer'),
               ('Compact expressions', 2, None, 'compact-expressions'),
-              ('For the output layer', 2, None, 'for-the-output-layer'),
+              ('Output layer', 2, None, 'output-layer'),
               ('Explicit derivatives', 2, None, 'explicit-derivatives'),
+              ('Derivatives of the hidden layer',
+               2,
+               None,
+               'derivatives-of-the-hidden-layer'),
               ('Setting up the equations for the optimization',
                2,
                None,
@@ -404,11 +408,12 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#the-training" style="font-size: 80%;">The training</a></li>
      <!-- navigation toc: --> <li><a href="#code-examples-for-the-simple-models" style="font-size: 80%;">Code examples for the simple models</a></li>
      <!-- navigation toc: --> <li><a href="#simple-neural-network-and-the-back-propagation-equations" style="font-size: 80%;">Simple neural network and the  back propagation equations</a></li>
-     <!-- navigation toc: --> <li><a href="#layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer" style="font-size: 80%;">Layout of a simple neural network with two input nodes and one  hidden layer</a></li>
+     <!-- navigation toc: --> <li><a href="#layout-of-a-simple-neural-network-with-two-input-nodes-one-hidden-layer-and-one-output-node" style="font-size: 80%;">Layout of a simple neural network with two input nodes, one  hidden layer and one output node</a></li>
      <!-- navigation toc: --> <li><a href="#the-ouput-layer" style="font-size: 80%;">The ouput layer</a></li>
      <!-- navigation toc: --> <li><a href="#compact-expressions" style="font-size: 80%;">Compact expressions</a></li>
-     <!-- navigation toc: --> <li><a href="#for-the-output-layer" style="font-size: 80%;">For the output layer</a></li>
+     <!-- navigation toc: --> <li><a href="#output-layer" style="font-size: 80%;">Output layer</a></li>
      <!-- navigation toc: --> <li><a href="#explicit-derivatives" style="font-size: 80%;">Explicit derivatives</a></li>
+     <!-- navigation toc: --> <li><a href="#derivatives-of-the-hidden-layer" style="font-size: 80%;">Derivatives of the hidden layer</a></li>
      <!-- navigation toc: --> <li><a href="#setting-up-the-equations-for-the-optimization" style="font-size: 80%;">Setting up the equations for the optimization</a></li>
      <!-- navigation toc: --> <li><a href="#getting-serious-the-back-propagation-equations-for-a-neural-network" style="font-size: 80%;">Getting serious, the  back propagation equations for a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#analyzing-the-last-results" style="font-size: 80%;">Analyzing the last results</a></li>
@@ -1305,7 +1310,7 @@ $$
 <h2 id="adding-a-hidden-layer" class="anchor">Adding a hidden layer </h2>
 
 <p>We change our simple model to (see graph)
-network with just one hidden layer but with scalar variables only.
+a network with just one hidden layer but with scalar variables only.
 </p>
 
 <p>Our output variable changes to \( a_2 \) and \( a_1 \) is now the output from the hidden node and \( a_0=x \).
@@ -1366,9 +1371,9 @@ $$
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 <p>From the above equations we see that the derivatives of the activation
 functions play a central role. If they vanish, the training may
-stop. This is called the vanishing gradient problem. If they become
+stop. This is called the vanishing gradient problem, see discussions below. If they become
 large, the parameters \( w_i \) and \( b_i \) may simply go to infinity. This
-is, pretty obvious, called the exploding gradient problem.
+is referenced as  the exploding gradient problem.
 </p>
 </div>
 </div>
@@ -1400,9 +1405,9 @@ $$
 <!-- !split -->
 <h2 id="simple-neural-network-and-the-back-propagation-equations" class="anchor">Simple neural network and the  back propagation equations  </h2>
 
-<p>Let us now try to increase our level of ambitions and attempt to set
+<p>Let us now try to increase our level of ambition and attempt at setting 
 up the equations for a neural network with two input nodes, one hidden
-layer with two hidden nodes and one utput layers.
+layer with two hidden nodes and one output layer with one output node/neuron only (see graph)..
 </p>
 
 <p>We need to define the following parameters and variables with the input layer (layer \( (0) \)) 
@@ -1419,7 +1424,7 @@ $$
 
 
 <!-- !split -->
-<h2 id="layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer" class="anchor">Layout of a simple neural network with two input nodes and one  hidden layer  </h2>
+<h2 id="layout-of-a-simple-neural-network-with-two-input-nodes-one-hidden-layer-and-one-output-node" class="anchor">Layout of a simple neural network with two input nodes, one  hidden layer and one output node  </h2>
 
 <br/><br/>
 <center>
@@ -1430,7 +1435,7 @@ $$
 <!-- !split -->
 <h2 id="the-ouput-layer" class="anchor">The ouput layer </h2>
 
-<p>Finally, we have the ouput layer given by layer label \( (2) \) with output \( a^{(2)} \) and weights and biases to be determined </p>
+<p>Finally, we have the ouput layer given by layer label \( (2) \) with output \( a^{(2)} \) and weights and biases to be determined given by the variables</p>
 $$
 w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
 $$
@@ -1460,7 +1465,7 @@ $$
 
 
 <!-- !split -->
-<h2 id="for-the-output-layer" class="anchor">For the output layer </h2>
+<h2 id="output-layer" class="anchor">Output layer </h2>
 
 <p>For the final output layer we have the inputs to the final activation function </p>
 $$
@@ -1496,6 +1501,37 @@ $$
 \frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
 $$
 
+
+<!-- !split -->
+<h2 id="derivatives-of-the-hidden-layer" class="anchor">Derivatives of the hidden layer </h2>
+
+<p>Using the chain rule we have the following expressions for say one of the weight parameters (it is easy to generalize to the other weight parameters)</p>
+$$
+\frac{\partial C}{\partial w_{00}^{(1)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=    \delta^{(2)}\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}},
+$$
+
+<p>which, noting that</p>
+$$
+z^{(2)} =w_0^{(2)}a_0^{(1)}+w_1^{(2)}a_1^{(1)}+b^{(2)},
+$$
+
+<p>which allows us to rewrite </p>
+$$
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}a_0^{(1)},
+$$
+
+<p>and defining</p>
+$$
+\delta_0^{(1)}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}\delta^{(2)},
+$$
+
+<p>we have </p>
+$$
+\frac{\partial C}{\partial w_{00}^{(1)}}=\delta_0^{(1)}a_0^{(1)}.
+$$
+
+<p>We obtain similar expressions for the other derivatives.</p>
 
 <!-- !split -->
 <h2 id="setting-up-the-equations-for-the-optimization" class="anchor">Setting up the equations for the optimization </h2>
