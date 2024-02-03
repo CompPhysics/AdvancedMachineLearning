@@ -166,11 +166,19 @@ doconce format html week3.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'first-network-example-simple-percepetron-with-one-input'),
+              ('Layout of a simple neural network with no hidden layer',
+               2,
+               None,
+               'layout-of-a-simple-neural-network-with-no-hidden-layer'),
               ('Optimizing the parameters',
                2,
                None,
                'optimizing-the-parameters'),
               ('Adding a hidden layer', 2, None, 'adding-a-hidden-layer'),
+              ('Layout of a simple neural network with one hidden layer',
+               2,
+               None,
+               'layout-of-a-simple-neural-network-with-one-hidden-layer'),
               ('The derivatives', 2, None, 'the-derivatives'),
               ('Important observations', 2, None, 'important-observations'),
               ('The training', 2, None, 'the-training'),
@@ -182,6 +190,11 @@ doconce format html week3.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'simple-neural-network-and-the-back-propagation-equations'),
+              ('Layout of a simple neural network with two input nodes and '
+               'one  hidden layer',
+               2,
+               None,
+               'layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer'),
               ('The ouput layer', 2, None, 'the-ouput-layer'),
               ('Compact expressions', 2, None, 'compact-expressions'),
               ('For the output layer', 2, None, 'for-the-output-layer'),
@@ -382,13 +395,16 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#automatic-differentiation" style="font-size: 80%;">Automatic differentiation</a></li>
      <!-- navigation toc: --> <li><a href="#chain-rule" style="font-size: 80%;">Chain rule</a></li>
      <!-- navigation toc: --> <li><a href="#first-network-example-simple-percepetron-with-one-input" style="font-size: 80%;">First network example, simple percepetron with one input</a></li>
+     <!-- navigation toc: --> <li><a href="#layout-of-a-simple-neural-network-with-no-hidden-layer" style="font-size: 80%;">Layout of a simple neural network with no hidden layer</a></li>
      <!-- navigation toc: --> <li><a href="#optimizing-the-parameters" style="font-size: 80%;">Optimizing the parameters</a></li>
      <!-- navigation toc: --> <li><a href="#adding-a-hidden-layer" style="font-size: 80%;">Adding a hidden layer</a></li>
+     <!-- navigation toc: --> <li><a href="#layout-of-a-simple-neural-network-with-one-hidden-layer" style="font-size: 80%;">Layout of a simple neural network with one hidden layer</a></li>
      <!-- navigation toc: --> <li><a href="#the-derivatives" style="font-size: 80%;">The derivatives</a></li>
      <!-- navigation toc: --> <li><a href="#important-observations" style="font-size: 80%;">Important observations</a></li>
      <!-- navigation toc: --> <li><a href="#the-training" style="font-size: 80%;">The training</a></li>
      <!-- navigation toc: --> <li><a href="#code-examples-for-the-simple-models" style="font-size: 80%;">Code examples for the simple models</a></li>
      <!-- navigation toc: --> <li><a href="#simple-neural-network-and-the-back-propagation-equations" style="font-size: 80%;">Simple neural network and the  back propagation equations</a></li>
+     <!-- navigation toc: --> <li><a href="#layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer" style="font-size: 80%;">Layout of a simple neural network with two input nodes and one  hidden layer</a></li>
      <!-- navigation toc: --> <li><a href="#the-ouput-layer" style="font-size: 80%;">The ouput layer</a></li>
      <!-- navigation toc: --> <li><a href="#compact-expressions" style="font-size: 80%;">Compact expressions</a></li>
      <!-- navigation toc: --> <li><a href="#for-the-output-layer" style="font-size: 80%;">For the output layer</a></li>
@@ -1248,6 +1264,15 @@ $$
 
 
 <!-- !split -->
+<h2 id="layout-of-a-simple-neural-network-with-no-hidden-layer" class="anchor">Layout of a simple neural network with no hidden layer  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/simplenn1.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
 <h2 id="optimizing-the-parameters" class="anchor">Optimizing the parameters </h2>
 
 <p>In setting up the feed forward and back propagation parts of the
@@ -1300,6 +1325,15 @@ C(x;\boldsymbol{\Theta})=\frac{1}{2}(a_2-y)^2,
 $$
 
 <p>with \( \boldsymbol{\Theta}=[w_1,w_2,b_1,b_2] \).</p>
+
+<!-- !split -->
+<h2 id="layout-of-a-simple-neural-network-with-one-hidden-layer" class="anchor">Layout of a simple neural network with one hidden layer  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/simplenn2.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
 
 <!-- !split -->
 <h2 id="the-derivatives" class="anchor">The derivatives </h2>
@@ -1356,7 +1390,7 @@ $$
 
 <p>with \( \eta \) is the learning rate.</p>
 
-<p>One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
+<p>One iteration consists of one feed forward step and one back-propagation step. Each back-propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
 
 <p>For the first hidden layer \( a_{i-1}=a_0=x \) for this simple model.</p>
 
@@ -1383,6 +1417,15 @@ $$
 w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
 $$
 
+
+<!-- !split -->
+<h2 id="layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer" class="anchor">Layout of a simple neural network with two input nodes and one  hidden layer  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/simplenn3.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
 
 <!-- !split -->
 <h2 id="the-ouput-layer" class="anchor">The ouput layer </h2>
@@ -1433,14 +1476,29 @@ $$
 <!-- !split -->
 <h2 id="explicit-derivatives" class="anchor">Explicit derivatives </h2>
 
-<p>In total we have nine parameters which we need to train.
-Using the chain rule (or just the back propagation algorithm) we can find all derivatives. For the output layer we have then
+<p>In total we have nine parameters which we need to train.  Using the
+chain rule (or just the back-propagation algorithm) we can find all
+derivatives. Since we will use automatic differentiation in reverse
+mode, we start with the derivatives of the cost function with respect
+to the parameters of the output layer, namely
 </p>
+$$
+\frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
+$$
+
+<p>with</p>
+$$
+\delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+$$
+
+<p>and finally</p>
+$$
+\frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
+$$
+
 
 <!-- !split -->
 <h2 id="setting-up-the-equations-for-the-optimization" class="anchor">Setting up the equations for the optimization </h2>
-
-<p>For th</p>
 
 <!-- !split -->
 <h2 id="getting-serious-the-back-propagation-equations-for-a-neural-network" class="anchor">Getting serious, the  back propagation equations for a neural network </h2>

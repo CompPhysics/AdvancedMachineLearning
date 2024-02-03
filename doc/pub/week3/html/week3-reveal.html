@@ -1101,6 +1101,16 @@ $$
 </section>
 
 <section>
+<h2 id="layout-of-a-simple-neural-network-with-no-hidden-layer">Layout of a simple neural network with no hidden layer  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/simplenn1.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
 <h2 id="optimizing-the-parameters">Optimizing the parameters </h2>
 
 <p>In setting up the feed forward and back propagation parts of the
@@ -1170,6 +1180,16 @@ $$
 </section>
 
 <section>
+<h2 id="layout-of-a-simple-neural-network-with-one-hidden-layer">Layout of a simple neural network with one hidden layer  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/simplenn2.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
 <h2 id="the-derivatives">The derivatives </h2>
 
 <p>The derivatives are now, using the chain rule again</p>
@@ -1236,7 +1256,7 @@ $$
 
 <p>with \( \eta \) is the learning rate.</p>
 
-<p>One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
+<p>One iteration consists of one feed forward step and one back-propagation step. Each back-propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
 
 <p>For the first hidden layer \( a_{i-1}=a_0=x \) for this simple model.</p>
 </section>
@@ -1268,6 +1288,16 @@ $$
 w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="layout-of-a-simple-neural-network-with-two-input-nodes-and-one-hidden-layer">Layout of a simple neural network with two input nodes and one  hidden layer  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/simplenn3.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
 </section>
 
 <section>
@@ -1331,15 +1361,35 @@ $$
 <section>
 <h2 id="explicit-derivatives">Explicit derivatives </h2>
 
-<p>In total we have nine parameters which we need to train.
-Using the chain rule (or just the back propagation algorithm) we can find all derivatives. For the output layer we have then
+<p>In total we have nine parameters which we need to train.  Using the
+chain rule (or just the back-propagation algorithm) we can find all
+derivatives. Since we will use automatic differentiation in reverse
+mode, we start with the derivatives of the cost function with respect
+to the parameters of the output layer, namely
 </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>with</p>
+<p>&nbsp;<br>
+$$
+\delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+$$
+<p>&nbsp;<br>
+
+<p>and finally</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
+$$
+<p>&nbsp;<br>
 </section>
 
 <section>
 <h2 id="setting-up-the-equations-for-the-optimization">Setting up the equations for the optimization </h2>
-
-<p>For th</p>
 </section>
 
 <section>

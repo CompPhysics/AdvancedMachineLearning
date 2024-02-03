@@ -889,7 +889,7 @@ b_i \leftarrow b_i-\eta \delta_i,
 !et
 with $\eta$ is the learning rate.
 
-One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters $\bm{\Theta}$.
+One iteration consists of one feed forward step and one back-propagation step. Each back-propagation step does one update of the parameters $\bm{\Theta}$.
 
 For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
 
@@ -987,24 +987,25 @@ a^{(2)}=\sigma^{(2)}(z^{(2)}).
 ===== Explicit derivatives =====
 
 In total we have nine parameters which we need to train.  Using the
-chain rule (or just the back propagation algorithm) we can find all
+chain rule (or just the back-propagation algorithm) we can find all
 derivatives. Since we will use automatic differentiation in reverse
-mode, we start with the derivatives of the cost function
+mode, we start with the derivatives of the cost function with respect
+to the parameters of the output layer, namely
 !bt
 \[
-\frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial C}{\partial a^{(2)}}\frac{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
+\frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
 \]
 !et
 with
 !bt
 \[
-\delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial C}{\partial a^{(2)}},
+\delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
 \]
 !et
 and finally
 !bt
 \[
-\frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial C}{\partial a^{(2)}}\frac{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
+\frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
 \]
 !et
 
