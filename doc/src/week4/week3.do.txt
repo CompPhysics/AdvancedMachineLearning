@@ -676,11 +676,19 @@ and requires only three operations if we can reuse all intermediate variables.
 
 
 !split
+===== In general not this simple =====
+
+In general, see the generalization below, unless we can obtain simple
+analytical expressions which we can simplify further, the final
+implementation of automatic differentiation involves repeated
+calculations (and thereby operations) of derivatives of elementary
+functions.
+
+!split
 ===== Automatic differentiation =====
 
 We can make this example more formal. Automatic differentiation is a
-formalization of the previous example (see graph from whiteboard
-notes).
+formalization of the previous example (see graph).
 
 We define $\bm{x}\in x_1,\dots, x_l$ input variables to a given function $f(\bm{x})$ and $x_{l+1},\dots, x_L$ intermediate variables.
 
@@ -723,7 +731,11 @@ programs can be automatically differentiated.
 !split
 ===== First network example, simple percepetron with one input =====
 
-As yet another example we define now a simple perceptron model with all quantities given by scalars. We consider only one input variable $x$ and one target value $y$.  We define an activation function $\sigma_1$ which takes as input
+As yet another example we define now a simple perceptron model with
+all quantities given by scalars. We consider only one input variable
+$x$ and one target value $y$.  We define an activation function
+$\sigma_1$ which takes as input
+
 !bt
 \[
 z_1 = w_1x+b_1,
@@ -740,6 +752,13 @@ define as the squared error
 C(x;w_1,b_1)=\frac{1}{2}(a_1-y)^2.
 \]
 !et
+
+!split
+===== Layout of a simple neural network with no hidden layer  =====
+
+FIGURE: [figures/simplenn1.png, width=900 frac=1.0]
+
+
 
 !split
 ===== Optimizing the parameters =====
@@ -778,8 +797,8 @@ which we later will just define as
 !split
 ===== Adding a hidden layer =====
 
-We change our simple model to a (see graph on whiteboard notes)
-network with just one hidden layer but with scalar variables only.
+We change our simple model to (see graph)
+a network with just one hidden layer but with scalar variables only.
 
 Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node and $a_0=x$.
 We have then
@@ -800,6 +819,14 @@ C(x;\bm{\Theta})=\frac{1}{2}(a_2-y)^2,
 \]
 !et
 with $\bm{\Theta}=[w_1,w_2,b_1,b_2]$.
+
+
+!split
+===== Layout of a simple neural network with one hidden layer  =====
+
+FIGURE: [figures/simplenn2.png, width=900 frac=1.0]
+
+
 
 !split
 ===== The derivatives =====
@@ -836,10 +863,13 @@ Can you generalize this to more than one hidden layer?
 !bblock
 From the above equations we see that the derivatives of the activation
 functions play a central role. If they vanish, the training may
-stop. This is called the vanishing gradient problem. If they become
+stop. This is called the vanishing gradient problem, see discussions below. If they become
 large, the parameters $w_i$ and $b_i$ may simply go to infinity. This
-is, pretty obvious, called the exploding gradient problem.
+is referenced as  the exploding gradient problem.
 !eblock
+
+
+
 
 !split
 ===== The training =====
@@ -848,7 +878,7 @@ The training of the parameters is done through various gradient descent approxim
 
 !bt
 \[
-w_{i}\leftarrow  = w_{i}- \eta \delta_i a_{i-1},
+w_{i}\leftarrow w_{i}- \eta \delta_i a_{i-1},
 \]
 !et
 and
@@ -859,9 +889,175 @@ b_i \leftarrow b_i-\eta \delta_i,
 !et
 with $\eta$ is the learning rate.
 
-One iteration consists of one feed forward step and one back propagation step. Each back propagation step does one update of the parameters $\bm{\Theta}$.
+One iteration consists of one feed forward step and one back-propagation step. Each back-propagation step does one update of the parameters $\bm{\Theta}$.
 
 For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
+
+
+!split
+===== Code examples for the simple models =====
+
+!split
+===== Simple neural network and the  back propagation equations  =====
+
+Let us now try to increase our level of ambition and attempt at setting 
+up the equations for a neural network with two input nodes, one hidden
+layer with two hidden nodes and one output layer with one output node/neuron only (see graph)..
+
+We need to define the following parameters and variables with the input layer (layer $(0)$) 
+where we label the  nodes $x_0$ and $x_1$
+!bt
+\[
+x_0 = a_0^{(0)} \wedge x_1 = a_1^{(0)}.
+\]
+!et
+
+The  hidden layer (layer $(1)$) has  nodes which yield the outputs $a_0^{(1)}$ and $a_1^{(1)}$) with  weight $\bm{w}$ and bias $\bm{b}$ parameters
+!bt
+\[
+w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
+\]
+!et
+
+
+!split
+===== Layout of a simple neural network with two input nodes, one  hidden layer and one output node  =====
+
+FIGURE: [figures/simplenn3.png, width=900 frac=1.0]
+
+
+
+!split
+===== The ouput layer =====
+
+Finally, we have the ouput layer given by layer label $(2)$ with output $a^{(2)}$ and weights and biases to be determined given by the variables
+!bt
+\[
+w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
+\]
+!et
+
+
+Our output is $\tilde{y}=a^{(2)}$ and we define a generic cost function $C(a^{(2)},y;\bm{\Theta})$ where $y$ is the target value (a scalar here).
+The parameters we need to optimize are given by
+!bt
+\[
+\bm{\Theta}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)},w_{0}^{(2)},w_{1}^{(2)},b_0^{(1)},b_1^{(1)},b^{(2)}\right\}.
+\]
+!et
+
+!split
+===== Compact expressions =====
+
+We can define the inputs to the activation functions for the various layers in terms of various matrix-vector multiplications and vector additions.
+The inputs to the first hidden layer are
+!bt
+\[
+\begin{bmatrix}z_0^{(1)} \\ z_1^{(1)} \end{bmatrix}=\begin{bmatrix}w_{00}^{(1)} & w_{01}^{(1)}\\ w_{10}^{(1)} &w_{11}^{(1)} \end{bmatrix}\begin{bmatrix}a_0^{(0)} \\ a_1^{(0)} \end{bmatrix}+\begin{bmatrix}b_0^{(1)} \\ b_1^{(1)} \end{bmatrix},
+\]
+!et
+with outputs
+!bt
+\[
+\begin{bmatrix}a_0^{(1)} \\ a_1^{(1)} \end{bmatrix}=\begin{bmatrix}\sigma^{(1)}(z_0^{(1)}) \\ \sigma^{(1)}(z_1^{(1)}) \end{bmatrix}.
+\]
+!et
+
+!split
+===== Output layer =====
+
+For the final output layer we have the inputs to the final activation function 
+!bt
+\[
+z^{(2)} = w_{0}^{(2)}a_0^{(1)} +w_{1}^{(2)}a_1^{(1)}+b^{(2)},
+\]
+!et
+resulting in the  output
+!bt
+\[
+a^{(2)}=\sigma^{(2)}(z^{(2)}).
+\]
+!et
+
+
+
+
+
+!split
+===== Explicit derivatives =====
+
+In total we have nine parameters which we need to train.  Using the
+chain rule (or just the back-propagation algorithm) we can find all
+derivatives. Since we will use automatic differentiation in reverse
+mode, we start with the derivatives of the cost function with respect
+to the parameters of the output layer, namely
+!bt
+\[
+\frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
+\]
+!et
+with
+!bt
+\[
+\delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+\]
+!et
+and finally
+!bt
+\[
+\frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
+\]
+!et
+
+
+!split
+===== Derivatives of the hidden layer =====
+
+Using the chain rule we have the following expressions for say one of the weight parameters (it is easy to generalize to the other weight parameters)
+!bt
+\[
+\frac{\partial C}{\partial w_{00}^{(1)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=    \delta^{(2)}\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}},
+\]
+!et
+which, noting that
+!bt
+\[
+z^{(2)} =w_0^{(2)}a_0^{(1)}+w_1^{(2)}a_1^{(1)}+b^{(2)},
+\]
+!et
+allows us to rewrite 
+!bt
+\[
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}a_0^{(1)},
+\]
+!et
+and defining
+!bt
+\[
+\delta_0^{(1)}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}\delta^{(2)},
+\]
+!et
+we have 
+!bt
+\[
+\frac{\partial C}{\partial w_{00}^{(1)}}=\delta_0^{(1)}a_0^{(1)}.
+\]
+!et
+We obtain similar expressions for the other derivatives. 
+
+!split
+=====  The gradient equation =====
+
+With the above equation, we can in turn set up the gradient algorithm for updating the weight and bias parameters. 
+
+
+
+
+!split
+===== Setting up the equations for the optimization =====
+
+
 
 !split
 ===== Getting serious, the  back propagation equations for a neural network =====
