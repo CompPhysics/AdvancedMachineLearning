@@ -209,6 +209,7 @@ doconce format html week3.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'final-expressions-for-the-biases-of-the-hidden-layer'),
+              ('Gradient expressions', 2, None, 'gradient-expressions'),
               ('Program example', 2, None, 'program-example'),
               ('Getting serious, the  back propagation equations for a neural '
                'network',
@@ -420,6 +421,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#final-expression" style="font-size: 80%;">Final expression</a></li>
      <!-- navigation toc: --> <li><a href="#completing-the-list" style="font-size: 80%;">Completing the list</a></li>
      <!-- navigation toc: --> <li><a href="#final-expressions-for-the-biases-of-the-hidden-layer" style="font-size: 80%;">Final expressions for the biases of the hidden layer</a></li>
+     <!-- navigation toc: --> <li><a href="#gradient-expressions" style="font-size: 80%;">Gradient expressions</a></li>
      <!-- navigation toc: --> <li><a href="#program-example" style="font-size: 80%;">Program example</a></li>
      <!-- navigation toc: --> <li><a href="#getting-serious-the-back-propagation-equations-for-a-neural-network" style="font-size: 80%;">Getting serious, the  back propagation equations for a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#analyzing-the-last-results" style="font-size: 80%;">Analyzing the last results</a></li>
@@ -1580,6 +1582,9 @@ $$
 $$
 
 <p>As we will see below, these expressions can be generalized in a more compact form. </p>
+
+<!-- !split -->
+<h2 id="gradient-expressions" class="anchor">Gradient expressions </h2>
 
 <p>For this specific model, with just one output node and two hidden
 nodes, the gradient descent equations take the following form for output layer
