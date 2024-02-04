@@ -230,6 +230,7 @@ div.toc p,a {
                2,
                None,
                'derivatives-of-the-hidden-layer'),
+              ('The gradient equation', 2, None, 'the-gradient-equation'),
               ('Setting up the equations for the optimization',
                2,
                None,
@@ -1410,7 +1411,7 @@ $$
 z^{(2)} =w_0^{(2)}a_0^{(1)}+w_1^{(2)}a_1^{(1)}+b^{(2)},
 $$
 
-<p>which allows us to rewrite </p>
+<p>allows us to rewrite </p>
 $$
 \frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}a_0^{(1)},
 $$
@@ -1425,7 +1426,12 @@ $$
 \frac{\partial C}{\partial w_{00}^{(1)}}=\delta_0^{(1)}a_0^{(1)}.
 $$
 
-<p>We obtain similar expressions for the other derivatives.</p>
+<p>We obtain similar expressions for the other derivatives. </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-gradient-equation">The gradient equation </h2>
+
+<p>With the above equation, we can in turn set up the gradient algorithm for updating the weight and bias parameters. </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="setting-up-the-equations-for-the-optimization">Setting up the equations for the optimization </h2>
