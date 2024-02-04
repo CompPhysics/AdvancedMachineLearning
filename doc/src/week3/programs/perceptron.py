@@ -1,0 +1,70 @@
+# import necessary packages
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(z):
+    return 1.0/(1.0+np.exp(-z))
+
+def feed_forward(X):
+    # weighted sum of inputs to the hidden layer
+    z_h = np.matmul(X, hidden_weights) + hidden_bias
+    # activation in the hidden layer
+    a_h = sigmoid(z_h)
+    # weighted sum of inputs to the output layer
+    z_o = np.matmul(a_h, output_weights) + output_bias
+    feedforward_output = z_o
+    return a_h, feedforward_output
+
+def backpropagation(X, Y):
+    a_h, feedforward_output = feed_forward(X)
+    
+    # error in the output layer
+    error_output = feedforward_output - Y
+    print(error_output**2)
+    # error in the hidden layer
+    error_hidden = np.matmul(error_output, output_weights.T) * a_h * (1 - a_h)
+    
+    # gradients for the output layer
+    output_weights_gradient = np.matmul(a_h.T, error_output)
+    output_bias_gradient = np.sum(error_output, axis=0)
+    # gradient for the hidden layer
+    hidden_weights_gradient = np.matmul(X.T, error_hidden)
+    hidden_bias_gradient = np.sum(error_hidden, axis=0)
+
+    return output_weights_gradient, output_bias_gradient, hidden_weights_gradient, hidden_bias_gradient
+
+
+# ensure the same random numbers appear every time
+np.random.seed(0)
+
+# Input variable
+X = np.array([4.0],dtype=np.float64)
+# Target values
+Y = np.array([5.0],dtype=np.float64)
+
+
+# Defining the neural network
+n_inputs = X.shape
+n_features = 1
+n_hidden_neurons = 1
+n_categories = 1
+n_features = 1
+# Initialize the network
+# weights and bias in the hidden layer
+hidden_weights = np.random.randn(n_features, n_hidden_neurons)
+hidden_bias = np.zeros(n_hidden_neurons) + 0.01
+
+# weights and bias in the output layer
+output_weights = np.random.randn(n_hidden_neurons, n_categories)
+output_bias = np.zeros(n_categories) + 0.01
+
+eta = 0.01
+for i in range(1000):
+    # calculate gradients
+    dWo, dBo, dWh, dBh = backpropagation(X, Y)
+    # update weights and biases
+    output_weights -= eta * dWo
+    output_bias -= eta * dBo
+    hidden_weights -= eta * dWh
+    hidden_bias -= eta * dBh
+
