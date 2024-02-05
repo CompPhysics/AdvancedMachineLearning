@@ -59,7 +59,7 @@ output_weights = np.random.randn(n_hidden_neurons, n_categories)
 output_bias = np.zeros(n_categories) + 0.01
 
 eta = 0.01
-for i in range(200):
+for i in range(1000):
     # calculate gradients
     dWo, dBo, dWh, dBh = backpropagation(X, Y)
     # update weights and biases
