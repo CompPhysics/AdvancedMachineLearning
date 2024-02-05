@@ -1,7 +1,6 @@
 TITLE: February 5-9: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: today
-
+DATE: February 6, 2024
 
 
 !split
@@ -118,11 +117,94 @@ which we later will just define as
 \]
 !et
 
+!split
+===== Implementing the simple perceptron model =====
+
+In the example code here we implement the above equations (with explict
+expressions for the derivatives) with just one input variable $x$ and
+one output variable.  The target value $y=2x+1$ is a simple linear
+function in $x$. Since this is a regression problem, we define the cost function to be proportional to the least squares error
+!bt
+\[
+C(y,w_1,b_1)=\frac{1}{2}(a_1-y)^2,
+\]
+!et
+with $a_1$ the output from the network.
+
+!bc pycod
+# import necessary packages
+import numpy as np
+import matplotlib.pyplot as plt
+
+def feed_forward(x):
+    # weighted sum of inputs to the output layer
+    z_1 = x*output_weights + output_bias
+    # Output from output node (one node only)
+    # Here the output is equal to the input
+    a_1 = z_1
+    return a_1
+
+def backpropagation(x, y):
+    a_1 = feed_forward(x)
+    # derivative of cost function
+    derivative_cost = a_1 - y
+    # the variable delta in the equations, note that output a_1 = z_1, its derivatives wrt z_o is thus 1
+    delta_1 = derivative_cost
+    # gradients for the output layer
+    output_weights_gradient = delta_1*x
+    output_bias_gradient = delta_1
+    # The cost function is 0.5*(a_1-y)^2. This gives a measure of the error for each iteration
+    return output_weights_gradient, output_bias_gradient
+
+# ensure the same random numbers appear every time
+np.random.seed(0)
+# Input variable
+x = 4.0
+# Target values
+y = 2*x+1.0
+
+# Defining the neural network
+n_inputs = 1
+n_outputs = 1
+# Initialize the network
+# weights and bias in the output layer
+output_weights = np.random.randn()
+output_bias = np.random.randn()
+
+# implementing a simple gradient descent approach with fixed learning rate
+eta = 0.01
+for i in range(40):
+    # calculate gradients from back propagation
+    derivative_w1, derivative_b1 = backpropagation(x, y)
+    # update weights and biases
+    output_weights -= eta * derivative_w1
+    output_bias -= eta * derivative_b1
+# our final prediction after training
+ytilde = output_weights*x+output_bias
+print(0.5*((ytilde-y)**2))
+
+!ec
+Running this code gives us an acceptable results after some 40-50 iterations. Note that the results depend on the value of the learning rate.
+
+!split
+===== Exercise: Extension to the above code =====
+
+Feel free to add more input nodes and weights to the above
+code. Furthermore, try to increase the amount of input and
+target/output data. Try also to perform calculations for more values
+of the learning rates. Feel free to add either hyperparameters with an
+$l_1$ norm or an $l_2$ norm and discuss your results.
+
+You could also try to change the function $f(x)=y$ from a linear polynomial in $x$ to a higher-order polynomial.
+Comment your results.
+
+_Hint_: Increasing the number of input variables and input nodes requires a rewrite of the input data in terms of a matrix. You need to figure out the correct dimensionalities.
+
 
 !split
 ===== Adding a hidden layer =====
 
-We change our simple model to (see graph)
+We change our simple model to (see graph below)
 a network with just one hidden layer but with scalar variables only.
 
 Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node and $a_0=x$.
@@ -220,7 +302,9 @@ For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
 
 
 !split
-===== Code examples for the simple models =====
+===== Code example  =====
+
+The code here implements the above model with one hidden layer and scalar variables only for the same function we studied in the previous example.
 
 !split
 ===== Simple neural network and the  back propagation equations  =====
