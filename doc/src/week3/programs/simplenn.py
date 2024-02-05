@@ -39,9 +39,8 @@ x = np.array([4.0],dtype=np.float64)
 y = 2*x+1.0 
 
 # Defining the neural network, only scalars
-n_inputs = x.shape
-n_features = 1
-n_hidden_neurons = 1
+n_inputs, n_features = X.shape
+n_hidden_neurons = 2
 n_outputs = 1
 
 # Initialize the network
