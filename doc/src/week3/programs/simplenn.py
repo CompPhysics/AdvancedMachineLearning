@@ -5,66 +5,61 @@ import matplotlib.pyplot as plt
 def sigmoid(z):
     return 1.0/(1.0+np.exp(-z))
 
-def feed_forward(X):
+def forwardpropagation(x):
     # weighted sum of inputs to the hidden layer
-    z_h = np.matmul(X, hidden_weights) + hidden_bias
+    z_1 = np.matmul(x, w_1) + b_1
     # activation in the hidden layer
-    a_h = sigmoid(z_h)
+    a_1 = sigmoid(z_1)
     # weighted sum of inputs to the output layer
-    z_o = np.matmul(a_h, output_weights) + output_bias
-    feedforward_output = z_o
-    return a_h, feedforward_output
+    z_2 = np.matmul(a_1, w_2) + b_2
+    a_2 = z_2
+    return a_1, a_2
 
-def backpropagation(X, Y):
-    a_h, feedforward_output = feed_forward(X)
-    
-    # error in the output layer
-    error_output = feedforward_output - Y
-    print(error_output**2)
-    # error in the hidden layer
-    error_hidden = np.matmul(error_output, output_weights.T) * a_h * (1 - a_h)
-    
+def backpropagation(x, y):
+    a_1, a_2 = forwardpropagation(x)
+    # parameter delta for the output layer, note that a_2=z_2 and its derivative wrt z_2 is just 1
+    delta_2 = a_2 - y
+    print(0.5*((a_2-y)**2))
+    # delta for  the hidden layer
+    delta_1 = np.matmul(delta_2, w_2.T) * a_1 * (1 - a_1)
     # gradients for the output layer
-    output_weights_gradient = np.matmul(a_h.T, error_output)
-    output_bias_gradient = np.sum(error_output, axis=0)
+    output_weights_gradient = np.matmul(a_1.T, delta_2)
+    output_bias_gradient = np.sum(delta_2, axis=0)
     # gradient for the hidden layer
-    hidden_weights_gradient = np.matmul(X.T, error_hidden)
-    hidden_bias_gradient = np.sum(error_hidden, axis=0)
-
+    hidden_weights_gradient = np.matmul(x.T, delta_1)
+    hidden_bias_gradient = np.sum(delta_1, axis=0)
     return output_weights_gradient, output_bias_gradient, hidden_weights_gradient, hidden_bias_gradient
 
 
 # ensure the same random numbers appear every time
 np.random.seed(0)
-
 # Input variable
-X = np.array([4.0],dtype=np.float64)
+x = np.array([4.0],dtype=np.float64)
 # Target values
-Y = np.array([5.0],dtype=np.float64)
+y = 2*x+1.0 
 
-
-# Defining the neural network
-n_inputs = X.shape
+# Defining the neural network, only scalars
+n_inputs = x.shape
 n_features = 1
 n_hidden_neurons = 1
-n_categories = 1
-n_features = 1
+n_outputs = 1
+
 # Initialize the network
 # weights and bias in the hidden layer
-hidden_weights = np.random.randn(n_features, n_hidden_neurons)
-hidden_bias = np.zeros(n_hidden_neurons) + 0.01
+w_1 = np.random.randn(n_features, n_hidden_neurons)
+b_1 = np.zeros(n_hidden_neurons) + 0.01
 
 # weights and bias in the output layer
-output_weights = np.random.randn(n_hidden_neurons, n_categories)
-output_bias = np.zeros(n_categories) + 0.01
+w_2 = np.random.randn(n_hidden_neurons, n_outputs)
+b_2 = np.zeros(n_outputs) + 0.01
 
-eta = 0.01
-for i in range(1000):
+eta = 0.1
+for i in range(100):
     # calculate gradients
-    dWo, dBo, dWh, dBh = backpropagation(X, Y)
+    derivW2, derivB2, derivW1, derivB1 = backpropagation(x, y)
     # update weights and biases
-    output_weights -= eta * dWo
-    output_bias -= eta * dBo
-    hidden_weights -= eta * dWh
-    hidden_bias -= eta * dBh
+    w_2 -= eta * derivW2
+    b_2 -= eta * derivB2
+    w_1 -= eta * derivW1
+    b_1 -= eta * derivB1
 
