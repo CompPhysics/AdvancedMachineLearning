@@ -37,7 +37,7 @@ np.random.seed(0)
 x = np.random.rand(100)
 # Target values
 y = 2*x*x+5*x+1.0 
-X = np.zeros((len(x),1))
+X = np.zeros((len(x),2))
 X[:,0] = x
 # Defining the neural network, only scalars
 n_inputs, n_features = X.shape
