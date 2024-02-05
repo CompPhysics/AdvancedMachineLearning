@@ -389,7 +389,7 @@ of the learning rates. Feel free to add either hyperparameters with an
 $l_1$ norm or an $l_2$ norm and discuss your results.
 Discuss your results as functions of the amount of training data and various learning rates.
 
-_Challenge:_ Try to cnage activation functions and replace the hard-coded analytical expressions with automatic derivation via either _autograd_ or _JAX_.
+_Challenge:_ Try to change the activation functions and replace the hard-coded analytical expressions with automatic derivation via either _autograd_ or _JAX_.
 
 !split
 ===== Simple neural network and the  back propagation equations  =====
@@ -624,7 +624,23 @@ where $\eta$ is the learning rate.
 !split
 ===== Program example  =====
 
+We extend our simple code to a function which depends on two variable $x_0$ and $x_1$, that is
+!bt
+\[
+y=f(x_0,x_1)=x_0^2+3x_0x_1+x_1^2+5.
+\]
+!et
+We feed our network with $n=100$ entries $x_0$ and $x_1$. We have thus two features represented by these variable and an input matrix/design matrix $\bm{X}\in \mathbf{R}^{n\times 2}$
+!bt
+\[
+\bm{X}=\begin{bmatrix} x_{00} & x_{01} \\ x_{00} & x_{01} \\ x_{10} & x_{11} \\ x_{20} & x_{21} \\ \dots & \dots \\ \dots & \dots \\ x_{n-20} & x_{n-21} \\ x_{n-10} & x_{n-11} \end{bmatrix}.
+\]
+!et
 
+
+!bc pycod
+
+!ec
 
 !split
 ===== Getting serious, the  back propagation equations for a neural network =====
@@ -2733,14 +2749,14 @@ Computing polynomial products can be implemented efficiently if we rewrite the m
 We note first that the new coefficients are given as
 
 !bt
-\begin{split}
+\begin{align}
 \delta_0=&\alpha_0\beta_0\\
 \delta_1=&\alpha_1\beta_0+\alpha_1\beta_0\\
 \delta_2=&\alpha_0\beta_2+\alpha_1\beta_1+\alpha_2\beta_0\\
 \delta_3=&\alpha_1\beta_2+\alpha_2\beta_1+\alpha_0\beta_3\\
 \delta_4=&\alpha_2\beta_2+\alpha_1\beta_3\\
 \delta_5=&\alpha_2\beta_3.\\
-\end{split}
+\end{align}
 !et
 
 
