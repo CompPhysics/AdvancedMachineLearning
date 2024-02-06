@@ -18,8 +18,10 @@ def forwardpropagation(x):
 def backpropagation(x, y):
     a_1, a_2 = forwardpropagation(x)
     # parameter delta for the output layer, note that a_2=z_2 and its derivative wrt z_2 is just 1
-    delta_2 = a_2 - y
-    print(0.5*((a_2-y)**2))
+    delta_2 = np.sum(a_2 - y)
+    print(a_2)
+    print(delta_2)
+#    print(0.5*((a_2-y)**2))
     # delta for  the hidden layer
     delta_1 = np.matmul(delta_2, w_2.T) * a_1 * (1 - a_1)
     # gradients for the output layer
@@ -34,26 +36,23 @@ def backpropagation(x, y):
 # ensure the same random numbers appear every time
 np.random.seed(0)
 # Input variable
-x = np.random.rand(100)
-# Target values
-y = 2*x*x+5*x+1.0 
-X = np.zeros((len(x),1))
-X[:,0] = x
+# Design matrix
+X = np.array([ [1.0, 2.0], [3.0, 4.0], [5.0, 6.0],[7.0, 8.0]],dtype=np.float64)
+
+# The XOR gate
+y = np.array( [ 0, 1 ,1, 0])
 # Defining the neural network, only scalars
 n_inputs, n_features = X.shape
-#n_features = 1
-n_hidden_neurons = 1
+n_hidden_neurons = 2
 n_outputs = 1
 
 # Initialize the network
 # weights and bias in the hidden layer
 w_1 = np.random.randn(n_features, n_hidden_neurons)
 b_1 = np.zeros(n_hidden_neurons) + 0.01
-
 # weights and bias in the output layer
 w_2 = np.random.randn(n_hidden_neurons, n_outputs)
 b_2 = np.zeros(n_outputs) + 0.01
-
 eta = 0.1
 for i in range(100):
     # calculate gradients

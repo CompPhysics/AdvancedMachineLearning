@@ -932,7 +932,9 @@ $$
 </section>
 
 <section>
-<h2 id="program-example">Program example  </h2>
+
+<!-- --- begin exercise --- -->
+<h2 id="exercise-3-extended-program">Exercise 3: Extended program </h2>
 
 <p>We extend our simple code to a function which depends on two variable \( x_0 \) and \( x_1 \), that is</p>
 <p>&nbsp;<br>
@@ -948,29 +950,13 @@ $$
 $$
 <p>&nbsp;<br>
 
+<p>Write a code, based on the previous code examples, which takes as input these data and fit the above function.
+You can extend your code to include automatic differentiation.
+</p>
 
+<p>With these examples, we are now ready to embark upon the writing of more a general code for neural networks.</p>
 
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="font-size: 80%; line-height: 125%;">
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- --- end exercise --- -->
 </section>
 
 <section>
@@ -1273,7 +1259,7 @@ task.
 </section>
 
 <section>
-<h2 id="which-activation-function-should-i-use">Which activation function should I use? </h2>
+<h2 id="vanishing-gradients">Vanishing gradients  </h2>
 
 <p>The Back propagation algorithm we derived above works by going from
 the output layer to the input layer, propagating the error gradient on
@@ -1288,6 +1274,10 @@ the GD update leaves the lower layer connection weights virtually
 unchanged, and training never converges to a good solution. This is
 known in the literature as <b>the vanishing gradients problem</b>.
 </p>
+</section>
+
+<section>
+<h2 id="exploding-gradients">Exploding gradients </h2>
 
 <p>In other cases, the opposite can happen, namely the the gradients can
 grow bigger and bigger. The result is that many of the layers get
@@ -1316,6 +1306,10 @@ that was most popular at the time, namely random initialization using
 a normal distribution with a mean of 0 and a standard deviation of
 1. 
 </p>
+</section>
+
+<section>
+<h2 id="logistic-function-as-the-root-of-problems">Logistic function as the root of problems </h2>
 
 <p>They showed that with this activation function and this
 initialization scheme, the variance of the outputs of each layer is
@@ -1382,6 +1376,10 @@ neuron&#8217;s inputs is negative, it will start outputting 0. When this
 happen, the neuron is unlikely to come back to life since the gradient
 of the ReLU function is 0 when its input is negative.
 </p>
+</section>
+
+<section>
+<h2 id="elu-function">ELU function </h2>
 
 <p>To solve this problem, nowadays practitioners use a variant of the
 ReLU function, such as the leaky ReLU discussed above or the so-called
@@ -1500,11 +1498,11 @@ do not use any of the test data to train the algorithm. This is a
 cardinal sin in ML. Then:
 </p>
 
-<ul>
+<ol>
 <p><li> Estimate optimal error rate</li>
 <p><li> Minimize underfitting (bias) on training data set.</li>
 <p><li> Make sure you are not overfitting.</li>
-</ul>
+</ol>
 </section>
 
 <section>
@@ -3421,7 +3419,10 @@ of deep learning methods. The success in for example image
 classifications have made them a central tool for most machine
 learning practitioners.
 </p>
+</section>
 
+<section>
+<h2 id="similar-to-nns">Similar to NNs </h2>
 <p>CNNs are very similar to ordinary Neural Networks.
 They are made up of neurons that have learnable weights and
 biases. Each neuron receives some inputs, performs a dot product and
@@ -3444,12 +3445,7 @@ efficient to implement and vastly reduce the amount of parameters in
 the network.</b>
 </p>
 
-<p>Here we provide only a superficial overview, for the more interested, we recommend highly the course
-<a href="https://www.uio.no/studier/emner/matnat/ifi/IN5400/index-eng.html" target="_blank">IN5400 &#8211; Machine Learning for Image Analysis</a>
-and the slides of <a href="http://cs231n.github.io/convolutional-networks/" target="_blank">CS231</a>.
-</p>
-
-<p>Another good read is the article here <a href="https://arxiv.org/pdf/1603.07285.pdf" target="_blank"><tt>https://arxiv.org/pdf/1603.07285.pdf</tt></a>. </p>
+<p>A good read is the article here <a href="https://arxiv.org/pdf/1603.07285.pdf" target="_blank"><tt>https://arxiv.org/pdf/1603.07285.pdf</tt></a>. </p>
 </section>
 
 <section>
@@ -3476,7 +3472,10 @@ structure. More formally, they share these important properties:
 <p><li> They feature one or more axes for which ordering matters (e.g., width and height axes for an image, time axis for a sound clip).</li>
 <p><li> One axis, called the channel axis, is used to access different views of the data (e.g., the red, green and blue channels of a color image, or the left and right channels of a stereo audio track).</li>
 </ul>
-<p>
+</section>
+
+<section>
+<h2 id="not-affine-necessarily-transformations">Not affine necessarily transformations </h2>
 <p>These properties are not exploited when an affine transformation is applied; in
 fact, all the axes are treated in the same way and the topological information
 is not taken into account. Still, taking advantage of the implicit structure of
@@ -3504,6 +3503,10 @@ scale to larger images. For example, an image of more respectable
 size, say \( 200\times 200\times 3 \), would lead to neurons that have 
 \( 200\times 200\times 3 = 120,000 \) weights. 
 </p>
+</section>
+
+<section>
+<h2 id="several-neurons">Several neurons </h2>
 
 <p>We could have
 several such neurons, and the parameters would add up quickly! Clearly,
@@ -3540,7 +3543,10 @@ with an input volume of
 activations has dimensions \( 32\times 32\times 3 \) (width, height,
 depth respectively). 
 </p>
+</section>
 
+<section>
+<h2 id="differences-between-cnns-and-nns">Differences between CNNs and NNs </h2>
 <p>The neurons in a layer will
 only be connected to a small region of the layer before it, instead of
 all of the neurons in a fully-connected manner. Moreover, the final
@@ -3570,7 +3576,10 @@ CNN architectures: Convolutional Layer, Pooling Layer, and
 Fully-Connected Layer (exactly as seen in regular Neural Networks). We
 will stack these layers to form a full CNN architecture.
 </p>
+</section>
 
+<section>
+<h2 id="layout-of-cnns">Layout of CNNs </h2>
 <p>A simple CNN for image classification could have the architecture:</p>
 
 <ul>
@@ -3613,12 +3622,6 @@ are consistent with the labels in the training set for each image.
 <p><li> Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn&#8217;t)</li>
 </ul>
 <p>
-<p>For more material on convolutional networks, we strongly recommend
-the course
-<a href="https://www.uio.no/studier/emner/matnat/ifi/IN5400/index-eng.html" target="_blank">IN5400 &#8211; Machine Learning for Image Analysis</a>
-and the slides of <a href="http://cs231n.github.io/convolutional-networks/" target="_blank">CS231</a> which is taught at Stanford University (consistently ranked as one of the top computer science programs in the world). <a href="http://neuralnetworksanddeeplearning.com/chap6.html" target="_blank">Michael Nielsen's book is a must read, in particular chapter 6 which deals with CNNs</a>.
-</p>
-
 <p>The textbook by Goodfellow et al, see chapter 9 contains an in depth discussion as well.</p>
 </section>
 
@@ -3644,7 +3647,10 @@ summation etc) on two function in order to produce a third function
 that expresses how the shape of one gets modified by the other.
 Convolution has a plethora of applications in a variety of disciplines, spanning from statistics to signal processing, computer vision, solutions of differential equations,linear algebra, engineering,  and yes, machine learning.
 </p>
+</section>
 
+<section>
+<h2 id="convolution">Convolution </h2>
 <p>Mathematically, convolution is defined as follows (one-dimensional example):
 Let us define a continuous function \( y(t) \) given by
 </p>
@@ -3730,7 +3736,10 @@ $$
 \end{align}
 $$
 <p>&nbsp;<br>
+</section>
 
+<section>
+<h2 id="to-be-noted">To be noted </h2>
 <p>We note that \( \alpha_i=0 \) except for \( i\in \left\{0,1,2\right\} \) and \( \beta_i=0 \) except for \( i\in\left\{0,1,2,3\right\} \).</p>
 
 <p>We can then rewrite the coefficients \( \delta_j \) using a discrete convolution as</p>
@@ -3769,7 +3778,10 @@ $$
 			    \end{bmatrix}\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \beta_3\end{bmatrix}.
 $$
 <p>&nbsp;<br>
+</section>
 
+<section>
+<h2 id="rewriting">Rewriting </h2>
 <p>The process is commutative and we can easily see that we can rewrite the multiplication in terms of  a matrix holding \( \beta \) and a vector holding \( \alpha \).
 In this case we have
 </p>
@@ -3839,7 +3851,10 @@ neural networks the idea is to automatically learn the filters and use
 many of them in conjunction with non-linear operations (activation
 functions).
 </p>
+</section>
 
+<section>
+<h2 id="sound-sequence-data">Sound sequence data </h2>
 <p>As an example consider a neural network operating on sound sequence
 data.  Assume that we an input vector \( \boldsymbol{x} \) of length \( d=10^6 \).  We
 construct then a neural network with onle hidden layer only with

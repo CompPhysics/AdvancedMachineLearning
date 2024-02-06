@@ -622,7 +622,7 @@ where $\eta$ is the learning rate.
 
 
 !split
-===== Program example  =====
+===== Exercise: Extended program  =====
 
 We extend our simple code to a function which depends on two variable $x_0$ and $x_1$, that is
 !bt
@@ -636,11 +636,10 @@ We feed our network with $n=100$ entries $x_0$ and $x_1$. We have thus two featu
 \bm{X}=\begin{bmatrix} x_{00} & x_{01} \\ x_{00} & x_{01} \\ x_{10} & x_{11} \\ x_{20} & x_{21} \\ \dots & \dots \\ \dots & \dots \\ x_{n-20} & x_{n-21} \\ x_{n-10} & x_{n-11} \end{bmatrix}.
 \]
 !et
+Write a code, based on the previous code examples, which takes as input these data and fit the above function.
+You can extend your code to include automatic differentiation.
 
-
-!bc pycod
-
-!ec
+With these examples, we are now ready to embark upon the writing of more a general code for neural networks.
 
 !split
 ===== Getting serious, the  back propagation equations for a neural network =====
@@ -909,7 +908,7 @@ task.
 
 
 !split 
-===== Which activation function should I use? =====
+===== Vanishing gradients  =====
 
 The Back propagation algorithm we derived above works by going from
 the output layer to the input layer, propagating the error gradient on
@@ -923,6 +922,9 @@ the algorithm progresses down to the first hidden layers. As a result,
 the GD update leaves the lower layer connection weights virtually
 unchanged, and training never converges to a good solution. This is
 known in the literature as _the vanishing gradients problem_.
+
+!split
+===== Exploding gradients =====
 
 In other cases, the opposite can happen, namely the the gradients can
 grow bigger and bigger. The result is that many of the layers get
@@ -949,6 +951,9 @@ sigmoid activation function and the weight initialization technique
 that was most popular at the time, namely random initialization using
 a normal distribution with a mean of 0 and a standard deviation of
 1. 
+
+!split
+===== Logistic function as the root of problems =====
 
 They showed that with this activation function and this
 initialization scheme, the variance of the outputs of each layer is
@@ -1010,6 +1015,9 @@ if a neuron’s weights get updated such that the weighted sum of the
 neuron’s inputs is negative, it will start outputting 0. When this
 happen, the neuron is unlikely to come back to life since the gradient
 of the ReLU function is 0 when its input is negative.
+
+!split
+===== ELU function =====
 
 To solve this problem, nowadays practitioners use a variant of the
 ReLU function, such as the leaky ReLU discussed above or the so-called
@@ -1114,12 +1122,9 @@ test error in order to make tweaks to our model. It is crucial that we
 do not use any of the test data to train the algorithm. This is a
 cardinal sin in ML. Then:
 
- 
-* Estimate optimal error rate
-
-* Minimize underfitting (bias) on training data set.
-
-* Make sure you are not overfitting.
+o Estimate optimal error rate
+o Minimize underfitting (bias) on training data set.
+o Make sure you are not overfitting.
 
 
 
@@ -2052,7 +2057,6 @@ linear_regression.reset_weights() # reset weights such that previous runs or rer
 scheduler = Constant(eta=1e-3)
 scores = linear_regression.fit(X_train, t_train, scheduler)
 
-
 !ec
 
 Due to the progress bar we can see the MSE (train$\_$error) throughout
@@ -2486,9 +2490,6 @@ for i in range(5):
 
 
 
-
-
-
 !split
 ===== Convolutional Neural Networks (recognizing images) =====
 
@@ -2500,6 +2501,9 @@ of deep learning methods. The success in for example image
 classifications have made them a central tool for most machine
 learning practitioners.
 
+
+!split
+===== Similar to NNs =====
 CNNs are very similar to ordinary Neural Networks.
 They are made up of neurons that have learnable weights and
 biases. Each neuron receives some inputs, performs a dot product and
@@ -2519,11 +2523,8 @@ into the architecture. These then make the forward function more
 efficient to implement and vastly reduce the amount of parameters in
 the network._
 
-Here we provide only a superficial overview, for the more interested, we recommend highly the course
-"IN5400 – Machine Learning for Image Analysis":"https://www.uio.no/studier/emner/matnat/ifi/IN5400/index-eng.html"
-and the slides of "CS231":"http://cs231n.github.io/convolutional-networks/".
 
-Another good read is the article here URL:"https://arxiv.org/pdf/1603.07285.pdf". 
+A good read is the article here URL:"https://arxiv.org/pdf/1603.07285.pdf". 
 
 
 
@@ -2549,6 +2550,9 @@ structure. More formally, they share these important properties:
 * They feature one or more axes for which ordering matters (e.g., width and height axes for an image, time axis for a sound clip).
 * One axis, called the channel axis, is used to access different views of the data (e.g., the red, green and blue channels of a color image, or the left and right channels of a stereo audio track).
 
+
+!split
+===== Not affine necessarily transformations =====
 These properties are not exploited when an affine transformation is applied; in
 fact, all the axes are treated in the same way and the topological information
 is not taken into account. Still, taking advantage of the implicit structure of
@@ -2576,6 +2580,9 @@ scale to larger images. For example, an image of more respectable
 size, say $200\times 200\times 3$, would lead to neurons that have 
 $200\times 200\times 3 = 120,000$ weights. 
 
+!split
+===== Several neurons =====
+
 We could have
 several such neurons, and the parameters would add up quickly! Clearly,
 this full connectivity is wasteful and the huge number of parameters
@@ -2601,6 +2608,9 @@ with an input volume of
 activations has dimensions $32\times 32\times 3$ (width, height,
 depth respectively). 
 
+
+!split
+===== Differences between CNNs and NNs =====
 The neurons in a layer will
 only be connected to a small region of the layer before it, instead of
 all of the neurons in a fully-connected manner. Moreover, the final
@@ -2625,6 +2635,9 @@ CNN architectures: Convolutional Layer, Pooling Layer, and
 Fully-Connected Layer (exactly as seen in regular Neural Networks). We
 will stack these layers to form a full CNN architecture.
 
+
+!split
+===== Layout of CNNs =====
 A simple CNN for image classification could have the architecture:
 
 * _INPUT_ ($32\times 32 \times 3$) will hold the raw pixel values of the image, in this case an image of width 32, height 32, and with three color channels R,G,B.
@@ -2661,10 +2674,6 @@ In summary:
 * Each Layer may or may not have parameters (e.g. CONV/FC do, RELU/POOL don’t)
 * Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn’t)
 
-For more material on convolutional networks, we strongly recommend
-the course
-"IN5400 – Machine Learning for Image Analysis":"https://www.uio.no/studier/emner/matnat/ifi/IN5400/index-eng.html"
-and the slides of "CS231":"http://cs231n.github.io/convolutional-networks/" which is taught at Stanford University (consistently ranked as one of the top computer science programs in the world). "Michael Nielsen's book is a must read, in particular chapter 6 which deals with CNNs":"http://neuralnetworksanddeeplearning.com/chap6.html".
 
 The textbook by Goodfellow et al, see chapter 9 contains an in depth discussion as well.
 
@@ -2689,6 +2698,8 @@ summation etc) on two function in order to produce a third function
 that expresses how the shape of one gets modified by the other.
 Convolution has a plethora of applications in a variety of disciplines, spanning from statistics to signal processing, computer vision, solutions of differential equations,linear algebra, engineering,  and yes, machine learning.
 
+!split
+===== Convolution =====
 Mathematically, convolution is defined as follows (one-dimensional example):
 Let us define a continuous function $y(t)$ given by
 !bt
@@ -2760,6 +2771,8 @@ We note first that the new coefficients are given as
 !et
 
 
+!split
+===== To be noted =====
 We note that $\alpha_i=0$ except for $i\in \left\{0,1,2\right\}$ and $\beta_i=0$ except for $i\in\left\{0,1,2,3\right\}$.
 
 We can then rewrite the coefficients $\delta_j$ using a discrete convolution as
@@ -2796,6 +2809,8 @@ as a matrix-vector multiplication
 \]
 !et
 
+!split
+===== Rewriting =====
 The process is commutative and we can easily see that we can rewrite the multiplication in terms of  a matrix holding $\beta$ and a vector holding $\alpha$.
 In this case we have
 !bt
@@ -2839,6 +2854,7 @@ S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i-m,j-n)K(m,n).
 
 Normally the latter is more straightforward to implement in  a machine elarning library since there is less variation in the range of values of $m$ and $n$.
 
+
 !split
 ===== Cross-Correlation =====
 
@@ -2863,6 +2879,9 @@ neural networks the idea is to automatically learn the filters and use
 many of them in conjunction with non-linear operations (activation
 functions).
 
+
+!split
+===== Sound sequence data =====
 As an example consider a neural network operating on sound sequence
 data.  Assume that we an input vector $\bm{x}$ of length $d=10^6$.  We
 construct then a neural network with onle hidden layer only with
