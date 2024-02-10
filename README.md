@@ -41,32 +41,31 @@ Furthermore, all teaching material is available from this GitHub link.
 - Link to whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesJanuary23.pdf
 
 ## January 29-February 2
-- Implementing neural networks with applications to differential equations
+- Mathematics of deep learning
 - Discussion of first project
 - More on TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 
 ## February 5-9
-- Convolutional neural networks (CNNs), basic mathematics
+- Mathematics of deep learning
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
 ## February 12-16
-- Convolutional neural networks (CNNs), building our own code
+- Convolutional neural networks (CNNs), basic mathematics and building our own code
 - Excursion into Graph CNNs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
 ## February 19-23
-- Examples of applications of CNNs
-- Recurrent neural networks
+- Applications of CNNs and discussion of codes
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and 10
 
 ## February 26-March 1
-- Summary of RNNs and discussion of Long-Short-Term memory and short excursion into transformers
-- Start discussions of Autoencoders
+- Recurrent neural networks, basic mathematics and structure
+- Long-Short-Term memory and short excursion into transformers
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Recommended reading Goodfellow et al chapters 10 and 14
 
