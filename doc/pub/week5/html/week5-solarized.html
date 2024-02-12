@@ -81,15 +81,16 @@ div.toc p,a {
                None,
                'regular-nns-don-t-scale-well-to-full-images'),
               ('3D volumes of neurons', 2, None, '3d-volumes-of-neurons'),
+              ('More on Dimensionalities', 2, None, 'more-on-dimensionalities'),
+              ('Further remarks', 2, None, 'further-remarks'),
               ('Layers used to build CNNs',
                2,
                None,
                'layers-used-to-build-cnns'),
               ('Transforming images', 2, None, 'transforming-images'),
               ('CNNs in brief', 2, None, 'cnns-in-brief'),
+              ('A deep CNN model', 2, None, 'a-deep-cnn-model'),
               ('Key Idea', 2, None, 'key-idea'),
-              ('More on Dimensionalities', 2, None, 'more-on-dimensionalities'),
-              ('Further remarks', 2, None, 'further-remarks'),
               ('Mathematics of CNNs', 2, None, 'mathematics-of-cnns'),
               ('Convolution Examples: Polynomial multiplication',
                2,
@@ -406,6 +407,47 @@ dimension.
 <p><img src="figslides/cnn.jpeg" width="500" align="bottom"></p>
 </center>
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-on-dimensionalities">More on Dimensionalities </h2>
+
+<p>In fields like signal processing (and imaging as well), one designs
+so-called filters. These filters are defined by the convolutions and
+are often hand-crafted. One may specify filters for smoothing, edge
+detection, frequency reshaping, and similar operations. However with
+neural networks the idea is to automatically learn the filters and use
+many of them in conjunction with non-linear operations (activation
+functions).
+</p>
+
+<p>As an example consider a neural network operating on sound sequence
+data.  Assume that we an input vector \( \boldsymbol{x} \) of length \( d=10^6 \).  We
+construct then a neural network with onle hidden layer only with
+\( 10^4 \) nodes. This means that we will have a weight matrix with
+\( 10^4\times 10^6=10^{10} \) weights to be determined, together with \( 10^4 \) biases.
+</p>
+
+<p>Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
+It means that we have only one output node. But since this output node connects to \( 10^4 \) nodes in the hidden layer, there are in total \( 10^4 \) weights to be determined for the output layer, plus one bias. In total we have
+</p>
+
+$$
+\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
+$$
+
+<p>that is ten billion parameters to determine. </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="further-remarks">Further remarks </h2>
+
+<p>The main principles that justify convolutions is locality of
+information and repetion of patterns within the signal. Sound samples
+of the input in adjacent spots are much more likely to affect each
+other than those that are very far away. Similarly, sounds are
+repeated in multiple times in the signal. While slightly simplistic,
+reasoning about such a sound example demonstrates this. The same
+principles then apply to images and other similar data.
+</p>
+
 <!-- !split  -->
 <h2 id="layers-used-to-build-cnns">Layers used to build CNNs </h2>
 
@@ -456,6 +498,17 @@ are consistent with the labels in the training set for each image.
 <li> Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn&#8217;t)</li>
 </ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="a-deep-cnn-model">A deep CNN model </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 3:  A deep CNN </p>
+</center>
+<p><img src="figslides/deepcnn.png" width="500" align="bottom"></p>
+</center>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="key-idea">Key Idea </h2>
 
 <p>A dense neural network is representd by an affine operation (like matrix-matrix multiplication) where all parameters are included.</p>
@@ -465,47 +518,6 @@ only neighboring neurons in the input instead of connecting all with the first h
 </p>
 
 <p>We say we perform a filtering (convolution is the mathematical operation). </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="more-on-dimensionalities">More on Dimensionalities </h2>
-
-<p>In fields like signal processing (and imaging as well), one designs
-so-called filters. These filters are defined by the convolutions and
-are often hand-crafted. One may specify filters for smoothing, edge
-detection, frequency reshaping, and similar operations. However with
-neural networks the idea is to automatically learn the filters and use
-many of them in conjunction with non-linear operations (activation
-functions).
-</p>
-
-<p>As an example consider a neural network operating on sound sequence
-data.  Assume that we an input vector \( \boldsymbol{x} \) of length \( d=10^6 \).  We
-construct then a neural network with onle hidden layer only with
-\( 10^4 \) nodes. This means that we will have a weight matrix with
-\( 10^4\times 10^6=10^{10} \) weights to be determined, together with \( 10^4 \) biases.
-</p>
-
-<p>Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
-It means that we have only one output node. But since this output node connects to \( 10^4 \) nodes in the hidden layer, there are in total \( 10^4 \) weights to be determined for the output layer, plus one bias. In total we have
-</p>
-
-$$
-\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
-$$
-
-<p>that is ten billion parameters to determine. </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="further-remarks">Further remarks </h2>
-
-<p>The main principles that justify convolutions is locality of
-information and repetion of patterns within the signal. Sound samples
-of the input in adjacent spots are much more likely to affect each
-other than those that are very far away. Similarly, sounds are
-repeated in multiple times in the signal. While slightly simplistic,
-reasoning about such a sound example demonstrates this. The same
-principles then apply to images and other similar data.
-</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="mathematics-of-cnns">Mathematics of CNNs </h2>

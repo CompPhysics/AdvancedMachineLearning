@@ -137,6 +137,50 @@ dimension.
 FIGURE: [figslides/cnn.jpeg, width=500 frac=0.6]  A CNN arranges its neurons in three dimensions (width, height, depth), as visualized in one of the layers. Every layer of a CNN transforms the 3D input volume to a 3D output volume of neuron activations. In this example, the red input layer holds the image, so its width and height would be the dimensions of the image, and the depth would be 3 (Red, Green, Blue channels).
 
 
+!split
+===== More on Dimensionalities =====
+
+In fields like signal processing (and imaging as well), one designs
+so-called filters. These filters are defined by the convolutions and
+are often hand-crafted. One may specify filters for smoothing, edge
+detection, frequency reshaping, and similar operations. However with
+neural networks the idea is to automatically learn the filters and use
+many of them in conjunction with non-linear operations (activation
+functions).
+
+As an example consider a neural network operating on sound sequence
+data.  Assume that we an input vector $\bm{x}$ of length $d=10^6$.  We
+construct then a neural network with onle hidden layer only with
+$10^4$ nodes. This means that we will have a weight matrix with
+$10^4\times 10^6=10^{10}$ weights to be determined, together with $10^4$ biases.
+
+Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
+It means that we have only one output node. But since this output node connects to $10^4$ nodes in the hidden layer, there are in total $10^4$ weights to be determined for the output layer, plus one bias. In total we have
+
+!bt
+\[
+\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
+\]
+!et
+that is ten billion parameters to determine. 
+
+
+!split
+===== Further remarks =====
+
+
+
+The main principles that justify convolutions is locality of
+information and repetion of patterns within the signal. Sound samples
+of the input in adjacent spots are much more likely to affect each
+other than those that are very far away. Similarly, sounds are
+repeated in multiple times in the signal. While slightly simplistic,
+reasoning about such a sound example demonstrates this. The same
+principles then apply to images and other similar data.
+
+
+
+
 
 !split 
 ===== Layers used to build CNNs =====
@@ -186,6 +230,11 @@ In summary:
 * Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn’t)
 
 !split
+===== A deep CNN model =====
+
+FIGURE: [figslides/deepcnn.png, width=500 frac=0.67]  A deep CNN
+
+!split
 ===== Key Idea =====
 
 A dense neural network is representd by an affine operation (like matrix-matrix multiplication) where all parameters are included.
@@ -196,46 +245,6 @@ only neighboring neurons in the input instead of connecting all with the first h
 We say we perform a filtering (convolution is the mathematical operation). 
 
 
-!split
-===== More on Dimensionalities =====
-
-In fields like signal processing (and imaging as well), one designs
-so-called filters. These filters are defined by the convolutions and
-are often hand-crafted. One may specify filters for smoothing, edge
-detection, frequency reshaping, and similar operations. However with
-neural networks the idea is to automatically learn the filters and use
-many of them in conjunction with non-linear operations (activation
-functions).
-
-As an example consider a neural network operating on sound sequence
-data.  Assume that we an input vector $\bm{x}$ of length $d=10^6$.  We
-construct then a neural network with onle hidden layer only with
-$10^4$ nodes. This means that we will have a weight matrix with
-$10^4\times 10^6=10^{10}$ weights to be determined, together with $10^4$ biases.
-
-Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
-It means that we have only one output node. But since this output node connects to $10^4$ nodes in the hidden layer, there are in total $10^4$ weights to be determined for the output layer, plus one bias. In total we have
-
-!bt
-\[
-\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
-\]
-!et
-that is ten billion parameters to determine. 
-
-
-!split
-===== Further remarks =====
-
-
-
-The main principles that justify convolutions is locality of
-information and repetion of patterns within the signal. Sound samples
-of the input in adjacent spots are much more likely to affect each
-other than those that are very far away. Similarly, sounds are
-repeated in multiple times in the signal. While slightly simplistic,
-reasoning about such a sound example demonstrates this. The same
-principles then apply to images and other similar data.
 
 
 
