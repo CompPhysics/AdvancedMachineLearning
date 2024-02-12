@@ -354,6 +354,17 @@ or as a double sum with restriction $l=i+j$
 
 
 !split
+===== Further simplification =====
+
+Although we may have redundant operations with some few zeros for $\beta_i$, we can rewrite the above sum as 
+!bt
+\[
+\delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i},
+\]
+!et
+where $m=3$ in our case, the maximum length of the vector $\alpha$.
+
+!split
 ===== A more efficient way of coding the above Convolution =====
 
 Since we only have a finite number of $\alpha$ and $\beta$ values
@@ -392,6 +403,10 @@ we do not encode (and allocate memory) the matrices explicitely.  We
 rather code the convolutions in the minimal memory footprint that they
 require.
 
+
+
+
+
 The above matrices are examples of so-called "Toeplitz
 matrices":"https://link.springer.com/book/10.1007/978-93-86279-04-0". A
 Toeplitz matrix is a matrix in which each descending diagonal from
@@ -418,6 +433,23 @@ represent linear convolution as multiplication of a Toeplitz matrix by
 a vector.
 
 
+
+!split
+===== Generalizing the above one-dimensional case =====
+
+In order to align the above simple case with the more general convolution cases, we relabel $\bm{\alpha}$, which is the shortest vector, with $\bm{w}$.
+We will interpret $\bm{w}$ as a weight/filter function with which we want to perform the convolution with an input varibale $\bm{x}$.
+We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{s}$ and have
+!bt
+\[
+\s_i (x*w)_i= \sum_{k=0}^{k=m-1}w_k\x_{i},
+\]
+!et
+where $m=3$ in our case, the maximum length of the vector $\bm{w}$.
+
+
+
+
 =====  Two-dimensional Objects =====
 
 We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
@@ -427,14 +459,14 @@ defined by a two-dimensional _kernel_ $K$. This leads to an output $S$
 
 !bt
 \[
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(m,n)K(i-m,j-n).
+S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
 \]
 !et
 
 Convolution is a commutatitave process, which means we can rewrite this equation as
 !bt
 \[
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i-m,j-n)K(m,n).
+S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 \]
 !et
 
@@ -444,58 +476,10 @@ Normally the latter is more straightforward to implement in  a machine larning l
 Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)
 !bt
 \[
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i+m,j+n)K(m,n).
+S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 \]
 !et
 
-
-!split
-===== More on Dimensionalities =====
-
-In fields like signal processing (and imaging as well), one designs
-so-called filters. These filters are defined by the convolutions and
-are often hand-crafted. One may specify filters for smoothing, edge
-detection, frequency reshaping, and similar operations. However with
-neural networks the idea is to automatically learn the filters and use
-many of them in conjunction with non-linear operations (activation
-functions).
-
-As an example consider a neural network operating on sound sequence
-data.  Assume that we an input vector $\bm{x}$ of length $d=10^6$.  We
-construct then a neural network with onle hidden layer only with
-$10^4$ nodes. This means that we will have a weight matrix with
-$10^4\times 10^6=10^{10}$ weights to be determined, together with $10^4$ biases.
-
-Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
-It means that we have only one output node. But since this output node connects to $10^4$ nodes in the hidden layer, there are in total $10^4$ weights to be determined for the output layer, plus one bias. In total we have
-
-!bt
-\[
-\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
-\]
-!et
-that is ten billion parameters to determine. 
-
-
-!split
-===== Further Dimensionality Remarks =====
-
-In today’s architecture one can train such neural networks, however
-this is a huge number of parameters for the task at hand. In general,
-it is a very wasteful and inefficient use of dense matrices as
-parameters. Just as importantly, such trained network parameters are
-very specific for the type of input data on which they were trained
-and the network is not likely to generalize easily to variations in
-the input.
-
-
-The main principles that justify convolutions is locality of
-information and repetion of patterns within the signal. Sound samples
-of the input in adjacent spots are much more likely to affect each
-other than those that are very far away. Similarly, sounds are
-repeated in multiple times in the signal. While slightly simplistic,
-reasoning about such a sound example demonstrates this. The same
-principles then apply to images and other similar data.
 
 
 !split

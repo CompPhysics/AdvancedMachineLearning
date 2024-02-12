@@ -177,16 +177,16 @@ div.toc p,a {
                2,
                None,
                'efficient-polynomial-multiplication'),
+              ('Further simplification', 2, None, 'further-simplification'),
               ('A more efficient way of coding the above Convolution',
                2,
                None,
                'a-more-efficient-way-of-coding-the-above-convolution'),
-              ('Two-dimensional Objects', 2, None, 'two-dimensional-objects'),
-              ('More on Dimensionalities', 2, None, 'more-on-dimensionalities'),
-              ('Further Dimensionality Remarks',
+              ('Generalizing the above one-dimensional case',
                2,
                None,
-               'further-dimensionality-remarks'),
+               'generalizing-the-above-one-dimensional-case'),
+              ('Two-dimensional Objects', 2, None, 'two-dimensional-objects'),
               ('CNNs in more detail', 2, None, 'cnns-in-more-detail'),
               ('Pooling', 2, None, 'pooling'),
               ('No zero padding, unit strides',
@@ -692,6 +692,16 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="further-simplification">Further simplification </h2>
+
+<p>Although we may have redundant operations with some few zeros for \( \beta_i \), we can rewrite the above sum as </p>
+$$
+\delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i},
+$$
+
+<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \).</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="a-more-efficient-way-of-coding-the-above-convolution">A more efficient way of coding the above Convolution </h2>
 
 <p>Since we only have a finite number of \( \alpha \) and \( \beta \) values
@@ -754,6 +764,19 @@ represented by such a matrix. The example above shows that we can
 represent linear convolution as multiplication of a Toeplitz matrix by
 a vector.
 </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="generalizing-the-above-one-dimensional-case">Generalizing the above one-dimensional case </h2>
+
+<p>In order to align the above simple case with the more general convolution cases, we relabel \( \boldsymbol{\alpha} \), which is the shortest vector, with \( \boldsymbol{w} \).
+We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we want to perform the convolution with an input varibale \( \boldsymbol{x} \).
+We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{s} \) and have
+</p>
+$$
+\s_i (x*w)_i= \sum_{k=0}^{k=m-1}w_k\x_{i},
+$$
+
+<p>where \( m=3 \) in our case, the maximum length of the vector \( \boldsymbol{w} \).</p>
 <h2 id="two-dimensional-objects">Two-dimensional Objects </h2>
 
 <p>We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
@@ -763,71 +786,21 @@ defined by a two-dimensional <b>kernel</b> \( K \). This leads to an output \( S
 </p>
 
 $$
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(m,n)K(i-m,j-n).
+S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
 $$
 
 <p>Convolution is a commutatitave process, which means we can rewrite this equation as</p>
 $$
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i-m,j-n)K(m,n).
+S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 $$
 
 <p>Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of \( m \) and \( n \).</p>
 
 <p>Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
 $$
-S_(i,j)=(I * K)(i,j) = \sum_m\sum_n I(i+m,j+n)K(m,n).
+S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 $$
 
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="more-on-dimensionalities">More on Dimensionalities </h2>
-
-<p>In fields like signal processing (and imaging as well), one designs
-so-called filters. These filters are defined by the convolutions and
-are often hand-crafted. One may specify filters for smoothing, edge
-detection, frequency reshaping, and similar operations. However with
-neural networks the idea is to automatically learn the filters and use
-many of them in conjunction with non-linear operations (activation
-functions).
-</p>
-
-<p>As an example consider a neural network operating on sound sequence
-data.  Assume that we an input vector \( \boldsymbol{x} \) of length \( d=10^6 \).  We
-construct then a neural network with onle hidden layer only with
-\( 10^4 \) nodes. This means that we will have a weight matrix with
-\( 10^4\times 10^6=10^{10} \) weights to be determined, together with \( 10^4 \) biases.
-</p>
-
-<p>Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
-It means that we have only one output node. But since this output node connects to \( 10^4 \) nodes in the hidden layer, there are in total \( 10^4 \) weights to be determined for the output layer, plus one bias. In total we have
-</p>
-
-$$
-\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
-$$
-
-<p>that is ten billion parameters to determine. </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="further-dimensionality-remarks">Further Dimensionality Remarks </h2>
-
-<p>In today&#8217;s architecture one can train such neural networks, however
-this is a huge number of parameters for the task at hand. In general,
-it is a very wasteful and inefficient use of dense matrices as
-parameters. Just as importantly, such trained network parameters are
-very specific for the type of input data on which they were trained
-and the network is not likely to generalize easily to variations in
-the input.
-</p>
-
-<p>The main principles that justify convolutions is locality of
-information and repetion of patterns within the signal. Sound samples
-of the input in adjacent spots are much more likely to affect each
-other than those that are very far away. Similarly, sounds are
-repeated in multiple times in the signal. While slightly simplistic,
-reasoning about such a sound example demonstrates this. The same
-principles then apply to images and other similar data.
-</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="cnns-in-more-detail">CNNs in more detail </h2>
