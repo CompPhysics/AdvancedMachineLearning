@@ -55,7 +55,8 @@ Furthermore, all teaching material is available from this GitHub link.
 
 ## February 12-16
 - Convolutional neural networks (CNNs), basic mathematics and building our own code
-- Excursion into Graph CNNs
+- Video of lecture at https://youtu.be/iNNVYdFw8CI
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary13.pdf
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
