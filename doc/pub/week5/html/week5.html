@@ -166,7 +166,11 @@ div.toc p,a {
                'layers-used-to-build-cnns'),
               ('Transforming images', 2, None, 'transforming-images'),
               ('CNNs in brief', 2, None, 'cnns-in-brief'),
-              ('A deep CNN model', 2, None, 'a-deep-cnn-model'),
+              ('A deep CNN model ("From Raschka et '
+               'al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Key Idea', 2, None, 'key-idea'),
               ('Mathematics of CNNs', 2, None, 'mathematics-of-cnns'),
               ('Convolution Examples: Polynomial multiplication',
@@ -192,6 +196,16 @@ div.toc p,a {
                'generalizing-the-above-one-dimensional-case'),
               ('Two-dimensional Objects', 2, None, 'two-dimensional-objects'),
               ('CNNs in more detail', 2, None, 'cnns-in-more-detail'),
+              ('Performing a discrete convolution with padding ("From Raschka '
+               'et al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
+              ('Performing a general discrete convolution ("From Raschka et '
+               'al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Set of filters', 2, None, 'set-of-filters'),
               ('Pooling', 2, None, 'pooling'),
               ('No zero padding, unit strides',
@@ -205,6 +219,11 @@ div.toc p,a {
               ('Half (same) padding', 2, None, 'half-same-padding'),
               ('Full padding', 2, None, 'full-padding'),
               ('Pooling arithmetic', 2, None, 'pooling-arithmetic'),
+              ('Pooling types ("From Raschka et '
+               'al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Building convolutional neural networks in Tensorflow and Keras',
                2,
                None,
@@ -580,7 +599,7 @@ are consistent with the labels in the training set for each image.
 <li> Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn&#8217;t)</li>
 </ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="a-deep-cnn-model">A deep CNN model </h2>
+<h2 id="a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">A deep CNN model (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
 
 <center>  <!-- FIGURE -->
 <hr class="figure">
@@ -878,6 +897,28 @@ $$
 <p>is now given by \( \boldsymbol{W}'\boldsymbol{X}' \) which is a vector of length \( 4 \) instead of the originally resulting  \( 2\times 2 \) output matrix.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Performing a discrete convolution with padding (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 4:  A deep CNN </p>
+</center>
+<p><img src="figslides/discreteconv.png" width="500" align="bottom"></p>
+</center>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Performing a general discrete convolution (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 5:  A deep CNN </p>
+</center>
+<p><img src="figslides/discreteconv1.png" width="500" align="bottom"></p>
+</center>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="set-of-filters">Set of filters </h2>
 
 <p>The collection of kernels/filters \( W \) defining a discrete convolution has a shape
@@ -1057,6 +1098,17 @@ $$
 \end{equation*}
 $$
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Pooling types (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 6:  A deep CNN </p>
+</center>
+<p><img src="figslides/maxpooling.png" width="500" align="bottom"></p>
+</center>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>

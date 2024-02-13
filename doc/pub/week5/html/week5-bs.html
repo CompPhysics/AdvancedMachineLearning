@@ -62,7 +62,11 @@ doconce format html week5.do.txt --html_style=bootstrap --pygments_html_style=de
                'layers-used-to-build-cnns'),
               ('Transforming images', 2, None, 'transforming-images'),
               ('CNNs in brief', 2, None, 'cnns-in-brief'),
-              ('A deep CNN model', 2, None, 'a-deep-cnn-model'),
+              ('A deep CNN model ("From Raschka et '
+               'al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Key Idea', 2, None, 'key-idea'),
               ('Mathematics of CNNs', 2, None, 'mathematics-of-cnns'),
               ('Convolution Examples: Polynomial multiplication',
@@ -88,6 +92,16 @@ doconce format html week5.do.txt --html_style=bootstrap --pygments_html_style=de
                'generalizing-the-above-one-dimensional-case'),
               ('Two-dimensional Objects', 2, None, 'two-dimensional-objects'),
               ('CNNs in more detail', 2, None, 'cnns-in-more-detail'),
+              ('Performing a discrete convolution with padding ("From Raschka '
+               'et al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
+              ('Performing a general discrete convolution ("From Raschka et '
+               'al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Set of filters', 2, None, 'set-of-filters'),
               ('Pooling', 2, None, 'pooling'),
               ('No zero padding, unit strides',
@@ -101,6 +115,11 @@ doconce format html week5.do.txt --html_style=bootstrap --pygments_html_style=de
               ('Half (same) padding', 2, None, 'half-same-padding'),
               ('Full padding', 2, None, 'full-padding'),
               ('Pooling arithmetic', 2, None, 'pooling-arithmetic'),
+              ('Pooling types ("From Raschka et '
+               'al":"https://github.com/rasbt/machine-learning-book")',
+               2,
+               None,
+               'pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Building convolutional neural networks in Tensorflow and Keras',
                2,
                None,
@@ -227,7 +246,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#layers-used-to-build-cnns" style="font-size: 80%;"><b>Layers used to build CNNs</b></a></li>
      <!-- navigation toc: --> <li><a href="#transforming-images" style="font-size: 80%;"><b>Transforming images</b></a></li>
      <!-- navigation toc: --> <li><a href="#cnns-in-brief" style="font-size: 80%;"><b>CNNs in brief</b></a></li>
-     <!-- navigation toc: --> <li><a href="#a-deep-cnn-model" style="font-size: 80%;"><b>A deep CNN model</b></a></li>
+     <!-- navigation toc: --> <li><a href="#a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>A deep CNN model ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#key-idea" style="font-size: 80%;"><b>Key Idea</b></a></li>
      <!-- navigation toc: --> <li><a href="#mathematics-of-cnns" style="font-size: 80%;"><b>Mathematics of CNNs</b></a></li>
      <!-- navigation toc: --> <li><a href="#convolution-examples-polynomial-multiplication" style="font-size: 80%;"><b>Convolution Examples: Polynomial multiplication</b></a></li>
@@ -238,6 +257,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#generalizing-the-above-one-dimensional-case" style="font-size: 80%;"><b>Generalizing the above one-dimensional case</b></a></li>
      <!-- navigation toc: --> <li><a href="#two-dimensional-objects" style="font-size: 80%;"><b>Two-dimensional Objects</b></a></li>
      <!-- navigation toc: --> <li><a href="#cnns-in-more-detail" style="font-size: 80%;"><b>CNNs in more detail</b></a></li>
+     <!-- navigation toc: --> <li><a href="#performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Performing a discrete convolution with padding ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
+     <!-- navigation toc: --> <li><a href="#performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Performing a general discrete convolution ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#set-of-filters" style="font-size: 80%;"><b>Set of filters</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling" style="font-size: 80%;"><b>Pooling</b></a></li>
      <!-- navigation toc: --> <li><a href="#no-zero-padding-unit-strides" style="font-size: 80%;"><b>No zero padding, unit strides</b></a></li>
@@ -245,6 +266,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#half-same-padding" style="font-size: 80%;"><b>Half (same) padding</b></a></li>
      <!-- navigation toc: --> <li><a href="#full-padding" style="font-size: 80%;"><b>Full padding</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling-arithmetic" style="font-size: 80%;"><b>Pooling arithmetic</b></a></li>
+     <!-- navigation toc: --> <li><a href="#pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Pooling types ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#building-convolutional-neural-networks-in-tensorflow-and-keras" style="font-size: 80%;"><b>Building convolutional neural networks in Tensorflow and Keras</b></a></li>
      <!-- navigation toc: --> <li><a href="#setting-it-up" style="font-size: 80%;"><b>Setting it up</b></a></li>
      <!-- navigation toc: --> <li><a href="#the-mnist-dataset-again" style="font-size: 80%;"><b>The MNIST dataset again</b></a></li>
@@ -577,7 +599,7 @@ are consistent with the labels in the training set for each image.
 <li> Each Layer may or may not have additional hyperparameters (e.g. CONV/FC/POOL do, RELU doesn&#8217;t)</li>
 </ul>
 <!-- !split -->
-<h2 id="a-deep-cnn-model" class="anchor">A deep CNN model </h2>
+<h2 id="a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">A deep CNN model (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
 
 <center>  <!-- FIGURE -->
 <hr class="figure">
@@ -875,6 +897,28 @@ $$
 <p>is now given by \( \boldsymbol{W}'\boldsymbol{X}' \) which is a vector of length \( 4 \) instead of the originally resulting  \( 2\times 2 \) output matrix.</p>
 
 <!-- !split -->
+<h2 id="performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Performing a discrete convolution with padding (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 4:  A deep CNN </p>
+</center>
+<p><img src="figslides/discreteconv.png" width="500" align="bottom"></p>
+</center>
+
+<!-- !split -->
+<h2 id="performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Performing a general discrete convolution (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 5:  A deep CNN </p>
+</center>
+<p><img src="figslides/discreteconv1.png" width="500" align="bottom"></p>
+</center>
+
+<!-- !split -->
 <h2 id="set-of-filters" class="anchor">Set of filters </h2>
 
 <p>The collection of kernels/filters \( W \) defining a discrete convolution has a shape
@@ -1054,6 +1098,17 @@ $$
 \end{equation*}
 $$
 
+
+<!-- !split -->
+<h2 id="pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Pooling types (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 6:  A deep CNN </p>
+</center>
+<p><img src="figslides/maxpooling.png" width="500" align="bottom"></p>
+</center>
 
 <!-- !split -->
 <h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras" class="anchor">Building convolutional neural networks in Tensorflow and Keras </h2>
