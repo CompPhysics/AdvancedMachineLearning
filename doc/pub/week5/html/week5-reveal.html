@@ -613,7 +613,7 @@ $$
 $$
 <p>&nbsp;<br>
 
-<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\bet} \) has length \( n=4 \).</p>
+<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\beta} \) has length \( n=4 \).</p>
 </section>
 
 <section>
@@ -705,7 +705,7 @@ We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \bolds
 </p>
 <p>&nbsp;<br>
 $$
-\s_i (x*w)_i= \sum_{k=0}^{k=m-1}w_k\x_{i},
+s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i),
 $$
 <p>&nbsp;<br>
 
@@ -722,14 +722,14 @@ defined by a two-dimensional <b>kernel</b> \( K \). This leads to an output \( Y
 
 <p>&nbsp;<br>
 $$
-Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
 $$
 <p>&nbsp;<br>
 
-<p>Convolution is a commutatitave process, which means we can rewrite this equation as</p>
+<p>Convolution is a commutative process, which means we can rewrite this equation as</p>
 <p>&nbsp;<br>
 $$
-Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 $$
 <p>&nbsp;<br>
 
@@ -738,8 +738,7 @@ $$
 <p>Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
 <p>&nbsp;<br>
 $$
-Y[
-S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 $$
 <p>&nbsp;<br>
 </section>

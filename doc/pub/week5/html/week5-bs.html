@@ -723,7 +723,7 @@ $$
 \delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i},
 $$
 
-<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\bet} \) has length \( n=4 \).</p>
+<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\beta} \) has length \( n=4 \).</p>
 
 <!-- !split -->
 <h2 id="a-more-efficient-way-of-coding-the-above-convolution" class="anchor">A more efficient way of coding the above Convolution </h2>
@@ -804,7 +804,7 @@ We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we
 We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{s} \) and have
 </p>
 $$
-\s_i (x*w)_i= \sum_{k=0}^{k=m-1}w_k\x_{i},
+s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i),
 $$
 
 <p>where \( m=3 \) in our case, the maximum length of the vector \( \boldsymbol{w} \).
@@ -819,20 +819,19 @@ defined by a two-dimensional <b>kernel</b> \( K \). This leads to an output \( Y
 </p>
 
 $$
-Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
 $$
 
-<p>Convolution is a commutatitave process, which means we can rewrite this equation as</p>
+<p>Convolution is a commutative process, which means we can rewrite this equation as</p>
 $$
-Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 $$
 
 <p>Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of \( m \) and \( n \).</p>
 
 <p>Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
 $$
-Y[
-S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 $$
 
 
