@@ -35,7 +35,6 @@ Furthermore, all teaching material is available from this GitHub link.
 
 ##  January 22-26
 - Mathematics  of deep learning, basics of neural networks
-- Introducing TensorFlow and Pytorch
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 - Link to video of lecture at https://youtu.be/SEYuOoMws_k
@@ -44,7 +43,7 @@ Furthermore, all teaching material is available from this GitHub link.
 ## January 29-February 2
 - Mathematics of deep learning
 - Discussion of first project
-- More on TensorFlow and Pytorch
+- Video of lecture at https://youtu.be/OUTFo0oJadU
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 
@@ -52,6 +51,9 @@ Furthermore, all teaching material is available from this GitHub link.
 - Mathematics of deep learning
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
+- Video of lecture at https://youtu.be/b9ni34-sMRI
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary6.pdf
+
 
 ## February 12-16
 - Convolutional neural networks (CNNs), basic mathematics and building our own code
