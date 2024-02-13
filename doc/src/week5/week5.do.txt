@@ -295,7 +295,7 @@ How can we use this? And what does it mean? Let us study some familiar examples 
 Our first example is that of a multiplication between two polynomials,
 which we will rewrite in terms of the mathematics of convolution. In
 the final stage, since the problem here is a discrete one, we will
-recats the final expression in terms of a matrix-vector
+recast the final expression in terms of a matrix-vector
 multiplication, where the matrix is a so-called "Toeplitz matrix
 ":"https://link.springer.com/book/10.1007/978-93-86279-04-0".
 
@@ -356,13 +356,13 @@ or as a double sum with restriction $l=i+j$
 !split
 ===== Further simplification =====
 
-Although we may have redundant operations with some few zeros for $\beta_i$, we can rewrite the above sum as 
+Although we may have redundant operations with some few zeros for $\beta_i$, we can rewrite the above sum in a more compact way as 
 !bt
 \[
 \delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i},
 \]
 !et
-where $m=3$ in our case, the maximum length of the vector $\alpha$.
+where $m=3$ in our case, the maximum length of the vector $\alpha$. Note that the vector $\bm{\bet}$ has length $n=4$.
 
 !split
 ===== A more efficient way of coding the above Convolution =====
@@ -425,19 +425,26 @@ rewrite as
 !et
 with elements $a_{ii}=a_{i+1,j+1}=a_{i-j}$ is an example of a Toeplitz
 matrix. Such a matrix does not need to be a square matrix.  Toeplitz
-matrices are also closely connected with Fourier series discussed
-below, because the multiplication operator by a trigonometric
+matrices are also closely connected with Fourier series, because the multiplication operator by a trigonometric
 polynomial, compressed to a finite-dimensional space, can be
 represented by such a matrix. The example above shows that we can
 represent linear convolution as multiplication of a Toeplitz matrix by
 a vector.
 
 
+!split
+===== Fourier series and Toeplitz matrices =====
+
+This is an active and ogoing research area concerning CNNs. The following articles may be of interest
+o "Read more about the convolution theorem and Fouriers series":"https://www.sciencedirect.com/topics/engineering/convolution-theorem#:~:text=The%20convolution%20theorem%20(together%20with,k%20)%20G%20(%20k%20)%20."
+o "Fourier Transform Layer":"https://www.sciencedirect.com/science/article/pii/S1568494623006257"
+
+
 
 !split
 ===== Generalizing the above one-dimensional case =====
 
-In order to align the above simple case with the more general convolution cases, we relabel $\bm{\alpha}$, which is the shortest vector, with $\bm{w}$.
+In order to align the above simple case with the more general convolution cases, we rename $\bm{\alpha}$, whose length is $m=3$, with $\bm{w}$.
 We will interpret $\bm{w}$ as a weight/filter function with which we want to perform the convolution with an input varibale $\bm{x}$.
 We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{s}$ and have
 !bt
@@ -446,7 +453,7 @@ We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{s}$ and h
 \]
 !et
 where $m=3$ in our case, the maximum length of the vector $\bm{w}$.
-
+Here the symbol $*$ represents the mathematical operation of convolution.
 
 
 
@@ -455,18 +462,18 @@ where $m=3$ in our case, the maximum length of the vector $\bm{w}$.
 We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
 We often use convolutions over more than one dimension at a time. If
 we have a two-dimensional image $I$ as input, we can have a _filter_
-defined by a two-dimensional _kernel_ $K$. This leads to an output $S$
+defined by a two-dimensional _kernel_ $K$. This leads to an output $Y$
 
 !bt
 \[
-S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
+Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
 \]
 !et
 
 Convolution is a commutatitave process, which means we can rewrite this equation as
 !bt
 \[
-S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
+Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 \]
 !et
 
@@ -475,7 +482,7 @@ Normally the latter is more straightforward to implement in  a machine larning l
 
 Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)
 !bt
-\[
+Y[
 S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 \]
 !et
@@ -486,14 +493,14 @@ S_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 ===== CNNs in more detail =====
 
 
-Let assume we have an input matrix $I$ of dimensionality $3\times 3$
+Let assume we have an input matrix $X$ of dimensionality $3\times 3$
 and a $2\times 2$ filter $W$ given by the following matrices
 
 !bt
 \[
-\bm{I}=\begin{bmatrix}i_{00} & i_{01} & i_{02}  \\
-                      i_{10} & i_{11} & i_{12}  \\
-	              i_{20} & i_{21} & i_{22} \end{bmatrix},
+\bm{X}=\begin{bmatrix}x_{00} & x_{01} & x_{02}  \\
+                      x_{10} & x_{11} & x_{12}  \\
+	              x_{20} & x_{21} & x_{22} \end{bmatrix},
 \]
 !et
 and 
@@ -503,31 +510,31 @@ and
 	              w_{10} & w_{11}\end{bmatrix}.
 \]
 !et
-We introduce now the hyperparameter $S$ _stride_. Stride represents how the filter $W$ moves the convolution process on the matrix $I$.
+We introduce now the hyperparameter $S$ _stride_. Stride represents how the filter $W$ moves the convolution process on the matrix $X$.
 We strongly recommend the repository on "Arithmetic of deep learning by Dumoulin and Visin":"https://github.com/vdumoulin/conv_arithmetic" 
 
-Here we set the stride equal to $S=1$, which means that, starting with the element $i_{00}$, the filter will act on $2\times 2$ submatrices each time, starting with the upper corner and moving according to the stride value column by column. 
+Here we set the stride equal to $S=1$, which means that, starting with the element $x_{00}$, the filter will act on $2\times 2$ submatrices each time, starting with the upper corner and moving according to the stride value column by column. 
 
 Here we perform the operation
 !bt
 \[
-S_(i,j)=(I * W)(i,j) = \sum_m\sum_n I(i-m,j-n)W(m,n),
+Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n),
 \]
 !et
 and obtain
 !bt
 \[
-\bm{S}=\begin{bmatrix}i_{00}w_{00}+i_{01}w_{01}+i_{10}w_{10}+i_{11}w_{11} & i_{01}w_{00}+i_{02}w_{01}+i_{11}w_{10}+i_{12}w_{11}  \\
-	              i_{10}w_{00}+i_{11}w_{01}+i_{20}w_{10}+i_{21}w_{11} & i_{11}w_{00}+i_{12}w_{01}+i_{21}w_{10}+i_{22}w_{11}\end{bmatrix}.
+\bm{Y}=\begin{bmatrix}x_{00}w_{00}+x_{01}w_{01}+x_{10}w_{10}+x_{11}w_{11} & x_{01}w_{00}+x_{02}w_{01}+x_{11}w_{10}+x_{12}w_{11}  \\
+	              x_{10}w_{00}+x_{11}w_{01}+x_{20}w_{10}+x_{21}w_{11} & x_{11}w_{00}+x_{12}w_{01}+x_{21}w_{10}+x_{22}w_{11}\end{bmatrix}.
 \]
 !et
 
-We can rewrite this operation in terms of a matrix-vector multiplication by defining a new vector where we flatten out the inputs as a vector $\bm{I}'$ of length $9$ and
+We can rewrite this operation in terms of a matrix-vector multiplication by defining a new vector where we flatten out the inputs as a vector $\bm{X}'$ of length $9$ and
 a matrix $\bm{W}'$ with dimension $4\times 9$ as
 
 !bt
 \[
-\bm{I}'=\begin{bmatrix}i_{00} \\ i_{01} \\ i_{02} \\ i_{10} \\ i_{11} \\ i_{12} \\ i_{20} \\ i_{21} \\ i_{22} \end{bmatrix},
+\bm{X}'=\begin{bmatrix}x_{00} \\ x_{01} \\ x_{02} \\ x_{10} \\ x_{11} \\ x_{12} \\ x_{20} \\ x_{21} \\ x_{22} \end{bmatrix},
 \]
 !et
 
@@ -541,15 +548,18 @@ and the new matrix
 \]
 !et
 
-We see easily that performing the matrix-vector multiplication $\bm{W}'\bm{I}'$ is the same as the above convolution with stride $S=1$, that is
+We see easily that performing the matrix-vector multiplication $\bm{W}'\bm{X}'$ is the same as the above convolution with stride $S=1$, that is
 
 !bt
 \[
-S=(\bm{W}*\bm{I}),
+Y=(\bm{W}*\bm{X}),
 \]
 !et
-is now given by $\bm{W}'\bm{I}'$ which is a vector of length $4$ instead of the originally resulting  $2\times 2$ output matrix.
+is now given by $\bm{W}'\bm{X}'$ which is a vector of length $4$ instead of the originally resulting  $2\times 2$ output matrix.
 
+
+!split
+===== Set of filters =====
 
 The collection of kernels/filters $W$ defining a discrete convolution has a shape
 corresponding to some permutation of $(n, m, k_1, \ldots, k_N)$, where
