@@ -633,7 +633,7 @@ $$
 
 <p>Although we may have redundant operations with some few zeros for \( \beta_i \), we can rewrite the above sum in a more compact way as </p>
 $$
-\delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i},
+\delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i-k},
 $$
 
 <p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\beta} \) has length \( n=4 \).</p>
@@ -717,7 +717,7 @@ We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we
 We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{s} \) and have
 </p>
 $$
-s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i),
+s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
 $$
 
 <p>where \( m=3 \) in our case, the maximum length of the vector \( \boldsymbol{w} \).
@@ -727,8 +727,8 @@ Here the symbol \( * \) represents the mathematical operation of convolution.
 
 <p>We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
 We often use convolutions over more than one dimension at a time. If
-we have a two-dimensional image \( I \) as input, we can have a <b>filter</b>
-defined by a two-dimensional <b>kernel</b> \( K \). This leads to an output \( Y \)
+we have a two-dimensional image \( X \) as input, we can have a <b>filter</b>
+defined by a two-dimensional <b>kernel/weight/filter</b> \( W \). This leads to an output \( Y \)
 </p>
 
 $$
