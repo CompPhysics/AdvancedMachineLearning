@@ -1,0 +1,18 @@
+from matplotlib.image import imread
+import matplotlib.pyplot as plt
+import scipy.linalg as ln
+import numpy as np
+import os
+from PIL import Image
+from math import log10, sqrt 
+plt.rcParams['figure.figsize'] = [16, 8]
+# Import image
+A = imread(os.path.join("photo.jpg"))
+X = A.dot([0.299, 0.5870, 0.114]) # Convert RGB to grayscale
+img = plt.imshow(X)
+# Konvert to gray
+img.set_cmap('gray')
+plt.axis('off')
+plt.show()
+# Call image size
+print(': %s'%str(X.shape))
