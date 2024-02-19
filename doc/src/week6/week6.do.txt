@@ -332,9 +332,24 @@ hyperparameter called _Stride_ $S$. For the latter, see the examples discussed d
 
 !split
 ===== Cross correlation =====
-In essentially all applications one uses what is called cross correlation instead of the standard convolution described above.
-This means that multiplication is performed in the same direction and instead of the general expression
 
+In essentially all applications one uses what is called cross correlation instead of the standard convolution described above.
+This means that multiplication is performed in the same direction and instead of the general expression we have discussed above (with infinite sums)
+!bt
+\[
+y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i-k),
+\]
+!et
+we have now
+!bt
+\[
+y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i+k).
+\]
+!et
+Both TensorFlow and PyTorch (as well as our own code example below), implement the last equation, although it is normally referred to as convolution.
+The same padding rules and stride rules discussed below apply to this expression as well.
+
+We leave it as an exercise for you to convince yourself that the example we have discussed till now, gives the same final expression.
 
 
 
@@ -436,6 +451,18 @@ Y=(\bm{W}*\bm{X}),
 \]
 !et
 is now given by $\bm{W}'\bm{X}'$ which is a vector of length $4$ instead of the originally resulting  $2\times 2$ output matrix.
+
+
+!split
+===== The convolution stage =====
+
+The convolution stage, where we apply different filters $\bm{W}$ in
+order to reduce the dimensionality of an image, adds, in addition to
+the weights and biases (to be trained by the back propagation
+algorithm) that define the filters, two hyperparameters, the so-called
+_padding_ $P$ and the stride $S$.
+
+These will be discussed in the forthcoming (material to be added, see also whiteboard notes from lecture on Feb 20).
 
 
 !split
