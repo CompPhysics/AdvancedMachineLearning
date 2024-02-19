@@ -7,7 +7,7 @@ from PIL import Image
 from math import log10, sqrt 
 plt.rcParams['figure.figsize'] = [16, 8]
 # Import image
-A = imread(os.path.join("photo.jpg"))
+A = imread(os.path.join("photo1.jpg"))
 X = A.dot([0.299, 0.5870, 0.114]) # Convert RGB to grayscale
 img = plt.imshow(X)
 # Konvert to gray
