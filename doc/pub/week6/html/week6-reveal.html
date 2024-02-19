@@ -201,8 +201,27 @@ MathJax.Hub.Config({
 <b></b>
 <p>
 <ol>
-<p><li> Mathematics of Convolutional  Neural Networks (CNNs)</li>
+<p><li> Mathematics of Convolutional  Neural Networks (CNNs), padding, strid, pooling and more</li>
 <p><li> Discussion of codes for CNNs, own code, TensorFlow+Keras and PyTorch examples</li>
+</ol>
+</div>
+</section>
+
+<section>
+<h2 id="reading-recommendations">Reading recommendations </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<ol>
+<p><li> For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications</li>
+<p><li> Reading suggestions for implementation of CNNs in PyTorch: <a href="https://github.com/rasbt/machine-learning-book/tree/main/ch14" target="_blank">See Rashcka et al.'s chapter 14</a>. The jupyter-notebook for this chapter is available from Rachska's GitHub site linked here.</li>
+<p><li> For TensorFlow implementations, we recommend
+<ol type="a"></li>
+ <p><li> <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/02_deeplearning/02_cnn" target="_blank">David Foster Generative Learning, see chapter 2 from the GitHub link</a></li>
+ <p><li> Joseph Babcock and Raghav Bali Generative AI with Python and their GitHub link, chapter 3":"https://github.com/raghavbali/generative_ai_with_tensorflow"</li>  
+</ol>
+<p>
 </ol>
 </div>
 </section>
@@ -369,7 +388,9 @@ $$
 $$
 <p>&nbsp;<br>
 
-<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\beta} \) has length \( n=4 \).</p>
+<p>where \( m=3 \) in our case, the maximum length of
+the vector \( \alpha \). Note that the vector \( \boldsymbol{\beta} \) has length \( n=4 \). Below we will find an even more efficient representation.
+</p>
 </section>
 
 <section>
@@ -391,6 +412,10 @@ $$
 			    \end{bmatrix}\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \beta_3\end{bmatrix}.
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="commutative-process">Commutative process </h2>
 
 <p>The process is commutative and we can easily see that we can rewrite the multiplication in terms of  a matrix holding \( \beta \) and a vector holding \( \alpha \).
 In this case we have
@@ -413,6 +438,10 @@ we do not encode (and allocate memory) the matrices explicitely.  We
 rather code the convolutions in the minimal memory footprint that they
 require.
 </p>
+</section>
+
+<section>
+<h2 id="toeplitz-matrices">Toeplitz matrices </h2>
 
 <p>The above matrices are examples of so-called <a href="https://link.springer.com/book/10.1007/978-93-86279-04-0" target="_blank">Toeplitz
 matrices</a>. A
@@ -456,19 +485,131 @@ a vector.
 <h2 id="generalizing-the-above-one-dimensional-case">Generalizing the above one-dimensional case </h2>
 
 <p>In order to align the above simple case with the more general convolution cases, we rename \( \boldsymbol{\alpha} \), whose length is \( m=3 \), with \( \boldsymbol{w} \).
-We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we want to perform the convolution with an input varibale \( \boldsymbol{x} \).
-We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{s} \) and have
+We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we want to perform the convolution with an input variabale \( \boldsymbol{x} \) of length \( n \).
+We will assume always that the filter \( \boldsymbol{w} \) has dimensionality \( m \le n \).
 </p>
+
+<p>We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{y} \) and have</p>
 <p>&nbsp;<br>
 $$
-s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
+y(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
 $$
 <p>&nbsp;<br>
 
 <p>where \( m=3 \) in our case, the maximum length of the vector \( \boldsymbol{w} \).
 Here the symbol \( * \) represents the mathematical operation of convolution.
 </p>
-<h2 id="two-dimensional-objects">Two-dimensional Objects </h2>
+</section>
+
+<section>
+<h2 id="memory-considerations">Memory considerations </h2>
+
+<p>This expression leaves us however with some terms with negative
+indices, for example \( x(-1) \) and \( x(-2) \) which may not be defined. Our
+vector \( \boldsymbol{x} \) has components \( x(0) \), \( x(1) \), \( x(2) \) and \( x(3) \). The
+index for \( \boldsymbol{x} \) runs from \( j=0 \) to \( j=3 \) since \( \boldsymbol{x} \) is meant to
+represent a third-order polynomial.
+</p>
+
+<p>Furthermore, the index \( i \) runs from \( i=0 \) to \( i=5 \) since \( \boldsymbol{y} \) contains the coefficients of a fifth-order polynomial.
+When \( i=5 \) we may also values of \( x(4) \) and \( x(5) \) which are not defined.
+</p>
+
+<p>The solution to this is what is called <b>padding</b>!
+We simply define a new vector \( x \) with two added elements set to zero before \( x(0) \) and two new elements after \( x(3) \) set to zero. That is, we augment the
+length of \( \boldsymbol{x} \) from \( n=4 \) to \( n+2P=8 \), where \( P=2 \) is the padding constant, see discussions below as well.
+</p>
+</section>
+
+<section>
+<h2 id="new-vector">New vector </h2>
+
+<p>We have now a new vector defined as \( x(0)=0 \), \( x(1)=0 \),
+\( x(2)=\beta_0 \), \( x(3)=\beta_1 \), \( x(4)=\beta_2 \), \( x(5)=\beta_3 \),
+\( x(6)=0 \), and \( x(7)=0 \). We have added four new elements, which
+are all zero. The benefit is that we can rewrite the equation for
+\( \boldsymbol{y} \), with \( i=0,1,\dots,5 \),
+</p>
+<p>&nbsp;<br>
+$$
+y(i) = \sum_{k=0}^{k=m-1}w(k)x(i+(m-1)-k).
+$$
+<p>&nbsp;<br>
+
+<p>As an example, we have</p>
+<p>&nbsp;<br>
+$$
+y(4)=x(6)w(0)+x(5)w(1)+x(4)w(2)=0\times \alpha_0+\beta_3\alpha_1+\beta_2\alpha_2,
+$$
+<p>&nbsp;<br>
+
+<p>as before except that we have now the term \( x(6)w(0) \).</p>
+
+<p>Similarly
+As an example, we have
+</p>
+<p>&nbsp;<br>
+$$
+y(5)=x(7)w(0)+x(6)w(1)+x(5)w(2)=0\times \alpha_0+0\times\alpha_1+\beta_3\alpha_2,
+$$
+<p>&nbsp;<br>
+
+<p>the fifth-order term.</p>
+
+<p>The zeroth-order term is</p>
+<p>&nbsp;<br>
+$$
+y(0)=x(2)w(0)+x(1)w(1)+x(0)w(2)=\beta_0 \alpha_0+0\times\alpha_1+0\times\alpha_2=\alpha_0\beta_0.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="rewriting-as-dot-products">Rewriting as dot products </h2>
+
+<p>If we now flip the filter vector, with the following term as a typical example</p>
+<p>&nbsp;<br>
+$$
+y(0)=x(2)w(0)+x(1)w(1)+x(0)w(2)=x(2)\tilde{w}(2)+x(1)\tilde{w}(1)+x(0)\tilde{w}(0),
+$$
+<p>&nbsp;<br>
+
+<p>with \( \tilde{w}(0)=w(2) \), \( \tilde{w}(1)=w(1) \), and \( \tilde{w}(2)=w(0) \), we can then rewrite the above sum as a dot product of
+\( x(i:i+(m-1))\tilde{w} \) for element $y(i), where \( x(i:i+(m-1)) \) is simply a patch of \( \boldsymbol{x} \) of size \( m-1 \).
+</p>
+
+<p>The padding \( P \) we have introduced for the convolution stage is just
+another hyperparameter which is introduced as part of the
+architecture. Similarly, below we will also introduce another
+hyperparameter called <b>Stride</b> \( S \). For the latter, see the examples discussed during the lecture of Tuesday Feb 20.
+</p>
+</section>
+
+<section>
+<h2 id="cross-correlation">Cross correlation </h2>
+
+<p>In essentially all applications one uses what is called cross correlation instead of the standard convolution described above.
+This means that multiplication is performed in the same direction and instead of the general expression we have discussed above (with infinite sums)
+</p>
+<p>&nbsp;<br>
+$$
+y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i-k),
+$$
+<p>&nbsp;<br>
+
+<p>we have now</p>
+<p>&nbsp;<br>
+$$
+y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i+k).
+$$
+<p>&nbsp;<br>
+
+<p>Both TensorFlow and PyTorch (as well as our own code example below), implement the last equation, although it is normally referred to as convolution.
+The same padding rules and stride rules discussed below apply to this expression as well.
+</p>
+
+<p>We leave it as an exercise for you to convince yourself that the example we have discussed till now, gives the same final expression using the last expression.</p>
+<h2 id="two-dimensional-objects">Two-dimensional objects </h2>
 
 <p>We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
 We often use convolutions over more than one dimension at a time. If
@@ -491,7 +632,7 @@ $$
 
 <p>Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of \( m \) and \( n \).</p>
 
-<p>Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
+<p>As mentioned above, most deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
 <p>&nbsp;<br>
 $$
 Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
@@ -572,6 +713,19 @@ $$
 <p>&nbsp;<br>
 
 <p>is now given by \( \boldsymbol{W}'\boldsymbol{X}' \) which is a vector of length \( 4 \) instead of the originally resulting  \( 2\times 2 \) output matrix.</p>
+</section>
+
+<section>
+<h2 id="the-convolution-stage">The convolution stage </h2>
+
+<p>The convolution stage, where we apply different filters \( \boldsymbol{W} \) in
+order to reduce the dimensionality of an image, adds, in addition to
+the weights and biases (to be trained by the back propagation
+algorithm) that define the filters, two hyperparameters, the so-called
+<b>padding</b> \( P \) and the stride \( S \).
+</p>
+
+<p>These will be discussed in the forthcoming (material to be added, see also whiteboard notes from lecture on Feb 20).</p>
 </section>
 
 <section>

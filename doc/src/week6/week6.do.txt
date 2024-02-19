@@ -12,6 +12,18 @@ o Discussion of codes for CNNs, own code, TensorFlow+Keras and PyTorch examples
 !eblock
 
 
+!split
+===== Reading recommendations =====
+
+!bblock
+o For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications
+o Reading suggestions for implementation of CNNs in PyTorch: "See Rashcka et al.'s chapter 14":"https://github.com/rasbt/machine-learning-book/tree/main/ch14". The jupyter-notebook for this chapter is available from Rachska's GitHub site linked here.
+o For TensorFlow implementations, we recommend
+  o "David Foster Generative Learning, see chapter 2 from the GitHub link":"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/02_deeplearning/02_cnn"
+  o Joseph Babcock and Raghav Bali Generative AI with Python and their GitHub link, chapter 3":"https://github.com/raghavbali/generative_ai_with_tensorflow"  
+!eblock
+
+
 
 !split
 ===== CNNs in brief =====
@@ -259,7 +271,7 @@ Here the symbol $*$ represents the mathematical operation of convolution.
 
 
 !split
-==== Memory considerations =====
+===== Memory considerations =====
 
 This expression leaves us however with some terms with negative
 indices, for example $x(-1)$ and $x(-2)$ which may not be defined. Our
@@ -349,7 +361,7 @@ y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i+k).
 Both TensorFlow and PyTorch (as well as our own code example below), implement the last equation, although it is normally referred to as convolution.
 The same padding rules and stride rules discussed below apply to this expression as well.
 
-We leave it as an exercise for you to convince yourself that the example we have discussed till now, gives the same final expression.
+We leave it as an exercise for you to convince yourself that the example we have discussed till now, gives the same final expression using the last expression.
 
 
 
