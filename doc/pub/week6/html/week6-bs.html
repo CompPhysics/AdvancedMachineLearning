@@ -48,6 +48,11 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Key Idea', 2, None, 'key-idea'),
+              ('How to do image compression before the era of deep learning',
+               2,
+               None,
+               'how-to-do-image-compression-before-the-era-of-deep-learning'),
+              ('The SVD example', 2, None, 'the-svd-example'),
               ('Mathematics of CNNs', 2, None, 'mathematics-of-cnns'),
               ('Convolution Examples: Polynomial multiplication',
                2,
@@ -216,6 +221,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#cnns-in-brief" style="font-size: 80%;"><b>CNNs in brief</b></a></li>
      <!-- navigation toc: --> <li><a href="#a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>A deep CNN model ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#key-idea" style="font-size: 80%;"><b>Key Idea</b></a></li>
+     <!-- navigation toc: --> <li><a href="#how-to-do-image-compression-before-the-era-of-deep-learning" style="font-size: 80%;"><b>How to do image compression before the era of deep learning</b></a></li>
+     <!-- navigation toc: --> <li><a href="#the-svd-example" style="font-size: 80%;"><b>The SVD example</b></a></li>
      <!-- navigation toc: --> <li><a href="#mathematics-of-cnns" style="font-size: 80%;"><b>Mathematics of CNNs</b></a></li>
      <!-- navigation toc: --> <li><a href="#convolution-examples-polynomial-multiplication" style="font-size: 80%;"><b>Convolution Examples: Polynomial multiplication</b></a></li>
      <!-- navigation toc: --> <li><a href="#efficient-polynomial-multiplication" style="font-size: 80%;"><b>Efficient Polynomial Multiplication</b></a></li>
@@ -377,6 +384,110 @@ only neighboring neurons in the input instead of connecting all with the first h
 </p>
 
 <p>We say we perform a filtering (convolution is the mathematical operation). </p>
+
+<!-- !split -->
+<h2 id="how-to-do-image-compression-before-the-era-of-deep-learning" class="anchor">How to do image compression before the era of deep learning </h2>
+
+<p>The singular-value decomposition (SVD) algorithm has been for decades one of the standard ways of compressing images.
+The <a href="https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/chapter2.html#the-singular-value-decomposition" target="_self">lectures on the SVD</a> give many of the essential details concerning the SVD.
+</p>
+
+<p>The orthogonal vectors which are obtained from the SVD, can be used to
+project down the dimensionality of a given image. In the example here
+we gray-scale an image and downsize it.
+</p>
+
+<p>This recipe relies on us being able to actually perform the SVD. For
+large images, and in particular with many images to reconstruct
+becomes an overwhelming task. With the advent of efficient deep
+learning methods like CNNs and later generative methods, these methods
+have become in the last years the premier way of performing image
+analysis.
+</p>
+
+<!-- !split -->
+<h2 id="the-svd-example" class="anchor">The SVD example </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">matplotlib.image</span> <span style="color: #008000; font-weight: bold">import</span> imread
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">scipy.linalg</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">ln</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">PIL</span> <span style="color: #008000; font-weight: bold">import</span> Image
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">math</span> <span style="color: #008000; font-weight: bold">import</span> log10, sqrt 
+plt<span style="color: #666666">.</span>rcParams[<span style="color: #BA2121">&#39;figure.figsize&#39;</span>] <span style="color: #666666">=</span> [<span style="color: #666666">16</span>, <span style="color: #666666">8</span>]
+<span style="color: #408080; font-style: italic"># Import image</span>
+A <span style="color: #666666">=</span> imread(os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(<span style="color: #BA2121">&quot;figslides/photo.jpg&quot;</span>))
+X <span style="color: #666666">=</span> A<span style="color: #666666">.</span>dot([<span style="color: #666666">0.299</span>, <span style="color: #666666">0.5870</span>, <span style="color: #666666">0.114</span>]) <span style="color: #408080; font-style: italic"># Convert RGB to grayscale</span>
+img <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>imshow(X)
+<span style="color: #408080; font-style: italic"># Konvert to gray</span>
+img<span style="color: #666666">.</span>set_cmap(<span style="color: #BA2121">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+plt<span style="color: #666666">.</span>show()
+<span style="color: #408080; font-style: italic"># Call image size</span>
+<span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;: </span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121">&#39;</span><span style="color: #666666">%</span><span style="color: #008000">str</span>(X<span style="color: #666666">.</span>shape))
+
+
+<span style="color: #408080; font-style: italic"># split the matrix into U, S, VT</span>
+U, S, VT <span style="color: #666666">=</span> np<span style="color: #666666">.</span>linalg<span style="color: #666666">.</span>svd(X,full_matrices<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+S <span style="color: #666666">=</span> np<span style="color: #666666">.</span>diag(S)
+m <span style="color: #666666">=</span> <span style="color: #666666">800</span> <span style="color: #408080; font-style: italic"># Image&#39;s width</span>
+n <span style="color: #666666">=</span> <span style="color: #666666">1200</span> <span style="color: #408080; font-style: italic"># Image&#39;s height</span>
+j <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+<span style="color: #408080; font-style: italic"># Try compression with different k vectors (these represent projections):</span>
+<span style="color: #008000; font-weight: bold">for</span> k <span style="color: #AA22FF; font-weight: bold">in</span> (<span style="color: #666666">5</span>,<span style="color: #666666">10</span>, <span style="color: #666666">20</span>, <span style="color: #666666">100</span>,<span style="color: #666666">200</span>,<span style="color: #666666">400</span>,<span style="color: #666666">500</span>):
+    <span style="color: #408080; font-style: italic"># Original size of the image</span>
+    originalSize <span style="color: #666666">=</span> m <span style="color: #666666">*</span> n 
+    <span style="color: #408080; font-style: italic"># Size after compressed</span>
+    compressedSize <span style="color: #666666">=</span> k <span style="color: #666666">*</span> (<span style="color: #666666">1</span> <span style="color: #666666">+</span> m <span style="color: #666666">+</span> n) 
+    <span style="color: #408080; font-style: italic"># The projection of the original image</span>
+    Xapprox <span style="color: #666666">=</span> U[:,:k] <span style="color: #666666">@</span> S[<span style="color: #666666">0</span>:k,:k] <span style="color: #666666">@</span> VT[:k,:]
+    plt<span style="color: #666666">.</span>figure(j<span style="color: #666666">+1</span>)
+    j <span style="color: #666666">+=</span> <span style="color: #666666">1</span>
+    img <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>imshow(Xapprox)
+    img<span style="color: #666666">.</span>set_cmap(<span style="color: #BA2121">&#39;gray&#39;</span>)
+    
+    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+    plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&#39;k = &#39;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(k))
+    plt<span style="color: #666666">.</span>show() 
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Original size of image:&#39;</span>)
+    <span style="color: #008000">print</span>(originalSize)
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Compression rate as Compressed image / Original size:&#39;</span>)
+    ratio <span style="color: #666666">=</span> compressedSize <span style="color: #666666">*</span> <span style="color: #666666">1.0</span> <span style="color: #666666">/</span> originalSize
+    <span style="color: #008000">print</span>(ratio)
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Compression rate is &#39;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>( <span style="color: #008000">round</span>(ratio <span style="color: #666666">*</span> <span style="color: #666666">100</span> ,<span style="color: #666666">2</span>)) <span style="color: #666666">+</span> <span style="color: #BA2121">&#39;%&#39;</span> )  
+    <span style="color: #408080; font-style: italic"># Estimate MQA</span>
+    x<span style="color: #666666">=</span> X<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&quot;float&quot;</span>)
+    y<span style="color: #666666">=</span>Xapprox<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&quot;float&quot;</span>)
+    err <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum((x <span style="color: #666666">-</span> y) <span style="color: #666666">**</span> <span style="color: #666666">2</span>)
+    err <span style="color: #666666">/=</span> <span style="color: #008000">float</span>(X<span style="color: #666666">.</span>shape[<span style="color: #666666">0</span>] <span style="color: #666666">*</span> Xapprox<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>])
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;The mean-square deviation &#39;</span><span style="color: #666666">+</span> <span style="color: #008000">str</span>(<span style="color: #008000">round</span>( err)))
+    max_pixel <span style="color: #666666">=</span> <span style="color: #666666">255.0</span>
+    <span style="color: #408080; font-style: italic"># Estimate Signal Noise Ratio</span>
+    srv <span style="color: #666666">=</span> <span style="color: #666666">20</span> <span style="color: #666666">*</span> (log10(max_pixel <span style="color: #666666">/</span> sqrt(err)))
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Signa to noise ratio &#39;</span><span style="color: #666666">+</span> <span style="color: #008000">str</span>(<span style="color: #008000">round</span>(srv)) <span style="color: #666666">+</span><span style="color: #BA2121">&#39;dB&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- !split -->
 <h2 id="mathematics-of-cnns" class="anchor">Mathematics of CNNs </h2>

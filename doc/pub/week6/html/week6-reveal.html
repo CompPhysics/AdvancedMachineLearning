@@ -265,6 +265,111 @@ only neighboring neurons in the input instead of connecting all with the first h
 </section>
 
 <section>
+<h2 id="how-to-do-image-compression-before-the-era-of-deep-learning">How to do image compression before the era of deep learning </h2>
+
+<p>The singular-value decomposition (SVD) algorithm has been for decades one of the standard ways of compressing images.
+The <a href="https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/chapter2.html#the-singular-value-decomposition" target="_blank">lectures on the SVD</a> give many of the essential details concerning the SVD.
+</p>
+
+<p>The orthogonal vectors which are obtained from the SVD, can be used to
+project down the dimensionality of a given image. In the example here
+we gray-scale an image and downsize it.
+</p>
+
+<p>This recipe relies on us being able to actually perform the SVD. For
+large images, and in particular with many images to reconstruct
+becomes an overwhelming task. With the advent of efficient deep
+learning methods like CNNs and later generative methods, these methods
+have become in the last years the premier way of performing image
+analysis.
+</p>
+</section>
+
+<section>
+<h2 id="the-svd-example">The SVD example </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">matplotlib.image</span> <span style="color: #8B008B; font-weight: bold">import</span> imread
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">scipy.linalg</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">ln</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">PIL</span> <span style="color: #8B008B; font-weight: bold">import</span> Image
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">math</span> <span style="color: #8B008B; font-weight: bold">import</span> log10, sqrt 
+plt.rcParams[<span style="color: #CD5555">&#39;figure.figsize&#39;</span>] = [<span style="color: #B452CD">16</span>, <span style="color: #B452CD">8</span>]
+<span style="color: #228B22"># Import image</span>
+A = imread(os.path.join(<span style="color: #CD5555">&quot;figslides/photo.jpg&quot;</span>))
+X = A.dot([<span style="color: #B452CD">0.299</span>, <span style="color: #B452CD">0.5870</span>, <span style="color: #B452CD">0.114</span>]) <span style="color: #228B22"># Convert RGB to grayscale</span>
+img = plt.imshow(X)
+<span style="color: #228B22"># Konvert to gray</span>
+img.set_cmap(<span style="color: #CD5555">&#39;gray&#39;</span>)
+plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
+plt.show()
+<span style="color: #228B22"># Call image size</span>
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;: %s&#39;</span>%<span style="color: #658b00">str</span>(X.shape))
+
+
+<span style="color: #228B22"># split the matrix into U, S, VT</span>
+U, S, VT = np.linalg.svd(X,full_matrices=<span style="color: #8B008B; font-weight: bold">False</span>)
+S = np.diag(S)
+m = <span style="color: #B452CD">800</span> <span style="color: #228B22"># Image&#39;s width</span>
+n = <span style="color: #B452CD">1200</span> <span style="color: #228B22"># Image&#39;s height</span>
+j = <span style="color: #B452CD">0</span>
+<span style="color: #228B22"># Try compression with different k vectors (these represent projections):</span>
+<span style="color: #8B008B; font-weight: bold">for</span> k <span style="color: #8B008B">in</span> (<span style="color: #B452CD">5</span>,<span style="color: #B452CD">10</span>, <span style="color: #B452CD">20</span>, <span style="color: #B452CD">100</span>,<span style="color: #B452CD">200</span>,<span style="color: #B452CD">400</span>,<span style="color: #B452CD">500</span>):
+    <span style="color: #228B22"># Original size of the image</span>
+    originalSize = m * n 
+    <span style="color: #228B22"># Size after compressed</span>
+    compressedSize = k * (<span style="color: #B452CD">1</span> + m + n) 
+    <span style="color: #228B22"># The projection of the original image</span>
+    Xapprox = U[:,:k] @ S[<span style="color: #B452CD">0</span>:k,:k] @ VT[:k,:]
+    plt.figure(j+<span style="color: #B452CD">1</span>)
+    j += <span style="color: #B452CD">1</span>
+    img = plt.imshow(Xapprox)
+    img.set_cmap(<span style="color: #CD5555">&#39;gray&#39;</span>)
+    
+    plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
+    plt.title(<span style="color: #CD5555">&#39;k = &#39;</span> + <span style="color: #658b00">str</span>(k))
+    plt.show() 
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Original size of image:&#39;</span>)
+    <span style="color: #658b00">print</span>(originalSize)
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Compression rate as Compressed image / Original size:&#39;</span>)
+    ratio = compressedSize * <span style="color: #B452CD">1.0</span> / originalSize
+    <span style="color: #658b00">print</span>(ratio)
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Compression rate is &#39;</span> + <span style="color: #658b00">str</span>( <span style="color: #658b00">round</span>(ratio * <span style="color: #B452CD">100</span> ,<span style="color: #B452CD">2</span>)) + <span style="color: #CD5555">&#39;%&#39;</span> )  
+    <span style="color: #228B22"># Estimate MQA</span>
+    x= X.astype(<span style="color: #CD5555">&quot;float&quot;</span>)
+    y=Xapprox.astype(<span style="color: #CD5555">&quot;float&quot;</span>)
+    err = np.sum((x - y) ** <span style="color: #B452CD">2</span>)
+    err /= <span style="color: #658b00">float</span>(X.shape[<span style="color: #B452CD">0</span>] * Xapprox.shape[<span style="color: #B452CD">1</span>])
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;The mean-square deviation &#39;</span>+ <span style="color: #658b00">str</span>(<span style="color: #658b00">round</span>( err)))
+    max_pixel = <span style="color: #B452CD">255.0</span>
+    <span style="color: #228B22"># Estimate Signal Noise Ratio</span>
+    srv = <span style="color: #B452CD">20</span> * (log10(max_pixel / sqrt(err)))
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Signa to noise ratio &#39;</span>+ <span style="color: #658b00">str</span>(<span style="color: #658b00">round</span>(srv)) +<span style="color: #CD5555">&#39;dB&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
 <h2 id="mathematics-of-cnns">Mathematics of CNNs </h2>
 
 <p>The mathematics of CNNs is based on the mathematical operation of
