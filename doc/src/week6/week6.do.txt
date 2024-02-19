@@ -7,7 +7,7 @@ DATE: February 19-23, 2024
 ===== Plans for the weeks February 19-23  =====
 
 !bblock
-o Mathematics of Convolutional  Neural Networks (CNNs)
+o Mathematics of Convolutional  Neural Networks (CNNs), padding, strid, pooling and more
 o Discussion of codes for CNNs, own code, TensorFlow+Keras and PyTorch examples
 !eblock
 
@@ -157,7 +157,8 @@ Although we may have redundant operations with some few zeros for $\beta_i$, we 
 \delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i-k},
 \]
 !et
-where $m=3$ in our case, the maximum length of the vector $\alpha$. Note that the vector $\bm{\beta}$ has length $n=4$.
+where $m=3$ in our case, the maximum length of
+the vector $\alpha$. Note that the vector $\bm{\beta}$ has length $n=4$. Below we will find an even more efficient representation.
 
 !split
 ===== A more efficient way of coding the above Convolution =====
@@ -177,6 +178,9 @@ as a matrix-vector multiplication
 			    \end{bmatrix}\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \beta_3\end{bmatrix}.
 \]
 !et
+
+!split
+===== Commutative process =====
 
 The process is commutative and we can easily see that we can rewrite the multiplication in terms of  a matrix holding $\beta$ and a vector holding $\alpha$.
 In this case we have
@@ -200,7 +204,8 @@ require.
 
 
 
-
+!split
+===== Toeplitz matrices =====
 
 The above matrices are examples of so-called "Toeplitz
 matrices":"https://link.springer.com/book/10.1007/978-93-86279-04-0". A
@@ -240,19 +245,100 @@ o "Fourier Transform Layer":"https://www.sciencedirect.com/science/article/pii/S
 ===== Generalizing the above one-dimensional case =====
 
 In order to align the above simple case with the more general convolution cases, we rename $\bm{\alpha}$, whose length is $m=3$, with $\bm{w}$.
-We will interpret $\bm{w}$ as a weight/filter function with which we want to perform the convolution with an input varibale $\bm{x}$.
-We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{s}$ and have
+We will interpret $\bm{w}$ as a weight/filter function with which we want to perform the convolution with an input variabale $\bm{x}$ of length $n$.
+We will assume always that the filter $\bm{w}$ has dimensionality $m \le n$.
+
+We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{y}$ and have
 !bt
 \[
-s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
+y(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
 \]
 !et
 where $m=3$ in our case, the maximum length of the vector $\bm{w}$.
 Here the symbol $*$ represents the mathematical operation of convolution.
 
 
+!split
+==== Memory considerations =====
 
-=====  Two-dimensional Objects =====
+This expression leaves us however with some terms with negative
+indices, for example $x(-1)$ and $x(-2)$ which may not be defined. Our
+vector $\bm{x}$ has components $x(0)$, $x(1)$, $x(2)$ and $x(3)$. The
+index for $\bm{x}$ runs from $j=0$ to $j=3$ since $\bm{x}$ is meant to
+represent a third-order polynomial.
+
+Furthermore, the index $i$ runs from $i=0$ to $i=5$ since $\bm{y}$ contains the coefficients of a fifth-order polynomial.
+When $i=5$ we may also values of $x(4)$ and $x(5)$ which are not defined.
+
+The solution to this is what is called _padding_!
+We simply define a new vector $x$ with two added elements set to zero before $x(0)$ and two new elements after $x(3)$ set to zero. That is, we augment the
+length of $\bm{x}$ from $n=4$ to $n+2P=8$, where $P=2$ is the padding constant, see discussions below as well.
+
+!split
+===== New vector =====
+
+We have now a new vector defined as $x(0)=0$, $x(1)=0$,
+$x(2)=\beta_0$, $x(3)=\beta_1$, $x(4)=\beta_2$, $x(5)=\beta_3$,
+$x(6)=0$, and $x(7)=0$. We have added four new elements, which
+are all zero. The benefit is that we can rewrite the equation for
+$\bm{y}$, with $i=0,1,\dots,5$,
+!bt
+\[
+y(i) = \sum_{k=0}^{k=m-1}w(k)x(i+(m-1)-k).
+\]
+!et
+
+As an example, we have
+!bt
+\[
+y(4)=x(6)w(0)+x(5)w(1)+x(4)w(2)=0\times \alpha_0+\beta_3\alpha_1+\beta_2\alpha_2,
+\]
+!et
+as before except that we have now the term $x(6)w(0)$.
+
+Similarly
+As an example, we have
+!bt
+\[
+y(5)=x(7)w(0)+x(6)w(1)+x(5)w(2)=0\times \alpha_0+0\times\alpha_1+\beta_3\alpha_2,
+\]
+!et
+the fifth-order term.
+
+The zeroth-order term is
+!bt
+\[
+y(0)=x(2)w(0)+x(1)w(1)+x(0)w(2)=\beta_0 \alpha_0+0\times\alpha_1+0\times\alpha_2=\alpha_0\beta_0.
+\]
+!et
+
+!split
+===== Rewriting as dot products =====
+
+If we now flip the filter vector, with the following term as a typical example
+!bt
+\[
+y(0)=x(2)w(0)+x(1)w(1)+x(0)w(2)=x(2)\tilde{w}(2)+x(1)\tilde{w}(1)+x(0)\tilde{w}(0),
+\]
+!et
+with $\tilde{w}(0)=w(2)$, $\tilde{w}(1)=w(1)$, and $\tilde{w}(2)=w(0)$, we can then rewrite the above sum as a dot product of
+$x(i:i+(m-1))\tilde{w}$ for element $y(i), where $x(i:i+(m-1))$ is simply a patch of $\bm{x}$ of size $m-1$.
+
+The padding $P$ we have introduced for the convolution stage is just
+another hyperparameter which is introduced as part of the
+architecture. Similarly, below we will also introduce another
+hyperparameter called _Stride_ $S$. For the latter, see the examples discussed during the lecture of Tuesday Feb 20.
+
+
+!split
+===== Cross correlation =====
+In essentially all applications one uses what is called cross correlation instead of the standard convolution described above.
+This means that multiplication is performed in the same direction and instead of the general expression
+
+
+
+
+=====  Two-dimensional objects =====
 
 We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
 We often use convolutions over more than one dimension at a time. If
@@ -275,7 +361,7 @@ Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of $m$ and $n$.
 
 
-Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)
+As mentioned above, most deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)
 !bt
 Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 \]
