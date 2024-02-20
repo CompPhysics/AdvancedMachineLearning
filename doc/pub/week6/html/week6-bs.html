@@ -101,16 +101,12 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'parameters-to-train-common-settings'),
               ('Examples of CNN setups', 2, None, 'examples-of-cnn-setups'),
-              ('Performing a discrete convolution with padding ("From Raschka '
-               'et al":"https://github.com/rasbt/machine-learning-book")',
-               2,
-               None,
-               'performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
-              ('Performing a general discrete convolution ("From Raschka et '
+              ('Summarizing: Performing a general discrete convolution ("From '
+               'Raschka et '
                'al":"https://github.com/rasbt/machine-learning-book")',
                2,
                None,
-               'performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
+               'summarizing-performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Pooling', 2, None, 'pooling'),
               ('Pooling arithmetic', 2, None, 'pooling-arithmetic'),
               ('Pooling types ("From Raschka et '
@@ -259,8 +255,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#new-image-or-volume" style="font-size: 80%;"><b>New image (or volume)</b></a></li>
      <!-- navigation toc: --> <li><a href="#parameters-to-train-common-settings" style="font-size: 80%;"><b>Parameters to train, common settings</b></a></li>
      <!-- navigation toc: --> <li><a href="#examples-of-cnn-setups" style="font-size: 80%;"><b>Examples of CNN setups</b></a></li>
-     <!-- navigation toc: --> <li><a href="#performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Performing a discrete convolution with padding ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
-     <!-- navigation toc: --> <li><a href="#performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Performing a general discrete convolution ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
+     <!-- navigation toc: --> <li><a href="#summarizing-performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Summarizing: Performing a general discrete convolution ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling" style="font-size: 80%;"><b>Pooling</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling-arithmetic" style="font-size: 80%;"><b>Pooling arithmetic</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Pooling types ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
@@ -398,7 +393,7 @@ MathJax.Hub.Config({
 <!-- !split -->
 <h2 id="key-idea" class="anchor">Key Idea </h2>
 
-<p>A dense neural network is representd by an affine operation (like matrix-matrix multiplication) where all parameters are included.</p>
+<p>A dense neural network is represented by an affine operation (like matrix-matrix multiplication) where all parameters are included.</p>
 
 <p>The key idea in CNNs for say imaging is that in images neighbor pixels tend to be related! So we connect
 only neighboring neurons in the input instead of connecting all with the first hidden layer.
@@ -419,11 +414,11 @@ we gray-scale an image and downsize it.
 </p>
 
 <p>This recipe relies on us being able to actually perform the SVD. For
-large images, and in particular with many images to reconstruct
-becomes an overwhelming task. With the advent of efficient deep
+large images, and in particular with many images to reconstruct, using the SVD 
+may quickly become an overwhelming task. With the advent of efficient deep
 learning methods like CNNs and later generative methods, these methods
 have become in the last years the premier way of performing image
-analysis.
+analysis. In particular for classification problems with labelled images.
 </p>
 
 <!-- !split -->
@@ -445,10 +440,10 @@ analysis.
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">math</span> <span style="color: #008000; font-weight: bold">import</span> log10, sqrt 
 plt<span style="color: #666666">.</span>rcParams[<span style="color: #BA2121">&#39;figure.figsize&#39;</span>] <span style="color: #666666">=</span> [<span style="color: #666666">16</span>, <span style="color: #666666">8</span>]
 <span style="color: #408080; font-style: italic"># Import image</span>
-A <span style="color: #666666">=</span> imread(os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(<span style="color: #BA2121">&quot;figslides/photo.jpg&quot;</span>))
+A <span style="color: #666666">=</span> imread(os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(<span style="color: #BA2121">&quot;figslides/photo1.jpg&quot;</span>))
 X <span style="color: #666666">=</span> A<span style="color: #666666">.</span>dot([<span style="color: #666666">0.299</span>, <span style="color: #666666">0.5870</span>, <span style="color: #666666">0.114</span>]) <span style="color: #408080; font-style: italic"># Convert RGB to grayscale</span>
 img <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>imshow(X)
-<span style="color: #408080; font-style: italic"># Konvert to gray</span>
+<span style="color: #408080; font-style: italic"># convert to gray</span>
 img<span style="color: #666666">.</span>set_cmap(<span style="color: #BA2121">&#39;gray&#39;</span>)
 plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
 plt<span style="color: #666666">.</span>show()
@@ -698,9 +693,12 @@ a vector.
 <!-- !split -->
 <h2 id="generalizing-the-above-one-dimensional-case" class="anchor">Generalizing the above one-dimensional case </h2>
 
-<p>In order to align the above simple case with the more general convolution cases, we rename \( \boldsymbol{\alpha} \), whose length is \( m=3 \), with \( \boldsymbol{w} \).
-We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we want to perform the convolution with an input variabale \( \boldsymbol{x} \) of length \( n \).
-We will assume always that the filter \( \boldsymbol{w} \) has dimensionality \( m \le n \).
+<p>In order to align the above simple case with the more general
+convolution cases, we rename \( \boldsymbol{\alpha} \), whose length is \( m=3 \),
+with \( \boldsymbol{w} \).  We will interpret \( \boldsymbol{w} \) as a weight/filter function
+with which we want to perform the convolution with an input variable
+\( \boldsymbol{x} \) of length \( n \).  We will assume always that the filter
+\( \boldsymbol{w} \) has dimensionality \( m \le n \).
 </p>
 
 <p>We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{y} \) and have</p>
@@ -788,7 +786,7 @@ $$
 <p>The padding \( P \) we have introduced for the convolution stage is just
 another hyperparameter which is introduced as part of the
 architecture. Similarly, below we will also introduce another
-hyperparameter called <b>Stride</b> \( S \). For the latter, see the examples discussed during the lecture of Tuesday Feb 20.
+hyperparameter called <b>Stride</b> \( S \). 
 </p>
 
 <!-- !split -->
@@ -917,7 +915,11 @@ algorithm) that define the filters, two new hyperparameters, the so-called
 <!-- !split -->
 <h2 id="finding-the-number-of-parameters" class="anchor">Finding the number of parameters </h2>
 
-<p>In the above example we have an input matrix of dimension \( 3\times 3 \). In general we call the input for an input volume and it is by its width \( H_1 \), height \( H_1 \) and depth \( D_1 \). If we have the standard three color channels \( D_1=3 \).</p>
+<p>In the above example we have an input matrix of dimension \( 3\times
+3 \). In general we call the input for an input volume and it is defined
+by its width \( H_1 \), height \( H_1 \) and depth \( D_1 \). If we have the
+standard three color channels \( D_1=3 \).
+</p>
 
 <p>The above example has \( W_1=H_1=3 \) and \( D_1=1 \).</p>
 
@@ -928,7 +930,7 @@ algorithm) that define the filters, two new hyperparameters, the so-called
 <li> \( S \) as the stride parameter</li>
 <li> \( P \) as the padding parameter</li>
 </ol>
-<p>These parameters are defined by the architecture of the network.</p>
+<p>These parameters are defined by the architecture of the network and are not included in the training.</p>
 
 <!-- !split -->
 <h2 id="new-image-or-volume" class="anchor">New image (or volume) </h2>
@@ -956,7 +958,7 @@ $$
 
 <p>In total we have</p>
 $$
-\left(F\times F\times D_1)\right) \times K+K-\mathrm{biases},
+\left(F\times F\times D_1)\right) \times K+(K\mathrm{--biases}),
 $$
 
 <p>parameters to train by back propagation.</p>
@@ -979,8 +981,8 @@ $$
 <!-- !split -->
 <h2 id="examples-of-cnn-setups" class="anchor">Examples of CNN setups </h2>
 
-<p>Let assume an input volume \( V \) given by an image of dimensionality
-\( 32\times 32 \times 3 \), that is three color channels and \( 32 \) pixels.
+<p>Let us assume we have an input volume \( V \) given by an image of dimensionality
+\( 32\times 32 \times 3 \), that is three color channels and \( 32\times 32 \) pixels.
 </p>
 
 <p>We apply a filter of dimension \( 5\times 5 \) ten times with stride \( S=1 \) and padding \( P=0 \).</p>
@@ -996,7 +998,7 @@ parameters for the ten filters.
 </p>
 
 <p>How many parameters will a filter of dimensionality \( 3\times 3 \)
-(adding color channels) result in if we produce \( 32 \) new images?
+(adding color channels) result in if we produce \( 32 \) new images? Use \( S=1 \) and \( P=0 \).
 </p>
 
 <p>Note that strides constitute a form of <b>subsampling</b>. As an alternative to
@@ -1007,23 +1009,12 @@ retaining only odd output elements.
 </p>
 
 <!-- !split -->
-<h2 id="performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Performing a discrete convolution with padding (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
+<h2 id="summarizing-performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Summarizing: Performing a general discrete convolution (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
 
 <center>  <!-- FIGURE -->
 <hr class="figure">
 <center>
 <p class="caption">Figure 2:  A deep CNN </p>
-</center>
-<p><img src="figslides/discreteconv.png" width="500" align="bottom"></p>
-</center>
-
-<!-- !split -->
-<h2 id="performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Performing a general discrete convolution (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
-
-<center>  <!-- FIGURE -->
-<hr class="figure">
-<center>
-<p class="caption">Figure 3:  A deep CNN </p>
 </center>
 <p><img src="figslides/discreteconv1.png" width="500" align="bottom"></p>
 </center>
@@ -1062,7 +1053,7 @@ locally by applying a non-linearity to the content of some patches.
 <center>  <!-- FIGURE -->
 <hr class="figure">
 <center>
-<p class="caption">Figure 4:  A deep CNN </p>
+<p class="caption">Figure 3:  A deep CNN </p>
 </center>
 <p><img src="figslides/maxpooling.png" width="500" align="bottom"></p>
 </center>
@@ -1568,28 +1559,28 @@ $$
 (f \ast g)(t):=\int_{-\infty}^{\infty} f(\tau) g(t-\tau) d \tau.
 $$
 
-<p>Here, f and g are the two functions on which we want to perform an
+<p>Here, \( f \) and \( g \) are the two functions on which we want to perform an
 operation. The outcome of the convolution operation is represented by
-\( (f \ast g) \), and it is derived by sliding the function g over f and
+\( (f \ast g) \), and it is derived by sliding the function \( g \) over \( f \) and
 computing the integral of their product at each position. If both
 functions are continuous, convolution takes the form shown
-above. However, if we discretize both f and g, the convolution
-operation will take the form of a sum between the elements of f and g:
+above. However, if we discretize both \( f \) and \( g \), the convolution
+operation will take the form of a sum between the elements of \( f \) and \( g \):
 </p>
 $$
-(f \ast g)[n]=\sum_{m=0}^{n-1} f[m] g[n-m].
+(f \ast g)[n]=\sum_{m=0}^{n-1} f(m) g(n-m).
 $$
 
 <p>The key idea we utilize to extract the information contained in an
-image is to slide an \( m \times n \) matrix <em>g</em> over an \( m \times n \)
-matrix <em>f</em>. In our case, <em>f</em> represents the image, while <em>g</em>
+image is to slide an \( m \times n \) matrix \( g \) over an \( m \times n \)
+matrix \( f \). In our case, \( f \) represents the image, while \( g \)
 represents the kernel, oftentimes called a filter. However, since our
 convolution will be a two-dimensional variant, we need to extend our
 mathematical formula with an additional summation:
 </p>
 
 $$
-(f \ast g)[i, j]\sum_{m=0}^{M-1}\sum_{n=0}^{N-1} f[m,n] g[i-m, j-n].
+(f \ast g)(i, j)\sum_{m=0}^{M-1}\sum_{n=0}^{N-1} f(m,n) g(i-m, j-n).
 $$
 
 <p>It is imperative to note that the size of the kernel g is
@@ -1601,7 +1592,7 @@ appropriate kernels for specific tasks.
 </p>
 
 <p>To give you an example of how 2D convolution works in practice,
-suppose we have an image <em>f</em> of dimension \( 6 \times 6 \)
+suppose we have an image \( f \) of dimension \( 6 \times 6 \)
 </p>
 
 $$
@@ -1615,7 +1606,7 @@ f = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-<p>and a \( 3 \times 3 \) kernel <em>g</em> called a low-pass filter. Note that the
+<p>and a \( 3 \times 3 \) kernel \( g \) called a low-pass filter. Note that the
 kernel is usually rotated by 180 degrees during convolution, however
 this has no effect on this kernel.
 </p>
@@ -1630,9 +1621,9 @@ g = \frac{1}{9}
 $$
 
 <p>In order to filter the image, we have to extract a \( 3 \times 3 \)
-element from the upper left corner of <em>f</em>, and perform element-wise
+element from the upper left corner of \( f \), and perform element-wise
 multiplication of the extracted image pixels with the elements of the
-kernel <em>g</em>:
+kernel \( g \):
 </p>
 
 $$
@@ -1653,21 +1644,21 @@ $$
 \frac{9}{9} & \frac{5}{9} & \frac{9}{9} \\
 \frac{1}{9} & \frac{5}{9} & \frac{9}{9} \\
 \end {bmatrix}
-= \textbf{A}
+= \boldsymbol{A}
 $$
 
-<p>Then, following the multiplication, we summarize all the elements of the resulting matrix A:</p>
+<p>Then, following the multiplication, we summarize all the elements of the resulting matrix \( \boldsymbol{A} \):</p>
 
 $$
-(f \ast g)[0, 0]= \sum_{i=0}^{2} \sum_{j=0}^{2} a_{i,j} = 5
+(f \ast g)(0, 0)= \sum_{i=0}^{2} \sum_{j=0}^{2} a_{i,j} = 5,
 $$
 
-<p>Which corresponds to the first element of the filtered image \( (f \ast g) \).</p>
+<p>which corresponds to the first element of the filtered image \( (f \ast g) \).</p>
 
-<p>Here we use a stride of 1, a parameter denoted <em>s</em> which describes how
-many indexes we move the kernel <em>g</em> to the right before repeating the
+<p>Here we use a stride of \( S=1 \), a parameter denoted \( S \) which describes how
+many indexes we move the kernel \( g \) to the right before repeating the
 calculations above for the next \( 3 \times 3 \) element of the image
-<em>f</em>. It is usually presumed that *s*=1, however, larger values for <em>s</em>
+\( f \). It is usually presumed that \( S=1 \), however, larger values for \( S \)
 can be used to reduce the dimentionality of the filtered image such
 that the convolution operation is more computationally efficient. In
 the context of a convolutional neural network, this will become very
@@ -1686,18 +1677,23 @@ $$
 \end{bmatrix}
 $$
 
-<p>The result is markedly smaller in shape than the original image. This occurs when using convolution without first padding the image with additional columns and rows, allowing us to keep the original image shape after sliding the kernel over the image.
-How many rows and columns we wish to pad the image with depends strictly on the shape of the kernel, as we wish to pad the image with <em>r</em> additional rows and <em>c</em> additional columns.
+<p>The result is markedly smaller in shape than the original image. This
+occurs when using convolution without first padding the image with
+additional columns and rows, allowing us to keep the original image
+shape after sliding the kernel over the image.  How many rows and
+columns we wish to pad the image with depends strictly on the shape of
+the kernel, as we wish to pad the image with \( r \) additional rows and
+\( c \) additional columns.
 </p>
 
 $$
-r =\lfloor \frac{kernel\ height}{2} \rfloor \cdot 2 \\
-c =\lfloor \frac{kernel\ width}{2} \rfloor \cdot 2
+r =\lfloor \frac{\mathrm{kernel height}}{2} \rfloor \cdot 2 \\
+c =\lfloor \frac{\mathrm{kernel width}}{2} \rfloor \cdot 2
 $$
 
-<p>Note the notation \( \lfloor \frac{kernel width}{2} \rfloor \) means that
+<p>Note the notation \( \lfloor \frac{\mathrm{kernel width}}{2} \rfloor \) means that
 we floor the result of the division, meaning we round down to a whole
-number in case \( \frac{kernel width}{2} \) results in a floating point
+number in case \( \frac{\mathrm{kernel width}}{2} \) results in a floating point
 number.
 </p>
 
@@ -1723,11 +1719,13 @@ $$
 0 & 8 & 1 & 6 & 4 & 2 & 2 & 0 \\
 0 & 1 & 0 & 5 & 7 & 8 & 2 & 0 \\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-\]
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
-<p>Below we have provided code that demonstrates padding and convolution. As you will see when we run the code, the size of the image will remain unchanged when using padding.&nbsp;</p>
+<p>Below we have provided code that demonstrates padding and
+convolution. As you will see when we run the code, the size of the
+image will remain unchanged when using padding.~
+</p>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "default" -->
@@ -1822,9 +1820,10 @@ $$
   </div>
 </div>
 
-<p>Fun fact: When filtering images, you will see that convolution involves rotating the kernel by 180 degrees. 
-However, this is not the case when applying convolution in a CNN, where the same operation not rotated by 180 degrees is called 
-cross-correlation.
+<p>Fun fact: When filtering images, you will see that convolution
+involves rotating the kernel by 180 degrees.  However, this is not the
+case when applying convolution in a CNN, where the same operation that is not
+rotated by 180 degrees is called cross-correlation, which is normally implemented in most libraries.
 </p>
 
 
@@ -1884,7 +1883,7 @@ feed forward neural network.
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Now an example using a real image and first a gaussian low-pass filter and then a sobel filter</span>
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Now an example using a real image and first a gaussian low-pass filter and then a Sobel filter</span>
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">imageio.v3</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">imageio</span>
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
@@ -3911,7 +3910,7 @@ cnn<span style="color: #666666">.</span>add_OutputLayer(<span style="color: #666
 <li> The output layer, with softmax as its activation function and 10 nodes. We use 10 nodes because we will be using a dataset with 10 classes.</li>
 </ol>
 <p>Now, before we can train the model, we need to load in our data. We
-will use the MNIST dataset and use 10000 \( 28 \times  28 images \).
+will use the MNIST dataset and use 10000 \( 28 \times  28 \) images.
 </p>
 
 

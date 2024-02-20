@@ -44,7 +44,7 @@ FIGURE: [figslides/deepcnn.png, width=500 frac=0.67]  A deep CNN
 !split
 ===== Key Idea =====
 
-A dense neural network is representd by an affine operation (like matrix-matrix multiplication) where all parameters are included.
+A dense neural network is represented by an affine operation (like matrix-matrix multiplication) where all parameters are included.
 
 The key idea in CNNs for say imaging is that in images neighbor pixels tend to be related! So we connect
 only neighboring neurons in the input instead of connecting all with the first hidden layer.
@@ -63,11 +63,11 @@ project down the dimensionality of a given image. In the example here
 we gray-scale an image and downsize it.
 
 This recipe relies on us being able to actually perform the SVD. For
-large images, and in particular with many images to reconstruct
-becomes an overwhelming task. With the advent of efficient deep
+large images, and in particular with many images to reconstruct, using the SVD 
+may quickly become an overwhelming task. With the advent of efficient deep
 learning methods like CNNs and later generative methods, these methods
 have become in the last years the premier way of performing image
-analysis.
+analysis. In particular for classification problems with labelled images.
 
 !split
 ===== The SVD example =====
@@ -82,10 +82,10 @@ from PIL import Image
 from math import log10, sqrt 
 plt.rcParams['figure.figsize'] = [16, 8]
 # Import image
-A = imread(os.path.join("figslides/photo.jpg"))
+A = imread(os.path.join("figslides/photo1.jpg"))
 X = A.dot([0.299, 0.5870, 0.114]) # Convert RGB to grayscale
 img = plt.imshow(X)
-# Konvert to gray
+# convert to gray
 img.set_cmap('gray')
 plt.axis('off')
 plt.show()
@@ -335,9 +335,12 @@ o "Fourier Transform Layer":"https://www.sciencedirect.com/science/article/pii/S
 !split
 ===== Generalizing the above one-dimensional case =====
 
-In order to align the above simple case with the more general convolution cases, we rename $\bm{\alpha}$, whose length is $m=3$, with $\bm{w}$.
-We will interpret $\bm{w}$ as a weight/filter function with which we want to perform the convolution with an input variabale $\bm{x}$ of length $n$.
-We will assume always that the filter $\bm{w}$ has dimensionality $m \le n$.
+In order to align the above simple case with the more general
+convolution cases, we rename $\bm{\alpha}$, whose length is $m=3$,
+with $\bm{w}$.  We will interpret $\bm{w}$ as a weight/filter function
+with which we want to perform the convolution with an input variable
+$\bm{x}$ of length $n$.  We will assume always that the filter
+$\bm{w}$ has dimensionality $m \le n$.
 
 We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{y}$ and have
 !bt
@@ -427,7 +430,7 @@ $x(i:i+(m-1))\tilde{w}$ for element $y(i)$, where $x(i:i+(m-1))$ is simply a pat
 The padding $P$ we have introduced for the convolution stage is just
 another hyperparameter which is introduced as part of the
 architecture. Similarly, below we will also introduce another
-hyperparameter called _Stride_ $S$. For the latter, see the examples discussed during the lecture of Tuesday Feb 20.
+hyperparameter called _Stride_ $S$. 
 
 
 !split
@@ -573,7 +576,10 @@ _padding_ $P$ and the stride $S$.
 !split
 ===== Finding the number of parameters =====
 
-In the above example we have an input matrix of dimension $3\times 3$. In general we call the input for an input volume and it is by its width $H_1$, height $H_1$ and depth $D_1$. If we have the standard three color channels $D_1=3$.
+In the above example we have an input matrix of dimension $3\times
+3$. In general we call the input for an input volume and it is defined
+by its width $H_1$, height $H_1$ and depth $D_1$. If we have the
+standard three color channels $D_1=3$.
 
 The above example has $W_1=H_1=3$ and $D_1=1$.
 
@@ -583,7 +589,7 @@ o $F$ as the filter's spatial extent
 o $S$ as the stride parameter
 o $P$ as the padding parameter
 
-These parameters are defined by the architecture of the network.
+These parameters are defined by the architecture of the network and are not included in the training.
 
 !split
 ===== New image (or volume) =====
@@ -613,7 +619,7 @@ With parameter sharing, the convolution involves thus  for each filter  $F\times
 In total we have
 !bt
 \[
-\left(F\times F\times D_1)\right) \times K+K-\mathrm{biases},
+\left(F\times F\times D_1)\right) \times K+(K\mathrm{--biases}),
 \]
 !et
 parameters to train by back propagation.
@@ -630,8 +636,8 @@ o $\begin{array}{c} F=1 & S=1 & P=0 \end{array}$
 !split
 ===== Examples of CNN setups =====
 
-Let assume an input volume $V$ given by an image of dimensionality
-$32\times 32 \times 3$, that is three color channels and $32$ pixels.
+Let us assume we have an input volume $V$ given by an image of dimensionality
+$32\times 32 \times 3$, that is three color channels and $32\times 32$ pixels.
 
 We apply a filter of dimension $5\times 5$ ten times with stride $S=1$ and padding $P=0$.
 
@@ -644,7 +650,7 @@ gives us $76$ parameters for each filter, leading to a total of $760$
 parameters for the ten filters.
 
 How many parameters will a filter of dimensionality $3\times 3$
-(adding color channels) result in if we produce $32$ new images?
+(adding color channels) result in if we produce $32$ new images? Use $S=1$ and $P=0$.
 
 Note that strides constitute a form of _subsampling_. As an alternative to
 being interpreted as a measure of how much the kernel/filter is translated, strides
@@ -653,14 +659,9 @@ the kernel by hops of two is equivalent to moving the kernel by hops of one but
 retaining only odd output elements.
 
 
-!split
-===== Performing a discrete convolution with padding ("From Raschka et al":"https://github.com/rasbt/machine-learning-book") =====
-
-FIGURE: [figslides/discreteconv.png, width=500 frac=0.67]  A deep CNN
-
 
 !split
-===== Performing a general discrete convolution ("From Raschka et al":"https://github.com/rasbt/machine-learning-book") =====
+===== Summarizing: Performing a general discrete convolution ("From Raschka et al":"https://github.com/rasbt/machine-learning-book") =====
 
 FIGURE: [figslides/discreteconv1.png, width=500 frac=0.67]  A deep CNN
 
@@ -1074,29 +1075,29 @@ functions, which is typically expressed as:
 \]
 !et
 
-Here, f and g are the two functions on which we want to perform an
+Here, $f$ and $g$ are the two functions on which we want to perform an
 operation. The outcome of the convolution operation is represented by
-$(f \ast g)$, and it is derived by sliding the function g over f and
+$(f \ast g)$, and it is derived by sliding the function $g$ over $f$ and
 computing the integral of their product at each position. If both
 functions are continuous, convolution takes the form shown
-above. However, if we discretize both f and g, the convolution
-operation will take the form of a sum between the elements of f and g:
+above. However, if we discretize both $f$ and $g$, the convolution
+operation will take the form of a sum between the elements of $f$ and $g$:
 !bt
 \[
-(f \ast g)[n]=\sum_{m=0}^{n-1} f[m] g[n-m].
+(f \ast g)[n]=\sum_{m=0}^{n-1} f(m) g(n-m).
 \]
 !et
 
 The key idea we utilize to extract the information contained in an
-image is to slide an $m \times n$ matrix *g* over an $m \times n$
-matrix *f*. In our case, *f* represents the image, while *g*
+image is to slide an $m \times n$ matrix $g$ over an $m \times n$
+matrix $f$. In our case, $f$ represents the image, while $g$
 represents the kernel, oftentimes called a filter. However, since our
 convolution will be a two-dimensional variant, we need to extend our
 mathematical formula with an additional summation:
 
 !bt
 \[
-(f \ast g)[i, j]\sum_{m=0}^{M-1}\sum_{n=0}^{N-1} f[m,n] g[i-m, j-n].
+(f \ast g)(i, j)\sum_{m=0}^{M-1}\sum_{n=0}^{N-1} f(m,n) g(i-m, j-n).
 \]
 !et
 
@@ -1108,7 +1109,7 @@ in a convolutional neural network, allowing the network to learn
 appropriate kernels for specific tasks.
 
 To give you an example of how 2D convolution works in practice,
-suppose we have an image *f* of dimension $6 \times 6$
+suppose we have an image $f$ of dimension $6 \times 6$
 
 !bt
 \[
@@ -1123,7 +1124,7 @@ f = \begin{bmatrix}
 \]
 !et
 
-and a $3 \times 3$ kernel *g* called a low-pass filter. Note that the
+and a $3 \times 3$ kernel $g$ called a low-pass filter. Note that the
 kernel is usually rotated by 180 degrees during convolution, however
 this has no effect on this kernel.
 
@@ -1139,9 +1140,9 @@ g = \frac{1}{9}
 !et
 
 In order to filter the image, we have to extract a $3 \times 3$
-element from the upper left corner of *f*, and perform element-wise
+element from the upper left corner of $f$, and perform element-wise
 multiplication of the extracted image pixels with the elements of the
-kernel *g*:
+kernel $g$:
 
 !bt
 \[
@@ -1162,24 +1163,23 @@ kernel *g*:
 \frac{9}{9} & \frac{5}{9} & \frac{9}{9} \\
 \frac{1}{9} & \frac{5}{9} & \frac{9}{9} \\
 \end {bmatrix}
-= \textbf{A}
+= \bm{A}
 \]
 !et
 
-Then, following the multiplication, we summarize all the elements of the resulting matrix A:
+Then, following the multiplication, we summarize all the elements of the resulting matrix $\bm{A}$:
 
 !bt
 \[
-(f \ast g)[0, 0]= \sum_{i=0}^{2} \sum_{j=0}^{2} a_{i,j} = 5
+(f \ast g)(0, 0)= \sum_{i=0}^{2} \sum_{j=0}^{2} a_{i,j} = 5,
 \]
 !et
+which corresponds to the first element of the filtered image $(f \ast g)$.
 
-Which corresponds to the first element of the filtered image $(f \ast g)$.
-
-Here we use a stride of 1, a parameter denoted *s* which describes how
-many indexes we move the kernel *g* to the right before repeating the
+Here we use a stride of $S=1$, a parameter denoted $S$ which describes how
+many indexes we move the kernel $g$ to the right before repeating the
 calculations above for the next $3 \times 3$ element of the image
-*f*. It is usually presumed that *s*=1, however, larger values for *s*
+$f$. It is usually presumed that $S=1$, however, larger values for $S$
 can be used to reduce the dimentionality of the filtered image such
 that the convolution operation is more computationally efficient. In
 the context of a convolutional neural network, this will become very
@@ -1198,19 +1198,25 @@ The full result of the convolution is:
 \end{bmatrix}
 \]
 !et
-The result is markedly smaller in shape than the original image. This occurs when using convolution without first padding the image with additional columns and rows, allowing us to keep the original image shape after sliding the kernel over the image.
-How many rows and columns we wish to pad the image with depends strictly on the shape of the kernel, as we wish to pad the image with *r* additional rows and *c* additional columns.
+
+The result is markedly smaller in shape than the original image. This
+occurs when using convolution without first padding the image with
+additional columns and rows, allowing us to keep the original image
+shape after sliding the kernel over the image.  How many rows and
+columns we wish to pad the image with depends strictly on the shape of
+the kernel, as we wish to pad the image with $r$ additional rows and
+$c$ additional columns.
 
 !bt
 \[
-r =\lfloor \frac{kernel\ height}{2} \rfloor \cdot 2 \\
-c =\lfloor \frac{kernel\ width}{2} \rfloor \cdot 2
+r =\lfloor \frac{\mathrm{kernel height}}{2} \rfloor \cdot 2 \\
+c =\lfloor \frac{\mathrm{kernel width}}{2} \rfloor \cdot 2
 \]
 !et
 
-Note the notation $\lfloor \frac{kernel width}{2} \rfloor$ means that
+Note the notation $\lfloor \frac{\mathrm{kernel width}}{2} \rfloor$ means that
 we floor the result of the division, meaning we round down to a whole
-number in case $\frac{kernel width}{2}$ results in a floating point
+number in case $\frac{\mathrm{kernel width}}{2}$ results in a floating point
 number.
 
 Using those simple equations, we find out by how much we have to
@@ -1235,10 +1241,13 @@ zero-padded rows and columns:
 0 & 8 & 1 & 6 & 4 & 2 & 2 & 0 \\
 0 & 1 & 0 & 5 & 7 & 8 & 2 & 0 \\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}.
 \]
-\end{bmatrix}
 !et
-Below we have provided code that demonstrates padding and convolution. As you will see when we run the code, the size of the image will remain unchanged when using padding.~
+
+Below we have provided code that demonstrates padding and
+convolution. As you will see when we run the code, the size of the
+image will remain unchanged when using padding.~
 
 !bc pycod
 import numpy as np
@@ -1314,9 +1323,10 @@ def convolve(image, kernel, stride=1):
     return conv_image
 !ec
 
-Fun fact: When filtering images, you will see that convolution involves rotating the kernel by 180 degrees. 
-However, this is not the case when applying convolution in a CNN, where the same operation not rotated by 180 degrees is called 
-cross-correlation.
+Fun fact: When filtering images, you will see that convolution
+involves rotating the kernel by 180 degrees.  However, this is not the
+case when applying convolution in a CNN, where the same operation that is not
+rotated by 180 degrees is called cross-correlation, which is normally implemented in most libraries.
 
 !bc pycod
 
@@ -1350,7 +1360,7 @@ CNN is able to use kernels to make better predictions than a regular
 feed forward neural network.
 
 !bc pycod
-# Now an example using a real image and first a gaussian low-pass filter and then a sobel filter
+# Now an example using a real image and first a gaussian low-pass filter and then a Sobel filter
 import numpy as np
 import imageio.v3 as imageio
 import matplotlib.pyplot as plt
@@ -3179,7 +3189,7 @@ o Another hidden layer but with 20 nodes
 o The output layer, with softmax as its activation function and 10 nodes. We use 10 nodes because we will be using a dataset with 10 classes.
 
 Now, before we can train the model, we need to load in our data. We
-will use the MNIST dataset and use 10000 $28 \times  28 images$.
+will use the MNIST dataset and use 10000 $28 \times  28$ images.
 
 !bc pycod
 from sklearn.datasets import fetch_openml
