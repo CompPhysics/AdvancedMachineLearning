@@ -78,6 +78,7 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'generalizing-the-above-one-dimensional-case'),
               ('Memory considerations', 2, None, 'memory-considerations'),
+              ('Padding', 2, None, 'padding'),
               ('New vector', 2, None, 'new-vector'),
               ('Rewriting as dot products',
                2,
@@ -85,8 +86,21 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                'rewriting-as-dot-products'),
               ('Cross correlation', 2, None, 'cross-correlation'),
               ('Two-dimensional objects', 2, None, 'two-dimensional-objects'),
-              ('CNNs in more detail', 2, None, 'cnns-in-more-detail'),
+              ('CNNs in more detail, simple example',
+               2,
+               None,
+               'cnns-in-more-detail-simple-example'),
               ('The convolution stage', 2, None, 'the-convolution-stage'),
+              ('Finding the number of parameters',
+               2,
+               None,
+               'finding-the-number-of-parameters'),
+              ('New image (or volume)', 2, None, 'new-image-or-volume'),
+              ('Parameters to train, common settings',
+               2,
+               None,
+               'parameters-to-train-common-settings'),
+              ('Examples of CNN setups', 2, None, 'examples-of-cnn-setups'),
               ('Performing a discrete convolution with padding ("From Raschka '
                'et al":"https://github.com/rasbt/machine-learning-book")',
                2,
@@ -97,18 +111,7 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
-              ('Set of filters', 2, None, 'set-of-filters'),
               ('Pooling', 2, None, 'pooling'),
-              ('No zero padding, unit strides',
-               2,
-               None,
-               'no-zero-padding-unit-strides'),
-              ('Zero padding, unit strides',
-               2,
-               None,
-               'zero-padding-unit-strides'),
-              ('Half (same) padding', 2, None, 'half-same-padding'),
-              ('Full padding', 2, None, 'full-padding'),
               ('Pooling arithmetic', 2, None, 'pooling-arithmetic'),
               ('Pooling types ("From Raschka et '
                'al":"https://github.com/rasbt/machine-learning-book")',
@@ -233,20 +236,20 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#fourier-series-and-toeplitz-matrices" style="font-size: 80%;"><b>Fourier series and Toeplitz matrices</b></a></li>
      <!-- navigation toc: --> <li><a href="#generalizing-the-above-one-dimensional-case" style="font-size: 80%;"><b>Generalizing the above one-dimensional case</b></a></li>
      <!-- navigation toc: --> <li><a href="#memory-considerations" style="font-size: 80%;"><b>Memory considerations</b></a></li>
+     <!-- navigation toc: --> <li><a href="#padding" style="font-size: 80%;"><b>Padding</b></a></li>
      <!-- navigation toc: --> <li><a href="#new-vector" style="font-size: 80%;"><b>New vector</b></a></li>
      <!-- navigation toc: --> <li><a href="#rewriting-as-dot-products" style="font-size: 80%;"><b>Rewriting as dot products</b></a></li>
      <!-- navigation toc: --> <li><a href="#cross-correlation" style="font-size: 80%;"><b>Cross correlation</b></a></li>
      <!-- navigation toc: --> <li><a href="#two-dimensional-objects" style="font-size: 80%;"><b>Two-dimensional objects</b></a></li>
-     <!-- navigation toc: --> <li><a href="#cnns-in-more-detail" style="font-size: 80%;"><b>CNNs in more detail</b></a></li>
+     <!-- navigation toc: --> <li><a href="#cnns-in-more-detail-simple-example" style="font-size: 80%;"><b>CNNs in more detail, simple example</b></a></li>
      <!-- navigation toc: --> <li><a href="#the-convolution-stage" style="font-size: 80%;"><b>The convolution stage</b></a></li>
+     <!-- navigation toc: --> <li><a href="#finding-the-number-of-parameters" style="font-size: 80%;"><b>Finding the number of parameters</b></a></li>
+     <!-- navigation toc: --> <li><a href="#new-image-or-volume" style="font-size: 80%;"><b>New image (or volume)</b></a></li>
+     <!-- navigation toc: --> <li><a href="#parameters-to-train-common-settings" style="font-size: 80%;"><b>Parameters to train, common settings</b></a></li>
+     <!-- navigation toc: --> <li><a href="#examples-of-cnn-setups" style="font-size: 80%;"><b>Examples of CNN setups</b></a></li>
      <!-- navigation toc: --> <li><a href="#performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Performing a discrete convolution with padding ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Performing a general discrete convolution ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
-     <!-- navigation toc: --> <li><a href="#set-of-filters" style="font-size: 80%;"><b>Set of filters</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling" style="font-size: 80%;"><b>Pooling</b></a></li>
-     <!-- navigation toc: --> <li><a href="#no-zero-padding-unit-strides" style="font-size: 80%;"><b>No zero padding, unit strides</b></a></li>
-     <!-- navigation toc: --> <li><a href="#zero-padding-unit-strides" style="font-size: 80%;"><b>Zero padding, unit strides</b></a></li>
-     <!-- navigation toc: --> <li><a href="#half-same-padding" style="font-size: 80%;"><b>Half (same) padding</b></a></li>
-     <!-- navigation toc: --> <li><a href="#full-padding" style="font-size: 80%;"><b>Full padding</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling-arithmetic" style="font-size: 80%;"><b>Pooling arithmetic</b></a></li>
      <!-- navigation toc: --> <li><a href="#pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" style="font-size: 80%;"><b>Pooling types ("From Raschka et al":"https://github.com/rasbt/machine-learning-book")</b></a></li>
      <!-- navigation toc: --> <li><a href="#building-our-own-cnn-code" style="font-size: 80%;"><b>Building our own CNN code</b></a></li>
@@ -684,7 +687,7 @@ We will assume always that the filter \( \boldsymbol{w} \) has dimensionality \(
 
 <p>We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{y} \) and have</p>
 $$
-y(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
+y(i)= \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
 $$
 
 <p>where \( m=3 \) in our case, the maximum length of the vector \( \boldsymbol{w} \).
@@ -696,26 +699,37 @@ Here the symbol \( * \) represents the mathematical operation of convolution.
 
 <p>This expression leaves us however with some terms with negative
 indices, for example \( x(-1) \) and \( x(-2) \) which may not be defined. Our
-vector \( \boldsymbol{x} \) has components \( x(0) \), \( x(1) \), \( x(2) \) and \( x(3) \). The
-index for \( \boldsymbol{x} \) runs from \( j=0 \) to \( j=3 \) since \( \boldsymbol{x} \) is meant to
+vector \( \boldsymbol{x} \) has components \( x(0) \), \( x(1) \), \( x(2) \) and \( x(3) \).
+</p>
+
+<p>The index \( j \) for \( \boldsymbol{x} \) runs from \( j=0 \) to \( j=3 \) since \( \boldsymbol{x} \) is meant to
 represent a third-order polynomial.
 </p>
 
-<p>Furthermore, the index \( i \) runs from \( i=0 \) to \( i=5 \) since \( \boldsymbol{y} \) contains the coefficients of a fifth-order polynomial.
-When \( i=5 \) we may also values of \( x(4) \) and \( x(5) \) which are not defined.
+<p>Furthermore, the index \( i \) runs from \( i=0 \) to \( i=5 \) since \( \boldsymbol{y} \)
+contains the coefficients of a fifth-order polynomial.  When \( i=5 \) we
+may also have values of \( x(4) \) and \( x(5) \) which are not defined.
 </p>
 
-<p>The solution to this is what is called <b>padding</b>!
-We simply define a new vector \( x \) with two added elements set to zero before \( x(0) \) and two new elements after \( x(3) \) set to zero. That is, we augment the
-length of \( \boldsymbol{x} \) from \( n=4 \) to \( n+2P=8 \), where \( P=2 \) is the padding constant, see discussions below as well.
+<!-- !split -->
+<h2 id="padding" class="anchor">Padding </h2>
+
+<p>The solution to this is what is called <b>padding</b>!  We simply define a
+new vector \( x \) with two added elements set to zero before \( x(0) \) and
+two new elements after \( x(3) \) set to zero. That is, we augment the
+length of \( \boldsymbol{x} \) from \( n=4 \) to \( n+2P=8 \), where \( P=2 \) is the padding
+constant (a new hyperparameter), see discussions below as well.
 </p>
 
 <!-- !split -->
 <h2 id="new-vector" class="anchor">New vector </h2>
 
-<p>We have now a new vector defined as \( x(0)=0 \), \( x(1)=0 \),
+<p>We have a new vector defined as \( x(0)=0 \), \( x(1)=0 \),
 \( x(2)=\beta_0 \), \( x(3)=\beta_1 \), \( x(4)=\beta_2 \), \( x(5)=\beta_3 \),
-\( x(6)=0 \), and \( x(7)=0 \). We have added four new elements, which
+\( x(6)=0 \), and \( x(7)=0 \).
+</p>
+
+<p>We have added four new elements, which
 are all zero. The benefit is that we can rewrite the equation for
 \( \boldsymbol{y} \), with \( i=0,1,\dots,5 \),
 </p>
@@ -728,16 +742,12 @@ $$
 y(4)=x(6)w(0)+x(5)w(1)+x(4)w(2)=0\times \alpha_0+\beta_3\alpha_1+\beta_2\alpha_2,
 $$
 
-<p>as before except that we have now the term \( x(6)w(0) \).</p>
+<p>as before except that we have an additional term \( x(6)w(0) \), which is zero.</p>
 
-<p>Similarly
-As an example, we have
-</p>
+<p>Similarly, for the fifth-order term we have</p>
 $$
-y(5)=x(7)w(0)+x(6)w(1)+x(5)w(2)=0\times \alpha_0+0\times\alpha_1+\beta_3\alpha_2,
+y(5)=x(7)w(0)+x(6)w(1)+x(5)w(2)=0\times \alpha_0+0\times\alpha_1+\beta_3\alpha_2.
 $$
-
-<p>the fifth-order term.</p>
 
 <p>The zeroth-order term is</p>
 $$
@@ -748,13 +758,13 @@ $$
 <!-- !split -->
 <h2 id="rewriting-as-dot-products" class="anchor">Rewriting as dot products </h2>
 
-<p>If we now flip the filter vector, with the following term as a typical example</p>
+<p>If we now flip the filter/weight vector, with the following term as a typical example</p>
 $$
 y(0)=x(2)w(0)+x(1)w(1)+x(0)w(2)=x(2)\tilde{w}(2)+x(1)\tilde{w}(1)+x(0)\tilde{w}(0),
 $$
 
 <p>with \( \tilde{w}(0)=w(2) \), \( \tilde{w}(1)=w(1) \), and \( \tilde{w}(2)=w(0) \), we can then rewrite the above sum as a dot product of
-\( x(i:i+(m-1))\tilde{w} \) for element $y(i), where \( x(i:i+(m-1)) \) is simply a patch of \( \boldsymbol{x} \) of size \( m-1 \).
+\( x(i:i+(m-1))\tilde{w} \) for element \( y(i) \), where \( x(i:i+(m-1)) \) is simply a patch of \( \boldsymbol{x} \) of size \( m-1 \).
 </p>
 
 <p>The padding \( P \) we have introduced for the convolution stage is just
@@ -778,8 +788,10 @@ $$
 y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i+k).
 $$
 
-<p>Both TensorFlow and PyTorch (as well as our own code example below), implement the last equation, although it is normally referred to as convolution.
-The same padding rules and stride rules discussed below apply to this expression as well.
+<p>Both TensorFlow and PyTorch (as well as our own code example below),
+implement the last equation, although it is normally referred to as
+convolution.  The same padding rules and stride rules discussed below
+apply to this expression as well.
 </p>
 
 <p>We leave it as an exercise for you to convince yourself that the example we have discussed till now, gives the same final expression using the last expression.</p>
@@ -800,16 +812,22 @@ $$
 Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
 $$
 
-<p>Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of \( m \) and \( n \).</p>
+<p>Normally the latter is more straightforward to implement in a machine
+larning library since there is less variation in the range of values
+of \( m \) and \( n \).
+</p>
 
-<p>As mentioned above, most deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
+<p>As mentioned above, most deep learning libraries implement
+cross-correlation instead of convolution (although it is referred to as
+convolution)
+</p>
 $$
 Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
 $$
 
 
 <!-- !split -->
-<h2 id="cnns-in-more-detail" class="anchor">CNNs in more detail </h2>
+<h2 id="cnns-in-more-detail-simple-example" class="anchor">CNNs in more detail, simple example  </h2>
 
 <p>Let assume we have an input matrix \( X \) of dimensionality \( 3\times 3 \)
 and a \( 2\times 2 \) filter \( W \) given by the following matrices
@@ -874,11 +892,101 @@ $$
 <p>The convolution stage, where we apply different filters \( \boldsymbol{W} \) in
 order to reduce the dimensionality of an image, adds, in addition to
 the weights and biases (to be trained by the back propagation
-algorithm) that define the filters, two hyperparameters, the so-called
+algorithm) that define the filters, two new hyperparameters, the so-called
 <b>padding</b> \( P \) and the stride \( S \).
 </p>
 
-<p>These will be discussed in the forthcoming (material to be added, see also whiteboard notes from lecture on Feb 20).</p>
+<!-- !split -->
+<h2 id="finding-the-number-of-parameters" class="anchor">Finding the number of parameters </h2>
+
+<p>In the above example we have an input matrix of dimension \( 3\times 3 \). In general we call the input for an input volume and it is by its width \( H_1 \), height \( H_1 \) and depth \( D_1 \). If we have the standard three color channels \( D_1=3 \).</p>
+
+<p>The above example has \( W_1=H_1=3 \) and \( D_1=1 \).</p>
+
+<p>When we introduce the filter we have the following additional hyperparameters</p>
+<ol>
+<li> \( K \) the number of filters. It is common to perform the convolution of the input several times since by experience shrinking the input too fast does not work well</li>
+<li> \( F \) as the filter's spatial extent</li>
+<li> \( S \) as the stride parameter</li>
+<li> \( P \) as the padding parameter</li>
+</ol>
+<p>These parameters are defined by the architecture of the network.</p>
+
+<!-- !split -->
+<h2 id="new-image-or-volume" class="anchor">New image (or volume) </h2>
+
+<p>Acting with the filter on the input volume produces an output volume
+which is defined by its width \( W_2 \), its height \( H_2 \) and its depth
+\( D_2 \).
+</p>
+
+<p>These are defined by the following relations</p>
+$$
+W_2 = \frac{(W_1-F+2P)}{S}+1,
+$$
+
+$$
+H_2 = \frac{(H_1-F+2P)}{S}+1,
+$$
+
+<p>and \( D_2=K \).</p>
+
+<!-- !split -->
+<h2 id="parameters-to-train-common-settings" class="anchor">Parameters to train, common settings </h2>
+
+<p>With parameter sharing, the convolution involves thus  for each filter  \( F\times F\times D_1 \) weights plus one bias parameter.</p>
+
+<p>In total we have</p>
+$$
+\left(F\times F\times D_1)\right) \times K+K-\mathrm{biases},
+$$
+
+<p>parameters to train by back propagation.</p>
+
+<p>It is common to let \( K \) come in powers of \( 2 \), that is \( 32 \), \( 64 \), \( 128 \) etc.</p>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<ol>
+<li> \( \begin{array}{c} F=3 &amp; S=1 &amp; P=1 \end{array} \)</li>
+<li> \( \begin{array}{c} F=5 &amp; S=1 &amp; P=2 \end{array} \)</li>
+<li> \( \begin{array}{c} F=5 &amp; S=2 &amp; P=\mathrm{open} \end{array} \)</li>
+<li> \( \begin{array}{c} F=1 &amp; S=1 &amp; P=0 \end{array} \)</li>
+</ol>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="examples-of-cnn-setups" class="anchor">Examples of CNN setups </h2>
+
+<p>Let assume an input volume \( V \) given by an image of dimensionality
+\( 32\times 32 \times 3 \), that is three color channels and \( 32 \) pixels.
+</p>
+
+<p>We apply a filter of dimension \( 5\times 5 \) ten times with stride \( S=1 \) and padding \( P=0 \).</p>
+
+<p>The output volume is given by \( (32-5)/1+1=28 \), resulting in ten images
+of dimensionality \( 28\times 28\times 3 \).
+</p>
+
+<p>The total number of parameters to train for each filter is then
+\( 5\times 5\times 3+1 \), where the last parameter is the bias. This
+gives us \( 76 \) parameters for each filter, leading to a total of \( 760 \)
+parameters for the ten filters.
+</p>
+
+<p>How many parameters will a filter of dimensionality \( 3\times 3 \)
+(adding color channels) result in if we produce \( 32 \) new images?
+</p>
+
+<p>Note that strides constitute a form of <b>subsampling</b>. As an alternative to
+being interpreted as a measure of how much the kernel/filter is translated, strides
+can also be viewed as how much of the output is retained. For instance, moving
+the kernel by hops of two is equivalent to moving the kernel by hops of one but
+retaining only odd output elements.
+</p>
 
 <!-- !split -->
 <h2 id="performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Performing a discrete convolution with padding (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
@@ -903,161 +1011,18 @@ algorithm) that define the filters, two hyperparameters, the so-called
 </center>
 
 <!-- !split -->
-<h2 id="set-of-filters" class="anchor">Set of filters </h2>
-
-<p>The collection of kernels/filters \( W \) defining a discrete convolution has a shape
-corresponding to some permutation of \( (n, m, k_1, \ldots, k_N) \), where
-</p>
-
-$$
-\begin{equation*}
-\begin{split}
-    n &\equiv \text{number of output feature maps},\\
-    m &\equiv \text{number of input feature maps},\\
-    k_j &\equiv \text{kernel size along axis $j$}.
-\end{split}
-\end{equation*}
-$$
-
-<p>The following properties affect the output size \( o_j \) of a convolutional layer
-along axis \( j \):
-</p>
-
-<ol>
-<li> \( i_j \): input size along axis \( j \),</li>
-<li> \( k_j \): kernel/filter size along axis \( j \),</li>
-<li> stride (distance between two consecutive positions of the kernel/filter) along axis \( j \),</li>
-<li> zero padding (number of zeros concatenated at the beginning and at the end of an axis) along axis \( j \).</li>
-</ol>
-<p>For instance, the above examples shows a  \( 2\times 2 \) kernel/filter \( \boldsymbol{W} \)  applied to a \( 3 \times 3 \) input padded with a \( 0 \times 0 \)
-border of zeros using \( 1 \times 1 \) strides.
-</p>
-
-<p>Note that strides constitute a form of <b>subsampling</b>. As an alternative to
-being interpreted as a measure of how much the kernel/filter is translated, strides
-can also be viewed as how much of the output is retained. For instance, moving
-the kernel by hops of two is equivalent to moving the kernel by hops of one but
-retaining only odd output elements.
-</p>
-
-<!-- !split -->
 <h2 id="pooling" class="anchor">Pooling </h2>
 
-<p>In addition to discrete convolutions themselves, {\em pooling\/} operations
+<p>In addition to discrete convolutions themselves, <b>pooling</b> operations
 make up another important building block in CNNs. Pooling operations reduce
 the size of feature maps by using some function to summarize subregions, such
 as taking the average or the maximum value.
 </p>
 
 <p>Pooling works by sliding a window across the input and feeding the content of
-the window to a {\em pooling function}. In some sense, pooling works very much
+the window to a <b>pooling function</b>. In some sense, pooling works very much
 like a discrete convolution, but replaces the linear combination described by
-the kernel with some other function. Poolin
-provides an example for average pooling, and 
-does the same for max pooling.
-</p>
-
-<p>The following properties affect the output size \( o_j \) of a pooling layer
-along axis \( j \):
-</p>
-
-<ol>
-<li> \( i_j \): input size along axis \( j \),</li>
-<li> \( k_j \): pooling window size along axis \( j \),</li>
-<li> \( s_j \): stride (distance between two consecutive positions of the pooling window) along axis \( j \).</li>
-</ol>
-<p>The analysis of the relationship between convolutional layer properties is eased
-by the fact that they don't interact across axes, i.e., the choice of kernel
-size, stride and zero padding along axis \( j \) only affects the output size of
-axis \( j \). Because of that, we will focus on the following simplified
-setting:
-</p>
-
-<ol>
-<li> 2-D discrete convolutions (\( N = 2 \)),</li>
-<li> square inputs (\( i_1 = i_2 = i \)),</li>
-<li> square kernel size (\( k_1 = k_2 = k \)),</li>
-<li> same strides along both axes (\( s_1 = s_2 = s \)),</li>
-<li> same zero padding along both axes (\( p_1 = p_2 = p \)).</li>
-</ol>
-<p>This facilitates the analysis and the visualization, but keep in mind that the
-results outlined here also generalize to the N-D and non-square cases.
-</p>
-
-<!-- !split -->
-<h2 id="no-zero-padding-unit-strides" class="anchor">No zero padding, unit strides </h2>
-
-<p>The simplest case to analyze is when the kernel just slides across every
-position of the input (i.e., \( s = 1 \) and \( p = 0 \)).
-</p>
-
-<p>For any \( i \) and \( k \), and for \( s = 1 \) and \( p = 0 \),</p>
-$$
-\begin{equation*}
-    o = (i - k) + 1.
-\end{equation*}
-$$
-
-
-<!-- !split -->
-<h2 id="zero-padding-unit-strides" class="anchor">Zero padding, unit strides </h2>
-
-<p>To factor in zero padding (i.e., only restricting to \( s = 1 \)), let's consider
-its effect on the effective input size: padding with \( p \) zeros changes the
-effective input size from \( i \) to \( i + 2p \). In the general case, we can infer the following
-relationship
-</p>
-
-<p>For any \( i \), \( k \) and \( p \), and for \( s = 1 \),</p>
-$$
-\begin{equation*}
-    o = (i - k) + 2p + 1.
-\end{equation*}
-$$
-
-
-<!-- !split -->
-<h2 id="half-same-padding" class="anchor">Half (same) padding </h2>
-
-<p>Having the output size be the same as the input size (i.e., \( o = i \)) can be a
-desirable property:
-</p>
-
-<p>For any \( i \) and for \( k \) odd (\( k = 2n + 1, \quad n \in \mathbb{N} \)), \( s = 1 \) and
-\( p = \lfloor k / 2 \rfloor = n \),
-</p>
-$$
-\begin{equation*}
-\begin{split}
-    o &= i + 2 \lfloor k / 2 \rfloor - (k - 1) \\
-      &= i + 2n - 2n \\
-      &= i.
-\end{split}
-\end{equation*}
-$$
-
-
-<!-- !split -->
-<h2 id="full-padding" class="anchor">Full padding </h2>
-
-<p>While convolving a kernel generally decreases the output size with
-respect to the input size, sometimes the opposite is required. This can be
-achieved with proper zero padding:
-</p>
-
-<p>For any \( i \) and \( k \), and for \( p = k - 1 \) and \( s = 1 \),</p>
-$$
-\begin{equation*}
-\begin{split}
-    o &= i + 2(k - 1) - (k - 1) \\
-      &= i + (k - 1).
-\end{split}
-\end{equation*}
-$$
-
-<p>This is sometimes referred to as full padding, because in this
-setting every possible partial or complete superimposition of the kernel on the
-input feature map is taken into account. 
+the kernel with some other function.
 </p>
 
 <!-- !split -->
@@ -1071,17 +1036,7 @@ mean or average pooling, which all share the same idea of aggregating the input
 locally by applying a non-linearity to the content of some patches.
 </p>
 
-<p>Since pooling does not involve
-zero padding, the relationship describing the general case is as follows:
-</p>
-
-<p>For any \( i \), \( k \) and \( s \),</p>
-$$
-\begin{equation*}
-    o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
-\end{equation*}
-$$
-
+<p>More on pooling on whiteboard notes from Feb 20.</p>
 
 <!-- !split -->
 <h2 id="pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book" class="anchor">Pooling types (<a href="https://github.com/rasbt/machine-learning-book" target="_self">From Raschka et al</a>) </h2>
