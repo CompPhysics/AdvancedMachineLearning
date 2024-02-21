@@ -66,6 +66,8 @@ Furthermore, all teaching material is available from this GitHub link.
 - Mathematics of  CNNs and discussion of codes
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and Raschka et al chapter 14
+- Video of lecture at https://youtu.be/jqgSED0tF70
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary20.pdf
 
 ## February 26-March 1
 - Recurrent neural networks, basic mathematics and structure
