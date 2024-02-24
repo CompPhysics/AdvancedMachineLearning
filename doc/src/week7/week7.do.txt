@@ -2,12 +2,46 @@ TITLE: February 26-March 1: Advanced machine learning and data analysis for the 
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
 DATE: February 26-March 1, 2024
 
-===== Plans for the weeks February 26-March 1  =====
+===== Plans for the week February 26-March 1  =====
 
 !bblock
 
 * Finalizing discussion of Convolutional  Neural Networks (CNNs)
 * Discussion of recurrent neural networks (RNNs)
+
+
+
+
+
+
+!split
+===== From FFNNs and CNNs to recurrent neural networks (RNNs) =====
+
+There are limitation of FFNNs, one of which being that FFNNs are not
+designed to handle sequential data (data for which the order matters)
+effectively because they lack the capabilities of storing information
+about previous inputs; each input is being treated indepen-
+dently. This is a limitation when dealing with sequential data where
+past information can be vital to correctly process current and future
+inputs. 
+
+
+In contrast to FFNs, recurrent networks introduce feedback
+connections, meaning the information is al- lowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time- series data,
+natural language processing, speech recog- nition, and several other
+problems for which the order of the data is crucial.  RNN
+architectures vary greatly in how they manage information flow and
+memory in the network. Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients. This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long.
 
 
 
