@@ -8,8 +8,8 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="February 27-March 10: Advanced machine learning and data analysis for the physical sciences">
-<title>February 27-March 10: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="February 26-March 1: Advanced machine learning and data analysis for the physical sciences">
+<title>February 26-March 1: Advanced machine learning and data analysis for the physical sciences</title>
 <!-- Bootstrap style: bootstrap -->
 <!-- doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=default --html_admon=bootstrap_panel --html_output=week7-bs --no_mako -->
 <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -36,67 +36,55 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the weeks February 27-March 10',
+ 'sections': [('Plans for the week February 26-March 1',
                2,
                None,
-               'plans-for-the-weeks-february-27-march-10'),
-              ('Building convolutional neural networks in Tensorflow and Keras',
+               'plans-for-the-week-february-26-march-1'),
+              ('From FFNNs and CNNs to recurrent neural networks (RNNs)',
                2,
                None,
-               'building-convolutional-neural-networks-in-tensorflow-and-keras'),
-              ('Setting it up', 2, None, 'setting-it-up'),
-              ('The MNIST dataset again', 2, None, 'the-mnist-dataset-again'),
-              ('Strong correlations', 2, None, 'strong-correlations'),
-              ('Layers of a CNN', 2, None, 'layers-of-a-cnn'),
-              ('Systematic reduction', 2, None, 'systematic-reduction'),
-              ('Prerequisites: Collect and pre-process data',
-               2,
-               None,
-               'prerequisites-collect-and-pre-process-data'),
-              ('Importing Keras and Tensorflow',
-               2,
-               None,
-               'importing-keras-and-tensorflow'),
-              ('Running with Keras', 2, None, 'running-with-keras'),
-              ('Final part', 2, None, 'final-part'),
-              ('Final visualization', 2, None, 'final-visualization'),
+               'from-ffnns-and-cnns-to-recurrent-neural-networks-rnns'),
               ('Recurrent neural networks (RNNs): Overarching view',
                2,
                None,
                'recurrent-neural-networks-rnns-overarching-view'),
               ('A simple example', 2, None, 'a-simple-example'),
-              ('Memoryless models', 3, None, 'memoryless-models'),
-              ('Linear dynamical model', 3, None, 'linear-dynamical-model'),
-              ('Hidden Markov Models', 3, None, 'hidden-markov-models'),
-              ('RNNs', 3, None, 'rnns'),
+              ('Memoryless models', 2, None, 'memoryless-models'),
+              ('Linear dynamical model', 2, None, 'linear-dynamical-model'),
+              ('Hidden Markov Models', 2, None, 'hidden-markov-models'),
+              ('RNNs', 2, None, 'rnns'),
               ('Do generative models need to be stochastic?',
-               3,
+               2,
                None,
                'do-generative-models-need-to-be-stochastic'),
+              ('Recurrent neural networks are deterministic',
+               2,
+               None,
+               'recurrent-neural-networks-are-deterministic'),
               ('What kinds of behaviour can RNNs exhibit?',
-               3,
+               2,
                None,
                'what-kinds-of-behaviour-can-rnns-exhibit'),
               ('Basic layout', 2, None, 'basic-layout'),
               ('We need to specify the initial activity state of all the '
                'hidden and output units',
-               3,
+               2,
                None,
                'we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units'),
               ('We can specify inputs in several ways',
-               3,
+               2,
                None,
                'we-can-specify-inputs-in-several-ways'),
               ('We can specify targets in several ways',
-               3,
+               2,
                None,
                'we-can-specify-targets-in-several-ways'),
               ('Backpropagation through time',
-               3,
+               2,
                None,
                'backpropagation-through-time'),
               ('The backward pass is linear',
-               3,
+               2,
                None,
                'the-backward-pass-is-linear'),
               ('The problem of exploding or vanishing gradients',
@@ -108,11 +96,11 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'four-effective-ways-to-learn-an-rnn'),
               ('Long Short Term Memory (LSTM)',
-               3,
+               2,
                None,
                'long-short-term-memory-lstm'),
               ('Implementing a memory cell in a neural network',
-               3,
+               2,
                None,
                'implementing-a-memory-cell-in-a-neural-network'),
               ('An extrapolation example', 2, None, 'an-extrapolation-example'),
@@ -125,7 +113,17 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
               ('Other Types of Recurrent Neural Networks',
                2,
                None,
-               'other-types-of-recurrent-neural-networks')]}
+               'other-types-of-recurrent-neural-networks'),
+              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
+              ('A typical RNN', 2, None, 'a-typical-rnn'),
+              ('Gating mechanism: Long Short Term Memory (LSTM)',
+               2,
+               None,
+               'gating-mechanism-long-short-term-memory-lstm'),
+              ('Implementing a memory cell in a neural network',
+               2,
+               None,
+               'implementing-a-memory-cell-in-a-neural-network')]}
 end of tocinfo -->
 
 <body>
@@ -153,48 +151,43 @@ MathJax.Hub.Config({
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="week7-bs.html">February 27-March 10: Advanced machine learning and data analysis for the physical sciences</a>
+    <a class="navbar-brand" href="week7-bs.html">February 26-March 1: Advanced machine learning and data analysis for the physical sciences</a>
   </div>
   <div class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
-     <!-- navigation toc: --> <li><a href="#plans-for-the-weeks-february-27-march-10" style="font-size: 80%;"><b>Plans for the weeks February 27-March 10</b></a></li>
-     <!-- navigation toc: --> <li><a href="#building-convolutional-neural-networks-in-tensorflow-and-keras" style="font-size: 80%;"><b>Building convolutional neural networks in Tensorflow and Keras</b></a></li>
-     <!-- navigation toc: --> <li><a href="#setting-it-up" style="font-size: 80%;"><b>Setting it up</b></a></li>
-     <!-- navigation toc: --> <li><a href="#the-mnist-dataset-again" style="font-size: 80%;"><b>The MNIST dataset again</b></a></li>
-     <!-- navigation toc: --> <li><a href="#strong-correlations" style="font-size: 80%;"><b>Strong correlations</b></a></li>
-     <!-- navigation toc: --> <li><a href="#layers-of-a-cnn" style="font-size: 80%;"><b>Layers of a CNN</b></a></li>
-     <!-- navigation toc: --> <li><a href="#systematic-reduction" style="font-size: 80%;"><b>Systematic reduction</b></a></li>
-     <!-- navigation toc: --> <li><a href="#prerequisites-collect-and-pre-process-data" style="font-size: 80%;"><b>Prerequisites: Collect and pre-process data</b></a></li>
-     <!-- navigation toc: --> <li><a href="#importing-keras-and-tensorflow" style="font-size: 80%;"><b>Importing Keras and Tensorflow</b></a></li>
-     <!-- navigation toc: --> <li><a href="#running-with-keras" style="font-size: 80%;"><b>Running with Keras</b></a></li>
-     <!-- navigation toc: --> <li><a href="#final-part" style="font-size: 80%;"><b>Final part</b></a></li>
-     <!-- navigation toc: --> <li><a href="#final-visualization" style="font-size: 80%;"><b>Final visualization</b></a></li>
-     <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;"><b>Recurrent neural networks (RNNs): Overarching view</b></a></li>
-     <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;"><b>A simple example</b></a></li>
-     <!-- navigation toc: --> <li><a href="#memoryless-models" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Memoryless models</a></li>
-     <!-- navigation toc: --> <li><a href="#linear-dynamical-model" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Linear dynamical model</a></li>
-     <!-- navigation toc: --> <li><a href="#hidden-markov-models" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Hidden Markov Models</a></li>
-     <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#do-generative-models-need-to-be-stochastic" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Do generative models need to be stochastic?</a></li>
-     <!-- navigation toc: --> <li><a href="#what-kinds-of-behaviour-can-rnns-exhibit" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;What kinds of behaviour can RNNs exhibit?</a></li>
-     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;"><b>Basic layout</b></a></li>
-     <!-- navigation toc: --> <li><a href="#we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;We need to specify the initial activity state of all the hidden and output units</a></li>
-     <!-- navigation toc: --> <li><a href="#we-can-specify-inputs-in-several-ways" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;We can specify inputs in several ways</a></li>
-     <!-- navigation toc: --> <li><a href="#we-can-specify-targets-in-several-ways" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;We can specify targets in several ways</a></li>
-     <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Backpropagation through time</a></li>
-     <!-- navigation toc: --> <li><a href="#the-backward-pass-is-linear" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;The backward pass is linear</a></li>
-     <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;"><b>The problem of exploding or vanishing gradients</b></a></li>
-     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn" style="font-size: 80%;"><b>Four effective ways to learn an RNN</b></a></li>
-     <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Long Short Term Memory (LSTM)</a></li>
-     <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Implementing a memory cell in a neural network</a></li>
-     <!-- navigation toc: --> <li><a href="#an-extrapolation-example" style="font-size: 80%;"><b>An extrapolation example</b></a></li>
-     <!-- navigation toc: --> <li><a href="#formatting-the-data" style="font-size: 80%;"><b>Formatting the Data</b></a></li>
-     <!-- navigation toc: --> <li><a href="#predicting-new-points-with-a-trained-recurrent-neural-network" style="font-size: 80%;"><b>Predicting New Points With A Trained Recurrent Neural Network</b></a></li>
-     <!-- navigation toc: --> <li><a href="#other-things-to-try" style="font-size: 80%;"><b>Other Things to Try</b></a></li>
-     <!-- navigation toc: --> <li><a href="#other-types-of-recurrent-neural-networks" style="font-size: 80%;"><b>Other Types of Recurrent Neural Networks</b></a></li>
+     <!-- navigation toc: --> <li><a href="#plans-for-the-week-february-26-march-1" style="font-size: 80%;">Plans for the week February 26-March 1</a></li>
+     <!-- navigation toc: --> <li><a href="#from-ffnns-and-cnns-to-recurrent-neural-networks-rnns" style="font-size: 80%;">From FFNNs and CNNs to recurrent neural networks (RNNs)</a></li>
+     <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;">Recurrent neural networks (RNNs): Overarching view</a></li>
+     <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;">A simple example</a></li>
+     <!-- navigation toc: --> <li><a href="#memoryless-models" style="font-size: 80%;">Memoryless models</a></li>
+     <!-- navigation toc: --> <li><a href="#linear-dynamical-model" style="font-size: 80%;">Linear dynamical model</a></li>
+     <!-- navigation toc: --> <li><a href="#hidden-markov-models" style="font-size: 80%;">Hidden Markov Models</a></li>
+     <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;">RNNs</a></li>
+     <!-- navigation toc: --> <li><a href="#do-generative-models-need-to-be-stochastic" style="font-size: 80%;">Do generative models need to be stochastic?</a></li>
+     <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-are-deterministic" style="font-size: 80%;">Recurrent neural networks are deterministic</a></li>
+     <!-- navigation toc: --> <li><a href="#what-kinds-of-behaviour-can-rnns-exhibit" style="font-size: 80%;">What kinds of behaviour can RNNs exhibit?</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units" style="font-size: 80%;">We need to specify the initial activity state of all the hidden and output units</a></li>
+     <!-- navigation toc: --> <li><a href="#we-can-specify-inputs-in-several-ways" style="font-size: 80%;">We can specify inputs in several ways</a></li>
+     <!-- navigation toc: --> <li><a href="#we-can-specify-targets-in-several-ways" style="font-size: 80%;">We can specify targets in several ways</a></li>
+     <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;">Backpropagation through time</a></li>
+     <!-- navigation toc: --> <li><a href="#the-backward-pass-is-linear" style="font-size: 80%;">The backward pass is linear</a></li>
+     <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;">The problem of exploding or vanishing gradients</a></li>
+     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn" style="font-size: 80%;">Four effective ways to learn an RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">Long Short Term Memory (LSTM)</a></li>
+     <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">Implementing a memory cell in a neural network</a></li>
+     <!-- navigation toc: --> <li><a href="#an-extrapolation-example" style="font-size: 80%;">An extrapolation example</a></li>
+     <!-- navigation toc: --> <li><a href="#formatting-the-data" style="font-size: 80%;">Formatting the Data</a></li>
+     <!-- navigation toc: --> <li><a href="#predicting-new-points-with-a-trained-recurrent-neural-network" style="font-size: 80%;">Predicting New Points With A Trained Recurrent Neural Network</a></li>
+     <!-- navigation toc: --> <li><a href="#other-things-to-try" style="font-size: 80%;">Other Things to Try</a></li>
+     <!-- navigation toc: --> <li><a href="#other-types-of-recurrent-neural-networks" style="font-size: 80%;">Other Types of Recurrent Neural Networks</a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
+     <!-- navigation toc: --> <li><a href="#a-typical-rnn" style="font-size: 80%;">A typical RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#gating-mechanism-long-short-term-memory-lstm" style="font-size: 80%;">Gating mechanism: Long Short Term Memory (LSTM)</a></li>
+     <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">Implementing a memory cell in a neural network</a></li>
 
         </ul>
       </li>
@@ -207,7 +200,7 @@ MathJax.Hub.Config({
 <!-- ------------------- main content ---------------------- -->
 <div class="jumbotron">
 <center>
-<h1>February 27-March 10: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>February 26-March 1: Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
@@ -223,399 +216,57 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>February 27-March 10, 2023</h4>
+<h4>February 26-March 1, 2024</h4>
 </center> <!-- date -->
 <br>
 
-
+<!-- potential-jumbotron-button -->
 </div> <!-- end jumbotron -->
-<h2 id="plans-for-the-weeks-february-27-march-10" class="anchor">Plans for the weeks February 27-March 10  </h2>
+
+<!-- !split -->
+<h2 id="plans-for-the-week-february-26-march-1" class="anchor">Plans for the week February 26-March 1  </h2>
 
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-
-<ul>
+<ol>
 <li> Finalizing discussion of Convolutional  Neural Networks (CNNs)</li>
 <li> Discussion of recurrent neural networks (RNNs)</li>
-<li> <a href="https://youtu.be/_K8PEN0M0g8" target="_self">Video of lecture</a></li>
-<li> Reading recommendations:
-<ol type="a"></li>
- <li> For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9 and for RNNs, see chapter 10. See also chapter 11 and 12 on practicalities and applications</li>
- <li> Reading suggestions for implementation of CNNs and RNNs: <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf" target="_self">Aurelien Geron's chapters 13 and 14</a>.</li> 
+<li> Reading recommendations: Goodfellow et al, Deep Learning, chpater 10</li>
 </ol>
-</ul>
-</div>
-</div>
-
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<ul>
-<li> <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_self">Video on Deep Learning</a></li>
-<li> <a href="https://www.youtube.com/watch?v=iaSUYvmCekI&ab_channel=AlexanderAmini" target="_self">Video  on Convolutional Neural Networks from MIT</a></li>
-<li> <a href="https://www.youtube.com/watch?v=bNb2fEVKeEo&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=6&ab_channel=StanfordUniversitySchoolofEngineering" target="_self">Video on CNNs from Stanford</a></li>
-</ul>
 </div>
 </div>
 
 
 <!-- !split -->
-<h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras" class="anchor">Building convolutional neural networks in Tensorflow and Keras </h2>
+<h2 id="from-ffnns-and-cnns-to-recurrent-neural-networks-rnns" class="anchor">From FFNNs and CNNs to recurrent neural networks (RNNs) </h2>
 
-<p>As discussed above, CNNs are neural networks built from the assumption that the inputs
-to the network are 2D images. This is important because the number of features or pixels in images
-grows very fast with the image size, and an enormous number of weights and biases are needed in order to build an accurate network.  
+<p>There are limitation of FFNNs, one of which being that FFNNs are not
+designed to handle sequential data (data for which the order matters)
+effectively because they lack the capabilities of storing information
+about previous inputs; each input is being treated indepen-
+dently. This is a limitation when dealing with sequential data where
+past information can be vital to correctly process current and future
+inputs. 
 </p>
 
-<p>As before, we still have our input, a hidden layer and an output. What's novel about convolutional networks
-are the <b>convolutional</b> and <b>pooling</b> layers stacked in pairs between the input and the hidden layer.
-In addition, the data is no longer represented as a 2D feature matrix, instead each input is a number of 2D
-matrices, typically 1 for each color dimension (Red, Green, Blue). 
+<p>In contrast to FFNs, recurrent networks introduce feedback
+connections, meaning the information is al- lowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time- series data,
+natural language processing, speech recog- nition, and several other
+problems for which the order of the data is crucial.  RNN
+architectures vary greatly in how they manage information flow and
+memory in the network. Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients. This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long.
 </p>
-
-<!-- !split -->
-<h2 id="setting-it-up" class="anchor">Setting it up </h2>
-
-<p>It means that to represent the entire
-dataset of images, we require a 4D matrix or <b>tensor</b>. This tensor has the dimensions:  
-</p>
-$$  
-(n_{inputs},\, n_{pixels, width},\, n_{pixels, height},\, depth) .
-$$
-
-
-<!-- !split -->
-<h2 id="the-mnist-dataset-again" class="anchor">The MNIST dataset again </h2>
-
-<p>The MNIST dataset consists of grayscale images with a pixel size of
-\( 28\times 28 \), meaning we require \( 28 \times 28 = 724 \) weights to each
-neuron in the first hidden layer.
-</p>
-
-<p>If we were to analyze images of size \( 128\times 128 \) we would require
-\( 128 \times 128 = 16384 \) weights to each neuron. Even worse if we were
-dealing with color images, as most images are, we have an image matrix
-of size \( 128\times 128 \) for each color dimension (Red, Green, Blue),
-meaning 3 times the number of weights \( = 49152 \) are required for every
-single neuron in the first hidden layer.
-</p>
-
-
-<!-- !split -->
-<h2 id="strong-correlations" class="anchor">Strong correlations </h2>
-
-<p>Images typically have strong local correlations, meaning that a small
-part of the image varies little from its neighboring regions. If for
-example we have an image of a blue car, we can roughly assume that a
-small blue part of the image is surrounded by other blue regions.
-</p>
-
-<p>Therefore, instead of connecting every single pixel to a neuron in the
-first hidden layer, as we have previously done with deep neural
-networks, we can instead connect each neuron to a small part of the
-image (in all 3 RGB depth dimensions).  The size of each small area is
-fixed, and known as a <a href="https://en.wikipedia.org/wiki/Receptive_field" target="_self">receptive</a>.
-</p>
-
-
-<!-- !split  -->
-<h2 id="layers-of-a-cnn" class="anchor">Layers of a CNN </h2>
-<p>The layers of a convolutional neural network arrange neurons in 3D: width, height and depth.  
-The input image is typically a square matrix of depth 3. 
-</p>
-
-<p>A <b>convolution</b> is performed on the image which outputs
-a 3D volume of neurons. The weights to the input are arranged in a number of 2D matrices, known as <b>filters</b>.
-</p>
-
-<p>Each filter slides along the input image, taking the dot product
-between each small part of the image and the filter, in all depth
-dimensions. This is then passed through a non-linear function,
-typically the <b>Rectified Linear (ReLu)</b> function, which serves as the
-activation of the neurons in the first convolutional layer. This is
-further passed through a <b>pooling layer</b>, which reduces the size of the
-convolutional layer, e.g. by taking the maximum or average across some
-small regions, and this serves as input to the next convolutional
-layer.
-</p>
-
-<!-- !split -->
-<h2 id="systematic-reduction" class="anchor">Systematic reduction </h2>
-
-<p>By systematically reducing the size of the input volume, through
-convolution and pooling, the network should create representations of
-small parts of the input, and then from them assemble representations
-of larger areas.  The final pooling layer is flattened to serve as
-input to a hidden layer, such that each neuron in the final pooling
-layer is connected to every single neuron in the hidden layer. This
-then serves as input to the output layer, e.g. a softmax output for
-classification.
-</p>
-
-
-<!-- !split -->
-<h2 id="prerequisites-collect-and-pre-process-data" class="anchor">Prerequisites: Collect and pre-process data </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># import necessary packages</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn</span> <span style="color: #008000; font-weight: bold">import</span> datasets
-
-
-<span style="color: #408080; font-style: italic"># ensure the same random numbers appear every time</span>
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">0</span>)
-
-<span style="color: #408080; font-style: italic"># display images in notebook</span>
-<span style="color: #666666">%</span>matplotlib inline
-plt<span style="color: #666666">.</span>rcParams[<span style="color: #BA2121">&#39;figure.figsize&#39;</span>] <span style="color: #666666">=</span> (<span style="color: #666666">12</span>,<span style="color: #666666">12</span>)
-
-
-<span style="color: #408080; font-style: italic"># download MNIST dataset</span>
-digits <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>load_digits()
-
-<span style="color: #408080; font-style: italic"># define inputs and labels</span>
-inputs <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>images
-labels <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>target
-
-<span style="color: #408080; font-style: italic"># RGB images have a depth of 3</span>
-<span style="color: #408080; font-style: italic"># our images are grayscale so they should have a depth of 1</span>
-inputs <span style="color: #666666">=</span> inputs[:,:,:,np<span style="color: #666666">.</span>newaxis]
-
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;inputs = (n_inputs, pixel_width, pixel_height, depth) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(inputs<span style="color: #666666">.</span>shape))
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;labels = (n_inputs) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(labels<span style="color: #666666">.</span>shape))
-
-
-<span style="color: #408080; font-style: italic"># choose some random images to display</span>
-n_inputs <span style="color: #666666">=</span> <span style="color: #008000">len</span>(inputs)
-indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(n_inputs)
-random_indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>choice(indices, size<span style="color: #666666">=5</span>)
-
-<span style="color: #008000; font-weight: bold">for</span> i, image <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(digits<span style="color: #666666">.</span>images[random_indices]):
-    plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">1</span>, <span style="color: #666666">5</span>, i<span style="color: #666666">+1</span>)
-    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
-    plt<span style="color: #666666">.</span>imshow(image, cmap<span style="color: #666666">=</span>plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>gray_r, interpolation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;nearest&#39;</span>)
-    plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;Label: </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> digits<span style="color: #666666">.</span>target[random_indices[i]])
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="importing-keras-and-tensorflow" class="anchor">Importing Keras and Tensorflow </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Input
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Sequential      <span style="color: #408080; font-style: italic">#This allows appending layers to existing models</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Dense           <span style="color: #408080; font-style: italic">#This allows defining the characteristics of a particular layer</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> optimizers             <span style="color: #408080; font-style: italic">#This allows using whichever optimiser we want (sgd,adam,RMSprop)</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> regularizers           <span style="color: #408080; font-style: italic">#This allows using whichever regularizer we want (l1,l2,l1_l2)</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.utils</span> <span style="color: #008000; font-weight: bold">import</span> to_categorical   <span style="color: #408080; font-style: italic">#This allows using categorical cross entropy as the cost function</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import Conv2D</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import MaxPooling2D</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import Flatten</span>
-
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn.model_selection</span> <span style="color: #008000; font-weight: bold">import</span> train_test_split
-
-<span style="color: #408080; font-style: italic"># representation of labels</span>
-labels <span style="color: #666666">=</span> to_categorical(labels)
-
-<span style="color: #408080; font-style: italic"># split into train and test data</span>
-<span style="color: #408080; font-style: italic"># one-liner from scikit-learn library</span>
-train_size <span style="color: #666666">=</span> <span style="color: #666666">0.8</span>
-test_size <span style="color: #666666">=</span> <span style="color: #666666">1</span> <span style="color: #666666">-</span> train_size
-X_train, X_test, Y_train, Y_test <span style="color: #666666">=</span> train_test_split(inputs, labels, train_size<span style="color: #666666">=</span>train_size,
-                                                    test_size<span style="color: #666666">=</span>test_size)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split  -->
-<h2 id="running-with-keras" class="anchor">Running with Keras </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_convolutional_neural_network_keras</span>(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd):
-    model <span style="color: #666666">=</span> Sequential()
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(n_filters, (receptive_field, receptive_field), input_shape<span style="color: #666666">=</span>input_shape, padding<span style="color: #666666">=</span><span style="color: #BA2121">&#39;same&#39;</span>,
-              activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D(pool_size<span style="color: #666666">=</span>(<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_neurons_connected, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_categories, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;softmax&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    
-    sgd <span style="color: #666666">=</span> optimizers<span style="color: #666666">.</span>SGD(lr<span style="color: #666666">=</span>eta)
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;categorical_crossentropy&#39;</span>, optimizer<span style="color: #666666">=</span>sgd, metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
-    
-    <span style="color: #008000; font-weight: bold">return</span> model
-
-epochs <span style="color: #666666">=</span> <span style="color: #666666">100</span>
-batch_size <span style="color: #666666">=</span> <span style="color: #666666">100</span>
-input_shape <span style="color: #666666">=</span> X_train<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>:<span style="color: #666666">4</span>]
-receptive_field <span style="color: #666666">=</span> <span style="color: #666666">3</span>
-n_filters <span style="color: #666666">=</span> <span style="color: #666666">10</span>
-n_neurons_connected <span style="color: #666666">=</span> <span style="color: #666666">50</span>
-n_categories <span style="color: #666666">=</span> <span style="color: #666666">10</span>
-
-eta_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
-lmbd_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="final-part" class="anchor">Final part </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">CNN_keras <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)), dtype<span style="color: #666666">=</span><span style="color: #008000">object</span>)
-        
-<span style="color: #008000; font-weight: bold">for</span> i, eta <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(eta_vals):
-    <span style="color: #008000; font-weight: bold">for</span> j, lmbd <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(lmbd_vals):
-        CNN <span style="color: #666666">=</span> create_convolutional_neural_network_keras(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd)
-        CNN<span style="color: #666666">.</span>fit(X_train, Y_train, epochs<span style="color: #666666">=</span>epochs, batch_size<span style="color: #666666">=</span>batch_size, verbose<span style="color: #666666">=0</span>)
-        scores <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)
-        
-        CNN_keras[i][j] <span style="color: #666666">=</span> CNN
-        
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Learning rate = &quot;</span>, eta)
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Lambda = &quot;</span>, lmbd)
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Test accuracy: </span><span style="color: #BB6688; font-weight: bold">%.3f</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> scores[<span style="color: #666666">1</span>])
-        <span style="color: #008000">print</span>()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="final-visualization" class="anchor">Final visualization </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># visual representation of grid search</span>
-<span style="color: #408080; font-style: italic"># uses seaborn heatmap, could probably do this in matplotlib</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">seaborn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">sns</span>
-
-sns<span style="color: #666666">.</span>set()
-
-train_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
-test_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
-
-<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(eta_vals)):
-    <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(lmbd_vals)):
-        CNN <span style="color: #666666">=</span> CNN_keras[i][j]
-
-        train_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_train, Y_train)[<span style="color: #666666">1</span>]
-        test_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)[<span style="color: #666666">1</span>]
-
-        
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
-sns<span style="color: #666666">.</span>heatmap(train_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
-ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Training Accuracy&quot;</span>)
-ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
-ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
-sns<span style="color: #666666">.</span>heatmap(test_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
-ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Test Accuracy&quot;</span>)
-ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
-ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!-- !split -->
 <h2 id="recurrent-neural-networks-rnns-overarching-view" class="anchor">Recurrent neural networks (RNNs): Overarching view </h2>
@@ -726,7 +377,10 @@ plt<span style="color: #666666">.</span>show()
     </div>
   </div>
 </div>
-<h3 id="memoryless-models" class="anchor">Memoryless models </h3>
+
+
+<!-- !split -->
+<h2 id="memoryless-models" class="anchor">Memoryless models </h2>
 
 <p>Autoregressive models Predict the next term in a sequence from a fixed number of previous terms using <b>delay taps</b>.</p>
 
@@ -753,7 +407,10 @@ interesting kind of model.
 <p>space of hidden state vectors.</p>
 
 <p>This inference is only tractable for two types of hidden state model.</p>
-<h3 id="linear-dynamical-model" class="anchor">Linear dynamical model </h3>
+
+<p>split
+<h2 id="linear-dynamical-model" class="anchor">Linear dynamical model </h2>
+</p>
 
 <p>If we give our generative model some hidden state, and if we give
 this hidden state its own internal dynamics, we get a much more
@@ -766,7 +423,8 @@ interesting kind of model.
 </ol>
 <li> The best we can do is to infer a probability distribution over the space of hidden state vectors.</li>
 </ol>
-<h3 id="hidden-markov-models" class="anchor">Hidden Markov Models </h3>
+<!-- !split -->
+<h2 id="hidden-markov-models" class="anchor">Hidden Markov Models </h2>
 <p>Hidden Markov Models have a discrete oneof-\( N \) hidden state. Transitions between states
 are stochastic and controlled by a transition
 matrix. The outputs produced by a state are
@@ -778,7 +436,9 @@ stochastic.
 <li> To predict the next output we need to infer the probability distribution over hidden states.</li>
 </ul>
 <p>HMMs have efficient algorithms for inference and learning</p>
-<h3 id="rnns" class="anchor">RNNs </h3>
+
+<!-- !split -->
+<h2 id="rnns" class="anchor">RNNs </h2>
 
 <p>RNNs are very powerful, because they
 combine two properties:
@@ -791,7 +451,9 @@ combine two properties:
 can compute anything that can be
 computed by your computer.
 </p>
-<h3 id="do-generative-models-need-to-be-stochastic" class="anchor">Do generative models need to be stochastic? </h3>
+
+<!-- !split -->
+<h2 id="do-generative-models-need-to-be-stochastic" class="anchor">Do generative models need to be stochastic? </h2>
 
 <div class="panel panel-default">
 <div class="panel-body">
@@ -808,6 +470,8 @@ data.
 </div>
  
 
+<!-- !split -->
+<h2 id="recurrent-neural-networks-are-deterministic" class="anchor">Recurrent neural networks are deterministic </h2>
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
@@ -823,7 +487,9 @@ model.
 </div>
 </div>
 
-<h3 id="what-kinds-of-behaviour-can-rnns-exhibit" class="anchor">What kinds of behaviour can RNNs exhibit? </h3>
+
+<!-- !split -->
+<h2 id="what-kinds-of-behaviour-can-rnns-exhibit" class="anchor">What kinds of behaviour can RNNs exhibit? </h2>
 <ol>
 <li> They can oscillate.</li> 
 <li> They can settle to point attractors.</li>
@@ -835,12 +501,10 @@ model.
 <!-- !split -->
 <h2 id="basic-layout" class="anchor">Basic layout </h2>
 
-<br/><br/>
-<center>
-<p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-<h3 id="we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units" class="anchor">We need to specify the initial activity state of all the hidden and output units </h3>
+<!-- FIGURE: [figslides/RNN1.png, width=700 frac=0.9] -->
+
+<!-- !split -->
+<h2 id="we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units" class="anchor">We need to specify the initial activity state of all the hidden and output units </h2>
 
 <ol>
 <li> We could just fix these initial states to have some default value like 0.5.</li>
@@ -852,7 +516,8 @@ model.
  <li> Adjust the initial states by following the negative gradient.</li> 
 </ol>
 </ol>
-<h3 id="we-can-specify-inputs-in-several-ways" class="anchor">We can specify inputs in several ways </h3>
+<!-- !split -->
+<h2 id="we-can-specify-inputs-in-several-ways" class="anchor">We can specify inputs in several ways </h2>
 
 <ol>
 <li> Specify the initial states of all the units.</li>
@@ -860,7 +525,9 @@ model.
 <li> Specify the states of the same subset of the units at every time step.</li>
 </ol>
 <p>This is the natural way to model most sequential data. </p>
-<h3 id="we-can-specify-targets-in-several-ways" class="anchor">We can specify targets in several ways </h3>
+
+<!-- !split -->
+<h2 id="we-can-specify-targets-in-several-ways" class="anchor">We can specify targets in several ways </h2>
 
 <ol>
 <li> Specify desired final activities of all the units</li>
@@ -872,30 +539,8 @@ model.
 </ul>
 <li> The other units are input or hidden units.</li> 
 </ol>
-<br/><br/>
-<center>
-<p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN3.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-<h3 id="backpropagation-through-time" class="anchor">Backpropagation through time </h3>
+<!-- !split -->
+<h2 id="backpropagation-through-time" class="anchor">Backpropagation through time </h2>
 
 <div class="panel panel-default">
 <div class="panel-body">
@@ -914,7 +559,8 @@ with weight constraints.
 <li> The backward pass peels activities off the stack to compute the error derivatives at each time step.</li>
 <li> After the backward pass we add together the derivatives at all the different times for each weight.</li> 
 </ol>
-<h3 id="the-backward-pass-is-linear" class="anchor">The backward pass is linear </h3>
+<!-- !split -->
+<h2 id="the-backward-pass-is-linear" class="anchor">The backward pass is linear </h2>
 
 <ol>
 <li> There is a big difference between the forward and backward passes.</li>
@@ -924,48 +570,6 @@ with weight constraints.
 <p>The forward pass determines the slope of the linear function used for
 backpropagating through each neuron
 </p>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN6.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN7.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN8.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN10.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN11.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
 
 <!-- !split  -->
 <h2 id="the-problem-of-exploding-or-vanishing-gradients" class="anchor">The problem of exploding or vanishing gradients </h2>
@@ -995,7 +599,8 @@ backpropagating through each neuron
 </ul>
 <li> Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum</li>
 </ol>
-<h3 id="long-short-term-memory-lstm" class="anchor">Long Short Term Memory (LSTM) </h3>
+<!-- !split -->
+<h2 id="long-short-term-memory-lstm" class="anchor">Long Short Term Memory (LSTM) </h2>
 
 <p>LSTM uses a memory cell for 
  modeling long-range dependencies and avoid vanishing gradient
@@ -1009,7 +614,8 @@ backpropagating through each neuron
 <li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
 <li> Information can be read from the cell by turning on its <b>read</b> gate.</li> 
 </ol>
-<h3 id="implementing-a-memory-cell-in-a-neural-network" class="anchor">Implementing a memory cell in a neural network </h3>
+<!-- !split -->
+<h2 id="implementing-a-memory-cell-in-a-neural-network" class="anchor">Implementing a memory cell in a neural network </h2>
 <p>To preserve information for a long time in
 the activities of an RNN, we use a circuit
 that implements an analog memory cell.
@@ -1021,66 +627,6 @@ that implements an analog memory cell.
 <li> Information is retrieved by activating the read gate.</li>
 <li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
 </ol>
-<br/><br/>
-<center>
-<p><img src="figslides/RNN13.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN14.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN15.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN16.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN17.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN18.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN19.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN20.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN21.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN22.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
 <!-- !split -->
 <h2 id="an-extrapolation-example" class="anchor">An extrapolation example </h2>
 
@@ -1747,6 +1293,72 @@ end <span style="color: #666666">=</span> timer()
 </div>
 
 
+<!-- !split -->
+<h2 id="summary-of-rnns" class="anchor">Summary of RNNs </h2>
+
+<p>Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+</p>
+
+<p>In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
+</p>
+
+<!-- !split -->
+<h2 id="a-typical-rnn" class="anchor">A typical RNN </h2>
+
+<ol>
+<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
+<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
+<li> The output from the hidden layer produces \( \tilde{y}_t=g(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
+<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
+</ol>
+<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
+The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+</p>
+
+<!-- !split -->
+<h2 id="gating-mechanism-long-short-term-memory-lstm" class="anchor">Gating mechanism: Long Short Term Memory (LSTM) </h2>
+
+<p>Besides a simple recurrent neural network layer, as discussed above, there are two other
+commonly used types of recurrent neural network layers: Long Short
+Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
+introduction to these layers see <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>
+and <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>.
+</p>
+
+<p>LSTM uses a memory cell for 
+modeling long-range dependencies and avoid vanishing gradient
+ problems.
+Capable of modeling longer term dependencies by having
+memory cells and gates that controls the information flow along
+with the memory cells.
+</p>
+
+<ol>
+<li> Introduced by Hochreiter and Schmidhuber (1997) who solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).</li>
+<li> They designed a memory cell using logistic and linear units with multiplicative interactions.</li>
+<li> Information gets into the cell whenever its &#8220;write&#8221; gate is on.</li>
+<li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
+<li> Information can be read from the cell by turning on its <b>read</b> gate.</li> 
+</ol>
+<!-- !split -->
+<h2 id="implementing-a-memory-cell-in-a-neural-network" class="anchor">Implementing a memory cell in a neural network </h2>
+
+<p>To preserve information for a long time in
+the activities of an RNN, we use a circuit
+that implements an analog memory cell.
+</p>
+
+<ol>
+<li> A linear unit that has a self-link with a weight of 1 will maintain its state.</li>
+<li> Information is stored in the cell by activating its write gate.</li>
+<li> Information is retrieved by activating the read gate.</li>
+<li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
+</ol>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
@@ -1758,7 +1370,7 @@ end <span style="color: #666666">=</span> timer()
 </footer>
 -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2023, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>
