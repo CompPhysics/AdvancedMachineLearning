@@ -70,6 +70,7 @@ Furthermore, all teaching material is available from this GitHub link.
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary20.pdf
 
 ## February 26-March 1
+- Repetion of CNNs and discussion codes
 - Recurrent neural networks, basic mathematics and structure
 - Long-Short-Term memory and short excursion into transformers
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
