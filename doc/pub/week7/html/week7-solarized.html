@@ -71,28 +71,24 @@ div.toc p,a {
                2,
                None,
                'from-ffnns-and-cnns-to-recurrent-neural-networks-rnns'),
+              ('Feedback connections', 2, None, 'feedback-connections'),
               ('Recurrent neural networks (RNNs): Overarching view',
                2,
                None,
                'recurrent-neural-networks-rnns-overarching-view'),
               ('A simple example', 2, None, 'a-simple-example'),
               ('Memoryless models', 2, None, 'memoryless-models'),
-              ('Linear dynamical model', 2, None, 'linear-dynamical-model'),
-              ('Hidden Markov Models', 2, None, 'hidden-markov-models'),
               ('RNNs', 2, None, 'rnns'),
-              ('Do generative models need to be stochastic?',
-               2,
-               None,
-               'do-generative-models-need-to-be-stochastic'),
-              ('Recurrent neural networks are deterministic',
-               2,
-               None,
-               'recurrent-neural-networks-are-deterministic'),
               ('What kinds of behaviour can RNNs exhibit?',
                2,
                None,
                'what-kinds-of-behaviour-can-rnns-exhibit'),
-              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout,  "Figures from Sebastian Rashcka et al, Machine '
+               'learning with Sickit-Learn and '
+               'PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"',
+               2,
+               None,
+               'basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html'),
               ('We need to specify the initial activity state of all the '
                'hidden and output units',
                2,
@@ -106,6 +102,31 @@ div.toc p,a {
                2,
                None,
                'we-can-specify-targets-in-several-ways'),
+              ('RNNs in mode detail', 2, None, 'rnns-in-mode-detail'),
+              ('RNNs in mode detail, part 2',
+               2,
+               None,
+               'rnns-in-mode-detail-part-2'),
+              ('RNNs in mode detail, part 3',
+               2,
+               None,
+               'rnns-in-mode-detail-part-3'),
+              ('RNNs in mode detail, part 4',
+               2,
+               None,
+               'rnns-in-mode-detail-part-4'),
+              ('RNNs in mode detail, part 5',
+               2,
+               None,
+               'rnns-in-mode-detail-part-5'),
+              ('RNNs in mode detail, part 6',
+               2,
+               None,
+               'rnns-in-mode-detail-part-6'),
+              ('RNNs in mode detail, part 7',
+               2,
+               None,
+               'rnns-in-mode-detail-part-7'),
               ('Backpropagation through time',
                2,
                None,
@@ -118,6 +139,10 @@ div.toc p,a {
                2,
                None,
                'the-problem-of-exploding-or-vanishing-gradients'),
+              ('Back propagation in time, part 1',
+               2,
+               None,
+               'back-propagation-in-time-part-1'),
               ('Four effective ways to learn an RNN',
                2,
                None,
@@ -201,10 +226,17 @@ MathJax.Hub.Config({
 <ol>
 <li> Finalizing discussion of Convolutional  Neural Networks (CNNs)</li>
 <li> Discussion of recurrent neural networks (RNNs)</li>
-<li> Reading recommendations: Goodfellow et al, Deep Learning, chpater 10</li>
+<li> Reading recommendations:
+<ol type="a"></li>
+ <li> Goodfellow, Bengio and Courville's chapter 10 from <a href="https://www.deeplearningbook.org/" target="_blank">Deep Learning</a></li>
+ <li> <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Sebastian Rashcka et al, chapter 15, Machine learning with Sickit-Learn and PyTorch</a></li>
+ <li> <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch05.html" target="_blank">David Foster, Generative Deep Learning with TensorFlow, see chapter 5</a></li>
+</ol>
 </ol>
 </div>
 
+
+<p>The last two books have codes for RNNs in PyTorch and TensorFlow/Keras.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="from-ffnns-and-cnns-to-recurrent-neural-networks-rnns">From FFNNs and CNNs to recurrent neural networks (RNNs) </h2>
@@ -218,6 +250,8 @@ past information can be vital to correctly process current and future
 inputs. 
 </p>
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="feedback-connections">Feedback connections </h2>
 <p>In contrast to FFNs, recurrent networks introduce feedback
 connections, meaning the information is al- lowed to be carried to
 subsequent nodes across different time steps. These cyclic or feedback
@@ -350,7 +384,7 @@ plt.show()
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="memoryless-models">Memoryless models </h2>
 
-<p>Autoregressive models Predict the next term in a sequence from a fixed number of previous terms using <b>delay taps</b>.</p>
+<p>Autoregressive models predict the next term in a sequence from a fixed number of previous terms. <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch05.html" target="_blank">David Foster, Generative Deep Learning with TensorFlow, discusses in chapter 5 autoregressive models</a>. We will come back later to autoregressive models.</p>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Feed-forward neural networks</b>
@@ -373,36 +407,7 @@ interesting kind of model.
 </ol>
 <p>space of hidden state vectors.</p>
 
-<p>This inference is only tractable for two types of hidden state model.</p>
-
-<p>split
-<h2 id="linear-dynamical-model">Linear dynamical model </h2>
-</p>
-
-<p>If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-</p>
-<ol>
-<li> It can store information in its hidden state for a long time.
-<ol type="a"></li>
-<li> If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.</li>
-</ol>
-<li> The best we can do is to infer a probability distribution over the space of hidden state vectors.</li>
-</ol>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="hidden-markov-models">Hidden Markov Models </h2>
-<p>Hidden Markov Models have a discrete oneof-\( N \) hidden state. Transitions between states
-are stochastic and controlled by a transition
-matrix. The outputs produced by a state are
-stochastic.
-</p>
-<ul>
-<li> We cannot be sure which state produced a given output. So the state is &#8220;hidden&#8221;.</li>
-<li> It is easy to represent a probability distribution across N states with N numbers.</li>
-<li> To predict the next output we need to infer the probability distribution over hidden states.</li>
-</ul>
-<p>HMMs have efficient algorithms for inference and learning</p>
+<p>This inference is only tractable for two types of hidden state models.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="rnns">RNNs </h2>
@@ -420,41 +425,8 @@ computed by your computer.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="do-generative-models-need-to-be-stochastic">Do generative models need to be stochastic? </h2>
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b>Linear dynamical systems and hidden Markov models are stochastic models.</b>
-<p>
-
-<p>But the posterior probability
-distribution over their
-hidden states given the
-observed data so far is a
-deterministic function of the
-data.
-</p>
-</div>
- 
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="recurrent-neural-networks-are-deterministic">Recurrent neural networks are deterministic </h2>
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>Think of the hidden state
-of an RNN as the
-equivalent of the
-deterministic probability
-distribution over hidden
-states in a linear dynamical
-system or hidden Markov
-model.
-</p>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="what-kinds-of-behaviour-can-rnns-exhibit">What kinds of behaviour can RNNs exhibit? </h2>
+
 <ol>
 <li> They can oscillate.</li> 
 <li> They can settle to point attractors.</li>
@@ -464,9 +436,13 @@ model.
 <p>But the computational power of RNNs makes them very hard to train.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
+<h2 id="basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html">Basic layout,  <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a> </h2>
 
-<!-- FIGURE: [figslides/RNN1.png, width=700 frac=0.9] -->
+<br/><br/>
+<center>
+<p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units">We need to specify the initial activity state of all the hidden and output units </h2>
@@ -504,6 +480,69 @@ model.
 </ul>
 <li> The other units are input or hidden units.</li> 
 </ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail">RNNs in mode detail  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail-part-2">RNNs in mode detail, part 2  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN3.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail-part-3">RNNs in mode detail, part 3  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail-part-4">RNNs in mode detail, part 4  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail-part-5">RNNs in mode detail, part 5  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN6.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail-part-6">RNNs in mode detail, part 6  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN7.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-mode-detail-part-7">RNNs in mode detail, part 7  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN8.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="backpropagation-through-time">Backpropagation through time </h2>
 
@@ -551,6 +590,15 @@ backpropagating through each neuron
 <li> Even with good initial weights, its very hard to detect that the current target output depends on an input from many time-steps ago.</li>
 </ul>
 <p>RNNs have difficulty dealing with long-range dependencies. </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-propagation-in-time-part-1">Back propagation in time, part 1   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="four-effective-ways-to-learn-an-rnn">Four effective ways to learn an RNN </h2>
