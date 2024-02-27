@@ -75,7 +75,7 @@ Furthermore, all teaching material is available from this GitHub link.
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Video of lecture at https://youtu.be/VkQGq84ml_0
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf
-- Recommended reading Goodfellow et al chapters 10
+- Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15
 
 
 ## March 4-8
