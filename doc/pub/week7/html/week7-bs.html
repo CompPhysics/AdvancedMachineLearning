@@ -52,7 +52,6 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                'recurrent-neural-networks-rnns-overarching-view'),
               ('Sequential data only?', 2, None, 'sequential-data-only'),
               ('A simple example', 2, None, 'a-simple-example'),
-              ('Memoryless models', 2, None, 'memoryless-models'),
               ('RNNs', 2, None, 'rnns'),
               ('What kinds of behaviour can RNNs exhibit?',
                2,
@@ -68,6 +67,13 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'solving-differential-equations-with-rnns'),
+              ('Two first-order differential equations',
+               2,
+               None,
+               'two-first-order-differential-equations'),
+              ('Velocity only', 2, None, 'velocity-only'),
+              ('Linking with RNNs', 2, None, 'linking-with-rnns'),
+              ('Minor rewrite', 2, None, 'minor-rewrite'),
               ('RNNs in more detail', 2, None, 'rnns-in-more-detail'),
               ('RNNs in more detail, part 2',
                2,
@@ -133,18 +139,15 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                'gradients-of-loss-functions'),
               ('Summary of RNNs', 2, None, 'summary-of-rnns'),
               ('A typical RNN', 2, None, 'a-typical-rnn'),
-              ('Four effective ways to learn an RNN',
+              ('Four effective ways to learn an RNN and preparing for next '
+               'week',
                2,
                None,
-               'four-effective-ways-to-learn-an-rnn'),
+               'four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week'),
               ('Long Short Term Memory (LSTM)',
                2,
                None,
-               'long-short-term-memory-lstm'),
-              ('Implementing a memory cell in a neural network',
-               2,
-               None,
-               'implementing-a-memory-cell-in-a-neural-network')]}
+               'long-short-term-memory-lstm')]}
 end of tocinfo -->
 
 <body>
@@ -186,11 +189,14 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;">Recurrent neural networks (RNNs): Overarching view</a></li>
      <!-- navigation toc: --> <li><a href="#sequential-data-only" style="font-size: 80%;">Sequential data only?</a></li>
      <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;">A simple example</a></li>
-     <!-- navigation toc: --> <li><a href="#memoryless-models" style="font-size: 80%;">Memoryless models</a></li>
      <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;">RNNs</a></li>
      <!-- navigation toc: --> <li><a href="#what-kinds-of-behaviour-can-rnns-exhibit" style="font-size: 80%;">What kinds of behaviour can RNNs exhibit?</a></li>
      <!-- navigation toc: --> <li><a href="#basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html" style="font-size: 80%;">Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"</a></li>
      <!-- navigation toc: --> <li><a href="#solving-differential-equations-with-rnns" style="font-size: 80%;">Solving differential equations with RNNs</a></li>
+     <!-- navigation toc: --> <li><a href="#two-first-order-differential-equations" style="font-size: 80%;">Two first-order differential equations</a></li>
+     <!-- navigation toc: --> <li><a href="#velocity-only" style="font-size: 80%;">Velocity only</a></li>
+     <!-- navigation toc: --> <li><a href="#linking-with-rnns" style="font-size: 80%;">Linking with RNNs</a></li>
+     <!-- navigation toc: --> <li><a href="#minor-rewrite" style="font-size: 80%;">Minor rewrite</a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail" style="font-size: 80%;">RNNs in more detail</a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-2" style="font-size: 80%;">RNNs in more detail, part 2</a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-3" style="font-size: 80%;">RNNs in more detail, part 3</a></li>
@@ -211,9 +217,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#gradients-of-loss-functions" style="font-size: 80%;">Gradients of loss functions</a></li>
      <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
      <!-- navigation toc: --> <li><a href="#a-typical-rnn" style="font-size: 80%;">A typical RNN</a></li>
-     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn" style="font-size: 80%;">Four effective ways to learn an RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" style="font-size: 80%;">Four effective ways to learn an RNN and preparing for next week</a></li>
      <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">Long Short Term Memory (LSTM)</a></li>
-     <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">Implementing a memory cell in a neural network</a></li>
 
         </ul>
       </li>
@@ -452,35 +457,6 @@ plt<span style="color: #666666">.</span>show()
 
 
 <!-- !split -->
-<h2 id="memoryless-models" class="anchor">Memoryless models </h2>
-
-<p>Autoregressive models predict the next term in a sequence from a fixed number of previous terms. <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch05.html" target="_self">David Foster, Generative Deep Learning with TensorFlow, discusses in chapter 5 autoregressive models</a>. We will come back later to autoregressive models.</p>
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>These generalize autoregressive
-models by using one or more
-layers of non-linear hidden units. 
-</p>
-</div>
-</div>
-
-
-<p>If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-</p>
-<ol>
-<li> It can store information in its hidden state for a long time.</li>
-<li> If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.</li>
-<li> The best we can do is to infer a probability distribution over the</li>
-</ol>
-<p>space of hidden state vectors.</p>
-
-<p>This inference is only tractable for two types of hidden state models.</p>
-
-<!-- !split -->
 <h2 id="rnns" class="anchor">RNNs </h2>
 
 <p>RNNs are very powerful, because they
@@ -518,7 +494,105 @@ computed by your computer.
 <!-- !split -->
 <h2 id="solving-differential-equations-with-rnns" class="anchor">Solving differential equations with RNNs </h2>
 
-<p>More material to be added here.</p>
+<p>To gain some intuition on how we can use RNNs for time series, let us
+tailor the representation of the solution of a differential equation
+as a time series.
+</p>
+
+<p>Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)</p>
+
+$$
+\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
+$$
+
+<p>where \( \eta \) is a constant used in scaling time into a dimensionless variable and \( F(t) \) is an external force acting on the system.
+The constant \( \eta \) is a so-called damping.
+</p>
+
+<!-- !split -->
+<h2 id="two-first-order-differential-equations" class="anchor">Two first-order differential equations </h2>
+
+<p>In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
+with the velocity
+</p>
+$$
+v(t)=\frac{dx}{dt},
+$$
+
+<p>and the acceleration</p>
+$$
+\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
+$$
+
+<p>With the initial conditions \( v_0=v(t_0) \) and \( x_0=x(t_0) \) defined, we can integrate these equations and find their respective solutions.</p>
+
+<!-- !split -->
+<h2 id="velocity-only" class="anchor">Velocity only </h2>
+
+<p>Let us focus on the velocity only. Discretizing and using the simplest
+possible approximation for the derivative, we have Euler's forward
+method for the updated velocity at a time step \( i+1 \) given by
+</p>
+$$
+v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
+$$
+
+<p>Defining a function</p>
+$$
+h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
+$$
+
+<p>we have</p>
+$$
+v_{i+1}=h_i(x_i,v_i,F_i).
+$$
+
+
+<!-- !split -->
+<h2 id="linking-with-rnns" class="anchor">Linking with RNNs </h2>
+
+<p>The equation</p>
+$$
+v_{i+1}=h_i(x_i,v_i,F_i).
+$$
+
+<p>can be used to train a feed-forward neural network with inputs \( v_i \) and outputs \( v_{i+1} \) at a time \( t_i \). But we can think of this also as a recurrent neural network
+with inputs \( v_i \), \( x_i \) and \( F_i \) at each time step \( t_i \), and producing an output \( v_{i+1} \).
+</p>
+
+<p>Noting that </p>
+$$
+v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
+$$
+
+<p>we have</p>
+$$
+v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
+$$
+
+<p>and we can rewrite</p>
+$$
+v_{i+1}=h_i(x_i,h_{i-1},F_i).
+$$
+
+
+<!-- !split -->
+<h2 id="minor-rewrite" class="anchor">Minor rewrite </h2>
+
+<p>We can thus set up a recurring series which depends on the inputs \( x_i \) and \( F_i \) and the previous values \( h_{i-1} \).
+We assume now that the inputs at each step (or time \( t_i \)) is given by \( x_i \) only and we denote the outputs for \( \tilde{y}_i \) instead of \( v_{i_1} \), we have then the compact equation for our outputs at each step \( t_i \)
+</p>
+$$
+y_{i}=h_i(x_i,h_{i-1}).
+$$
+
+<p>We can think of this as an element in a recurrent network where our
+network (our model) produces an output \( y_i \) which is then compared
+with a target value through a given cost/loss function that we
+optimize. The target values at a given step \( t_i \) could be the results
+of a measurement or simply the analytical results of a differential
+equation.
+</p>
 
 <!-- !split -->
 <h2 id="rnns-in-more-detail" class="anchor">RNNs in more detail  </h2>
@@ -644,8 +718,8 @@ $$
 \begin{align*}
     \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
     \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
-    \mathbf{o}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
-    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{o}^{(t)}).
+    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
 \end{align*}
 $$
 
@@ -691,14 +765,14 @@ $$
 
 <p>To derive the expression of the gradients of \( \mathcal{L} \) for
 the RNN, we need to start recursively from the nodes closer to the
-output layer in the temporal unrolling scheme - such as \( \mathbf{o} \)
+output layer in the temporal unrolling scheme - such as \( \mathbf{y} \)
 and \( \mathbf{h} \) at final time \( t = \tau \),
 </p>
 
 $$
 \begin{align*}
-    (\nabla_{ \mathbf{o}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial o_{i}^{(t)}}, \notag\\
-    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{o}^{(\tau)}} \mathcal{L}.
+    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial o_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
 \end{align*}
 $$
 
@@ -709,7 +783,7 @@ $$
 
 $$
 \begin{align*}
-    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{o}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{o}^{(t)}} \mathcal{L}.
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
 \end{align*}
 $$
 
@@ -720,9 +794,9 @@ $$
 
 $$
 \begin{align*}
-    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{o}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{o}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
     \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
-    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial o_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}o_i^{(t)} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
     \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
     \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
     \label{eq:rnn_gradients3}
@@ -758,7 +832,7 @@ The parameters are trained through the so-called back-propagation through time (
 </p>
 
 <!-- !split -->
-<h2 id="four-effective-ways-to-learn-an-rnn" class="anchor">Four effective ways to learn an RNN </h2>
+<h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" class="anchor">Four effective ways to learn an RNN and preparing for next week </h2>
 <ol>
 <li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
 <li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
@@ -782,19 +856,6 @@ The parameters are trained through the so-called back-propagation through time (
 <li> Information gets into the cell whenever its &#8220;write&#8221; gate is on.</li>
 <li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
 <li> Information can be read from the cell by turning on its <b>read</b> gate.</li> 
-</ol>
-<!-- !split -->
-<h2 id="implementing-a-memory-cell-in-a-neural-network" class="anchor">Implementing a memory cell in a neural network </h2>
-<p>To preserve information for a long time in
-the activities of an RNN, we use a circuit
-that implements an analog memory cell.
-</p>
-
-<ol>
-<li> A linear unit that has a self-link with a weight of 1 will maintain its state.</li>
-<li> Information is stored in the cell by activating its write gate.</li>
-<li> Information is retrieved by activating the read gate.</li>
-<li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
 </ol>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->

@@ -202,6 +202,7 @@ o RNNs could potentially learn to implement lots of small programs that each cap
 
 But the extensive computational needs  of RNNs makes them very hard to train.
 
+
 !split
 ===== Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" =====
 
@@ -211,7 +212,111 @@ FIGURE: [figslides/RNN1.png, width=700 frac=0.9]
 !split
 ===== Solving differential equations with RNNs =====
 
+To gain some intuition on how we can use RNNs for time series, let us
+tailor the representation of the solution of a differential equation
+as a time series.
 
+Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)
+
+!bt
+\[
+\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
+\]
+!et
+where $\eta$ is a constant used in scaling time into a dimensionless variable and $F(t)$ is an external force acting on the system.
+The constant $\eta$ is a so-called damping.
+
+!split
+===== Two first-order differential equations =====
+
+In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
+with the velocity
+!bt
+\[
+v(t)=\frac{dx}{dt},
+\]
+!et
+and the acceleration
+!bt
+\[
+\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
+\]
+!et
+
+With the initial conditions $v_0=v(t_0)$ and $x_0=x(t_0)$ defined, we can integrate these equations and find their respective solutions.
+
+!split
+===== Velocity only =====
+
+Let us focus on the velocity only. Discretizing and using the simplest
+possible approximation for the derivative, we have Euler's forward
+method for the updated velocity at a time step $i+1$ given by
+!bt
+\[
+v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
+\]
+!et
+Defining a function
+!bt
+\[
+h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
+\]
+!et
+we have
+!bt
+\[
+v_{i+1}=h_i(x_i,v_i,F_i).
+\]
+!et
+
+!split
+===== Linking with RNNs =====
+
+The equation
+!bt
+\[
+v_{i+1}=h_i(x_i,v_i,F_i).
+\]
+!et
+can be used to train a feed-forward neural network with inputs $v_i$ and outputs $v_{i+1}$ at a time $t_i$. But we can think of this also as a recurrent neural network
+with inputs $v_i$, $x_i$ and $F_i$ at each time step $t_i$, and producing an output $v_{i+1}$.
+
+Noting that 
+!bt
+\[
+v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
+\]
+!et
+we have
+!bt
+\[
+v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
+\]
+!et
+and we can rewrite
+!bt
+\[
+v_{i+1}=h_i(x_i,h_{i-1},F_i).
+\]
+!et
+
+!split
+===== Minor rewrite =====
+
+We can thus set up a recurring series which depends on the inputs $x_i$ and $F_i$ and the previous values $h_{i-1}$.
+We assume now that the inputs at each step (or time $t_i$) is given by $x_i$ only and we denote the outputs for $\tilde{y}_i$ instead of $v_{i_1}$, we have then the compact equation for our outputs at each step $t_i$
+!bt
+\[
+y_{i}=h_i(x_i,h_{i-1}).
+\]
+!et
+
+We can think of this as an element in a recurrent network where our
+network (our model) produces an output $y_i$ which is then compared
+with a target value through a given cost/loss function that we
+optimize. The target values at a given step $t_i$ could be the results
+of a measurement or simply the analytical results of a differential
+equation.
 
 
 !split
@@ -301,8 +406,8 @@ the concept of temporal dependencies
 \begin{align*}
     \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
     \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
-    \mathbf{o}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
-    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{o}^{(t)}).
+    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
 \end{align*}
 !et
 
@@ -336,13 +441,13 @@ FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
 
 To derive the expression of the gradients of $\mathcal{L}$ for
 the RNN, we need to start recursively from the nodes closer to the
-output layer in the temporal unrolling scheme - such as $\mathbf{o}$
+output layer in the temporal unrolling scheme - such as $\mathbf{y}$
 and $\mathbf{h}$ at final time $t = \tau$,
 
 !bt
 \begin{align*}
-    (\nabla_{ \mathbf{o}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial o_{i}^{(t)}}, \notag\\
-    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{o}^{(\tau)}} \mathcal{L}.
+    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial o_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
 \end{align*}
 !et
 
@@ -352,7 +457,7 @@ For the following hidden nodes, we have to iterate through time, so by the chain
 
 !bt
 \begin{align*}
-    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{o}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{o}^{(t)}} \mathcal{L}.
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
 \end{align*}
 !et
 
@@ -362,9 +467,9 @@ Similarly, the gradients of $\mathcal{L}$ with respect to the weights and biases
 
 !bt
 \begin{align*}
-    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{o}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{o}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
     \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
-    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial o_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}o_i^{(t)} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
     \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
     \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
     \label{eq:rnn_gradients3}
