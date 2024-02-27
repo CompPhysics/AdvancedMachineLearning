@@ -139,7 +139,10 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'gradients-of-loss-functions'),
               ('Summary of RNNs', 2, None, 'summary-of-rnns'),
-              ('A typical RNN', 2, None, 'a-typical-rnn'),
+              ('Summary of a  typical RNN',
+               2,
+               None,
+               'summary-of-a-typical-rnn'),
               ('Four effective ways to learn an RNN and preparing for next '
                'week',
                2,
@@ -218,7 +221,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#chain-rule-again" style="font-size: 80%;">Chain rule again</a></li>
      <!-- navigation toc: --> <li><a href="#gradients-of-loss-functions" style="font-size: 80%;">Gradients of loss functions</a></li>
      <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#a-typical-rnn" style="font-size: 80%;">A typical RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-a-typical-rnn" style="font-size: 80%;">Summary of a  typical RNN</a></li>
      <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" style="font-size: 80%;">Four effective ways to learn an RNN and preparing for next week</a></li>
      <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">Long Short Term Memory (LSTM)</a></li>
 
@@ -824,12 +827,12 @@ independent of each other.  But with sequential data, the input at a given stage
 </p>
 
 <!-- !split -->
-<h2 id="a-typical-rnn" class="anchor">A typical RNN </h2>
+<h2 id="summary-of-a-typical-rnn" class="anchor">Summary of a  typical RNN </h2>
 
 <ol>
 <li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
-<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
-<li> The output from the hidden layer produces \( \tilde{y}_t=g(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
+<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
+<li> The output from the hidden layer produces \( \tilde{y}_t=\sigma_y(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
 <li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
 </ol>
 <p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.

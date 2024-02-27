@@ -492,11 +492,11 @@ In a  traditional NN, it is assumed that every input is
 independent of each other.  But with sequential data, the input at a given stage $t$ depends on the input from the previous stage $t-1$
 
 !split
-===== A typical RNN =====
+===== Summary of a  typical RNN =====
 
 o Weight matrices $U$, $W$ and $V$ that connect the input layer at a stage $t$ with the hidden layer $h_t$, the previous hidden layer $h_{t-1}$ with $h_t$ and the hidden layer $h_t$ connecting with the output layer at the same stage and producing an output $\tilde{y}_t$, respectively.
-o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
-o The output from the hidden layer produces $\tilde{y}_t=g(Vh_t+c)$ where $c$ is a new bias parameter.
+o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
+o The output from the hidden layer produces $\tilde{y}_t=\sigma_y(Vh_t+c)$ where $c$ is a new bias parameter.
 o The output from the training at a given stage is in turn compared with the observation $y_t$ thorugh a chosen cost function.
 
 The function $g$ can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
