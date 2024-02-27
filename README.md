@@ -72,15 +72,18 @@ Furthermore, all teaching material is available from this GitHub link.
 ## February 26-March 1
 - Repetion of CNNs and discussion codes
 - Recurrent neural networks, basic mathematics and structure
-- Long-Short-Term memory and short excursion into transformers
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
-- Recommended reading Goodfellow et al chapters 10 and 14
+- Video of lecture at https://youtu.be/VkQGq84ml_0
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf
+- Recommended reading Goodfellow et al chapters 10
 
 
 ## March 4-8
-- Autoencoders and discussions of codes and links with PCA
+- Structure of RNNs 
+- Long-Short-Term memory and applications to differential equations
+- Start discussing autoencoders
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
-- Recommended reading Goodfellow et al chapter 14
+- Recommended reading Goodfellow et al chapter 14 for Autoenconders
 
 
 ## March 11-15: Deep generative models
@@ -90,13 +93,13 @@ Furthermore, all teaching material is available from this GitHub link.
 
 
 ## March 18-22: Deep generative models
+- Autoencoders, summary
 - Summary of deep learning methods and links with generative models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters, 17, 18
 
 
 ## April 1-5: Deep generative models
-- Monte Carlo methods and structured probabilistic models for deep learning
 - Monte Carlo methods and structured probabilistic models for deep learning
 - Partition function and Boltzmann machines
 - Boltzmann machines
