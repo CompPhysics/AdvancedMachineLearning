@@ -45,10 +45,12 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'from-ffnns-and-cnns-to-recurrent-neural-networks-rnns'),
               ('Feedback connections', 2, None, 'feedback-connections'),
+              ('Vanishing gradients', 2, None, 'vanishing-gradients'),
               ('Recurrent neural networks (RNNs): Overarching view',
                2,
                None,
                'recurrent-neural-networks-rnns-overarching-view'),
+              ('Sequential data only?', 2, None, 'sequential-data-only'),
               ('A simple example', 2, None, 'a-simple-example'),
               ('Memoryless models', 2, None, 'memoryless-models'),
               ('RNNs', 2, None, 'rnns'),
@@ -116,10 +118,11 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'the-problem-of-exploding-or-vanishing-gradients'),
-              ('Back propagation in time, part 1',
+              ('Mathematical setup', 2, None, 'mathematical-setup'),
+              ('Back propagation in time through figures, part 1',
                2,
                None,
-               'back-propagation-in-time-part-1'),
+               'back-propagation-in-time-through-figures-part-1'),
               ('Back propagation in time, part 2',
                2,
                None,
@@ -132,6 +135,17 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'back-propagation-in-time-part-4'),
+              ('Back propagation in time in equations',
+               2,
+               None,
+               'back-propagation-in-time-in-equations'),
+              ('Chain rule again', 2, None, 'chain-rule-again'),
+              ('Gradients of loss functions',
+               2,
+               None,
+               'gradients-of-loss-functions'),
+              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
+              ('A typical RNN', 2, None, 'a-typical-rnn'),
               ('Solving differential equations with RNNs, code examples',
                2,
                None,
@@ -199,8 +213,6 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'other-types-of-recurrent-neural-networks'),
-              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
-              ('A typical RNN', 2, None, 'a-typical-rnn'),
               ('Gating mechanism: Long Short Term Memory (LSTM)',
                2,
                None,
@@ -246,7 +258,9 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-february-26-march-1" style="font-size: 80%;">Plans for the week February 26-March 1</a></li>
      <!-- navigation toc: --> <li><a href="#from-ffnns-and-cnns-to-recurrent-neural-networks-rnns" style="font-size: 80%;">From FFNNs and CNNs to recurrent neural networks (RNNs)</a></li>
      <!-- navigation toc: --> <li><a href="#feedback-connections" style="font-size: 80%;">Feedback connections</a></li>
+     <!-- navigation toc: --> <li><a href="#vanishing-gradients" style="font-size: 80%;">Vanishing gradients</a></li>
      <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;">Recurrent neural networks (RNNs): Overarching view</a></li>
+     <!-- navigation toc: --> <li><a href="#sequential-data-only" style="font-size: 80%;">Sequential data only?</a></li>
      <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;">A simple example</a></li>
      <!-- navigation toc: --> <li><a href="#memoryless-models" style="font-size: 80%;">Memoryless models</a></li>
      <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;">RNNs</a></li>
@@ -266,10 +280,16 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;">Backpropagation through time</a></li>
      <!-- navigation toc: --> <li><a href="#the-backward-pass-is-linear" style="font-size: 80%;">The backward pass is linear</a></li>
      <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;">The problem of exploding or vanishing gradients</a></li>
-     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-1" style="font-size: 80%;">Back propagation in time, part 1</a></li>
+     <!-- navigation toc: --> <li><a href="#mathematical-setup" style="font-size: 80%;">Mathematical setup</a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-through-figures-part-1" style="font-size: 80%;">Back propagation in time through figures, part 1</a></li>
      <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-2" style="font-size: 80%;">Back propagation in time, part 2</a></li>
      <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-3" style="font-size: 80%;">Back propagation in time, part 3</a></li>
      <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-4" style="font-size: 80%;">Back propagation in time, part 4</a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-in-equations" style="font-size: 80%;">Back propagation in time in equations</a></li>
+     <!-- navigation toc: --> <li><a href="#chain-rule-again" style="font-size: 80%;">Chain rule again</a></li>
+     <!-- navigation toc: --> <li><a href="#gradients-of-loss-functions" style="font-size: 80%;">Gradients of loss functions</a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
+     <!-- navigation toc: --> <li><a href="#a-typical-rnn" style="font-size: 80%;">A typical RNN</a></li>
      <!-- navigation toc: --> <li><a href="#solving-differential-equations-with-rnns-code-examples" style="font-size: 80%;">Solving differential equations with RNNs, code examples</a></li>
      <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn" style="font-size: 80%;">Four effective ways to learn an RNN</a></li>
      <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">Long Short Term Memory (LSTM)</a></li>
@@ -289,8 +309,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#predicting-new-points-with-a-trained-recurrent-neural-network" style="font-size: 80%;">Predicting New Points With A Trained Recurrent Neural Network</a></li>
      <!-- navigation toc: --> <li><a href="#other-things-to-try" style="font-size: 80%;">Other Things to Try</a></li>
      <!-- navigation toc: --> <li><a href="#other-types-of-recurrent-neural-networks" style="font-size: 80%;">Other Types of Recurrent Neural Networks</a></li>
-     <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#a-typical-rnn" style="font-size: 80%;">A typical RNN</a></li>
      <!-- navigation toc: --> <li><a href="#gating-mechanism-long-short-term-memory-lstm" style="font-size: 80%;">Gating mechanism: Long Short Term Memory (LSTM)</a></li>
      <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">Implementing a memory cell in a neural network</a></li>
 
@@ -348,7 +366,7 @@ MathJax.Hub.Config({
 </div>
 
 
-<p>The last two books have codes for RNNs in PyTorch and TensorFlow/Keras.</p>
+<p>The last two books have codes for RNNs in PyTorch and TensorFlow/Keras. Next week we will study the solution of differential equations.</p>
 
 <!-- !split -->
 <h2 id="from-ffnns-and-cnns-to-recurrent-neural-networks-rnns" class="anchor">From FFNNs and CNNs to recurrent neural networks (RNNs) </h2>
@@ -364,6 +382,7 @@ inputs.
 
 <!-- !split -->
 <h2 id="feedback-connections" class="anchor">Feedback connections </h2>
+
 <p>In contrast to FFNs, recurrent networks introduce feedback
 connections, meaning the information is al- lowed to be carried to
 subsequent nodes across different time steps. These cyclic or feedback
@@ -372,7 +391,13 @@ of memory, making RNNs particularly suited for time- series data,
 natural language processing, speech recog- nition, and several other
 problems for which the order of the data is crucial.  RNN
 architectures vary greatly in how they manage information flow and
-memory in the network. Different architectures often aim at improving
+memory in the network.
+</p>
+
+<!-- !split -->
+<h2 id="vanishing-gradients" class="anchor">Vanishing gradients </h2>
+
+<p>Different architectures often aim at improving
 some sub-optimal characteristics of the network. The simplest form of
 recurrent network, commonly called simple or vanilla RNN, for example,
 is known to suffer from the problem of vanishing gradients. This
@@ -403,6 +428,36 @@ fixed-sized inputs like all the nets we have discussed so far. For
 example, they can take sentences, documents, or audio samples as
 input, making them extremely useful for natural language processing
 systems such as automatic translation and speech-to-text.
+</p>
+
+<!-- !split -->
+<h2 id="sequential-data-only" class="anchor">Sequential data only? </h2>
+
+<p>An important issue is that in many deep learning methods we assume
+that the input and output data can be treated as independent and
+identically distributed, normally abbreviated to <b>iid</b>.
+This means that the data we use can be seen as mutually independent.
+</p>
+
+<p>This is however not the case for most data sets used in RNNs since we
+are dealing with sequences of data with strong inter-dependencies.
+This applies in particular to time series, which are sequential by
+contruction.
+</p>
+
+<p>As an example, the solutions of ordinary differential equations can be
+represented as a time series, similarly, how stock prices evolve as
+function of time is another example of a typical time series, or voice
+records and many other examples.
+</p>
+
+<p>Not all sequential data may however have a time stamp, texts being a
+typical example thereof, or DNA sequences.
+</p>
+
+<p>The main focus here is on data that can be structured either as time
+series or as ordered series of data.  We will not focus on for example
+natural language processing or similar data sets.
 </p>
 
 <!-- !split -->
@@ -546,7 +601,7 @@ computed by your computer.
 <li> They can behave chaotically.</li>
 <li> RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.</li>
 </ol>
-<p>But the computational power of RNNs makes them very hard to train.</p>
+<p>But the extensive computational needs  of RNNs makes them very hard to train.</p>
 
 <!-- !split -->
 <h2 id="basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html" class="anchor">Basic layout,  <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_self">Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a> </h2>
@@ -711,7 +766,25 @@ backpropagating through each neuron
 <p>RNNs have difficulty dealing with long-range dependencies. </p>
 
 <!-- !split -->
-<h2 id="back-propagation-in-time-part-1" class="anchor">Back propagation in time, part 1   </h2>
+<h2 id="mathematical-setup" class="anchor">Mathematical setup </h2>
+
+<p>The expression for the simplest Recurrent network resembles that of a
+regular feed-forward neural network, but now with
+the concept of temporal dependencies
+</p>
+
+$$
+\begin{align*}
+    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
+    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
+    \mathbf{o}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{o}^{(t)}).
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="back-propagation-in-time-through-figures-part-1" class="anchor">Back propagation in time through figures, part 1   </h2>
 
 <br/><br/>
 <center>
@@ -747,7 +820,80 @@ backpropagating through each neuron
 <br/><br/>
 
 <!-- !split -->
+<h2 id="back-propagation-in-time-in-equations" class="anchor">Back propagation in time in equations </h2>
+
+<p>To derive the expression of the gradients of \( \mathcal{L} \) for
+the RNN, we need to start recursively from the nodes closer to the
+output layer in the temporal unrolling scheme - such as \( \mathbf{o} \)
+and \( \mathbf{h} \) at final time \( t = \tau \),
+</p>
+
+$$
+\begin{align*}
+    (\nabla_{ \mathbf{o}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial o_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{o}^{(\tau)}} \mathcal{L}.
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="chain-rule-again" class="anchor">Chain rule again </h2>
+<p>For the following hidden nodes, we have to iterate through time, so by the chain rule, </p>
+
+$$
+\begin{align*}
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{o}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{o}^{(t)}} \mathcal{L}.
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="gradients-of-loss-functions" class="anchor">Gradients of loss functions </h2>
+<p>Similarly, the gradients of \( \mathcal{L} \) with respect to the weights and biases follow,</p>
+
+$$
+\begin{align*}
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{o}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{o}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial o_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}o_i^{(t)} \notag\\
+    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
+    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
+    \label{eq:rnn_gradients3}
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="summary-of-rnns" class="anchor">Summary of RNNs </h2>
+
+<p>Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+</p>
+
+<p>In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
+</p>
+
+<!-- !split -->
+<h2 id="a-typical-rnn" class="anchor">A typical RNN </h2>
+
+<ol>
+<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
+<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
+<li> The output from the hidden layer produces \( \tilde{y}_t=g(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
+<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
+</ol>
+<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
+The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+</p>
+
+<!-- !split -->
 <h2 id="solving-differential-equations-with-rnns-code-examples" class="anchor">Solving differential equations with RNNs, code examples </h2>
+
+<p>Examples to be added for week 8</p>
 
 <!-- !split -->
 <h2 id="four-effective-ways-to-learn-an-rnn" class="anchor">Four effective ways to learn an RNN </h2>
@@ -1545,33 +1691,6 @@ end <span style="color: #666666">=</span> timer()
 
 
 <!-- !split -->
-<h2 id="summary-of-rnns" class="anchor">Summary of RNNs </h2>
-
-<p>Recurrent neural networks (RNNs) have in general no probabilistic component
-in a model. With a given fixed input and target from data, the RNNs learn the intermediate
-association between various layers.
-The inputs, outputs, and internal representation (hidden states) are all
-real-valued vectors.
-</p>
-
-<p>In a  traditional NN, it is assumed that every input is
-independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
-</p>
-
-<!-- !split -->
-<h2 id="a-typical-rnn" class="anchor">A typical RNN </h2>
-
-<ol>
-<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
-<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
-<li> The output from the hidden layer produces \( \tilde{y}_t=g(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
-<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
-</ol>
-<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
-The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
-</p>
-
-<!-- !split -->
 <h2 id="gating-mechanism-long-short-term-memory-lstm" class="anchor">Gating mechanism: Long Short Term Memory (LSTM) </h2>
 
 <p>Besides a simple recurrent neural network layer, as discussed above, there are two other
@@ -1610,6 +1729,40 @@ that implements an analog memory cell.
 <li> Information is retrieved by activating the read gate.</li>
 <li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
 </ol>
+<p>In contrast to FFNs, recurrent networks introduce feedback
+connections, meaning the information is allowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time-series data,
+natural language processing, speech recognition, and several other
+problems for which the order of the data is crucial.
+</p>
+
+<p>RNN architectures vary greatly in how they manage information flow and
+memory in the network. Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients.  This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long. Consequently, the convergence to correctly
+predicted values in the training process happens very slowly. This is
+particularly the case when using activation functions like the Sigmoid
+or hyperbolic tangent, (whose outputs are between 0 and 1 for Sigmoid,
+and -1 and 1 for \( \tanh \)), with equally small gradients by design
+(\( < 1 \)).
+</p>
+
+<p>To address that, one natural alternative is to use the Long Short-Term
+Memory (LSTM) variation. While LSTMs are generally used, they also
+present the downside of being inefficient for large-scale models. For
+such problems, Gated recurrent units (GRUs) can be employed as they
+have a simpler architecture, thus being computationally faster. We
+will hereafter focus simply on the Vanilla and LSTM variants for their
+simplicity and popularity.
+</p>
+
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->

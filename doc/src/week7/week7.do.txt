@@ -14,7 +14,7 @@ o Reading recommendations:
   o "David Foster, Generative Deep Learning with TensorFlow, see chapter 5":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch05.html"
 !eblock
 
-The last two books have codes for RNNs in PyTorch and TensorFlow/Keras.
+The last two books have codes for RNNs in PyTorch and TensorFlow/Keras. Next week we will study the solution of differential equations.
 
 
 
@@ -33,6 +33,8 @@ inputs.
 
 !split
 ===== Feedback connections =====
+
+
 In contrast to FFNs, recurrent networks introduce feedback
 connections, meaning the information is al- lowed to be carried to
 subsequent nodes across different time steps. These cyclic or feedback
@@ -41,7 +43,13 @@ of memory, making RNNs particularly suited for time- series data,
 natural language processing, speech recog- nition, and several other
 problems for which the order of the data is crucial.  RNN
 architectures vary greatly in how they manage information flow and
-memory in the network. Different architectures often aim at improving
+memory in the network.
+
+
+!split
+===== Vanishing gradients =====
+
+Different architectures often aim at improving
 some sub-optimal characteristics of the network. The simplest form of
 recurrent network, commonly called simple or vanilla RNN, for example,
 is known to suffer from the problem of vanishing gradients. This
@@ -73,6 +81,31 @@ example, they can take sentences, documents, or audio samples as
 input, making them extremely useful for natural language processing
 systems such as automatic translation and speech-to-text.
 
+!split
+===== Sequential data only? =====
+
+An important issue is that in many deep learning methods we assume
+that the input and output data can be treated as independent and
+identically distributed, normally abbreviated to _iid_.
+This means that the data we use can be seen as mutually independent.
+
+This is however not the case for most data sets used in RNNs since we
+are dealing with sequences of data with strong inter-dependencies.
+This applies in particular to time series, which are sequential by
+contruction.
+
+As an example, the solutions of ordinary differential equations can be
+represented as a time series, similarly, how stock prices evolve as
+function of time is another example of a typical time series, or voice
+records and many other examples.
+
+
+Not all sequential data may however have a time stamp, texts being a
+typical example thereof, or DNA sequences.
+
+The main focus here is on data that can be structured either as time
+series or as ordered series of data.  We will not focus on for example
+natural language processing or similar data sets.
 
 
 
@@ -164,7 +197,6 @@ o If the dynamics is noisy and the way it generates outputs from its hidden stat
 o The best we can do is to infer a probability distribution over the
 space of hidden state vectors.
 
-
 This inference is only tractable for two types of hidden state models.
 
 !split
@@ -189,7 +221,7 @@ o They can settle to point attractors.
 o They can behave chaotically.
 o RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.
 
-But the computational power of RNNs makes them very hard to train.
+But the extensive computational needs  of RNNs makes them very hard to train.
 
 !split
 ===== Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" =====
@@ -273,6 +305,9 @@ FIGURE: [figslides/RNN8.png, width=700 frac=0.9]
 
 
 
+
+
+
 !split
 ===== Backpropagation through time =====
 
@@ -311,9 +346,25 @@ backpropagating through each neuron
 
 RNNs have difficulty dealing with long-range dependencies. 
 
+!split
+===== Mathematical setup =====
+
+The expression for the simplest Recurrent network resembles that of a
+regular feed-forward neural network, but now with
+the concept of temporal dependencies
+
+!bt
+\begin{align*}
+    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
+    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
+    \mathbf{o}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{o}^{(t)}).
+\end{align*}
+!et
+
 
 !split
-===== Back propagation in time, part 1   =====
+===== Back propagation in time through figures, part 1   =====
 
 FIGURE: [figslides/RNN9.png, width=700 frac=0.9]
 
@@ -336,10 +387,76 @@ FIGURE: [figslides/RNN11.png, width=700 frac=0.9]
 FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
 
 
+!split
+===== Back propagation in time in equations =====
+
+To derive the expression of the gradients of $\mathcal{L}$ for
+the RNN, we need to start recursively from the nodes closer to the
+output layer in the temporal unrolling scheme - such as $\mathbf{o}$
+and $\mathbf{h}$ at final time $t = \tau$,
+
+!bt
+\begin{align*}
+    (\nabla_{ \mathbf{o}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial o_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{o}^{(\tau)}} \mathcal{L}.
+\end{align*}
+!et
+
+!split
+===== Chain rule again =====
+For the following hidden nodes, we have to iterate through time, so by the chain rule, 
+
+!bt
+\begin{align*}
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{o}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{o}^{(t)}} \mathcal{L}.
+\end{align*}
+!et
+
+!split
+===== Gradients of loss functions =====
+Similarly, the gradients of $\mathcal{L}$ with respect to the weights and biases follow,
+
+!bt
+\begin{align*}
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{o}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{o}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial o_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}o_i^{(t)} \notag\\
+    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
+    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
+    \label{eq:rnn_gradients3}
+\end{align*}
+!et
+
+!split
+===== Summary of RNNs =====
+
+Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+
+In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage $t$ depends on the input from the previous stage $t-1$
+
+!split
+===== A typical RNN =====
+
+o Weight matrices $U$, $W$ and $V$ that connect the input layer at a stage $t$ with the hidden layer $h_t$, the previous hidden layer $h_{t-1}$ with $h_t$ and the hidden layer $h_t$ connecting with the output layer at the same stage and producing an output $\tilde{y}_t$, respectively.
+o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
+o The output from the hidden layer produces $\tilde{y}_t=g(Vh_t+c)$ where $c$ is a new bias parameter.
+o The output from the training at a given stage is in turn compared with the observation $y_t$ thorugh a chosen cost function.
+
+The function $g$ can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
+The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+
+
+
 
 !split
 ===== Solving differential equations with RNNs, code examples =====
 
+Examples to be added for week 8
 
 !split
 ===== Four effective ways to learn an RNN =====
@@ -1001,40 +1118,6 @@ print('Time: ', end-start)
 !ec
 
 
-
-
-
-
-
-
-
-
-
-
-
-!split
-===== Summary of RNNs =====
-
-Recurrent neural networks (RNNs) have in general no probabilistic component
-in a model. With a given fixed input and target from data, the RNNs learn the intermediate
-association between various layers.
-The inputs, outputs, and internal representation (hidden states) are all
-real-valued vectors.
-
-In a  traditional NN, it is assumed that every input is
-independent of each other.  But with sequential data, the input at a given stage $t$ depends on the input from the previous stage $t-1$
-
-!split
-===== A typical RNN =====
-
-o Weight matrices $U$, $W$ and $V$ that connect the input layer at a stage $t$ with the hidden layer $h_t$, the previous hidden layer $h_{t-1}$ with $h_t$ and the hidden layer $h_t$ connecting with the output layer at the same stage and producing an output $\tilde{y}_t$, respectively.
-o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
-o The output from the hidden layer produces $\tilde{y}_t=g(Vh_t+c)$ where $c$ is a new bias parameter.
-o The output from the training at a given stage is in turn compared with the observation $y_t$ thorugh a chosen cost function.
-
-The function $g$ can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
-The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
-
 !split
 ===== Gating mechanism: Long Short Term Memory (LSTM) =====
 
@@ -1067,4 +1150,46 @@ o A linear unit that has a self-link with a weight of 1 will maintain its state.
 o Information is stored in the cell by activating its write gate.
 o Information is retrieved by activating the read gate.
 o We can backpropagate through this circuit because logistics are have nice derivatives. 
+
+
+In contrast to FFNs, recurrent networks introduce feedback
+connections, meaning the information is allowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time-series data,
+natural language processing, speech recognition, and several other
+problems for which the order of the data is crucial.
+
+RNN architectures vary greatly in how they manage information flow and
+memory in the network. Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients.  This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long. Consequently, the convergence to correctly
+predicted values in the training process happens very slowly. This is
+particularly the case when using activation functions like the Sigmoid
+or hyperbolic tangent, (whose outputs are between 0 and 1 for Sigmoid,
+and -1 and 1 for $\tanh$), with equally small gradients by design
+($<1$).
+
+To address that, one natural alternative is to use the Long Short-Term
+Memory (LSTM) variation. While LSTMs are generally used, they also
+present the downside of being inefficient for large-scale models. For
+such problems, Gated recurrent units (GRUs) can be employed as they
+have a simpler architecture, thus being computationally faster. We
+will hereafter focus simply on the Vanilla and LSTM variants for their
+simplicity and popularity.
+
+
+
+
+
+
+
+
+
+
 
