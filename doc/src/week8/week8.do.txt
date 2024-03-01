@@ -1,27 +1,22 @@
-TITLE: March 13-17: Advanced machine learning and data analysis for the physical sciences
+TITLE: March 4-8: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: March 13-17, 2023
+DATE: March 5, 2024
 
-===== Plans for the week March 13-17  =====
+===== Plans for the week March 4-8  =====
 
 !bblock
-* Summary of RNNs and discussion of Long-Short-Term memory with examples
-* Discussion of Autoencoders (AEs). Codes will be discussed next week. 
+* RNNs and discussion of Long-Short-Term memory with examples
+* Discussion of Autoencoders (AEs). 
 * "Video of lecture":"https://youtu.be/F11o2W4OBqU"
 
 * Reading recommendations:
   o For RNNs see Goodfellow et al chapter 10. See also chapter 11 and 12 on practicalities and applications. For AEs, see chapter 14.
   o Reading suggestions for implementation of RNNs: "Aurelien Geron's chapter 14":"https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf". 
-  o "Deep Learning Tutorial on AEs from Stanford University":"http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/"
-  o "Building AEs in Keras":"https://blog.keras.io/building-autoencoders-in-keras.html"
-  o "Introduction to AEs in TensorFlow":"https://www.tensorflow.org/tutorials/generative/autoencoder"
-  o "Grosse, University of Toronto, Lecture on AEs":"http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf"
-  o "Bank et al on AEs":"https://arxiv.org/abs/2003.05991"  
 !eblock
 
 
 !split
-===== Summary of RNNs =====
+===== RNNs =====
 
 Recurrent neural networks (RNNs) have in general no probabilistic component
 in a model. With a given fixed input and target from data, the RNNs learn the intermediate
@@ -75,28 +70,6 @@ o A linear unit that has a self-link with a weight of 1 will maintain its state.
 o Information is stored in the cell by activating its write gate.
 o Information is retrieved by activating the read gate.
 o We can backpropagate through this circuit because logistics are have nice derivatives. 
-
-FIGURE: [figslides/RNN13.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN14.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN15.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN16.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN17.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN18.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN19.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN20.png, width=700 frac=0.9]
-
-
-FIGURE: [figslides/RNN21.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN22.png, width=700 frac=0.9]
-
 
 
 !split
