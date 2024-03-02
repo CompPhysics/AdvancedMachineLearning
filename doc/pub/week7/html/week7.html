@@ -8,8 +8,8 @@ doconce format html week7.do.txt --pygments_html_style=default --html_style=bloo
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="February 27-March 10: Advanced machine learning and data analysis for the physical sciences">
-<title>February 27-March 10: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="February 26-March 1: Advanced machine learning and data analysis for the physical sciences">
+<title>February 26-March 1: Advanced machine learning and data analysis for the physical sciences</title>
 <style type="text/css">
 /* bloodish style */
 body {
@@ -140,96 +140,122 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the weeks February 27-March 10',
+ 'sections': [('Plans for the week February 26-March 1',
                2,
                None,
-               'plans-for-the-weeks-february-27-march-10'),
-              ('Building convolutional neural networks in Tensorflow and Keras',
+               'plans-for-the-week-february-26-march-1'),
+              ('From FFNNs and CNNs to recurrent neural networks (RNNs)',
                2,
                None,
-               'building-convolutional-neural-networks-in-tensorflow-and-keras'),
-              ('Setting it up', 2, None, 'setting-it-up'),
-              ('The MNIST dataset again', 2, None, 'the-mnist-dataset-again'),
-              ('Strong correlations', 2, None, 'strong-correlations'),
-              ('Layers of a CNN', 2, None, 'layers-of-a-cnn'),
-              ('Systematic reduction', 2, None, 'systematic-reduction'),
-              ('Prerequisites: Collect and pre-process data',
-               2,
-               None,
-               'prerequisites-collect-and-pre-process-data'),
-              ('Importing Keras and Tensorflow',
-               2,
-               None,
-               'importing-keras-and-tensorflow'),
-              ('Running with Keras', 2, None, 'running-with-keras'),
-              ('Final part', 2, None, 'final-part'),
-              ('Final visualization', 2, None, 'final-visualization'),
+               'from-ffnns-and-cnns-to-recurrent-neural-networks-rnns'),
+              ('Feedback connections', 2, None, 'feedback-connections'),
+              ('Vanishing gradients', 2, None, 'vanishing-gradients'),
               ('Recurrent neural networks (RNNs): Overarching view',
                2,
                None,
                'recurrent-neural-networks-rnns-overarching-view'),
+              ('Sequential data only?', 2, None, 'sequential-data-only'),
+              ('Differential equations', 2, None, 'differential-equations'),
               ('A simple example', 2, None, 'a-simple-example'),
-              ('Memoryless models', 3, None, 'memoryless-models'),
-              ('Linear dynamical model', 3, None, 'linear-dynamical-model'),
-              ('Hidden Markov Models', 3, None, 'hidden-markov-models'),
-              ('RNNs', 3, None, 'rnns'),
-              ('Do generative models need to be stochastic?',
-               3,
-               None,
-               'do-generative-models-need-to-be-stochastic'),
+              ('RNNs', 2, None, 'rnns'),
               ('What kinds of behaviour can RNNs exhibit?',
-               3,
+               2,
                None,
                'what-kinds-of-behaviour-can-rnns-exhibit'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('We need to specify the initial activity state of all the '
-               'hidden and output units',
-               3,
+              ('Basic layout,  "Figures from Sebastian Rashcka et al, Machine '
+               'learning with Sickit-Learn and '
+               'PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"',
+               2,
                None,
-               'we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units'),
-              ('We can specify inputs in several ways',
-               3,
+               'basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html'),
+              ('Solving differential equations with RNNs',
+               2,
                None,
-               'we-can-specify-inputs-in-several-ways'),
-              ('We can specify targets in several ways',
-               3,
+               'solving-differential-equations-with-rnns'),
+              ('Two first-order differential equations',
+               2,
                None,
-               'we-can-specify-targets-in-several-ways'),
+               'two-first-order-differential-equations'),
+              ('Velocity only', 2, None, 'velocity-only'),
+              ('Linking with RNNs', 2, None, 'linking-with-rnns'),
+              ('Minor rewrite', 2, None, 'minor-rewrite'),
+              ('RNNs in more detail', 2, None, 'rnns-in-more-detail'),
+              ('RNNs in more detail, part 2',
+               2,
+               None,
+               'rnns-in-more-detail-part-2'),
+              ('RNNs in more detail, part 3',
+               2,
+               None,
+               'rnns-in-more-detail-part-3'),
+              ('RNNs in more detail, part 4',
+               2,
+               None,
+               'rnns-in-more-detail-part-4'),
+              ('RNNs in more detail, part 5',
+               2,
+               None,
+               'rnns-in-more-detail-part-5'),
+              ('RNNs in more detail, part 6',
+               2,
+               None,
+               'rnns-in-more-detail-part-6'),
+              ('RNNs in more detail, part 7',
+               2,
+               None,
+               'rnns-in-more-detail-part-7'),
               ('Backpropagation through time',
-               3,
+               2,
                None,
                'backpropagation-through-time'),
               ('The backward pass is linear',
-               3,
+               2,
                None,
                'the-backward-pass-is-linear'),
               ('The problem of exploding or vanishing gradients',
                2,
                None,
                'the-problem-of-exploding-or-vanishing-gradients'),
-              ('Four effective ways to learn an RNN',
+              ('Mathematical setup', 2, None, 'mathematical-setup'),
+              ('Back propagation in time through figures, part 1',
                2,
                None,
-               'four-effective-ways-to-learn-an-rnn'),
+               'back-propagation-in-time-through-figures-part-1'),
+              ('Back propagation in time, part 2',
+               2,
+               None,
+               'back-propagation-in-time-part-2'),
+              ('Back propagation in time, part 3',
+               2,
+               None,
+               'back-propagation-in-time-part-3'),
+              ('Back propagation in time, part 4',
+               2,
+               None,
+               'back-propagation-in-time-part-4'),
+              ('Back propagation in time in equations',
+               2,
+               None,
+               'back-propagation-in-time-in-equations'),
+              ('Chain rule again', 2, None, 'chain-rule-again'),
+              ('Gradients of loss functions',
+               2,
+               None,
+               'gradients-of-loss-functions'),
+              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
+              ('Summary of a  typical RNN',
+               2,
+               None,
+               'summary-of-a-typical-rnn'),
+              ('Four effective ways to learn an RNN and preparing for next '
+               'week',
+               2,
+               None,
+               'four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week'),
               ('Long Short Term Memory (LSTM)',
-               3,
-               None,
-               'long-short-term-memory-lstm'),
-              ('Implementing a memory cell in a neural network',
-               3,
-               None,
-               'implementing-a-memory-cell-in-a-neural-network'),
-              ('An extrapolation example', 2, None, 'an-extrapolation-example'),
-              ('Formatting the Data', 2, None, 'formatting-the-data'),
-              ('Predicting New Points With A Trained Recurrent Neural Network',
                2,
                None,
-               'predicting-new-points-with-a-trained-recurrent-neural-network'),
-              ('Other Things to Try', 2, None, 'other-things-to-try'),
-              ('Other Types of Recurrent Neural Networks',
-               2,
-               None,
-               'other-types-of-recurrent-neural-networks')]}
+               'long-short-term-memory-lstm')]}
 end of tocinfo -->
 
 <body>
@@ -251,7 +277,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------- main content ---------------------- -->
 <center>
-<h1>February 27-March 10: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>February 26-March 1: Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
@@ -267,394 +293,71 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>February 27-March 10, 2023</h4>
+<h4>February 26-March 1, 2024</h4>
 </center> <!-- date -->
 <br>
-<h2 id="plans-for-the-weeks-february-27-march-10">Plans for the weeks February 27-March 10  </h2>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="plans-for-the-week-february-26-march-1">Plans for the week February 26-March 1  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
-
-<ul>
+<ol>
 <li> Finalizing discussion of Convolutional  Neural Networks (CNNs)</li>
 <li> Discussion of recurrent neural networks (RNNs)</li>
-<li> <a href="https://youtu.be/_K8PEN0M0g8" target="_blank">Video of lecture</a></li>
+<li> <a href="https://youtu.be/VkQGq84ml_0" target="_blank">Video of lecture</a></li>
+<li> <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf" target="_blank">Whiteboard notes</a></li>
 <li> Reading recommendations:
 <ol type="a"></li>
- <li> For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9 and for RNNs, see chapter 10. See also chapter 11 and 12 on practicalities and applications</li>
- <li> Reading suggestions for implementation of CNNs and RNNs: <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf" target="_blank">Aurelien Geron's chapters 13 and 14</a>.</li> 
+ <li> Goodfellow, Bengio and Courville's chapter 10 from <a href="https://www.deeplearningbook.org/" target="_blank">Deep Learning</a></li>
+ <li> <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Sebastian Rashcka et al, chapter 15, Machine learning with Sickit-Learn and PyTorch</a></li>
+ <li> <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch05.html" target="_blank">David Foster, Generative Deep Learning with TensorFlow, see chapter 5</a></li>
 </ol>
-</ul>
+</ol>
 </div>
 
 
-<div class="alert alert-block alert-block alert-text-normal">
-<b>Excellent lectures on CNNs and Neural Networks</b>
-<p>
-<ul>
-<li> <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">Video on Deep Learning</a></li>
-<li> <a href="https://www.youtube.com/watch?v=iaSUYvmCekI&ab_channel=AlexanderAmini" target="_blank">Video  on Convolutional Neural Networks from MIT</a></li>
-<li> <a href="https://www.youtube.com/watch?v=bNb2fEVKeEo&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=6&ab_channel=StanfordUniversitySchoolofEngineering" target="_blank">Video on CNNs from Stanford</a></li>
-</ul>
-</div>
-
+<p>The last two books have codes for RNNs in PyTorch and TensorFlow/Keras. Next week we will study the solution of differential equations.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>
+<h2 id="from-ffnns-and-cnns-to-recurrent-neural-networks-rnns">From FFNNs and CNNs to recurrent neural networks (RNNs) </h2>
 
-<p>As discussed above, CNNs are neural networks built from the assumption that the inputs
-to the network are 2D images. This is important because the number of features or pixels in images
-grows very fast with the image size, and an enormous number of weights and biases are needed in order to build an accurate network.  
-</p>
-
-<p>As before, we still have our input, a hidden layer and an output. What's novel about convolutional networks
-are the <b>convolutional</b> and <b>pooling</b> layers stacked in pairs between the input and the hidden layer.
-In addition, the data is no longer represented as a 2D feature matrix, instead each input is a number of 2D
-matrices, typically 1 for each color dimension (Red, Green, Blue). 
+<p>There are limitation of FFNNs, one of which being that FFNNs are not
+designed to handle sequential data (data for which the order matters)
+effectively because they lack the capabilities of storing information
+about previous inputs; each input is being treated indepen-
+dently. This is a limitation when dealing with sequential data where
+past information can be vital to correctly process current and future
+inputs. 
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="setting-it-up">Setting it up </h2>
+<h2 id="feedback-connections">Feedback connections </h2>
 
-<p>It means that to represent the entire
-dataset of images, we require a 4D matrix or <b>tensor</b>. This tensor has the dimensions:  
-</p>
-$$  
-(n_{inputs},\, n_{pixels, width},\, n_{pixels, height},\, depth) .
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-mnist-dataset-again">The MNIST dataset again </h2>
-
-<p>The MNIST dataset consists of grayscale images with a pixel size of
-\( 28\times 28 \), meaning we require \( 28 \times 28 = 724 \) weights to each
-neuron in the first hidden layer.
-</p>
-
-<p>If we were to analyze images of size \( 128\times 128 \) we would require
-\( 128 \times 128 = 16384 \) weights to each neuron. Even worse if we were
-dealing with color images, as most images are, we have an image matrix
-of size \( 128\times 128 \) for each color dimension (Red, Green, Blue),
-meaning 3 times the number of weights \( = 49152 \) are required for every
-single neuron in the first hidden layer.
-</p>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="strong-correlations">Strong correlations </h2>
-
-<p>Images typically have strong local correlations, meaning that a small
-part of the image varies little from its neighboring regions. If for
-example we have an image of a blue car, we can roughly assume that a
-small blue part of the image is surrounded by other blue regions.
-</p>
-
-<p>Therefore, instead of connecting every single pixel to a neuron in the
-first hidden layer, as we have previously done with deep neural
-networks, we can instead connect each neuron to a small part of the
-image (in all 3 RGB depth dimensions).  The size of each small area is
-fixed, and known as a <a href="https://en.wikipedia.org/wiki/Receptive_field" target="_blank">receptive</a>.
-</p>
-
-
-<!-- !split  -->
-<h2 id="layers-of-a-cnn">Layers of a CNN </h2>
-<p>The layers of a convolutional neural network arrange neurons in 3D: width, height and depth.  
-The input image is typically a square matrix of depth 3. 
-</p>
-
-<p>A <b>convolution</b> is performed on the image which outputs
-a 3D volume of neurons. The weights to the input are arranged in a number of 2D matrices, known as <b>filters</b>.
-</p>
-
-<p>Each filter slides along the input image, taking the dot product
-between each small part of the image and the filter, in all depth
-dimensions. This is then passed through a non-linear function,
-typically the <b>Rectified Linear (ReLu)</b> function, which serves as the
-activation of the neurons in the first convolutional layer. This is
-further passed through a <b>pooling layer</b>, which reduces the size of the
-convolutional layer, e.g. by taking the maximum or average across some
-small regions, and this serves as input to the next convolutional
-layer.
+<p>In contrast to FFNNs, recurrent networks introduce feedback
+connections, meaning the information is allowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time- series data,
+natural language processing, speech recognition, and several other
+problems for which the order of the data is crucial.  The RNN
+architectures vary greatly in how they manage information flow and
+memory in the network.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="systematic-reduction">Systematic reduction </h2>
+<h2 id="vanishing-gradients">Vanishing gradients </h2>
 
-<p>By systematically reducing the size of the input volume, through
-convolution and pooling, the network should create representations of
-small parts of the input, and then from them assemble representations
-of larger areas.  The final pooling layer is flattened to serve as
-input to a hidden layer, such that each neuron in the final pooling
-layer is connected to every single neuron in the hidden layer. This
-then serves as input to the output layer, e.g. a softmax output for
-classification.
+<p>Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients. This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long.
 </p>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="prerequisites-collect-and-pre-process-data">Prerequisites: Collect and pre-process data </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># import necessary packages</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn</span> <span style="color: #008000; font-weight: bold">import</span> datasets
-
-
-<span style="color: #408080; font-style: italic"># ensure the same random numbers appear every time</span>
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">0</span>)
-
-<span style="color: #408080; font-style: italic"># display images in notebook</span>
-<span style="color: #666666">%</span>matplotlib inline
-plt<span style="color: #666666">.</span>rcParams[<span style="color: #BA2121">&#39;figure.figsize&#39;</span>] <span style="color: #666666">=</span> (<span style="color: #666666">12</span>,<span style="color: #666666">12</span>)
-
-
-<span style="color: #408080; font-style: italic"># download MNIST dataset</span>
-digits <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>load_digits()
-
-<span style="color: #408080; font-style: italic"># define inputs and labels</span>
-inputs <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>images
-labels <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>target
-
-<span style="color: #408080; font-style: italic"># RGB images have a depth of 3</span>
-<span style="color: #408080; font-style: italic"># our images are grayscale so they should have a depth of 1</span>
-inputs <span style="color: #666666">=</span> inputs[:,:,:,np<span style="color: #666666">.</span>newaxis]
-
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;inputs = (n_inputs, pixel_width, pixel_height, depth) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(inputs<span style="color: #666666">.</span>shape))
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;labels = (n_inputs) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(labels<span style="color: #666666">.</span>shape))
-
-
-<span style="color: #408080; font-style: italic"># choose some random images to display</span>
-n_inputs <span style="color: #666666">=</span> <span style="color: #008000">len</span>(inputs)
-indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(n_inputs)
-random_indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>choice(indices, size<span style="color: #666666">=5</span>)
-
-<span style="color: #008000; font-weight: bold">for</span> i, image <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(digits<span style="color: #666666">.</span>images[random_indices]):
-    plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">1</span>, <span style="color: #666666">5</span>, i<span style="color: #666666">+1</span>)
-    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
-    plt<span style="color: #666666">.</span>imshow(image, cmap<span style="color: #666666">=</span>plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>gray_r, interpolation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;nearest&#39;</span>)
-    plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;Label: </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> digits<span style="color: #666666">.</span>target[random_indices[i]])
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="importing-keras-and-tensorflow">Importing Keras and Tensorflow </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Input
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Sequential      <span style="color: #408080; font-style: italic">#This allows appending layers to existing models</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Dense           <span style="color: #408080; font-style: italic">#This allows defining the characteristics of a particular layer</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> optimizers             <span style="color: #408080; font-style: italic">#This allows using whichever optimiser we want (sgd,adam,RMSprop)</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> regularizers           <span style="color: #408080; font-style: italic">#This allows using whichever regularizer we want (l1,l2,l1_l2)</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.utils</span> <span style="color: #008000; font-weight: bold">import</span> to_categorical   <span style="color: #408080; font-style: italic">#This allows using categorical cross entropy as the cost function</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import Conv2D</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import MaxPooling2D</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import Flatten</span>
-
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn.model_selection</span> <span style="color: #008000; font-weight: bold">import</span> train_test_split
-
-<span style="color: #408080; font-style: italic"># representation of labels</span>
-labels <span style="color: #666666">=</span> to_categorical(labels)
-
-<span style="color: #408080; font-style: italic"># split into train and test data</span>
-<span style="color: #408080; font-style: italic"># one-liner from scikit-learn library</span>
-train_size <span style="color: #666666">=</span> <span style="color: #666666">0.8</span>
-test_size <span style="color: #666666">=</span> <span style="color: #666666">1</span> <span style="color: #666666">-</span> train_size
-X_train, X_test, Y_train, Y_test <span style="color: #666666">=</span> train_test_split(inputs, labels, train_size<span style="color: #666666">=</span>train_size,
-                                                    test_size<span style="color: #666666">=</span>test_size)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split  -->
-<h2 id="running-with-keras">Running with Keras </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_convolutional_neural_network_keras</span>(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd):
-    model <span style="color: #666666">=</span> Sequential()
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(n_filters, (receptive_field, receptive_field), input_shape<span style="color: #666666">=</span>input_shape, padding<span style="color: #666666">=</span><span style="color: #BA2121">&#39;same&#39;</span>,
-              activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D(pool_size<span style="color: #666666">=</span>(<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_neurons_connected, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_categories, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;softmax&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    
-    sgd <span style="color: #666666">=</span> optimizers<span style="color: #666666">.</span>SGD(lr<span style="color: #666666">=</span>eta)
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;categorical_crossentropy&#39;</span>, optimizer<span style="color: #666666">=</span>sgd, metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
-    
-    <span style="color: #008000; font-weight: bold">return</span> model
-
-epochs <span style="color: #666666">=</span> <span style="color: #666666">100</span>
-batch_size <span style="color: #666666">=</span> <span style="color: #666666">100</span>
-input_shape <span style="color: #666666">=</span> X_train<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>:<span style="color: #666666">4</span>]
-receptive_field <span style="color: #666666">=</span> <span style="color: #666666">3</span>
-n_filters <span style="color: #666666">=</span> <span style="color: #666666">10</span>
-n_neurons_connected <span style="color: #666666">=</span> <span style="color: #666666">50</span>
-n_categories <span style="color: #666666">=</span> <span style="color: #666666">10</span>
-
-eta_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
-lmbd_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="final-part">Final part </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">CNN_keras <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)), dtype<span style="color: #666666">=</span><span style="color: #008000">object</span>)
-        
-<span style="color: #008000; font-weight: bold">for</span> i, eta <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(eta_vals):
-    <span style="color: #008000; font-weight: bold">for</span> j, lmbd <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(lmbd_vals):
-        CNN <span style="color: #666666">=</span> create_convolutional_neural_network_keras(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd)
-        CNN<span style="color: #666666">.</span>fit(X_train, Y_train, epochs<span style="color: #666666">=</span>epochs, batch_size<span style="color: #666666">=</span>batch_size, verbose<span style="color: #666666">=0</span>)
-        scores <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)
-        
-        CNN_keras[i][j] <span style="color: #666666">=</span> CNN
-        
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Learning rate = &quot;</span>, eta)
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Lambda = &quot;</span>, lmbd)
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Test accuracy: </span><span style="color: #BB6688; font-weight: bold">%.3f</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> scores[<span style="color: #666666">1</span>])
-        <span style="color: #008000">print</span>()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="final-visualization">Final visualization </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># visual representation of grid search</span>
-<span style="color: #408080; font-style: italic"># uses seaborn heatmap, could probably do this in matplotlib</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">seaborn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">sns</span>
-
-sns<span style="color: #666666">.</span>set()
-
-train_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
-test_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
-
-<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(eta_vals)):
-    <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(lmbd_vals)):
-        CNN <span style="color: #666666">=</span> CNN_keras[i][j]
-
-        train_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_train, Y_train)[<span style="color: #666666">1</span>]
-        test_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)[<span style="color: #666666">1</span>]
-
-        
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
-sns<span style="color: #666666">.</span>heatmap(train_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
-ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Training Accuracy&quot;</span>)
-ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
-ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
-sns<span style="color: #666666">.</span>heatmap(test_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
-ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Test Accuracy&quot;</span>)
-ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
-ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="recurrent-neural-networks-rnns-overarching-view">Recurrent neural networks (RNNs): Overarching view </h2>
@@ -677,6 +380,39 @@ fixed-sized inputs like all the nets we have discussed so far. For
 example, they can take sentences, documents, or audio samples as
 input, making them extremely useful for natural language processing
 systems such as automatic translation and speech-to-text.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="sequential-data-only">Sequential data only? </h2>
+
+<p>An important issue is that in many deep learning methods we assume
+that the input and output data can be treated as independent and
+identically distributed, normally abbreviated to <b>iid</b>.
+This means that the data we use can be seen as mutually independent.
+</p>
+
+<p>This is however not the case for most data sets used in RNNs since we
+are dealing with sequences of data with strong inter-dependencies.
+This applies in particular to time series, which are sequential by
+contruction.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="differential-equations">Differential equations </h2>
+
+<p>As an example, the solutions of ordinary differential equations can be
+represented as a time series, similarly, how stock prices evolve as
+function of time is another example of a typical time series, or voice
+records and many other examples.
+</p>
+
+<p>Not all sequential data may however have a time stamp, texts being a
+typical example thereof, or DNA sequences.
+</p>
+
+<p>The main focus here is on data that can be structured either as time
+series or as ordered series of data.  We will not focus on for example
+natural language processing or similar data sets.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -765,58 +501,10 @@ plt<span style="color: #666666">.</span>show()
     </div>
   </div>
 </div>
-<h3 id="memoryless-models">Memoryless models </h3>
-
-<p>Autoregressive models Predict the next term in a sequence from a fixed number of previous terms using <b>delay taps</b>.</p>
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b>Feed-forward neural networks</b>
-<p>
-<p>These generalize autoregressive
-models by using one or more
-layers of non-linear hidden units. 
-</p>
-</div>
 
 
-<p>If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-</p>
-<ol>
-<li> It can store information in its hidden state for a long time.</li>
-<li> If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.</li>
-<li> The best we can do is to infer a probability distribution over the</li>
-</ol>
-<p>space of hidden state vectors.</p>
-
-<p>This inference is only tractable for two types of hidden state model.</p>
-<h3 id="linear-dynamical-model">Linear dynamical model </h3>
-
-<p>If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-</p>
-<ol>
-<li> It can store information in its hidden state for a long time.
-<ol type="a"></li>
-<li> If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.</li>
-</ol>
-<li> The best we can do is to infer a probability distribution over the space of hidden state vectors.</li>
-</ol>
-<h3 id="hidden-markov-models">Hidden Markov Models </h3>
-<p>Hidden Markov Models have a discrete oneof-\( N \) hidden state. Transitions between states
-are stochastic and controlled by a transition
-matrix. The outputs produced by a state are
-stochastic.
-</p>
-<ul>
-<li> We cannot be sure which state produced a given output. So the state is &#8220;hidden&#8221;.</li>
-<li> It is easy to represent a probability distribution across N states with N numbers.</li>
-<li> To predict the next output we need to infer the probability distribution over hidden states.</li>
-</ul>
-<p>HMMs have efficient algorithms for inference and learning</p>
-<h3 id="rnns">RNNs </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns">RNNs </h2>
 
 <p>RNNs are very powerful, because they
 combine two properties:
@@ -829,90 +517,141 @@ combine two properties:
 can compute anything that can be
 computed by your computer.
 </p>
-<h3 id="do-generative-models-need-to-be-stochastic">Do generative models need to be stochastic? </h3>
 
-<div class="alert alert-block alert-block alert-text-normal">
-<b>Linear dynamical systems and hidden Markov models are stochastic models.</b>
-<p>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="what-kinds-of-behaviour-can-rnns-exhibit">What kinds of behaviour can RNNs exhibit? </h2>
 
-<p>But the posterior probability
-distribution over their
-hidden states given the
-observed data so far is a
-deterministic function of the
-data.
-</p>
-</div>
- 
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b>Recurrent neural networks are deterministic.</b>
-<p>
-<p>Think of the hidden state
-of an RNN as the
-equivalent of the
-deterministic probability
-distribution over hidden
-states in a linear dynamical
-system or hidden Markov
-model.
-</p>
-</div>
-
-<h3 id="what-kinds-of-behaviour-can-rnns-exhibit">What kinds of behaviour can RNNs exhibit? </h3>
 <ol>
 <li> They can oscillate.</li> 
 <li> They can settle to point attractors.</li>
 <li> They can behave chaotically.</li>
 <li> RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.</li>
 </ol>
-<p>But the computational power of RNNs makes them very hard to train.</p>
+<p>But the extensive computational needs  of RNNs makes them very hard to train.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
+<h2 id="basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html">Basic layout,  <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a> </h2>
 
 <br/><br/>
 <center>
 <p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
-<h3 id="we-need-to-specify-the-initial-activity-state-of-all-the-hidden-and-output-units">We need to specify the initial activity state of all the hidden and output units </h3>
 
-<ol>
-<li> We could just fix these initial states to have some default value like 0.5.</li>
-<li> But it is better to treat the initial states as learned parameters.</li>
-<li> We learn them in the same way as we learn the weights.</li>
-<li> Start off with an initial random guess for the initial states.
-<ol type="a"></li>
- <li> At the end of each training sequence, backpropagate through time all the way to the initial states to get the gradient of the error function with respect to each initial state.</li>
- <li> Adjust the initial states by following the negative gradient.</li> 
-</ol>
-</ol>
-<h3 id="we-can-specify-inputs-in-several-ways">We can specify inputs in several ways </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="solving-differential-equations-with-rnns">Solving differential equations with RNNs </h2>
 
-<ol>
-<li> Specify the initial states of all the units.</li>
-<li> Specify the initial states of a subset of the units.</li>
-<li> Specify the states of the same subset of the units at every time step.</li>
-</ol>
-<p>This is the natural way to model most sequential data. </p>
-<h3 id="we-can-specify-targets-in-several-ways">We can specify targets in several ways </h3>
+<p>To gain some intuition on how we can use RNNs for time series, let us
+tailor the representation of the solution of a differential equation
+as a time series.
+</p>
 
-<ol>
-<li> Specify desired final activities of all the units</li>
-<li> Specify desired activities of all units for the last few steps</li>
-<li> Good for learning attractors</li>
-<li> It is easy to add in extra error derivatives as we backpropagate.</li>
-<ul>
-  <li> Specify the desired activity of a subset of the units.</li>
-</ul>
-<li> The other units are input or hidden units.</li> 
-</ol>
+<p>Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)</p>
+
+$$
+\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
+$$
+
+<p>where \( \eta \) is a constant used in scaling time into a dimensionless variable and \( F(t) \) is an external force acting on the system.
+The constant \( \eta \) is a so-called damping.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="two-first-order-differential-equations">Two first-order differential equations </h2>
+
+<p>In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
+with the velocity
+</p>
+$$
+v(t)=\frac{dx}{dt},
+$$
+
+<p>and the acceleration</p>
+$$
+\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
+$$
+
+<p>With the initial conditions \( v_0=v(t_0) \) and \( x_0=x(t_0) \) defined, we can integrate these equations and find their respective solutions.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="velocity-only">Velocity only </h2>
+
+<p>Let us focus on the velocity only. Discretizing and using the simplest
+possible approximation for the derivative, we have Euler's forward
+method for the updated velocity at a time step \( i+1 \) given by
+</p>
+$$
+v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
+$$
+
+<p>Defining a function</p>
+$$
+h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
+$$
+
+<p>we have</p>
+$$
+v_{i+1}=h_i(x_i,v_i,F_i).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="linking-with-rnns">Linking with RNNs </h2>
+
+<p>The equation</p>
+$$
+v_{i+1}=h_i(x_i,v_i,F_i).
+$$
+
+<p>can be used to train a feed-forward neural network with inputs \( v_i \) and outputs \( v_{i+1} \) at a time \( t_i \). But we can think of this also as a recurrent neural network
+with inputs \( v_i \), \( x_i \) and \( F_i \) at each time step \( t_i \), and producing an output \( v_{i+1} \).
+</p>
+
+<p>Noting that </p>
+$$
+v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
+$$
+
+<p>we have</p>
+$$
+v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
+$$
+
+<p>and we can rewrite</p>
+$$
+v_{i+1}=h_i(x_i,h_{i-1},F_i).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="minor-rewrite">Minor rewrite </h2>
+
+<p>We can thus set up a recurring series which depends on the inputs \( x_i \) and \( F_i \) and the previous values \( h_{i-1} \).
+We assume now that the inputs at each step (or time \( t_i \)) is given by \( x_i \) only and we denote the outputs for \( \tilde{y}_i \) instead of \( v_{i_1} \), we have then the compact equation for our outputs at each step \( t_i \)
+</p>
+$$
+y_{i}=h_i(x_i,h_{i-1}).
+$$
+
+<p>We can think of this as an element in a recurrent network where our
+network (our model) produces an output \( y_i \) which is then compared
+with a target value through a given cost/loss function that we
+optimize. The target values at a given step \( t_i \) could be the results
+of a measurement or simply the analytical results of a differential
+equation.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail">RNNs in more detail  </h2>
+
 <br/><br/>
 <center>
 <p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail-part-2">RNNs in more detail, part 2  </h2>
 
 <br/><br/>
 <center>
@@ -920,18 +659,53 @@ model.
 </center>
 <br/><br/>
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail-part-3">RNNs in more detail, part 3  </h2>
+
 <br/><br/>
 <center>
 <p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail-part-4">RNNs in more detail, part 4  </h2>
+
 <br/><br/>
 <center>
 <p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
-<h3 id="backpropagation-through-time">Backpropagation through time </h3>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail-part-5">RNNs in more detail, part 5  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN6.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail-part-6">RNNs in more detail, part 6  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN7.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rnns-in-more-detail-part-7">RNNs in more detail, part 7  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN8.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="backpropagation-through-time">Backpropagation through time </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
@@ -949,7 +723,8 @@ with weight constraints.
 <li> The backward pass peels activities off the stack to compute the error derivatives at each time step.</li>
 <li> After the backward pass we add together the derivatives at all the different times for each weight.</li> 
 </ol>
-<h3 id="the-backward-pass-is-linear">The backward pass is linear </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-backward-pass-is-linear">The backward pass is linear </h2>
 
 <ol>
 <li> There is a big difference between the forward and backward passes.</li>
@@ -959,48 +734,6 @@ with weight constraints.
 <p>The forward pass determines the slope of the linear function used for
 backpropagating through each neuron
 </p>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN6.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN7.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN8.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN10.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN11.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
 
 <!-- !split  -->
 <h2 id="the-problem-of-exploding-or-vanishing-gradients">The problem of exploding or vanishing gradients </h2>
@@ -1020,7 +753,132 @@ backpropagating through each neuron
 <p>RNNs have difficulty dealing with long-range dependencies. </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="four-effective-ways-to-learn-an-rnn">Four effective ways to learn an RNN </h2>
+<h2 id="mathematical-setup">Mathematical setup </h2>
+
+<p>The expression for the simplest Recurrent network resembles that of a
+regular feed-forward neural network, but now with
+the concept of temporal dependencies
+</p>
+
+$$
+\begin{align*}
+    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
+    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
+    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-propagation-in-time-through-figures-part-1">Back propagation in time through figures, part 1   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-propagation-in-time-part-2">Back propagation in time, part 2   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN10.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-propagation-in-time-part-3">Back propagation in time, part 3   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN11.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-propagation-in-time-part-4">Back propagation in time, part 4   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-propagation-in-time-in-equations">Back propagation in time in equations </h2>
+
+<p>To derive the expression of the gradients of \( \mathcal{L} \) for
+the RNN, we need to start recursively from the nodes closer to the
+output layer in the temporal unrolling scheme - such as \( \mathbf{y} \)
+and \( \mathbf{h} \) at final time \( t = \tau \),
+</p>
+
+$$
+\begin{align*}
+    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial y_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="chain-rule-again">Chain rule again </h2>
+<p>For the following hidden nodes, we have to iterate through time, so by the chain rule, </p>
+
+$$
+\begin{align*}
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gradients-of-loss-functions">Gradients of loss functions </h2>
+<p>Similarly, the gradients of \( \mathcal{L} \) with respect to the weights and biases follow,</p>
+
+$$
+\begin{align*}
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
+    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
+    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
+    \label{eq:rnn_gradients3}
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="summary-of-rnns">Summary of RNNs </h2>
+
+<p>Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+</p>
+
+<p>In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="summary-of-a-typical-rnn">Summary of a  typical RNN </h2>
+
+<ol>
+<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
+<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
+<li> The output from the hidden layer produces \( \tilde{y}_t=\sigma_y(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
+<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
+</ol>
+<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
+The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week">Four effective ways to learn an RNN and preparing for next week </h2>
 <ol>
 <li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
 <li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
@@ -1030,7 +888,8 @@ backpropagating through each neuron
 </ul>
 <li> Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum</li>
 </ol>
-<h3 id="long-short-term-memory-lstm">Long Short Term Memory (LSTM) </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="long-short-term-memory-lstm">Long Short Term Memory (LSTM) </h2>
 
 <p>LSTM uses a memory cell for 
  modeling long-range dependencies and avoid vanishing gradient
@@ -1044,747 +903,9 @@ backpropagating through each neuron
 <li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
 <li> Information can be read from the cell by turning on its <b>read</b> gate.</li> 
 </ol>
-<h3 id="implementing-a-memory-cell-in-a-neural-network">Implementing a memory cell in a neural network </h3>
-<p>To preserve information for a long time in
-the activities of an RNN, we use a circuit
-that implements an analog memory cell.
-</p>
-
-<ol>
-<li> A linear unit that has a self-link with a weight of 1 will maintain its state.</li>
-<li> Information is stored in the cell by activating its write gate.</li>
-<li> Information is retrieved by activating the read gate.</li>
-<li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
-</ol>
-<br/><br/>
-<center>
-<p><img src="figslides/RNN13.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN14.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN15.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN16.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN17.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN18.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN19.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN20.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN21.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN22.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="an-extrapolation-example">An extrapolation example </h2>
-
-<p>The following code provides an example of how recurrent neural
-networks can be used to extrapolate to unknown values of physics data
-sets.  Specifically, the data sets used in this program come from
-a quantum mechanical many-body calculation of energies as functions of the number of particles.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># For matrices and calculations</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
-<span style="color: #408080; font-style: italic"># For machine learning (backend for keras)</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
-<span style="color: #408080; font-style: italic"># User-friendly machine learning library</span>
-<span style="color: #408080; font-style: italic"># Front end for TensorFlow</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span>
-<span style="color: #408080; font-style: italic"># Different methods from Keras needed to create an RNN</span>
-<span style="color: #408080; font-style: italic"># This is not necessary but it shortened function calls </span>
-<span style="color: #408080; font-style: italic"># that need to be used in the code.</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Input
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> regularizers
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Model, Sequential
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Dense, SimpleRNN, LSTM, GRU
-<span style="color: #408080; font-style: italic"># For timing the code</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">timeit</span> <span style="color: #008000; font-weight: bold">import</span> default_timer <span style="color: #008000; font-weight: bold">as</span> timer
-<span style="color: #408080; font-style: italic"># For plotting</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-
-
-<span style="color: #408080; font-style: italic"># The data set</span>
-datatype<span style="color: #666666">=</span><span style="color: #BA2121">&#39;VaryDimension&#39;</span>
-X_tot <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(<span style="color: #666666">2</span>, <span style="color: #666666">42</span>, <span style="color: #666666">2</span>)
-y_tot <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([<span style="color: #666666">-0.03077640549</span>, <span style="color: #666666">-0.08336233266</span>, <span style="color: #666666">-0.1446729567</span>, <span style="color: #666666">-0.2116753732</span>, <span style="color: #666666">-0.2830637392</span>, <span style="color: #666666">-0.3581341341</span>, <span style="color: #666666">-0.436462435</span>, <span style="color: #666666">-0.5177783846</span>,
-	<span style="color: #666666">-0.6019067271</span>, <span style="color: #666666">-0.6887363571</span>, <span style="color: #666666">-0.7782028952</span>, <span style="color: #666666">-0.8702784034</span>, <span style="color: #666666">-0.9649652536</span>, <span style="color: #666666">-1.062292565</span>, <span style="color: #666666">-1.16231451</span>, 
-	<span style="color: #666666">-1.265109911</span>, <span style="color: #666666">-1.370782966</span>, <span style="color: #666666">-1.479465113</span>, <span style="color: #666666">-1.591317992</span>, <span style="color: #666666">-1.70653767</span>])
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="formatting-the-data">Formatting the Data </h2>
-
-<p>The way the recurrent neural networks are trained in this program
-differs from how machine learning algorithms are usually trained.
-Typically a machine learning algorithm is trained by learning the
-relationship between the x data and the y data.  In this program, the
-recurrent neural network will be trained to recognize the relationship
-in a sequence of y values.  This is type of data formatting is
-typically used time series forcasting, but it can also be used in any
-extrapolation (time series forecasting is just a specific type of
-extrapolation along the time axis).  This method of data formatting
-does not use the x data and assumes that the y data are evenly spaced.
-</p>
-
-<p>For a standard machine learning algorithm, the training data has the
-form of (x,y) so the machine learning algorithm learns to assiciate a
-y value with a given x value.  This is useful when the test data has x
-values within the same range as the training data.  However, for this
-application, the x values of the test data are outside of the x values
-of the training data and the traditional method of training a machine
-learning algorithm does not work as well.  For this reason, the
-recurrent neural network is trained on sequences of y values of the
-form ((y1, y2), y3), so that the network is concerned with learning
-the pattern of the y data and not the relation between the x and y
-data.  As long as the pattern of y data outside of the training region
-stays relatively stable compared to what was inside the training
-region, this method of training can produce accurate extrapolations to
-y values far removed from the training data set.
-</p>
-
-<!--  -->
-<!-- The idea behind formatting the data in this way comes from [this resource](https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/) and [this one](https://fairyonice.github.io/Understand-Keras%27s-RNN-behind-the-scenes-with-a-sin-wave-example.html). -->
-<!--  -->
-<!-- The following method takes in a y data set and formats it so the "x data" are of the form (y1, y2) and the "y data" are of the form y3, with extra brackets added in to make the resulting arrays compatable with both Keras and Tensorflow. -->
-<!--  -->
-<!-- Note: Using a sequence length of two is not required for time series forecasting so any lenght of sequence could be used (for example instead of ((y1, y2) y3) you could change the length of sequence to be 4 and the resulting data points would have the form ((y1, y2, y3, y4), y5)).  While the following method can be used to create a data set of any sequence length, the remainder of the code expects the length of sequence to be 2.  This is because the data sets are very small and the higher the lenght of the sequence the less resulting data points. -->
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># FORMAT_DATA</span>
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">format_data</span>(data, length_of_sequence <span style="color: #666666">=</span> <span style="color: #666666">2</span>):  
-    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
-<span style="color: #BA2121; font-style: italic">        Inputs:</span>
-<span style="color: #BA2121; font-style: italic">            data(a numpy array): the data that will be the inputs to the recurrent neural</span>
-<span style="color: #BA2121; font-style: italic">                network</span>
-<span style="color: #BA2121; font-style: italic">            length_of_sequence (an int): the number of elements in one iteration of the</span>
-<span style="color: #BA2121; font-style: italic">                sequence patter.  For a function approximator use length_of_sequence = 2.</span>
-<span style="color: #BA2121; font-style: italic">        Returns:</span>
-<span style="color: #BA2121; font-style: italic">            rnn_input (a 3D numpy array): the input data for the recurrent neural network.  Its</span>
-<span style="color: #BA2121; font-style: italic">                dimensions are length of data - length of sequence, length of sequence, </span>
-<span style="color: #BA2121; font-style: italic">                dimnsion of data</span>
-<span style="color: #BA2121; font-style: italic">            rnn_output (a numpy array): the training data for the neural network</span>
-<span style="color: #BA2121; font-style: italic">        Formats data to be used in a recurrent neural network.</span>
-<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-
-    X, Y <span style="color: #666666">=</span> [], []
-    <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(data)<span style="color: #666666">-</span>length_of_sequence):
-        <span style="color: #408080; font-style: italic"># Get the next length_of_sequence elements</span>
-        a <span style="color: #666666">=</span> data[i:i<span style="color: #666666">+</span>length_of_sequence]
-        <span style="color: #408080; font-style: italic"># Get the element that immediately follows that</span>
-        b <span style="color: #666666">=</span> data[i<span style="color: #666666">+</span>length_of_sequence]
-        <span style="color: #408080; font-style: italic"># Reshape so that each data point is contained in its own array</span>
-        a <span style="color: #666666">=</span> np<span style="color: #666666">.</span>reshape (a, (<span style="color: #008000">len</span>(a), <span style="color: #666666">1</span>))
-        X<span style="color: #666666">.</span>append(a)
-        Y<span style="color: #666666">.</span>append(b)
-    rnn_input <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array(X)
-    rnn_output <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array(Y)
-
-    <span style="color: #008000; font-weight: bold">return</span> rnn_input, rnn_output
-
-
-<span style="color: #408080; font-style: italic"># ## Defining the Recurrent Neural Network Using Keras</span>
-<span style="color: #408080; font-style: italic"># </span>
-<span style="color: #408080; font-style: italic"># The following method defines a simple recurrent neural network in keras consisting of one input layer, one hidden layer, and one output layer.</span>
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">rnn</span>(length_of_sequences, batch_size <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>, stateful <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">False</span>):
-    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
-<span style="color: #BA2121; font-style: italic">        Inputs:</span>
-<span style="color: #BA2121; font-style: italic">            length_of_sequences (an int): the number of y values in &quot;x data&quot;.  This is determined</span>
-<span style="color: #BA2121; font-style: italic">                when the data is formatted</span>
-<span style="color: #BA2121; font-style: italic">            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">        Returns:</span>
-<span style="color: #BA2121; font-style: italic">            model (a Keras model): The recurrent neural network that is built and compiled by this</span>
-<span style="color: #BA2121; font-style: italic">                method</span>
-<span style="color: #BA2121; font-style: italic">        Builds and compiles a recurrent neural network with one hidden layer and returns the model.</span>
-<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-    <span style="color: #408080; font-style: italic"># Number of neurons in the input and output layers</span>
-    in_out_neurons <span style="color: #666666">=</span> <span style="color: #666666">1</span>
-    <span style="color: #408080; font-style: italic"># Number of neurons in the hidden layer</span>
-    hidden_neurons <span style="color: #666666">=</span> <span style="color: #666666">200</span>
-    <span style="color: #408080; font-style: italic"># Define the input layer</span>
-    inp <span style="color: #666666">=</span> Input(batch_shape<span style="color: #666666">=</span>(batch_size, 
-                length_of_sequences, 
-                in_out_neurons))  
-    <span style="color: #408080; font-style: italic"># Define the hidden layer as a simple RNN layer with a set number of neurons and add it to </span>
-    <span style="color: #408080; font-style: italic"># the network immediately after the input layer</span>
-    rnn <span style="color: #666666">=</span> SimpleRNN(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>,
-                    stateful <span style="color: #666666">=</span> stateful,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN&quot;</span>)(inp)
-    <span style="color: #408080; font-style: italic"># Define the output layer as a dense neural network layer (standard neural network layer)</span>
-    <span style="color: #408080; font-style: italic">#and add it to the network immediately after the hidden layer.</span>
-    dens <span style="color: #666666">=</span> Dense(in_out_neurons,name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;dense&quot;</span>)(rnn)
-    <span style="color: #408080; font-style: italic"># Create the machine learning model starting with the input layer and ending with the </span>
-    <span style="color: #408080; font-style: italic"># output layer</span>
-    model <span style="color: #666666">=</span> Model(inputs<span style="color: #666666">=</span>[inp],outputs<span style="color: #666666">=</span>[dens])
-    <span style="color: #408080; font-style: italic"># Compile the machine learning model using the mean squared error function as the loss </span>
-    <span style="color: #408080; font-style: italic"># function and an Adams optimizer.</span>
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;mean_squared_error&quot;</span>, optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&quot;adam&quot;</span>)  
-    <span style="color: #008000; font-weight: bold">return</span> model
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="predicting-new-points-with-a-trained-recurrent-neural-network">Predicting New Points With A Trained Recurrent Neural Network </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_rnn</span> (x1, y_test, plot_min, plot_max):
-    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
-<span style="color: #BA2121; font-style: italic">        Inputs:</span>
-<span style="color: #BA2121; font-style: italic">            x1 (a list or numpy array): The complete x component of the data set</span>
-<span style="color: #BA2121; font-style: italic">            y_test (a list or numpy array): The complete y component of the data set</span>
-<span style="color: #BA2121; font-style: italic">            plot_min (an int or float): the smallest x value used in the training data</span>
-<span style="color: #BA2121; font-style: italic">            plot_max (an int or float): the largest x valye used in the training data</span>
-<span style="color: #BA2121; font-style: italic">        Returns:</span>
-<span style="color: #BA2121; font-style: italic">            None.</span>
-<span style="color: #BA2121; font-style: italic">        Uses a trained recurrent neural network model to predict future points in the </span>
-<span style="color: #BA2121; font-style: italic">        series.  Computes the MSE of the predicted data set from the true data set, saves</span>
-<span style="color: #BA2121; font-style: italic">        the predicted data set to a csv file, and plots the predicted and true data sets w</span>
-<span style="color: #BA2121; font-style: italic">        while also displaying the data range used for training.</span>
-<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-    <span style="color: #408080; font-style: italic"># Add the training data as the first dim points in the predicted data array as these</span>
-    <span style="color: #408080; font-style: italic"># are known values.</span>
-    y_pred <span style="color: #666666">=</span> y_test[:dim]<span style="color: #666666">.</span>tolist()
-    <span style="color: #408080; font-style: italic"># Generate the first input to the trained recurrent neural network using the last two </span>
-    <span style="color: #408080; font-style: italic"># points of the training data.  Based on how the network was trained this means that it</span>
-    <span style="color: #408080; font-style: italic"># will predict the first point in the data set after the training data.  All of the </span>
-    <span style="color: #408080; font-style: italic"># brackets are necessary for Tensorflow.</span>
-    next_input <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[[y_test[dim<span style="color: #666666">-2</span>]], [y_test[dim<span style="color: #666666">-1</span>]]]])
-    <span style="color: #408080; font-style: italic"># Save the very last point in the training data set.  This will be used later.</span>
-    last <span style="color: #666666">=</span> [y_test[dim<span style="color: #666666">-1</span>]]
-
-    <span style="color: #408080; font-style: italic"># Iterate until the complete data set is created.</span>
-    <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span> (dim, <span style="color: #008000">len</span>(y_test)):
-        <span style="color: #408080; font-style: italic"># Predict the next point in the data set using the previous two points.</span>
-        <span style="color: #008000">next</span> <span style="color: #666666">=</span> model<span style="color: #666666">.</span>predict(next_input)
-        <span style="color: #408080; font-style: italic"># Append just the number of the predicted data set</span>
-        y_pred<span style="color: #666666">.</span>append(<span style="color: #008000">next</span>[<span style="color: #666666">0</span>][<span style="color: #666666">0</span>])
-        <span style="color: #408080; font-style: italic"># Create the input that will be used to predict the next data point in the data set.</span>
-        next_input <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[last, <span style="color: #008000">next</span>[<span style="color: #666666">0</span>]]], dtype<span style="color: #666666">=</span>np<span style="color: #666666">.</span>float64)
-        last <span style="color: #666666">=</span> <span style="color: #008000">next</span>
-
-    <span style="color: #408080; font-style: italic"># Print the mean squared error between the known data set and the predicted data set.</span>
-    <span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;MSE: &#39;</span>, np<span style="color: #666666">.</span>square(np<span style="color: #666666">.</span>subtract(y_test, y_pred))<span style="color: #666666">.</span>mean())
-    <span style="color: #408080; font-style: italic"># Save the predicted data set as a csv file for later use</span>
-    name <span style="color: #666666">=</span> datatype <span style="color: #666666">+</span> <span style="color: #BA2121">&#39;Predicted&#39;</span><span style="color: #666666">+</span><span style="color: #008000">str</span>(dim)<span style="color: #666666">+</span><span style="color: #BA2121">&#39;.csv&#39;</span>
-    np<span style="color: #666666">.</span>savetxt(name, y_pred, delimiter<span style="color: #666666">=</span><span style="color: #BA2121">&#39;,&#39;</span>)
-    <span style="color: #408080; font-style: italic"># Plot the known data set and the predicted data set.  The red box represents the region that was used</span>
-    <span style="color: #408080; font-style: italic"># for the training data.</span>
-    fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots()
-    ax<span style="color: #666666">.</span>plot(x1, y_test, label<span style="color: #666666">=</span><span style="color: #BA2121">&quot;true&quot;</span>, linewidth<span style="color: #666666">=3</span>)
-    ax<span style="color: #666666">.</span>plot(x1, y_pred, <span style="color: #BA2121">&#39;g-.&#39;</span>,label<span style="color: #666666">=</span><span style="color: #BA2121">&quot;predicted&quot;</span>, linewidth<span style="color: #666666">=4</span>)
-    ax<span style="color: #666666">.</span>legend()
-    <span style="color: #408080; font-style: italic"># Created a red region to represent the points used in the training data.</span>
-    ax<span style="color: #666666">.</span>axvspan(plot_min, plot_max, alpha<span style="color: #666666">=0.25</span>, color<span style="color: #666666">=</span><span style="color: #BA2121">&#39;red&#39;</span>)
-    plt<span style="color: #666666">.</span>show()
-
-<span style="color: #408080; font-style: italic"># Check to make sure the data set is complete</span>
-<span style="color: #008000; font-weight: bold">assert</span> <span style="color: #008000">len</span>(X_tot) <span style="color: #666666">==</span> <span style="color: #008000">len</span>(y_tot)
-
-<span style="color: #408080; font-style: italic"># This is the number of points that will be used in as the training data</span>
-dim<span style="color: #666666">=12</span>
-
-<span style="color: #408080; font-style: italic"># Separate the training data from the whole data set</span>
-X_train <span style="color: #666666">=</span> X_tot[:dim]
-y_train <span style="color: #666666">=</span> y_tot[:dim]
-
-
-<span style="color: #408080; font-style: italic"># Generate the training data for the RNN, using a sequence of 2</span>
-rnn_input, rnn_training <span style="color: #666666">=</span> format_data(y_train, <span style="color: #666666">2</span>)
-
-
-<span style="color: #408080; font-style: italic"># Create a recurrent neural network in Keras and produce a summary of the </span>
-<span style="color: #408080; font-style: italic"># machine learning model</span>
-model <span style="color: #666666">=</span> rnn(length_of_sequences <span style="color: #666666">=</span> rnn_input<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>])
-model<span style="color: #666666">.</span>summary()
-
-<span style="color: #408080; font-style: italic"># Start the timer.  Want to time training+testing</span>
-start <span style="color: #666666">=</span> timer()
-<span style="color: #408080; font-style: italic"># Fit the model using the training data genenerated above using 150 training iterations and a 5%</span>
-<span style="color: #408080; font-style: italic"># validation split.  Setting verbose to True prints information about each training iteration.</span>
-hist <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(rnn_input, rnn_training, batch_size<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>, epochs<span style="color: #666666">=150</span>, 
-                 verbose<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,validation_split<span style="color: #666666">=0.05</span>)
-
-<span style="color: #008000; font-weight: bold">for</span> label <span style="color: #AA22FF; font-weight: bold">in</span> [<span style="color: #BA2121">&quot;loss&quot;</span>,<span style="color: #BA2121">&quot;val_loss&quot;</span>]:
-    plt<span style="color: #666666">.</span>plot(hist<span style="color: #666666">.</span>history[label],label<span style="color: #666666">=</span>label)
-
-plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;loss&quot;</span>)
-plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;epoch&quot;</span>)
-plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;The final validation loss: </span><span style="color: #BB6688; font-weight: bold">{}</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">.</span>format(hist<span style="color: #666666">.</span>history[<span style="color: #BA2121">&quot;val_loss&quot;</span>][<span style="color: #666666">-1</span>]))
-plt<span style="color: #666666">.</span>legend()
-plt<span style="color: #666666">.</span>show()
-
-<span style="color: #408080; font-style: italic"># Use the trained neural network to predict more points of the data set</span>
-test_rnn(X_tot, y_tot, X_tot[<span style="color: #666666">0</span>], X_tot[dim<span style="color: #666666">-1</span>])
-<span style="color: #408080; font-style: italic"># Stop the timer and calculate the total time needed.</span>
-end <span style="color: #666666">=</span> timer()
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Time: &#39;</span>, end<span style="color: #666666">-</span>start)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="other-things-to-try">Other Things to Try </h2>
-
-<p>Changing the size of the recurrent neural network and its parameters
-can drastically change the results you get from the model.  The below
-code takes the simple recurrent neural network from above and adds a
-second hidden layer, changes the number of neurons in the hidden
-layer, and explicitly declares the activation function of the hidden
-layers to be a sigmoid function.  The loss function and optimizer can
-also be changed but are kept the same as the above network.  These
-parameters can be tuned to provide the optimal result from the
-network.  For some ideas on how to improve the performance of a
-<a href="https://danijar.com/tips-for-training-recurrent-neural-networks" target="_blank">recurrent neural network</a>.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">rnn_2layers</span>(length_of_sequences, batch_size <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>, stateful <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">False</span>):
-    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
-<span style="color: #BA2121; font-style: italic">        Inputs:</span>
-<span style="color: #BA2121; font-style: italic">            length_of_sequences (an int): the number of y values in &quot;x data&quot;.  This is determined</span>
-<span style="color: #BA2121; font-style: italic">                when the data is formatted</span>
-<span style="color: #BA2121; font-style: italic">            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">        Returns:</span>
-<span style="color: #BA2121; font-style: italic">            model (a Keras model): The recurrent neural network that is built and compiled by this</span>
-<span style="color: #BA2121; font-style: italic">                method</span>
-<span style="color: #BA2121; font-style: italic">        Builds and compiles a recurrent neural network with two hidden layers and returns the model.</span>
-<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-    <span style="color: #408080; font-style: italic"># Number of neurons in the input and output layers</span>
-    in_out_neurons <span style="color: #666666">=</span> <span style="color: #666666">1</span>
-    <span style="color: #408080; font-style: italic"># Number of neurons in the hidden layer, increased from the first network</span>
-    hidden_neurons <span style="color: #666666">=</span> <span style="color: #666666">500</span>
-    <span style="color: #408080; font-style: italic"># Define the input layer</span>
-    inp <span style="color: #666666">=</span> Input(batch_shape<span style="color: #666666">=</span>(batch_size, 
-                length_of_sequences, 
-                in_out_neurons))  
-    <span style="color: #408080; font-style: italic"># Create two hidden layers instead of one hidden layer.  Explicitly set the activation</span>
-    <span style="color: #408080; font-style: italic"># function to be the sigmoid function (the default value is hyperbolic tangent)</span>
-    rnn1 <span style="color: #666666">=</span> SimpleRNN(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,  <span style="color: #408080; font-style: italic"># This needs to be True if another hidden layer is to follow</span>
-                    stateful <span style="color: #666666">=</span> stateful, activation <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;sigmoid&#39;</span>,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN1&quot;</span>)(inp)
-    rnn2 <span style="color: #666666">=</span> SimpleRNN(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>, activation <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;sigmoid&#39;</span>,
-                    stateful <span style="color: #666666">=</span> stateful,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN2&quot;</span>)(rnn1)
-    <span style="color: #408080; font-style: italic"># Define the output layer as a dense neural network layer (standard neural network layer)</span>
-    <span style="color: #408080; font-style: italic">#and add it to the network immediately after the hidden layer.</span>
-    dens <span style="color: #666666">=</span> Dense(in_out_neurons,name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;dense&quot;</span>)(rnn2)
-    <span style="color: #408080; font-style: italic"># Create the machine learning model starting with the input layer and ending with the </span>
-    <span style="color: #408080; font-style: italic"># output layer</span>
-    model <span style="color: #666666">=</span> Model(inputs<span style="color: #666666">=</span>[inp],outputs<span style="color: #666666">=</span>[dens])
-    <span style="color: #408080; font-style: italic"># Compile the machine learning model using the mean squared error function as the loss </span>
-    <span style="color: #408080; font-style: italic"># function and an Adams optimizer.</span>
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;mean_squared_error&quot;</span>, optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&quot;adam&quot;</span>)  
-    <span style="color: #008000; font-weight: bold">return</span> model
-
-<span style="color: #408080; font-style: italic"># Check to make sure the data set is complete</span>
-<span style="color: #008000; font-weight: bold">assert</span> <span style="color: #008000">len</span>(X_tot) <span style="color: #666666">==</span> <span style="color: #008000">len</span>(y_tot)
-
-<span style="color: #408080; font-style: italic"># This is the number of points that will be used in as the training data</span>
-dim<span style="color: #666666">=12</span>
-
-<span style="color: #408080; font-style: italic"># Separate the training data from the whole data set</span>
-X_train <span style="color: #666666">=</span> X_tot[:dim]
-y_train <span style="color: #666666">=</span> y_tot[:dim]
-
-
-<span style="color: #408080; font-style: italic"># Generate the training data for the RNN, using a sequence of 2</span>
-rnn_input, rnn_training <span style="color: #666666">=</span> format_data(y_train, <span style="color: #666666">2</span>)
-
-
-<span style="color: #408080; font-style: italic"># Create a recurrent neural network in Keras and produce a summary of the </span>
-<span style="color: #408080; font-style: italic"># machine learning model</span>
-model <span style="color: #666666">=</span> rnn_2layers(length_of_sequences <span style="color: #666666">=</span> <span style="color: #666666">2</span>)
-model<span style="color: #666666">.</span>summary()
-
-<span style="color: #408080; font-style: italic"># Start the timer.  Want to time training+testing</span>
-start <span style="color: #666666">=</span> timer()
-<span style="color: #408080; font-style: italic"># Fit the model using the training data genenerated above using 150 training iterations and a 5%</span>
-<span style="color: #408080; font-style: italic"># validation split.  Setting verbose to True prints information about each training iteration.</span>
-hist <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(rnn_input, rnn_training, batch_size<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>, epochs<span style="color: #666666">=150</span>, 
-                 verbose<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,validation_split<span style="color: #666666">=0.05</span>)
-
-
-<span style="color: #408080; font-style: italic"># This section plots the training loss and the validation loss as a function of training iteration.</span>
-<span style="color: #408080; font-style: italic"># This is not required for analyzing the couple cluster data but can help determine if the network is</span>
-<span style="color: #408080; font-style: italic"># being overtrained.</span>
-<span style="color: #008000; font-weight: bold">for</span> label <span style="color: #AA22FF; font-weight: bold">in</span> [<span style="color: #BA2121">&quot;loss&quot;</span>,<span style="color: #BA2121">&quot;val_loss&quot;</span>]:
-    plt<span style="color: #666666">.</span>plot(hist<span style="color: #666666">.</span>history[label],label<span style="color: #666666">=</span>label)
-
-plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;loss&quot;</span>)
-plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;epoch&quot;</span>)
-plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;The final validation loss: </span><span style="color: #BB6688; font-weight: bold">{}</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">.</span>format(hist<span style="color: #666666">.</span>history[<span style="color: #BA2121">&quot;val_loss&quot;</span>][<span style="color: #666666">-1</span>]))
-plt<span style="color: #666666">.</span>legend()
-plt<span style="color: #666666">.</span>show()
-
-<span style="color: #408080; font-style: italic"># Use the trained neural network to predict more points of the data set</span>
-test_rnn(X_tot, y_tot, X_tot[<span style="color: #666666">0</span>], X_tot[dim<span style="color: #666666">-1</span>])
-<span style="color: #408080; font-style: italic"># Stop the timer and calculate the total time needed.</span>
-end <span style="color: #666666">=</span> timer()
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Time: &#39;</span>, end<span style="color: #666666">-</span>start)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="other-types-of-recurrent-neural-networks">Other Types of Recurrent Neural Networks </h2>
-
-<p>Besides a simple recurrent neural network layer, there are two other
-commonly used types of recurrent neural network layers: Long Short
-Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
-introduction to these layers see <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_blank"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>
-and <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_blank"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>.
-</p>
-
-<p>The first network created below is similar to the previous network,
-but it replaces the SimpleRNN layers with LSTM layers.  The second
-network below has two hidden layers made up of GRUs, which are
-preceeded by two dense (feeddorward) neural network layers.  These
-dense layers "preprocess" the data before it reaches the recurrent
-layers.  This architecture has been shown to improve the performance
-of recurrent neural networks (see the link above and also
-<a href="https://arxiv.org/pdf/1807.02857.pdf" target="_blank"><tt>https://arxiv.org/pdf/1807.02857.pdf</tt></a>.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">lstm_2layers</span>(length_of_sequences, batch_size <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>, stateful <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">False</span>):
-    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
-<span style="color: #BA2121; font-style: italic">        Inputs:</span>
-<span style="color: #BA2121; font-style: italic">            length_of_sequences (an int): the number of y values in &quot;x data&quot;.  This is determined</span>
-<span style="color: #BA2121; font-style: italic">                when the data is formatted</span>
-<span style="color: #BA2121; font-style: italic">            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">        Returns:</span>
-<span style="color: #BA2121; font-style: italic">            model (a Keras model): The recurrent neural network that is built and compiled by this</span>
-<span style="color: #BA2121; font-style: italic">                method</span>
-<span style="color: #BA2121; font-style: italic">        Builds and compiles a recurrent neural network with two LSTM hidden layers and returns the model.</span>
-<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-    <span style="color: #408080; font-style: italic"># Number of neurons on the input/output layer and the number of neurons in the hidden layer</span>
-    in_out_neurons <span style="color: #666666">=</span> <span style="color: #666666">1</span>
-    hidden_neurons <span style="color: #666666">=</span> <span style="color: #666666">250</span>
-    <span style="color: #408080; font-style: italic"># Input Layer</span>
-    inp <span style="color: #666666">=</span> Input(batch_shape<span style="color: #666666">=</span>(batch_size, 
-                length_of_sequences, 
-                in_out_neurons)) 
-    <span style="color: #408080; font-style: italic"># Hidden layers (in this case they are LSTM layers instead if SimpleRNN layers)</span>
-    rnn<span style="color: #666666">=</span> LSTM(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,
-                    stateful <span style="color: #666666">=</span> stateful,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN&quot;</span>, use_bias<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;tanh&#39;</span>)(inp)
-    rnn1 <span style="color: #666666">=</span> LSTM(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>,
-                    stateful <span style="color: #666666">=</span> stateful,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN1&quot;</span>, use_bias<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;tanh&#39;</span>)(rnn)
-    <span style="color: #408080; font-style: italic"># Output layer</span>
-    dens <span style="color: #666666">=</span> Dense(in_out_neurons,name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;dense&quot;</span>)(rnn1)
-    <span style="color: #408080; font-style: italic"># Define the midel</span>
-    model <span style="color: #666666">=</span> Model(inputs<span style="color: #666666">=</span>[inp],outputs<span style="color: #666666">=</span>[dens])
-    <span style="color: #408080; font-style: italic"># Compile the model</span>
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;mean_squared_error&#39;</span>, optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;adam&#39;</span>)  
-    <span style="color: #408080; font-style: italic"># Return the model</span>
-    <span style="color: #008000; font-weight: bold">return</span> model
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">dnn2_gru2</span>(length_of_sequences, batch_size <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>, stateful <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">False</span>):
-    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
-<span style="color: #BA2121; font-style: italic">        Inputs:</span>
-<span style="color: #BA2121; font-style: italic">            length_of_sequences (an int): the number of y values in &quot;x data&quot;.  This is determined</span>
-<span style="color: #BA2121; font-style: italic">                when the data is formatted</span>
-<span style="color: #BA2121; font-style: italic">            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.</span>
-<span style="color: #BA2121; font-style: italic">        Returns:</span>
-<span style="color: #BA2121; font-style: italic">            model (a Keras model): The recurrent neural network that is built and compiled by this</span>
-<span style="color: #BA2121; font-style: italic">                method</span>
-<span style="color: #BA2121; font-style: italic">        Builds and compiles a recurrent neural network with four hidden layers (two dense followed by</span>
-<span style="color: #BA2121; font-style: italic">        two GRU layers) and returns the model.</span>
-<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>    
-    <span style="color: #408080; font-style: italic"># Number of neurons on the input/output layers and hidden layers</span>
-    in_out_neurons <span style="color: #666666">=</span> <span style="color: #666666">1</span>
-    hidden_neurons <span style="color: #666666">=</span> <span style="color: #666666">250</span>
-    <span style="color: #408080; font-style: italic"># Input layer</span>
-    inp <span style="color: #666666">=</span> Input(batch_shape<span style="color: #666666">=</span>(batch_size, 
-                length_of_sequences, 
-                in_out_neurons)) 
-    <span style="color: #408080; font-style: italic"># Hidden Dense (feedforward) layers</span>
-    dnn <span style="color: #666666">=</span> Dense(hidden_neurons<span style="color: #666666">/2</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, name<span style="color: #666666">=</span><span style="color: #BA2121">&#39;dnn&#39;</span>)(inp)
-    dnn1 <span style="color: #666666">=</span> Dense(hidden_neurons<span style="color: #666666">/2</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, name<span style="color: #666666">=</span><span style="color: #BA2121">&#39;dnn1&#39;</span>)(dnn)
-    <span style="color: #408080; font-style: italic"># Hidden GRU layers</span>
-    rnn1 <span style="color: #666666">=</span> GRU(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,
-                    stateful <span style="color: #666666">=</span> stateful,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN1&quot;</span>, use_bias<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)(dnn1)
-    rnn <span style="color: #666666">=</span> GRU(hidden_neurons, 
-                    return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>,
-                    stateful <span style="color: #666666">=</span> stateful,
-                    name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;RNN&quot;</span>, use_bias<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)(rnn1)
-    <span style="color: #408080; font-style: italic"># Output layer</span>
-    dens <span style="color: #666666">=</span> Dense(in_out_neurons,name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;dense&quot;</span>)(rnn)
-    <span style="color: #408080; font-style: italic"># Define the model</span>
-    model <span style="color: #666666">=</span> Model(inputs<span style="color: #666666">=</span>[inp],outputs<span style="color: #666666">=</span>[dens])
-    <span style="color: #408080; font-style: italic"># Compile the mdoel</span>
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;mean_squared_error&#39;</span>, optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;adam&#39;</span>)  
-    <span style="color: #408080; font-style: italic"># Return the model</span>
-    <span style="color: #008000; font-weight: bold">return</span> model
-
-<span style="color: #408080; font-style: italic"># Check to make sure the data set is complete</span>
-<span style="color: #008000; font-weight: bold">assert</span> <span style="color: #008000">len</span>(X_tot) <span style="color: #666666">==</span> <span style="color: #008000">len</span>(y_tot)
-
-<span style="color: #408080; font-style: italic"># This is the number of points that will be used in as the training data</span>
-dim<span style="color: #666666">=12</span>
-
-<span style="color: #408080; font-style: italic"># Separate the training data from the whole data set</span>
-X_train <span style="color: #666666">=</span> X_tot[:dim]
-y_train <span style="color: #666666">=</span> y_tot[:dim]
-
-
-<span style="color: #408080; font-style: italic"># Generate the training data for the RNN, using a sequence of 2</span>
-rnn_input, rnn_training <span style="color: #666666">=</span> format_data(y_train, <span style="color: #666666">2</span>)
-
-
-<span style="color: #408080; font-style: italic"># Create a recurrent neural network in Keras and produce a summary of the </span>
-<span style="color: #408080; font-style: italic"># machine learning model</span>
-<span style="color: #408080; font-style: italic"># Change the method name to reflect which network you want to use</span>
-model <span style="color: #666666">=</span> dnn2_gru2(length_of_sequences <span style="color: #666666">=</span> <span style="color: #666666">2</span>)
-model<span style="color: #666666">.</span>summary()
-
-<span style="color: #408080; font-style: italic"># Start the timer.  Want to time training+testing</span>
-start <span style="color: #666666">=</span> timer()
-<span style="color: #408080; font-style: italic"># Fit the model using the training data genenerated above using 150 training iterations and a 5%</span>
-<span style="color: #408080; font-style: italic"># validation split.  Setting verbose to True prints information about each training iteration.</span>
-hist <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(rnn_input, rnn_training, batch_size<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>, epochs<span style="color: #666666">=150</span>, 
-                 verbose<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,validation_split<span style="color: #666666">=0.05</span>)
-
-
-<span style="color: #408080; font-style: italic"># This section plots the training loss and the validation loss as a function of training iteration.</span>
-<span style="color: #408080; font-style: italic"># This is not required for analyzing the couple cluster data but can help determine if the network is</span>
-<span style="color: #408080; font-style: italic"># being overtrained.</span>
-<span style="color: #008000; font-weight: bold">for</span> label <span style="color: #AA22FF; font-weight: bold">in</span> [<span style="color: #BA2121">&quot;loss&quot;</span>,<span style="color: #BA2121">&quot;val_loss&quot;</span>]:
-    plt<span style="color: #666666">.</span>plot(hist<span style="color: #666666">.</span>history[label],label<span style="color: #666666">=</span>label)
-
-plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;loss&quot;</span>)
-plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;epoch&quot;</span>)
-plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;The final validation loss: </span><span style="color: #BB6688; font-weight: bold">{}</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">.</span>format(hist<span style="color: #666666">.</span>history[<span style="color: #BA2121">&quot;val_loss&quot;</span>][<span style="color: #666666">-1</span>]))
-plt<span style="color: #666666">.</span>legend()
-plt<span style="color: #666666">.</span>show()
-
-<span style="color: #408080; font-style: italic"># Use the trained neural network to predict more points of the data set</span>
-test_rnn(X_tot, y_tot, X_tot[<span style="color: #666666">0</span>], X_tot[dim<span style="color: #666666">-1</span>])
-<span style="color: #408080; font-style: italic"># Stop the timer and calculate the total time needed.</span>
-end <span style="color: #666666">=</span> timer()
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Time: &#39;</span>, end<span style="color: #666666">-</span>start)
-
-
-<span style="color: #408080; font-style: italic"># ### Training Recurrent Neural Networks in the Standard Way (i.e. learning the relationship between the X and Y data)</span>
-<span style="color: #408080; font-style: italic"># </span>
-<span style="color: #408080; font-style: italic"># Finally, comparing the performace of a recurrent neural network using the standard data formatting to the performance of the network with time sequence data formatting shows the benefit of this type of data formatting with extrapolation.</span>
-
-<span style="color: #408080; font-style: italic"># Check to make sure the data set is complete</span>
-<span style="color: #008000; font-weight: bold">assert</span> <span style="color: #008000">len</span>(X_tot) <span style="color: #666666">==</span> <span style="color: #008000">len</span>(y_tot)
-
-<span style="color: #408080; font-style: italic"># This is the number of points that will be used in as the training data</span>
-dim<span style="color: #666666">=12</span>
-
-<span style="color: #408080; font-style: italic"># Separate the training data from the whole data set</span>
-X_train <span style="color: #666666">=</span> X_tot[:dim]
-y_train <span style="color: #666666">=</span> y_tot[:dim]
-
-<span style="color: #408080; font-style: italic"># Reshape the data for Keras specifications</span>
-X_train <span style="color: #666666">=</span> X_train<span style="color: #666666">.</span>reshape((dim, <span style="color: #666666">1</span>))
-y_train <span style="color: #666666">=</span> y_train<span style="color: #666666">.</span>reshape((dim, <span style="color: #666666">1</span>))
-
-
-<span style="color: #408080; font-style: italic"># Create a recurrent neural network in Keras and produce a summary of the </span>
-<span style="color: #408080; font-style: italic"># machine learning model</span>
-<span style="color: #408080; font-style: italic"># Set the sequence length to 1 for regular data formatting </span>
-model <span style="color: #666666">=</span> rnn(length_of_sequences <span style="color: #666666">=</span> <span style="color: #666666">1</span>)
-model<span style="color: #666666">.</span>summary()
-
-<span style="color: #408080; font-style: italic"># Start the timer.  Want to time training+testing</span>
-start <span style="color: #666666">=</span> timer()
-<span style="color: #408080; font-style: italic"># Fit the model using the training data genenerated above using 150 training iterations and a 5%</span>
-<span style="color: #408080; font-style: italic"># validation split.  Setting verbose to True prints information about each training iteration.</span>
-hist <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(X_train, y_train, batch_size<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>, epochs<span style="color: #666666">=150</span>, 
-                 verbose<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,validation_split<span style="color: #666666">=0.05</span>)
-
-
-<span style="color: #408080; font-style: italic"># This section plots the training loss and the validation loss as a function of training iteration.</span>
-<span style="color: #408080; font-style: italic"># This is not required for analyzing the couple cluster data but can help determine if the network is</span>
-<span style="color: #408080; font-style: italic"># being overtrained.</span>
-<span style="color: #008000; font-weight: bold">for</span> label <span style="color: #AA22FF; font-weight: bold">in</span> [<span style="color: #BA2121">&quot;loss&quot;</span>,<span style="color: #BA2121">&quot;val_loss&quot;</span>]:
-    plt<span style="color: #666666">.</span>plot(hist<span style="color: #666666">.</span>history[label],label<span style="color: #666666">=</span>label)
-
-plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;loss&quot;</span>)
-plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;epoch&quot;</span>)
-plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;The final validation loss: </span><span style="color: #BB6688; font-weight: bold">{}</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">.</span>format(hist<span style="color: #666666">.</span>history[<span style="color: #BA2121">&quot;val_loss&quot;</span>][<span style="color: #666666">-1</span>]))
-plt<span style="color: #666666">.</span>legend()
-plt<span style="color: #666666">.</span>show()
-
-<span style="color: #408080; font-style: italic"># Use the trained neural network to predict the remaining data points</span>
-X_pred <span style="color: #666666">=</span> X_tot[dim:]
-X_pred <span style="color: #666666">=</span> X_pred<span style="color: #666666">.</span>reshape((<span style="color: #008000">len</span>(X_pred), <span style="color: #666666">1</span>))
-y_model <span style="color: #666666">=</span> model<span style="color: #666666">.</span>predict(X_pred)
-y_pred <span style="color: #666666">=</span> np<span style="color: #666666">.</span>concatenate((y_tot[:dim], y_model<span style="color: #666666">.</span>flatten()))
-
-<span style="color: #408080; font-style: italic"># Plot the known data set and the predicted data set.  The red box represents the region that was used</span>
-<span style="color: #408080; font-style: italic"># for the training data.</span>
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots()
-ax<span style="color: #666666">.</span>plot(X_tot, y_tot, label<span style="color: #666666">=</span><span style="color: #BA2121">&quot;true&quot;</span>, linewidth<span style="color: #666666">=3</span>)
-ax<span style="color: #666666">.</span>plot(X_tot, y_pred, <span style="color: #BA2121">&#39;g-.&#39;</span>,label<span style="color: #666666">=</span><span style="color: #BA2121">&quot;predicted&quot;</span>, linewidth<span style="color: #666666">=4</span>)
-ax<span style="color: #666666">.</span>legend()
-<span style="color: #408080; font-style: italic"># Created a red region to represent the points used in the training data.</span>
-ax<span style="color: #666666">.</span>axvspan(X_tot[<span style="color: #666666">0</span>], X_tot[dim], alpha<span style="color: #666666">=0.25</span>, color<span style="color: #666666">=</span><span style="color: #BA2121">&#39;red&#39;</span>)
-plt<span style="color: #666666">.</span>show()
-
-<span style="color: #408080; font-style: italic"># Stop the timer and calculate the total time needed.</span>
-end <span style="color: #666666">=</span> timer()
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Time: &#39;</span>, end<span style="color: #666666">-</span>start)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2023, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>

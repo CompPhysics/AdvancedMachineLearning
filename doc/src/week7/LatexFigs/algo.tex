@@ -1,0 +1,73 @@
+\documentclass[twoside,11pt,a4paper]{article}
+ 
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, latexsym}
+\usepackage{sidecap}
+ 
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage[colorinlistoftodos, color=green!40, prependcaption]{todonotes}
+\usepackage{booktabs}
+\usepackage{comment}
+\usetikzlibrary{positioning,chains}
+\usepackage{tikz}
+\usepackage{lipsum,adjustbox}
+\usepackage{empheq} 
+\usetikzlibrary{shapes,arrows,positioning}
+\usetikzlibrary{fit, arrows.meta, shapes}
+\usetikzlibrary{external}
+\tikzexternalize % activate!
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+\mathtoolsset{showonlyrefs=false} 
+\usepackage{xcolor}
+\usepackage{hyperref} % For hyperlinks in the PDF
+%\setlength{\marginparwidth}{2.5cm}
+\bibliographystyle{apsrev4-1}
+%\bibliographystyle{apalike}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+% defines the color of hyperref objects
+% Blending two colors:  blue!80!black  =  .8 blue and 0.2 black       % automagic cross-referencing
+\hypersetup{ % this is just my personal choice, feel free to change things
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}}
+
+\usepackage{listings}
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\bibliographystyle{apsrev4-1}
+
+
+
+
+\begin{document}
+
+
+\State \textbf{Compute and update hidden state gradient:}
+\State $\boldsymbol{\delta_h} = \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\boldsymbol{\delta_h} + \left(\frac{\part\
+  ial\mathbf{o}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{o}^{(t)}} \mathcal{L}$
+
+\State \textbf{Acumulate parameter gradients:}
+\State $\boldsymbol{\delta_c} += \left(\frac{\partial \mathbf{o}^{(t)}}{\partial\mathbf{c}}\right)^\mathsf{T}\nabla_{\mathbf{o}^{(t)}} \mathcal{L}$
+\State $\boldsymbol{\delta_b} += \left(\frac{\partial \mathbf{h}^{(t)}}{\partial\mathbf{b}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t)}} \mathcal{L}$
+\State $\boldsymbol{\delta_V} +=\sum_{i} \left(\frac{\partial \mathcal{L}}{\partial o_{i}^{(t)}}\right)\nabla_{\mathbf{V}^{(t)}}o^{(t)}_{i}$
+\State $\boldsymbol{\delta_W} +=\sum_{i} \left( {\delta_{\mathbf{h}}}\right)_i\nabla_{\mathbf{W}^{(t)}}h^{(t)}_{i}$
+\State $\boldsymbol{\delta_U} +=\sum_{i} \left( {\delta_{\mathbf{h}}}\right)_i\nabla_{\mathbf{U}^{(t)}}h^{(t)}_{i}$
+\EndFor
+\State \textbf{Weight and bias update:}
+\State $\enspace \{W, U, V, \mathbf{b}, \mathbf{c} \}-= \alpha \cdot  \{\boldsymbol{\delta_W} , \boldsymbol{\delta_U} , \boldsymbol{\delta_V} , \boldsymbol{\del\
+  ta_b} ,\boldsymbol{\delta_c} \}$
+\end{algorithmic}
+\end{algorithm}
+    \end{figure}
+
+
+
+\end{document}
+
+

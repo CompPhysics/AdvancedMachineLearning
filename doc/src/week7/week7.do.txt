@@ -2,12 +2,63 @@ TITLE: February 26-March 1: Advanced machine learning and data analysis for the 
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
 DATE: February 26-March 1, 2024
 
-===== Plans for the weeks February 26-March 1  =====
+!split
+===== Plans for the week February 26-March 1  =====
 
 !bblock
+o Finalizing discussion of Convolutional  Neural Networks (CNNs)
+o Discussion of recurrent neural networks (RNNs)
+o "Video of lecture":"https://youtu.be/VkQGq84ml_0"
+o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf"
+o Reading recommendations:
+  o Goodfellow, Bengio and Courville's chapter 10 from "Deep Learning":"https://www.deeplearningbook.org/"
+  o "Sebastian Rashcka et al, chapter 15, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
+  o "David Foster, Generative Deep Learning with TensorFlow, see chapter 5":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch05.html"
+!eblock
 
-* Finalizing discussion of Convolutional  Neural Networks (CNNs)
-* Discussion of recurrent neural networks (RNNs)
+The last two books have codes for RNNs in PyTorch and TensorFlow/Keras. Next week we will study the solution of differential equations.
+
+
+
+
+!split
+===== From FFNNs and CNNs to recurrent neural networks (RNNs) =====
+
+There are limitation of FFNNs, one of which being that FFNNs are not
+designed to handle sequential data (data for which the order matters)
+effectively because they lack the capabilities of storing information
+about previous inputs; each input is being treated indepen-
+dently. This is a limitation when dealing with sequential data where
+past information can be vital to correctly process current and future
+inputs. 
+
+
+!split
+===== Feedback connections =====
+
+
+In contrast to FFNNs, recurrent networks introduce feedback
+connections, meaning the information is allowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time- series data,
+natural language processing, speech recognition, and several other
+problems for which the order of the data is crucial.  The RNN
+architectures vary greatly in how they manage information flow and
+memory in the network.
+
+
+!split
+===== Vanishing gradients =====
+
+Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients. This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long.
 
 
 
@@ -32,6 +83,34 @@ example, they can take sentences, documents, or audio samples as
 input, making them extremely useful for natural language processing
 systems such as automatic translation and speech-to-text.
 
+!split
+===== Sequential data only? =====
+
+An important issue is that in many deep learning methods we assume
+that the input and output data can be treated as independent and
+identically distributed, normally abbreviated to _iid_.
+This means that the data we use can be seen as mutually independent.
+
+This is however not the case for most data sets used in RNNs since we
+are dealing with sequences of data with strong inter-dependencies.
+This applies in particular to time series, which are sequential by
+contruction.
+
+!split
+===== Differential equations =====
+
+As an example, the solutions of ordinary differential equations can be
+represented as a time series, similarly, how stock prices evolve as
+function of time is another example of a typical time series, or voice
+records and many other examples.
+
+
+Not all sequential data may however have a time stamp, texts being a
+typical example thereof, or DNA sequences.
+
+The main focus here is on data that can be structured either as time
+series or as ordered series of data.  We will not focus on for example
+natural language processing or similar data sets.
 
 
 
@@ -104,51 +183,8 @@ plt.show()
 !ec
 
 
-
-=== Memoryless models ===
-
-Autoregressive models Predict the next term in a sequence from a fixed number of previous terms using _delay taps_.
-
-!bblock Feed-forward neural networks
-These generalize autoregressive
-models by using one or more
-layers of non-linear hidden units. 
-!eblock
-
-If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-o It can store information in its hidden state for a long time.
-o If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.
-o The best we can do is to infer a probability distribution over the
-space of hidden state vectors.
-
-
-This inference is only tractable for two types of hidden state model.
-
-
-=== Linear dynamical model ===
-
-If we give our generative model some hidden state, and if we give
-this hidden state its own internal dynamics, we get a much more
-interesting kind of model.
-o It can store information in its hidden state for a long time.
-o  If the dynamics is noisy and the way it generates outputs from its hidden state is noisy, we can never know its exact hidden state.
-o The best we can do is to infer a probability distribution over the space of hidden state vectors.
-
-
-=== Hidden Markov Models ===
-Hidden Markov Models have a discrete oneof-$N$ hidden state. Transitions between states
-are stochastic and controlled by a transition
-matrix. The outputs produced by a state are
-stochastic.
-* We cannot be sure which state produced a given output. So the state is “hidden”.
-* It is easy to represent a probability distribution across N states with N numbers.
-* To predict the next output we need to infer the probability distribution over hidden states.
-
-HMMs have efficient algorithms for inference and learning
-
-=== RNNs ===
+!split
+===== RNNs =====
 
 RNNs are very powerful, because they
 combine two properties:
@@ -160,89 +196,174 @@ can compute anything that can be
 computed by your computer.
 
 
-=== Do generative models need to be stochastic? ===
 
-!bblock Linear dynamical systems and hidden Markov models are stochastic models.
+!split
+===== What kinds of behaviour can RNNs exhibit? =====
 
-But the posterior probability
-distribution over their
-hidden states given the
-observed data so far is a
-deterministic function of the
-data.
-!eblock 
-
-
-!bblock Recurrent neural networks are deterministic.
-Think of the hidden state
-of an RNN as the
-equivalent of the
-deterministic probability
-distribution over hidden
-states in a linear dynamical
-system or hidden Markov
-model.
-!eblock
-
-=== What kinds of behaviour can RNNs exhibit? ===
 o They can oscillate. 
 o They can settle to point attractors.
 o They can behave chaotically.
 o RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.
 
-But the computational power of RNNs makes them very hard to train.
+But the extensive computational needs  of RNNs makes them very hard to train.
+
 
 !split
-===== Basic layout =====
+===== Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" =====
 
 FIGURE: [figslides/RNN1.png, width=700 frac=0.9]
 
 
-=== We need to specify the initial activity state of all the hidden and output units ===
+!split
+===== Solving differential equations with RNNs =====
 
-o We could just fix these initial states to have some default value like 0.5.
-o But it is better to treat the initial states as learned parameters.
-o We learn them in the same way as we learn the weights.
+To gain some intuition on how we can use RNNs for time series, let us
+tailor the representation of the solution of a differential equation
+as a time series.
 
-* Start off with an initial random guess for the initial states.
-  o At the end of each training sequence, backpropagate through time all the way to the initial states to get the gradient of the error function with respect to each initial state.
-  o Adjust the initial states by following the negative gradient. 
+Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)
+
+!bt
+\[
+\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
+\]
+!et
+where $\eta$ is a constant used in scaling time into a dimensionless variable and $F(t)$ is an external force acting on the system.
+The constant $\eta$ is a so-called damping.
+
+!split
+===== Two first-order differential equations =====
+
+In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
+with the velocity
+!bt
+\[
+v(t)=\frac{dx}{dt},
+\]
+!et
+and the acceleration
+!bt
+\[
+\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
+\]
+!et
+
+With the initial conditions $v_0=v(t_0)$ and $x_0=x(t_0)$ defined, we can integrate these equations and find their respective solutions.
+
+!split
+===== Velocity only =====
+
+Let us focus on the velocity only. Discretizing and using the simplest
+possible approximation for the derivative, we have Euler's forward
+method for the updated velocity at a time step $i+1$ given by
+!bt
+\[
+v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
+\]
+!et
+Defining a function
+!bt
+\[
+h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
+\]
+!et
+we have
+!bt
+\[
+v_{i+1}=h_i(x_i,v_i,F_i).
+\]
+!et
+
+!split
+===== Linking with RNNs =====
+
+The equation
+!bt
+\[
+v_{i+1}=h_i(x_i,v_i,F_i).
+\]
+!et
+can be used to train a feed-forward neural network with inputs $v_i$ and outputs $v_{i+1}$ at a time $t_i$. But we can think of this also as a recurrent neural network
+with inputs $v_i$, $x_i$ and $F_i$ at each time step $t_i$, and producing an output $v_{i+1}$.
+
+Noting that 
+!bt
+\[
+v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
+\]
+!et
+we have
+!bt
+\[
+v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
+\]
+!et
+and we can rewrite
+!bt
+\[
+v_{i+1}=h_i(x_i,h_{i-1},F_i).
+\]
+!et
+
+!split
+===== Minor rewrite =====
+
+We can thus set up a recurring series which depends on the inputs $x_i$ and $F_i$ and the previous values $h_{i-1}$.
+We assume now that the inputs at each step (or time $t_i$) is given by $x_i$ only and we denote the outputs for $\tilde{y}_i$ instead of $v_{i_1}$, we have then the compact equation for our outputs at each step $t_i$
+!bt
+\[
+y_{i}=h_i(x_i,h_{i-1}).
+\]
+!et
+
+We can think of this as an element in a recurrent network where our
+network (our model) produces an output $y_i$ which is then compared
+with a target value through a given cost/loss function that we
+optimize. The target values at a given step $t_i$ could be the results
+of a measurement or simply the analytical results of a differential
+equation.
 
 
-
-=== We can specify inputs in several ways ===
-
-o Specify the initial states of all the units.
-o Specify the initial states of a subset of the units.
-o Specify the states of the same subset of the units at every time step.
-
-This is the natural way to model most sequential data. 
-
-
-=== We can specify targets in several ways ===
-
-o Specify desired final activities of all the units
-o Specify desired activities of all units for the last few steps
-
-* Good for learning attractors
-* It is easy to add in extra error derivatives as we backpropagate.
-  * Specify the desired activity of a subset of the units.
-* The other units are input or hidden units. 
-
-
-
+!split
+===== RNNs in more detail  =====
 
 FIGURE: [figslides/RNN2.png, width=700 frac=0.9]
 
+!split
+===== RNNs in more detail, part 2  =====
+
 FIGURE: [figslides/RNN3.png, width=700 frac=0.9]
+
+
+!split
+===== RNNs in more detail, part 3  =====
 
 FIGURE: [figslides/RNN4.png, width=700 frac=0.9]
 
+!split
+===== RNNs in more detail, part 4  =====
+
 FIGURE: [figslides/RNN5.png, width=700 frac=0.9]
 
+!split
+===== RNNs in more detail, part 5  =====
+
+FIGURE: [figslides/RNN6.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 6  =====
+
+FIGURE: [figslides/RNN7.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 7  =====
+
+FIGURE: [figslides/RNN8.png, width=700 frac=0.9]
 
 
-=== Backpropagation through time ===
+
+!split
+===== Backpropagation through time =====
 
 !bblock
 We can think of the recurrent net as a layered, feed-forward
@@ -255,8 +376,8 @@ o The forward pass builds up a stack of the activities of all the units at each 
 o The backward pass peels activities off the stack to compute the error derivatives at each time step.
 o After the backward pass we add together the derivatives at all the different times for each weight. 
 
-
-=== The backward pass is linear ===
+!split
+===== The backward pass is linear =====
 
 o There is a big difference between the forward and backward passes.
 o In the forward pass we use squashing functions (like the logistic) to prevent the activity vectors from exploding.
@@ -264,38 +385,6 @@ o The backward pass, is completely linear. If you double the error derivatives a
 
 The forward pass determines the slope of the linear function used for
 backpropagating through each neuron
-
-
-
-
-FIGURE: [figslides/RNN6.png, width=700 frac=0.9]
-
-
-
-FIGURE: [figslides/RNN7.png, width=700 frac=0.9]
-
-
-
-
-FIGURE: [figslides/RNN8.png, width=700 frac=0.9]
-
-
-
-
-FIGURE: [figslides/RNN9.png, width=700 frac=0.9]
-
-
-
-FIGURE: [figslides/RNN10.png, width=700 frac=0.9]
-
-
-
-FIGURE: [figslides/RNN11.png, width=700 frac=0.9]
-
-
-
-FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
-
 
 
 !split 
@@ -311,638 +400,86 @@ FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
 
 RNNs have difficulty dealing with long-range dependencies. 
 
-
 !split
-===== Four effective ways to learn an RNN =====
-o Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.
-o Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.
-o Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.
-  * ESNs only need to learn the hidden-output connections.
-o Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum
+===== Mathematical setup =====
 
+The expression for the simplest Recurrent network resembles that of a
+regular feed-forward neural network, but now with
+the concept of temporal dependencies
 
-=== Long Short Term Memory (LSTM) ===
-
-LSTM uses a memory cell for   modeling long-range dependencies and avoid vanishing gradient  problems.
-
-o Introduced by Hochreiter and Schmidhuber (1997) who solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).
-o They designed a memory cell using logistic and linear units with multiplicative interactions.
-o Information gets into the cell whenever its “write” gate is on.
-o The information stays in the cell so long as its _keep_ gate is on.
-o Information can be read from the cell by turning on its _read_ gate. 
-
-
-=== Implementing a memory cell in a neural network ===
-To preserve information for a long time in
-the activities of an RNN, we use a circuit
-that implements an analog memory cell.
-
-o A linear unit that has a self-link with a weight of 1 will maintain its state.
-o Information is stored in the cell by activating its write gate.
-o Information is retrieved by activating the read gate.
-o We can backpropagate through this circuit because logistics are have nice derivatives. 
-
-FIGURE: [figslides/RNN13.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN14.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN15.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN16.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN17.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN18.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN19.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN20.png, width=700 frac=0.9]
-
-
-FIGURE: [figslides/RNN21.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN22.png, width=700 frac=0.9]
-
+!bt
+\begin{align*}
+    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
+    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
+    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
+\end{align*}
+!et
 
 
 !split
-=====  An extrapolation example =====
+===== Back propagation in time through figures, part 1   =====
 
-The following code provides an example of how recurrent neural
-networks can be used to extrapolate to unknown values of physics data
-sets.  Specifically, the data sets used in this program come from
-a quantum mechanical many-body calculation of energies as functions of the number of particles.
+FIGURE: [figslides/RNN9.png, width=700 frac=0.9]
 
-
-!bc pycod
-
-# For matrices and calculations
-import numpy as np
-# For machine learning (backend for keras)
-import tensorflow as tf
-# User-friendly machine learning library
-# Front end for TensorFlow
-import tensorflow.keras
-# Different methods from Keras needed to create an RNN
-# This is not necessary but it shortened function calls 
-# that need to be used in the code.
-from tensorflow.keras import datasets, layers, models
-from tensorflow.keras.layers import Input
-from tensorflow.keras import regularizers
-from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, GRU
-# For timing the code
-from timeit import default_timer as timer
-# For plotting
-import matplotlib.pyplot as plt
-
-
-# The data set
-datatype='VaryDimension'
-X_tot = np.arange(2, 42, 2)
-y_tot = np.array([-0.03077640549, -0.08336233266, -0.1446729567, -0.2116753732, -0.2830637392, -0.3581341341, -0.436462435, -0.5177783846,
-	-0.6019067271, -0.6887363571, -0.7782028952, -0.8702784034, -0.9649652536, -1.062292565, -1.16231451, 
-	-1.265109911, -1.370782966, -1.479465113, -1.591317992, -1.70653767])
-
-!ec
 
 !split
-===== Formatting the Data =====
+===== Back propagation in time, part 2   =====
 
-The way the recurrent neural networks are trained in this program
-differs from how machine learning algorithms are usually trained.
-Typically a machine learning algorithm is trained by learning the
-relationship between the x data and the y data.  In this program, the
-recurrent neural network will be trained to recognize the relationship
-in a sequence of y values.  This is type of data formatting is
-typically used time series forcasting, but it can also be used in any
-extrapolation (time series forecasting is just a specific type of
-extrapolation along the time axis).  This method of data formatting
-does not use the x data and assumes that the y data are evenly spaced.
+FIGURE: [figslides/RNN10.png, width=700 frac=0.9]
 
-For a standard machine learning algorithm, the training data has the
-form of (x,y) so the machine learning algorithm learns to assiciate a
-y value with a given x value.  This is useful when the test data has x
-values within the same range as the training data.  However, for this
-application, the x values of the test data are outside of the x values
-of the training data and the traditional method of training a machine
-learning algorithm does not work as well.  For this reason, the
-recurrent neural network is trained on sequences of y values of the
-form ((y1, y2), y3), so that the network is concerned with learning
-the pattern of the y data and not the relation between the x and y
-data.  As long as the pattern of y data outside of the training region
-stays relatively stable compared to what was inside the training
-region, this method of training can produce accurate extrapolations to
-y values far removed from the training data set.
-
-
-# 
-# The idea behind formatting the data in this way comes from [this resource](https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/) and [this one](https://fairyonice.github.io/Understand-Keras%27s-RNN-behind-the-scenes-with-a-sin-wave-example.html).
-# 
-# The following method takes in a y data set and formats it so the "x data" are of the form (y1, y2) and the "y data" are of the form y3, with extra brackets added in to make the resulting arrays compatable with both Keras and Tensorflow.
-# 
-# Note: Using a sequence length of two is not required for time series forecasting so any lenght of sequence could be used (for example instead of ((y1, y2) y3) you could change the length of sequence to be 4 and the resulting data points would have the form ((y1, y2, y3, y4), y5)).  While the following method can be used to create a data set of any sequence length, the remainder of the code expects the length of sequence to be 2.  This is because the data sets are very small and the higher the lenght of the sequence the less resulting data points.
-
-!bc pycod
-# FORMAT_DATA
-def format_data(data, length_of_sequence = 2):  
-    """
-        Inputs:
-            data(a numpy array): the data that will be the inputs to the recurrent neural
-                network
-            length_of_sequence (an int): the number of elements in one iteration of the
-                sequence patter.  For a function approximator use length_of_sequence = 2.
-        Returns:
-            rnn_input (a 3D numpy array): the input data for the recurrent neural network.  Its
-                dimensions are length of data - length of sequence, length of sequence, 
-                dimnsion of data
-            rnn_output (a numpy array): the training data for the neural network
-        Formats data to be used in a recurrent neural network.
-    """
-
-    X, Y = [], []
-    for i in range(len(data)-length_of_sequence):
-        # Get the next length_of_sequence elements
-        a = data[i:i+length_of_sequence]
-        # Get the element that immediately follows that
-        b = data[i+length_of_sequence]
-        # Reshape so that each data point is contained in its own array
-        a = np.reshape (a, (len(a), 1))
-        X.append(a)
-        Y.append(b)
-    rnn_input = np.array(X)
-    rnn_output = np.array(Y)
-
-    return rnn_input, rnn_output
-
-
-# ## Defining the Recurrent Neural Network Using Keras
-# 
-# The following method defines a simple recurrent neural network in keras consisting of one input layer, one hidden layer, and one output layer.
-
-def rnn(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with one hidden layer and returns the model.
-    """
-    # Number of neurons in the input and output layers
-    in_out_neurons = 1
-    # Number of neurons in the hidden layer
-    hidden_neurons = 200
-    # Define the input layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons))  
-    # Define the hidden layer as a simple RNN layer with a set number of neurons and add it to 
-    # the network immediately after the input layer
-    rnn = SimpleRNN(hidden_neurons, 
-                    return_sequences=False,
-                    stateful = stateful,
-                    name="RNN")(inp)
-    # Define the output layer as a dense neural network layer (standard neural network layer)
-    #and add it to the network immediately after the hidden layer.
-    dens = Dense(in_out_neurons,name="dense")(rnn)
-    # Create the machine learning model starting with the input layer and ending with the 
-    # output layer
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the machine learning model using the mean squared error function as the loss 
-    # function and an Adams optimizer.
-    model.compile(loss="mean_squared_error", optimizer="adam")  
-    return model
-
-!ec
 
 !split
-===== Predicting New Points With A Trained Recurrent Neural Network =====
+===== Back propagation in time, part 3   =====
 
-!bc pycod
-def test_rnn (x1, y_test, plot_min, plot_max):
-    """
-        Inputs:
-            x1 (a list or numpy array): The complete x component of the data set
-            y_test (a list or numpy array): The complete y component of the data set
-            plot_min (an int or float): the smallest x value used in the training data
-            plot_max (an int or float): the largest x valye used in the training data
-        Returns:
-            None.
-        Uses a trained recurrent neural network model to predict future points in the 
-        series.  Computes the MSE of the predicted data set from the true data set, saves
-        the predicted data set to a csv file, and plots the predicted and true data sets w
-        while also displaying the data range used for training.
-    """
-    # Add the training data as the first dim points in the predicted data array as these
-    # are known values.
-    y_pred = y_test[:dim].tolist()
-    # Generate the first input to the trained recurrent neural network using the last two 
-    # points of the training data.  Based on how the network was trained this means that it
-    # will predict the first point in the data set after the training data.  All of the 
-    # brackets are necessary for Tensorflow.
-    next_input = np.array([[[y_test[dim-2]], [y_test[dim-1]]]])
-    # Save the very last point in the training data set.  This will be used later.
-    last = [y_test[dim-1]]
+FIGURE: [figslides/RNN11.png, width=700 frac=0.9]
 
-    # Iterate until the complete data set is created.
-    for i in range (dim, len(y_test)):
-        # Predict the next point in the data set using the previous two points.
-        next = model.predict(next_input)
-        # Append just the number of the predicted data set
-        y_pred.append(next[0][0])
-        # Create the input that will be used to predict the next data point in the data set.
-        next_input = np.array([[last, next[0]]], dtype=np.float64)
-        last = next
-
-    # Print the mean squared error between the known data set and the predicted data set.
-    print('MSE: ', np.square(np.subtract(y_test, y_pred)).mean())
-    # Save the predicted data set as a csv file for later use
-    name = datatype + 'Predicted'+str(dim)+'.csv'
-    np.savetxt(name, y_pred, delimiter=',')
-    # Plot the known data set and the predicted data set.  The red box represents the region that was used
-    # for the training data.
-    fig, ax = plt.subplots()
-    ax.plot(x1, y_test, label="true", linewidth=3)
-    ax.plot(x1, y_pred, 'g-.',label="predicted", linewidth=4)
-    ax.legend()
-    # Created a red region to represent the points used in the training data.
-    ax.axvspan(plot_min, plot_max, alpha=0.25, color='red')
-    plt.show()
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-
-# Generate the training data for the RNN, using a sequence of 2
-rnn_input, rnn_training = format_data(y_train, 2)
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-model = rnn(length_of_sequences = rnn_input.shape[1])
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict more points of the data set
-test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-!ec
 
 !split
-===== Other Things to Try =====
+===== Back propagation in time, part 4   =====
 
+FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
 
-Changing the size of the recurrent neural network and its parameters
-can drastically change the results you get from the model.  The below
-code takes the simple recurrent neural network from above and adds a
-second hidden layer, changes the number of neurons in the hidden
-layer, and explicitly declares the activation function of the hidden
-layers to be a sigmoid function.  The loss function and optimizer can
-also be changed but are kept the same as the above network.  These
-parameters can be tuned to provide the optimal result from the
-network.  For some ideas on how to improve the performance of a
-"recurrent neural network":"https://danijar.com/tips-for-training-recurrent-neural-networks".
-
-!bc pycod
-def rnn_2layers(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with two hidden layers and returns the model.
-    """
-    # Number of neurons in the input and output layers
-    in_out_neurons = 1
-    # Number of neurons in the hidden layer, increased from the first network
-    hidden_neurons = 500
-    # Define the input layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons))  
-    # Create two hidden layers instead of one hidden layer.  Explicitly set the activation
-    # function to be the sigmoid function (the default value is hyperbolic tangent)
-    rnn1 = SimpleRNN(hidden_neurons, 
-                    return_sequences=True,  # This needs to be True if another hidden layer is to follow
-                    stateful = stateful, activation = 'sigmoid',
-                    name="RNN1")(inp)
-    rnn2 = SimpleRNN(hidden_neurons, 
-                    return_sequences=False, activation = 'sigmoid',
-                    stateful = stateful,
-                    name="RNN2")(rnn1)
-    # Define the output layer as a dense neural network layer (standard neural network layer)
-    #and add it to the network immediately after the hidden layer.
-    dens = Dense(in_out_neurons,name="dense")(rnn2)
-    # Create the machine learning model starting with the input layer and ending with the 
-    # output layer
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the machine learning model using the mean squared error function as the loss 
-    # function and an Adams optimizer.
-    model.compile(loss="mean_squared_error", optimizer="adam")  
-    return model
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-
-# Generate the training data for the RNN, using a sequence of 2
-rnn_input, rnn_training = format_data(y_train, 2)
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-model = rnn_2layers(length_of_sequences = 2)
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-
-# This section plots the training loss and the validation loss as a function of training iteration.
-# This is not required for analyzing the couple cluster data but can help determine if the network is
-# being overtrained.
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict more points of the data set
-test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-!ec
 
 !split
-===== Other Types of Recurrent Neural Networks =====
+===== Back propagation in time in equations =====
 
-Besides a simple recurrent neural network layer, there are two other
-commonly used types of recurrent neural network layers: Long Short
-Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
-introduction to these layers see URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b"
-and URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b".
+To derive the expression of the gradients of $\mathcal{L}$ for
+the RNN, we need to start recursively from the nodes closer to the
+output layer in the temporal unrolling scheme - such as $\mathbf{y}$
+and $\mathbf{h}$ at final time $t = \tau$,
 
-The first network created below is similar to the previous network,
-but it replaces the SimpleRNN layers with LSTM layers.  The second
-network below has two hidden layers made up of GRUs, which are
-preceeded by two dense (feeddorward) neural network layers.  These
-dense layers "preprocess" the data before it reaches the recurrent
-layers.  This architecture has been shown to improve the performance
-of recurrent neural networks (see the link above and also
-URL:"https://arxiv.org/pdf/1807.02857.pdf".
+!bt
+\begin{align*}
+    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial y_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
+\end{align*}
+!et
 
-!bc pycod
-def lstm_2layers(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with two LSTM hidden layers and returns the model.
-    """
-    # Number of neurons on the input/output layer and the number of neurons in the hidden layer
-    in_out_neurons = 1
-    hidden_neurons = 250
-    # Input Layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons)) 
-    # Hidden layers (in this case they are LSTM layers instead if SimpleRNN layers)
-    rnn= LSTM(hidden_neurons, 
-                    return_sequences=True,
-                    stateful = stateful,
-                    name="RNN", use_bias=True, activation='tanh')(inp)
-    rnn1 = LSTM(hidden_neurons, 
-                    return_sequences=False,
-                    stateful = stateful,
-                    name="RNN1", use_bias=True, activation='tanh')(rnn)
-    # Output layer
-    dens = Dense(in_out_neurons,name="dense")(rnn1)
-    # Define the midel
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the model
-    model.compile(loss='mean_squared_error', optimizer='adam')  
-    # Return the model
-    return model
+!split
+===== Chain rule again =====
+For the following hidden nodes, we have to iterate through time, so by the chain rule, 
 
-def dnn2_gru2(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with four hidden layers (two dense followed by
-        two GRU layers) and returns the model.
-    """    
-    # Number of neurons on the input/output layers and hidden layers
-    in_out_neurons = 1
-    hidden_neurons = 250
-    # Input layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons)) 
-    # Hidden Dense (feedforward) layers
-    dnn = Dense(hidden_neurons/2, activation='relu', name='dnn')(inp)
-    dnn1 = Dense(hidden_neurons/2, activation='relu', name='dnn1')(dnn)
-    # Hidden GRU layers
-    rnn1 = GRU(hidden_neurons, 
-                    return_sequences=True,
-                    stateful = stateful,
-                    name="RNN1", use_bias=True)(dnn1)
-    rnn = GRU(hidden_neurons, 
-                    return_sequences=False,
-                    stateful = stateful,
-                    name="RNN", use_bias=True)(rnn1)
-    # Output layer
-    dens = Dense(in_out_neurons,name="dense")(rnn)
-    # Define the model
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the mdoel
-    model.compile(loss='mean_squared_error', optimizer='adam')  
-    # Return the model
-    return model
+!bt
+\begin{align*}
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
+\end{align*}
+!et
 
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
+!split
+===== Gradients of loss functions =====
+Similarly, the gradients of $\mathcal{L}$ with respect to the weights and biases follow,
 
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-
-# Generate the training data for the RNN, using a sequence of 2
-rnn_input, rnn_training = format_data(y_train, 2)
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-# Change the method name to reflect which network you want to use
-model = dnn2_gru2(length_of_sequences = 2)
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-
-# This section plots the training loss and the validation loss as a function of training iteration.
-# This is not required for analyzing the couple cluster data but can help determine if the network is
-# being overtrained.
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict more points of the data set
-test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-
-
-# ### Training Recurrent Neural Networks in the Standard Way (i.e. learning the relationship between the X and Y data)
-# 
-# Finally, comparing the performace of a recurrent neural network using the standard data formatting to the performance of the network with time sequence data formatting shows the benefit of this type of data formatting with extrapolation.
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-# Reshape the data for Keras specifications
-X_train = X_train.reshape((dim, 1))
-y_train = y_train.reshape((dim, 1))
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-# Set the sequence length to 1 for regular data formatting 
-model = rnn(length_of_sequences = 1)
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(X_train, y_train, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-
-# This section plots the training loss and the validation loss as a function of training iteration.
-# This is not required for analyzing the couple cluster data but can help determine if the network is
-# being overtrained.
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict the remaining data points
-X_pred = X_tot[dim:]
-X_pred = X_pred.reshape((len(X_pred), 1))
-y_model = model.predict(X_pred)
-y_pred = np.concatenate((y_tot[:dim], y_model.flatten()))
-
-# Plot the known data set and the predicted data set.  The red box represents the region that was used
-# for the training data.
-fig, ax = plt.subplots()
-ax.plot(X_tot, y_tot, label="true", linewidth=3)
-ax.plot(X_tot, y_pred, 'g-.',label="predicted", linewidth=4)
-ax.legend()
-# Created a red region to represent the points used in the training data.
-ax.axvspan(X_tot[0], X_tot[dim], alpha=0.25, color='red')
-plt.show()
-
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-
-!ec
-
-
-
-
-
-
-
-
-
-
-
-
+!bt
+\begin{align*}
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
+    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
+    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
+    \label{eq:rnn_gradients3}
+\end{align*}
+!et
 
 !split
 ===== Summary of RNNs =====
@@ -957,30 +494,32 @@ In a  traditional NN, it is assumed that every input is
 independent of each other.  But with sequential data, the input at a given stage $t$ depends on the input from the previous stage $t-1$
 
 !split
-===== A typical RNN =====
+===== Summary of a  typical RNN =====
 
 o Weight matrices $U$, $W$ and $V$ that connect the input layer at a stage $t$ with the hidden layer $h_t$, the previous hidden layer $h_{t-1}$ with $h_t$ and the hidden layer $h_t$ connecting with the output layer at the same stage and producing an output $\tilde{y}_t$, respectively.
-o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
-o The output from the hidden layer produces $\tilde{y}_t=g(Vh_t+c)$ where $c$ is a new bias parameter.
+o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
+o The output from the hidden layer produces $\tilde{y}_t=\sigma_y(Vh_t+c)$ where $c$ is a new bias parameter.
 o The output from the training at a given stage is in turn compared with the observation $y_t$ thorugh a chosen cost function.
 
 The function $g$ can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
 The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
 
+
+
+
 !split
-===== Gating mechanism: Long Short Term Memory (LSTM) =====
+===== Four effective ways to learn an RNN and preparing for next week =====
+o Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.
+o Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.
+o Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.
+  * ESNs only need to learn the hidden-output connections.
+o Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum
 
-Besides a simple recurrent neural network layer, as discussed above, there are two other
-commonly used types of recurrent neural network layers: Long Short
-Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
-introduction to these layers see URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b"
-and URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b".
 
+!split
+===== Long Short Term Memory (LSTM) =====
 
-LSTM uses a memory cell for  modeling long-range dependencies and avoid vanishing gradient  problems.
-Capable of modeling longer term dependencies by having
-memory cells and gates that controls the information flow along
-with the memory cells.
+LSTM uses a memory cell for   modeling long-range dependencies and avoid vanishing gradient  problems.
 
 o Introduced by Hochreiter and Schmidhuber (1997) who solved the problem of getting an RNN to remember things for a long time (like hundreds of time steps).
 o They designed a memory cell using logistic and linear units with multiplicative interactions.
@@ -989,600 +528,8 @@ o The information stays in the cell so long as its _keep_ gate is on.
 o Information can be read from the cell by turning on its _read_ gate. 
 
 
-=== Implementing a memory cell in a neural network ===
 
-To preserve information for a long time in
-the activities of an RNN, we use a circuit
-that implements an analog memory cell.
 
-o A linear unit that has a self-link with a weight of 1 will maintain its state.
-o Information is stored in the cell by activating its write gate.
-o Information is retrieved by activating the read gate.
-o We can backpropagate through this circuit because logistics are have nice derivatives. 
-
-FIGURE: [figslides/RNN13.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN14.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN15.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN16.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN17.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN18.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN19.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN20.png, width=700 frac=0.9]
-
-
-FIGURE: [figslides/RNN21.png, width=700 frac=0.9]
-
-FIGURE: [figslides/RNN22.png, width=700 frac=0.9]
-
-
-
-!split
-=====  An extrapolation example =====
-
-The following code provides an example of how recurrent neural
-networks can be used to extrapolate to unknown values of physics data
-sets.  Specifically, the data sets used in this program come from
-a quantum mechanical many-body calculation of energies as functions of the number of particles.
-
-
-!bc pycod
-
-# For matrices and calculations
-import numpy as np
-# For machine learning (backend for keras)
-import tensorflow as tf
-# User-friendly machine learning library
-# Front end for TensorFlow
-import tensorflow.keras
-# Different methods from Keras needed to create an RNN
-# This is not necessary but it shortened function calls 
-# that need to be used in the code.
-from tensorflow.keras import datasets, layers, models
-from tensorflow.keras.layers import Input
-from tensorflow.keras import regularizers
-from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, GRU
-# For timing the code
-from timeit import default_timer as timer
-# For plotting
-import matplotlib.pyplot as plt
-
-
-# The data set
-datatype='VaryDimension'
-X_tot = np.arange(2, 42, 2)
-y_tot = np.array([-0.03077640549, -0.08336233266, -0.1446729567, -0.2116753732, -0.2830637392, -0.3581341341, -0.436462435, -0.5177783846,
-	-0.6019067271, -0.6887363571, -0.7782028952, -0.8702784034, -0.9649652536, -1.062292565, -1.16231451, 
-	-1.265109911, -1.370782966, -1.479465113, -1.591317992, -1.70653767])
-
-!ec
-
-!split
-===== Formatting the Data =====
-
-The way the recurrent neural networks are trained in this program
-differs from how machine learning algorithms are usually trained.
-Typically a machine learning algorithm is trained by learning the
-relationship between the x data and the y data.  In this program, the
-recurrent neural network will be trained to recognize the relationship
-in a sequence of y values.  This is type of data formatting is
-typically used time series forcasting, but it can also be used in any
-extrapolation (time series forecasting is just a specific type of
-extrapolation along the time axis).  This method of data formatting
-does not use the x data and assumes that the y data are evenly spaced.
-
-For a standard machine learning algorithm, the training data has the
-form of (x,y) so the machine learning algorithm learns to assiciate a
-y value with a given x value.  This is useful when the test data has x
-values within the same range as the training data.  However, for this
-application, the x values of the test data are outside of the x values
-of the training data and the traditional method of training a machine
-learning algorithm does not work as well.  For this reason, the
-recurrent neural network is trained on sequences of y values of the
-form ((y1, y2), y3), so that the network is concerned with learning
-the pattern of the y data and not the relation between the x and y
-data.  As long as the pattern of y data outside of the training region
-stays relatively stable compared to what was inside the training
-region, this method of training can produce accurate extrapolations to
-y values far removed from the training data set.
-
-
-# 
-# The idea behind formatting the data in this way comes from [this resource](https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/) and [this one](https://fairyonice.github.io/Understand-Keras%27s-RNN-behind-the-scenes-with-a-sin-wave-example.html).
-# 
-# The following method takes in a y data set and formats it so the "x data" are of the form (y1, y2) and the "y data" are of the form y3, with extra brackets added in to make the resulting arrays compatable with both Keras and Tensorflow.
-# 
-# Note: Using a sequence length of two is not required for time series forecasting so any lenght of sequence could be used (for example instead of ((y1, y2) y3) you could change the length of sequence to be 4 and the resulting data points would have the form ((y1, y2, y3, y4), y5)).  While the following method can be used to create a data set of any sequence length, the remainder of the code expects the length of sequence to be 2.  This is because the data sets are very small and the higher the lenght of the sequence the less resulting data points.
-
-!bc pycod
-# FORMAT_DATA
-def format_data(data, length_of_sequence = 2):  
-    """
-        Inputs:
-            data(a numpy array): the data that will be the inputs to the recurrent neural
-                network
-            length_of_sequence (an int): the number of elements in one iteration of the
-                sequence patter.  For a function approximator use length_of_sequence = 2.
-        Returns:
-            rnn_input (a 3D numpy array): the input data for the recurrent neural network.  Its
-                dimensions are length of data - length of sequence, length of sequence, 
-                dimnsion of data
-            rnn_output (a numpy array): the training data for the neural network
-        Formats data to be used in a recurrent neural network.
-    """
-
-    X, Y = [], []
-    for i in range(len(data)-length_of_sequence):
-        # Get the next length_of_sequence elements
-        a = data[i:i+length_of_sequence]
-        # Get the element that immediately follows that
-        b = data[i+length_of_sequence]
-        # Reshape so that each data point is contained in its own array
-        a = np.reshape (a, (len(a), 1))
-        X.append(a)
-        Y.append(b)
-    rnn_input = np.array(X)
-    rnn_output = np.array(Y)
-
-    return rnn_input, rnn_output
-
-
-# ## Defining the Recurrent Neural Network Using Keras
-# 
-# The following method defines a simple recurrent neural network in keras consisting of one input layer, one hidden layer, and one output layer.
-
-def rnn(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with one hidden layer and returns the model.
-    """
-    # Number of neurons in the input and output layers
-    in_out_neurons = 1
-    # Number of neurons in the hidden layer
-    hidden_neurons = 200
-    # Define the input layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons))  
-    # Define the hidden layer as a simple RNN layer with a set number of neurons and add it to 
-    # the network immediately after the input layer
-    rnn = SimpleRNN(hidden_neurons, 
-                    return_sequences=False,
-                    stateful = stateful,
-                    name="RNN")(inp)
-    # Define the output layer as a dense neural network layer (standard neural network layer)
-    #and add it to the network immediately after the hidden layer.
-    dens = Dense(in_out_neurons,name="dense")(rnn)
-    # Create the machine learning model starting with the input layer and ending with the 
-    # output layer
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the machine learning model using the mean squared error function as the loss 
-    # function and an Adams optimizer.
-    model.compile(loss="mean_squared_error", optimizer="adam")  
-    return model
-
-!ec
-
-!split
-===== Predicting New Points With A Trained Recurrent Neural Network =====
-
-!bc pycod
-def test_rnn (x1, y_test, plot_min, plot_max):
-    """
-        Inputs:
-            x1 (a list or numpy array): The complete x component of the data set
-            y_test (a list or numpy array): The complete y component of the data set
-            plot_min (an int or float): the smallest x value used in the training data
-            plot_max (an int or float): the largest x valye used in the training data
-        Returns:
-            None.
-        Uses a trained recurrent neural network model to predict future points in the 
-        series.  Computes the MSE of the predicted data set from the true data set, saves
-        the predicted data set to a csv file, and plots the predicted and true data sets w
-        while also displaying the data range used for training.
-    """
-    # Add the training data as the first dim points in the predicted data array as these
-    # are known values.
-    y_pred = y_test[:dim].tolist()
-    # Generate the first input to the trained recurrent neural network using the last two 
-    # points of the training data.  Based on how the network was trained this means that it
-    # will predict the first point in the data set after the training data.  All of the 
-    # brackets are necessary for Tensorflow.
-    next_input = np.array([[[y_test[dim-2]], [y_test[dim-1]]]])
-    # Save the very last point in the training data set.  This will be used later.
-    last = [y_test[dim-1]]
-
-    # Iterate until the complete data set is created.
-    for i in range (dim, len(y_test)):
-        # Predict the next point in the data set using the previous two points.
-        next = model.predict(next_input)
-        # Append just the number of the predicted data set
-        y_pred.append(next[0][0])
-        # Create the input that will be used to predict the next data point in the data set.
-        next_input = np.array([[last, next[0]]], dtype=np.float64)
-        last = next
-
-    # Print the mean squared error between the known data set and the predicted data set.
-    print('MSE: ', np.square(np.subtract(y_test, y_pred)).mean())
-    # Save the predicted data set as a csv file for later use
-    name = datatype + 'Predicted'+str(dim)+'.csv'
-    np.savetxt(name, y_pred, delimiter=',')
-    # Plot the known data set and the predicted data set.  The red box represents the region that was used
-    # for the training data.
-    fig, ax = plt.subplots()
-    ax.plot(x1, y_test, label="true", linewidth=3)
-    ax.plot(x1, y_pred, 'g-.',label="predicted", linewidth=4)
-    ax.legend()
-    # Created a red region to represent the points used in the training data.
-    ax.axvspan(plot_min, plot_max, alpha=0.25, color='red')
-    plt.show()
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-
-# Generate the training data for the RNN, using a sequence of 2
-rnn_input, rnn_training = format_data(y_train, 2)
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-model = rnn(length_of_sequences = rnn_input.shape[1])
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict more points of the data set
-test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-!ec
-
-!split
-===== Other Things to Try =====
-
-
-Changing the size of the recurrent neural network and its parameters
-can drastically change the results you get from the model.  The below
-code takes the simple recurrent neural network from above and adds a
-second hidden layer, changes the number of neurons in the hidden
-layer, and explicitly declares the activation function of the hidden
-layers to be a sigmoid function.  The loss function and optimizer can
-also be changed but are kept the same as the above network.  These
-parameters can be tuned to provide the optimal result from the
-network.  For some ideas on how to improve the performance of a
-"recurrent neural network":"https://danijar.com/tips-for-training-recurrent-neural-networks".
-
-!bc pycod
-def rnn_2layers(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with two hidden layers and returns the model.
-    """
-    # Number of neurons in the input and output layers
-    in_out_neurons = 1
-    # Number of neurons in the hidden layer, increased from the first network
-    hidden_neurons = 500
-    # Define the input layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons))  
-    # Create two hidden layers instead of one hidden layer.  Explicitly set the activation
-    # function to be the sigmoid function (the default value is hyperbolic tangent)
-    rnn1 = SimpleRNN(hidden_neurons, 
-                    return_sequences=True,  # This needs to be True if another hidden layer is to follow
-                    stateful = stateful, activation = 'sigmoid',
-                    name="RNN1")(inp)
-    rnn2 = SimpleRNN(hidden_neurons, 
-                    return_sequences=False, activation = 'sigmoid',
-                    stateful = stateful,
-                    name="RNN2")(rnn1)
-    # Define the output layer as a dense neural network layer (standard neural network layer)
-    #and add it to the network immediately after the hidden layer.
-    dens = Dense(in_out_neurons,name="dense")(rnn2)
-    # Create the machine learning model starting with the input layer and ending with the 
-    # output layer
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the machine learning model using the mean squared error function as the loss 
-    # function and an Adams optimizer.
-    model.compile(loss="mean_squared_error", optimizer="adam")  
-    return model
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-
-# Generate the training data for the RNN, using a sequence of 2
-rnn_input, rnn_training = format_data(y_train, 2)
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-model = rnn_2layers(length_of_sequences = 2)
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-
-# This section plots the training loss and the validation loss as a function of training iteration.
-# This is not required for analyzing the couple cluster data but can help determine if the network is
-# being overtrained.
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict more points of the data set
-test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-!ec
-
-!split
-===== Other Types of Recurrent Neural Networks =====
-
-The first network created below is similar to the previous network,
-but it replaces the SimpleRNN layers with LSTM layers.  The second
-network below has two hidden layers made up of GRUs, which are
-preceeded by two dense (feeddorward) neural network layers.  These
-dense layers "preprocess" the data before it reaches the recurrent
-layers.  This architecture has been shown to improve the performance
-of recurrent neural networks (see the link above and also
-URL:"https://arxiv.org/pdf/1807.02857.pdf".
-
-!bc pycod
-def lstm_2layers(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with two LSTM hidden layers and returns the model.
-    """
-    # Number of neurons on the input/output layer and the number of neurons in the hidden layer
-    in_out_neurons = 1
-    hidden_neurons = 250
-    # Input Layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons)) 
-    # Hidden layers (in this case they are LSTM layers instead if SimpleRNN layers)
-    rnn= LSTM(hidden_neurons, 
-                    return_sequences=True,
-                    stateful = stateful,
-                    name="RNN", use_bias=True, activation='tanh')(inp)
-    rnn1 = LSTM(hidden_neurons, 
-                    return_sequences=False,
-                    stateful = stateful,
-                    name="RNN1", use_bias=True, activation='tanh')(rnn)
-    # Output layer
-    dens = Dense(in_out_neurons,name="dense")(rnn1)
-    # Define the midel
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the model
-    model.compile(loss='mean_squared_error', optimizer='adam')  
-    # Return the model
-    return model
-
-def dnn2_gru2(length_of_sequences, batch_size = None, stateful = False):
-    """
-        Inputs:
-            length_of_sequences (an int): the number of y values in "x data".  This is determined
-                when the data is formatted
-            batch_size (an int): Default value is None.  See Keras documentation of SimpleRNN.
-            stateful (a boolean): Default value is False.  See Keras documentation of SimpleRNN.
-        Returns:
-            model (a Keras model): The recurrent neural network that is built and compiled by this
-                method
-        Builds and compiles a recurrent neural network with four hidden layers (two dense followed by
-        two GRU layers) and returns the model.
-    """    
-    # Number of neurons on the input/output layers and hidden layers
-    in_out_neurons = 1
-    hidden_neurons = 250
-    # Input layer
-    inp = Input(batch_shape=(batch_size, 
-                length_of_sequences, 
-                in_out_neurons)) 
-    # Hidden Dense (feedforward) layers
-    dnn = Dense(hidden_neurons/2, activation='relu', name='dnn')(inp)
-    dnn1 = Dense(hidden_neurons/2, activation='relu', name='dnn1')(dnn)
-    # Hidden GRU layers
-    rnn1 = GRU(hidden_neurons, 
-                    return_sequences=True,
-                    stateful = stateful,
-                    name="RNN1", use_bias=True)(dnn1)
-    rnn = GRU(hidden_neurons, 
-                    return_sequences=False,
-                    stateful = stateful,
-                    name="RNN", use_bias=True)(rnn1)
-    # Output layer
-    dens = Dense(in_out_neurons,name="dense")(rnn)
-    # Define the model
-    model = Model(inputs=[inp],outputs=[dens])
-    # Compile the mdoel
-    model.compile(loss='mean_squared_error', optimizer='adam')  
-    # Return the model
-    return model
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-
-# Generate the training data for the RNN, using a sequence of 2
-rnn_input, rnn_training = format_data(y_train, 2)
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-# Change the method name to reflect which network you want to use
-model = dnn2_gru2(length_of_sequences = 2)
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(rnn_input, rnn_training, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-
-# This section plots the training loss and the validation loss as a function of training iteration.
-# This is not required for analyzing the couple cluster data but can help determine if the network is
-# being overtrained.
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict more points of the data set
-test_rnn(X_tot, y_tot, X_tot[0], X_tot[dim-1])
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-
-
-# ### Training Recurrent Neural Networks in the Standard Way (i.e. learning the relationship between the X and Y data)
-# 
-# Finally, comparing the performace of a recurrent neural network using the standard data formatting to the performance of the network with time sequence data formatting shows the benefit of this type of data formatting with extrapolation.
-
-# Check to make sure the data set is complete
-assert len(X_tot) == len(y_tot)
-
-# This is the number of points that will be used in as the training data
-dim=12
-
-# Separate the training data from the whole data set
-X_train = X_tot[:dim]
-y_train = y_tot[:dim]
-
-# Reshape the data for Keras specifications
-X_train = X_train.reshape((dim, 1))
-y_train = y_train.reshape((dim, 1))
-
-
-# Create a recurrent neural network in Keras and produce a summary of the 
-# machine learning model
-# Set the sequence length to 1 for regular data formatting 
-model = rnn(length_of_sequences = 1)
-model.summary()
-
-# Start the timer.  Want to time training+testing
-start = timer()
-# Fit the model using the training data genenerated above using 150 training iterations and a 5%
-# validation split.  Setting verbose to True prints information about each training iteration.
-hist = model.fit(X_train, y_train, batch_size=None, epochs=150, 
-                 verbose=True,validation_split=0.05)
-
-
-# This section plots the training loss and the validation loss as a function of training iteration.
-# This is not required for analyzing the couple cluster data but can help determine if the network is
-# being overtrained.
-for label in ["loss","val_loss"]:
-    plt.plot(hist.history[label],label=label)
-
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.title("The final validation loss: {}".format(hist.history["val_loss"][-1]))
-plt.legend()
-plt.show()
-
-# Use the trained neural network to predict the remaining data points
-X_pred = X_tot[dim:]
-X_pred = X_pred.reshape((len(X_pred), 1))
-y_model = model.predict(X_pred)
-y_pred = np.concatenate((y_tot[:dim], y_model.flatten()))
-
-# Plot the known data set and the predicted data set.  The red box represents the region that was used
-# for the training data.
-fig, ax = plt.subplots()
-ax.plot(X_tot, y_tot, label="true", linewidth=3)
-ax.plot(X_tot, y_pred, 'g-.',label="predicted", linewidth=4)
-ax.legend()
-# Created a red region to represent the points used in the training data.
-ax.axvspan(X_tot[0], X_tot[dim], alpha=0.25, color='red')
-plt.show()
-
-# Stop the timer and calculate the total time needed.
-end = timer()
-print('Time: ', end-start)
-
-!ec
 
 
 

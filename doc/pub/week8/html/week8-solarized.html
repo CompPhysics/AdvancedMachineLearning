@@ -8,8 +8,8 @@ doconce format html week8.do.txt --pygments_html_style=perldoc --html_style=sola
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="March 13-17: Advanced machine learning and data analysis for the physical sciences">
-<title>March 13-17: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="March 4-8: Advanced machine learning and data analysis for the physical sciences">
+<title>March 4-8: Advanced machine learning and data analysis for the physical sciences</title>
 <link href="https://cdn.rawgit.com/doconce/doconce/master/bundled/html_styles/style_solarized_box/css/solarized_light_code.css" rel="stylesheet" type="text/css" title="light"/>
 <script src="https://cdn.rawgit.com/doconce/doconce/master/bundled/html_styles/style_solarized_box/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
@@ -63,11 +63,11 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the week March 13-17',
+ 'sections': [('Plans for the week March 4-8',
                2,
                None,
-               'plans-for-the-week-march-13-17'),
-              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
+               'plans-for-the-week-march-4-8'),
+              ('RNNs', 2, None, 'rnns'),
               ('A typical RNN', 2, None, 'a-typical-rnn'),
               ('Gating mechanism: Long Short Term Memory (LSTM)',
                2,
@@ -185,7 +185,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------- main content ---------------------- -->
 <center>
-<h1>March 13-17: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>March 4-8: Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
@@ -201,34 +201,29 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>March 13-17, 2023</h4>
+<h4>March 5, 2024</h4>
 </center> <!-- date -->
 <br>
-<h2 id="plans-for-the-week-march-13-17">Plans for the week March 13-17  </h2>
+<h2 id="plans-for-the-week-march-4-8">Plans for the week March 4-8  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
 <ul>
-<li> Summary of RNNs and discussion of Long-Short-Term memory with examples</li>
-<li> Discussion of Autoencoders (AEs). Codes will be discussed next week.</li> 
+<li> RNNs and discussion of Long-Short-Term memory with examples</li>
+<li> Discussion of Autoencoders (AEs).</li> 
 <li> <a href="https://youtu.be/F11o2W4OBqU" target="_blank">Video of lecture</a></li>
 <li> Reading recommendations:
 <ol type="a"></li>
  <li> For RNNs see Goodfellow et al chapter 10. See also chapter 11 and 12 on practicalities and applications. For AEs, see chapter 14.</li>
  <li> Reading suggestions for implementation of RNNs: <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf" target="_blank">Aurelien Geron's chapter 14</a>.</li> 
- <li> <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_blank">Deep Learning Tutorial on AEs from Stanford University</a></li>
- <li> <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_blank">Building AEs in Keras</a></li>
- <li> <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_blank">Introduction to AEs in TensorFlow</a></li>
- <li> <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_blank">Grosse, University of Toronto, Lecture on AEs</a></li>
- <li> <a href="https://arxiv.org/abs/2003.05991" target="_blank">Bank et al on AEs</a></li>  
 </ol>
 </ul>
 </div>
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="summary-of-rnns">Summary of RNNs </h2>
+<h2 id="rnns">RNNs </h2>
 
 <p>Recurrent neural networks (RNNs) have in general no probabilistic component
 in a model. With a given fixed input and target from data, the RNNs learn the intermediate
@@ -292,66 +287,6 @@ that implements an analog memory cell.
 <li> Information is retrieved by activating the read gate.</li>
 <li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
 </ol>
-<br/><br/>
-<center>
-<p><img src="figslides/RNN13.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN14.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN15.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN16.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN17.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN18.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN19.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN20.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN21.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN22.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="an-extrapolation-example">An extrapolation example </h2>
 
@@ -2332,7 +2267,7 @@ X_reduced = rbf_pca.fit_transform(X)
 </ul>
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2023, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>
