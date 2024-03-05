@@ -164,9 +164,16 @@ div.toc p,a {
                None,
                'gating-mechanism-long-short-term-memory-lstm'),
               ('Implementing a memory cell in a neural network',
-               3,
+               2,
                None,
                'implementing-a-memory-cell-in-a-neural-network'),
+              ('LSTM details', 2, None, 'lstm-details'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('More LSTM details', 2, None, 'more-lstm-details'),
+              ('The forget gate', 2, None, 'the-forget-gate'),
+              ('Input gate', 2, None, 'input-gate'),
+              ('Forget and input', 2, None, 'forget-and-input'),
+              ('Output gate', 2, None, 'output-gate'),
               ('An extrapolation example', 2, None, 'an-extrapolation-example'),
               ('Formatting the Data', 2, None, 'formatting-the-data'),
               ('Predicting New Points With A Trained Recurrent Neural Network',
@@ -726,7 +733,8 @@ with the memory cells.
 <li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
 <li> Information can be read from the cell by turning on its <b>read</b> gate.</li> 
 </ol>
-<h3 id="implementing-a-memory-cell-in-a-neural-network">Implementing a memory cell in a neural network </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="implementing-a-memory-cell-in-a-neural-network">Implementing a memory cell in a neural network </h2>
 
 <p>To preserve information for a long time in
 the activities of an RNN, we use a circuit
@@ -739,6 +747,112 @@ that implements an analog memory cell.
 <li> Information is retrieved by activating the read gate.</li>
 <li> We can backpropagate through this circuit because logistics are have nice derivatives.</li> 
 </ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="lstm-details">LSTM details </h2>
+
+<p>The LSTM is a unit cell that is made of three gates:</p>
+<ol>
+<li> the input gate,</li>
+<li> the forget gate,</li>
+<li> and the output gate.</li>
+</ol>
+<p>It also introduces a cell state \( c \), which can be thought of as the
+long-term memory, and a hidden state \( h \) which can be thought of as
+the short-term memory.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="basic-layout">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/lstm.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-lstm-details">More LSTM details </h2>
+
+<p>The first stage is called the forget gate, where we combine the input
+at (say, time \( t \)), and the hidden cell state input at \( t-1 \), passing
+it through the Sigmoid activation function and then performing an
+element-wise multiplication, denoted by \( \otimes \).
+</p>
+
+<p>It follows </p>
+$$
+\mathbf{f}^{(t)} = \sigma(W_f\mathbf{x}^{(t)} + U_f\mathbf{h}^{(t-1)} + \mathbf{b}_f)
+$$
+
+<p>where \( W \) and \( U \) are the weights respectively.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-forget-gate">The forget gate </h2>
+
+<p>This is called the forget gate since the Sigmoid activation function's
+outputs are very close to \( 0 \) if the argument for the function is very
+negative, and \( 1 \) if the argument is very positive. Hence we can
+control the amount of information we want to take from the long-term
+memory.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="input-gate">Input gate </h2>
+
+<p>The next stage is the input gate, which consists of both a Sigmoid
+function (\( \sigma_i \)), which decide what percentage of the input will
+be stored in the long-term memory, and the \( \tanh_i \) function, which
+decide what is the full memory that can be stored in the long term
+memory. When these results are calculated and multiplied together, it
+is added to the cell state or stored in the long-term memory, denoted
+as \( \oplus \). 
+</p>
+
+<p>We have</p>
+$$
+\mathbf{i}^{(t)} = \sigma_g(W_i\mathbf{x}^{(t)} + U_i\mathbf{h}^{(t-1)} + \mathbf{b}_i),
+$$
+
+<p>and</p>
+$$
+\mathbf{\tilde{c}}^{(t)} = \tanh(W_c\mathbf{x}^{(t)} + U_c\mathbf{h}^{(t-1)} + \mathbf{b}_c),
+$$
+
+<p>again the \( W \) and \( U \) are the weights.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="forget-and-input">Forget and input </h2>
+
+<p>The forget gate and the input gate together also update the cell state with the following equation, </p>
+$$
+\mathbf{c}^{(t)} = \mathbf{f}^{(t)} \otimes \mathbf{c}^{(t-1)} + \mathbf{i}^{(t)} \otimes \mathbf{\tilde{c}}^{(t)},
+$$
+
+<p>where \( f^{(t)} \) and \( i^{(t)} \) are the outputs of the forget gate and the input gate, respectively.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="output-gate">Output gate </h2>
+
+<p>The final stage of the LSTM is the output gate, and its purpose is to
+update the short-term memory.  To achieve this, we take the newly
+generated long-term memory and process it through a hyperbolic tangent
+(\( \tanh \)) function creating a potential new short-term memory. We then
+multiply this potential memory by the output of the Sigmoid function
+(\( \sigma_o \)). This multiplication generates the final output as well
+as the input for the next hidden cell (\( h^{\langle t \rangle} \)) within
+the LSTM cell.
+</p>
+
+<p>We have </p>
+$$
+\begin{aligned}
+\mathbf{o}^{(t)} &= \sigma_g(W_o\mathbf{x}^{(t)} + U_o\mathbf{h}^{(t-1)} + \mathbf{b}_o), \\
+\mathbf{h}^{(t)} &= \mathbf{o}^{(t)} \otimes \sigma_h(\mathbf{c}^{(t)}). \\
+\end{aligned}
+$$
+
+<p>where \( \mathbf{W_o,U_o} \) are the weights of the output gate and \( \mathbf{b_o} \) is the bias of the output gate.</p>
+
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="an-extrapolation-example">An extrapolation example </h2>
 
