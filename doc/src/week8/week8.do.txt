@@ -34,16 +34,317 @@ real-valued vectors.
 In a  traditional NN, it is assumed that every input is
 independent of each other.  But with sequential data, the input at a given stage $t$ depends on the input from the previous stage $t-1$
 
+
+
+
 !split
-===== A typical RNN =====
+===== Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" =====
+
+FIGURE: [figslides/RNN1.png, width=700 frac=0.9]
+
+
+!split
+===== Solving differential equations with RNNs =====
+
+To gain some intuition on how we can use RNNs for time series, let us
+tailor the representation of the solution of a differential equation
+as a time series.
+
+Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)
+
+!bt
+\[
+\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
+\]
+!et
+where $\eta$ is a constant used in scaling time into a dimensionless variable and $F(t)$ is an external force acting on the system.
+The constant $\eta$ is a so-called damping.
+
+!split
+===== Two first-order differential equations =====
+
+In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
+with the velocity
+!bt
+\[
+v(t)=\frac{dx}{dt},
+\]
+!et
+and the acceleration
+!bt
+\[
+\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
+\]
+!et
+
+With the initial conditions $v_0=v(t_0)$ and $x_0=x(t_0)$ defined, we can integrate these equations and find their respective solutions.
+
+!split
+===== Velocity only =====
+
+Let us focus on the velocity only. Discretizing and using the simplest
+possible approximation for the derivative, we have Euler's forward
+method for the updated velocity at a time step $i+1$ given by
+!bt
+\[
+v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
+\]
+!et
+Defining a function
+!bt
+\[
+h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
+\]
+!et
+we have
+!bt
+\[
+v_{i+1}=h_i(x_i,v_i,F_i).
+\]
+!et
+
+!split
+===== Linking with RNNs =====
+
+The equation
+!bt
+\[
+v_{i+1}=h_i(x_i,v_i,F_i).
+\]
+!et
+can be used to train a feed-forward neural network with inputs $v_i$ and outputs $v_{i+1}$ at a time $t_i$. But we can think of this also as a recurrent neural network
+with inputs $v_i$, $x_i$ and $F_i$ at each time step $t_i$, and producing an output $v_{i+1}$.
+
+Noting that 
+!bt
+\[
+v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
+\]
+!et
+we have
+!bt
+\[
+v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
+\]
+!et
+and we can rewrite
+!bt
+\[
+v_{i+1}=h_i(x_i,h_{i-1},F_i).
+\]
+!et
+
+!split
+===== Minor rewrite =====
+
+We can thus set up a recurring series which depends on the inputs $x_i$ and $F_i$ and the previous values $h_{i-1}$.
+We assume now that the inputs at each step (or time $t_i$) is given by $x_i$ only and we denote the outputs for $\tilde{y}_i$ instead of $v_{i_1}$, we have then the compact equation for our outputs at each step $t_i$
+!bt
+\[
+y_{i}=h_i(x_i,h_{i-1}).
+\]
+!et
+
+We can think of this as an element in a recurrent network where our
+network (our model) produces an output $y_i$ which is then compared
+with a target value through a given cost/loss function that we
+optimize. The target values at a given step $t_i$ could be the results
+of a measurement or simply the analytical results of a differential
+equation.
+
+
+!split
+===== RNNs in more detail  =====
+
+FIGURE: [figslides/RNN2.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 2  =====
+
+FIGURE: [figslides/RNN3.png, width=700 frac=0.9]
+
+
+!split
+===== RNNs in more detail, part 3  =====
+
+FIGURE: [figslides/RNN4.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 4  =====
+
+FIGURE: [figslides/RNN5.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 5  =====
+
+FIGURE: [figslides/RNN6.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 6  =====
+
+FIGURE: [figslides/RNN7.png, width=700 frac=0.9]
+
+!split
+===== RNNs in more detail, part 7  =====
+
+FIGURE: [figslides/RNN8.png, width=700 frac=0.9]
+
+
+
+!split
+===== Backpropagation through time =====
+
+!bblock
+We can think of the recurrent net as a layered, feed-forward
+net with shared weights and then train the feed-forward net
+with weight constraints.
+!eblock
+
+We can also think of this training algorithm in the time domain:
+o The forward pass builds up a stack of the activities of all the units at each time step.
+o The backward pass peels activities off the stack to compute the error derivatives at each time step.
+o After the backward pass we add together the derivatives at all the different times for each weight. 
+
+!split
+===== The backward pass is linear =====
+
+o There is a big difference between the forward and backward passes.
+o In the forward pass we use squashing functions (like the logistic) to prevent the activity vectors from exploding.
+o The backward pass, is completely linear. If you double the error derivatives at the final layer, all the error derivatives will double.
+
+The forward pass determines the slope of the linear function used for
+backpropagating through each neuron
+
+
+!split 
+===== The problem of exploding or vanishing gradients =====
+* What happens to the magnitude of the gradients as we backpropagate through many layers?
+  o If the weights are small, the gradients shrink exponentially.
+  o If the weights are big the gradients grow exponentially.
+* Typical feed-forward neural nets can cope with these exponential effects because they only have a few hidden layers.
+* In an RNN trained on long sequences (e.g. 100 time steps) the gradients can easily explode or vanish.
+  o We can avoid this by initializing the weights very carefully.
+* Even with good initial weights, its very hard to detect that the current target output depends on an input from many time-steps ago.
+
+
+RNNs have difficulty dealing with long-range dependencies. 
+
+!split
+===== Mathematical setup =====
+
+The expression for the simplest Recurrent network resembles that of a
+regular feed-forward neural network, but now with
+the concept of temporal dependencies
+
+!bt
+\begin{align*}
+    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
+    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
+    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
+\end{align*}
+!et
+
+
+!split
+===== Back propagation in time through figures, part 1   =====
+
+FIGURE: [figslides/RNN9.png, width=700 frac=0.9]
+
+
+!split
+===== Back propagation in time, part 2   =====
+
+FIGURE: [figslides/RNN10.png, width=700 frac=0.9]
+
+
+!split
+===== Back propagation in time, part 3   =====
+
+FIGURE: [figslides/RNN11.png, width=700 frac=0.9]
+
+
+!split
+===== Back propagation in time, part 4   =====
+
+FIGURE: [figslides/RNN12.png, width=700 frac=0.9]
+
+
+!split
+===== Back propagation in time in equations =====
+
+To derive the expression of the gradients of $\mathcal{L}$ for
+the RNN, we need to start recursively from the nodes closer to the
+output layer in the temporal unrolling scheme - such as $\mathbf{y}$
+and $\mathbf{h}$ at final time $t = \tau$,
+
+!bt
+\begin{align*}
+    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial y_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
+\end{align*}
+!et
+
+!split
+===== Chain rule again =====
+For the following hidden nodes, we have to iterate through time, so by the chain rule, 
+
+!bt
+\begin{align*}
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
+\end{align*}
+!et
+
+!split
+===== Gradients of loss functions =====
+Similarly, the gradients of $\mathcal{L}$ with respect to the weights and biases follow,
+
+!bt
+\begin{align*}
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
+    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
+    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
+    \label{eq:rnn_gradients3}
+\end{align*}
+!et
+
+!split
+===== Summary of RNNs =====
+
+Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+
+In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage $t$ depends on the input from the previous stage $t-1$
+
+!split
+===== Summary of a  typical RNN =====
 
 o Weight matrices $U$, $W$ and $V$ that connect the input layer at a stage $t$ with the hidden layer $h_t$, the previous hidden layer $h_{t-1}$ with $h_t$ and the hidden layer $h_t$ connecting with the output layer at the same stage and producing an output $\tilde{y}_t$, respectively.
-o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=f(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
-o The output from the hidden layer produces $\tilde{y}_t=g(Vh_t+c)$ where $c$ is a new bias parameter.
+o The output from the hidden layer $h_t$ is oftem modulated by a $\tanh{}$ function $h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)}$ with $b$ a bias value
+o The output from the hidden layer produces $\tilde{y}_t=\sigma_y(Vh_t+c)$ where $c$ is a new bias parameter.
 o The output from the training at a given stage is in turn compared with the observation $y_t$ thorugh a chosen cost function.
 
 The function $g$ can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
 The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+
+
+
+
+!split
+===== Four effective ways to learn an RNN and preparing for next week =====
+o Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.
+o Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.
+o Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.
+  * ESNs only need to learn the hidden-output connections.
+o Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum
+
+
 
 !split
 ===== Gating mechanism: Long Short Term Memory (LSTM) =====
@@ -65,6 +366,7 @@ o They designed a memory cell using logistic and linear units with multiplicativ
 o Information gets into the cell whenever its “write” gate is on.
 o The information stays in the cell so long as its _keep_ gate is on.
 o Information can be read from the cell by turning on its _read_ gate. 
+
 
 
 === Implementing a memory cell in a neural network ===
@@ -698,7 +1000,6 @@ An autoencoder is a type of algorithm with the primary purpose of learning an "i
 !split
 ===== Autoencoder structure =====
 
-See also whiteboard notes. These will be added later.
 
 Autoencoders are neural networks where the outputs are its own inputs. They are split (see whiteboard drawing) into an _encoder part_ which
 maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this is the encoder part) to a _so-called code part_ (or intermediate part) with the result
