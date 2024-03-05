@@ -485,7 +485,163 @@ We have
 !et
 where $\mathbf{W_o,U_o}$ are the weights of the output gate and $\mathbf{b_o}$ is the bias of the output gate.
 
+!split
+===== Differential equations =====
 
+"The examples here are taken from the project of Keran Chen and Daniel Haas Beccatini Lima from 2023.":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Projects/2023/ProjectExamples/RNNs.pdf"
+
+The dynamics of a stable spiral evolve in such a way that the system's
+trajectory converges to a fixed point while spiraling inward. These
+oscillations around the fixed point are gradually dampened until the
+system reaches a steady state at a fixed point.  Suppose we have a
+two-dimensional system of coupled differential equations of the form
+!bt
+\begin{align*}
+    \frac{dx}{dt} &= ax + by \notag,\\
+    \frac{dy}{dt} &= cx + dy.
+\end{align*}
+!et
+
+The choice of $a,b,c,d \in \mathbb{R}$ completely determines the
+behavior of the solution, and for some of these values, albeit not
+all, the system is said to be a stable spiral. This condition is
+satisfied when the eigenvalues of the matrix formed by the
+coefficients are complex conjugates with a negative real part.
+
+!split
+===== Lorenz attractor =====
+
+A Lorenz attractor presents some added complexity. It exhbits what is called a chaotic
+behavior and its behavior is extremely sensitive to initial conditions.
+
+The expression for the Lorenz attractor evolution consists of a set of three coupled nonlinear differential equations given by
+
+!bt
+\begin{align*}
+    \frac{dx}{dt} &= \sigma (y-x), \notag\\
+    \frac{dy}{dt} &= x(\rho -z) - y, \notag\\
+    \frac{dz}{dt} &= xy- \beta z.  
+\end{align*}
+!et
+
+For this problem, ${x,y,z}$ are the variables that determine the state
+of the system in the space while $\sigma, \rho$ and $\beta$ are,
+similarly to the constants $a,b,c,d$ of the stable spiral, parameters
+that influence largely how the system evolves. 
+
+!split
+===== Generating data =====
+
+Both of the above-mentioned systems are governed by differential
+equations, and as such, they can be solved numerically through some
+integration scheme such as forward-Euler or fourth-order
+Runge-Kutta. 
+
+We use the common choice of parameters $\sigma =10$, $\rho =28$,
+$\beta =8/3$.  This choice generates complex and aesthetic
+trajectories that have been extensively investigated and benchmarked
+in the literature of numerical simulations.
+
+For the stable spiral, we employ $a = 0.2$, $b = -1.0$, $c = 1.0$, $d = 0.2$.
+This gives a good number of oscillations before reaching a steady state. 
+
+
+!split
+===== Training and testing =====
+
+Training and testing procedures in recurrent neural networks follow
+what is usual for regular FNNs, but some special consideration needs
+to be taken into account due to the sequential character of the
+data. _Training and testing batches must not be randomly shuffled_ for
+it would clearly decorrelate the time-series points and leak future
+information into present or past points of the model.
+
+!split
+===== Computationally expensive =====
+
+The training algorithm can become computationally
+costly, especially if the losses are evaluated for all previous time
+steps. While other architectures such as that of LSTMs can be used to
+mitigate that, it is also possible to introduce another hyperparameter
+responsible for controlling how much of the network will be unfolded
+in the training process, adjusting how much the network will remember
+from previous points in time . Similarly, the number of steps the network predicts
+in the future per iteration greatly influences the assessment of the
+loss function. .
+
+!split
+===== Choice of training data =====
+
+The training and testing batches were separated into whole
+trajectories. This means that instead of training and testing on
+different fractions of the same trajectory, all trajectories that were
+tested had completely new initial conditions. In this sense, from a
+total of 10 initial conditions (independent trajectories), 9 were used
+for training and 1 for testing. Each trajectory consisted of 800
+points in each space coordinate.
+
+!split
+===== Cost/Loss function =====
+
+The problem we have is a time-series forecasting problem, so, we are
+free to choose the loss function amongst the big collection of
+regression losses. Using the mean-squared error of the predicted
+versus factual trajectories of the dynamic systems is a natural choice.
+
+It is a convex
+function, so given sufficient time and appropriate learning rates, it
+is guaranteed to converge to global minima irrespective of the
+weightss random initializations. 
+
+!bt
+\begin{align}
+    \mathcal{L}_{MSE} = \frac{1}{N}\sum_{i}^N (y(\mathbf{x}_i) - \hat{y}(\mathbf{x}_i, \mathbf{\theta}))^2
+\end{align}
+!et
+where $\mathbf{\theta}$ represents the set of all parameters of the network, and $\mathbf{x}_i$ are the input values
+
+
+
+!split
+===== Modifying the cost/loss function, adding more info =====
+
+A cost/loss function that is based on the observational and
+predicted data, is normally referred to as a purely data-driven approach.
+
+While this is a
+well-established way of assessing regressions, it does not make use of
+other intuitions we might have over the problem we are trying to
+solve. At the same time, it is a well-established fact that neural
+network models are data-greedy - they need large amounts of data to be
+able to generalize predictions outside the training set. One way to
+try to mitigate this is by using physics-informed neural networks
+(PINNs) when possible.
+
+!split
+===== Changing the function to optimize =====
+
+Trying to improve the performance of our model beyond training sets,
+PINNs then add physics-informed penalties to the loss function. In
+essence, this means that we add a worse evaluation score to
+predictions that do not respect physical laws we think our real data
+should obey. This procedure often has the advantage of trimming the
+parameter space without adding bias to the model if the constraints
+imposed are correct, but the choice of the physical laws can be a
+delicate one.
+
+!split
+===== Adding more information to the loss function =====
+
+A general way of expressing this added penalty to the loss function is shown here
+!bt
+\begin{align*}
+    \mathcal{L} = w_{MSE}\mathcal{L}_{MSE} + w_{PI}\mathcal{L}_{PI}.
+\end{align*}
+!et
+
+Here, the weights $w_{MSE}$ and $w_{PI}$ explicitly mediate how much
+influence the specific parts of the total loss function should
+contribute. See the above project link for more details.
 
 
 !split
@@ -1157,7 +1313,7 @@ and
 With the above linear dependence we can in turn define our optimization problem in terms of the optimization of the mean-squared error, that is we wish to optimize
 !bt
 \[
-\min_{\bm{W},\bm{V}\in {\mathbb{R}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \bm{x}-\bm{V}\bm{W}\bm{x}\vert\vert_2^2,
+\min_{\bm{W},\bm{V}\in {\mathbb{R}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \bm{x}-\bm{V}\bm{W}\bm{x}\vert\vert_2^2,
 \]
 !et
 where we have used the definition of  a norm-2 vector, that is

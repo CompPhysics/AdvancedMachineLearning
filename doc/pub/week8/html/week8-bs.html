@@ -147,6 +147,28 @@ doconce format html week8.do.txt --html_style=bootstrap --pygments_html_style=de
               ('Input gate', 2, None, 'input-gate'),
               ('Forget and input', 2, None, 'forget-and-input'),
               ('Output gate', 2, None, 'output-gate'),
+              ('Differential equations', 2, None, 'differential-equations'),
+              ('Lorenz attractor', 2, None, 'lorenz-attractor'),
+              ('Generating data', 2, None, 'generating-data'),
+              ('Training and testing', 2, None, 'training-and-testing'),
+              ('Computationally expensive',
+               2,
+               None,
+               'computationally-expensive'),
+              ('Choice of training data', 2, None, 'choice-of-training-data'),
+              ('Cost/Loss function', 2, None, 'cost-loss-function'),
+              ('Modifying the cost/loss function, adding more info',
+               2,
+               None,
+               'modifying-the-cost-loss-function-adding-more-info'),
+              ('Changing the function to optimize',
+               2,
+               None,
+               'changing-the-function-to-optimize'),
+              ('Adding more information to the loss function',
+               2,
+               None,
+               'adding-more-information-to-the-loss-function'),
               ('An extrapolation example', 2, None, 'an-extrapolation-example'),
               ('Formatting the Data', 2, None, 'formatting-the-data'),
               ('Predicting New Points With A Trained Recurrent Neural Network',
@@ -307,6 +329,16 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#input-gate" style="font-size: 80%;"><b>Input gate</b></a></li>
      <!-- navigation toc: --> <li><a href="#forget-and-input" style="font-size: 80%;"><b>Forget and input</b></a></li>
      <!-- navigation toc: --> <li><a href="#output-gate" style="font-size: 80%;"><b>Output gate</b></a></li>
+     <!-- navigation toc: --> <li><a href="#differential-equations" style="font-size: 80%;"><b>Differential equations</b></a></li>
+     <!-- navigation toc: --> <li><a href="#lorenz-attractor" style="font-size: 80%;"><b>Lorenz attractor</b></a></li>
+     <!-- navigation toc: --> <li><a href="#generating-data" style="font-size: 80%;"><b>Generating data</b></a></li>
+     <!-- navigation toc: --> <li><a href="#training-and-testing" style="font-size: 80%;"><b>Training and testing</b></a></li>
+     <!-- navigation toc: --> <li><a href="#computationally-expensive" style="font-size: 80%;"><b>Computationally expensive</b></a></li>
+     <!-- navigation toc: --> <li><a href="#choice-of-training-data" style="font-size: 80%;"><b>Choice of training data</b></a></li>
+     <!-- navigation toc: --> <li><a href="#cost-loss-function" style="font-size: 80%;"><b>Cost/Loss function</b></a></li>
+     <!-- navigation toc: --> <li><a href="#modifying-the-cost-loss-function-adding-more-info" style="font-size: 80%;"><b>Modifying the cost/loss function, adding more info</b></a></li>
+     <!-- navigation toc: --> <li><a href="#changing-the-function-to-optimize" style="font-size: 80%;"><b>Changing the function to optimize</b></a></li>
+     <!-- navigation toc: --> <li><a href="#adding-more-information-to-the-loss-function" style="font-size: 80%;"><b>Adding more information to the loss function</b></a></li>
      <!-- navigation toc: --> <li><a href="#an-extrapolation-example" style="font-size: 80%;"><b>An extrapolation example</b></a></li>
      <!-- navigation toc: --> <li><a href="#formatting-the-data" style="font-size: 80%;"><b>Formatting the Data</b></a></li>
      <!-- navigation toc: --> <li><a href="#predicting-new-points-with-a-trained-recurrent-neural-network" style="font-size: 80%;"><b>Predicting New Points With A Trained Recurrent Neural Network</b></a></li>
@@ -937,6 +969,179 @@ $$
 $$
 
 <p>where \( \mathbf{W_o,U_o} \) are the weights of the output gate and \( \mathbf{b_o} \) is the bias of the output gate.</p>
+
+<!-- !split -->
+<h2 id="differential-equations" class="anchor">Differential equations </h2>
+
+<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Projects/2023/ProjectExamples/RNNs.pdf" target="_self">The examples here are taken from the project of Keran Chen and Daniel Haas Beccatini Lima from 2023.</a>
+
+<p>The dynamics of a stable spiral evolve in such a way that the system's
+trajectory converges to a fixed point while spiraling inward. These
+oscillations around the fixed point are gradually dampened until the
+system reaches a steady state at a fixed point.  Suppose we have a
+two-dimensional system of coupled differential equations of the form
+</p>
+$$
+\begin{align*}
+    \frac{dx}{dt} &= ax + by \notag,\\
+    \frac{dy}{dt} &= cx + dy.
+\end{align*}
+$$
+
+<p>The choice of \( a,b,c,d \in \mathbb{R} \) completely determines the
+behavior of the solution, and for some of these values, albeit not
+all, the system is said to be a stable spiral. This condition is
+satisfied when the eigenvalues of the matrix formed by the
+coefficients are complex conjugates with a negative real part.
+</p>
+
+<!-- !split -->
+<h2 id="lorenz-attractor" class="anchor">Lorenz attractor </h2>
+
+<p>A Lorenz attractor presents some added complexity. It exhbits what is called a chaotic
+behavior and its behavior is extremely sensitive to initial conditions.
+</p>
+
+<p>The expression for the Lorenz attractor evolution consists of a set of three coupled nonlinear differential equations given by</p>
+
+$$
+\begin{align*}
+    \frac{dx}{dt} &= \sigma (y-x), \notag\\
+    \frac{dy}{dt} &= x(\rho -z) - y, \notag\\
+    \frac{dz}{dt} &= xy- \beta z.  
+\end{align*}
+$$
+
+<p>For this problem, \( {x,y,z} \) are the variables that determine the state
+of the system in the space while \( \sigma, \rho \) and \( \beta \) are,
+similarly to the constants \( a,b,c,d \) of the stable spiral, parameters
+that influence largely how the system evolves. 
+</p>
+
+<!-- !split -->
+<h2 id="generating-data" class="anchor">Generating data </h2>
+
+<p>Both of the above-mentioned systems are governed by differential
+equations, and as such, they can be solved numerically through some
+integration scheme such as forward-Euler or fourth-order
+Runge-Kutta. 
+</p>
+
+<p>We use the common choice of parameters \( \sigma =10 \), \( \rho =28 \),
+\( \beta =8/3 \).  This choice generates complex and aesthetic
+trajectories that have been extensively investigated and benchmarked
+in the literature of numerical simulations.
+</p>
+
+<p>For the stable spiral, we employ \( a = 0.2 \), \( b = -1.0 \), \( c = 1.0 \), \( d = 0.2 \).
+This gives a good number of oscillations before reaching a steady state. 
+</p>
+
+<!-- !split -->
+<h2 id="training-and-testing" class="anchor">Training and testing </h2>
+
+<p>Training and testing procedures in recurrent neural networks follow
+what is usual for regular FNNs, but some special consideration needs
+to be taken into account due to the sequential character of the
+data. <b>Training and testing batches must not be randomly shuffled</b> for
+it would clearly decorrelate the time-series points and leak future
+information into present or past points of the model.
+</p>
+
+<!-- !split -->
+<h2 id="computationally-expensive" class="anchor">Computationally expensive </h2>
+
+<p>The training algorithm can become computationally
+costly, especially if the losses are evaluated for all previous time
+steps. While other architectures such as that of LSTMs can be used to
+mitigate that, it is also possible to introduce another hyperparameter
+responsible for controlling how much of the network will be unfolded
+in the training process, adjusting how much the network will remember
+from previous points in time . Similarly, the number of steps the network predicts
+in the future per iteration greatly influences the assessment of the
+loss function. .
+</p>
+
+<!-- !split -->
+<h2 id="choice-of-training-data" class="anchor">Choice of training data </h2>
+
+<p>The training and testing batches were separated into whole
+trajectories. This means that instead of training and testing on
+different fractions of the same trajectory, all trajectories that were
+tested had completely new initial conditions. In this sense, from a
+total of 10 initial conditions (independent trajectories), 9 were used
+for training and 1 for testing. Each trajectory consisted of 800
+points in each space coordinate.
+</p>
+
+<!-- !split -->
+<h2 id="cost-loss-function" class="anchor">Cost/Loss function </h2>
+
+<p>The problem we have is a time-series forecasting problem, so, we are
+free to choose the loss function amongst the big collection of
+regression losses. Using the mean-squared error of the predicted
+versus factual trajectories of the dynamic systems is a natural choice.
+</p>
+
+<p>It is a convex
+function, so given sufficient time and appropriate learning rates, it
+is guaranteed to converge to global minima irrespective of the
+weightss random initializations. 
+</p>
+
+$$
+\begin{align}
+    \mathcal{L}_{MSE} = \frac{1}{N}\sum_{i}^N (y(\mathbf{x}_i) - \hat{y}(\mathbf{x}_i, \mathbf{\theta}))^2
+\label{_auto1}
+\end{align}
+$$
+
+<p>where \( \mathbf{\theta} \) represents the set of all parameters of the network, and \( \mathbf{x}_i \) are the input values</p>
+
+<!-- !split -->
+<h2 id="modifying-the-cost-loss-function-adding-more-info" class="anchor">Modifying the cost/loss function, adding more info </h2>
+
+<p>A cost/loss function that is based on the observational and
+predicted data, is normally referred to as a purely data-driven approach.
+</p>
+
+<p>While this is a
+well-established way of assessing regressions, it does not make use of
+other intuitions we might have over the problem we are trying to
+solve. At the same time, it is a well-established fact that neural
+network models are data-greedy - they need large amounts of data to be
+able to generalize predictions outside the training set. One way to
+try to mitigate this is by using physics-informed neural networks
+(PINNs) when possible.
+</p>
+
+<!-- !split -->
+<h2 id="changing-the-function-to-optimize" class="anchor">Changing the function to optimize </h2>
+
+<p>Trying to improve the performance of our model beyond training sets,
+PINNs then add physics-informed penalties to the loss function. In
+essence, this means that we add a worse evaluation score to
+predictions that do not respect physical laws we think our real data
+should obey. This procedure often has the advantage of trimming the
+parameter space without adding bias to the model if the constraints
+imposed are correct, but the choice of the physical laws can be a
+delicate one.
+</p>
+
+<!-- !split -->
+<h2 id="adding-more-information-to-the-loss-function" class="anchor">Adding more information to the loss function </h2>
+
+<p>A general way of expressing this added penalty to the loss function is shown here</p>
+$$
+\begin{align*}
+    \mathcal{L} = w_{MSE}\mathcal{L}_{MSE} + w_{PI}\mathcal{L}_{PI}.
+\end{align*}
+$$
+
+<p>Here, the weights \( w_{MSE} \) and \( w_{PI} \) explicitly mediate how much
+influence the specific parts of the total loss function should
+contribute. See the above project link for more details.
+</p>
 
 <!-- !split -->
 <h2 id="an-extrapolation-example" class="anchor">An extrapolation example </h2>
@@ -1702,7 +1907,7 @@ $$
 
 <p>With the above linear dependence we can in turn define our optimization problem in terms of the optimization of the mean-squared error, that is we wish to optimize</p>
 $$
-\min_{\boldsymbol{W},\boldsymbol{V}\in {\mathbb{R}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \boldsymbol{x}-\boldsymbol{V}\boldsymbol{W}\boldsymbol{x}\vert\vert_2^2,
+\min_{\boldsymbol{W},\boldsymbol{V}\in {\mathbb{R}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \boldsymbol{x}-\boldsymbol{V}\boldsymbol{W}\boldsymbol{x}\vert\vert_2^2,
 $$
 
 <p>where we have used the definition of  a norm-2 vector, that is</p>
