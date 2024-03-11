@@ -1,447 +1,60 @@
+The autoencoder is an effective unsupervised learning model which is
+widely used in deep learning. It is well known that an autoencoder
+with a single fully-connected hidden layer, a linear activation
+function and a squared error cost function trains weights that span
+the same subspace as the one spanned by the principal component
+loading vectors, but that they are not identical to the loading
+vectors. In this paper, we show how to recover the loading vectors
+from the autoencoder weights.
 
-%% bare_jrnl.tex
-%% V1.4b
-%% 2015/08/26
-%% by Michael Shell
-%% see http://www.michaelshell.org/
-%% for current contact information.
-%%
-%% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
-%% journal paper.
-%%
-%% Support sites:
-%% http://www.michaelshell.org/tex/ieeetran/
-%% http://www.ctan.org/pkg/ieeetran
-%% and
-%% http://www.ieee.org/
+!split
+===== Background =====
 
-%%*************************************************************************
-%% Legal Notice:
-%% This code is offered as-is without any warranty either expressed or
-%% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
-%% User assumes all risk.
-%% In no event shall the IEEE or any contributor to this code be liable for
-%% any damages or losses, including, but not limited to, incidental,
-%% consequential, or any other damages, resulting from the use or misuse
-%% of any information contained here.
-%%
-%% All comments are the opinions of their respective authors and are not
-%% necessarily endorsed by the IEEE.
-%%
-%% This work is distributed under the LaTeX Project Public License (LPPL)
-%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
-%% distributed and modified. A copy of the LPPL, version 1.3, is included
-%% in the base LaTeX documentation of all distributions of LaTeX released
-%% 2003/12/01 or later.
-%% Retain all contribution notices and credits.
-%% ** Modified files should be clearly indicated as such, including  **
-%% ** renaming them and changing author support contact information. **
-%%*************************************************************************
+Principal Component Analysis (PCA) is a linear transformation that
+transforms a set of observations to a new coordinate system in which
+the values of the first coordinate have the largest possible variance,
+and the values of each succeeding coordinate have the largest possible
+variance under the constraint that they are uncorrelated with the
+preceding coordinates. They are often found by either computing the
+eigendecomposition of the covariance matrix or by computing the
+singular value decomposition of the observations.
 
+By keeping only the first few principal components, PCA can be used
+for dimensionality reduction. The decorrelation of the coordinates is
+also a useful property, and PCA is sometimes used as a preprocessing
+step for whitening a dataset before using it as an input into an
+optimization problem such as a neural network classifier.
 
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. The IEEE's font choices and paper sizes can   ***
-% *** trigger bugs that do not appear when using other class files.       ***                          ***
-% The testflow support page is at:
-% http://www.michaelshell.org/tex/testflow/
-
-
-
-\documentclass[journal]{IEEEtran}
-%
-% If IEEEtran.cls has not been installed into the LaTeX system files,
-% manually specify the path to it like:
-% \documentclass[journal]{../sty/IEEEtran}
-
-% Some very useful LaTeX packages include:
-% (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/pkg/ifpdf
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
-
-
-
-% *** CITATION PACKAGES ***
-%
-%\usepackage{cite}
-% cite.sty was written by Donald Arseneau
-% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
-% \cite{} output to follow that of the IEEE. Loading the cite package will
-% result in citation numbers being automatically sorted and properly
-% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
-% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
-% \cite will automatically add leading space, if needed. Use cite.sty's
-% noadjust option (cite.sty V3.8 and later) if you want to turn this off
-% such as if a citation ever needs to be enclosed in parenthesis.
-% cite.sty is already installed on most LaTeX systems. Be sure and use
-% version 5.0 (2009-03-20) and later if using hyperref.sty.
-% The latest version can be obtained at:
-% http://www.ctan.org/pkg/cite
-% The documentation is contained in the cite.sty file itself.
-
-
-
-% *** GRAPHICS RELATED PACKAGES ***
-%
-\ifCLASSINFOpdf
-   \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-   \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
-\fi
-% graphicx was written by David Carlisle and Sebastian Rahtz. It is
-% required if you want graphics, photos, etc. graphicx.sty is already
-% installed on most LaTeX systems. The latest version and documentation
-% can be obtained at: 
-% http://www.ctan.org/pkg/graphicx
-% Another good source of documentation is "Using Imported Graphics in
-% LaTeX2e" by Keith Reckdahl which can be found at:
-% http://www.ctan.org/pkg/epslatex
-%
-% latex, and pdflatex in dvi mode, support graphics in encapsulated
-% postscript (.eps) format. pdflatex in pdf mode supports graphics
-% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
-% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
-% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
-% which can result in "jaggedy"/blurry rendering of lines and letters as
-% well as large increases in file sizes.
-%
-% You can find documentation about the pdfTeX application at:
-% http://www.tug.org/applications/pdftex
-
-
-% *** MATH PACKAGES ***
-%
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{bbold}
-\usepackage{mathtools}
-\usepackage{comment}
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics.
-%
-% Note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/pkg/amsmath
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{listings}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/pkg/algorithms
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/pkg/algorithmicx
-
-
-% *** ALIGNMENT PACKAGES ***
-%
-\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/pkg/array
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-% *** SUBFIGURE PACKAGES ***
-\ifCLASSOPTIONcompsoc
-  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-\else
-  \usepackage[caption=false,font=footnotesize]{subfig}
-%\fi
-% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
-% for subfigure.sty, the latter of which is no longer maintained and is
-% incompatible with some LaTeX packages including fixltx2e. However,
-% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
-% which will override IEEEtran.cls' handling of captions and this will result
-% in non-IEEE style figure/table captions. To prevent this problem, be sure
-% and invoke subfig.sty's "caption=false" package option (available since
-% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
-% handling of captions.
-% Note that the Computer Society format requires a larger sans serif font
-% than the serif footnote size font used in traditional IEEE formatting
-% and thus the need to invoke different subfig.sty package options depending
-% on whether compsoc mode has been enabled.
-%
-% The latest version and documentation of subfig.sty can be obtained at:
-% http://www.ctan.org/pkg/subfig
-
-
-% *** FLOAT PACKAGES ***
-%
-%\usepackage{fixltx2e}
-% fixltx2e, the successor to the earlier fix2col.sty, was written by
-% Frank Mittelbach and David Carlisle. This package corrects a few problems
-% in the LaTeX2e kernel, the most notable of which is that in current
-% LaTeX2e releases, the ordering of single and double column floats is not
-% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
-% single column figure to be placed prior to an earlier double column
-% figure.
-% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
-% corrections already built into the system in which case a warning will
-% be issued if an attempt is made to load fixltx2e.sty as it is no longer
-% needed.
-% The latest version and documentation can be found at:
-% http://www.ctan.org/pkg/fixltx2e
-
-
-% \usepackage{stfloats}
-% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
-% the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
-% LaTeX2e). It also provides a command:
-%\fnbelowfloat
-% to enable the placement of footnotes below bottom floats (the standard
-% LaTeX2e kernel puts them above bottom floats). This is an invasive package
-% which rewrites many portions of the LaTeX2e float routines. It may not work
-% with other packages that modify the LaTeX2e float routines. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/pkg/stfloats
-% Do not use the stfloats baselinefloat ability as the IEEE does not allow
-% \baselineskip to stretch. Authors submitting work to the IEEE should note
-% that the IEEE rarely uses double column equations and that authors should try
-% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
-% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
-% such ways.
-% Do not attempt to use stfloats with fixltx2e as they are incompatible.
-% Instead, use Morten Hogholm'a dblfloatfix which combines the features
-% of both fixltx2e and stfloats:
-%
-% \usepackage{dblfloatfix}
-% The latest version can be found at:
-% http://www.ctan.org/pkg/dblfloatfix
-
-
-%\ifCLASSOPTIONcaptionsoff
-%  \usepackage[nomarkers]{endfloat}
-% \let\MYoriglatexcaption\caption
-% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
-%\fi
-% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and 
-% Axel Sommerfeldt. This package may be useful when used in conjunction with 
-% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
-% submissions have lists of figures/tables at the end of the paper and that
-% figures/tables without any captions are placed on a page by themselves at
-% the end of the document. If needed, the draftcls IEEEtran class option or
-% \CLASSINPUTbaselinestretch interface can be used to increase the line
-% spacing as well. Be sure and use the nomarkers option of endfloat to
-% prevent endfloat from "marking" where the figures would have been placed
-% in the text. The two hack lines of code above are a slight modification of
-% that suggested by in the endfloat docs (section 8.4.1) to ensure that
-% the full captions always appear in the list of figures/tables - even if
-% the user used the short optional argument of \caption[]{}.
-% IEEE papers do not typically make use of \caption[]'s optional argument,
-% so this should not be an issue. A similar trick can be used to disable
-% captions of packages such as subfig.sty that lack options to turn off
-% the subcaptions:
-% For subfig.sty:
-% \let\MYorigsubfloat\subfloat
-% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
-% However, the above trick will not work if both optional arguments of
-% the \subfloat command are used. Furthermore, there needs to be a
-% description of each subfigure *somewhere* and endfloat does not add
-% subfigure captions to its list of figures. Thus, the best approach is to
-% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
-% and instead reference/explain all the subfigures within the main caption.
-% The latest version of endfloat.sty and its documentation can obtained at:
-% http://www.ctan.org/pkg/endfloat
-%
-% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
-% later in the document, say, to conditionally put the References on a 
-% page by themselves.
-
-
-% *** PDF, URL AND HYPERLINK PACKAGES ***
-%
-%\usepackage{url}
-% url.sty was written by Donald Arseneau. It provides better support for
-% handling and breaking URLs. url.sty is already installed on most LaTeX
-% systems. The latest version and documentation can be obtained at:
-% http://www.ctan.org/pkg/url
-% Basically, \url{my_url_here}.
-
-\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
-
-
-
-% *** Do not adjust lengths that control margins, column widths, etc. ***
-% *** Do not use packages that alter fonts (such as pslatex).         ***
-% There should be no need to do such things with IEEEtran.cls V1.6 and later.
-% (Unless specifically asked to do so by the journal or conference you plan
-% to submit to, of course. )
-
-
-% correct bad hyphenation here
-\hyphenation{op-tical net-works semi-conduc-tor}
-
-
-\begin{document}
-%
-% paper title
-% Titles are generally capitalized except for words such as a, an, and, as,
-% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
-% not capitalized unless they are the first or last word of the title.
-% Linebreaks \\ can be used within to get better formatting as desired.
-% Do not put math or special symbols in the title.
-\title{From Principal Subspaces to Principal Components with Linear Autoencoders}
-%
-%
-% author names and IEEE memberships
-% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
-% a structure at a ~ so this keeps an author's name from being broken across
-% two lines.
-% use \thanks{} to gain access to the first footnote area
-% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
-% was not built to handle multiple paragraphs
-%
-
-\author{Elad~Plaut% <-this % stops a space
-%\thanks{The authors are with the School of Electrical Engineering, Tel Aviv University, Tel Aviv,
-%Israel}
-}% <-this % stops a space
-% note the % following the last \IEEEmembership and also \thanks - 
-% these prevent an unwanted space from occurring between the last author name
-% and the end of the author line. i.e., if you had this:
-% 
-% \author{....lastname \thanks{...} \thanks{...} }
-%                     ^------------^------------^----Do not want these spaces!
-%
-% a space would be appended to the last name and could cause every name on that
-% line to be shifted left slightly. This is one of those "LaTeX things". For
-% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
-% "AB" then you have to do: "\textbf{A}\textbf{B}"
-% \thanks is no different in this regard, so shield the last } of each \thanks
-% that ends a line with a % and do not let a space in before the next \thanks.
-% Spaces after \IEEEmembership other than the last one are OK (and needed) as
-% you are supposed to have spaces between the names. For what it is worth,
-% this is a minor point as most people would not even notice if the said evil
-% space somehow managed to creep in.
-
-
-
-% The paper headers
-%\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
-%{}
-% The only time the second header will appear is for the odd numbered pages
-% after the title page when using the twoside option.
-% 
-% *** Note that you probably will NOT want to include the author's ***
-% *** name in the headers of peer review papers.                   ***
-% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
-% you desire.
-
-
-
-
-% If you want to put a publisher's ID mark on the page you can do it like
-% this:
-%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
-% Remember, if you use this you must call \IEEEpubidadjcol in the second
-% column for its text to clear the IEEEpubid mark.
-
-
-
-% use for special paper notices
-%\IEEEspecialpapernotice{(Invited Paper)}
-
-
-% make the title area
-\maketitle
-
-% As a general rule, do not put math, special symbols or citations
-% in the abstract or keywords.
-\begin{abstract}
-The autoencoder is an effective unsupervised learning model which is widely used in deep learning. It is well known that an autoencoder with a single fully-connected hidden layer, a linear activation function and a squared error cost function trains weights that span the same subspace as the one spanned by the principal component loading vectors, but that they are not identical to the loading vectors. In this paper, we show how to recover the loading vectors from the autoencoder weights.
-\end{abstract}
-
-% Note that keywords are not normally used for peerreview papers.
-%\begin{IEEEkeywords}
-%Convolutional Sparse Coding, Global modeling, Local Processing, Greedy Algorithms, Sparse Representations
-%\end{IEEEkeywords}
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
-\IEEEpeerreviewmaketitle
-
-\section{Background}
-\IEEEPARstart{P}{rincipal Component Analysis} (PCA) is a linear transformation that transforms a set of observations to a new coordinate system in which the values of the first coordinate have the largest possible variance, and the values of each succeeding coordinate have the largest possible variance under the constraint that they are uncorrelated with the preceding coordinates. They are often found by either computing the eigendecomposition of the covariance matrix or by computing the singular value decomposition of the observations.
-
-By keeping only the first few principal components, PCA can be used for dimensionality reduction. The decorrelation of the coordinates is also a useful property, and PCA is sometimes used as a preprocessing step for whitening a dataset before using it as an input into an optimization problem such as a neural network classifier.
-
-One of the properties of PCA is that out of all possible linear transformations, the reconstructions of the observations from the leading principal components have the least total squared error. Autoencoders are neural networks that aim to minimize the error of reconstructions of observations. It is well known that an autoencoder with a single fully-connected hidden layer, a linear activation function and a squared error cost function is closely related to PCA - its weights span the principal subspace, which is the subspace spanned by the first loading vectors \cite{AutoencoderSVD}, \cite{WithoutLocalMinima}. However, they are not equal to the loading vectors.
+One of the properties of PCA is that out of all possible linear
+transformations, the reconstructions of the observations from the
+leading principal components have the least total squared
+error. Autoencoders are neural networks that aim to minimize the error
+of reconstructions of observations. It is well known that an
+autoencoder with a single fully-connected hidden layer, a linear
+activation function and a squared error cost function is closely
+related to PCA - its weights span the principal subspace, which is the
+subspace spanned by the first loading vectors \cite{AutoencoderSVD},
+\cite{WithoutLocalMinima}. However, they are not equal to the loading
+vectors.
 
 This paper proposes a simple method for recovering the loading vectors from the weights of a linear autoencoder. This allows the usage of autoencoders for computing PCA, unlike existing methods which merely find the principal subspace. After recovering the loading vectors, the solution has the following properties: (i) it is unique; (ii) in the transformed data, different coordinates are uncorrelated; (iii) the coordinates are sorted in descending order of variance; and (iv) the solutions for reduction to different dimensions are nested: when reducing the data from dimension $n$ to dimension $m_1$, the first $m_2$ vectors ($m_2 < m_1$) are the same as the solution for reduction from dimension $n$ to $m_2$. These properties do not hold for a general basis for the principal subspace, which is what the autoencoder weights converge to.
 
-Even though any method for computing PCA using autoencoders is highly inefficient for small datasets, for large datasets such a method is desirable because of its various advantages compared to the standard methods. Autoencoders can be trained by a variety of stochastic optimization methods that have been developed for training deep neural networks. These optimizers can handle high-dimensional training data such as images, and a large number of them. They are suitable for the online learning scenario in which new data arrives over time, and they do not require subtracting from each example the element-wise mean of the entire training set. While several online PCA methods have been proposed for meeting these demands \cite{Online1}, \cite{Online2}, \cite{Online3}, our method is the first to simply recover the loading vectors from the weights of an autoencoder.
+Even though any method for computing PCA using autoencoders is highly
+inefficient for small datasets, for large datasets such a method is
+desirable because of its various advantages compared to the standard
+methods. Autoencoders can be trained by a variety of stochastic
+optimization methods that have been developed for training deep neural
+networks. These optimizers can handle high-dimensional training data
+such as images, and a large number of them. They are suitable for the
+online learning scenario in which new data arrives over time, and they
+do not require subtracting from each example the element-wise mean of
+the entire training set. 
 
-\section{Introduction}
-\subsection{Principal Component Analysis}
+!split
+===== Principal Component Analysis =====
+
 Let $\left\{ \textbf{y}_i \right\}_{i=1}^N$ be a set of $N$ observation vectors, each of dimension $n$. We assume that $n \leq N$, which is the more common scenario in machine learning, but a similar analysis can be done for the case of $n > N$. Let $\text{Y} \in \mathbb{R}^{n \times N}$ be a matrix whose columns are $\left\{ \textbf{y}_i \right\}_{i=1}^N$,
+!bt
 \[
 \text{Y} = \left[\begin{array}{ccc}
 \mid &  & \mid\\
@@ -449,6 +62,7 @@ Let $\left\{ \textbf{y}_i \right\}_{i=1}^N$ be a set of $N$ observation vectors,
 \mid &  & \mid
 \end{array}\right].
 \]
+!et
 The element-wise average of the $N$ observations is an $n$ dimensional signal which may be written as:
 \[
 \bar{\textbf{y}} = \frac{1}{N}\overset{N}{\underset{i=1}{\sum}} \textbf{y}_i = \frac{1}{N} \text{Y} \mathbb{1}_N,
@@ -483,7 +97,8 @@ The solution to (\ref{eq:p2}) is known to be the eigenvector corresponding to th
 \]
 where $\Lambda = \text{X}_0 \text{X}_0^T$ is a diagonal matrix whose diagonal elements $\left\{ \lambda_i \right\}_{i=1}^n$ are sorted in descending order, the columns of $\text{P}$ are orthonormal, i.e. $\text{P}^{-1}=\text{P}^T$. The transformation back to the observations is $\text{Y} = \text{P} \text{X}$. The fact that the covariance matrix of $\text{X}$ is diagonal means that PCA is a decorrelation transformation. By dividing each coordinate by the square root of its corresponding eigenvalue, PCA can be used as a whitening transformation, which is sometimes used as a preprocessing step in order to cause optimization problems to converge more easily.
 
-\subsection{Dimensionality reduction}
+!split
+===== Dimensionality reduction =====
 PCA is often used as a method for dimensionality reduction, the process of reducing the number of variables in a model in order to avoid the curse of dimensionality. This is done by simply keeping the first $m$ principal components ($m<n$), i.e., applying the truncated transformation
 \[
 \text{X}_m = \text{P}_m^T \text{Y},
@@ -601,296 +216,3 @@ This familiar equation states that $\textbf{p}_k$ is an eigenvector of $\text{U}
 In other words, instead of computing the first $m$ left singular vectors of $\text{Y}_0 \in \mathbb{R}^{n \times N}$, we may train a linear autoencoder on the (non-centered) dataset $\text{Y}$ and then compute the first $m$ left singular vectors of $\text{W}_2 \in \mathbb{R}^{n \times m}$, where typically $m << N$. The loading vectors may also be recovered from the weights of the hidden layer, $\text{W}_1$. If $\text{W}_2 = \text{U} \Sigma \text{V}^T$, then $\text{W}_1 = \text{W}_2^{\dagger} = \text{V} \Sigma^{\dagger} \text{U}^T$, and $\text{W}_1^T = \text{U} \left( \Sigma^{\dagger} \right)^T \text{V}^T$. Thus, the first $m$ left singular vectors of $\text{W}_1^T \in \mathbb{R}^{n \times m}$ are also equal to the first $m$ loading vectors of $\text{Y}$.
 
 
-\section{Experiments}
-\begin{figure}[!b]
-\centering
-\includegraphics[width=3.2in]{y_m.png}
-\caption{Examples of images from the MNIST dataset.}
-\label{fig0}
-\end{figure}
-\begin{figure*}
-    \centering
-  \subfloat[$\text{P}_m$]{%
-       \includegraphics[width=0.3\linewidth]{AnalyticalPCA.png}}
-    \label{1a}\hfill
-  \subfloat[$\text{W}_2$]{%
-        \includegraphics[width=0.3\linewidth]{W2.png}}
-    \label{1b}\hfill
-  \subfloat[$\text{U}_m$]{%
-        \includegraphics[width=0.3\linewidth]{LinearAE_PCA.png}}
-    \label{1c}
-  \caption{(a) The first 16 loading vectors of MNIST, computed by applying SVD to the entire dataset, (b) the weights of a linear autoencoder trained on the dataset, (c) the left singular vectors of the autoencoder weights. Notice how the left singular vectors in (c) are very close to the loading vectors in (a) up to their sign (inversion of the gray levels in some of the images).}
-  \label{fig1} 
-\end{figure*}
-
-\begin{figure*} 
-    \centering
-  \subfloat[$\text{P}_m^T \text{Y}_0 \text{Y}_0^T \text{P}_m$]{%
-       \includegraphics[width=0.28\linewidth]{XXT.png}}
-    \label{1a}\hfill
-  \subfloat[$\text{W}_2^T \text{Y}_0 \text{Y}_0^T \text{W}_2$]{%
-        \includegraphics[width=0.28\linewidth]{ZZT.png}}
-    \label{1b}\hfill
-  \subfloat[$\text{U}_m^T \text{Y}_0 \text{Y}_0^T \text{U}_m$]{%
-        \includegraphics[width=0.28\linewidth]{XhatXhatT.png}}
-    \label{1c}
-  \caption{The covariance matrix of the data in the transformed coordinates, according to (a) the loading vectors computed by applying SVD to the entire dataset, (b) the weights of the linear autoencoder, and (c) the left singular vectors of the autoencoder weights.}
-  \label{fig2}
-\end{figure*}
-
-An important advantage of applying PCA using a linear autoencoder is that it is very simple to implement using popular machine learning frameworks. We release a sample implementation of a linear autoencoder and the recovery of the loading vectors from its weights which uses the Keras library. It can be found at \emph{https://github.com/plaut/linear-ae-pca}.
-
-As in any neural network, we initialize the values of the parameters, including $\text{W}_2$, to random numbers. Notice that the optimization is convex over $\text{W}_2$ for a fixed $\text{W}_1$ and it is convex over $\text{W}_1$ for a fixed $\text{W}_2$, but it is not jointly convex and has many saddle points which may be far from optimal. The optimization may benifit from a more sophisticated update than basic stochastic gradient descent, and we chose to use the Adam optimizer. Weight decay regularization, which penalizes unreasonable factorizations, was also found to be beneficial.
-
-\subsection{MNIST}
-We trained a linear autoencoder on the MNIST training dataset \cite{MNISTdata}, which contains 60,000 grayscale images of handwritten digits, each of size $28 \times 28$. Fig. \ref{fig0} shows a few examples of images from the dataset. We set the dimensions of the network for reduction from a dimension of $28 \times 28=784$ to a dimension of $16$. Then, we applied our method for recovering the loading vectors from the weights of the autoencoder.
-
-For comparison, Fig. \ref{fig1}(a) shows the first 16 loading vectors as computed using the standard method of applying SVD to the entire dataset after centering it. Fig. \ref{fig1}(b) shows the columns of $\text{W}_2$, and Fig. \ref{fig1}(c) shows the columns of $\text{U}_m$ (the first $m$ left singular vectors of $\text{W}_2$). It is evident that although the columns of $\text{W}_2$ are entirely different from the loading vectors, their left singular vectors are approximately equal to them up to sign. Seven of the vectors have opposite signs, which is reflected in their inverted gray levels.
-
-After computing the loading vectors, we applied three different transformations to the centered: $\text{P}_m^T \text{Y}_0$, $\text{W}_2^T \text{Y}_0$, and $\text{U}_m^T \text{Y}_0$. Fig. \ref{fig2} shows the covariance matrix in the transformed coordinates for the three transformations. As expected, $\text{U}_m^T$ transformed the data to coordinates in which the covariance is a diagonal matrix with descending diagonal elements (similarly to $\text{P}_m^T$), while $\text{W}_2^T$ did not.
-
-In order to further reduce the dimensionality to $m_2 < 16$, all we need to do is keep the first $m_2$ rows of $\text{U}_m^T \text{Y}_0$.
-
-\subsection{CUB-200-2011}
-Computing PCA using a linear autoencoder only becomes advantageous when handling a large set of large images. We applied the same technique to the CUB-200-2011 dataset \cite{WahCUB}, which contains 11,788 color images of birds. The images were resized to $256 \times 256$. Fig. \ref{fig2.5} shows a few examples of images from the dataset. The autoencoder was set for dimensionality reduction from a dimension of $256 \times 256 \times 3 = 196,608$ to a dimension of 36. Then, the first 36 loading vectors of the dataset were recovered by applying SVD to the weight matrix $\text{W}_2$ and taking the first 36 left singular vectors of it, they are shown in Fig. \ref{fig3}.
-
-In order to verify that the resulting transformation applies PCA, we centered the dataset and calculated the covariance in the transformed coordinates, shown in Fig. \ref{fig4}. As expected, it is approximately a diagonal matrix with descending elements on the diagonal.
-
-This dataset was too large to fit in memory, so we did not compare the results to applying SVD to the entire dataset. One might suspect that the last loading vectors in Fig. \ref{fig3} are evidence of underfitting due to their high spatial frequencies. In order to rule this out, we computed the loading vectors of a subset of 1,000 examples from the dataset by applying SVD to all the 1,000 examples after centering them, and they exhibited the same appearance.
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.4in]{y_s.png}
-\caption{Examples of images from the CUB-200-2011 dataset.}
-\label{fig2.5}
-\end{figure}
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.6in]{LinearAE_PCA_birds.png}
-\caption{The loading vectors of the CUB-200-2011 dataset, as recovered from the weight matrix $\text{W}_2$.}
-\label{fig3}
-\end{figure}
-\begin{figure}[!t]
-\centering
-\includegraphics[width=2.5in]{bird_corr.png}
-\caption{The covariance matrix of the CUB-200-2011 dataset in the transformed coordinates. As expected, the covariance is approximately diagonal with descending elements on the diagonal.}
-\label{fig4}
-\end{figure}
-
-
-\section{Conclusion}
-It is in fact possible to use a linear autoencoder not only to project data onto the principal subspace, but to actually perform principal component analysis. Recovering the loading vectors amounts to simply applying SVD to the weight matrix of one of the two layers. The solution is independent of the optimization algorithm used to train the neural network. The advantages of implementing PCA this way are that is able to:
-\begin{itemize}
-\item Process high-dimensional data.
-\item Process datasets with large numbers of observations.
-\item Avoid the need to center the data to element-wise zero mean.
-\item Process new data online as it arrives.
-\item Be implemented easily using very few lines of code, using the latest algorithms, software frameworks and hardware that are optimized for training neural networks.
-\end{itemize}
-
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-%\newpage
-%\appendices
-%\section{}
-
-%Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-%\section{}
-%Appendix two text goes here.
-
-
-% use section* for acknowledgment
-%\section*{Acknowledgment}
-
-
-%The authors would like to thank...
-
-
-% Can use something like this to put references on a page
-% by themselves when using endfloat and the captionsoff option.
-\ifCLASSOPTIONcaptionsoff
-  \newpage
-\fi
-
-
-
-% trigger a \newpage just before the given reference
-% number - used to balance the columns on the last page
-% adjust value as needed - may need to be readjusted if
-% the document is modified later
-%\IEEEtriggeratref{8}
-% The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
-
-% references section
-
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
-\bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
-
-% Generated by IEEEtran.bst, version: 1.14 (2015/08/26)
-\begin{thebibliography}{10}
-\providecommand{\url}[1]{#1}
-\csname url@samestyle\endcsname
-\providecommand{\newblock}{\relax}
-\providecommand{\bibinfo}[2]{#2}
-\providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
-\providecommand{\BIBentryALTinterwordstretchfactor}{4}
-\providecommand{\BIBentryALTinterwordspacing}{\spaceskip=\fontdimen2\font plus
-\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
-  \fontdimen4\font\relax}
-\providecommand{\BIBforeignlanguage}[2]{{%
-\expandafter\ifx\csname l@#1\endcsname\relax
-\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
-\typeout{** loaded for the language `#1'. Using the pattern for}%
-\typeout{** the default language instead.}%
-\else
-\language=\csname l@#1\endcsname
-\fi
-#2}}
-\providecommand{\BIBdecl}{\relax}
-\BIBdecl
-
-\bibitem{AutoencoderSVD}
-H.~Bourlard and Y.~Kamp, ``Auto-association by multilayer perceptrons and
-  singular value decomposition,'' \emph{Biological Cybernetics}, vol. 59(4-5),
-  pp. 291--294, 1988.
-
-\bibitem{WithoutLocalMinima}
-P.~Baldi and K.~Hornik, ``Neural networks and principal component analysis:
-  Learning from examples without local minima,'' \emph{Neural Networks}, vol.
-  2(1), pp. 53--58, 1989.
-
-\bibitem{Online1}
-M.~Warmuth and D.~Kuzmin, ``Randomized online {PCA} algorithms with regret
-  bounds that are logarithmic in the dimension,'' \emph{Journal of Machine
-  Learning Research}, vol.~9, pp. 2287--2320, 2008.
-
-\bibitem{Online2}
-J.~Fend, H.~Xu, S.~Mannor, and S.~Yan, ``Online {PCA} for contaminated data,''
-  \emph{Advances in Neural Information Processing Systems}, pp. 764--772, 2013.
-
-\bibitem{Online3}
-J.~Fend, H.~Xu, and S.~Yan, ``Online robust {PCA} via stochastic
-  optimization,'' \emph{Advances in Neural Information Processing Systems}, pp.
-  404--412, 2013.
-
-\bibitem{LocalPCA}
-N.~Kambhatla and T.~Leen, ``Dimension reduction by local principal component
-  analysis,'' \emph{Neural Computation}, vol. 9(7), pp. 1493--1516, 1997.
-
-\bibitem{EckardtYoung}
-C.~Eckardt and G.~Young, ``The approximation of one matrix by another of lower
-  rank,'' \emph{Psychometrika}, vol.~1, pp. 211--218, 1936.
-
-\bibitem{Dimreduction}
-G.~Hinton and R.~Salakhutdinov, ``Reducing the dimensionality of data with
-  neural networks,'' \emph{Science}, vol. 313(5786), pp. 504--507, 2006.
-
-\bibitem{NNPCA1}
-E.~Oja, ``Neural networks, principal components, and subspaces,''
-  \emph{International Journal of Neural Systems}, vol. 1(01), pp. 61--68, 1989.
-
-\bibitem{NNPCA2}
-J.~Rubner and P.~Tavan, ``A self-organizing network for principal-component
-  analysis,'' \emph{EPL (Europhysics Letters)}, vol. 10(7), p. 693, 1989.
-
-\bibitem{NNPCA3}
-S.~Kung and K.~Diamantaras, ``A neural network learning algorithm for adaptive
-  principal component extraction ({APEX}),'' \emph{ICASSP}, pp. 861--864, 1990.
-
-\bibitem{NNPCA4}
-E.~Oja, ``Principal components, minor components, and linear neural networks,''
-  \emph{Neural Networks}, vol. 5(6), pp. 927--935, 1992.
-
-\bibitem{NNPCA5}
-L.~Xu, ``Least mean square error reconstruction principle for self-organizing
-  neural-nets,'' \emph{Neural Networks}, vol. 6(5), pp. 627--648, 1993.
-
-\bibitem{Freedman}
-D.~A. Freedman, ``Statistical models: Theory and practice.'' \emph{Cambridge
-  University Press}, 2009.
-
-\bibitem{Antoulas}
-A.~Antoulas, ``Approximation of large-scale dynamical systems,'' \emph{SIAM},
-  vol.~6, pp. 37--38, 2005.
-
-\bibitem{MNISTdata}
-Y.~LeCun, C.~Cortes, and C.~Burges, ``{MNIST} handwritten digit database,''
-  2010.
-
-\bibitem{WahCUB}
-C.~Wah, S.~Branson, P.~Welinder, P.~Perona, and S.~Belongie, ``The
-  {Caltech}-{UCSD} birds-200-2011 dataset,'' no. CNS-TR-2011-001, 2011.
-
-\end{thebibliography}
-
-
-%\bibliography{refs}
-
-% biography section
-% 
-% If you have an EPS/PDF photo (graphicx package needed) extra braces are
-% needed around the contents of the optional argument to biography to prevent
-% the LaTeX parser from getting confused when it sees the complicated
-% \includegraphics command within an optional argument. (You could create
-% your own custom macro containing the \includegraphics command to make things
-% simpler here.)
-%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
-% or if you just want to reserve a space for a photo:
-
-%\begin{IEEEbiography}{Michael Shell}
-%Biography text here.
-%\end{IEEEbiography}
-
-% if you will not have a photo at all:
-%\begin{IEEEbiographynophoto}{John Doe}
-%Biography text here.
-%\end{IEEEbiographynophoto}
-
-% insert where needed to balance the two columns on the last page with
-% biographies
-%\newpage
-
-%\begin{IEEEbiographynophoto}{Jane Doe}
-%Biography text here.
-%\end{IEEEbiographynophoto}
-
-% You can push biographies down or up by placing
-% a \vfill before or after them. The appropriate
-% use of \vfill depends on what kind of text is
-% on the last page and whether or not the columns
-% are being equalized.
-
-%\vfill
-
-% Can be used to pull up biographies so that the bottom of the last one
-% is flush with the other column.
-%\enlargethispage{-5in}
-
-% that's all folks
-\end{document}
