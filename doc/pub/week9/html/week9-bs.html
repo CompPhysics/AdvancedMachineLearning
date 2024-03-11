@@ -44,6 +44,7 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'autoencoders-overarching-view'),
+              ('Powerful detectors', 2, None, 'powerful-detectors'),
               ('First introduction of AEs',
                2,
                None,
@@ -55,10 +56,11 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'dimensionality-reduction-and-links-with-principal-component-analysis'),
               ('AE mean-squared error', 2, None, 'ae-mean-squared-error'),
-              ('Basic ideas of the Principal Component Analysis (PCA)',
+              ('What is the Principal Component Analysis (PCA)?',
                2,
                None,
-               'basic-ideas-of-the-principal-component-analysis-pca'),
+               'what-is-the-principal-component-analysis-pca'),
+              ('Basic ideas of the PCA', 2, None, 'basic-ideas-of-the-pca'),
               ('Introducing the Covariance and Correlation functions',
                2,
                None,
@@ -112,7 +114,10 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
               ('Randomized PCA', 3, None, 'randomized-pca'),
               ('Kernel PCA', 3, None, 'kernel-pca'),
               ('Other techniques', 2, None, 'other-techniques'),
-              ('Linear Autoencoders', 2, None, 'linear-autoencoders'),
+              ('Back to Autoencoders: Linear Autoencoders',
+               2,
+               None,
+               'back-to-autoencoders-linear-autoencoders'),
               ('More advanced features, stacked AEs',
                2,
                None,
@@ -162,11 +167,13 @@ MathJax.Hub.Config({
         <ul class="dropdown-menu">
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-march-11-15" style="font-size: 80%;"><b>Plans for the week March 11-15</b></a></li>
      <!-- navigation toc: --> <li><a href="#autoencoders-overarching-view" style="font-size: 80%;"><b>Autoencoders: Overarching view</b></a></li>
+     <!-- navigation toc: --> <li><a href="#powerful-detectors" style="font-size: 80%;"><b>Powerful detectors</b></a></li>
      <!-- navigation toc: --> <li><a href="#first-introduction-of-aes" style="font-size: 80%;"><b>First introduction of AEs</b></a></li>
      <!-- navigation toc: --> <li><a href="#autoencoder-structure" style="font-size: 80%;"><b>Autoencoder structure</b></a></li>
      <!-- navigation toc: --> <li><a href="#dimensionality-reduction-and-links-with-principal-component-analysis" style="font-size: 80%;"><b>Dimensionality reduction and links with Principal component analysis</b></a></li>
      <!-- navigation toc: --> <li><a href="#ae-mean-squared-error" style="font-size: 80%;"><b>AE mean-squared error</b></a></li>
-     <!-- navigation toc: --> <li><a href="#basic-ideas-of-the-principal-component-analysis-pca" style="font-size: 80%;"><b>Basic ideas of the Principal Component Analysis (PCA)</b></a></li>
+     <!-- navigation toc: --> <li><a href="#what-is-the-principal-component-analysis-pca" style="font-size: 80%;"><b>What is the Principal Component Analysis (PCA)?</b></a></li>
+     <!-- navigation toc: --> <li><a href="#basic-ideas-of-the-pca" style="font-size: 80%;"><b>Basic ideas of the PCA</b></a></li>
      <!-- navigation toc: --> <li><a href="#introducing-the-covariance-and-correlation-functions" style="font-size: 80%;"><b>Introducing the Covariance and Correlation functions</b></a></li>
      <!-- navigation toc: --> <li><a href="#more-on-the-covariance" style="font-size: 80%;"><b>More on the covariance</b></a></li>
      <!-- navigation toc: --> <li><a href="#reminding-ourselves-about-linear-regression" style="font-size: 80%;"><b>Reminding ourselves about Linear Regression</b></a></li>
@@ -197,7 +204,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#randomized-pca" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Randomized PCA</a></li>
      <!-- navigation toc: --> <li><a href="#kernel-pca" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Kernel PCA</a></li>
      <!-- navigation toc: --> <li><a href="#other-techniques" style="font-size: 80%;"><b>Other techniques</b></a></li>
-     <!-- navigation toc: --> <li><a href="#linear-autoencoders" style="font-size: 80%;"><b>Linear Autoencoders</b></a></li>
+     <!-- navigation toc: --> <li><a href="#back-to-autoencoders-linear-autoencoders" style="font-size: 80%;"><b>Back to Autoencoders: Linear Autoencoders</b></a></li>
      <!-- navigation toc: --> <li><a href="#more-advanced-features-stacked-aes" style="font-size: 80%;"><b>More advanced features, stacked AEs</b></a></li>
      <!-- navigation toc: --> <li><a href="#using-convolutional-layers-instead-of-dense-layers" style="font-size: 80%;"><b>Using Convolutional Layers Instead of Dense Layers</b></a></li>
      <!-- navigation toc: --> <li><a href="#recurrent-autoencoders" style="font-size: 80%;"><b>Recurrent Autoencoders</b></a></li>
@@ -267,6 +274,19 @@ any supervision (i.e., the training set is unlabeled). These codings
 typically have a much lower dimensionality than the input data, making
 autoencoders useful for dimensionality reduction. 
 </p>
+
+<p>Autoencoders learn to encode the
+input data into a lower-dimensional representation, and then decode it
+back to the original data. The goal of autoencoders is to minimize the
+reconstruction error, which measures how well the output matches the
+input. Autoencoders can be seen as a way of learning the latent
+features or hidden structure of the data, and they can be used for
+data compression, denoising, anomaly detection, and generative
+modeling.
+</p>
+
+<!-- !split -->
+<h2 id="powerful-detectors" class="anchor">Powerful detectors </h2>
 
 <p>More importantly, autoencoders act as powerful feature detectors, and
 they can be used for unsupervised pretraining of deep neural networks.
@@ -388,7 +408,24 @@ ourselves about the PCA method.
 </p>
 
 <!-- !split -->
-<h2 id="basic-ideas-of-the-principal-component-analysis-pca" class="anchor">Basic ideas of the Principal Component Analysis (PCA) </h2>
+<h2 id="what-is-the-principal-component-analysis-pca" class="anchor">What is the Principal Component Analysis (PCA)? </h2>
+
+<p>PCA is a linear transformation that finds the directions of maximum
+variance in the data, and projects the data onto a lower-dimensional
+space. These directions are called principal components, and they are
+orthogonal to each other. PCA can be seen as a way of compressing the
+data by discarding the components that have low variance and retain
+the most important ones. PCA can be applied to both supervised and
+unsupervised learning problems, and it is often used for data
+visualization, feature extraction, and noise reduction.
+</p>
+
+<p>A linear autoencoder can be shown to be equal to the PCA.
+In this lectures we will try to expose these ideas.
+</p>
+
+<!-- !split -->
+<h2 id="basic-ideas-of-the-pca" class="anchor">Basic ideas of the PCA </h2>
 
 <p>The principal component analysis deals with the problem of fitting a
 low-dimensional affine subspace \( S \) of dimension \( d \) much smaller than
@@ -1513,7 +1550,7 @@ X_reduced <span style="color: #666666">=</span> rbf_pca<span style="color: #6666
 <li> Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.</li>
 </ul>
 <!-- !split -->
-<h2 id="linear-autoencoders" class="anchor">Linear Autoencoders </h2>
+<h2 id="back-to-autoencoders-linear-autoencoders" class="anchor">Back to Autoencoders: Linear Autoencoders </h2>
 
 <p>These examples here are based the codes from A. Geron's textbook. They
 can be easily  modified and adapted to different data sets. The first example is a straightforward AE.

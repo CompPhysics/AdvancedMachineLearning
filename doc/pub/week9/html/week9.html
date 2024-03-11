@@ -148,6 +148,7 @@ div.toc p,a {
                2,
                None,
                'autoencoders-overarching-view'),
+              ('Powerful detectors', 2, None, 'powerful-detectors'),
               ('First introduction of AEs',
                2,
                None,
@@ -159,10 +160,11 @@ div.toc p,a {
                None,
                'dimensionality-reduction-and-links-with-principal-component-analysis'),
               ('AE mean-squared error', 2, None, 'ae-mean-squared-error'),
-              ('Basic ideas of the Principal Component Analysis (PCA)',
+              ('What is the Principal Component Analysis (PCA)?',
                2,
                None,
-               'basic-ideas-of-the-principal-component-analysis-pca'),
+               'what-is-the-principal-component-analysis-pca'),
+              ('Basic ideas of the PCA', 2, None, 'basic-ideas-of-the-pca'),
               ('Introducing the Covariance and Correlation functions',
                2,
                None,
@@ -216,7 +218,10 @@ div.toc p,a {
               ('Randomized PCA', 3, None, 'randomized-pca'),
               ('Kernel PCA', 3, None, 'kernel-pca'),
               ('Other techniques', 2, None, 'other-techniques'),
-              ('Linear Autoencoders', 2, None, 'linear-autoencoders'),
+              ('Back to Autoencoders: Linear Autoencoders',
+               2,
+               None,
+               'back-to-autoencoders-linear-autoencoders'),
               ('More advanced features, stacked AEs',
                2,
                None,
@@ -300,6 +305,19 @@ any supervision (i.e., the training set is unlabeled). These codings
 typically have a much lower dimensionality than the input data, making
 autoencoders useful for dimensionality reduction. 
 </p>
+
+<p>Autoencoders learn to encode the
+input data into a lower-dimensional representation, and then decode it
+back to the original data. The goal of autoencoders is to minimize the
+reconstruction error, which measures how well the output matches the
+input. Autoencoders can be seen as a way of learning the latent
+features or hidden structure of the data, and they can be used for
+data compression, denoising, anomaly detection, and generative
+modeling.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="powerful-detectors">Powerful detectors </h2>
 
 <p>More importantly, autoencoders act as powerful feature detectors, and
 they can be used for unsupervised pretraining of deep neural networks.
@@ -420,7 +438,24 @@ ourselves about the PCA method.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-ideas-of-the-principal-component-analysis-pca">Basic ideas of the Principal Component Analysis (PCA) </h2>
+<h2 id="what-is-the-principal-component-analysis-pca">What is the Principal Component Analysis (PCA)? </h2>
+
+<p>PCA is a linear transformation that finds the directions of maximum
+variance in the data, and projects the data onto a lower-dimensional
+space. These directions are called principal components, and they are
+orthogonal to each other. PCA can be seen as a way of compressing the
+data by discarding the components that have low variance and retain
+the most important ones. PCA can be applied to both supervised and
+unsupervised learning problems, and it is often used for data
+visualization, feature extraction, and noise reduction.
+</p>
+
+<p>A linear autoencoder can be shown to be equal to the PCA.
+In this lectures we will try to expose these ideas.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="basic-ideas-of-the-pca">Basic ideas of the PCA </h2>
 
 <p>The principal component analysis deals with the problem of fitting a
 low-dimensional affine subspace \( S \) of dimension \( d \) much smaller than
@@ -1545,7 +1580,7 @@ X_reduced <span style="color: #666666">=</span> rbf_pca<span style="color: #6666
 <li> Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.</li>
 </ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="linear-autoencoders">Linear Autoencoders </h2>
+<h2 id="back-to-autoencoders-linear-autoencoders">Back to Autoencoders: Linear Autoencoders </h2>
 
 <p>These examples here are based the codes from A. Geron's textbook. They
 can be easily  modified and adapted to different data sets. The first example is a straightforward AE.

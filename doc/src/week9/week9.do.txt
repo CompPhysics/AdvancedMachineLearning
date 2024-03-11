@@ -28,6 +28,18 @@ any supervision (i.e., the training set is unlabeled). These codings
 typically have a much lower dimensionality than the input data, making
 autoencoders useful for dimensionality reduction. 
 
+Autoencoders learn to encode the
+input data into a lower-dimensional representation, and then decode it
+back to the original data. The goal of autoencoders is to minimize the
+reconstruction error, which measures how well the output matches the
+input. Autoencoders can be seen as a way of learning the latent
+features or hidden structure of the data, and they can be used for
+data compression, denoising, anomaly detection, and generative
+modeling.
+
+!split
+===== Powerful detectors =====
+
 More importantly, autoencoders act as powerful feature detectors, and
 they can be used for unsupervised pretraining of deep neural networks.
 
@@ -150,7 +162,22 @@ ourselves about the PCA method.
 
 
 !split
-===== Basic ideas of the Principal Component Analysis (PCA) =====
+===== What is the Principal Component Analysis (PCA)? =====
+
+PCA is a linear transformation that finds the directions of maximum
+variance in the data, and projects the data onto a lower-dimensional
+space. These directions are called principal components, and they are
+orthogonal to each other. PCA can be seen as a way of compressing the
+data by discarding the components that have low variance and retain
+the most important ones. PCA can be applied to both supervised and
+unsupervised learning problems, and it is often used for data
+visualization, feature extraction, and noise reduction.
+
+A linear autoencoder can be shown to be equal to the PCA.
+In this lectures we will try to expose these ideas.
+
+!split
+===== Basic ideas of the PCA =====
 
 The principal component analysis deals with the problem of fitting a
 low-dimensional affine subspace $S$ of dimension $d$ much smaller than
@@ -963,7 +990,7 @@ Here are some of the most popular:
 
 
 !split
-===== Linear Autoencoders =====
+===== Back to Autoencoders: Linear Autoencoders =====
 
 These examples here are based the codes from A. Geron's textbook. They
 can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
