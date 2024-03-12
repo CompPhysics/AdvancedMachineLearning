@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{10}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{x} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{+}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{n}{x}\PYG{o}{+}\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{y}\PYG{p}{)}
+\PYG{n}{X} \PYG{o}{=} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{vstack}\PYG{p}{((}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)))}\PYG{o}{.}\PYG{n}{T}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+\PYG{n}{Xpd} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{Xpd}\PYG{p}{)}
+\PYG{n}{correlation\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{Xpd}\PYG{o}{.}\PYG{n}{corr}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{correlation\PYGZus{}matrix}\PYG{p}{)}
+
+\end{Verbatim}

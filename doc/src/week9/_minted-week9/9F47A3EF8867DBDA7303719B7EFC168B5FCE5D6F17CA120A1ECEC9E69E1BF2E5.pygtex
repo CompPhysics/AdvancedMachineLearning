@@ -1,0 +1,32 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.model\PYGZus{}selection} \PYG{k+kn}{import}  \PYG{n}{train\PYGZus{}test\PYGZus{}split}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.datasets} \PYG{k+kn}{import} \PYG{n}{load\PYGZus{}breast\PYGZus{}cancer}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.linear\PYGZus{}model} \PYG{k+kn}{import} \PYG{n}{LogisticRegression}
+\PYG{n}{cancer} \PYG{o}{=} \PYG{n}{load\PYGZus{}breast\PYGZus{}cancer}\PYG{p}{()}
+
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{train\PYGZus{}test\PYGZus{}split}\PYG{p}{(}\PYG{n}{cancer}\PYG{o}{.}\PYG{n}{data}\PYG{p}{,}\PYG{n}{cancer}\PYG{o}{.}\PYG{n}{target}\PYG{p}{,}\PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+\PYG{n}{logreg} \PYG{o}{=} \PYG{n}{LogisticRegression}\PYG{p}{()}
+\PYG{n}{logreg}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Train set accuracy from Logistic Regression: }\PYG{l+s+si}{\PYGZob{}:.2f\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{logreg}\PYG{o}{.}\PYG{n}{score}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,}\PYG{n}{y\PYGZus{}train}\PYG{p}{)))}
+\PYG{c+c1}{\PYGZsh{} We scale the data}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.preprocessing} \PYG{k+kn}{import} \PYG{n}{StandardScaler}
+\PYG{n}{scaler} \PYG{o}{=} \PYG{n}{StandardScaler}\PYG{p}{()}
+\PYG{n}{scaler}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{X\PYGZus{}train\PYGZus{}scaled} \PYG{o}{=} \PYG{n}{scaler}\PYG{o}{.}\PYG{n}{transform}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{X\PYGZus{}test\PYGZus{}scaled} \PYG{o}{=} \PYG{n}{scaler}\PYG{o}{.}\PYG{n}{transform}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Then perform again a log reg fit}
+\PYG{n}{logreg}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}scaled}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Train set accuracy scaled data: }\PYG{l+s+si}{\PYGZob{}:.2f\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{logreg}\PYG{o}{.}\PYG{n}{score}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}scaled}\PYG{p}{,}\PYG{n}{y\PYGZus{}train}\PYG{p}{)))}
+\PYG{c+c1}{\PYGZsh{}thereafter we do a PCA with Scikit\PYGZhy{}learn}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.decomposition} \PYG{k+kn}{import} \PYG{n}{PCA}
+\PYG{n}{pca} \PYG{o}{=} \PYG{n}{PCA}\PYG{p}{(}\PYG{n}{n\PYGZus{}components} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{X2D\PYGZus{}train} \PYG{o}{=} \PYG{n}{pca}\PYG{o}{.}\PYG{n}{fit\PYGZus{}transform}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}scaled}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} and finally compute the log reg fit and the score on the training data	}
+\PYG{n}{logreg}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X2D\PYGZus{}train}\PYG{p}{,}\PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Train set accuracy scaled and PCA data: }\PYG{l+s+si}{\PYGZob{}:.2f\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{logreg}\PYG{o}{.}\PYG{n}{score}\PYG{p}{(}\PYG{n}{X2D\PYGZus{}train}\PYG{p}{,}\PYG{n}{y\PYGZus{}train}\PYG{p}{)))}
+
+
+\end{Verbatim}

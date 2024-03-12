@@ -22,7 +22,9 @@ o "Building AEs in Keras":"https://blog.keras.io/building-autoencoders-in-keras.
 o "Introduction to AEs in TensorFlow":"https://www.tensorflow.org/tutorials/generative/autoencoder"
 o "Grosse, University of Toronto, Lecture on AEs":"http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf"
 o "Bank et al on AEs":"https://arxiv.org/abs/2003.05991"  
+o Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)
 !eblock
+
 
 
 
@@ -117,6 +119,104 @@ The goal is to minimize the construction error.
 
 !split
 ===== Schematic image of an Autoencoder =====
+
+FIGURE: [figures/ae1.png, width=700 frac=1.0]
+
+
+
+!split
+===== More on the structure =====
+
+In most typical architectures, the encoder and the decoder are neural networks
+since they can be easily trained with existing software libraries such as TensorFlow or PyTorch with back propagation.
+
+
+
+In general, the encoder can be written as a function $g$ that will depend on some parameters
+!bt
+\[
+\mathbf{h}_{i} = g(\mathbf{x}_{i}),
+\]
+!et
+where $\mathbf{h}_{i}\in\mathbb{R}^{q}$  (the latent feature representation) is the output of the encoder block where we evaluate
+it using the input $\mathbf{x}_{i}$.
+
+!split
+===== Decoder part =====
+
+Note that we have $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{q}$
+The decoder and the output of the network $\tilde{\mathbf{x}}_{i}$ can be written then as a second generic function
+of the latent features
+!bt
+\[
+\tilde{\mathbf{x}}_{i} = f\left(\mathbf{h}_{i}\right) = f\left(g\left(\mathbf{x}_{i}\right)\right),
+\]
+!et
+where $\tilde{\mathbf{x}}_{i}\mathbf{\in }\mathbb{R}^{n}$.
+
+Training an autoencoder simply means finding the functions $g(\cdot)$ and $f(\cdot)$
+that satisfy
+!bt
+\[
+\textrm{arg}\min_{f,g}<\left[\Delta (\mathbf{x}_{i}, f(g\left(\mathbf{x}_{i}\right))\right]>.
+\]
+!et
+
+
+!split
+===== Typical AEs =====
+
+The standard setup is done via a standard feed forward neural network (FFNN), or what is called a Feed Forward Autoencoder.
+
+A typical FFNN architecture has an odd number of layers and is symmetrical with respect to the middle layer.
+
+Typically, the first layer has a number of neurons $n_{1} = n$ which equals the size of the input observation $\mathbf{x}_{\mathbf{i}}$.
+
+As we move toward the center of the network, the number of neurons in each layer drops in some measure.
+The middle layer usually has the smallest number of neurons.
+The fact that the number of neurons in this layer is smaller than the size of the input, is often called the _bottleneck_.
+
+!split
+===== Feed Forward Autoencoder =====
+
+FIGURE: [figures/ae2.pdf, width=700 frac=1.0]
+
+
+!split
+===== Mirroring =====
+
+In almost all practical applications,
+the layers after the middle one are a mirrored version of the layers before the middle one.
+For example, an autoencoder with three layers could have the following numbers of neurons:
+
+$n_{1} = 10$, $n_{2} = 5$ and then $n_{3} = n_{1} = 10$ where the input dimension is equal to ten.
+
+
+All the layers up to and including the middle one, make what is called the encoder, and all the layers from and including
+the middle one (up to the output) make what is called the decoder.
+
+If the FFNN training is successful, the result will
+be a good approximation of the input $\tilde{\mathbf{x}}_{i}\approx\mathbf{x}_{i}$.
+
+What is essential to notice is that the decoder can reconstruct the
+input by using only a much smaller number of features than the input
+observations initially have.
+
+!split
+===== Output of middle layer =====
+
+The output of the middle layer
+$\mathbf{h}_{\mathbf{i}}$ are also called a _learned representation_ of the input observation $\mathbf{x}_{i}$.
+
+The encoder can reduce the number of dimensions of the input
+observation and create a learned representation
+$\mathbf{h}_{\mathbf{i}}\mathbf{) }$ of the input that has a smaller
+dimension $q<n$.
+
+This learned representation is enough for the decoder to reconstruct
+the input accurately (if the autoencoder training was successful as
+intended).
+
 
 
 !split
