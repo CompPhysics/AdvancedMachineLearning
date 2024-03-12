@@ -40,6 +40,7 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'plans-for-the-week-march-11-15'),
+              ('Reading recommendations', 2, None, 'reading-recommendations'),
               ('Autoencoders: Overarching view',
                2,
                None,
@@ -50,40 +51,53 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'first-introduction-of-aes'),
               ('Autoencoder structure', 2, None, 'autoencoder-structure'),
+              ('Schematic image of an Autoencoder',
+               2,
+               None,
+               'schematic-image-of-an-autoencoder'),
               ('Dimensionality reduction and links with Principal component '
                'analysis',
                2,
                None,
                'dimensionality-reduction-and-links-with-principal-component-analysis'),
+              ('Linear functions', 2, None, 'linear-functions'),
               ('AE mean-squared error', 2, None, 'ae-mean-squared-error'),
+              ('Dimensionality reduction', 2, None, 'dimensionality-reduction'),
               ('What is the Principal Component Analysis (PCA)?',
                2,
                None,
                'what-is-the-principal-component-analysis-pca'),
               ('Basic ideas of the PCA', 2, None, 'basic-ideas-of-the-pca'),
+              ('Ingredients of the PCA', 2, None, 'ingredients-of-the-pca'),
               ('Introducing the Covariance and Correlation functions',
                2,
                None,
                'introducing-the-covariance-and-correlation-functions'),
+              ('Covariance matrix', 2, None, 'covariance-matrix'),
               ('More on the covariance', 2, None, 'more-on-the-covariance'),
               ('Reminding ourselves about Linear Regression',
                2,
                None,
                'reminding-ourselves-about-linear-regression'),
+              ('Rewriting the matrix $\\boldsymbol{X}$',
+               2,
+               None,
+               'rewriting-the-matrix-boldsymbol-x'),
               ('Simple Example', 2, None, 'simple-example'),
               ('The Correlation Matrix', 2, None, 'the-correlation-matrix'),
               ('Numpy Functionality', 2, None, 'numpy-functionality'),
               ('Correlation Matrix again', 2, None, 'correlation-matrix-again'),
               ('Using Pandas', 2, None, 'using-pandas'),
-              ('Lnks with the Design Matrix',
+              ('Links with the Design Matrix',
                2,
                None,
-               'lnks-with-the-design-matrix'),
+               'links-with-the-design-matrix'),
               ('Computing the Expectation Values',
                2,
                None,
                'computing-the-expectation-values'),
               ('Towards the PCA theorem', 2, None, 'towards-the-pca-theorem'),
+              ('More details', 2, None, 'more-details'),
               ('More on the PCA Theorem', 2, None, 'more-on-the-pca-theorem'),
               ('The Algorithm before the Theorem',
                2,
@@ -113,24 +127,7 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
               ('Incremental PCA', 2, None, 'incremental-pca'),
               ('Randomized PCA', 3, None, 'randomized-pca'),
               ('Kernel PCA', 3, None, 'kernel-pca'),
-              ('Other techniques', 2, None, 'other-techniques'),
-              ('Back to Autoencoders: Linear Autoencoders',
-               2,
-               None,
-               'back-to-autoencoders-linear-autoencoders'),
-              ('More advanced features, stacked AEs',
-               2,
-               None,
-               'more-advanced-features-stacked-aes'),
-              ('Using Convolutional Layers Instead of Dense Layers',
-               2,
-               None,
-               'using-convolutional-layers-instead-of-dense-layers'),
-              ('Recurrent Autoencoders', 2, None, 'recurrent-autoencoders'),
-              ('Stacked denoising Autoencoder with Gaussian noise',
-               2,
-               None,
-               'stacked-denoising-autoencoder-with-gaussian-noise')]}
+              ('Other techniques', 2, None, 'other-techniques')]}
 end of tocinfo -->
 
 <body>
@@ -166,25 +163,33 @@ MathJax.Hub.Config({
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-march-11-15" style="font-size: 80%;"><b>Plans for the week March 11-15</b></a></li>
+     <!-- navigation toc: --> <li><a href="#reading-recommendations" style="font-size: 80%;"><b>Reading recommendations</b></a></li>
      <!-- navigation toc: --> <li><a href="#autoencoders-overarching-view" style="font-size: 80%;"><b>Autoencoders: Overarching view</b></a></li>
      <!-- navigation toc: --> <li><a href="#powerful-detectors" style="font-size: 80%;"><b>Powerful detectors</b></a></li>
      <!-- navigation toc: --> <li><a href="#first-introduction-of-aes" style="font-size: 80%;"><b>First introduction of AEs</b></a></li>
      <!-- navigation toc: --> <li><a href="#autoencoder-structure" style="font-size: 80%;"><b>Autoencoder structure</b></a></li>
+     <!-- navigation toc: --> <li><a href="#schematic-image-of-an-autoencoder" style="font-size: 80%;"><b>Schematic image of an Autoencoder</b></a></li>
      <!-- navigation toc: --> <li><a href="#dimensionality-reduction-and-links-with-principal-component-analysis" style="font-size: 80%;"><b>Dimensionality reduction and links with Principal component analysis</b></a></li>
+     <!-- navigation toc: --> <li><a href="#linear-functions" style="font-size: 80%;"><b>Linear functions</b></a></li>
      <!-- navigation toc: --> <li><a href="#ae-mean-squared-error" style="font-size: 80%;"><b>AE mean-squared error</b></a></li>
+     <!-- navigation toc: --> <li><a href="#dimensionality-reduction" style="font-size: 80%;"><b>Dimensionality reduction</b></a></li>
      <!-- navigation toc: --> <li><a href="#what-is-the-principal-component-analysis-pca" style="font-size: 80%;"><b>What is the Principal Component Analysis (PCA)?</b></a></li>
      <!-- navigation toc: --> <li><a href="#basic-ideas-of-the-pca" style="font-size: 80%;"><b>Basic ideas of the PCA</b></a></li>
+     <!-- navigation toc: --> <li><a href="#ingredients-of-the-pca" style="font-size: 80%;"><b>Ingredients of the PCA</b></a></li>
      <!-- navigation toc: --> <li><a href="#introducing-the-covariance-and-correlation-functions" style="font-size: 80%;"><b>Introducing the Covariance and Correlation functions</b></a></li>
+     <!-- navigation toc: --> <li><a href="#covariance-matrix" style="font-size: 80%;"><b>Covariance matrix</b></a></li>
      <!-- navigation toc: --> <li><a href="#more-on-the-covariance" style="font-size: 80%;"><b>More on the covariance</b></a></li>
      <!-- navigation toc: --> <li><a href="#reminding-ourselves-about-linear-regression" style="font-size: 80%;"><b>Reminding ourselves about Linear Regression</b></a></li>
+     <!-- navigation toc: --> <li><a href="#rewriting-the-matrix-boldsymbol-x" style="font-size: 80%;"><b>Rewriting the matrix \( \boldsymbol{X} \)</b></a></li>
      <!-- navigation toc: --> <li><a href="#simple-example" style="font-size: 80%;"><b>Simple Example</b></a></li>
      <!-- navigation toc: --> <li><a href="#the-correlation-matrix" style="font-size: 80%;"><b>The Correlation Matrix</b></a></li>
      <!-- navigation toc: --> <li><a href="#numpy-functionality" style="font-size: 80%;"><b>Numpy Functionality</b></a></li>
      <!-- navigation toc: --> <li><a href="#correlation-matrix-again" style="font-size: 80%;"><b>Correlation Matrix again</b></a></li>
      <!-- navigation toc: --> <li><a href="#using-pandas" style="font-size: 80%;"><b>Using Pandas</b></a></li>
-     <!-- navigation toc: --> <li><a href="#lnks-with-the-design-matrix" style="font-size: 80%;"><b>Lnks with the Design Matrix</b></a></li>
+     <!-- navigation toc: --> <li><a href="#links-with-the-design-matrix" style="font-size: 80%;"><b>Links with the Design Matrix</b></a></li>
      <!-- navigation toc: --> <li><a href="#computing-the-expectation-values" style="font-size: 80%;"><b>Computing the Expectation Values</b></a></li>
      <!-- navigation toc: --> <li><a href="#towards-the-pca-theorem" style="font-size: 80%;"><b>Towards the PCA theorem</b></a></li>
+     <!-- navigation toc: --> <li><a href="#more-details" style="font-size: 80%;"><b>More details</b></a></li>
      <!-- navigation toc: --> <li><a href="#more-on-the-pca-theorem" style="font-size: 80%;"><b>More on the PCA Theorem</b></a></li>
      <!-- navigation toc: --> <li><a href="#the-algorithm-before-the-theorem" style="font-size: 80%;"><b>The Algorithm before the Theorem</b></a></li>
      <!-- navigation toc: --> <li><a href="#writing-our-own-pca-code" style="font-size: 80%;"><b>Writing our own PCA code</b></a></li>
@@ -204,11 +209,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#randomized-pca" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Randomized PCA</a></li>
      <!-- navigation toc: --> <li><a href="#kernel-pca" style="font-size: 80%;">&nbsp;&nbsp;&nbsp;Kernel PCA</a></li>
      <!-- navigation toc: --> <li><a href="#other-techniques" style="font-size: 80%;"><b>Other techniques</b></a></li>
-     <!-- navigation toc: --> <li><a href="#back-to-autoencoders-linear-autoencoders" style="font-size: 80%;"><b>Back to Autoencoders: Linear Autoencoders</b></a></li>
-     <!-- navigation toc: --> <li><a href="#more-advanced-features-stacked-aes" style="font-size: 80%;"><b>More advanced features, stacked AEs</b></a></li>
-     <!-- navigation toc: --> <li><a href="#using-convolutional-layers-instead-of-dense-layers" style="font-size: 80%;"><b>Using Convolutional Layers Instead of Dense Layers</b></a></li>
-     <!-- navigation toc: --> <li><a href="#recurrent-autoencoders" style="font-size: 80%;"><b>Recurrent Autoencoders</b></a></li>
-     <!-- navigation toc: --> <li><a href="#stacked-denoising-autoencoder-with-gaussian-noise" style="font-size: 80%;"><b>Stacked denoising Autoencoder with Gaussian noise</b></a></li>
 
         </ul>
       </li>
@@ -241,8 +241,10 @@ MathJax.Hub.Config({
 </center> <!-- date -->
 <br>
 
-
+<!-- potential-jumbotron-button -->
 </div> <!-- end jumbotron -->
+
+<!-- !split -->
 <h2 id="plans-for-the-week-march-11-15" class="anchor">Plans for the week March 11-15  </h2>
 
 <div class="panel panel-default">
@@ -251,16 +253,25 @@ MathJax.Hub.Config({
 <ol>
 <li> Discussion of Autoencoders (AEs)</li>
 <li> Links between Principal Component Analysis (PCA) and AE</li>
-<li> Reading recommendations:
-<ol type="a"></li>
- <li> Goodfellow et al chapter 14.</li>
- <li> Rashcka et al. Their chapter 17 contains a brief introduction only.</li>
- <li> <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_self">Deep Learning Tutorial on AEs from Stanford University</a></li>
- <li> <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_self">Building AEs in Keras</a></li>
- <li> <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_self">Introduction to AEs in TensorFlow</a></li>
- <li> <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_self">Grosse, University of Toronto, Lecture on AEs</a></li>
- <li> <a href="https://arxiv.org/abs/2003.05991" target="_self">Bank et al on AEs</a></li>  
 </ol>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="reading-recommendations" class="anchor">Reading recommendations </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<ol>
+<li> Goodfellow et al chapter 14.</li>
+<li> Rashcka et al. Their chapter 17 contains a brief introduction only.</li>
+<li> <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_self">Deep Learning Tutorial on AEs from Stanford University</a></li>
+<li> <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_self">Building AEs in Keras</a></li>
+<li> <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_self">Introduction to AEs in TensorFlow</a></li>
+<li> <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_self">Grosse, University of Toronto, Lecture on AEs</a></li>
+<li> <a href="https://arxiv.org/abs/2003.05991" target="_self">Bank et al on AEs</a></li>  
 </ol>
 </div>
 </div>
@@ -338,7 +349,7 @@ understand why autoencoders are useful we need a more informative
 <h2 id="autoencoder-structure" class="anchor">Autoencoder structure </h2>
 
 <p>Autoencoders are neural networks where the outputs are its own
-inputs. They are split (see whiteboard drawing) into an <b>encoder part</b>
+inputs. They are split into an <b>encoder part</b>
 which maps the input \( \boldsymbol{x} \) via a function \( f(\boldsymbol{x},\boldsymbol{W}) \) (this
 is the encoder part) to a <b>so-called code part</b> (or intermediate part)
 with the result \( \boldsymbol{h} \)
@@ -358,6 +369,9 @@ $$
 <p>The goal is to minimize the construction error.</p>
 
 <!-- !split -->
+<h2 id="schematic-image-of-an-autoencoder" class="anchor">Schematic image of an Autoencoder </h2>
+
+<!-- !split -->
 <h2 id="dimensionality-reduction-and-links-with-principal-component-analysis" class="anchor">Dimensionality reduction and links with Principal component analysis </h2>
 
 <p>The hope is that the training of the autoencoder can unravel some
@@ -366,6 +380,9 @@ only single-layer neural networks (although deep networks can improve
 the training) and are essentially given by feed forward neural
 networks.
 </p>
+
+<!-- !split -->
+<h2 id="linear-functions" class="anchor">Linear functions </h2>
 
 <p>If the function \( f \) and \( g \) are given by a linear dependence on the
 weight matrices \( \boldsymbol{W} \) and \( \boldsymbol{V} \), we can show that for a
@@ -402,6 +419,10 @@ $$
 \vert\vert \boldsymbol{x}\vert\vert_2 = \sqrt{\sum_i x_i^2}. 
 $$
 
+
+<!-- !split -->
+<h2 id="dimensionality-reduction" class="anchor">Dimensionality reduction </h2>
+
 <p>This is equivalent to our functions learning the same subspace as
 the PCA method. This means that we can interpret AEs as a
 dimensionality reduction method.  To see this, we need to remind
@@ -437,12 +458,15 @@ classical PCA, we will stay with a statistical approach.
 Historically, the PCA was first formulated in a statistical setting in order to estimate the principal component of a multivariate random variable.
 </p>
 
+<!-- !split -->
+<h2 id="ingredients-of-the-pca" class="anchor">Ingredients of the PCA </h2>
+
 <p>We have a data set defined by a design/feature matrix \( \boldsymbol{X} \) (see below for its definition) </p>
-<ul>
+<ol>
 <li> Each data point is determined by \( p \) extrinsic (measurement) variables</li>
 <li> We may want to ask the following question: Are there fewer intrinsic variables (say \( d < < p \)) that still approximately describe the data?</li>
 <li> If so, these intrinsic variables may tell us something important and finding these intrinsic variables is what dimension reduction methods do.</li> 
-</ul>
+</ol>
 <p>A good read is for example <a href="https://www.springer.com/gp/book/9780387878102" target="_self">Vidal, Ma and Sastry</a>.</p>
 
 <!-- !split -->
@@ -465,6 +489,10 @@ $$
 $$
 \mathrm{cov}[\boldsymbol{x},\boldsymbol{y}] =\frac{1}{n} \sum_{i=0}^{n-1}(x_i- \overline{x})(y_i- \overline{y}).
 $$
+
+
+<!-- !split -->
+<h2 id="covariance-matrix" class="anchor">Covariance matrix </h2>
 
 <p>With this definition and recalling that the variance is defined as</p>
 $$
@@ -525,8 +553,12 @@ $$
 
 <p>with \( \boldsymbol{X}\in {\mathbb{R}}^{n\times p} \), with the predictors/features \( p \)  refering to the column numbers and the
 entries \( n \) being the row elements.
-We can rewrite the design/feature matrix in terms of its column vectors as
 </p>
+
+<!-- !split -->
+<h2 id="rewriting-the-matrix-boldsymbol-x" class="anchor">Rewriting the matrix \( \boldsymbol{X} \) </h2>
+
+<p>We can rewrite the design/feature matrix in terms of its column vectors as</p>
 $$
 \boldsymbol{X}=\begin{bmatrix} \boldsymbol{x}_0 & \boldsymbol{x}_1 & \boldsymbol{x}_2 & \dots & \dots & \boldsymbol{x}_{p-1}\end{bmatrix},
 $$
@@ -539,6 +571,7 @@ $$
 
 <!-- !split -->
 <h2 id="simple-example" class="anchor">Simple Example </h2>
+
 <p>With these definitions, we can now rewrite our \( 2\times 2 \)
 correlation/covariance matrix in terms of a moe general design/feature
 matrix \( \boldsymbol{X}\in {\mathbb{R}}^{n\times p} \). This leads to a \( p\times p \)
@@ -553,14 +586,14 @@ $$
 \dots & \dots & \dots & \dots & \dots & \dots \\
 \dots & \dots & \dots & \dots & \dots & \dots \\
 \mathrm{cov}[\boldsymbol{x}_{p-1},\boldsymbol{x}_0]   & \mathrm{cov}[\boldsymbol{x}_{p-1},\boldsymbol{x}_1] & \mathrm{cov}[\boldsymbol{x}_{p-1},\boldsymbol{x}_{2}]  & \dots & \dots  & \mathrm{var}[\boldsymbol{x}_{p-1}]\\
-\end{bmatrix},
+\end{bmatrix}.
 $$
 
 
 <!-- !split -->
 <h2 id="the-correlation-matrix" class="anchor">The Correlation Matrix </h2>
 
-<p>and the correlation matrix</p>
+<p>The correlation matrix</p>
 $$
 \boldsymbol{K}[\boldsymbol{x}] = \begin{bmatrix}
 1 & \mathrm{corr}[\boldsymbol{x}_0,\boldsymbol{x}_1]  & \mathrm{corr}[\boldsymbol{x}_0,\boldsymbol{x}_2] & \dots & \dots & \mathrm{corr}[\boldsymbol{x}_0,\boldsymbol{x}_{p-1}]\\
@@ -569,7 +602,7 @@ $$
 \dots & \dots & \dots & \dots & \dots & \dots \\
 \dots & \dots & \dots & \dots & \dots & \dots \\
 \mathrm{corr}[\boldsymbol{x}_{p-1},\boldsymbol{x}_0]   & \mathrm{corr}[\boldsymbol{x}_{p-1},\boldsymbol{x}_1] & \mathrm{corr}[\boldsymbol{x}_{p-1},\boldsymbol{x}_{2}]  & \dots & \dots  & 1\\
-\end{bmatrix},
+\end{bmatrix}.
 $$
 
 
@@ -734,7 +767,7 @@ correlation_matrix <span style="color: #666666">=</span> Xpd<span style="color: 
 
 
 <!-- !split -->
-<h2 id="lnks-with-the-design-matrix" class="anchor">Lnks with the Design Matrix </h2>
+<h2 id="links-with-the-design-matrix" class="anchor">Links with the Design Matrix </h2>
 
 <p>We can rewrite the covariance matrix in a more compact form in terms of the design/feature matrix \( \boldsymbol{X} \) as </p>
 $$
@@ -785,6 +818,9 @@ $$
 <p>Let us now assume that we can perform a series of orthogonal transformations where we employ some orthogonal matrices \( \boldsymbol{S} \).
 These matrices are defined as \( \boldsymbol{S}\in {\mathbb{R}}^{p\times p} \) and obey the orthogonality requirements \( \boldsymbol{S}\boldsymbol{S}^T=\boldsymbol{S}^T\boldsymbol{S}=\boldsymbol{I} \). The matrix can be written out in terms of the column vectors \( \boldsymbol{s}_i \) as \( \boldsymbol{S}=[\boldsymbol{s}_0,\boldsymbol{s}_1,\dots,\boldsymbol{s}_{p-1}] \) and \( \boldsymbol{s}_i \in {\mathbb{R}}^{p} \).
 </p>
+
+<!-- !split -->
+<h2 id="more-details" class="anchor">More details </h2>
 
 <p>Assume also that there is a transformation \( \boldsymbol{S}^T\boldsymbol{C}[\boldsymbol{x}]\boldsymbol{S}=\boldsymbol{C}[\boldsymbol{y}] \) such that the new matrix \( \boldsymbol{C}[\boldsymbol{y}] \) is diagonal with elements \( [\lambda_0,\lambda_1,\lambda_2,\dots,\lambda_{p-1}] \).  </p>
 
@@ -1203,9 +1239,7 @@ the Singular Value Decomposition theorem. For categorical data, see
 chapter 12.4 and discussion therein.
 </p>
 
-<p>For more details, see for example <a href="https://www.springer.com/gp/book/9780387878102" target="_self">Vidal, Ma and Sastry, chapter 2</a> and the whiteboard notes.
-The whiteboard notes will also contain the final link with linear autoencoders.
-</p>
+<p>For more details, see for example <a href="https://www.springer.com/gp/book/9780387878102" target="_self">Vidal, Ma and Sastry, chapter 2</a>.</p>
 
 <!-- !split -->
 <h2 id="geometric-interpretation-and-link-with-singular-value-decomposition" class="anchor">Geometric Interpretation and link with Singular Value Decomposition </h2>
@@ -1550,595 +1584,6 @@ X_reduced <span style="color: #666666">=</span> rbf_pca<span style="color: #6666
 <li> <b>t-Distributed Stochastic Neighbor Embedding</b> (t-SNE) reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space (e.g., to visualize the MNIST images in 2D).</li>
 <li> Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.</li>
 </ul>
-<!-- !split -->
-<h2 id="back-to-autoencoders-linear-autoencoders" class="anchor">Back to Autoencoders: Linear Autoencoders </h2>
-
-<p>These examples here are based the codes from A. Geron's textbook. They
-can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Python ≥3.5 is required</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sys</span>
-<span style="color: #008000; font-weight: bold">assert</span> sys<span style="color: #666666">.</span>version_info <span style="color: #666666">&gt;=</span> (<span style="color: #666666">3</span>, <span style="color: #666666">5</span>)
-
-<span style="color: #408080; font-style: italic"># Is this notebook running on Colab or Kaggle?</span>
-IS_COLAB <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;google.colab&quot;</span> <span style="color: #AA22FF; font-weight: bold">in</span> sys<span style="color: #666666">.</span>modules
-IS_KAGGLE <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;kaggle_secrets&quot;</span> <span style="color: #AA22FF; font-weight: bold">in</span> sys<span style="color: #666666">.</span>modules
-
-<span style="color: #408080; font-style: italic"># Scikit-Learn ≥0.20 is required</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sklearn</span>
-<span style="color: #008000; font-weight: bold">assert</span> sklearn<span style="color: #666666">.</span>__version__ <span style="color: #666666">&gt;=</span> <span style="color: #BA2121">&quot;0.20&quot;</span>
-
-<span style="color: #408080; font-style: italic"># TensorFlow ≥2.0 is required</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">import</span> keras
-<span style="color: #008000; font-weight: bold">assert</span> tf<span style="color: #666666">.</span>__version__ <span style="color: #666666">&gt;=</span> <span style="color: #BA2121">&quot;2.0&quot;</span>
-
-<span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> tf<span style="color: #666666">.</span>config<span style="color: #666666">.</span>list_physical_devices(<span style="color: #BA2121">&#39;GPU&#39;</span>):
-    <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;No GPU was detected. LSTMs and CNNs can be very slow without a GPU.&quot;</span>)
-    <span style="color: #008000; font-weight: bold">if</span> IS_COLAB:
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go to Runtime &gt; Change runtime and select a GPU hardware accelerator.&quot;</span>)
-    <span style="color: #008000; font-weight: bold">if</span> IS_KAGGLE:
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go to Settings &gt; Accelerator and select GPU.&quot;</span>)
-
-<span style="color: #408080; font-style: italic"># Common imports</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
-
-<span style="color: #408080; font-style: italic"># to make this notebook&#39;s output stable across runs</span>
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-
-<span style="color: #408080; font-style: italic"># To plot pretty figures</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">mpl</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-mpl<span style="color: #666666">.</span>rc(<span style="color: #BA2121">&#39;axes&#39;</span>, labelsize<span style="color: #666666">=14</span>)
-mpl<span style="color: #666666">.</span>rc(<span style="color: #BA2121">&#39;xtick&#39;</span>, labelsize<span style="color: #666666">=12</span>)
-mpl<span style="color: #666666">.</span>rc(<span style="color: #BA2121">&#39;ytick&#39;</span>, labelsize<span style="color: #666666">=12</span>)
-
-<span style="color: #408080; font-style: italic"># Where to save the figures</span>
-PROJECT_ROOT_DIR <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;.&quot;</span>
-CHAPTER_ID <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;autoencoders&quot;</span>
-IMAGES_PATH <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(PROJECT_ROOT_DIR, <span style="color: #BA2121">&quot;images&quot;</span>, CHAPTER_ID)
-os<span style="color: #666666">.</span>makedirs(IMAGES_PATH, exist_ok<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">save_fig</span>(fig_id, tight_layout<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, fig_extension<span style="color: #666666">=</span><span style="color: #BA2121">&quot;png&quot;</span>, resolution<span style="color: #666666">=300</span>):
-    path <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(IMAGES_PATH, fig_id <span style="color: #666666">+</span> <span style="color: #BA2121">&quot;.&quot;</span> <span style="color: #666666">+</span> fig_extension)
-    <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Saving figure&quot;</span>, fig_id)
-    <span style="color: #008000; font-weight: bold">if</span> tight_layout:
-        plt<span style="color: #666666">.</span>tight_layout()
-    plt<span style="color: #666666">.</span>savefig(path, <span style="color: #008000">format</span><span style="color: #666666">=</span>fig_extension, dpi<span style="color: #666666">=</span>resolution)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">plot_image</span>(image):
-    plt<span style="color: #666666">.</span>imshow(image, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary&quot;</span>)
-    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&quot;off&quot;</span>)
-
-
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">4</span>)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">generate_3d_data</span>(m, w1<span style="color: #666666">=0.1</span>, w2<span style="color: #666666">=0.3</span>, noise<span style="color: #666666">=0.1</span>):
-    angles <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>rand(m) <span style="color: #666666">*</span> <span style="color: #666666">3</span> <span style="color: #666666">*</span> np<span style="color: #666666">.</span>pi <span style="color: #666666">/</span> <span style="color: #666666">2</span> <span style="color: #666666">-</span> <span style="color: #666666">0.5</span>
-    data <span style="color: #666666">=</span> np<span style="color: #666666">.</span>empty((m, <span style="color: #666666">3</span>))
-    data[:, <span style="color: #666666">0</span>] <span style="color: #666666">=</span> np<span style="color: #666666">.</span>cos(angles) <span style="color: #666666">+</span> np<span style="color: #666666">.</span>sin(angles)<span style="color: #666666">/2</span> <span style="color: #666666">+</span> noise <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(m) <span style="color: #666666">/</span> <span style="color: #666666">2</span>
-    data[:, <span style="color: #666666">1</span>] <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sin(angles) <span style="color: #666666">*</span> <span style="color: #666666">0.7</span> <span style="color: #666666">+</span> noise <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(m) <span style="color: #666666">/</span> <span style="color: #666666">2</span>
-    data[:, <span style="color: #666666">2</span>] <span style="color: #666666">=</span> data[:, <span style="color: #666666">0</span>] <span style="color: #666666">*</span> w1 <span style="color: #666666">+</span> data[:, <span style="color: #666666">1</span>] <span style="color: #666666">*</span> w2 <span style="color: #666666">+</span> noise <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(m)
-    <span style="color: #008000; font-weight: bold">return</span> data
-
-X_train <span style="color: #666666">=</span> generate_3d_data(<span style="color: #666666">60</span>)
-X_train <span style="color: #666666">=</span> X_train <span style="color: #666666">-</span> X_train<span style="color: #666666">.</span>mean(axis<span style="color: #666666">=0</span>, keepdims<span style="color: #666666">=0</span>)
-
-
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-
-encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">2</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">3</span>])])
-decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">3</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">2</span>])])
-autoencoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([encoder, decoder])
-
-autoencoder<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;mse&quot;</span>, optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=1.5</span>))
-
-codings <span style="color: #666666">=</span> encoder<span style="color: #666666">.</span>predict(X_train)
-fig <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">4</span>,<span style="color: #666666">3</span>))
-plt<span style="color: #666666">.</span>plot(codings[:,<span style="color: #666666">0</span>], codings[:, <span style="color: #666666">1</span>], <span style="color: #BA2121">&quot;b.&quot;</span>)
-plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;$z_1$&quot;</span>, fontsize<span style="color: #666666">=18</span>)
-plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;$z_2$&quot;</span>, fontsize<span style="color: #666666">=18</span>, rotation<span style="color: #666666">=0</span>)
-plt<span style="color: #666666">.</span>grid(<span style="color: #008000; font-weight: bold">True</span>)
-save_fig(<span style="color: #BA2121">&quot;linear_autoencoder_pca_plot&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="more-advanced-features-stacked-aes" class="anchor">More advanced features, stacked AEs </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">(X_train_full, y_train_full), (X_test, y_test) <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>fashion_mnist<span style="color: #666666">.</span>load_data()
-X_train_full <span style="color: #666666">=</span> X_train_full<span style="color: #666666">.</span>astype(np<span style="color: #666666">.</span>float32) <span style="color: #666666">/</span> <span style="color: #666666">255</span>
-X_test <span style="color: #666666">=</span> X_test<span style="color: #666666">.</span>astype(np<span style="color: #666666">.</span>float32) <span style="color: #666666">/</span> <span style="color: #666666">255</span>
-X_train, X_valid <span style="color: #666666">=</span> X_train_full[:<span style="color: #666666">-5000</span>], X_train_full[<span style="color: #666666">-5000</span>:]
-y_train, y_valid <span style="color: #666666">=</span> y_train_full[:<span style="color: #666666">-5000</span>], y_train_full[<span style="color: #666666">-5000</span>:]
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>We can now train all layers at once by building a stacked AE with 3 hidden layers and 1 output layer (i.e., 2 stacked Autoencoders).</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">rounded_accuracy</span>(y_true, y_pred):
-    <span style="color: #008000; font-weight: bold">return</span> keras<span style="color: #666666">.</span>metrics<span style="color: #666666">.</span>binary_accuracy(tf<span style="color: #666666">.</span>round(y_true), tf<span style="color: #666666">.</span>round(y_pred))
-tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-
-stacked_encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Flatten(input_shape<span style="color: #666666">=</span>[<span style="color: #666666">28</span>, <span style="color: #666666">28</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">30</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-])
-stacked_decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">30</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">28</span> <span style="color: #666666">*</span> <span style="color: #666666">28</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sigmoid&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Reshape([<span style="color: #666666">28</span>, <span style="color: #666666">28</span>])
-])
-stacked_ae <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([stacked_encoder, stacked_decoder])
-stacked_ae<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary_crossentropy&quot;</span>,
-                   optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=1.5</span>), metrics<span style="color: #666666">=</span>[rounded_accuracy])
-history <span style="color: #666666">=</span> stacked_ae<span style="color: #666666">.</span>fit(X_train, X_train, epochs<span style="color: #666666">=20</span>,
-                         validation_data<span style="color: #666666">=</span>(X_valid, X_valid))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>This function processes a few test images through the autoencoder and
-displays the original images and their reconstructions.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">show_reconstructions</span>(model, images<span style="color: #666666">=</span>X_valid, n_images<span style="color: #666666">=5</span>):
-    reconstructions <span style="color: #666666">=</span> model<span style="color: #666666">.</span>predict(images[:n_images])
-    fig <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(n_images <span style="color: #666666">*</span> <span style="color: #666666">1.5</span>, <span style="color: #666666">3</span>))
-    <span style="color: #008000; font-weight: bold">for</span> image_index <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(n_images):
-        plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">2</span>, n_images, <span style="color: #666666">1</span> <span style="color: #666666">+</span> image_index)
-        plot_image(images[image_index])
-        plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">2</span>, n_images, <span style="color: #666666">1</span> <span style="color: #666666">+</span> n_images <span style="color: #666666">+</span> image_index)
-        plot_image(reconstructions[image_index])
-show_reconstructions(stacked_ae)
-save_fig(<span style="color: #BA2121">&quot;reconstruction_plot&quot;</span>)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>Then visualize </p>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn.manifold</span> <span style="color: #008000; font-weight: bold">import</span> TSNE
-X_valid_compressed <span style="color: #666666">=</span> stacked_encoder<span style="color: #666666">.</span>predict(X_valid)
-tsne <span style="color: #666666">=</span> TSNE()
-X_valid_2D <span style="color: #666666">=</span> tsne<span style="color: #666666">.</span>fit_transform(X_valid_compressed)
-X_valid_2D <span style="color: #666666">=</span> (X_valid_2D <span style="color: #666666">-</span> X_valid_2D<span style="color: #666666">.</span>min()) <span style="color: #666666">/</span> (X_valid_2D<span style="color: #666666">.</span>max() <span style="color: #666666">-</span> X_valid_2D<span style="color: #666666">.</span>min())
-plt<span style="color: #666666">.</span>scatter(X_valid_2D[:, <span style="color: #666666">0</span>], X_valid_2D[:, <span style="color: #666666">1</span>], c<span style="color: #666666">=</span>y_valid, s<span style="color: #666666">=10</span>, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;tab10&quot;</span>)
-plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&quot;off&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>And visualize in a nicer way</p>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># adapted from https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html</span>
-plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">10</span>, <span style="color: #666666">8</span>))
-cmap <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>tab10
-plt<span style="color: #666666">.</span>scatter(X_valid_2D[:, <span style="color: #666666">0</span>], X_valid_2D[:, <span style="color: #666666">1</span>], c<span style="color: #666666">=</span>y_valid, s<span style="color: #666666">=10</span>, cmap<span style="color: #666666">=</span>cmap)
-image_positions <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #666666">1.</span>, <span style="color: #666666">1.</span>]])
-<span style="color: #008000; font-weight: bold">for</span> index, position <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(X_valid_2D):
-    dist <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum((position <span style="color: #666666">-</span> image_positions) <span style="color: #666666">**</span> <span style="color: #666666">2</span>, axis<span style="color: #666666">=1</span>)
-    <span style="color: #008000; font-weight: bold">if</span> np<span style="color: #666666">.</span>min(dist) <span style="color: #666666">&gt;</span> <span style="color: #666666">0.02</span>: <span style="color: #408080; font-style: italic"># if far enough from other images</span>
-        image_positions <span style="color: #666666">=</span> np<span style="color: #666666">.</span>r_[image_positions, [position]]
-        imagebox <span style="color: #666666">=</span> mpl<span style="color: #666666">.</span>offsetbox<span style="color: #666666">.</span>AnnotationBbox(
-            mpl<span style="color: #666666">.</span>offsetbox<span style="color: #666666">.</span>OffsetImage(X_valid[index], cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary&quot;</span>),
-            position, bboxprops<span style="color: #666666">=</span>{<span style="color: #BA2121">&quot;edgecolor&quot;</span>: cmap(y_valid[index]), <span style="color: #BA2121">&quot;lw&quot;</span>: <span style="color: #666666">2</span>})
-        plt<span style="color: #666666">.</span>gca()<span style="color: #666666">.</span>add_artist(imagebox)
-plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&quot;off&quot;</span>)
-save_fig(<span style="color: #BA2121">&quot;fashion_mnist_visualization_plot&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="using-convolutional-layers-instead-of-dense-layers" class="anchor">Using Convolutional Layers Instead of Dense Layers </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-
-conv_encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Reshape([<span style="color: #666666">28</span>, <span style="color: #666666">28</span>, <span style="color: #666666">1</span>], input_shape<span style="color: #666666">=</span>[<span style="color: #666666">28</span>, <span style="color: #666666">28</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">16</span>, kernel_size<span style="color: #666666">=3</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;SAME&quot;</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>MaxPool2D(pool_size<span style="color: #666666">=2</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">32</span>, kernel_size<span style="color: #666666">=3</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;SAME&quot;</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>MaxPool2D(pool_size<span style="color: #666666">=2</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, kernel_size<span style="color: #666666">=3</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;SAME&quot;</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>MaxPool2D(pool_size<span style="color: #666666">=2</span>)
-])
-conv_decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Conv2DTranspose(<span style="color: #666666">32</span>, kernel_size<span style="color: #666666">=3</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;VALID&quot;</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>,
-                                 input_shape<span style="color: #666666">=</span>[<span style="color: #666666">3</span>, <span style="color: #666666">3</span>, <span style="color: #666666">64</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Conv2DTranspose(<span style="color: #666666">16</span>, kernel_size<span style="color: #666666">=3</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;SAME&quot;</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Conv2DTranspose(<span style="color: #666666">1</span>, kernel_size<span style="color: #666666">=3</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;SAME&quot;</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sigmoid&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Reshape([<span style="color: #666666">28</span>, <span style="color: #666666">28</span>])
-])
-conv_ae <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([conv_encoder, conv_decoder])
-
-conv_ae<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary_crossentropy&quot;</span>, optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=1.0</span>),
-                metrics<span style="color: #666666">=</span>[rounded_accuracy])
-history <span style="color: #666666">=</span> conv_ae<span style="color: #666666">.</span>fit(X_train, X_train, epochs<span style="color: #666666">=5</span>,
-                      validation_data<span style="color: #666666">=</span>(X_valid, X_valid))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">conv_encoder<span style="color: #666666">.</span>summary()
-conv_decoder<span style="color: #666666">.</span>summary()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">show_reconstructions(conv_ae)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="recurrent-autoencoders" class="anchor">Recurrent Autoencoders </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">recurrent_encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>LSTM(<span style="color: #666666">100</span>, return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">28</span>, <span style="color: #666666">28</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>LSTM(<span style="color: #666666">30</span>)
-])
-recurrent_decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>RepeatVector(<span style="color: #666666">28</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">30</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>LSTM(<span style="color: #666666">100</span>, return_sequences<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>TimeDistributed(keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">28</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sigmoid&quot;</span>))
-])
-recurrent_ae <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([recurrent_encoder, recurrent_decoder])
-recurrent_ae<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary_crossentropy&quot;</span>, optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(<span style="color: #666666">0.1</span>),
-                     metrics<span style="color: #666666">=</span>[rounded_accuracy])
-history <span style="color: #666666">=</span> recurrent_ae<span style="color: #666666">.</span>fit(X_train, X_train, epochs<span style="color: #666666">=10</span>, validation_data<span style="color: #666666">=</span>(X_valid, X_valid))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">show_reconstructions(recurrent_ae)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- !split -->
-<h2 id="stacked-denoising-autoencoder-with-gaussian-noise" class="anchor">Stacked denoising Autoencoder with Gaussian noise </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-
-denoising_encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Flatten(input_shape<span style="color: #666666">=</span>[<span style="color: #666666">28</span>, <span style="color: #666666">28</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>GaussianNoise(<span style="color: #666666">0.2</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">30</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>)
-])
-denoising_decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">30</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">28</span> <span style="color: #666666">*</span> <span style="color: #666666">28</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sigmoid&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Reshape([<span style="color: #666666">28</span>, <span style="color: #666666">28</span>])
-])
-denoising_ae <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([denoising_encoder, denoising_decoder])
-denoising_ae<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary_crossentropy&quot;</span>, optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=1.0</span>),
-                     metrics<span style="color: #666666">=</span>[rounded_accuracy])
-history <span style="color: #666666">=</span> denoising_ae<span style="color: #666666">.</span>fit(X_train, X_train, epochs<span style="color: #666666">=10</span>,
-                           validation_data<span style="color: #666666">=</span>(X_valid, X_valid))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-
-noise <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>GaussianNoise(<span style="color: #666666">0.2</span>)
-show_reconstructions(denoising_ae, noise(X_valid, training<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>))
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>And using dropout</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-
-dropout_encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Flatten(input_shape<span style="color: #666666">=</span>[<span style="color: #666666">28</span>, <span style="color: #666666">28</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dropout(<span style="color: #666666">0.5</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">30</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>)
-])
-dropout_decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;selu&quot;</span>, input_shape<span style="color: #666666">=</span>[<span style="color: #666666">30</span>]),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">28</span> <span style="color: #666666">*</span> <span style="color: #666666">28</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sigmoid&quot;</span>),
-    keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Reshape([<span style="color: #666666">28</span>, <span style="color: #666666">28</span>])
-])
-dropout_ae <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>models<span style="color: #666666">.</span>Sequential([dropout_encoder, dropout_decoder])
-dropout_ae<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;binary_crossentropy&quot;</span>, optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=1.0</span>),
-                   metrics<span style="color: #666666">=</span>[rounded_accuracy])
-history <span style="color: #666666">=</span> dropout_ae<span style="color: #666666">.</span>fit(X_train, X_train, epochs<span style="color: #666666">=10</span>,
-                         validation_data<span style="color: #666666">=</span>(X_valid, X_valid))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>set_seed(<span style="color: #666666">42</span>)
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">42</span>)
-
-dropout <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>layers<span style="color: #666666">.</span>Dropout(<span style="color: #666666">0.5</span>)
-show_reconstructions(dropout_ae, dropout(X_valid, training<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>))
-save_fig(<span style="color: #BA2121">&quot;dropout_denoising_plot&quot;</span>, tight_layout<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
