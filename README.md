@@ -84,7 +84,7 @@ Furthermore, all teaching material is available from this GitHub link.
 - Start discussing autoencoders
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders
-
+- Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch5.pdf
 
 ## March 11-15: Deep generative models
 - Autoencoders and discussions of codes and links with PCA
