@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{c+c1}{\PYGZsh{} define two vectors}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{random}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{+}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{n}{x}\PYG{o}{+}\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{n}{n}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}scaling the x and y vectors}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{x} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{y}\PYG{p}{)}
+\PYG{n}{variance\PYGZus{}x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{x}\PYG{n+nd}{@x}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}
+\PYG{n}{variance\PYGZus{}y} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{y}\PYG{n+nd}{@y}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{variance\PYGZus{}x}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{variance\PYGZus{}y}\PYG{p}{)}
+\PYG{n}{cov\PYGZus{}xy} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{x}\PYG{n+nd}{@y}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}
+\PYG{n}{cov\PYGZus{}xx} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{x}\PYG{n+nd}{@x}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}
+\PYG{n}{cov\PYGZus{}yy} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{y}\PYG{n+nd}{@y}\PYG{p}{)}\PYG{o}{/}\PYG{n}{n}
+\PYG{n}{C} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{C}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{=} \PYG{n}{cov\PYGZus{}xx}\PYG{o}{/}\PYG{n}{variance\PYGZus{}x}
+\PYG{n}{C}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{=} \PYG{n}{cov\PYGZus{}yy}\PYG{o}{/}\PYG{n}{variance\PYGZus{}y}
+\PYG{n}{C}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{=} \PYG{n}{cov\PYGZus{}xy}\PYG{o}{/}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{variance\PYGZus{}y}\PYG{o}{*}\PYG{n}{variance\PYGZus{}x}\PYG{p}{)}
+\PYG{n}{C}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{=} \PYG{n}{C}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{C}\PYG{p}{)}
+
+\end{Verbatim}
