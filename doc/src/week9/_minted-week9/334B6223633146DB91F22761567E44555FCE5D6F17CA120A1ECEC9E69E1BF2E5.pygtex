@@ -1,7 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
-\PYG{n}{pca} \PYG{o}{=} \PYG{n}{PCA}\PYG{p}{()}
-\PYG{n}{pca}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
-\PYG{n}{cumsum} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cumsum}\PYG{p}{(}\PYG{n}{pca}\PYG{o}{.}\PYG{n}{explained\PYGZus{}variance\PYGZus{}ratio\PYGZus{}}\PYG{p}{)}
-\PYG{n}{d} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argmax}\PYG{p}{(}\PYG{n}{cumsum} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mf}{0.95}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{1}
-
-\end{Verbatim}

@@ -118,6 +118,7 @@ doconce format html week9.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'the-algorithm-before-the-theorem'),
+              ('Further steps', 2, None, 'further-steps'),
               ('Writing our own PCA code', 2, None, 'writing-our-own-pca-code'),
               ('Implementing it', 2, None, 'implementing-it'),
               ('First Step', 2, None, 'first-step'),
@@ -219,6 +220,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#more-details" style="font-size: 80%;"><b>More details</b></a></li>
      <!-- navigation toc: --> <li><a href="#more-on-the-pca-theorem" style="font-size: 80%;"><b>More on the PCA Theorem</b></a></li>
      <!-- navigation toc: --> <li><a href="#the-algorithm-before-the-theorem" style="font-size: 80%;"><b>The Algorithm before the Theorem</b></a></li>
+     <!-- navigation toc: --> <li><a href="#further-steps" style="font-size: 80%;"><b>Further steps</b></a></li>
      <!-- navigation toc: --> <li><a href="#writing-our-own-pca-code" style="font-size: 80%;"><b>Writing our own PCA code</b></a></li>
      <!-- navigation toc: --> <li><a href="#implementing-it" style="font-size: 80%;"><b>Implementing it</b></a></li>
      <!-- navigation toc: --> <li><a href="#first-step" style="font-size: 80%;"><b>First Step</b></a></li>
@@ -523,10 +525,10 @@ $$
 $$
 
 <p>This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
-If the input \( \mathbf{x}_{i} \) can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice.
+If the input \( \mathbf{x}_{i} \) can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called <b>Leaky ReLu</b> or just modified ReLU.
 </p>
 
-<p>The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.</p>
+<p>The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  </p>
 
 <!-- !split -->
 <h2 id="sigmoid" class="anchor">Sigmoid </h2>
@@ -551,11 +553,11 @@ the output layer's activation function.
 <h2 id="cost-loss-function" class="anchor">Cost/Loss Function </h2>
 
 <p>If an autoencoder is trying to solve a regression problem, the most
-common choice as a loss function is the Mean Square Error (MSE):
+common choice as a loss function is the Mean Square Error
 </p>
 
 $$
-L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{M}\sum_{i = 1}^{M}\left\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert^{2}
+L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 $$
 
 
@@ -571,7 +573,7 @@ autoencoders. The formula for it is
 </p>
 
 $$
-L_{\textrm{CE}} = -\frac{1}{M}\sum_{i = 1}^{M}\sum_{j = 1}^{n}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})] \\ 
+L_{\textrm{CE}} = -\frac{1}{n}\sum_{i = 1}^{n}\sum_{j = 1}^{p}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})].
 $$
 
 
@@ -583,7 +585,7 @@ the input observation \( \mathbf{x}_{i} \). The most typical RE used is the MSE
 </p>
 
 $$
-\textrm{RE}\equiv \textrm{MSE} = \frac{1}{M}\sum_{i = 1}^{M}\left\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert^{2}\\ 
+\textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 $$
 
 
@@ -1094,6 +1096,10 @@ x_{n-2,0} & x_{n-2,1} & x_{n-2,2}& \dots & \dots x_{n-2,p-1}\\
 x_{n-1,0} & x_{n-1,1} & x_{n-1,2}& \dots & \dots x_{n-1,p-1}\\
 \end{bmatrix},
 $$
+
+
+<!-- !split -->
+<h2 id="further-steps" class="anchor">Further steps </h2>
 
 <ul>
 <li> Center the data by subtracting the mean value for each column. This leads to a new matrix \( \boldsymbol{X}\rightarrow \overline{\boldsymbol{X}} \).</li>

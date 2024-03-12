@@ -466,10 +466,10 @@ $$
 <p>&nbsp;<br>
 
 <p>This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
-If the input \( \mathbf{x}_{i} \) can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice.
+If the input \( \mathbf{x}_{i} \) can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called <b>Leaky ReLu</b> or just modified ReLU.
 </p>
 
-<p>The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.</p>
+<p>The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  </p>
 </section>
 
 <section>
@@ -498,12 +498,12 @@ the output layer's activation function.
 <h2 id="cost-loss-function">Cost/Loss Function </h2>
 
 <p>If an autoencoder is trying to solve a regression problem, the most
-common choice as a loss function is the Mean Square Error (MSE):
+common choice as a loss function is the Mean Square Error
 </p>
 
 <p>&nbsp;<br>
 $$
-L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{M}\sum_{i = 1}^{M}\left\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert^{2}
+L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 $$
 <p>&nbsp;<br>
 </section>
@@ -521,7 +521,7 @@ autoencoders. The formula for it is
 
 <p>&nbsp;<br>
 $$
-L_{\textrm{CE}} = -\frac{1}{M}\sum_{i = 1}^{M}\sum_{j = 1}^{n}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})] \\ 
+L_{\textrm{CE}} = -\frac{1}{n}\sum_{i = 1}^{n}\sum_{j = 1}^{p}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})].
 $$
 <p>&nbsp;<br>
 </section>
@@ -535,7 +535,7 @@ the input observation \( \mathbf{x}_{i} \). The most typical RE used is the MSE
 
 <p>&nbsp;<br>
 $$
-\textrm{RE}\equiv \textrm{MSE} = \frac{1}{M}\sum_{i = 1}^{M}\left\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert^{2}\\ 
+\textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 $$
 <p>&nbsp;<br>
 </section>
@@ -1112,6 +1112,10 @@ x_{n-1,0} & x_{n-1,1} & x_{n-1,2}& \dots & \dots x_{n-1,p-1}\\
 \end{bmatrix},
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="further-steps">Further steps </h2>
 
 <ul>
 <p><li> Center the data by subtracting the mean value for each column. This leads to a new matrix \( \boldsymbol{X}\rightarrow \overline{\boldsymbol{X}} \).</li>
