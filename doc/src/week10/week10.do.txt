@@ -1,1651 +1,895 @@
-TITLE: March 27-31: Advanced machine learning and data analysis for the physical sciences
+TITLE: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: March 27-31, 2023
+DATE: March 19, 2024
 
-===== Plans for the week March 27-31  =====
+!split
+===== Plans for the week March 18-22  =====
 
-!bblock  Deep generative models
-o Monte Carlo methods and structured probabilistic models for deep learning
-o Partition function and Boltzmann machines
-o Reading recommendation: Goodfellow et al chapters 16-18
-o "Video of lecture":"https://youtu.be/DMZP54-tPxc"
-o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesMar292023.pdf"
+!bblock
+o Autoencoders (AEs) and Principal Component Analysis (PCA)
+o Implementing Autoencoders with TensorFlow/Keras and PyTorch
+o Start discussion of generative models
 !eblock
 
 
 !split
-===== Probabilistic models and Bayesian statistics =====
+===== Reading recommendations =====
 
-See also whiteboard notes March 29
-
-
-A central theorem in statistics is Bayes' theorem. This theorem plays a similar role as the good old Pythagoras' theorem in geometry.
-Bayes' theorem is extremely simple to derive. But to do so we need some basic axioms from statistics.
-
-Assume we have two domains of events $X=[x_0,x_1,\dots,x_{n-1}]$ and $Y=[y_0,y_1,\dots,y_{n-1}]$.
-
-We define also the likelihood for $X$ and $Y$ as $p(X)$ and $p(Y)$ respectively.
-The likelihood of a specific event $x_i$ (or $y_i$) is then written as $p(X=x_i)$ or just $p(x_i)=p_i$. 
-
-!bblock Union of events is given by
-!bt
-\[
-p(X \cup Y)= p(X)+p(Y)-p(X \cap Y).
-\]
-!et
+!bblock
+o Goodfellow et al chapter 14 on AEs and chapter 16 for start generative models
+o Rashcka et al. Their chapter 17 contains a brief introduction only.
+o "Deep Learning Tutorial on AEs from Stanford University":"http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/"
+o "Building AEs in Keras":"https://blog.keras.io/building-autoencoders-in-keras.html"
+o "Introduction to AEs in TensorFlow":"https://www.tensorflow.org/tutorials/generative/autoencoder"
+o "Grosse, University of Toronto, Lecture on AEs":"http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf"
+o "Bank et al on AEs":"https://arxiv.org/abs/2003.05991"  
+o Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)
 !eblock
-
-
-!bblock The product rule (aka joint probability) is given by
-!bt
-\[
-p(X \cup Y)= p(X,Y)= p(X\vert Y)p(Y)=p(Y\vert X)p(X),
-\]
-!et
-where we read $p(X\vert Y)$ as the likelihood of obtaining $X$ given $Y$.
-!eblock
-
-If we have independent events then $p(X,Y)=p(X)p(Y)$.
-
-===== Marginal Probability =====
-
-The marginal probability is defined in terms of only one of the set of variables $X,Y$. For a discrete probability we have
-!bblock 
-!bt
-\[
-p(X)=\sum_{i=0}^{n-1}p(X,Y=y_i)=\sum_{i=0}^{n-1}p(X\vert Y=y_i)p(Y=y_i)=\sum_{i=0}^{n-1}p(X\vert y_i)p(y_i).
-\]
-!et
-!eblock
-
-
-===== Conditional  Probability =====
-
-The conditional  probability, if $p(Y) > 0$, is 
-!bblock 
-!bt
-\[
-p(X\vert Y)= \frac{p(X,Y)}{p(Y)}=\frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}.
-\]
-!et
-!eblock
-
-
-===== Bayes' Theorem =====
-
-If we combine the conditional probability with the marginal probability and the standard product rule, we have
-!bt
-\[
-p(X\vert Y)= \frac{p(X,Y)}{p(Y)},
-\]
-!et
-which we can rewrite as
-
-!bt
-\[
-p(X\vert Y)= \frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}=\frac{p(Y\vert X)p(X)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)},
-\]
-!et
-which is Bayes' theorem. It allows us to evaluate the uncertainty in in $X$ after we have observed $Y$. We can easily interchange $X$ with $Y$.  
-
-===== Interpretations of Bayes' Theorem =====
-
-The quantity $p(Y\vert X)$ on the right-hand side of the theorem is
-evaluated for the observed data $Y$ and can be viewed as a function of
-the parameter space represented by $X$. This function is not
-necesseraly normalized and is normally called the likelihood function.
-
-The function $p(X)$ on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.
-
-Let us try to illustrate Bayes' theorem through an example.
-
-=====  Example of Usage of Bayes' theorem =====
-
-Let us suppose that you are undergoing a series of mammography scans in
-order to rule out possible breast cancer cases.  We define the
-sensitivity for a positive event by the variable $X$. It takes binary
-values with $X=1$ representing a positive event and $X=0$ being a
-negative event. We reserve $Y$ as a classification parameter for
-either a negative or a positive breast cancer confirmation. (Short note on wordings: positive here means having breast cancer, although none of us would consider this being a  positive thing).
-
-We let $Y=1$ represent the the case of having breast cancer and $Y=0$ as not.
-
-Let us assume that if you have breast cancer, the test will be positive with a probability of $0.8$, that is we have
-
-!bt
-\[
-p(X=1\vert Y=1) =0.8.
-\]
-!et
-
-This obviously sounds  scary since many would conclude that if the test is positive, there is a likelihood of $80\%$ for having cancer.
-It is however not correct, as the following Bayesian analysis shows.
-
-
-===== Doing it correctly =====
-
-If we look at various national surveys on breast cancer, the general likelihood of developing breast cancer is a very small number.
-Let us assume that the prior probability in the population as a whole is
-
-!bt
-\[
-p(Y=1) =0.004.
-\]
-!et
-
-We need also to account for the fact that the test may produce a false positive result (false alarm). Let us here assume that we have
-!bt
-\[
-p(X=1\vert Y=0) =0.1.
-\]
-!et
-
-Using Bayes' theorem we can then find the posterior probability that the person has breast cancer in case of a positive test, that is we can compute
-
-!bt
-\[
-p(Y=1\vert X=1)=\frac{p(X=1\vert Y=1)p(Y=1)}{p(X=1\vert Y=1)p(Y=1)+p(X=1\vert Y=0)p(Y=0)}=\frac{0.8\times 0.004}{0.8\times 0.004+0.1\times 0.996}=0.031.
-\]
-!et
-That is, in case of a positive test, there is only a $3\%$ chance of having breast cancer!
 
 
 
 !split
-=====  Why Markov chains, Brownian motion and the Metropolis algorithm =====
-
-* We want to study a physical system which evolves towards equilibrium, from given  initial conditions.
-* We start with a PDF $w(x_0,t_0)$  and we want to understand how the system evolves with time.
-* We want to reach a situation where after a given number of time steps we obtain a steady state. This means that the system reaches its most likely state (equilibrium situation)
-* Our PDF is normally a multidimensional object whose normalization constant is impossible to find.
-* Analytical calculations from $w(x,t)$ are not possible.
-* To sample directly from from $w(x,t)$ is not possible/difficult.
-* The transition probability $W$ is also not  known.
-* How can we establish that we have reached a steady state?   Sounds impossible!
-
-_Use Markov chain Monte Carlo_
+===== Autoencoder structure =====
 
 
-===== Brownian motion and Markov processes =====
-A Markov process is a random walk with a selected probability for making a
-move. The new move is independent of the previous history of the system.
+Autoencoders are neural networks where the outputs are its own
+inputs. They are split into an _encoder part_
+which maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this
+is the encoder part) to a _so-called code part_ (or intermediate part)
+with the result $\bm{h}$
 
-The Markov process is used repeatedly in Monte Carlo simulations in order to generate
-new random states.
+!bt
+\[
+\bm{h} = f(\bm{x},\bm{W})),
+\]
+!et
+where $\bm{W}$ are the weights to be determined.  The _decoder_ parts maps, via its own parameters (weights given by the matrix $\bm{V}$ and its own biases) to 
+the final ouput
+!bt
+\[
+\tilde{\bm{x}} = g(\bm{h},\bm{V})).
+\]
+!et
 
-The reason for choosing a Markov process is that when it is run for a
-long enough time starting with a random state, we will eventually reach the most likely state of the system.
-
-In thermodynamics, this means that after a certain number of Markov processes
-we reach an equilibrium distribution.
-
-This mimicks the way a real system reaches
-its most likely state at a given temperature of the surroundings.
-
-
-To reach this distribution, the Markov process needs to obey two important conditions, that of
-_ergodicity_ and _detailed balance_. These conditions impose then constraints on our algorithms
-for accepting or rejecting new random states.
-
-
-The Metropolis algorithm discussed here
-abides to both these constraints.
-
-The Metropolis algorithm is widely used in Monte Carlo
-simulations and the understanding of it rests within
-the interpretation of random walks and Markov processes.
-
-
-In a random walk one defines a mathematical entity called a _walker_, 
-whose  attributes
-completely define the state of the system in question. 
-
-The state of the system  can refer to any physical quantities,
-from the vibrational state of a molecule specified by a set of quantum numbers, 
-to the brands of coffee in your favourite supermarket.
-
-
-The walker moves in an appropriate state space by a combination of 
-deterministic and random displacements from its previous
-position.
-
-This sequence of steps forms a _chain_.
-
-
-* We want to study a physical system which evolves towards equilibrium, from given  initial conditions.
-* Markov chains are intimately linked with the physical process of diffusion. 
-* From a Markov chain we can then derive the conditions for detailed balance and ergodicity. These are the conditions needed for obtaining a steady state.
-* The widely used algorithm for doing this is the so-called Metropolis algorithm, in its refined form the Metropolis-Hastings algorithm.
+The goal is to minimize the construction error.
 
 !split
-===== Applications: almost every field in science =====
+===== Schematic image of an Autoencoder =====
 
-* Financial engineering, see for example Patriarca *et al*, Physica _340_, "page 334 (2004)":"http://www.sciencedirect.com/science/article/pii/S0378437104004327".
-* Neuroscience, see for example Lipinski, Physics Medical Biology _35_, "page 441 (1990)":"http://iopscience.iop.org/article/10.1088/0031-9155/35/3/012/meta;jsessionid=FA91B191036E1F10948F7C42B6A6D295.c1" or Farnell and Gibson, Journal of Computational Physics _208_, "page 253 (2005)":"http://www.sciencedirect.com/science/article/pii/S0021999105001087"
-* Tons of applications in physics
-* and chemistry
-* and biology, medicine
-* Nobel prize in economy to Black and Scholes
-!bt
-\[
-\frac{\partial V}{\partial t}+\frac{1}{2}\sigma^{2}S^{2}\frac{\partial^{2} V}{\partial S^{2}}+rS\frac{\partial V}{\partial S}-rV=0.
-\]
-!et
-The Black and Scholes equation is a partial differential equation, which describes the price
-of the option over time. It is a diffusion equation with a random term.
-
-The list of applications is endless
-
-
-The obvious case is that of a random walker on a one-, or two- or three-dimensional lattice
-(dubbed coordinate space hereafter).
-
-Consider a system whose energy is defined by the orientation of single spins.
-Consider the state $i$, with given energy $E_i$ represented by the following $N$ spins
-!bt
-\[
-\begin{array}{cccccccccc}
-\uparrow&\uparrow&\uparrow&\dots&\uparrow&\downarrow&\uparrow&\dots&\uparrow&\downarrow\\
-1&2&3&\dots& k-1&k&k+1&\dots&N-1&N\end{array}
-\]
-!et
-We may be  interested in the transition with one single  spinflip to a new state $j$ with energy $E_j$
-!bt
-\[
-\begin{array}{cccccccccc}
-\uparrow&\uparrow&\uparrow&\dots&\uparrow&\uparrow&\uparrow&\dots&\uparrow&\downarrow\\
-1&2&3&\dots& k-1&k&k+1&\dots&N-1&N\end{array}
-\]
-!et
-This change from one microstate $i$ (or spin configuration)  to another microstate $j$ is the
-_configuration space_  analogue to a random walk on a lattice. Instead of jumping from
-one place to another in space, we 'jump' from one microstate to another.
-
-
-===== Markov processes =====
-!bblock
-A Markov process allows in principle for a microscopic description of Brownian motion.
-As with the random walk studied in the previous section, we consider a particle 
-which moves along the  $x$-axis in the form of a series of jumps with step length 
-$\Delta x = l$. Time and space are discretized and the subsequent moves are
-statistically independent, i.e., the new move depends only on the previous step
-and not on the results from earlier trials. 
-We start at a position $x=jl=j\Delta x$ and move to 
-a new position $x =i\Delta x$ during a step $\Delta t=\epsilon$, where 
-$i\ge  0$ and $j\ge 0$ are integers. 
-The original probability distribution function (PDF) of the particles is given by  
-$w_i(t=0)$ where $i$ refers to a specific position on the grid in 
-!eblock
-The function $w_i(t=0)$ is now the discretized version of $w(x,t)$.
-We can regard the discretized PDF as a vector.
-
-!bblock
-For the Markov process we have a transition probability from a position
-$x=jl$ to a position $x=il$ given by
-!bt
-\begin{equation*}
-   W_{ij}(\epsilon)=W(il-jl,\epsilon)=\left\{\begin{array}{cc}\frac{1}{2} & |i-j| = 1\\
-             0 & \mathrm{else} \end{array} \right. ,
-\end{equation*}
-!et
-where $W_{ij}$ is normally called 
-the transition probability and we can represent it, see below,
-as a matrix. 
-_Here we have specialized to a case where the transition probability is known_.
-
-Our new PDF $w_i(t=\epsilon)$ is now related to the PDF at
-$t=0$ through the relation
-
-!bt
-\begin{equation*} 
-   w_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)w_j(t=0).
-\end{equation*}
-!et
- 
-This equation represents the discretized time-development of an original 
-PDF with equal probability of jumping left or right.
-!eblock
-
-
-Since both $W$ and $w$ represent probabilities, they have to be normalized, i.e., we require
-that at each time step we have
-
-!bt
-\begin{equation*} 
-   \sum_i w_i(t) = 1, 
-\end{equation*}
-!et
-and
-
-!bt
-\begin{equation*} 
-   \sum_j W(j\rightarrow i) = 1,
-\end{equation*}
-!et
-which applies for all $j$-values.
-The further constraints are
-$0 \le W_{ij} \le 1$  and  $0 \le w_{j} \le 1$.
-Note that the probability for remaining at the same place is in general 
-not necessarily equal zero. 
-
-The time development of our initial PDF can now be represented through the action of
-the transition probability matrix applied $n$ times. At a 
-time  $t_n=n\epsilon$ our initial distribution has developed into
-
-!bt
-\begin{equation*}
-   w_i(t_n) = \sum_jW_{ij}(t_n)w_j(0),
-\end{equation*}
-!et
-and defining
-
-!bt
-\begin{equation*}
-   W(il-jl,n\epsilon)=(W^n(\epsilon))_{ij}
-\end{equation*}
-!et
-we obtain
-
-!bt
-\begin{equation*}
-   w_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}w_j(0),
-\end{equation*}
-!et
-or in matrix form
-!bt
-\begin{equation} label{eq:wfinal}
-   \hat{w}(n\epsilon) = \hat{W}^n(\epsilon)\hat{w}(0).
-\end{equation}
-!et
-
-===== An Illustrative Example =====
-!bblock
-
-The following simple example may help in understanding the meaning of 
-the transition matrix $\hat{W}$ and the vector $\hat{w}$.
-Consider the $4\times 4$ matrix $\hat{W}$
-
-!bt
-\begin{equation*}
-   \hat{W} = \left(\begin{array}{cccc} 1/4 & 1/9 & 3/8 & 1/3 \\                   
-                                       2/4 & 2/9 & 0 & 1/3\\                   
-                                       0   & 1/9 & 3/8 & 0\\
-                                       1/4 & 5/9&  2/8 & 1/3 \end{array} \right),
-\end{equation*}
-!et
-and we choose our initial state as
-
-!bt
-\begin{equation*}
-\hat{w}(t=0)=  \left(\begin{array}{c} 1\\                   
-                                 0\\
-                                 0 \\                   
-                                 0 \end{array} \right).
-\end{equation*}
-!et
-!eblock
-
-
-We note that both the vector and the matrix are properly normalized. Summing the vector elements gives one and
-summing over columns for the matrix results also in one.  Furthermore, the largest eigenvalue is one.
-We act then on $\hat{w}$ with $\hat{W}$.
-The first iteration is
-
-!bt
-\begin{equation*}
-   \hat{w}(t=\epsilon) = \hat{W}\hat{w}(t=0),
-\end{equation*}
-!et
- 
-resulting in
-
-!bt
-\begin{equation*}
-\hat{w}(t=\epsilon)=  \left(\begin{array}{c} 1/4\\                   
-                                1/2 \\
-                                0 \\                   
-                                1/4 \end{array} \right).
-\end{equation*}
-!et
-
-The next iteration results in
-
-!bt
-\begin{equation*}
-   \hat{w}(t=2\epsilon) = \hat{W}\hat{w}(t=\epsilon),
-\end{equation*}
-!et
- 
-resulting in
-
-!bt
-\begin{equation*}
-\hat{w}(t=2\epsilon)=  \left(\begin{array}{c} 0.201389\\
-   0.319444 \\
-   0.055556 \\
-   0.423611 \end{array} \right).
-\end{equation*}
-!et
-Note that the vector $\hat{w}$ is always normalized to $1$. 
-
-We find the steady state of the system by solving the set of equations
-
-!bt
-\begin{equation*} 
-w(t=\infty) = Ww(t=\infty),
-\end{equation*}
-!et
-which is an eigenvalue problem with eigenvalue equal to _one_!
-This set of equations reads
-!bt
-\begin{align}
- W_{11}w_1(t=\infty) +W_{12}w_2(t=\infty) +W_{13}w_3(t=\infty)+ W_{14}w_4(t=\infty)=&w_1(t=\infty) \nonumber \\
-W_{21}w_1(t=\infty) + W_{22}w_2(t=\infty) + W_{23}w_3(t=\infty)+ W_{24}w_4(t=\infty)=&w_2(t=\infty) \nonumber \\
-W_{31}w_1(t=\infty) + W_{32}w_2(t=\infty) + W_{33}w_3(t=\infty)+ W_{34}w_4(t=\infty)=&w_3(t=\infty) \nonumber \\
-W_{41}w_1(t=\infty) + W_{42}w_2(t=\infty) + W_{43}w_3(t=\infty)+ W_{44}w_4(t=\infty)=&w_4(t=\infty) \nonumber \\
-\end{align}
-!et
-with the constraint that
-
-!bt
-\begin{equation*}
-   \sum_i w_i(t=\infty) = 1, 
-\end{equation*}
-!et
-yielding as solution
-
-!bt
-\begin{equation*}
-\hat{w}(t=\infty)=  \left(\begin{array}{c}0.244318 \\                   
-                                 0.319602 \\  0.056818 \\  0.379261 \end{array} \right).
-\end{equation*}
-!et
-
-The table here  demonstrates the convergence as a function of the number of iterations or
-time steps. After  twelve iterations we have reached the exact value with six leading digits. 
-
-|-------------------------------------------------------------------------------------------------------------|
-| Iteration           | $w_1$               | $w_2$               | $w_3$               | $w_4$               |
-|---------r--------------------l--------------------l--------------------l--------------------l---------------|
-| 0                   | 1.000000            | 0.000000            | 0.000000            | 0.000000            |
-| 1                   | 0.250000            | 0.500000            | 0.000000            | 0.250000            |
-| 2                   | 0.201389            | 0.319444            | 0.055556            | 0.423611            |
-| 3                   | 0.247878            | 0.312886            | 0.056327            | 0.382909            |
-| 4                   | 0.245494            | 0.321106            | 0.055888            | 0.377513            |
-| 5                   | 0.243847            | 0.319941            | 0.056636            | 0.379575            |
-| 6                   | 0.244274            | 0.319547            | 0.056788            | 0.379391            |
-| 7                   | 0.244333            | 0.319611            | 0.056801            | 0.379255            |
-| 8                   | 0.244314            | 0.319610            | 0.056813            | 0.379264            |
-| 9                   | 0.244317            | 0.319603            | 0.056817            | 0.379264            |
-| 10                  | 0.244318            | 0.319602            | 0.056818            | 0.379262            |
-| 11                  | 0.244318            | 0.319602            | 0.056818            | 0.379261            |
-| 12                  | 0.244318            | 0.319602            | 0.056818            | 0.379261            |
-| $\hat{w}(t=\infty)$ | 0.244318            | 0.319602            | 0.056818            | 0.379261            |
-|-------------------------------------------------------------------------------------------------------------|
-
-We have after $t$-steps
-
-!bt
-\begin{equation*}
-   \hat{w}(t) = \hat{W}^t\hat{w}(0),
-\end{equation*}
-!et
-with $\hat{w}(0)$ the distribution at $t=0$ and $\hat{W}$ representing the 
-transition probability matrix. 
-
-We can always expand $\hat{w}(0)$ in terms of the right eigenvectors 
-$\hat{v}$ of $\hat{W}$ as
-
-!bt
-\begin{equation*}
-    \hat{w}(0)  = \sum_i\alpha_i\hat{v}_i,
-\end{equation*}
-!et
-resulting in
-
-!bt
-\begin{equation*}
-   \hat{w}(t) = \hat{W}^t\hat{w}(0)=\hat{W}^t\sum_i\alpha_i\hat{v}_i=
-\sum_i\lambda_i^t\alpha_i\hat{v}_i,
-\end{equation*}
-!et
-with $\lambda_i$ the $i^{\mathrm{th}}$ eigenvalue corresponding to  
-the eigenvector $\hat{v}_i$. 
-
-If we assume that $\lambda_0$ is the largest eigenvector we see that in the limit $t\rightarrow \infty$,
-$\hat{w}(t)$ becomes proportional to the corresponding eigenvector 
-$\hat{v}_0$. This is our steady state or final distribution. 
-
-
-
-Let us recapitulate some of our results about Markov chains and random walks.
-
-  * The time development of our PDF $w(t)$, after 
-one time-step from $t=0$ is given by  
-!bt
-\begin{equation*}    
-w_i(t=\epsilon) = W(j\rightarrow i)w_j(t=0).
-\end{equation*}
-!et
- 
-This equation represents the discretized time-development of an original 
-PDF.  We can rewrite this as a
-
-!bt
-\begin{equation*}
-   w_i(t=\epsilon) = W_{ij}w_j(t=0).
-\end{equation*}
-!et
-with the transition matrix $W$ for a random walk given by
-
-!bt
-\begin{equation*}
-   W_{ij}(\epsilon)=W(il-jl,\epsilon)=\left\{\begin{array}{cc}\frac{1}{2} & |i-j| = 1\\
-                                             0 & \mathrm{else} \end{array} \right.
-\end{equation*}
-!et
-
-We call $W_{ij}$ for the transition probability and we represent it
-as a matrix. 
-  * Both  $W$ and $w$ represent probabilities and they have to be normalized, meaning that at each time step we have   
-!bt 
-\begin{equation*}    
-\sum_i w_i(t) = 1,
-\end{equation*}
-!et
-and
-
-!bt
-\begin{equation*} 
-   \sum_j W(j\rightarrow i) = 1.
-\end{equation*}
-!et
-Here we have written the previous matrix $W_{ij}=W(j\rightarrow i)$.
-
-
-The further constraints are
-$0 \le W_{ij} \le 1$  and  $0 \le w_{j} \le 1$.
-  * We can thus write the action of $W$ as   
-!bt 
-\begin{equation*}    
-w_i(t+1) = \sum_jW_{ij}w_j(t),
-\end{equation*}
-!et
-or as vector-matrix relation
-
-!bt
-\begin{equation*}
-   \hat{w}(t+1) = \hat{W\hat{w}}(t),
-\end{equation*}
-!et
-and if we have that $||\hat{w}(t+1)-\hat{w}(t)||\rightarrow 0$, we say that 
-we have reached the most likely state of the system, the so-called steady state or equilibrium state.
-
-Another way of phrasing this is
-!bt
-\begin{equation} 
-w(t=\infty) = Ww(t=\infty). 
-\end{equation}   
-!et
-
-The question then is how can we model anything under such a severe lack of knowledge? The Metropolis algorithm comes to our rescue here. Since $W(j\rightarrow i)$ is unknown, we model it as the product of two probabilities, 
-a probability for accepting the proposed move from the state $j$ to the state $j$, and a probability for making the transition to the state $i$ being in the state $j$. We label these probabilities $A(j\rightarrow i)$ and $T(j\rightarrow i)$, respectively.  Our total transition probability is then
-
-!bt
-\begin{equation*}
-W(j\rightarrow i)=T(j\rightarrow i)A(j\rightarrow i).
-\end{equation*}
-!et
-The algorithm can then be expressed as
-
-  * We make a suggested move to the new state $i$ with some transition or moving probability $T_{j\rightarrow i}$.
-
-  * We accept this move to the new state with an acceptance probability $A_{j \rightarrow i}$. The new state $i$ is in turn used as our new starting point for the next move.  We reject this proposed moved with a $1-A_{j\rightarrow i}$ and the original state $j$ is used again as a sample.
-
-We wish to derive the required properties of the probabilities $T$ and $A$ such that
-$w_i^{(t\rightarrow \infty)} \rightarrow w_i$, starting
-from any distribution, will lead us to the correct distribution.
-
-We can now derive the dynamical process towards 
-equilibrium. To obtain this equation we note that after $t$ time steps the probability for being in a state $i$ is related 
-to the probability of being in a state $j$ and performing a transition to the new state together with the probability of actually being in the state $i$ and making a move to any of the possible states $j$ from the previous time step.
-
-
-We can express this as, assuming that $T$ and $A$ are time-independent,
-
-!bt
-\begin{equation*}
-w_i(t+1) = \sum_j \left [
-w_j(t)T_{j\rightarrow i} A_{j\rightarrow i} 
-+w_i(t)T_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
-\right ] \,.
-\end{equation*}
-!et
-
-All probabilities are normalized, meaning that 
-$\sum_j T_{i\rightarrow j} = 1$. Using the latter, we can rewrite the previous equation as
-
-!bt
-\begin{equation*}
-w_i(t+1) = w_i(t) +
- \sum_j \left [
-w_j(t)T_{j\rightarrow i} A_{j\rightarrow i} 
--w_i(t)T_{i\rightarrow j}A_{i\rightarrow j}\right ] \,,
-\end{equation*}
-!et
-which can be rewritten as
-
-!bt
-\begin{equation*}
-w_i(t+1)-w_i(t) =  \sum_j \left [w_j(t)T_{j\rightarrow i} A_{j\rightarrow i} 
--w_i(t)T_{i\rightarrow j}A_{i\rightarrow j}\right ] .
-\end{equation*}
-!et
-
-The last equation is very similar to the so-called Master equation, which relates the temporal dependence of 
-a PDF $w_i(t)$ to various transition rates. The equation can be derived from the so-called 
-Chapman-Einstein-Enskog-Kolmogorov equation. The equation is given as 
-!bt
-\begin{equation}
-label{eq:masterequation}
-\frac{d w_i(t)}{dt} = \sum_j\left[ W(j\rightarrow i)w_j-W(i\rightarrow j)w_i\right],
-\end{equation}
-!et
-which simply states that the rate at which the systems moves from a state $j$
-to a final state $i$ (the first term on the right-hand side of the last equation) is balanced by the rate at which the system undergoes transitions from the state $i$ to a state $j$ (the second term). If we have reached the so-called steady state, then the temporal development is zero. This  means that in equilibrium we have
-
-!bt
-\begin{equation*}
-\frac{d w_i(t)}{dt} = 0.
-\end{equation*}
-!et
-
-In the limit $t\rightarrow \infty$ we require that the  two distributions $w_i(t+1)=w_i$ and $w_i(t)=w_i$
-and we have
-
-!bt
-\begin{equation*}
- \sum_j w_jT_{j\rightarrow i} A_{j\rightarrow i}= \sum_j w_iT_{i\rightarrow j}A_{i\rightarrow j},
-\end{equation*}
-!et
-which is the condition for balance when the most likely state (or steady state) has been reached.
-We see also that the right-hand side  can be  rewritten as
-
-!bt
-\begin{equation*} 
-\sum_j w_iT_{i\rightarrow j}A_{i\rightarrow j}= \sum_j w_iW_{i\rightarrow j},
-\end{equation*}
-!et
-and using the property that $\sum_j W_{i\rightarrow j}=1$, we can rewrite our equation
-as
-
-!bt
-\begin{equation*}
-w_i= \sum_j w_jT_{j\rightarrow i} A_{j\rightarrow i}= \sum_j w_j W_{j\rightarrow i},
-\end{equation*}
-!et
-which is nothing but the standard equation for a Markov chain when the steady state has been reached.
-
-
-However, the condition that the rates should equal each other is in general not sufficient
-to guarantee that we, after many simulations, generate the correct distribution.
-We may risk to end up with so-called cyclic solutions. To avoid this
-we therefore introduce an additional condition, namely that of detailed balance
-
-!bt
-\begin{equation*} W(j\rightarrow i)w_j= W(i\rightarrow j)w_i.  \end{equation*}
-!et
-These equations were derived by Lars Onsager when studying irreversible processes.
-At equilibrium detailed balance gives thus
-
-!bt
-\begin{equation*} \frac{W(j\rightarrow i)}{W(i\rightarrow j)}=\frac{w_i}{w_j}.  \end{equation*}
-!et
-Rewriting the last equation in terms of our transition probabilities $T$ and 
-acceptance probobalities $A$ we obtain
-
-!bt
-\begin{equation*} 
-w_j(t)T_{j\rightarrow i}A_{j\rightarrow i}= w_i(t)T_{i\rightarrow j}A_{i\rightarrow j}.
-\end{equation*}
-!et
-
-Since we normally have an expression 
-for the probability distribution functions $w_i$,  we can rewrite the last equation as
-
-!bt
-\begin{equation*} 
-\frac{T_{j\rightarrow i}A_{j\rightarrow i}}{T_{i\rightarrow j}A_{i\rightarrow j}}= \frac{w_i}{w_j}.
-\end{equation*}
-!et
-
-
-In statistical physics this condition ensures that it is e.g., the 
-Boltzmann distribution which is generated when equilibrium is reached.
-
-We introduce  now the Boltzmann distribution
-
-!bt
-\begin{equation*}
-   w_i= \frac{\exp{(-\beta(E_i))}}{Z},
-\end{equation*}
-!et
-which states that the probability of finding the system in a state $i$ with energy $E_i$ 
-at an inverse temperature $\beta = 1/k_BT$ is $w_i\propto \exp{(-\beta(E_i))}$.
-The denominator $Z$ is a normalization constant which ensures that the sum of all
-probabilities is normalized to one. It is defined as the sum of probabilities over all microstates
-$j$ of the system
-
-!bt
-\begin{equation*}
-   Z=\sum_j \exp{(-\beta(E_i))}.
-\end{equation*}
-!et
-
-From the partition function we can in principle generate all interesting quantities
-for a given system in equilibrium with its surroundings at a temperature $T$.
-
-With the probability distribution given by the Boltzmann distribution we are now in a position
-where we can generate expectation values for a given variable $A$ through the
-definition
-
-!bt
-\begin{equation*}
-   \langle A \rangle = \sum_jA_jw_j=
-    \frac{\sum_jA_j\exp{(-\beta(E_j)}}{Z}.
-\end{equation*}
-!et
-In general, most systems have an infinity of microstates making thereby the computation
-of $Z$ practically impossible and 
-a brute force Monte Carlo calculation over a given number of randomly selected microstates
-may therefore not yield those microstates which are important 
-at equilibrium. 
-To select the most important contributions we need to  
-use the condition for detailed balance. Since this is just given by the ratios of probabilities,
-we never need to evaluate the partition function $Z$.
-
-For the 
-Boltzmann distribution, detailed balance results in
-
-!bt
-\begin{equation*} \frac{w_i}{w_j}= \exp{(-\beta(E_i-E_j))}. \end{equation*}
-!et
-
-Let us now specialize to a system whose energy is defined by the orientation of single spins.
-Consider the state $i$, with given energy $E_i$ represented by the following $N$ spins
-
-!bt
-\begin{equation*}
-\begin{array}{cccccccccc}
-\uparrow&\uparrow&\uparrow&\dots&\uparrow&\downarrow&\uparrow&\dots&\uparrow&\downarrow\\
-1&2&3&\dots& k-1&k&k+1&\dots&N-1&N\end{array}
-\end{equation*}
-!et
-
-We are interested in the transition with one single  spinflip to a new state $j$ with energy $E_j$
-
-!bt
-\begin{equation*}
-\begin{array}{cccccccccc}
-\uparrow&\uparrow&\uparrow&\dots&\uparrow&\uparrow&\uparrow&\dots&\uparrow&\downarrow\\
-1&2&3&\dots& k-1&k&k+1&\dots&N-1&N\end{array}
-\end{equation*}
-!et
-This change from one microstate $i$ (or spin configuration)  to another microstate $j$ is the
-configuration space analogue to a random walk on a lattice. Instead of jumping from 
-one place to another in space, we 'jump' from one microstate to another.
-
-However, the selection of states has to generate a final distribution which is the
-Boltzmann distribution. This is again the same we saw for a random walker, for the discrete case we had 
-always a binomial distribution, whereas for the continuous case we had a normal distribution.
-The way we sample configurations should result, when equilibrium is established, in the 
-Boltzmann distribution. Else, our algorithm for selecting microstates is wrong.
- 
-
-As stated above, we do in general not know the closed-form expression of the transition rate and we are free to model it as
-     $W(i\rightarrow j)=T(i\rightarrow j)A(i\rightarrow j)$.
-Our ratio between probabilities gives us
-
-!bt
-\begin{equation*} 
-\frac{A_{j\rightarrow i}}{A_{i\rightarrow j}}= \frac{w_iT_{i\rightarrow j}}{w_jT_{j\rightarrow i}}.
-\end{equation*}
-!et
-The simplest form of the Metropolis algorithm (sometimes called for brute force Metropolis) assumes that 
-the transition probability $T(i\rightarrow j)$ is symmetric, implying that $T(i\rightarrow j)=T(j\rightarrow i)$.
-
-
-We obtain then (using the Boltzmann distribution)
-
-!bt
-\begin{equation*}
-\frac{A(j\rightarrow i)}{A(i\rightarrow j)}= \exp{(-\beta(E_i-E_j))} .
-\end{equation*}
-!et
-We are in this case interested in a new state $E_j$ whose energy is lower than 
-$E_i$, viz., $\Delta E = E_j-E_i \le 0$. A simple test would then be to accept only those
-microstates which lower the energy.  
-Suppose we have ten microstates with energy $E_0 \le E_1 \le E_2 \le E_3 \le \dots \le E_9$.
-Our desired energy is $E_0$.
-
-
-
-At a given temperature $T$ we start our simulation by randomly choosing state
-$E_9$. Flipping spins we may then find a path from $E_9\rightarrow E_8 \rightarrow E_7 \dots \rightarrow E_1 \rightarrow E_0$. 
-This would however lead to biased statistical averages since it would violate the ergodic hypothesis discussed
-in the previous section. This principle states  that 
-it should be possible for any Markov process to reach every possible state of the system
-from any starting point if the simulations is carried out for a long enough time.
-
-Any state in a Boltzmann distribution has a probability different from zero and if such 
-a state cannot be reached from a given starting point, then the system is not ergodic.
-This means that another possible path to $E_0$ could be 
-$E_9\rightarrow E_7 \rightarrow E_8 \dots \rightarrow E_9 \rightarrow E_5 \rightarrow E_0$ and so forth.
-Even though such a path could have a negligible probability it is still a possibility, and if
-we simulate long enough it should be included in our computation of an expectation value.
-
-
-
-Thus, we require that our algorithm should satisfy the principle of detailed balance and be ergodic. 
-The problem with our ratio
-
-!bt
-\begin{equation*}
-\frac{A(j\rightarrow i)}{A(i\rightarrow j)}= \exp{(-\beta(E_i-E_j))}, 
-\end{equation*}
-!et
-is that we do not know the acceptance probability. This equation only specifies the ratio of pairs of probabilities. Normally we want an algorithm which is as efficient as possible and maximizes the number of accepted moves. 
-Moreover, we know that the acceptance probability has $0$ as its smallest value and $1$ as its largest. 
-If we assume that the largest possible acceptance probability is $1$,  we adjust thereafter the other acceptance probability
-to this constraint. 
-
-To understand this better, assume that we have two energies, $E_i$ and $E_j$, with $E_i < E_j$. This means that the largest acceptance value must be 
-$A(j\rightarrow i)$ since we move to a state with lower energy.  It follows from also from the fact that the probability $w_i$ is larger than $w_j$. 
-The trick then is to fix this value to $A(j\rightarrow i)=1$. It means that 
-the other acceptance probability has to be
-
-!bt
-\begin{equation*}
-A(i\rightarrow j)= \exp{(-\beta(E_j-E_i))}.
-\end{equation*}
-!et
-
-
-One possible way to encode this equation reads
-
-!bt
-\begin{equation*}       
-A(j\rightarrow i)=\left\{\begin{array}{cc}
-\exp{(-\beta(E_i-E_j))} & E_i-E_j > 0 \\ 1 & else \end{array} \right.,  
-\end{equation*}
-!et
-implying that if we move to a state with a lower energy, we always accept
-this move with acceptance probability $A(j\rightarrow i)=1$. If the energy is higher, we need to check
-this acceptance probability with the ratio between the probabilities  from our PDF.  From a practical point of view, 
-the above ratio is compared with a random number.
-If the ratio is smaller than a given random number we accept the move to a higher energy, else we stay in the same state. 
-
-
-Nothing hinders us obviously in choosing another acceptance ratio, like a weighting  of the two energies via
-
-!bt
-\begin{equation*}
-A(j\rightarrow i)=\exp{(-\frac{1}{2}\beta(E_i-E_j))}.
-\end{equation*}
-!et
-However, it is easy to see that such an acceptance ratio would result in 
-fewer accepted moves.
-
-
-The Monte Carlo approach, combined with the theory for Markov chains can be summarized as follows:
-A Markov chain Monte Carlo method for the simulation of a distribution $w$ is any method producing an 
-ergodic Markov chain of events $x$ whose stationary distribution is $w$. The Metropolis algorithm can be phrased as
-
-  * Generate an initial value $x^{(i)}$.
-
-  * Generate a trial value $y_t$ with probability $T(y_t|x^{(i)})$. The latter quantity represents the probability of generating $y_t$ given $x^{(i)}$.
-
-  * Take a new value   
-!bt 
-\begin{equation*}  
-x^{(i+1)}= \left\{\begin{array}{cc} y_t & \mathrm{with\hspace{0.1cm}probability} = A(x^{(i)}\rightarrow y_t) \\                                           x^{(i)}    & \mathrm{with \hspace{0.1cm}probability} = 1-A(x^{(i)}\rightarrow y_t)\end{array}\right .
-\end{equation*}
-!et 
-
-  * We have defined the transition (acceptance) probability as   
-!bt 
-\begin{equation*}    A(x\rightarrow y)= \mathrm{min}\left\{\frac{w(y)T(x|y)}{w(x)T(y|x)},1\right\}.
-\end{equation*}
-!et
-
-
-!split
-===== Boltzmann Machines =====
-
-Why use a generative model rather than the more well known discriminative deep neural networks (DNN)? 
-
-* Discriminitave methods have several limitations: They are mainly supervised learning methods, thus requiring labeled data. And there are tasks they cannot accomplish, like drawing new examples from an unknown probability distribution.
-
-* A generative model can learn to represent and sample from a probability distribution. The core idea is to learn a parametric model of the probability distribution from which the training data was drawn. As an example
-
-  o A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.
-  o Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.
-  o Model the trial function for Monte Carlo calculations
-
- o Both use gradient-descent based learning procedures for minimizing cost functions
- o Energy based models don't use backpropagation and automatic differentiation for computing gradients, instead turning to Markov Chain Monte Carlo methods.
- o DNNs often have several hidden layers. A restricted Boltzmann machine has only one hidden layer, however several RBMs can be stacked to make up Deep Belief Networks, of which they constitute the building blocks.
-
-History: The RBM was developed by amongst others Geoffrey Hinton, called by some the "Godfather of Deep Learning", working with the University of Toronto and Google.
-
-
-
-!bblock
-A BM is what we would call an undirected probabilistic graphical model
-with stochastic continuous or discrete units.
-!eblock
-!bblock
-It is interpreted as a stochastic recurrent neural network where the
-state of each unit(neurons/nodes) depends on the units it is connected
-to. The weights in the network represent thus the strength of the
-interaction between various units/nodes.
-!eblock
-!bblock
-It turns into a Hopfield network if we choose deterministic rather
-than stochastic units. In contrast to a Hopfield network, a BM is a
-so-called generative model. It allows us to generate new samples from
-the learned distribution.
-!eblock
-
-!bblock
-A standard BM network is divided into a set of observable and visible units $\hat{x}$ and a set of unknown hidden units/nodes $\hat{h}$.
-!eblock
-
-!bblock
-Additionally there can be bias nodes for the hidden and visible layers. These biases are normally set to $1$.
-!eblock
-
-!bblock
-BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning
-!eblock
-
-However, they are often hard to train. This leads to the introduction of so-called restricted BMs, or RBMS.
-Here we take away all lateral connections between nodes in the visible layer as well as connections between nodes in the hidden layer. The network is illustrated in the figure below.
-
-#FIGURE: [figures/RBM.pdf, width=800 frac=1.0]
+FIGURE: [figures/ae1.png, width=700 frac=1.0]
 
 
 
 !split
-===== The network =====
+===== Towards the PCA theorem =====
 
-_The network layers_:
-  o A function $\mathbf{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
-  o The function $\mathbf{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
-
-The goal of the hidden layer is to increase the model's expressive power. We encode complex interactions between visible variables by introducing additional, hidden variables that interact with visible degrees of freedom in a simple manner, yet still reproduce the complex correlations between visible degrees in the data once marginalized over (integrated out).
-
-Examples of this trick being employed in physics: 
-  o The Hubbard-Stratonovich transformation
-  o The introduction of ghost fields in gauge theory
-  o Shadow wave functions in Quantum Monte Carlo simulations
-_The network parameters, to be optimized/learned_:
-  o $\mathbf{a}$ represents the visible bias, a vector of same length as $\mathbf{x}$.
-  o $\mathbf{b}$ represents the hidden bias, a vector of same lenght as $\mathbf{h}$.
-  o $W$ represents the interaction weights, a matrix of size $M\times N$.
-
-
-
-=== Joint distribution ===
-T
-he restricted Boltzmann machine is described by a Bolztmann distribution
-!bt
-\begin{align}
-	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
-\end{align}
-!et
-where $Z$ is the normalization constant or partition function, defined as 
-!bt
-\begin{align}
-	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
-\end{align}
-!et
-It is common to ignore $T_0$ by setting it to one. 
-
-
-=== Network Elements, the energy function  ===
-
-The function $E(\mathbf{x},\mathbf{h})$ gives the _energy_ of a
-configuration (pair of vectors) $(\mathbf{x}, \mathbf{h})$. The lower
-the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters $\mathbf{a}$, $\mathbf{b}$ and
-$W$. Thus, when we adjust them during the learning procedure, we are
-adjusting the energy function to best fit our problem.
-
-An expression for the energy function is
+We have from last week that the covariance matrix (the correlation matrix involves a simple rescaling) is given as
 !bt
 \[
-E(\hat{x},\hat{h}) = -\sum_{ia}^{NA}b_i^a \alpha_i^a(x_i)-\sum_{jd}^{MD}c_j^d \beta_j^d(h_j)-\sum_{ijad}^{NAMD}b_i^a \alpha_i^a(x_i)c_j^d \beta_j^d(h_j)w_{ij}^{ad}.
+\bm{C}[\bm{x}] = \frac{1}{n}\bm{X}^T\bm{X}= \mathbb{E}[\bm{X}^T\bm{X}].
+\]
+!et
+Let us now assume that we can perform a series of orthogonal transformations where we employ some orthogonal matrices $\bm{S}$.
+These matrices are defined as $\bm{S}\in {\mathbb{R}}^{p\times p}$ and obey the orthogonality requirements $\bm{S}\bm{S}^T=\bm{S}^T\bm{S}=\bm{I}$. The matrix can be written out in terms of the column vectors $\bm{s}_i$ as $\bm{S}=[\bm{s}_0,\bm{s}_1,\dots,\bm{s}_{p-1}]$ and $\bm{s}_i \in {\mathbb{R}}^{p}$.
+
+!split
+===== More details =====
+
+Assume also that there is a transformation $\bm{S}^T\bm{C}[\bm{x}]\bm{S}=\bm{C}[\bm{y}]$ such that the new matrix $\bm{C}[\bm{y}]$ is diagonal with elements $[\lambda_0,\lambda_1,\lambda_2,\dots,\lambda_{p-1}]$.  
+
+That is we have
+!bt
+\[
+\bm{C}[\bm{y}] = \mathbb{E}[\bm{S}^T\bm{X}^T\bm{X}T\bm{S}]=\bm{S}^T\bm{C}[\bm{x}]\bm{S},
+\]
+!et
+since the matrix $\bm{S}$ is not a data dependent matrix.   Multiplying with $\bm{S}$ from the left we have
+!bt
+\[
+\bm{S}\bm{C}[\bm{y}] = \bm{C}[\bm{x}]\bm{S},
+\]
+!et
+and since $\bm{C}[\bm{y}]$ is diagonal we have for a given eigenvalue $i$ of the covariance matrix that
+
+!bt
+\[
+\bm{S}_i\lambda_i = \bm{C}[\bm{x}]\bm{S}_i.
 \]
 !et
 
-Here $\beta_j^d(h_j)$ and $\alpha_i^a(x_j)$ are so-called transfer functions that map a given input value to a desired feature value. The labels $a$ and $d$ denote that there can be multiple transfer functions per variable. The first sum depends only on the visible units. The second on the hidden ones. _Note_ that there is no connection between nodes in a layer.
+!split
+===== More on the PCA Theorem =====
 
-The quantities $b$ and $c$ can be interpreted as the visible and hidden biases, respectively.
+In the derivation of the PCA theorem we will assume that the eigenvalues are ordered in descending order, that is
+$\lambda_0 > \lambda_1 > \dots > \lambda_{p-1}$. 
 
-The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
 
-=== Defining different types of RBMs ===
+The eigenvalues tell us then how much we need to stretch the
+corresponding eigenvectors. Dimensions with large eigenvalues have
+thus large variations (large variance) and define therefore useful
+dimensions. The data points are more spread out in the direction of
+these eigenvectors.  Smaller eigenvalues mean on the other hand that
+the corresponding eigenvectors are shrunk accordingly and the data
+points are tightly bunched together and there is not much variation in
+these specific directions. Hopefully then we could leave it out
+dimensions where the eigenvalues are very small. If $p$ is very large,
+we could then aim at reducing $p$ to $l << p$ and handle only $l$
+features/predictors.
 
-There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\mathbf{x},\mathbf{h})$. 
+!split
+===== The Algorithm before the Theorem =====
 
-!bblock Binary-Binary RBM:
-
-RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:
+Here's how we would proceed in setting up the algorithm for the PCA, see also discussion below here. 
+* Set up the datapoints for the design/feature matrix $\bm{X}$ with $\bm{X}\in {\mathbb{R}}^{n\times p}$, with the predictors/features $p$  referring to the column numbers and the entries $n$ being the row elements.
 !bt
-\begin{align}
-	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
-\end{align}
-!et
-where the binary values taken on by the nodes are most commonly 0 and 1.
-!eblock
-!bblock Gaussian-Binary RBM:
-
-Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
-!bt
-\begin{align}
-	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
-\end{align}
-!et
-!eblock
-
-
-o RBMs are Useful when we model continuous data (i.e., we wish $\mathbf{x}$ to be continuous)
-o Requires a smaller learning rate, since there's no upper bound to the value a component might take in the reconstruction
-
-Other types of units include:
- o Softmax and multinomial units
- o Gaussian visible and hidden units
- o Binomial units
- o Rectified linear units
-
-
-=== Cost function ===
-
-When working with a training dataset, the most common training approach is maximizing the log-likelihood of the training data. The log likelihood characterizes the log-probability of generating the observed data using our generative model. Using this method our cost function is chosen as the negative log-likelihood. The learning then consists of trying to find parameters that maximize the probability of the dataset, and is known as Maximum Likelihood Estimation (MLE).
-Denoting the parameters as $\bm{\theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN}$, the log-likelihood is given by
-!bt
-\begin{align}
-	\mathcal{L}(\{ \theta_i \}) &= \langle \text{log} P_\theta(\bm{x}) \rangle_{data} \\
-	&= - \langle E(\bm{x}; \{ \theta_i\}) \rangle_{data} - \text{log} Z(\{ \theta_i\}),
-\end{align}
-!et
-where we used that the normalization constant does not depend on the data, $\langle \text{log} Z(\{ \theta_i\}) \rangle = \text{log} Z(\{ \theta_i\})$
-Our cost function is the negative log-likelihood, $\mathcal{C}(\{ \theta_i \}) = - \mathcal{L}(\{ \theta_i \})$
-
-=== Optimization / Training ===
-
-The training procedure of choice often is Stochastic Gradient Descent (SGD). It consists of a series of iterations where we update the parameters according to the equation
-!bt
-\begin{align}
-	\bm{\theta}_{k+1} = \bm{\theta}_k - \eta \nabla \mathcal{C} (\bm{\theta}_k)
-\end{align}
-!et
-at each $k$-th iteration. There are a range of variants of the algorithm which aim at making the learning rate $\eta$ more adaptive so the method might be more efficient while remaining stable.
-
-We now need the gradient of the cost function in order to minimize it. We find that
-!bt
-\begin{align}
-	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
-	&= \langle \frac{\partial E(\bm{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
-	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} \\
-	&= \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model},
-\end{align}
-!et
-where in order to simplify notation we defined the "operator"
-!bt
-\begin{align}
-	O_i(\bm{x}) = \frac{\partial E(\bm{x}; \theta_i)}{\partial \theta_i}, 
-\end{align}
-!et
-and used the statistical mechanics relationship between expectation values and the log-partition function:
-!bt
-\begin{align}
-	\langle O_i(\bm{x}) \rangle_{model} = \text{Tr} P_\theta(\bm{x})O_i(\bm{x}) = - \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i}.
-\end{align}
+\[
+\bm{X}=\begin{bmatrix}
+x_{0,0} & x_{0,1} & x_{0,2}& \dots & \dots x_{0,p-1}\\
+x_{1,0} & x_{1,1} & x_{1,2}& \dots & \dots x_{1,p-1}\\
+x_{2,0} & x_{2,1} & x_{2,2}& \dots & \dots x_{2,p-1}\\
+\dots & \dots & \dots & \dots \dots & \dots \\
+x_{n-2,0} & x_{n-2,1} & x_{n-2,2}& \dots & \dots x_{n-2,p-1}\\
+x_{n-1,0} & x_{n-1,1} & x_{n-1,2}& \dots & \dots x_{n-1,p-1}\\
+\end{bmatrix},
+\]
 !et
 
-The data-dependent term in the gradient is known as the positive phase
-of the gradient, while the model-dependent term is known as the
-negative phase of the gradient. The aim of the training is to lower
-the energy of configurations that are near observed data points
-(increasing their probability), and raising the energy of
-configurations that are far from observed data points (decreasing
-their probability).
+!split
+===== Further steps =====
 
-The gradient of the negative log-likelihood cost function of a Binary-Binary RBM is then
+* Center the data by subtracting the mean value for each column. This leads to a new matrix $\bm{X}\rightarrow \overline{\bm{X}}$.
+* Compute then the covariance/correlation matrix $\mathbb{E}[\overline{\bm{X}}^T\overline{\bm{X}}]$.
+* Find the eigenpairs of $\bm{C}$ with eigenvalues $[\lambda_0,\lambda_1,\dots,\lambda_{p-1}]$ and eigenvectors $[\bm{s}_0,\bm{s}_1,\dots,\bm{s}_{p-1}]$.
+* Order the eigenvalue (and the eigenvectors accordingly) in order of decreasing eigenvalues.
+* Keep only those $l$ eigenvalues larger than a selected threshold value, discarding thus $p-l$ features since we expect small variations in the data here.
+
+!split
+===== Writing our own PCA code =====
+
+We will use a simple example first with two-dimensional data
+drawn from a multivariate normal distribution with the following mean and covariance matrix (we have fixed these quantities but will play around with them below):
 !bt
-\begin{align}
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial w_{ij}} =& \langle x_i h_j \rangle_{data} - \langle x_i h_j \rangle_{model} \\
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial a_{ij}} =& \langle x_i \rangle_{data} - \langle x_i \rangle_{model} \\
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial b_{ij}} =& \langle h_i \rangle_{data} - \langle h_i \rangle_{model}. \\
-\end{align}
+\[
+\mu = (-1,2) \qquad \Sigma = \begin{bmatrix} 4 & 2 \\
+2 & 2
+\end{bmatrix}
+\]
 !et
-To get the expectation values with respect to the *data*, we set the visible units to each of the observed samples in the training data, then update the hidden units according to the conditional probability found before. We then average over all samples in the training data to calculate expectation values with respect to the data. 
+Note that the mean refers to each column of data. 
+We will generate $n = 10000$ points $X = \{ x_1, \ldots, x_N \}$ from
+this distribution, and store them in the $1000 \times 2$ matrix $\bm{X}$. This is our design matrix where we have forced the covariance and mean values to take specific values.
 
+!split
+===== Implementing it =====
+The following Python code aids in setting up the data and writing out the design matrix.
+Note that the function _multivariate_ returns also the covariance discussed above and that it is defined by dividing by $n-1$ instead of $n$.
+!bc pycod 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import display
+n = 10000
+mean = (-1, 2)
+cov = [[4, 2], [2, 2]]
+X = np.random.multivariate_normal(mean, cov, n)
+!ec
 
+Now we are going to implement the PCA algorithm. We will break it down into various substeps.
 
+!split
+===== First Step =====
 
-=== Kullback-Leibler relative entropy ===
-
-When the goal of the training is to approximate a probability
-distribution, as it is in generative modeling, another relevant
-measure is the _Kullback-Leibler divergence_, also known as the
-relative entropy or Shannon entropy. It is a non-symmetric measure of the
-dissimilarity between two probability density functions $p$ and
-$q$. If $p$ is the unkown probability which we approximate with $q$,
-we can measure the difference by
+The first step of PCA is to compute the sample mean of the data and use it to center the data. Recall that the sample mean is
 !bt
-\begin{align}
-	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\bm{x}) \log \frac{p(\bm{x})}{q(\bm{x})}  d\bm{x}.
-\end{align}
+\[
+\mu_n = \frac{1}{n} \sum_{i=1}^n x_i
+\]
 !et
-
-Thus, the Kullback-Leibler divergence between the distribution of the
-training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
-\bm{\theta})$ is
-
+and the mean-centered data $\bar{X} = \{ \bar{x}_1, \ldots, \bar{x}_n \}$ takes the form
 !bt
-\begin{align}
-	\text{KL} (f(\bm{x})|| p(\bm{x}| \bm{\theta})) =& \int_{-\infty}^{\infty}
-	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}| \bm{\theta})} d\bm{x} \\
-	=& \int_{-\infty}^{\infty} f(\bm{x}) \log f(\bm{x}) d\bm{x} - \int_{-\infty}^{\infty} f(\bm{x}) \log
-	p(\bm{x}| \bm{\theta}) d\bm{x} \\
-	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}| \bm{\theta}))
-	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x}| \bm{\theta}) \rangle_{f(\bm{x})} \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \mathcal{C}_{LL} .
-\end{align}
+\[
+\bar{x}_i = x_i - \mu_n.
+\]
 !et
+When you are done with these steps, print out $\mu_n$ to verify it is
+close to $\mu$ and plot your mean centered data to verify it is
+centered at the origin! 
+The following code elements perform these operations using _pandas_ or using our own functionality for doing so. The latter, using _numpy_ is rather simple through the _mean()_ function. 
+!bc pycod
+df = pd.DataFrame(X)
+# Pandas does the centering for us
+df = df -df.mean()
+# we center it ourselves
+X_centered = X - X.mean(axis=0)
+!ec
 
-The first term is constant with respect to $\bm{\theta}$ since $f(\bm{x})$ is independent of $\bm{\theta}$. Thus the Kullback-Leibler Divergence is minimal when the second term is minimal. The second term is the log-likelihood cost function, hence minimizing the Kullback-Leibler divergence is equivalent to maximizing the log-likelihood.
+!split
+===== Scaling =====
+Alternatively, we could use the functions we discussed
+earlier for scaling the data set.  That is, we could have used the
+_StandardScaler_ function in _Scikit-Learn_, a function which ensures
+that for each feature/predictor we study the mean value is zero and
+the variance is one (every column in the design/feature matrix).  You
+would then not get the same results, since we divide by the
+variance. The diagonal covariance matrix elements will then be one,
+while the non-diagonal ones need to be divided by $2\sqrt{2}$ for our
+specific case.
 
+!split
+===== Centered Data =====
 
-To further understand generative models it is useful to study the
-gradient of the cost function which is needed in order to minimize it
-using methods like stochastic gradient descent. 
-
-The partition function is the generating function of
-expectation values, in particular there are mathematical relationships
-between expectation values and the log-partition function. In this
-case we have
+Now we are going to use the mean centered data to compute the sample covariance of the data by using the following equation
 !bt
-\begin{align}
-	\langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{model}
-	= \int p(\bm{x}| \bm{\theta}) \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} d\bm{x} 
-	= -\frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} .
-\end{align}
+\begin{equation*}
+\Sigma_n = \frac{1}{n-1} \sum_{i=1}^n \bar{x}_i^T \bar{x}_i = \frac{1}{n-1} \sum_{i=1}^n (x_i - \mu_n)^T (x_i - \mu_n)
+\end{equation*}
 !et
+where the data points $x_i \in \mathbb{R}^p$ (here in this example $p = 2$) are column vectors and $x^T$ is the transpose of $x$.
+We can write our own code or simply use either the functionaly of _numpy_ or that of _pandas_, as follows
+!bc pycod
+print(df.cov())
+print(np.cov(X_centered.T))
+!ec
+Note that the way we define the covariance matrix here has a factor $n-1$ instead of $n$. This is included in the _cov()_ function by _numpy_ and _pandas_. 
+Our own code here is not very elegant and asks for obvious improvements. It is tailored to this specific $2\times 2$ covariance matrix. 
+!bc pycod
+# extract the relevant columns from the centered design matrix of dim n x 2
+x = X_centered[:,0]
+y = X_centered[:,1]
+Cov = np.zeros((2,2))
+Cov[0,1] = np.sum(x.T@y)/(n-1.0)
+Cov[0,0] = np.sum(x.T@x)/(n-1.0)
+Cov[1,1] = np.sum(y.T@y)/(n-1.0)
+Cov[1,0]= Cov[0,1]
+print("Centered covariance using own code")
+print(Cov)
+plt.plot(x, y, 'x')
+plt.axis('equal')
+plt.show()
+!ec
 
-Here $\langle \cdot \rangle_{model}$ is the expectation value over the model probability distribution $p(\bm{x}| \bm{\theta})$.
+!split
+===== Exploring =====
 
-===== Setting up for gradient descent calculations =====
+Depending on the number of points $n$, we will get results that are close to the covariance values defined above.
+The plot shows how the data are clustered around a line with slope close to one. Is this expected?  Try to change the covariance and the mean values. For example, try to make the variance of the first element much larger than that of the second diagonal element. Try also to shrink the covariance  (the non-diagonal elements) and see how the data points are distributed. 
 
-Using the previous relationship we can express the gradient of the cost function as
+!split
+===== Diagonalize the sample covariance matrix to obtain the principal components =====
 
-!bt
-\begin{align}
-	\frac{\partial \mathcal{C}_{LL}}{\partial \theta_i}
-	=& \langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{data} + \frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} \\
-	=& \langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{data} - \langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{model} \\
-	%=& \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model}
-\end{align}
-!et
+Now we are ready to solve for the principal components! To do so we
+diagonalize the sample covariance matrix $\Sigma$. We can use the
+function _np.linalg.eig_ to do so. It will return the eigenvalues and
+eigenvectors of $\Sigma$. Once we have these we can perform the 
+following tasks:
 
-This expression shows that the gradient of the log-likelihood cost
-function is a _difference of moments_, with one calculated from
-the data and one calculated from the model. The data-dependent term is
-called the _positive phase_ and the model-dependent term is
-called the _negative phase_ of the gradient. We see now that
-minimizing the cost function results in lowering the energy of
-configurations $\bm{x}$ near points in the training data and
-increasing the energy of configurations not observed in the training
-data. That means we increase the model's probability of configurations
-similar to those in the training data.
-
-
-The gradient of the cost function also demonstrates why gradients of
-unsupervised, generative models must be computed differently from for
-those of for example FNNs. While the data-dependent expectation value
-is easily calculated based on the samples $\bm{x}_i$ in the training
-data, we must sample from the model in order to generate samples from
-which to caclulate the model-dependent term. We sample from the model
-by using MCMC-based methods. We can not sample from the model directly
-because the partition function $Z$ is generally intractable.
-
-As in supervised machine learning problems, the goal is also here to
-perform well on _unseen_ data, that is to have good
-generalization from the training data. The distribution $f(x)$ we
-approximate is not the _true_ distribution we wish to estimate,
-it is limited to the training data. Hence, in unsupervised training as
-well it is important to prevent overfitting to the training data. Thus
-it is common to add regularizers to the cost function in the same
-manner as we discussed for say linear regression.
-
-
-
-
-Because we are restricted to potential functions which are positive it
-is convenient to express them as exponentials, so that
+* We compute the percentage of the total variance captured by the first principal component
+* We plot the mean centered data and lines along the first and second principal components
+* Then we project the mean centered data onto the first and second principal components, and plot the projected data. 
+* Finally, we approximate the data as
 
 !bt
-\begin{align}
-	\phi_C (\bm{x}_C) = e^{-E_C(\bm{x}_C)}
-\end{align}
+\begin{equation*}
+x_i \approx \tilde{x}_i = \mu_n + \langle x_i, v_0 \rangle v_0
+\end{equation*}
 !et
+where $v_0$ is the first principal component. 
 
-where $E(\bm{x}_C)$ is called an *energy function*, and the
-exponential representation is the *Boltzmann distribution*. The
-joint distribution is defined as the product of potentials.
+!split
+===== Collecting all Steps =====
 
-The joint distribution of the random variables is then
+Collecting all these steps we can write our own PCA function and
+compare this with the functionality included in _Scikit-Learn_.  
+
+The code here outlines some of the elements we could include in the
+analysis. Feel free to extend upon this in order to address the above
+questions.
+
+!bc pycod
+# diagonalize and obtain eigenvalues, not necessarily sorted
+EigValues, EigVectors = np.linalg.eig(Cov)
+# sort eigenvectors and eigenvalues
+#permute = EigValues.argsort()
+#EigValues = EigValues[permute]
+#EigVectors = EigVectors[:,permute]
+print("Eigenvalues of Covariance matrix")
+for i in range(2):
+    print(EigValues[i])
+FirstEigvector = EigVectors[:,0]
+SecondEigvector = EigVectors[:,1]
+print("First eigenvector")
+print(FirstEigvector)
+print("Second eigenvector")
+print(SecondEigvector)
+#thereafter we do a PCA with Scikit-learn
+from sklearn.decomposition import PCA
+pca = PCA(n_components = 2)
+X2Dsl = pca.fit_transform(X)
+print("Eigenvector of largest eigenvalue")
+print(pca.components_.T[:, 0])
+
+!ec
+This code does not contain all the above elements, but it shows how we can use _Scikit-Learn_ to extract the eigenvector which corresponds to the largest eigenvalue. Try to address the questions we pose before the above code.  Try also to change the values of the covariance matrix by making one of the diagonal elements much larger than the other. What do you observe then? 
+
+!split
+===== Classical PCA Theorem   =====
+
+We assume now that we have a design matrix $\bm{X}$ which has been
+centered as discussed above. For the sake of simplicity we skip the
+overline symbol. The matrix is defined in terms of the various column
+vectors $[\bm{x}_0,\bm{x}_1,\dots, \bm{x}_{p-1}]$ each with dimension
+$\bm{x}\in {\mathbb{R}}^{n}$.
+
+
+
+The PCA theorem states that minimizing the above reconstruction error
+corresponds to setting $\bm{W}=\bm{S}$, the orthogonal matrix which
+diagonalizes the empirical covariance(correlation) matrix. The optimal
+low-dimensional encoding of the data is then given by a set of vectors
+$\bm{z}_i$ with at most $l$ vectors, with $l << p$, defined by the
+orthogonal projection of the data onto the columns spanned by the
+eigenvectors of the covariance(correlations matrix).
+
+
+
+!split
+===== The PCA Theorem =====
+
+To show the PCA theorem let us start with the assumption that there is one vector $\bm{s}_0$ which corresponds to a solution which minimized the reconstruction error $J$. This is an orthogonal vector. It means that we now approximate the reconstruction error in terms of $\bm{w}_0$ and $\bm{z}_0$ as
+
+
+
+We are almost there, we have obtained a relation between minimizing
+the reconstruction error and the variance and the covariance
+matrix. Minimizing the error is equivalent to maximizing the variance
+of the projected data.
+
+
+We could trivially maximize the variance of the projection (and
+thereby minimize the error in the reconstruction function) by letting
+the norm-2 of $\bm{w}_0$ go to infinity. However, this norm since we
+want the matrix $\bm{W}$ to be an orthogonal matrix, is constrained by
+$\vert\vert \bm{w}_0 \vert\vert_2^2=1$. Imposing this condition via a
+Lagrange multiplier we can then in turn maximize
 
 !bt
-\begin{align}
-	p(\bm{x}) =& \frac{1}{Z} \prod_C \phi_C (\bm{x}_C) \nonumber \\
-	=& \frac{1}{Z} \prod_C e^{-E_C(\bm{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-\sum_C E_C(\bm{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-E(\bm{x})}.
-\end{align} 
+\[
+J(\bm{w}_0)= \bm{w}_0^T\bm{C}[\bm{x}]\bm{w}_0+\lambda_0(1-\bm{w}_0^T\bm{w}_0).
+\]
 !et
-!bt
-\begin{align}
-	p_{BM}(\bm{x}, \bm{h}) = \frac{1}{Z_{BM}} e^{-\frac{1}{T}E_{BM}(\bm{x}, \bm{h})} ,
-\end{align}
-!et
-
-with the partition function 
-!bt
-\begin{align}
-	Z_{BM} = \int \int e^{-\frac{1}{T} E_{BM}(\tilde{\bm{x}}, \tilde{\bm{h}})} d\tilde{\bm{x}} d\tilde{\bm{h}} .
-\end{align}
-!et
-
-$T$ is a physics-inspired parameter named temperature and will be assumed to be 1 unless otherwise stated. The energy function of the Boltzmann machine determines the interactions between the nodes and is defined  
+Taking the derivative with respect to $\bm{w}_0$ we obtain
 
 !bt
-\begin{align}
-	E_{BM}(\bm{x}, \bm{h}) =& - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j) \nonumber \\
-	&- \sum_{i, m=i+1, k}^{M, M, K} \alpha_i^k (x_i) v_{im}^k \alpha_m^k (x_m)
-	- \sum_{j,n=j+1,l}^{N,N,L} \beta_j^l (h_j) u_{jn}^l \beta_n^l (h_n).
-\end{align}
+\[
+\frac{\partial J(\bm{w}_0)}{\partial \bm{w}_0}= 2\bm{C}[\bm{x}]\bm{w}_0-2\lambda_0\bm{w}_0=0,
+\]
 !et
-
-Here $\alpha_i^k (x_i)$ and $\beta_j^l (h_j)$ are one-dimensional
-transfer functions or mappings from the given input value to the
-desired feature value. They can be arbitrary functions of the input
-variables and are independent of the parameterization (parameters
-referring to weight and biases), meaning they are not affected by
-training of the model. The indices $k$ and $l$ indicate that there can
-be multiple transfer functions per variable.  Furthermore, $a_i^k$ and
-$b_j^l$ are the visible and hidden bias. $w_{ij}^{kl}$ are weights of
-the \textbf{inter-layer} connection terms which connect visible and
-hidden units. $ v_{im}^k$ and $u_{jn}^l$ are weights of the
-\textbf{intra-layer} connection terms which connect the visible units
-to each other and the hidden units to each other, respectively.
-
-
-
-We remove the intra-layer connections by setting $v_{im}$ and $u_{jn}$
-to zero. The expression for the energy of the RBM is then
-
+meaning that
 !bt
-\begin{align}
-	E_{RBM}(\bm{x}, \bm{h}) = - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j). 
-\end{align}
+\[
+\bm{C}[\bm{x}]\bm{w}_0=\lambda_0\bm{w}_0.
+\]
 !et
-resulting in 
+_The direction that maximizes the variance (or minimizes the construction error) is an eigenvector of the covariance matrix_! If we left multiply with $\bm{w}_0^T$ we have the variance of the projected data is
 !bt
-\begin{align}
-	P_{RBM} (\bm{x}) =& \int P_{RBM} (\bm{x}, \tilde{\bm{h}})  d \tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\bm{x}, \tilde{\bm{h}}) } d\tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} 
-	d\tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\int \prod_j^N e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} d\tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\biggl( \int e^{\sum_l b_1^l \beta_1^l (\tilde{h}_1) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i1}^{kl} \beta_1^l (\tilde{h}_1)} d \tilde{h}_1 \nonumber \\
-	& \times \int e^{\sum_l b_2^l \beta_2^l (\tilde{h}_2) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i2}^{kl} \beta_2^l (\tilde{h}_2)} d \tilde{h}_2 \nonumber \\
-	& \times ... \nonumber \\
-	& \times \int e^{\sum_l b_N^l \beta_N^l (\tilde{h}_N) + \sum_{i,k,l} \alpha_i^k (x_i) w_{iN}^{kl} \beta_N^l (\tilde{h}_N)} d \tilde{h}_N \biggr) \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j
-\end{align}
+\[
+\bm{w}_0^T\bm{C}[\bm{x}]\bm{w}_0=\lambda_0.
+\]
 !et
 
-Similarly
+If we want to maximize the variance (minimize the construction error)
+we simply pick the eigenvector of the covariance matrix with the
+largest eigenvalue. This establishes the link between the minimization
+of the reconstruction function $J$ in terms of an orthogonal matrix
+and the maximization of the variance and thereby the covariance of our
+observations encoded in the design/feature matrix $\bm{X}$.
 
-!bt
-\begin{align}
-	P_{RBM} (\bm{h}) =& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\tilde{\bm{x}}, \bm{h})} d\tilde{\bm{x}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{j, l} b_j^l \beta_j^l (h_j)}
-	\prod_i^M \int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i
-\end{align}
-!et
+The proof
+for the other eigenvectors $\bm{w}_1,\bm{w}_2,\dots$ can be
+established by applying the above arguments and using the fact that
+our basis of eigenvectors is orthogonal, see "Murphy chapter
+12.2":"https://mitpress.mit.edu/books/machine-learning-1".  The
+discussion in chapter 12.2 of Murphy's text has also a nice link with
+the Singular Value Decomposition theorem. For categorical data, see
+chapter 12.4 and discussion therein.
 
+For more details, see for example "Vidal, Ma and Sastry, chapter 2":"https://www.springer.com/gp/book/9780387878102".
 
-Using Bayes theorem
+!split
+===== Geometric Interpretation and link with Singular Value Decomposition =====
 
-!bt
-\begin{align}
-	P_{RBM} (\bm{h}|\bm{x}) =& \frac{P_{RBM} (\bm{x}, \bm{h})}{P_{RBM} (\bm{x})} \nonumber \\
-	=& \frac{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (h_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j} \nonumber \\
-	=& \prod_j^N \frac{e^{\sum_l b_j^l \beta_j^l (h_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)} }
-	{\int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j}
-\end{align}
-!et
-
-Similarly
-
-!bt
-\begin{align}
-	P_{RBM} (\bm{x}|\bm{h}) =&  \frac{P_{RBM} (\bm{x}, \bm{h})}{P_{RBM} (\bm{h})} \nonumber \\
-	=& \prod_i^M \frac{e^{\sum_k a_i^k \alpha_i^k (x_i)
-	+ \sum_{j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i}
-\end{align}
-!et
+For a detailed demonstration of the geometric interpretation, see "Vidal, Ma and Sastry, section 2.1.2":"https://www.springer.com/gp/book/9780387878102".
 
 
+Principal Component Analysis (PCA) is by far the most popular dimensionality reduction algorithm.
+First it identifies the hyperplane that lies closest to the data, and then it projects the data onto it.
+
+The following Python code uses NumPy’s _svd()_ function to obtain all the principal components of the
+training set, then extracts the first two principal components. First we center the data using either _pandas_ or our own code
+!bc pycod
+import numpy as np
+import pandas as pd
+from IPython.display import display
+np.random.seed(100)
+# setting up a 10 x 5 vanilla matrix 
+rows = 10
+cols = 5
+X = np.random.randn(rows,cols)
+df = pd.DataFrame(X)
+# Pandas does the centering for us
+df = df -df.mean()
+display(df)
+
+# we center it ourselves
+X_centered = X - X.mean(axis=0)
+# Then check the difference between pandas and our own set up
+print(X_centered-df)
+#Now we do an SVD
+U, s, V = np.linalg.svd(X_centered)
+c1 = V.T[:, 0]
+c2 = V.T[:, 1]
+W2 = V.T[:, :2]
+X2D = X_centered.dot(W2)
+print(X2D)
+!ec
+
+PCA assumes that the dataset is centered around the origin. Scikit-Learn’s PCA classes take care of centering
+the data for you. However, if you implement PCA yourself (as in the preceding example), or if you use other libraries, don’t
+forget to center the data first.
+
+Once you have identified all the principal components, you can reduce the dimensionality of the dataset
+down to $d$ dimensions by projecting it onto the hyperplane defined by the first $d$ principal components.
+Selecting this hyperplane ensures that the projection will preserve as much variance as possible. 
+!bc pycod
+W2 = V.T[:, :2]
+X2D = X_centered.dot(W2)
+!ec
+
+!split
+===== PCA and scikit-learn =====
+
+Scikit-Learn’s PCA class implements PCA using SVD decomposition just like we did before. The
+following code applies PCA to reduce the dimensionality of the dataset down to two dimensions (note
+that it automatically takes care of centering the data):
+!bc pycod
+#thereafter we do a PCA with Scikit-learn
+from sklearn.decomposition import PCA
+pca = PCA(n_components = 2)
+X2D = pca.fit_transform(X)
+print(X2D)
+!ec
+After fitting the PCA transformer to the dataset, you can access the principal components using the
+components variable (note that it contains the PCs as horizontal vectors, so, for example, the first
+principal component is equal to 
+!bc pycod
+pca.components_.T[:, 0]
+!ec
+Another very useful piece of information is the explained variance ratio of each principal component,
+available via the $explained\_variance\_ratio$ variable. It indicates the proportion of the dataset’s
+variance that lies along the axis of each principal component. 
+
+!split
+===== Example of Cancer Data =====
+We can now repeat the above but applied to real data, in this case the Wisconsin breast cancer data.
+Here we compute performance scores on the training data using logistic regression.
+!bc pycod
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import  train_test_split 
+from sklearn.datasets import load_breast_cancer
+from sklearn.linear_model import LogisticRegression
+cancer = load_breast_cancer()
+
+X_train, X_test, y_train, y_test = train_test_split(cancer.data,cancer.target,random_state=0)
+
+logreg = LogisticRegression()
+logreg.fit(X_train, y_train)
+print("Train set accuracy from Logistic Regression: {:.2f}".format(logreg.score(X_train,y_train)))
+# We scale the data
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(X_train)
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+# Then perform again a log reg fit
+logreg.fit(X_train_scaled, y_train)
+print("Train set accuracy scaled data: {:.2f}".format(logreg.score(X_train_scaled,y_train)))
+#thereafter we do a PCA with Scikit-learn
+from sklearn.decomposition import PCA
+pca = PCA(n_components = 2)
+X2D_train = pca.fit_transform(X_train_scaled)
+# and finally compute the log reg fit and the score on the training data	
+logreg.fit(X2D_train,y_train)
+print("Train set accuracy scaled and PCA data: {:.2f}".format(logreg.score(X2D_train,y_train)))
+
+!ec
+
+We see that our training data after the PCA decomposition has a performance similar to the non-scaled data. 
 
 
-The original RBM had binary visible and hidden nodes. They were
-showned to be universal approximators of discrete distributions.
-It was also shown that adding hidden units yields
-strictly improved modelling power. The common choice of binary values
-are 0 and 1. However, in some physics applications, -1 and 1 might be
-a more natural choice. We will here use 0 and 1.
+Instead of arbitrarily choosing the number of dimensions to reduce down to, it is generally preferable to
+choose the number of dimensions that add up to a sufficiently large portion of the variance (e.g., 95%).
+Unless, of course, you are reducing dimensionality for data visualization — in that case you will
+generally want to reduce the dimensionality down to 2 or 3.
+The following code computes PCA without reducing dimensionality, then computes the minimum number
+of dimensions required to preserve 95% of the training set’s variance:
+!bc pycod
+pca = PCA()
+pca.fit(X_train)
+cumsum = np.cumsum(pca.explained_variance_ratio_)
+d = np.argmax(cumsum >= 0.95) + 1
+!ec
+You could then set $n\_components=d$ and run PCA again. However, there is a much better option: instead
+of specifying the number of principal components you want to preserve, you can set $n\_components$ to be
+a float between 0.0 and 1.0, indicating the ratio of variance you wish to preserve:
+!bc pycod
+pca = PCA(n_components=0.95)
+X_reduced = pca.fit_transform(X_train)
+!ec
+
+!split
+===== Incremental PCA =====
+
+One problem with the preceding implementation of PCA is that it requires the whole training set to fit in
+memory in order for the SVD algorithm to run. Fortunately, Incremental PCA (IPCA) algorithms have
+been developed: you can split the training set into mini-batches and feed an IPCA algorithm one minibatch
+at a time. This is useful for large training sets, and also to apply PCA online (i.e., on the fly, as new
+instances arrive).
 
 
-!bt
-\begin{align}
-	E_{BB}(\bm{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\end{align}
-!et
+=== Randomized PCA ===
+
+Scikit-Learn offers yet another option to perform PCA, called Randomized PCA. This is a stochastic
+algorithm that quickly finds an approximation of the first d principal components. Its computational
+complexity is $O(m \times d^2)+O(d^3)$, instead of $O(m \times n^2) + O(n^3)$, so it is dramatically faster than the
+previous algorithms when $d$ is much smaller than $n$.
 
 
-
-!bt
-\begin{align}
-	p_{BB}(\bm{x}, \bm{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}}
-\end{align}
-!et
-
-with the partition function
-
-!bt
-\begin{align}
-	Z_{BB} = \sum_{\bm{x}, \bm{h}} e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} .
-\end{align}
-!et
-
-=== Marginal Probability Density Functions ===
-
-In order to find the probability of any configuration of the visible units we derive the marginal probability density function.
-
-!bt
-\begin{align}
-	p_{BB} (\bm{x}) =& \sum_{\bm{h}} p_{BB} (\bm{x}, \bm{h}) \\
-	=& \frac{1}{Z_{BB}} \sum_{\bm{h}} e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \sum_{\bm{h}} e^{\sum_j^N (b_j + \bm{x}^T \bm{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \sum_{\bm{h}} \prod_j^N e^{ (b_j + \bm{x}^T \bm{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \bigg ( \sum_{h_1} e^{(b_1 + \bm{x}^T \bm{w}_{\ast 1})h_1}
-	\times \sum_{h_2} e^{(b_2 + \bm{x}^T \bm{w}_{\ast 2})h_2} \times \nonumber \\
-	& ... \times \sum_{h_2} e^{(b_N + \bm{x}^T \bm{w}_{\ast N})h_N} \bigg ) \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N \sum_{h_j} e^{(b_j + \bm{x}^T \bm{w}_{\ast j}) h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}) .
-\end{align}
-!et
-
-A similar derivation yields the marginal probability of the hidden units
-
-!bt
-\begin{align}
-	p_{BB} (\bm{h}) = \frac{1}{Z_{BB}} e^{\bm{b}^T \bm{h}} \prod_i^M (1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h}}) .
-\end{align}
-!et
-
-=== Conditional Probability Density Functions ===
-
-We derive the probability of the hidden units given the visible units using Bayes' rule
-
-!bt
-\begin{align}
-	p_{BB} (\bm{h}|\bm{x}) =& \frac{p_{BB} (\bm{x}, \bm{h})}{p_{BB} (\bm{x})} \nonumber \\
-	=& \frac{ \frac{1}{Z_{BB}}  e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} }
-	        {\frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}})} \nonumber \\
-	=& \frac{  e^{\bm{x}^T \bm{a}} e^{ \sum_j^N (b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j} }
-	        { e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}})} \nonumber \\
-	=& \prod_j^N \frac{ e^{(b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j}  }
-	{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}} \nonumber \\
-	=& \prod_j^N p_{BB} (h_j| \bm{x}) .
-\end{align}
-!et
-
-From this we find the probability of a hidden unit being "on" or "off":
-
-!bt
-\begin{align}
-	p_{BB} (h_j=1 | \bm{x}) =&   \frac{ e^{(b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j}  }
-	{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}} \\
-	=&  \frac{ e^{(b_j + \bm{x}^T \bm{w}_{\ast j} )}  }
-	{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}} \\
-	=&  \frac{ 1 }{1 + e^{-(b_j + \bm{x}^T \bm{w}_{\ast j})} } ,
-\end{align}
-!et
-and
-
-!bt
-\begin{align}
-	p_{BB} (h_j=0 | \bm{x}) =\frac{ 1 }{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}} } .
-\end{align}
-!et
+=== Kernel PCA ===
 
 
-Similarly we have that the conditional probability of the visible units given the hidden are
+The kernel trick is a mathematical technique that implicitly maps instances into a
+very high-dimensional space (called the feature space), enabling nonlinear classification and regression
+with Support Vector Machines. Recall that a linear decision boundary in the high-dimensional feature
+space corresponds to a complex nonlinear decision boundary in the original space.
+It turns out that the same trick can be applied to PCA, making it possible to perform complex nonlinear
+projections for dimensionality reduction. This is called Kernel PCA (kPCA). It is often good at
+preserving clusters of instances after projection, or sometimes even unrolling datasets that lie close to a
+twisted manifold.
+For example, the following code uses Scikit-Learn’s KernelPCA class to perform kPCA with an
+!bc pycod
+from sklearn.decomposition import KernelPCA
+rbf_pca = KernelPCA(n_components = 2, kernel="rbf", gamma=0.04)
+X_reduced = rbf_pca.fit_transform(X)
+!ec
 
-!bt
-\begin{align}
-	p_{BB} (\bm{x}|\bm{h}) =& \prod_i^M \frac{ e^{ (a_i + \bm{w}_{i\ast}^T \bm{h}) x_i} }{ 1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h}} } \\
-	&= \prod_i^M p_{BB} (x_i | \bm{h}) .
-\end{align}
-!et
-
-
-!bt
-\begin{align}
-	p_{BB} (x_i=1 | \bm{h}) =& \frac{1}{1 + e^{-(a_i + \bm{w}_{i\ast}^T \bm{h} )}} \\
-	p_{BB} (x_i=0 | \bm{h}) =& \frac{1}{1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h} }} .
-\end{align}
-!et
-
-
-
+!split
+=====  Other techniques =====
 
 
-=== Gaussian-Binary Restricted Boltzmann Machines ===
+There are many other dimensionality reduction techniques, several of which are available in Scikit-Learn.
 
-
-Inserting into the expression for $E_{RBM}(\bm{x},\bm{h})$ in equation  results in the energy
-
-!bt
-\begin{align}
-	E_{GB}(\bm{x}, \bm{h}) =& \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
-	- \sum_j^N b_j h_j 
-	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
-	=& \vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 - \bm{b}^T \bm{h} 
-	- (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h} . 
-\end{align}
-!et
-
-=== Joint Probability Density Function ===
-
-!bt
-\begin{align}
-	p_{GB} (\bm{x}, \bm{h}) =& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
-	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{- \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
-	+ \sum_j^N b_j h_j 
-	+\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}} \nonumber \\
-	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
-	+ b_j h_j 
-	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\end{align}
-!et
-
-with the partition function given by
-
-!bt
-\begin{align}
-	Z_{GB} =& \int \sum_{\tilde{\bm{h}}}^{\tilde{\bm{H}}} e^{-\vert\vert\frac{\tilde{\bm{x}} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \tilde{\bm{h}} 
-	+ (\frac{\tilde{\bm{x}}}{\bm{\sigma}^2})^T \bm{W}\tilde{\bm{h}}} d\tilde{\bm{x}} .
-\end{align}
-!et
-
-=== Marginal Probability Density Functions ===
-
-We proceed to find the marginal probability densitites of the
-Gaussian-binary RBM. We first marginalize over the binary hidden units
-to find $p_{GB} (\bm{x})$
-
-!bt
-\begin{align}
-	p_{GB} (\bm{x}) =& \sum_{\tilde{\bm{h}}}^{\tilde{\bm{H}}} p_{GB} (\bm{x}, \tilde{\bm{h}}) \nonumber \\
-	=& \frac{1}{Z_{GB}} \sum_{\tilde{\bm{h}}}^{\tilde{\bm{H}}} 
-	e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \tilde{\bm{h}} 
-	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\tilde{\bm{h}}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2}
-	\prod_j^N (1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}} ) .
-\end{align}
-!et
-
-We next marginalize over the visible units. This is the first time we
-marginalize over continuous values. We rewrite the exponential factor
-dependent on $\bm{x}$ as a Gaussian function before we integrate in
-the last step.
-
-!bt
-\begin{align}
-	p_{GB} (\bm{h}) =& \int p_{GB} (\tilde{\bm{x}}, \bm{h}) d\tilde{\bm{x}} \nonumber \\
-	=& \frac{1}{Z_{GB}} \int e^{-\vert\vert\frac{\tilde{\bm{x}} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
-	+ (\frac{\tilde{\bm{x}}}{\bm{\sigma}^2})^T \bm{W}\bm{h}} d\tilde{\bm{x}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h} } \int \prod_i^M
-	e^{- \frac{(\tilde{x}_i - a_i)^2}{2\sigma_i^2} + \frac{\tilde{x}_i \bm{w}_{i\ast}^T \bm{h}}{\sigma_i^2} } d\tilde{\bm{x}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h} }
-	\biggl( \int e^{- \frac{(\tilde{x}_1 - a_1)^2}{2\sigma_1^2} + \frac{\tilde{x}_1 \bm{w}_{1\ast}^T \bm{h}}{\sigma_1^2} } d\tilde{x}_1 \nonumber \\
-	& \times \int e^{- \frac{(\tilde{x}_2 - a_2)^2}{2\sigma_2^2} + \frac{\tilde{x}_2 \bm{w}_{2\ast}^T \bm{h}}{\sigma_2^2} } d\tilde{x}_2 \nonumber \\
-	& \times ... \nonumber \\
-	&\times \int e^{- \frac{(\tilde{x}_M - a_M)^2}{2\sigma_M^2} + \frac{\tilde{x}_M \bm{w}_{M\ast}^T \bm{h}}{\sigma_M^2} } d\tilde{x}_M \biggr) \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	\int e^{- \frac{(\tilde{x}_i - a_i)^2 - 2\tilde{x}_i \bm{w}_{i\ast}^T \bm{h}}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	\int e^{- \frac{\tilde{x}_i^2 - 2\tilde{x}_i(a_i + \tilde{x}_i \bm{w}_{i\ast}^T \bm{h}) + a_i^2}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	\int e^{- \frac{\tilde{x}_i^2 - 2\tilde{x}_i(a_i + \bm{w}_{i\ast}^T \bm{h}) + (a_i + \bm{w}_{i\ast}^T \bm{h})^2 - (a_i + \bm{w}_{i\ast}^T \bm{h})^2 + a_i^2}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	\int e^{- \frac{(\tilde{x}_i - (a_i + \bm{w}_{i\ast}^T \bm{h}))^2 - a_i^2 -2a_i \bm{w}_{i\ast}^T \bm{h} - (\bm{w}_{i\ast}^T \bm{h})^2 + a_i^2}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	e^{\frac{2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2 }{2\sigma_i^2}}
-	\int e^{- \frac{(\tilde{x}_i - a_i - \bm{w}_{i\ast}^T \bm{h})^2}{2\sigma_i^2}}
-	d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	\sqrt{2\pi \sigma_i^2}
-	e^{\frac{2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2 }{2\sigma_i^2}} .
-\end{align}
-!et
-
-=== Conditional Probability Density Functions ===
-
-We finish by deriving the conditional probabilities.
-!bt 
-\begin{align}
-	p_{GB} (\bm{h}| \bm{x}) =& \frac{p_{GB} (\bm{x}, \bm{h})}{p_{GB} (\bm{x})} \nonumber \\
-	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
-	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h}}}
-	{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2}
-	\prod_j^N (1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}} ) }
-	\nonumber \\
-	=& \prod_j^N \frac{e^{(b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j})h_j } }
-	{1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} \nonumber \\
-	=& \prod_j^N p_{GB} (h_j|\bm{x}).
-\end{align}
-!et
-The conditional probability of a binary hidden unit $h_j$ being on or off again takes the form of a sigmoid function
-
-!bt
-\begin{align}
-	p_{GB} (h_j =1 | \bm{x}) =& \frac{e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j} } }
-	{1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} \nonumber \\
-	=& \frac{1}{1 + e^{-b_j - (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} \\
-	p_{GB} (h_j =0 | \bm{x}) =&
-	\frac{1}{1 + e^{b_j +(\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} .
-\end{align}
-!et
-
-The conditional probability of the continuous $\bm{x}$ now has another form, however.
-
-!bt
-\begin{align}
-	p_{GB} (\bm{x}|\bm{h})
-	=& \frac{p_{GB} (\bm{x}, \bm{h})}{p_{GB} (\bm{h})} \nonumber \\
-	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
-	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h}}}
-	{\frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
-	\sqrt{2\pi \sigma_i^2}
-	e^{\frac{2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2 }{2\sigma_i^2}}}
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	\frac{e^{- \frac{(x_i - a_i)^2}{2\sigma_i^2} + \frac{x_i \bm{w}_{i\ast}^T \bm{h}}{2\sigma_i^2} }}
-	{e^{\frac{2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2 }{2\sigma_i^2}}}
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	\frac{e^{-\frac{x_i^2 - 2a_i x_i + a_i^2 - 2x_i \bm{w}_{i\ast}^T\bm{h} }{2\sigma_i^2} } }
-	{e^{\frac{2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2 }{2\sigma_i^2}}}
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	e^{- \frac{x_i^2 - 2a_i x_i + a_i^2 - 2x_i \bm{w}_{i\ast}^T\bm{h}
-	+ 2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2}
-	{2\sigma_i^2} }
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	e^{ - \frac{(x_i - b_i - \bm{w}_{i\ast}^T \bm{h})^2}{2\sigma_i^2}} \nonumber \\
-	=& \prod_i^M \mathcal{N}
-	(x_i | b_i + \bm{w}_{i\ast}^T \bm{h}, \sigma_i^2) \\
-	\Rightarrow p_{GB} (x_i|\bm{h}) =& \mathcal{N}
-	(x_i | b_i + \bm{w}_{i\ast}^T \bm{h}, \sigma_i^2) .
-\end{align}
-!et
-
-
-The form of these conditional probabilities explains the name
-"Gaussian" and the form of the Gaussian-binary energy function. We see
-that the conditional probability of $x_i$ given $\bm{h}$ is a normal
-distribution with mean $b_i + \bm{w}_{i\ast}^T \bm{h}$ and variance
-$\sigma_i^2$.
+Here are some of the most popular:
+* _Multidimensional Scaling (MDS)_ reduces dimensionality while trying to preserve the distances between the instances.
+* _Isomap_ creates a graph by connecting each instance to its nearest neighbors, then reduces dimensionality while trying to preserve the geodesic distances between the instances.
+* _t-Distributed Stochastic Neighbor Embedding_ (t-SNE) reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space (e.g., to visualize the MNIST images in 2D).
+* Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.
 
 
 
+
+
+!split
+===== Back to Autoencoders: Linear Autoencoders =====
+
+These examples here are based the codes from A. Geron's textbook. They
+can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
+
+
+
+!bc pycod
+import sys
+assert sys.version_info >= (3, 5)
+
+# Is this notebook running on Colab or Kaggle?
+IS_COLAB = "google.colab" in sys.modules
+IS_KAGGLE = "kaggle_secrets" in sys.modules
+
+# Scikit-Learn >=0.20 is required
+import sklearn
+assert sklearn.__version__ >= "0.20"
+
+# TensorFlow >= 2.0 is required
+import tensorflow as tf
+from tensorflow import keras
+assert tf.__version__ >= "2.0"
+
+if not tf.config.list_physical_devices('GPU'):
+    print("No GPU was detected. LSTMs and CNNs can be very slow without a GPU.")
+    if IS_COLAB:
+        print("Go to Runtime > Change runtime and select a GPU hardware accelerator.")
+    if IS_KAGGLE:
+        print("Go to Settings > Accelerator and select GPU.")
+
+# Common imports
+import numpy as np
+import os
+
+# to make this notebook's output stable across runs
+np.random.seed(42)
+tf.random.set_seed(42)
+
+# To plot pretty figures
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+mpl.rc('axes', labelsize=14)
+mpl.rc('xtick', labelsize=12)
+mpl.rc('ytick', labelsize=12)
+
+# Where to save the figures
+PROJECT_ROOT_DIR = "."
+CHAPTER_ID = "autoencoders"
+IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
+os.makedirs(IMAGES_PATH, exist_ok=True)
+
+def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
+    print("Saving figure", fig_id)
+    if tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, format=fig_extension, dpi=resolution)
+
+def plot_image(image):
+    plt.imshow(image, cmap="binary")
+    plt.axis("off")
+
+
+np.random.seed(4)
+
+def generate_3d_data(m, w1=0.1, w2=0.3, noise=0.1):
+    angles = np.random.rand(m) * 3 * np.pi / 2 - 0.5
+    data = np.empty((m, 3))
+    data[:, 0] = np.cos(angles) + np.sin(angles)/2 + noise * np.random.randn(m) / 2
+    data[:, 1] = np.sin(angles) * 0.7 + noise * np.random.randn(m) / 2
+    data[:, 2] = data[:, 0] * w1 + data[:, 1] * w2 + noise * np.random.randn(m)
+    return data
+
+X_train = generate_3d_data(60)
+X_train = X_train - X_train.mean(axis=0, keepdims=0)
+
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+encoder = keras.models.Sequential([keras.layers.Dense(2, input_shape=[3])])
+decoder = keras.models.Sequential([keras.layers.Dense(3, input_shape=[2])])
+autoencoder = keras.models.Sequential([encoder, decoder])
+
+autoencoder.compile(loss="mse", optimizer=keras.optimizers.SGD(learning_rate=1.5))
+
+codings = encoder.predict(X_train)
+fig = plt.figure(figsize=(4,3))
+plt.plot(codings[:,0], codings[:, 1], "b.")
+plt.xlabel("$z_1$", fontsize=18)
+plt.ylabel("$z_2$", fontsize=18, rotation=0)
+plt.grid(True)
+save_fig("linear_autoencoder_pca_plot")
+plt.show()
+
+!ec
+
+!split
+===== More advanced features, stacked AEs =====
+
+!bc pycod
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+X_train_full = X_train_full.astype(np.float32) / 255
+X_test = X_test.astype(np.float32) / 255
+X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
+y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
+!ec
+
+We can now train all layers at once by building a stacked AE with 3 hidden layers and 1 output layer (i.e., 2 stacked Autoencoders).
+
+!bc pycod
+def rounded_accuracy(y_true, y_pred):
+    return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
+tf.random.set_seed(42)
+np.random.seed(42)
+
+stacked_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu"),
+])
+stacked_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+stacked_ae = keras.models.Sequential([stacked_encoder, stacked_decoder])
+stacked_ae.compile(loss="binary_crossentropy",
+                   optimizer=keras.optimizers.SGD(learning_rate=1.5), metrics=[rounded_accuracy])
+history = stacked_ae.fit(X_train, X_train, epochs=20,
+                         validation_data=(X_valid, X_valid))
+!ec
+
+
+This function processes a few test images through the autoencoder and
+displays the original images and their reconstructions.
+
+!bc pycod
+def show_reconstructions(model, images=X_valid, n_images=5):
+    reconstructions = model.predict(images[:n_images])
+    fig = plt.figure(figsize=(n_images * 1.5, 3))
+    for image_index in range(n_images):
+        plt.subplot(2, n_images, 1 + image_index)
+        plot_image(images[image_index])
+        plt.subplot(2, n_images, 1 + n_images + image_index)
+        plot_image(reconstructions[image_index])
+show_reconstructions(stacked_ae)
+save_fig("reconstruction_plot")
+!ec
+
+Then visualize 
+!bc pycod
+np.random.seed(42)
+from sklearn.manifold import TSNE
+X_valid_compressed = stacked_encoder.predict(X_valid)
+tsne = TSNE()
+X_valid_2D = tsne.fit_transform(X_valid_compressed)
+X_valid_2D = (X_valid_2D - X_valid_2D.min()) / (X_valid_2D.max() - X_valid_2D.min())
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap="tab10")
+plt.axis("off")
+plt.show()
+!ec
+And visualize in a nicer way
+!bc pycod
+# adapted from https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html
+plt.figure(figsize=(10, 8))
+cmap = plt.cm.tab10
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap=cmap)
+image_positions = np.array([[1., 1.]])
+for index, position in enumerate(X_valid_2D):
+    dist = np.sum((position - image_positions) ** 2, axis=1)
+    if np.min(dist) > 0.02: # if far enough from other images
+        image_positions = np.r_[image_positions, [position]]
+        imagebox = mpl.offsetbox.AnnotationBbox(
+            mpl.offsetbox.OffsetImage(X_valid[index], cmap="binary"),
+            position, bboxprops={"edgecolor": cmap(y_valid[index]), "lw": 2})
+        plt.gca().add_artist(imagebox)
+plt.axis("off")
+save_fig("fashion_mnist_visualization_plot")
+plt.show()
+!ec
+
+!split
+===== Using Convolutional Layers Instead of Dense Layers =====
+
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+conv_encoder = keras.models.Sequential([
+    keras.layers.Reshape([28, 28, 1], input_shape=[28, 28]),
+    keras.layers.Conv2D(16, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2),
+    keras.layers.Conv2D(32, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2),
+    keras.layers.Conv2D(64, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2)
+])
+conv_decoder = keras.models.Sequential([
+    keras.layers.Conv2DTranspose(32, kernel_size=3, strides=2, padding="VALID", activation="selu",
+                                 input_shape=[3, 3, 64]),
+    keras.layers.Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2DTranspose(1, kernel_size=3, strides=2, padding="SAME", activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+conv_ae = keras.models.Sequential([conv_encoder, conv_decoder])
+
+conv_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                metrics=[rounded_accuracy])
+history = conv_ae.fit(X_train, X_train, epochs=5,
+                      validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+conv_encoder.summary()
+conv_decoder.summary()
+!ec
+
+!bc pycod
+show_reconstructions(conv_ae)
+plt.show()
+!ec
+
+!split
+===== Recurrent Autoencoders =====
+
+!bc pycod
+recurrent_encoder = keras.models.Sequential([
+    keras.layers.LSTM(100, return_sequences=True, input_shape=[28, 28]),
+    keras.layers.LSTM(30)
+])
+recurrent_decoder = keras.models.Sequential([
+    keras.layers.RepeatVector(28, input_shape=[30]),
+    keras.layers.LSTM(100, return_sequences=True),
+    keras.layers.TimeDistributed(keras.layers.Dense(28, activation="sigmoid"))
+])
+recurrent_ae = keras.models.Sequential([recurrent_encoder, recurrent_decoder])
+recurrent_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(0.1),
+                     metrics=[rounded_accuracy])
+history = recurrent_ae.fit(X_train, X_train, epochs=10, validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+show_reconstructions(recurrent_ae)
+plt.show()
+!ec
+!split
+===== Stacked denoising Autoencoder with Gaussian noise =====
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+denoising_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.GaussianNoise(0.2),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+denoising_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+denoising_ae = keras.models.Sequential([denoising_encoder, denoising_decoder])
+denoising_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                     metrics=[rounded_accuracy])
+history = denoising_ae.fit(X_train, X_train, epochs=10,
+                           validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+noise = keras.layers.GaussianNoise(0.2)
+show_reconstructions(denoising_ae, noise(X_valid, training=True))
+plt.show()
+!ec
+And using dropout
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+dropout_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+dropout_ae = keras.models.Sequential([dropout_encoder, dropout_decoder])
+dropout_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                   metrics=[rounded_accuracy])
+history = dropout_ae.fit(X_train, X_train, epochs=10,
+                         validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout = keras.layers.Dropout(0.5)
+show_reconstructions(dropout_ae, dropout(X_valid, training=True))
+save_fig("dropout_denoising_plot", tight_layout=False)
+!ec
