@@ -90,6 +90,8 @@ Furthermore, all teaching material is available from this GitHub link.
 - Autoencoders and discussions of codes and links with PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
 - Reading recommendation: Goodfellow et al chapter 14
+- Video of Lecture at https://youtu.be/PU_8riCscQg
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch12.pdf
 
 
 ## March 18-22: Deep generative models
