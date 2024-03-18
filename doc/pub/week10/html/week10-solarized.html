@@ -122,7 +122,8 @@ div.toc p,a {
               ('Stacked denoising Autoencoder with Gaussian noise',
                2,
                None,
-               'stacked-denoising-autoencoder-with-gaussian-noise')]}
+               'stacked-denoising-autoencoder-with-gaussian-noise'),
+              ('PyTorch example', 2, None, 'pytorch-example')]}
 end of tocinfo -->
 
 <body>
@@ -1583,6 +1584,356 @@ np.random.seed(<span style="color: #B452CD">42</span>)
 dropout = keras.layers.Dropout(<span style="color: #B452CD">0.5</span>)
 show_reconstructions(dropout_ae, dropout(X_valid, training=<span style="color: #8B008B; font-weight: bold">True</span>))
 save_fig(<span style="color: #CD5555">&quot;dropout_denoising_plot&quot;</span>, tight_layout=<span style="color: #8B008B; font-weight: bold">False</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="pytorch-example">PyTorch example </h2>
+<p>We will continue with the MNIST database, which has \( 60000 \) training examples and a test set of 10000 handwritten numbers. The images have
+only one color channel and have a size of \( 28\times 28 \) pixels.
+We start by uploading the data set.
+</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># import the Torch packages</span>
+<span style="color: #228B22"># transforms are used to preprocess the images, e.g. crop, rotate, normalize, etc</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets,transforms
+
+<span style="color: #228B22"># specify the data path in which you would like to store the downloaded files</span>
+<span style="color: #228B22"># ToTensor() here is used to convert data type to tensor</span>
+
+train_dataset = datasets.MNIST(root=<span style="color: #CD5555">&#39;./mnist_data/&#39;</span>, train=<span style="color: #8B008B; font-weight: bold">True</span>, transform=transforms.ToTensor(), download=<span style="color: #8B008B; font-weight: bold">True</span>)
+test_dataset = datasets.MNIST(root=<span style="color: #CD5555">&#39;./mnist_data/&#39;</span>, train=<span style="color: #8B008B; font-weight: bold">False</span>, transform=transforms.ToTensor(), download=<span style="color: #8B008B; font-weight: bold">True</span>)
+<span style="color: #658b00">print</span>(train_dataset)
+batchSize=<span style="color: #B452CD">128</span>
+
+<span style="color: #228B22">#only after packed in DataLoader, can we feed the data into the neural network iteratively</span>
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batchSize, shuffle=<span style="color: #8B008B; font-weight: bold">True</span>)
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batchSize, shuffle=<span style="color: #8B008B; font-weight: bold">False</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>We visualize the images here using the \( imshow \) function  function and the \( make\_grid \) function from PyTorch to arrange and display them.</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># package we used to manipulate matrix</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #228B22"># package we used for image processing</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">matplotlib</span> <span style="color: #8B008B; font-weight: bold">import</span> pyplot <span style="color: #8B008B; font-weight: bold">as</span> plt
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> make_grid
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">imshow</span>(img):
+    npimg = img.numpy()
+    <span style="color: #228B22">#transpose: change array axis to correspond to the plt.imshow() function     </span>
+    plt.imshow(np.transpose(npimg, (<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">0</span>))) 
+    plt.show()
+
+<span style="color: #228B22"># load the first 16 training samples from next iteration</span>
+<span style="color: #228B22"># [:16,:,:,:] for the 4 dimension of examples, first dimension take first 16, other dimension take all data</span>
+<span style="color: #228B22"># arrange the image in grid</span>
+examples, _ = <span style="color: #658b00">next</span>(<span style="color: #658b00">iter</span>(train_loader))
+example_show=make_grid(examples[:<span style="color: #B452CD">16</span>,:,:,:], <span style="color: #B452CD">4</span>)
+
+<span style="color: #228B22"># then display them</span>
+imshow(example_show)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Our autoencoder consists of two parts, see also the TensorFlow example
+above. The encoder and decoder parts are represented by two fully
+connected feed forward neural networks where we use the standard
+Sigmoid function.  In the encoder part we reduce the dimensionality of
+the image from \( 28\times 28=784 \) pixels to first \( 16\times 16=256 \)
+pixels and then to 128 pixels. The 128 pixel representation is then
+used to define the representation of the input and the input to the
+decoder part.  The latter attempts to reconstruct the images.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">etorch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
+
+<span style="color: #228B22"># Network Parameters</span>
+num_hidden_1 = <span style="color: #B452CD">256</span>  <span style="color: #228B22"># 1st layer num features</span>
+num_hidden_2 = <span style="color: #B452CD">128</span>  <span style="color: #228B22"># 2nd layer num features (the latent dim)</span>
+num_input = <span style="color: #B452CD">784</span>  <span style="color: #228B22"># MNIST data input (img shape: 28*28)</span>
+
+
+<span style="color: #228B22"># Building the encoder</span>
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">Autoencoder</span>(nn.Module):
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>, x_dim, h_dim1, h_dim2):
+        <span style="color: #658b00">super</span>(Autoencoder, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #228B22"># encoder part</span>
+        <span style="color: #658b00">self</span>.fc1 = nn.Linear(x_dim, h_dim1)
+        <span style="color: #658b00">self</span>.fc2 = nn.Linear(h_dim1, h_dim2)
+        <span style="color: #228B22"># decoder part</span>
+        <span style="color: #658b00">self</span>.fc3 = nn.Linear(h_dim2, h_dim1)
+        <span style="color: #658b00">self</span>.fc4 = nn.Linear(h_dim1, x_dim)
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">encoder</span>(<span style="color: #658b00">self</span>, x):
+        x = torch.sigmoid(<span style="color: #658b00">self</span>.fc1(x))
+        x = torch.sigmoid(<span style="color: #658b00">self</span>.fc2(x))
+        <span style="color: #8B008B; font-weight: bold">return</span> x
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">decoder</span>(<span style="color: #658b00">self</span>, x):
+        x = torch.sigmoid(<span style="color: #658b00">self</span>.fc3(x))
+        x = torch.sigmoid(<span style="color: #658b00">self</span>.fc4(x))
+        <span style="color: #8B008B; font-weight: bold">return</span> x
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x):
+        x = <span style="color: #658b00">self</span>.encoder(x)
+        x = <span style="color: #658b00">self</span>.decoder(x)
+        <span style="color: #8B008B; font-weight: bold">return</span> x
+
+<span style="color: #228B22"># When initializing, it will run __init__() function as above</span>
+model = Autoencoder(num_input, num_hidden_1, num_hidden_2)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>We define here the cost/loss function and the optimizer we employ (Adam here).</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># define loss function and parameters</span>
+optimizer = optim.Adam(model.parameters())
+epoch = <span style="color: #B452CD">100</span>
+<span style="color: #228B22"># MSE loss will calculate Mean Squared Error between the inputs </span>
+loss_function = nn.MSELoss()
+
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;====Training start====&#39;</span>)
+<span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(epoch):
+    train_loss = <span style="color: #B452CD">0</span>
+    <span style="color: #8B008B; font-weight: bold">for</span> batch_idx, (data, _) <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(train_loader):
+        <span style="color: #228B22"># prepare input data</span>
+        inputs = torch.reshape(data,(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">784</span>)) <span style="color: #228B22"># -1 can be any value.</span>
+        <span style="color: #228B22"># set gradient to zero</span>
+        optimizer.zero_grad()
+        <span style="color: #228B22"># feed inputs into model</span>
+        recon_x = model(inputs)
+        <span style="color: #228B22"># calculating loss </span>
+        loss = loss_function(recon_x, inputs)
+        <span style="color: #228B22"># calculate gradient of each parameter</span>
+        loss.backward()
+        train_loss += loss.item()
+        <span style="color: #228B22"># update the weight based on the gradient calculated</span>
+        optimizer.step()
+    <span style="color: #8B008B; font-weight: bold">if</span> i%<span style="color: #B452CD">10</span>==<span style="color: #B452CD">0</span>:    
+        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;====&gt; Epoch: {} Average loss: {:.9f}&#39;</span>.format(i, train_loss ))
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;====Training finish====&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>As we have trained the network, we will now reconstruct various test samples to see if the model can generalize to data which
+were not included in the training set. 
+</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># load 16 images from testset</span>
+inputs, _ = <span style="color: #658b00">next</span>(<span style="color: #658b00">iter</span>(test_loader))
+inputs_example = make_grid(inputs[:<span style="color: #B452CD">16</span>,:,:,:],<span style="color: #B452CD">4</span>)
+imshow(inputs_example)
+
+<span style="color: #228B22">#convert from image to tensor</span>
+<span style="color: #228B22">#inputs=inputs.cuda()</span>
+inputs=torch.reshape(inputs,(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>))
+
+<span style="color: #228B22"># get the outputs from the trained model</span>
+outputs=model(inputs)
+
+<span style="color: #228B22">#convert from tensor to image</span>
+outputs=torch.reshape(outputs,(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>))
+outputs=outputs.detach().cpu()
+
+<span style="color: #228B22">#show the output images</span>
+outputs_example = make_grid(outputs[:<span style="color: #B452CD">16</span>,:,:,:],<span style="color: #B452CD">4</span>)
+imshow(outputs_example)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>After training the auto-encoder, we can now use the model to reconstruct some images.
+In order to reconstruct different training images, the model
+has learned to recognize how the image looks like and describe it in
+the 128-dimensional  latent space. In other words, the visual information of
+images is compressed and encoded in the 128-dimensional representations. As we
+assume that samples from the same categories should be more visually
+similar than those from different classes, the representations can
+then be used for image recognition, i.e., handwritten digit images
+recognition in our case.
+</p>
+
+<p>One simple way to recognize images is to randomly select ten training
+samples from each class and annotate them with the corresponding label.
+Then given the
+test data, we can predict which classes they belong to by finding the
+most similar labelled training samples to them.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># get 100 image-label pairs from training set</span>
+x_train, y_train = <span style="color: #658b00">next</span>(<span style="color: #658b00">iter</span>(train_loader))
+
+<span style="color: #228B22"># 10 classes, 10 samples per class, 100 in total</span>
+candidates = np.random.choice(batchSize, <span style="color: #B452CD">10</span>*<span style="color: #B452CD">10</span>)
+
+<span style="color: #228B22"># randomly select 100 samples</span>
+x_train = x_train[candidates]
+y_train = y_train[candidates]
+
+<span style="color: #228B22"># display the selected samples and print their labels</span>
+
+imshow(make_grid(x_train[:<span style="color: #B452CD">100</span>,:,:,:],<span style="color: #B452CD">10</span>))
+<span style="color: #658b00">print</span>(y_train.reshape(<span style="color: #B452CD">10</span>, <span style="color: #B452CD">10</span>))
+
+<span style="color: #228B22"># get 100 image-label pairs from test set</span>
+x_test, y_test = <span style="color: #658b00">next</span>(<span style="color: #658b00">iter</span>(train_loader))
+candidates_test = np.random.choice(batchSize, <span style="color: #B452CD">10</span>*<span style="color: #B452CD">10</span>)
+
+x_test = x_test[candidates_test]
+y_test = y_test[candidates_test]
+
+<span style="color: #228B22"># display the selected samples and print their labels</span>
+imshow(make_grid(x_test[:<span style="color: #B452CD">100</span>,:,:,:],<span style="color: #B452CD">10</span>))
+
+<span style="color: #658b00">print</span>(y_test.reshape(<span style="color: #B452CD">10</span>, <span style="color: #B452CD">10</span>))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># compute the representations of training and test samples</span>
+<span style="color: #228B22">#h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))</span>
+<span style="color: #228B22">#h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))</span>
+h_train=model.encoder(torch.reshape(x_train,(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>)))
+h_test=model.encoder(torch.reshape(x_test,(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>)))
+
+<span style="color: #228B22"># find the nearest training samples to each test instance, in terms of MSE</span>
+MSEs = np.mean(np.power(np.expand_dims(h_test.detach().cpu(), axis=<span style="color: #B452CD">1</span>) - np.expand_dims(h_train.detach().cpu(), axis=<span style="color: #B452CD">0</span>), <span style="color: #B452CD">2</span>), axis=<span style="color: #B452CD">2</span>)
+neighbours = MSEs.argmin(axis=<span style="color: #B452CD">1</span>)
+predicts = y_train[neighbours]
+
+<span style="color: #228B22"># print(np.stack([y_test, predicts], axis=1))</span>
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Recognition accuracy according to the learned representation is %.1f%%&#39;</span> % (<span style="color: #B452CD">100</span> * (y_test == predicts).numpy().astype(np.float32).mean()))
 </pre>
 </div>
       </div>

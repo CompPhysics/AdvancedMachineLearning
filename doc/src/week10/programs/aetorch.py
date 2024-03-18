@@ -122,7 +122,7 @@ inputs_example = make_grid(inputs[:16,:,:,:],4)
 imshow(inputs_example)
 
 #convert from image to tensor
-inputs=inputs.cuda()
+#inputs=inputs.cuda()
 inputs=torch.reshape(inputs,(-1,784))
 
 # get the outputs from the trained model
@@ -164,8 +164,10 @@ imshow(make_grid(x_test[:100,:,:,:],10))
 print(y_test.reshape(10, 10))
 
 # compute the representations of training and test samples
-h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))
-h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))
+#h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))
+#h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))
+h_train=model.encoder(torch.reshape(x_train,(-1,784)))
+h_test=model.encoder(torch.reshape(x_test,(-1,784)))
 
 # find the nearest training samples to each test instance, in terms of MSE
 MSEs = np.mean(np.power(np.expand_dims(h_test.detach().cpu(), axis=1) - np.expand_dims(h_train.detach().cpu(), axis=0), 2), axis=2)

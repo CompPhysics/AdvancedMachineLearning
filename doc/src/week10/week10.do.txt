@@ -893,3 +893,219 @@ dropout = keras.layers.Dropout(0.5)
 show_reconstructions(dropout_ae, dropout(X_valid, training=True))
 save_fig("dropout_denoising_plot", tight_layout=False)
 !ec
+
+
+!split
+===== PyTorch example =====
+We will continue with the MNIST database, which has $60000$ training examples and a test set of 10000 handwritten numbers. The images have
+only one color channel and have a size of $28\times 28$ pixels.
+We start by uploading the data set.
+!bc pycod
+# import the Torch packages
+# transforms are used to preprocess the images, e.g. crop, rotate, normalize, etc
+import torch
+from torchvision import datasets,transforms
+
+# specify the data path in which you would like to store the downloaded files
+# ToTensor() here is used to convert data type to tensor
+
+train_dataset = datasets.MNIST(root='./mnist_data/', train=True, transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.MNIST(root='./mnist_data/', train=False, transform=transforms.ToTensor(), download=True)
+print(train_dataset)
+batchSize=128
+
+#only after packed in DataLoader, can we feed the data into the neural network iteratively
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batchSize, shuffle=True)
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batchSize, shuffle=False)
+!ec 
+
+We visualize the images here using the $imshow$ function  function and the $make\_grid$ function from PyTorch to arrange and display them.
+
+!bc pycod
+# package we used to manipulate matrix
+import numpy as np
+# package we used for image processing
+from matplotlib import pyplot as plt
+from torchvision.utils import make_grid
+
+def imshow(img):
+    npimg = img.numpy()
+    #transpose: change array axis to correspond to the plt.imshow() function     
+    plt.imshow(np.transpose(npimg, (1, 2, 0))) 
+    plt.show()
+
+# load the first 16 training samples from next iteration
+# [:16,:,:,:] for the 4 dimension of examples, first dimension take first 16, other dimension take all data
+# arrange the image in grid
+examples, _ = next(iter(train_loader))
+example_show=make_grid(examples[:16,:,:,:], 4)
+
+# then display them
+imshow(example_show)
+!ec
+
+Our autoencoder consists of two parts, see also the TensorFlow example
+above. The encoder and decoder parts are represented by two fully
+connected feed forward neural networks where we use the standard
+Sigmoid function.  In the encoder part we reduce the dimensionality of
+the image from $28\times 28=784$ pixels to first $16\times 16=256$
+pixels and then to 128 pixels. The 128 pixel representation is then
+used to define the representation of the input and the input to the
+decoder part.  The latter attempts to reconstruct the images.
+
+!bc pycod
+import etorch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# Network Parameters
+num_hidden_1 = 256  # 1st layer num features
+num_hidden_2 = 128  # 2nd layer num features (the latent dim)
+num_input = 784  # MNIST data input (img shape: 28*28)
+
+
+# Building the encoder
+class Autoencoder(nn.Module):
+    def __init__(self, x_dim, h_dim1, h_dim2):
+        super(Autoencoder, self).__init__()
+        # encoder part
+        self.fc1 = nn.Linear(x_dim, h_dim1)
+        self.fc2 = nn.Linear(h_dim1, h_dim2)
+        # decoder part
+        self.fc3 = nn.Linear(h_dim2, h_dim1)
+        self.fc4 = nn.Linear(h_dim1, x_dim)
+
+    def encoder(self, x):
+        x = torch.sigmoid(self.fc1(x))
+        x = torch.sigmoid(self.fc2(x))
+        return x
+
+    def decoder(self, x):
+        x = torch.sigmoid(self.fc3(x))
+        x = torch.sigmoid(self.fc4(x))
+        return x
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
+# When initializing, it will run __init__() function as above
+model = Autoencoder(num_input, num_hidden_1, num_hidden_2)
+!ec
+
+We define here the cost/loss function and the optimizer we employ (Adam here).
+!bc pycod 
+# define loss function and parameters
+optimizer = optim.Adam(model.parameters())
+epoch = 100
+# MSE loss will calculate Mean Squared Error between the inputs 
+loss_function = nn.MSELoss()
+
+print('====Training start====')
+for i in range(epoch):
+    train_loss = 0
+    for batch_idx, (data, _) in enumerate(train_loader):
+        # prepare input data
+        inputs = torch.reshape(data,(-1, 784)) # -1 can be any value.
+        # set gradient to zero
+        optimizer.zero_grad()
+        # feed inputs into model
+        recon_x = model(inputs)
+        # calculating loss 
+        loss = loss_function(recon_x, inputs)
+        # calculate gradient of each parameter
+        loss.backward()
+        train_loss += loss.item()
+        # update the weight based on the gradient calculated
+        optimizer.step()
+    if i%10==0:    
+        print('====> Epoch: {} Average loss: {:.9f}'.format(i, train_loss ))
+print('====Training finish====')
+!ec
+As we have trained the network, we will now reconstruct various test samples to see if the model can generalize to data which
+were not included in the training set. 
+!bc pycod
+# load 16 images from testset
+inputs, _ = next(iter(test_loader))
+inputs_example = make_grid(inputs[:16,:,:,:],4)
+imshow(inputs_example)
+
+#convert from image to tensor
+#inputs=inputs.cuda()
+inputs=torch.reshape(inputs,(-1,784))
+
+# get the outputs from the trained model
+outputs=model(inputs)
+
+#convert from tensor to image
+outputs=torch.reshape(outputs,(-1,1,28,28))
+outputs=outputs.detach().cpu()
+
+#show the output images
+outputs_example = make_grid(outputs[:16,:,:,:],4)
+imshow(outputs_example)
+!ec
+
+After training the auto-encoder, we can now use the model to reconstruct some images.
+In order to reconstruct different training images, the model
+has learned to recognize how the image looks like and describe it in
+the 128-dimensional  latent space. In other words, the visual information of
+images is compressed and encoded in the 128-dimensional representations. As we
+assume that samples from the same categories should be more visually
+similar than those from different classes, the representations can
+then be used for image recognition, i.e., handwritten digit images
+recognition in our case.
+
+One simple way to recognize images is to randomly select ten training
+samples from each class and annotate them with the corresponding label.
+Then given the
+test data, we can predict which classes they belong to by finding the
+most similar labelled training samples to them.
+
+
+!bc pycod
+# get 100 image-label pairs from training set
+x_train, y_train = next(iter(train_loader))
+
+# 10 classes, 10 samples per class, 100 in total
+candidates = np.random.choice(batchSize, 10*10)
+
+# randomly select 100 samples
+x_train = x_train[candidates]
+y_train = y_train[candidates]
+
+# display the selected samples and print their labels
+
+imshow(make_grid(x_train[:100,:,:,:],10))
+print(y_train.reshape(10, 10))
+
+# get 100 image-label pairs from test set
+x_test, y_test = next(iter(train_loader))
+candidates_test = np.random.choice(batchSize, 10*10)
+
+x_test = x_test[candidates_test]
+y_test = y_test[candidates_test]
+
+# display the selected samples and print their labels
+imshow(make_grid(x_test[:100,:,:,:],10))
+
+print(y_test.reshape(10, 10))
+!ec
+
+!bc pycod
+# compute the representations of training and test samples
+#h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))
+#h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))
+h_train=model.encoder(torch.reshape(x_train,(-1,784)))
+h_test=model.encoder(torch.reshape(x_test,(-1,784)))
+
+# find the nearest training samples to each test instance, in terms of MSE
+MSEs = np.mean(np.power(np.expand_dims(h_test.detach().cpu(), axis=1) - np.expand_dims(h_train.detach().cpu(), axis=0), 2), axis=2)
+neighbours = MSEs.argmin(axis=1)
+predicts = y_train[neighbours]
+
+# print(np.stack([y_test, predicts], axis=1))
+print('Recognition accuracy according to the learned representation is %.1f%%' % (100 * (y_test == predicts).numpy().astype(np.float32).mean()))
+
+!ec
