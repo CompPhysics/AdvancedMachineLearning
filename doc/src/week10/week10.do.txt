@@ -7,8 +7,8 @@ DATE: March 19, 2024
 
 !bblock
 o Autoencoders (AEs) and Principal Component Analysis (PCA)
-o Implementing Autoencoders with TensorFlow/Keras and PyTorch
-o Start discussion of generative models
+o Implementing Autoencoders with TensorFlow/Keras and PyTorch, see examples at the end here.
+o Start discussion of generative models and possible paths for project 2
 !eblock
 
 
@@ -954,7 +954,7 @@ used to define the representation of the input and the input to the
 decoder part.  The latter attempts to reconstruct the images.
 
 !bc pycod
-import etorch.nn as nn
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
