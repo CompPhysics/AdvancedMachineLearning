@@ -86,7 +86,7 @@ Furthermore, all teaching material is available from this GitHub link.
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders
 - Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch5.pdf
 
-## March 11-15: Deep generative models
+## March 11-15: Autoencoders
 - Autoencoders and discussions of codes and links with PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
 - Reading recommendation: Goodfellow et al chapter 14
@@ -94,19 +94,18 @@ Furthermore, all teaching material is available from this GitHub link.
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch12.pdf
 
 
-## March 18-22: Deep generative models
-- Autoencoders, summary
-- Summary of deep learning methods and links with generative models
+## March 18-22: Autoencoders and start discussion of generative models
+- Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
+- Summary of deep learning methods and links with generative models and discussion of possible paths for project 2
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
-- Reading recommendation: Goodfellow et al chapters, 17, 18
+- Reading recommendation: Goodfellow et al chapters, 14 and 16
 
 
 ## April 1-5: Deep generative models
 - Monte Carlo methods and structured probabilistic models for deep learning
 - Partition function and Boltzmann machines
 - Boltzmann machines
-- Variational autoencoders
-- Reading recommendation: Goodfellow et al chapters 17, 18  and 20.1-20.7
+- Reading recommendation: Goodfellow et al chapters 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
 
 ## April 8-12: Deep generative models
@@ -126,11 +125,11 @@ Furthermore, all teaching material is available from this GitHub link.
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
 ## April 29-May 3: Deep generative models
-- Generative Adversarial Networks (GANs)
+- TBA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 
 ## May 6-10: Deep generative models
-- Generative Adversarial Networks (GANs)
+- TBA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
 
 
