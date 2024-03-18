@@ -682,7 +682,9 @@ plt.show()
 ===== More advanced features, stacked AEs =====
 
 !bc pycod
-(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+# You can select the so-called fashion data as well, here we just use the MNIST standard set
+#(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
 X_train_full = X_train_full.astype(np.float32) / 255
 X_test = X_test.astype(np.float32) / 255
 X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]

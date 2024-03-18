@@ -1173,7 +1173,9 @@ plt<span style="color: #666666">.</span>show()
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">(X_train_full, y_train_full), (X_test, y_test) <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>fashion_mnist<span style="color: #666666">.</span>load_data()
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># You can select the so-called fashion data as well, here we just use the MNIST standard set</span>
+<span style="color: #408080; font-style: italic">#(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()</span>
+(X_train_full, y_train_full), (X_test, y_test) <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>mnist<span style="color: #666666">.</span>load_data()
 X_train_full <span style="color: #666666">=</span> X_train_full<span style="color: #666666">.</span>astype(np<span style="color: #666666">.</span>float32) <span style="color: #666666">/</span> <span style="color: #666666">255</span>
 X_test <span style="color: #666666">=</span> X_test<span style="color: #666666">.</span>astype(np<span style="color: #666666">.</span>float32) <span style="color: #666666">/</span> <span style="color: #666666">255</span>
 X_train, X_valid <span style="color: #666666">=</span> X_train_full[:<span style="color: #666666">-5000</span>], X_train_full[<span style="color: #666666">-5000</span>:]

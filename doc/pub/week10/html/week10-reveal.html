@@ -1219,7 +1219,9 @@ plt.show()
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #eeeedd">
-  <pre style="font-size: 80%; line-height: 125%;">(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #228B22"># You can select the so-called fashion data as well, here we just use the MNIST standard set</span>
+<span style="color: #228B22">#(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()</span>
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
 X_train_full = X_train_full.astype(np.float32) / <span style="color: #B452CD">255</span>
 X_test = X_test.astype(np.float32) / <span style="color: #B452CD">255</span>
 X_train, X_valid = X_train_full[:-<span style="color: #B452CD">5000</span>], X_train_full[-<span style="color: #B452CD">5000</span>:]
