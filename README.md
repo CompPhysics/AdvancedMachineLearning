@@ -99,7 +99,8 @@ Furthermore, all teaching material is available from this GitHub link.
 - Summary of deep learning methods and links with generative models and discussion of possible paths for project 2
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters, 14 and 16
-
+- Video of lecture at https://youtu.be/8s0QC1MvdYg
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch19.pdf
 
 ## April 1-5: Deep generative models
 - Monte Carlo methods and structured probabilistic models for deep learning
