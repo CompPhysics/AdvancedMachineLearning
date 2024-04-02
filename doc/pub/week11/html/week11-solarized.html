@@ -62,55 +62,83 @@ div.toc p,a {
 </head>
 
 <!-- tocinfo
-{'highest level': 1,
+{'highest level': 2,
  'sections': [('Plans for the weeks April 1-5',
                2,
                None,
                'plans-for-the-weeks-april-1-5'),
-              ('Boltzmann Machines', 1, None, 'boltzmann-machines'),
+              ('What Is Generative Modeling?',
+               2,
+               None,
+               'what-is-generative-modeling'),
+              ('Example of generative modeling, "taken from Generative Deeep '
+               'Learning by David '
+               'Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"',
+               2,
+               None,
+               'example-of-generative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
+              ('Generative Modeling', 2, None, 'generative-modeling'),
+              ('Generative Versus Discriminative Modeling',
+               2,
+               None,
+               'generative-versus-discriminative-modeling'),
+              ('Example of discriminative modeling, "taken from Generative '
+               'Deeep Learning by David '
+               'Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"',
+               2,
+               None,
+               'example-of-discriminative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
+              ('Discriminative Modeling', 2, None, 'discriminative-modeling'),
+              ('Taxonomy of generative deep learning, "taken from Generative '
+               'Deep Learning by David '
+               'Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"',
+               2,
+               None,
+               'taxonomy-of-generative-deep-learning-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
+              ('Boltzmann Machines', 2, None, 'boltzmann-machines'),
               ('The network', 2, None, 'the-network'),
-              ('Joint distribution', 3, None, 'joint-distribution'),
+              ('Joint distribution', 2, None, 'joint-distribution'),
               ('Network Elements, the energy function',
-               3,
+               2,
                None,
                'network-elements-the-energy-function'),
               ('Defining different types of RBMs',
-               3,
+               2,
                None,
                'defining-different-types-of-rbms'),
-              ('Cost function', 3, None, 'cost-function'),
-              ('Optimization / Training', 3, None, 'optimization-training'),
+              ('Cost function', 2, None, 'cost-function'),
+              ('Optimization / Training', 2, None, 'optimization-training'),
               ('Kullback-Leibler relative entropy',
-               3,
+               2,
                None,
                'kullback-leibler-relative-entropy'),
               ('Setting up for gradient descent calculations',
                2,
                None,
                'setting-up-for-gradient-descent-calculations'),
-              ('Mathematical details', 3, None, 'mathematical-details'),
+              ('Mathematical details', 2, None, 'mathematical-details'),
               ('Marginal Probability Density Functions',
-               3,
+               2,
                None,
                'marginal-probability-density-functions'),
               ('Conditional Probability Density Functions',
-               3,
+               2,
                None,
                'conditional-probability-density-functions'),
               ('Gaussian-Binary Restricted Boltzmann Machines',
-               3,
+               2,
                None,
                'gaussian-binary-restricted-boltzmann-machines'),
               ('Joint Probability Density Function',
-               3,
+               2,
                None,
                'joint-probability-density-function'),
               ('Marginal Probability Density Functions',
-               3,
+               2,
                None,
                'marginal-probability-density-functions'),
               ('Conditional Probability Density Functions',
-               3,
+               2,
                None,
                'conditional-probability-density-functions')]}
 end of tocinfo -->
@@ -153,20 +181,116 @@ MathJax.Hub.Config({
 <h4>April 1-5, 2024</h4>
 </center> <!-- date -->
 <br>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="plans-for-the-weeks-april-1-5">Plans for the weeks April 1-5  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Deep generative models</b>
 <p>
 <ol>
-<li> Boltzmann machines</li>
-<li> Reading recommendation: Goodfellow et al chapters 16, 17, 18
+<li> Overview of generative models</li>
+<li> Boltzmann machines and energy models</li>
+<li> Reading recommendation: Goodfellow et al chapters 16 and 18.1 and 18.2. Chapter 17 gives a background to Monte Carlo Markov Chains.
 <!-- o <a href="https://youtu.be/KeTW6klG50w" target="_blank">Video of lecture</a> -->
 <!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr192024.pdf" target="_blank">Whiteboard notes</a> --></li>
 </ol>
 </div>
 
-<h1 id="boltzmann-machines">Boltzmann Machines </h1>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="what-is-generative-modeling">What Is Generative Modeling? </h2>
+
+<p>Generative modeling can be broadly defined as follows:</p>
+
+<p>Generative modeling is a branch of machine learning that involves
+training a model to produce new data that is similar to a given
+dataset.
+</p>
+
+<p>What does this mean in practice? Suppose we have a dataset containing
+photos of horses. We can train a generative model on this dataset to
+capture the rules that govern the complex relationships between pixels
+in images of horses. Then we can sample from this model to create
+novel, realistic images of horses that did not exist in the original
+dataset. 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="example-of-generative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Example of generative modeling, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deeep Learning by David Foster</a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/generativelearning.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="generative-modeling">Generative Modeling </h2>
+
+<p>In order to build a generative model, we require a dataset consisting
+of many examples of the entity we are trying to generate. This is
+known as the training data, and one such data point is called an
+observation.
+</p>
+
+<p>Each observation consists of many features. For an image generation
+problem, the features are usually the individual pixel values; for a
+text generation problem, the features could be individual words or
+groups of letters. It is our goal to build a model that can generate
+new sets of features that look as if they have been created using the
+same rules as the original data. Conceptually, for image generation
+this is an incredibly difficult task, considering the vast number of
+ways that individual pixel values can be assigned and the relatively
+tiny number of such arrangements that constitute an image of the
+entity we are trying to generate.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="generative-versus-discriminative-modeling">Generative Versus Discriminative Modeling </h2>
+
+<p>In order to truly understand what generative modeling aims to achieve
+and why this is important, it is useful to compare it to its
+counterpart, discriminative modeling. If you have studied machine
+learning, most problems you will have faced will have most likely been
+discriminative in nature. 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="example-of-discriminative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Example of discriminative modeling, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deeep Learning by David Foster</a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/standarddeeplearning.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="discriminative-modeling">Discriminative Modeling </h2>
+
+<p>When performing discriminative modeling, each observation in the
+training data has a label. For a binary classification problem such as
+our data could be labeled as ones and zeros. Our model then learns how to
+discriminate between these two groups and outputs the probability that
+a new observation has label 1 or 0
+</p>
+
+<p>In contrast, generative modeling doesn&#8217;t require the dataset to be
+labeled because it concerns itself with generating entirely new
+data (for example an image), rather than trying to predict a label for say  a given image.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="taxonomy-of-generative-deep-learning-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Taxonomy of generative deep learning, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deep Learning by David Foster</a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/generativemodels.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="boltzmann-machines">Boltzmann Machines </h2>
 
 <p>Why use a generative model rather than the more well known discriminative deep neural networks (DNN)? </p>
 
@@ -243,6 +367,8 @@ Here we take away all lateral connections between nodes in the visible layer as 
 <p><img src="figures/RBM.png" width="800" align="bottom"></p>
 </center>
 <br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="the-network">The network </h2>
 
 <b>The network layers</b>:
@@ -250,21 +376,22 @@ Here we take away all lateral connections between nodes in the visible layer as 
  <li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
  <li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
 </ol>
-<p>The goal of the hidden layer is to increase the model's expressive power. We encode complex interactions between visible variables by introducing additional, hidden variables that interact with visible degrees of freedom in a simple manner, yet still reproduce the complex correlations between visible degrees in the data once marginalized over (integrated out).</p>
+<p>The goal of the hidden layer is to increase the model's expressive
+power. We encode complex interactions between visible variables by
+introducing additional, hidden variables that interact with visible
+degrees of freedom in a simple manner, yet still reproduce the complex
+correlations between visible degrees in the data once marginalized
+over (integrated out).
+</p>
 
-<p>Examples of this trick being employed in physics: </p>
-<ol>
- <li> The Hubbard-Stratonovich transformation</li>
- <li> The introduction of ghost fields in gauge theory</li>
- <li> Shadow wave functions in Quantum Monte Carlo simulations</li>
-</ol>
 <b>The network parameters, to be optimized/learned</b>:
 <ol>
  <li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
  <li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
  <li> \( W \) represents the interaction weights, a matrix of size \( M\times N \).</li>
 </ol>
-<h3 id="joint-distribution">Joint distribution </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="joint-distribution">Joint distribution </h2>
 <p>The restricted Boltzmann machine is described by a Boltzmann distribution</p>
 $$
 \begin{align}
@@ -282,7 +409,9 @@ $$
 $$
 
 <p>It is common to ignore \( T_0 \) by setting it to one. </p>
-<h3 id="network-elements-the-energy-function">Network Elements, the energy function  </h3>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="network-elements-the-energy-function">Network Elements, the energy function  </h2>
 
 <p>The function \( E(\mathbf{x},\mathbf{h}) \) gives the <b>energy</b> of a
 configuration (pair of vectors) \( (\mathbf{x}, \mathbf{h}) \). The lower
@@ -291,7 +420,9 @@ function also depends on the parameters \( \mathbf{a} \), \( \mathbf{b} \) and
 \( W \). Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 </p>
-<h3 id="defining-different-types-of-rbms">Defining different types of RBMs </h3>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="defining-different-types-of-rbms">Defining different types of RBMs </h2>
 
 <p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\mathbf{x},\mathbf{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
 
@@ -335,7 +466,8 @@ $$
 <li> Binomial units</li>
 <li> Rectified linear units</li>
 </ol>
-<h3 id="cost-function">Cost function </h3>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="cost-function">Cost function </h2>
 
 <p>When working with a training dataset, the most common training approach is maximizing the log-likelihood of the training data. The log likelihood characterizes the log-probability of generating the observed data using our generative model. Using this method our cost function is chosen as the negative log-likelihood. The learning then consists of trying to find parameters that maximize the probability of the dataset, and is known as Maximum Likelihood Estimation (MLE).
 Denoting the parameters as \( \boldsymbol{\theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN} \), the log-likelihood is given by
@@ -352,7 +484,9 @@ $$
 <p>where we used that the normalization constant does not depend on the data, \( \langle \text{log} Z(\{ \theta_i\}) \rangle = \text{log} Z(\{ \theta_i\}) \)
 Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \theta_i \}) = - \mathcal{L}(\{ \theta_i \}) \)
 </p>
-<h3 id="optimization-training">Optimization / Training </h3>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="optimization-training">Optimization / Training </h2>
 
 <p>The training procedure of choice often is Stochastic Gradient Descent (SGD). It consists of a series of iterations where we update the parameters according to the equation</p>
 $$
@@ -415,7 +549,9 @@ $$
 $$
 
 <p>To get the expectation values with respect to the <em>data</em>, we set the visible units to each of the observed samples in the training data, then update the hidden units according to the conditional probability found before. We then average over all samples in the training data to calculate expectation values with respect to the data. </p>
-<h3 id="kullback-leibler-relative-entropy">Kullback-Leibler relative entropy </h3>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="kullback-leibler-relative-entropy">Kullback-Leibler relative entropy </h2>
 
 <p>When the goal of the training is to approximate a probability
 distribution, as it is in generative modeling, another relevant
@@ -477,6 +613,8 @@ $$
 $$
 
 <p>Here \( \langle \cdot \rangle_{model} \) is the expectation value over the model probability distribution \( p(\boldsymbol{x}| \boldsymbol{\theta}) \).</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="setting-up-for-gradient-descent-calculations">Setting up for gradient descent calculations </h2>
 
 <p>Using the previous relationship we can express the gradient of the cost function as</p>
@@ -524,7 +662,9 @@ well it is important to prevent overfitting to the training data. Thus
 it is common to add regularizers to the cost function in the same
 manner as we discussed for say linear regression.
 </p>
-<h3 id="mathematical-details">Mathematical details </h3>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="mathematical-details">Mathematical details </h2>
 
 <p>Because we are restricted to potential functions which are positive it
 is convenient to express them as exponentials, so that
@@ -706,7 +846,7 @@ $$
 \label{_auto39}
 \end{align}
 $$
-<h3 id="marginal-probability-density-functions">Marginal Probability Density Functions </h3>
+<h2 id="marginal-probability-density-functions">Marginal Probability Density Functions </h2>
 
 <p>In order to find the probability of any configuration of the visible units we derive the marginal probability density function.</p>
 
@@ -734,7 +874,10 @@ $$
 \label{_auto42}
 \end{align}
 $$
-<h3 id="conditional-probability-density-functions">Conditional Probability Density Functions </h3>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="conditional-probability-density-functions">Conditional Probability Density Functions </h2>
 
 <p>We derive the probability of the hidden units given the visible units using Bayes' rule</p>
 
@@ -796,7 +939,10 @@ $$
 \label{_auto51}
 \end{align}
 $$
-<h3 id="gaussian-binary-restricted-boltzmann-machines">Gaussian-Binary Restricted Boltzmann Machines </h3>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gaussian-binary-restricted-boltzmann-machines">Gaussian-Binary Restricted Boltzmann Machines </h2>
 
 <p>Inserting into the expression for \( E_{RBM}(\boldsymbol{x},\boldsymbol{h}) \) in equation  results in the energy</p>
 
@@ -810,7 +956,10 @@ $$
 \label{_auto52}
 \end{align}
 $$
-<h3 id="joint-probability-density-function">Joint Probability Density Function </h3>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="joint-probability-density-function">Joint Probability Density Function </h2>
 
 $$
 \begin{align}
@@ -835,7 +984,10 @@ $$
 \label{_auto54}
 \end{align}
 $$
-<h3 id="marginal-probability-density-functions">Marginal Probability Density Functions </h3>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="marginal-probability-density-functions">Marginal Probability Density Functions </h2>
 
 <p>We proceed to find the marginal probability densitites of the
 Gaussian-binary RBM. We first marginalize over the binary hidden units
@@ -890,7 +1042,10 @@ $$
 \label{_auto56}
 \end{align}
 $$
-<h3 id="conditional-probability-density-functions">Conditional Probability Density Functions </h3>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="conditional-probability-density-functions">Conditional Probability Density Functions </h2>
 
 <p>We finish by deriving the conditional probabilities.</p>
 $$
