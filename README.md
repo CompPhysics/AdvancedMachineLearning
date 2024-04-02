@@ -106,12 +106,12 @@ Furthermore, all teaching material is available from this GitHub link.
 - Monte Carlo methods and structured probabilistic models for deep learning
 - Partition function and Boltzmann machines
 - Boltzmann machines
-- Reading recommendation: Goodfellow et al chapters 17 and 18
+- Reading recommendation: Goodfellow et al chapters 16, 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
 
 ## April 8-12: Deep generative models
-- Variational autoencoders
-- Reading recommendation: Goodfellow et al chapter 20.10-20.14
+- Boltzmann machines
+- Reading recommendation: Goodfellow et al chapters 16, 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb  
 
 
