@@ -68,6 +68,26 @@ doconce format html week11.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'taxonomy-of-generative-deep-learning-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
+              ("Statistics and Bayes' theorem",
+               2,
+               None,
+               'statistics-and-bayes-theorem'),
+              ('Marginal Probability', 2, None, 'marginal-probability'),
+              ('Conditional  Probability', 2, None, 'conditional-probability'),
+              ("Bayes' Theorem", 2, None, 'bayes-theorem'),
+              ("Interpretations of Bayes' Theorem",
+               2,
+               None,
+               'interpretations-of-bayes-theorem'),
+              ("Example of Usage of Bayes' theorem",
+               2,
+               None,
+               'example-of-usage-of-bayes-theorem'),
+              ('Doing it correctly', 2, None, 'doing-it-correctly'),
+              ('Maximum Likelihood Estimation (MLE)',
+               2,
+               None,
+               'maximum-likelihood-estimation-mle'),
               ('Probability distributions and normalization constants',
                2,
                None,
@@ -161,6 +181,14 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#example-of-discriminative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html" style="font-size: 80%;">Example of discriminative modeling, "taken from Generative Deeep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"</a></li>
      <!-- navigation toc: --> <li><a href="#discriminative-modeling" style="font-size: 80%;">Discriminative Modeling</a></li>
      <!-- navigation toc: --> <li><a href="#taxonomy-of-generative-deep-learning-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html" style="font-size: 80%;">Taxonomy of generative deep learning, "taken from Generative Deep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"</a></li>
+     <!-- navigation toc: --> <li><a href="#statistics-and-bayes-theorem" style="font-size: 80%;">Statistics and Bayes' theorem</a></li>
+     <!-- navigation toc: --> <li><a href="#marginal-probability" style="font-size: 80%;">Marginal Probability</a></li>
+     <!-- navigation toc: --> <li><a href="#conditional-probability" style="font-size: 80%;">Conditional  Probability</a></li>
+     <!-- navigation toc: --> <li><a href="#bayes-theorem" style="font-size: 80%;">Bayes' Theorem</a></li>
+     <!-- navigation toc: --> <li><a href="#interpretations-of-bayes-theorem" style="font-size: 80%;">Interpretations of Bayes' Theorem</a></li>
+     <!-- navigation toc: --> <li><a href="#example-of-usage-of-bayes-theorem" style="font-size: 80%;">Example of Usage of Bayes' theorem</a></li>
+     <!-- navigation toc: --> <li><a href="#doing-it-correctly" style="font-size: 80%;">Doing it correctly</a></li>
+     <!-- navigation toc: --> <li><a href="#maximum-likelihood-estimation-mle" style="font-size: 80%;">Maximum Likelihood Estimation (MLE)</a></li>
      <!-- navigation toc: --> <li><a href="#probability-distributions-and-normalization-constants" style="font-size: 80%;">Probability distributions and normalization constants</a></li>
      <!-- navigation toc: --> <li><a href="#markov-chain-monte-carlo" style="font-size: 80%;">Markov Chain Monte Carlo</a></li>
      <!-- navigation toc: --> <li><a href="#boltzmann-machines" style="font-size: 80%;">Boltzmann Machines</a></li>
@@ -322,6 +350,177 @@ data (for example an image), rather than trying to predict a label for say  a gi
 <p><img src="figures/generativemodels.png" width="900" align="bottom"></p>
 </center>
 <br/><br/>
+
+<!-- !split -->
+<h2 id="statistics-and-bayes-theorem" class="anchor">Statistics and Bayes' theorem </h2>
+
+<p>A central theorem in statistics is Bayes' theorem. This theorem plays a similar role as the good old Pythagoras' theorem in geometry.
+Bayes' theorem is extremely simple to derive. But to do so we need some basic axioms from statistics.
+</p>
+
+<p>Assume we have two domains of events \( X=[x_0,x_1,\dots,x_{n-1}] \) and \( Y=[y_0,y_1,\dots,y_{n-1}] \).</p>
+
+<p>We define also the likelihood for \( X \) and \( Y \) as \( p(X) \) and \( p(Y) \) respectively.
+The likelihood of a specific event \( x_i \) (or \( y_i \)) is then written as \( p(X=x_i) \) or just \( p(x_i)=p_i \). 
+</p>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+$$
+p(X \cup Y)= p(X)+p(Y)-p(X \cap Y).
+$$
+</div>
+</div>
+
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+$$
+p(X \cup Y)= p(X,Y)= p(X\vert Y)p(Y)=p(Y\vert X)p(X),
+$$
+
+<p>where we read \( p(X\vert Y) \) as the likelihood of obtaining \( X \) given \( Y \).</p>
+</div>
+</div>
+
+
+<p>If we have independent events then \( p(X,Y)=p(X)p(Y) \).</p>
+
+<!-- !split -->
+<h2 id="marginal-probability" class="anchor">Marginal Probability </h2>
+
+<p>The marginal probability is defined in terms of only one of the set of variables \( X,Y \). For a discrete probability we have</p>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+$$
+p(X)=\sum_{i=0}^{n-1}p(X,Y=y_i)=\sum_{i=0}^{n-1}p(X\vert Y=y_i)p(Y=y_i)=\sum_{i=0}^{n-1}p(X\vert y_i)p(y_i).
+$$
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="conditional-probability" class="anchor">Conditional  Probability </h2>
+
+<p>The conditional  probability, if \( p(Y) > 0 \), is </p>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+$$
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)}=\frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}.
+$$
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="bayes-theorem" class="anchor">Bayes' Theorem </h2>
+
+<p>If we combine the conditional probability with the marginal probability and the standard product rule, we have</p>
+$$
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)},
+$$
+
+<p>which we can rewrite as</p>
+
+$$
+p(X\vert Y)= \frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}=\frac{p(Y\vert X)p(X)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)},
+$$
+
+<p>which is Bayes' theorem. It allows us to evaluate the uncertainty in in \( X \) after we have observed \( Y \). We can easily interchange \( X \) with \( Y \).  </p>
+
+<!-- !split -->
+<h2 id="interpretations-of-bayes-theorem" class="anchor">Interpretations of Bayes' Theorem </h2>
+
+<p>The quantity \( p(Y\vert X) \) on the right-hand side of the theorem is
+evaluated for the observed data \( Y \) and can be viewed as a function of
+the parameter space represented by \( X \). This function is not
+necesseraly normalized and is normally called the likelihood function.
+</p>
+
+<p>The function \( p(X) \) on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.</p>
+
+<p>Let us try to illustrate Bayes' theorem through an example.</p>
+
+<!-- !split -->
+<h2 id="example-of-usage-of-bayes-theorem" class="anchor">Example of Usage of Bayes' theorem </h2>
+
+<p>Let us suppose that you are undergoing a series of mammography scans in
+order to rule out possible breast cancer cases.  We define the
+sensitivity for a positive event by the variable \( X \). It takes binary
+values with \( X=1 \) representing a positive event and \( X=0 \) being a
+negative event. We reserve \( Y \) as a classification parameter for
+either a negative or a positive breast cancer confirmation. (Short note on wordings: positive here means having breast cancer, although none of us would consider this being a  positive thing).
+</p>
+
+<p>We let \( Y=1 \) represent the the case of having breast cancer and \( Y=0 \) as not.</p>
+
+<p>Let us assume that if you have breast cancer, the test will be positive with a probability of \( 0.8 \), that is we have</p>
+
+$$
+p(X=1\vert Y=1) =0.8.
+$$
+
+<p>This obviously sounds  scary since many would conclude that if the test is positive, there is a likelihood of \( 80\% \) for having cancer.
+It is however not correct, as the following Bayesian analysis shows.
+</p>
+
+<!-- !split -->
+<h2 id="doing-it-correctly" class="anchor">Doing it correctly </h2>
+
+<p>If we look at various national surveys on breast cancer, the general likelihood of developing breast cancer is a very small number.
+Let us assume that the prior probability in the population as a whole is
+</p>
+
+$$
+p(Y=1) =0.004.
+$$
+
+<p>We need also to account for the fact that the test may produce a false positive result (false alarm). Let us here assume that we have</p>
+$$
+p(X=1\vert Y=0) =0.1.
+$$
+
+<p>Using Bayes' theorem we can then find the posterior probability that the person has breast cancer in case of a positive test, that is we can compute</p>
+
+$$
+p(Y=1\vert X=1)=\frac{p(X=1\vert Y=1)p(Y=1)}{p(X=1\vert Y=1)p(Y=1)+p(X=1\vert Y=0)p(Y=0)}=\frac{0.8\times 0.004}{0.8\times 0.004+0.1\times 0.996}=0.031.
+$$
+
+<p>That is, in case of a positive test, there is only a \( 3\% \) chance of having breast cancer!</p>
+
+<!-- !split -->
+<h2 id="maximum-likelihood-estimation-mle" class="anchor">Maximum Likelihood Estimation (MLE) </h2>
+
+<p>We assume now that the various variables are stochastically distributed and  
+<b>Independent and Identically Distrubuted</b> (iid).
+</p>
+
+<p>In statistics, maximum likelihood estimation (MLE) is a method of
+estimating the parameters of an assumed probability distribution,
+given some observed data. This is achieved by maximizing a likelihood
+function so that, under the assumed statistical model, the observed
+data is the most probable. The probability is then written in terms of the products of the individual probabilities.
+</p>
+
+<p>However, computing the derivatives of a
+product function is cumbersome and can easily lead to overflow and/or
+underflowproblems, with potentials for loss of numerical precision.
+</p>
+
+<p>In practice, it is more convenient to maximize the logarithm of the
+PDF because it is a monotonically increasing function of the argument.
+Alternatively, and this will be our option, we will minimize the
+negative of the logarithm since this is a monotonically decreasing
+function.
+</p>
+
+<p>Note also that maximization/minimization of the logarithm of the PDF
+is equivalent to the maximization/minimization of the function itself.
+</p>
 
 <!-- !split -->
 <h2 id="probability-distributions-and-normalization-constants" class="anchor">Probability distributions and normalization constants </h2>

@@ -100,6 +100,174 @@ FIGURE: [figures/generativemodels.png, width=900 frac=1.0]
 
 
 !split
+===== Statistics and Bayes' theorem =====
+
+A central theorem in statistics is Bayes' theorem. This theorem plays a similar role as the good old Pythagoras' theorem in geometry.
+Bayes' theorem is extremely simple to derive. But to do so we need some basic axioms from statistics.
+
+Assume we have two domains of events $X=[x_0,x_1,\dots,x_{n-1}]$ and $Y=[y_0,y_1,\dots,y_{n-1}]$.
+
+We define also the likelihood for $X$ and $Y$ as $p(X)$ and $p(Y)$ respectively.
+The likelihood of a specific event $x_i$ (or $y_i$) is then written as $p(X=x_i)$ or just $p(x_i)=p_i$. 
+
+!bblock Union of events is given by
+!bt
+\[
+p(X \cup Y)= p(X)+p(Y)-p(X \cap Y).
+\]
+!et
+!eblock
+
+
+!bblock The product rule (aka joint probability) is given by
+!bt
+\[
+p(X \cup Y)= p(X,Y)= p(X\vert Y)p(Y)=p(Y\vert X)p(X),
+\]
+!et
+where we read $p(X\vert Y)$ as the likelihood of obtaining $X$ given $Y$.
+!eblock
+
+If we have independent events then $p(X,Y)=p(X)p(Y)$.
+
+
+!split
+===== Marginal Probability =====
+
+The marginal probability is defined in terms of only one of the set of variables $X,Y$. For a discrete probability we have
+!bblock 
+!bt
+\[
+p(X)=\sum_{i=0}^{n-1}p(X,Y=y_i)=\sum_{i=0}^{n-1}p(X\vert Y=y_i)p(Y=y_i)=\sum_{i=0}^{n-1}p(X\vert y_i)p(y_i).
+\]
+!et
+!eblock
+
+
+!split
+===== Conditional  Probability =====
+
+The conditional  probability, if $p(Y) > 0$, is 
+!bblock 
+!bt
+\[
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)}=\frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}.
+\]
+!et
+!eblock
+
+
+!split
+===== Bayes' Theorem =====
+
+If we combine the conditional probability with the marginal probability and the standard product rule, we have
+!bt
+\[
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)},
+\]
+!et
+which we can rewrite as
+
+!bt
+\[
+p(X\vert Y)= \frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}=\frac{p(Y\vert X)p(X)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)},
+\]
+!et
+which is Bayes' theorem. It allows us to evaluate the uncertainty in in $X$ after we have observed $Y$. We can easily interchange $X$ with $Y$.  
+
+!split
+===== Interpretations of Bayes' Theorem =====
+
+The quantity $p(Y\vert X)$ on the right-hand side of the theorem is
+evaluated for the observed data $Y$ and can be viewed as a function of
+the parameter space represented by $X$. This function is not
+necesseraly normalized and is normally called the likelihood function.
+
+The function $p(X)$ on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.
+
+Let us try to illustrate Bayes' theorem through an example.
+
+!split
+=====  Example of Usage of Bayes' theorem =====
+
+Let us suppose that you are undergoing a series of mammography scans in
+order to rule out possible breast cancer cases.  We define the
+sensitivity for a positive event by the variable $X$. It takes binary
+values with $X=1$ representing a positive event and $X=0$ being a
+negative event. We reserve $Y$ as a classification parameter for
+either a negative or a positive breast cancer confirmation. (Short note on wordings: positive here means having breast cancer, although none of us would consider this being a  positive thing).
+
+We let $Y=1$ represent the the case of having breast cancer and $Y=0$ as not.
+
+Let us assume that if you have breast cancer, the test will be positive with a probability of $0.8$, that is we have
+
+!bt
+\[
+p(X=1\vert Y=1) =0.8.
+\]
+!et
+
+This obviously sounds  scary since many would conclude that if the test is positive, there is a likelihood of $80\%$ for having cancer.
+It is however not correct, as the following Bayesian analysis shows.
+
+!split
+===== Doing it correctly =====
+
+If we look at various national surveys on breast cancer, the general likelihood of developing breast cancer is a very small number.
+Let us assume that the prior probability in the population as a whole is
+
+!bt
+\[
+p(Y=1) =0.004.
+\]
+!et
+
+We need also to account for the fact that the test may produce a false positive result (false alarm). Let us here assume that we have
+!bt
+\[
+p(X=1\vert Y=0) =0.1.
+\]
+!et
+
+Using Bayes' theorem we can then find the posterior probability that the person has breast cancer in case of a positive test, that is we can compute
+
+!bt
+\[
+p(Y=1\vert X=1)=\frac{p(X=1\vert Y=1)p(Y=1)}{p(X=1\vert Y=1)p(Y=1)+p(X=1\vert Y=0)p(Y=0)}=\frac{0.8\times 0.004}{0.8\times 0.004+0.1\times 0.996}=0.031.
+\]
+!et
+That is, in case of a positive test, there is only a $3\%$ chance of having breast cancer!
+
+!split
+===== Maximum Likelihood Estimation (MLE) =====
+
+We assume now that the various variables are stochastically distributed and  
+_Independent and Identically Distrubuted_ (iid).
+
+In statistics, maximum likelihood estimation (MLE) is a method of
+estimating the parameters of an assumed probability distribution,
+given some observed data. This is achieved by maximizing a likelihood
+function so that, under the assumed statistical model, the observed
+data is the most probable. The probability is then written in terms of the products of the individual probabilities.
+
+However, computing the derivatives of a
+product function is cumbersome and can easily lead to overflow and/or
+underflowproblems, with potentials for loss of numerical precision.
+
+
+In practice, it is more convenient to maximize the logarithm of the
+PDF because it is a monotonically increasing function of the argument.
+Alternatively, and this will be our option, we will minimize the
+negative of the logarithm since this is a monotonically decreasing
+function.
+
+Note also that maximization/minimization of the logarithm of the PDF
+is equivalent to the maximization/minimization of the function itself.
+
+
+
+
+!split
 ===== Probability distributions and normalization constants =====
 
 See whiteboard notes
@@ -834,6 +1002,12 @@ The form of these conditional probabilities explains the name
 that the conditional probability of $x_i$ given $\bm{h}$ is a normal
 distribution with mean $b_i + \bm{w}_{i\ast}^T \bm{h}$ and variance
 $\sigma_i^2$.
+
+
+
+
+
+
 
 
 

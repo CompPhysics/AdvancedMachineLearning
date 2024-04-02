@@ -310,6 +310,198 @@ data (for example an image), rather than trying to predict a label for say  a gi
 </section>
 
 <section>
+<h2 id="statistics-and-bayes-theorem">Statistics and Bayes' theorem </h2>
+
+<p>A central theorem in statistics is Bayes' theorem. This theorem plays a similar role as the good old Pythagoras' theorem in geometry.
+Bayes' theorem is extremely simple to derive. But to do so we need some basic axioms from statistics.
+</p>
+
+<p>Assume we have two domains of events \( X=[x_0,x_1,\dots,x_{n-1}] \) and \( Y=[y_0,y_1,\dots,y_{n-1}] \).</p>
+
+<p>We define also the likelihood for \( X \) and \( Y \) as \( p(X) \) and \( p(Y) \) respectively.
+The likelihood of a specific event \( x_i \) (or \( y_i \)) is then written as \( p(X=x_i) \) or just \( p(x_i)=p_i \). 
+</p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Union of events is given by</b>
+<p>
+<p>&nbsp;<br>
+$$
+p(X \cup Y)= p(X)+p(Y)-p(X \cap Y).
+$$
+<p>&nbsp;<br>
+</div>
+
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>The product rule (aka joint probability) is given by</b>
+<p>
+<p>&nbsp;<br>
+$$
+p(X \cup Y)= p(X,Y)= p(X\vert Y)p(Y)=p(Y\vert X)p(X),
+$$
+<p>&nbsp;<br>
+
+<p>where we read \( p(X\vert Y) \) as the likelihood of obtaining \( X \) given \( Y \).</p>
+</div>
+
+<p>If we have independent events then \( p(X,Y)=p(X)p(Y) \).</p>
+</section>
+
+<section>
+<h2 id="marginal-probability">Marginal Probability </h2>
+
+<p>The marginal probability is defined in terms of only one of the set of variables \( X,Y \). For a discrete probability we have</p>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>&nbsp;<br>
+$$
+p(X)=\sum_{i=0}^{n-1}p(X,Y=y_i)=\sum_{i=0}^{n-1}p(X\vert Y=y_i)p(Y=y_i)=\sum_{i=0}^{n-1}p(X\vert y_i)p(y_i).
+$$
+<p>&nbsp;<br>
+</div>
+</section>
+
+<section>
+<h2 id="conditional-probability">Conditional  Probability </h2>
+
+<p>The conditional  probability, if \( p(Y) > 0 \), is </p>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>&nbsp;<br>
+$$
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)}=\frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}.
+$$
+<p>&nbsp;<br>
+</div>
+</section>
+
+<section>
+<h2 id="bayes-theorem">Bayes' Theorem </h2>
+
+<p>If we combine the conditional probability with the marginal probability and the standard product rule, we have</p>
+<p>&nbsp;<br>
+$$
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)},
+$$
+<p>&nbsp;<br>
+
+<p>which we can rewrite as</p>
+
+<p>&nbsp;<br>
+$$
+p(X\vert Y)= \frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}=\frac{p(Y\vert X)p(X)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)},
+$$
+<p>&nbsp;<br>
+
+<p>which is Bayes' theorem. It allows us to evaluate the uncertainty in in \( X \) after we have observed \( Y \). We can easily interchange \( X \) with \( Y \).  </p>
+</section>
+
+<section>
+<h2 id="interpretations-of-bayes-theorem">Interpretations of Bayes' Theorem </h2>
+
+<p>The quantity \( p(Y\vert X) \) on the right-hand side of the theorem is
+evaluated for the observed data \( Y \) and can be viewed as a function of
+the parameter space represented by \( X \). This function is not
+necesseraly normalized and is normally called the likelihood function.
+</p>
+
+<p>The function \( p(X) \) on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.</p>
+
+<p>Let us try to illustrate Bayes' theorem through an example.</p>
+</section>
+
+<section>
+<h2 id="example-of-usage-of-bayes-theorem">Example of Usage of Bayes' theorem </h2>
+
+<p>Let us suppose that you are undergoing a series of mammography scans in
+order to rule out possible breast cancer cases.  We define the
+sensitivity for a positive event by the variable \( X \). It takes binary
+values with \( X=1 \) representing a positive event and \( X=0 \) being a
+negative event. We reserve \( Y \) as a classification parameter for
+either a negative or a positive breast cancer confirmation. (Short note on wordings: positive here means having breast cancer, although none of us would consider this being a  positive thing).
+</p>
+
+<p>We let \( Y=1 \) represent the the case of having breast cancer and \( Y=0 \) as not.</p>
+
+<p>Let us assume that if you have breast cancer, the test will be positive with a probability of \( 0.8 \), that is we have</p>
+
+<p>&nbsp;<br>
+$$
+p(X=1\vert Y=1) =0.8.
+$$
+<p>&nbsp;<br>
+
+<p>This obviously sounds  scary since many would conclude that if the test is positive, there is a likelihood of \( 80\% \) for having cancer.
+It is however not correct, as the following Bayesian analysis shows.
+</p>
+</section>
+
+<section>
+<h2 id="doing-it-correctly">Doing it correctly </h2>
+
+<p>If we look at various national surveys on breast cancer, the general likelihood of developing breast cancer is a very small number.
+Let us assume that the prior probability in the population as a whole is
+</p>
+
+<p>&nbsp;<br>
+$$
+p(Y=1) =0.004.
+$$
+<p>&nbsp;<br>
+
+<p>We need also to account for the fact that the test may produce a false positive result (false alarm). Let us here assume that we have</p>
+<p>&nbsp;<br>
+$$
+p(X=1\vert Y=0) =0.1.
+$$
+<p>&nbsp;<br>
+
+<p>Using Bayes' theorem we can then find the posterior probability that the person has breast cancer in case of a positive test, that is we can compute</p>
+
+<p>&nbsp;<br>
+$$
+p(Y=1\vert X=1)=\frac{p(X=1\vert Y=1)p(Y=1)}{p(X=1\vert Y=1)p(Y=1)+p(X=1\vert Y=0)p(Y=0)}=\frac{0.8\times 0.004}{0.8\times 0.004+0.1\times 0.996}=0.031.
+$$
+<p>&nbsp;<br>
+
+<p>That is, in case of a positive test, there is only a \( 3\% \) chance of having breast cancer!</p>
+</section>
+
+<section>
+<h2 id="maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE) </h2>
+
+<p>We assume now that the various variables are stochastically distributed and  
+<b>Independent and Identically Distrubuted</b> (iid).
+</p>
+
+<p>In statistics, maximum likelihood estimation (MLE) is a method of
+estimating the parameters of an assumed probability distribution,
+given some observed data. This is achieved by maximizing a likelihood
+function so that, under the assumed statistical model, the observed
+data is the most probable. The probability is then written in terms of the products of the individual probabilities.
+</p>
+
+<p>However, computing the derivatives of a
+product function is cumbersome and can easily lead to overflow and/or
+underflowproblems, with potentials for loss of numerical precision.
+</p>
+
+<p>In practice, it is more convenient to maximize the logarithm of the
+PDF because it is a monotonically increasing function of the argument.
+Alternatively, and this will be our option, we will minimize the
+negative of the logarithm since this is a monotonically decreasing
+function.
+</p>
+
+<p>Note also that maximization/minimization of the logarithm of the PDF
+is equivalent to the maximization/minimization of the function itself.
+</p>
+</section>
+
+<section>
 <h2 id="probability-distributions-and-normalization-constants">Probability distributions and normalization constants </h2>
 
 <p>See whiteboard notes</p>
