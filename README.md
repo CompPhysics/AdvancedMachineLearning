@@ -108,6 +108,9 @@ Furthermore, all teaching material is available from this GitHub link.
 - Boltzmann machines
 - Reading recommendation: Goodfellow et al chapters 16, 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
+- Video of lecture at https://youtu.be/zIG0iEGN05c
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril2.pdf
+
 
 ## April 8-12: Deep generative models
 - Boltzmann machines
