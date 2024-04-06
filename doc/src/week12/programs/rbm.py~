@@ -1,0 +1,30 @@
+import numpy as np
+import torch
+import torch.utils.data
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.autograd import Variable
+from torchvision import datasets, transforms
+from torchvision.utils import make_grid , save_image
+import matplotlib.pyplot as plt
+
+
+batch_size = 64
+train_loader = torch.utils.data.DataLoader(
+datasets.MNIST('./data',
+    train=True,
+    download = True,
+    transform = transforms.Compose(
+        [transforms.ToTensor()])
+     ),
+     batch_size=batch_size
+)
+
+test_loader = torch.utils.data.DataLoader(
+datasets.MNIST('./data',
+    train=False,
+    transform=transforms.Compose(
+    [transforms.ToTensor()])
+    ),
+    batch_size=batch_size)
