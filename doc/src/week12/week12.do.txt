@@ -339,149 +339,20 @@ manner as we discussed for say linear regression.
 ===== Mathematical details =====
 
 Because we are restricted to potential functions which are positive it
-is convenient to express them as exponentials, so that
-
-!bt
-\begin{align}
-	\phi_C (\bm{x}_C) = e^{-E_C(\bm{x}_C)}
-\end{align}
-!et
-
-where $E(\bm{x}_C)$ is called an *energy function*, and the
-exponential representation is the *Boltzmann distribution*. The
-joint distribution is defined as the product of potentials.
-
-The joint distribution of the random variables is then
-
-!bt
-\begin{align}
-	p(\bm{x}) =& \frac{1}{Z} \prod_C \phi_C (\bm{x}_C) \nonumber \\
-	=& \frac{1}{Z} \prod_C e^{-E_C(\bm{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-\sum_C E_C(\bm{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-E(\bm{x})}.
-\end{align} 
-!et
-!bt
-\begin{align}
-	p_{BM}(\bm{x}, \bm{h}) = \frac{1}{Z_{BM}} e^{-\frac{1}{T}E_{BM}(\bm{x}, \bm{h})} ,
-\end{align}
-!et
-
-with the partition function 
-!bt
-\begin{align}
-	Z_{BM} = \int \int e^{-\frac{1}{T} E_{BM}(\tilde{\bm{x}}, \tilde{\bm{h}})} d\tilde{\bm{x}} d\tilde{\bm{h}} .
-\end{align}
-!et
-
-$T$ is a physics-inspired parameter named temperature and will be assumed to be 1 unless otherwise stated. The energy function of the Boltzmann machine determines the interactions between the nodes and is defined  
-
-!bt
-\begin{align}
-	E_{BM}(\bm{x}, \bm{h}) =& - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j) \nonumber \\
-	&- \sum_{i, m=i+1, k}^{M, M, K} \alpha_i^k (x_i) v_{im}^k \alpha_m^k (x_m)
-	- \sum_{j,n=j+1,l}^{N,N,L} \beta_j^l (h_j) u_{jn}^l \beta_n^l (h_n).
-\end{align}
-!et
-
-Here $\alpha_i^k (x_i)$ and $\beta_j^l (h_j)$ are one-dimensional
-transfer functions or mappings from the given input value to the
-desired feature value. They can be arbitrary functions of the input
-variables and are independent of the parameterization (parameters
-referring to weight and biases), meaning they are not affected by
-training of the model. The indices $k$ and $l$ indicate that there can
-be multiple transfer functions per variable.  Furthermore, $a_i^k$ and
-$b_j^l$ are the visible and hidden bias. $w_{ij}^{kl}$ are weights of
-the \textbf{inter-layer} connection terms which connect visible and
-hidden units. $ v_{im}^k$ and $u_{jn}^l$ are weights of the
-\textbf{intra-layer} connection terms which connect the visible units
-to each other and the hidden units to each other, respectively.
-
-
-
-We remove the intra-layer connections by setting $v_{im}$ and $u_{jn}$
-to zero. The expression for the energy of the RBM is then
-
-!bt
-\begin{align}
-	E_{RBM}(\bm{x}, \bm{h}) = - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j). 
-\end{align}
-!et
-resulting in 
-!bt
-\begin{align}
-	P_{RBM} (\bm{x}) =& \int P_{RBM} (\bm{x}, \tilde{\bm{h}})  d \tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\bm{x}, \tilde{\bm{h}}) } d\tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} 
-	d\tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\int \prod_j^N e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} d\tilde{\bm{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\biggl( \int e^{\sum_l b_1^l \beta_1^l (\tilde{h}_1) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i1}^{kl} \beta_1^l (\tilde{h}_1)} d \tilde{h}_1 \nonumber \\
-	& \times \int e^{\sum_l b_2^l \beta_2^l (\tilde{h}_2) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i2}^{kl} \beta_2^l (\tilde{h}_2)} d \tilde{h}_2 \nonumber \\
-	& \times ... \nonumber \\
-	& \times \int e^{\sum_l b_N^l \beta_N^l (\tilde{h}_N) + \sum_{i,k,l} \alpha_i^k (x_i) w_{iN}^{kl} \beta_N^l (\tilde{h}_N)} d \tilde{h}_N \biggr) \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j
-\end{align}
-!et
-
-Similarly
-
-!bt
-\begin{align}
-	P_{RBM} (\bm{h}) =& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\tilde{\bm{x}}, \bm{h})} d\tilde{\bm{x}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{j, l} b_j^l \beta_j^l (h_j)}
-	\prod_i^M \int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i
-\end{align}
-!et
-
-
-Using Bayes theorem
-
-!bt
-\begin{align}
-	P_{RBM} (\bm{h}|\bm{x}) =& \frac{P_{RBM} (\bm{x}, \bm{h})}{P_{RBM} (\bm{x})} \nonumber \\
-	=& \frac{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (h_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j} \nonumber \\
-	=& \prod_j^N \frac{e^{\sum_l b_j^l \beta_j^l (h_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)} }
-	{\int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j}
-\end{align}
-!et
-
-Similarly
-
-!bt
-\begin{align}
-	P_{RBM} (\bm{x}|\bm{h}) =&  \frac{P_{RBM} (\bm{x}, \bm{h})}{P_{RBM} (\bm{h})} \nonumber \\
-	=& \prod_i^M \frac{e^{\sum_k a_i^k \alpha_i^k (x_i)
-	+ \sum_{j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i}
-\end{align}
-!et
-
-
-
+is convenient to express them as exponentials.
 
 The original RBM had binary visible and hidden nodes. They were
 showned to be universal approximators of discrete distributions.
 It was also shown that adding hidden units yields
-strictly improved modelling power. The common choice of binary values
-are 0 and 1. However, in some physics applications, -1 and 1 might be
-a more natural choice. We will here use 0 and 1.
+strictly improved modelling power.
 
+
+!split
+===== Binary-binary RBMs =====
+
+The common choice of binary values
+are 0 and 1. However, in some physics applications, -1 and 1 might be
+a more natural choice. We will here use 0 and 1. We habe the energy function
 
 !bt
 \begin{align}
@@ -489,8 +360,10 @@ a more natural choice. We will here use 0 and 1.
 \end{align}
 !et
 
+!split
+===== Marginal probability =====
 
-
+We have the binary-binary marginal probability defined as 
 !bt
 \begin{align}
 	p_{BB}(\bm{x}, \bm{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} \\
@@ -506,7 +379,8 @@ with the partition function
 \end{align}
 !et
 
-===== Marginal Probability Density Functions =====
+!split
+===== Marginal Probability Density Function for the visible units  =====
 
 In order to find the probability of any configuration of the visible units we derive the marginal probability density function.
 
@@ -523,6 +397,9 @@ In order to find the probability of any configuration of the visible units we de
 	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}) .
 \end{align}
 !et
+
+!split
+===== Marginal probability for hidden units =====
 
 A similar derivation yields the marginal probability of the hidden units
 
@@ -550,6 +427,9 @@ We derive the probability of the hidden units given the visible units using Baye
 \end{align}
 !et
 
+!split
+===== On and off probabilities =====
+
 From this we find the probability of a hidden unit being "on" or "off":
 
 !bt
@@ -569,6 +449,8 @@ and
 \end{align}
 !et
 
+!split
+===== Conditional probability for visible units =====
 
 Similarly we have that the conditional probability of the visible units given the hidden are
 

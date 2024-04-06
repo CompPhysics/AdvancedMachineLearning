@@ -74,14 +74,25 @@ doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=d
                None,
                'setting-up-for-gradient-descent-calculations'),
               ('Mathematical details', 2, None, 'mathematical-details'),
-              ('Marginal Probability Density Functions',
+              ('Binary-binary RBMs', 2, None, 'binary-binary-rbms'),
+              ('Marginal probability', 2, None, 'marginal-probability'),
+              ('Marginal Probability Density Function for the visible units',
                2,
                None,
-               'marginal-probability-density-functions'),
+               'marginal-probability-density-function-for-the-visible-units'),
+              ('Marginal probability for hidden units',
+               2,
+               None,
+               'marginal-probability-for-hidden-units'),
               ('Conditional Probability Density Functions',
                2,
                None,
                'conditional-probability-density-functions'),
+              ('On and off probabilities', 2, None, 'on-and-off-probabilities'),
+              ('Conditional probability for visible units',
+               2,
+               None,
+               'conditional-probability-for-visible-units'),
               ('Gaussian-Binary Restricted Boltzmann Machines',
                2,
                None,
@@ -150,8 +161,13 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#kullback-leibler-relative-entropy" style="font-size: 80%;">Kullback-Leibler relative entropy</a></li>
      <!-- navigation toc: --> <li><a href="#setting-up-for-gradient-descent-calculations" style="font-size: 80%;">Setting up for gradient descent calculations</a></li>
      <!-- navigation toc: --> <li><a href="#mathematical-details" style="font-size: 80%;">Mathematical details</a></li>
-     <!-- navigation toc: --> <li><a href="#marginal-probability-density-functions" style="font-size: 80%;">Marginal Probability Density Functions</a></li>
+     <!-- navigation toc: --> <li><a href="#binary-binary-rbms" style="font-size: 80%;">Binary-binary RBMs</a></li>
+     <!-- navigation toc: --> <li><a href="#marginal-probability" style="font-size: 80%;">Marginal probability</a></li>
+     <!-- navigation toc: --> <li><a href="#marginal-probability-density-function-for-the-visible-units" style="font-size: 80%;">Marginal Probability Density Function for the visible units</a></li>
+     <!-- navigation toc: --> <li><a href="#marginal-probability-for-hidden-units" style="font-size: 80%;">Marginal probability for hidden units</a></li>
      <!-- navigation toc: --> <li><a href="#conditional-probability-density-functions" style="font-size: 80%;">Conditional Probability Density Functions</a></li>
+     <!-- navigation toc: --> <li><a href="#on-and-off-probabilities" style="font-size: 80%;">On and off probabilities</a></li>
+     <!-- navigation toc: --> <li><a href="#conditional-probability-for-visible-units" style="font-size: 80%;">Conditional probability for visible units</a></li>
      <!-- navigation toc: --> <li><a href="#gaussian-binary-restricted-boltzmann-machines" style="font-size: 80%;">Gaussian-Binary Restricted Boltzmann Machines</a></li>
      <!-- navigation toc: --> <li><a href="#joint-probability-density-function" style="font-size: 80%;">Joint Probability Density Function</a></li>
      <!-- navigation toc: --> <li><a href="#marginal-probability-density-functions" style="font-size: 80%;">Marginal Probability Density Functions</a></li>
@@ -604,174 +620,41 @@ manner as we discussed for say linear regression.
 <h2 id="mathematical-details" class="anchor">Mathematical details </h2>
 
 <p>Because we are restricted to potential functions which are positive it
-is convenient to express them as exponentials, so that
+is convenient to express them as exponentials.
 </p>
-
-$$
-\begin{align}
-	\phi_C (\boldsymbol{x}_C) = e^{-E_C(\boldsymbol{x}_C)}
-\label{_auto26}
-\end{align}
-$$
-
-<p>where \( E(\boldsymbol{x}_C) \) is called an <em>energy function</em>, and the
-exponential representation is the <em>Boltzmann distribution</em>. The
-joint distribution is defined as the product of potentials.
-</p>
-
-<p>The joint distribution of the random variables is then</p>
-
-$$
-\begin{align}
-	p(\boldsymbol{x}) =& \frac{1}{Z} \prod_C \phi_C (\boldsymbol{x}_C) \nonumber \\
-	=& \frac{1}{Z} \prod_C e^{-E_C(\boldsymbol{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-\sum_C E_C(\boldsymbol{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-E(\boldsymbol{x})}.
-\label{_auto27}
-\end{align} 
-$$
-
-$$
-\begin{align}
-	p_{BM}(\boldsymbol{x}, \boldsymbol{h}) = \frac{1}{Z_{BM}} e^{-\frac{1}{T}E_{BM}(\boldsymbol{x}, \boldsymbol{h})} ,
-\label{_auto28}
-\end{align}
-$$
-
-<p>with the partition function </p>
-$$
-\begin{align}
-	Z_{BM} = \int \int e^{-\frac{1}{T} E_{BM}(\tilde{\boldsymbol{x}}, \tilde{\boldsymbol{h}})} d\tilde{\boldsymbol{x}} d\tilde{\boldsymbol{h}} .
-\label{_auto29}
-\end{align}
-$$
-
-<p>\( T \) is a physics-inspired parameter named temperature and will be assumed to be 1 unless otherwise stated. The energy function of the Boltzmann machine determines the interactions between the nodes and is defined  </p>
-
-$$
-\begin{align}
-	E_{BM}(\boldsymbol{x}, \boldsymbol{h}) =& - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j) \nonumber \\
-	&- \sum_{i, m=i+1, k}^{M, M, K} \alpha_i^k (x_i) v_{im}^k \alpha_m^k (x_m)
-	- \sum_{j,n=j+1,l}^{N,N,L} \beta_j^l (h_j) u_{jn}^l \beta_n^l (h_n).
-\label{_auto30}
-\end{align}
-$$
-
-<p>Here \( \alpha_i^k (x_i) \) and \( \beta_j^l (h_j) \) are one-dimensional
-transfer functions or mappings from the given input value to the
-desired feature value. They can be arbitrary functions of the input
-variables and are independent of the parameterization (parameters
-referring to weight and biases), meaning they are not affected by
-training of the model. The indices \( k \) and \( l \) indicate that there can
-be multiple transfer functions per variable.  Furthermore, \( a_i^k \) and
-\( b_j^l \) are the visible and hidden bias. \( w_{ij}^{kl} \) are weights of
-the \textbf{inter-layer} connection terms which connect visible and
-hidden units. $ v_{im}^k$ and \( u_{jn}^l \) are weights of the
-\textbf{intra-layer} connection terms which connect the visible units
-to each other and the hidden units to each other, respectively.
-</p>
-
-<p>We remove the intra-layer connections by setting \( v_{im} \) and \( u_{jn} \)
-to zero. The expression for the energy of the RBM is then
-</p>
-
-$$
-\begin{align}
-	E_{RBM}(\boldsymbol{x}, \boldsymbol{h}) = - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j). 
-\label{_auto31}
-\end{align}
-$$
-
-<p>resulting in </p>
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{x}) =& \int P_{RBM} (\boldsymbol{x}, \tilde{\boldsymbol{h}})  d \tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\boldsymbol{x}, \tilde{\boldsymbol{h}}) } d\tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} 
-	d\tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\int \prod_j^N e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} d\tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\biggl( \int e^{\sum_l b_1^l \beta_1^l (\tilde{h}_1) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i1}^{kl} \beta_1^l (\tilde{h}_1)} d \tilde{h}_1 \nonumber \\
-	& \times \int e^{\sum_l b_2^l \beta_2^l (\tilde{h}_2) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i2}^{kl} \beta_2^l (\tilde{h}_2)} d \tilde{h}_2 \nonumber \\
-	& \times ... \nonumber \\
-	& \times \int e^{\sum_l b_N^l \beta_N^l (\tilde{h}_N) + \sum_{i,k,l} \alpha_i^k (x_i) w_{iN}^{kl} \beta_N^l (\tilde{h}_N)} d \tilde{h}_N \biggr) \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j
-\label{_auto32}
-\end{align}
-$$
-
-<p>Similarly</p>
-
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{h}) =& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\tilde{\boldsymbol{x}}, \boldsymbol{h})} d\tilde{\boldsymbol{x}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{j, l} b_j^l \beta_j^l (h_j)}
-	\prod_i^M \int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i
-\label{_auto33}
-\end{align}
-$$
-
-<p>Using Bayes theorem</p>
-
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{h}|\boldsymbol{x}) =& \frac{P_{RBM} (\boldsymbol{x}, \boldsymbol{h})}{P_{RBM} (\boldsymbol{x})} \nonumber \\
-	=& \frac{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (h_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j} \nonumber \\
-	=& \prod_j^N \frac{e^{\sum_l b_j^l \beta_j^l (h_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)} }
-	{\int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j}
-\label{_auto34}
-\end{align}
-$$
-
-<p>Similarly</p>
-
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{x}|\boldsymbol{h}) =&  \frac{P_{RBM} (\boldsymbol{x}, \boldsymbol{h})}{P_{RBM} (\boldsymbol{h})} \nonumber \\
-	=& \prod_i^M \frac{e^{\sum_k a_i^k \alpha_i^k (x_i)
-	+ \sum_{j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i}
-\label{_auto35}
-\end{align}
-$$
 
 <p>The original RBM had binary visible and hidden nodes. They were
 showned to be universal approximators of discrete distributions.
 It was also shown that adding hidden units yields
-strictly improved modelling power. The common choice of binary values
+strictly improved modelling power.
+</p>
+
+<!-- !split -->
+<h2 id="binary-binary-rbms" class="anchor">Binary-binary RBMs </h2>
+
+<p>The common choice of binary values
 are 0 and 1. However, in some physics applications, -1 and 1 might be
-a more natural choice. We will here use 0 and 1.
+a more natural choice. We will here use 0 and 1. We habe the energy function
 </p>
 
 $$
 \begin{align}
 	E_{BB}(\boldsymbol{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\label{_auto36}
+\label{_auto26}
 \end{align}
 $$
 
 
+<!-- !split -->
+<h2 id="marginal-probability" class="anchor">Marginal probability </h2>
+
+<p>We have the binary-binary marginal probability defined as </p>
 $$
 \begin{align}
 	p_{BB}(\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} 
-\label{_auto37}\\
+\label{_auto27}\\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
-\label{_auto38}
+\label{_auto28}
 \end{align}
 $$
 
@@ -780,17 +663,20 @@ $$
 $$
 \begin{align}
 	Z_{BB} = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
-\label{_auto39}
+\label{_auto29}
 \end{align}
 $$
-<h2 id="marginal-probability-density-functions" class="anchor">Marginal Probability Density Functions </h2>
+
+
+<!-- !split -->
+<h2 id="marginal-probability-density-function-for-the-visible-units" class="anchor">Marginal Probability Density Function for the visible units  </h2>
 
 <p>In order to find the probability of any configuration of the visible units we derive the marginal probability density function.</p>
 
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h}) 
-\label{_auto40}\\
+\label{_auto30}\\
 	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
@@ -799,16 +685,20 @@ $$
 	& ... \times \sum_{h_2} e^{(b_N + \boldsymbol{x}^T \boldsymbol{w}_{\ast N})h_N} \bigg ) \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
-\label{_auto41}
+\label{_auto31}
 \end{align}
 $$
+
+
+<!-- !split -->
+<h2 id="marginal-probability-for-hidden-units" class="anchor">Marginal probability for hidden units </h2>
 
 <p>A similar derivation yields the marginal probability of the hidden units</p>
 
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{h}) = \frac{1}{Z_{BB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
-\label{_auto42}
+\label{_auto32}
 \end{align}
 $$
 
@@ -828,9 +718,13 @@ $$
 	=& \prod_j^N \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{BB} (h_j| \boldsymbol{x}) .
-\label{_auto43}
+\label{_auto33}
 \end{align}
 $$
+
+
+<!-- !split -->
+<h2 id="on-and-off-probabilities" class="anchor">On and off probabilities </h2>
 
 <p>From this we find the probability of a hidden unit being "on" or "off":</p>
 
@@ -838,12 +732,12 @@ $$
 \begin{align}
 	p_{BB} (h_j=1 | \boldsymbol{x}) =&   \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto44}\\
+\label{_auto34}\\
 	=&  \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} )}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto45}\\
+\label{_auto35}\\
 	=&  \frac{ 1 }{1 + e^{-(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})} } ,
-\label{_auto46}
+\label{_auto36}
 \end{align}
 $$
 
@@ -852,18 +746,22 @@ $$
 $$
 \begin{align}
 	p_{BB} (h_j=0 | \boldsymbol{x}) =\frac{ 1 }{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}} } .
-\label{_auto47}
+\label{_auto37}
 \end{align}
 $$
+
+
+<!-- !split -->
+<h2 id="conditional-probability-for-visible-units" class="anchor">Conditional probability for visible units </h2>
 
 <p>Similarly we have that the conditional probability of the visible units given the hidden are</p>
 
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } 
-\label{_auto48}\\
+\label{_auto38}\\
 	&= \prod_i^M p_{BB} (x_i | \boldsymbol{h}) .
-\label{_auto49}
+\label{_auto39}
 \end{align}
 $$
 
@@ -871,9 +769,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} 
-\label{_auto50}\\
+\label{_auto40}\\
 	p_{BB} (x_i=0 | \boldsymbol{h}) =& \frac{1}{1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} }} .
-\label{_auto51}
+\label{_auto41}
 \end{align}
 $$
 
@@ -890,7 +788,7 @@ $$
 	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
 	=& \vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 - \boldsymbol{b}^T \boldsymbol{h} 
 	- (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h} . 
-\label{_auto52}
+\label{_auto42}
 \end{align}
 $$
 
@@ -908,7 +806,7 @@ $$
 	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ b_j h_j 
 	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\label{_auto53}
+\label{_auto43}
 \end{align}
 $$
 
@@ -918,7 +816,7 @@ $$
 \begin{align}
 	Z_{GB} =& \int \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
 	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} d\tilde{\boldsymbol{x}} .
-\label{_auto54}
+\label{_auto44}
 \end{align}
 $$
 
@@ -939,7 +837,7 @@ $$
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
 	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) .
-\label{_auto55}
+\label{_auto45}
 \end{align}
 $$
 
@@ -976,7 +874,7 @@ $$
 	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
 	\sqrt{2\pi \sigma_i^2}
 	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}} .
-\label{_auto56}
+\label{_auto46}
 \end{align}
 $$
 
@@ -996,7 +894,7 @@ $$
 	=& \prod_j^N \frac{e^{(b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j})h_j } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{GB} (h_j|\boldsymbol{x}).
-\label{_auto57}
+\label{_auto47}
 \end{align}
 $$
 
@@ -1007,10 +905,10 @@ $$
 	p_{GB} (h_j =1 | \boldsymbol{x}) =& \frac{e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j} } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto58}\\
+\label{_auto48}\\
 	p_{GB} (h_j =0 | \boldsymbol{x}) =&
 	\frac{1}{1 + e^{b_j +(\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} .
-\label{_auto59}
+\label{_auto49}
 \end{align}
 $$
 
@@ -1043,10 +941,10 @@ $$
 	e^{ - \frac{(x_i - b_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}} \nonumber \\
 	=& \prod_i^M \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) 
-\label{_auto60}\\
+\label{_auto50}\\
 	\Rightarrow p_{GB} (x_i|\boldsymbol{h}) =& \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) .
-\label{_auto61}
+\label{_auto51}
 \end{align}
 $$
 
