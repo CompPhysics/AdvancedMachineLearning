@@ -205,8 +205,34 @@ that is
 This quantity is evaluated using Monte Carlo sampling, with Gibbs sampling as the standard sampling rule.
 Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropolis-Hastings algorithm and Gibbs sampling.
 
+!split
+===== Introducing the energy model =====
 
+As we will see below, a typical Boltzmann machines employs a probability distribution
+!bt
+\[
+p(\bm{x},\bm{h};\bm{\Theta}) = \frac{f(\bm{x},\bm{h};\bm{\Theta})}{Z(\bm{\Theta})},
+\]
+!et
+where $f(\bm{x},\bm{h};\bm{\Theta})$ is given by a so-called energy model. If we assume that the random variables $x_i$ and $h_j$ take binary values only, for example $x_i,h_j=\{0,1\}$, we have a so-called binary-binary model where
+!bt
+\[
+f(\bm{x},\bm{h};\bm{\Theta})=-E(\bm{x}, \bm{h};\bm{\Theta}) = \sum_{x_i\in \bm{X}} x_i a_i+\sum_{h_j\in \bm{H}} b_j h_j + \sum_{x_i\in \bm{X},h_j\in\bm{H}} x_i w_{ij} h_j,
+\]
+!et
+where the set of parameters are given by the biases and weights $\bm{\Theta}=\{\bm{a},\bm{b},\bm{W}\}$.
+_Note the vector notation_ instead of $x_i$ and $h_j$ for $f$.
 
+!split
+===== More compact notation =====
+
+With the above definition we can write the probaility as
+!bt
+\[
+p(\bm{x},\bm{h};\bm{\Theta}) = \frac{\exp{(\bm{a}^T\bm{x}+\bm{b}^T\bm{h}+\bm{x}^T\bm{W}\bm{h})}}{Z(\bm{\Theta})},
+\]
+!et
+where the biases $\bm{a}$ and $\bm{h}$ and the weights defined by the matrix $\bm{W}$ are the parameters we need to optimize.
 
 !split
 ===== Reminder on Markov Chain Monte Carlo =====
@@ -422,7 +448,7 @@ resulting in
 
 !bt
 \begin{equation*}
-   \bm{w}(t) = \bm{W}^t\bm{w}(0)=\bm{W}^t\sum_i\alpha_i\bm{v}_i=
+v   \bm{w}(t) = \bm{W}^t\bm{w}(0)=\bm{W}^t\sum_i\alpha_i\bm{v}_i=
 \sum_i\lambda_i^t\alpha_i\bm{v}_i,
 \end{equation*}
 !et

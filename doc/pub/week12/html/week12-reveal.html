@@ -433,6 +433,41 @@ Before we discuss the explicit algorithms, we need to remind ourselves about Mar
 </section>
 
 <section>
+<h2 id="introducing-the-energy-model">Introducing the energy model </h2>
+
+<p>As we will see below, a typical Boltzmann machines employs a probability distribution</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>where \( f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) \) is given by a so-called energy model. If we assume that the random variables \( x_i \) and \( h_j \) take binary values only, for example \( x_i,h_j=\{0,1\} \), we have a so-called binary-binary model where</p>
+<p>&nbsp;<br>
+$$
+f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})=-E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta}) = \sum_{x_i\in \boldsymbol{X}} x_i a_i+\sum_{h_j\in \boldsymbol{H}} b_j h_j + \sum_{x_i\in \boldsymbol{X},h_j\in\boldsymbol{H}} x_i w_{ij} h_j,
+$$
+<p>&nbsp;<br>
+
+<p>where the set of parameters are given by the biases and weights \( \boldsymbol{\Theta}=\{\boldsymbol{a},\boldsymbol{b},\boldsymbol{W}\} \).
+<b>Note the vector notation</b> instead of \( x_i \) and \( h_j \) for \( f \).
+</p>
+</section>
+
+<section>
+<h2 id="more-compact-notation">More compact notation </h2>
+
+<p>With the above definition we can write the probaility as</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{\exp{(\boldsymbol{a}^T\boldsymbol{x}+\boldsymbol{b}^T\boldsymbol{h}+\boldsymbol{x}^T\boldsymbol{W}\boldsymbol{h})}}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>where the biases \( \boldsymbol{a} \) and \( \boldsymbol{h} \) and the weights defined by the matrix \( \boldsymbol{W} \) are the parameters we need to optimize.</p>
+</section>
+
+<section>
 <h2 id="reminder-on-markov-chain-monte-carlo">Reminder on Markov Chain Monte Carlo </h2>
 
 <ul>
@@ -713,7 +748,7 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{equation*}
-   \boldsymbol{w}(t) = \boldsymbol{W}^t\boldsymbol{w}(0)=\boldsymbol{W}^t\sum_i\alpha_i\boldsymbol{v}_i=
+v   \boldsymbol{w}(t) = \boldsymbol{W}^t\boldsymbol{w}(0)=\boldsymbol{W}^t\sum_i\alpha_i\boldsymbol{v}_i=
 \sum_i\lambda_i^t\alpha_i\boldsymbol{v}_i,
 \end{equation*}
 $$
