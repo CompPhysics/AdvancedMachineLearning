@@ -34,7 +34,76 @@ Last week we defined a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_
 p(\bm{X})=\prod_{x_i\in \bm{X}}p(x_i),
 \]
 !et
-where we have assumed that the random varaibles $x_i$ are all independent and identically distributed.
+where we have assumed that the random varaibles $x_i$ are all independent and identically distributed (iid).
+
+We will now assume that we can defined this function in terms of optimization parameters $\bm{\Theta}$, which could be the biases and weights of deep network, and a set of hidden variables we also assume to be random variables which also are iid. The domain of these variables is
+$\bm{H}= \{h_0,h_1, \dots , h_{m-1}\}$.
+
+!split
+===== Probability model =====
+
+We define a probability
+!bt
+p(x_i,h_j;\Theta) = \frac{f(x_i,h_j;\Theta)}{Z(\Theta)},
+\]
+!et
+where $f(x_i,h_j;\Theta)$ is a function which we assume is larger or
+equal than zero and obeys all properties required for a probability
+distribution and $Z(\Theta)$ is a normalization constant. Inspired by
+statistical mechanics, we call it often for the partition function.
+It is defined as (assuming that we have discrete probability distributions)
+!bt
+\[
+Z(\Theta)=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\Theta).
+\]
+!et
+
+!split
+===== Marginal and conditional probabilities =====
+
+We can in turn define the marginal probabilities
+!bt
+p(x_i;\Theta) = \frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\Theta)}{Z(\Theta)},
+\]
+!et
+and 
+!bt
+p(h_i;\Theta) = \frac{\sum_{x_i\in \bm{X}}f(x_i,h_j;\Theta)}{Z(\Theta)}.
+\]
+!et
+
+Similarly, we have the conditional probabilities
+!bt
+\[
+p(\bm{h}|\bm{x})=\prod_j p(h_j| \bm{x}),
+\]
+!et
+and
+!bt
+\begin{align}
+	p(\bm{x}|\bm{h})=\prod_i p(x_i | \bm{h}).
+\end{align}
+!et
+
+!split
+===== Optimization problem =====
+
+We are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is 
+!bt
+\[
+p(\bm{X};\Theta)=\prod_{x_i\in \bm{X}}p(x_i;\Theta)=\prod_{x_i\in \bm{X}}\left(\frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\Theta)}{Z(\Theta)}\right),
+\]
+!et
+which we rewrite as
+!bt
+\[
+p(\bm{X};\Theta)=\frac{1}{Z(\Theta)}\prod_{x_i\in \bm{X}}\left(\sum_{h_j\in \bm{H}}f(x_i,h_j;\Theta)\right).
+\]
+!et
+
+
+
+
 
 
 !split
@@ -61,8 +130,7 @@ Why use a generative model rather than the more well known discriminative deep n
 
  o Both use gradient-descent based learning procedures for minimizing cost functions
  o Energy based models don't use backpropagation and automatic differentiation for computing gradients, instead turning to Markov Chain Monte Carlo methods.
- o DNNs often have several hidden layers. A restricted Boltzmann machine has only one hidden layer, however several RBMs can be stacked to make up Deep Belief Networks, of which they constitute the building blocks.
-
+ o DNNs often have several hidden layers. A restricted Boltzmann machine has only one hidden layer, however several RBMs can be stacked to make up Dbeep Belief Networks, of which they constitute the building blocks.
 History: The RBM was developed by amongst others Geoffrey Hinton, called by some the "Godfather of Deep Learning", working with the University of Toronto and Google.
 
 
