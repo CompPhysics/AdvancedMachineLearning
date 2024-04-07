@@ -68,11 +68,64 @@ doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'reminder-on-markov-chain-monte-carlo'),
+              ('Brownian motion and Markov processes',
+               2,
+               None,
+               'brownian-motion-and-markov-processes'),
+              ('Brownian motion and Markov processes, Ergodicity and Detailed '
+               'balance',
+               2,
+               None,
+               'brownian-motion-and-markov-processes-ergodicity-and-detailed-balance'),
+              ('Brownian motion and Markov processes, jargon',
+               2,
+               None,
+               'brownian-motion-and-markov-processes-jargon'),
+              ('Brownian motion and Markov processes, sequence of ingredients',
+               2,
+               None,
+               'brownian-motion-and-markov-processes-sequence-of-ingredients'),
+              ('Markov processes', 2, None, 'markov-processes'),
+              ('Markov processes', 2, None, 'markov-processes'),
+              ('Markov processes, the probabilities',
+               2,
+               None,
+               'markov-processes-the-probabilities'),
+              ('Markov processes', 2, None, 'markov-processes'),
+              ('What do the results mean?',
+               2,
+               None,
+               'what-do-the-results-mean'),
+              ('Understanding the basics', 2, None, 'understanding-the-basics'),
+              ('Basics of the Metropolis Algorithm',
+               2,
+               None,
+               'basics-of-the-metropolis-algorithm'),
+              ('The basic of the Metropolis Algorithm',
+               2,
+               None,
+               'the-basic-of-the-metropolis-algorithm'),
+              ('More on the Metropolis', 2, None, 'more-on-the-metropolis'),
+              ('Metropolis algorithm, setting it up',
+               2,
+               None,
+               'metropolis-algorithm-setting-it-up'),
+              ('Metropolis continues', 2, None, 'metropolis-continues'),
+              ('Detailed Balance', 2, None, 'detailed-balance'),
+              ('More on Detailed Balance', 2, None, 'more-on-detailed-balance'),
               ('Gibbs sampling', 2, None, 'gibbs-sampling'),
               ('Boltzmann Machines, marginal and conditional probabilities',
                2,
                None,
                'boltzmann-machines-marginal-and-conditional-probabilities'),
+              ('Generative and discriminative models',
+               2,
+               None,
+               'generative-and-discriminative-models'),
+              ('Basics of the Boltzmann machine',
+               2,
+               None,
+               'basics-of-the-boltzmann-machine'),
               ('The network', 2, None, 'the-network'),
               ('Joint distribution', 2, None, 'joint-distribution'),
               ('Network Elements, the energy function',
@@ -83,6 +136,7 @@ doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'defining-different-types-of-rbms'),
+              ('Gaussian-binary RBM', 2, None, 'gaussian-binary-rbm'),
               ('Cost function', 2, None, 'cost-function'),
               ('Optimization / Training', 2, None, 'optimization-training'),
               ('Kullback-Leibler relative entropy',
@@ -178,12 +232,32 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#explicit-expression-for-the-derivative" style="font-size: 80%;">Explicit expression for the derivative</a></li>
      <!-- navigation toc: --> <li><a href="#final-expression" style="font-size: 80%;">Final expression</a></li>
      <!-- navigation toc: --> <li><a href="#reminder-on-markov-chain-monte-carlo" style="font-size: 80%;">Reminder on Markov Chain Monte Carlo</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes" style="font-size: 80%;">Brownian motion and Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes-ergodicity-and-detailed-balance" style="font-size: 80%;">Brownian motion and Markov processes, Ergodicity and Detailed balance</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes-jargon" style="font-size: 80%;">Brownian motion and Markov processes, jargon</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes-sequence-of-ingredients" style="font-size: 80%;">Brownian motion and Markov processes, sequence of ingredients</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes" style="font-size: 80%;">Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes" style="font-size: 80%;">Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes-the-probabilities" style="font-size: 80%;">Markov processes, the probabilities</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes" style="font-size: 80%;">Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#what-do-the-results-mean" style="font-size: 80%;">What do the results mean?</a></li>
+     <!-- navigation toc: --> <li><a href="#understanding-the-basics" style="font-size: 80%;">Understanding the basics</a></li>
+     <!-- navigation toc: --> <li><a href="#basics-of-the-metropolis-algorithm" style="font-size: 80%;">Basics of the Metropolis Algorithm</a></li>
+     <!-- navigation toc: --> <li><a href="#the-basic-of-the-metropolis-algorithm" style="font-size: 80%;">The basic of the Metropolis Algorithm</a></li>
+     <!-- navigation toc: --> <li><a href="#more-on-the-metropolis" style="font-size: 80%;">More on the Metropolis</a></li>
+     <!-- navigation toc: --> <li><a href="#metropolis-algorithm-setting-it-up" style="font-size: 80%;">Metropolis algorithm, setting it up</a></li>
+     <!-- navigation toc: --> <li><a href="#metropolis-continues" style="font-size: 80%;">Metropolis continues</a></li>
+     <!-- navigation toc: --> <li><a href="#detailed-balance" style="font-size: 80%;">Detailed Balance</a></li>
+     <!-- navigation toc: --> <li><a href="#more-on-detailed-balance" style="font-size: 80%;">More on Detailed Balance</a></li>
      <!-- navigation toc: --> <li><a href="#gibbs-sampling" style="font-size: 80%;">Gibbs sampling</a></li>
      <!-- navigation toc: --> <li><a href="#boltzmann-machines-marginal-and-conditional-probabilities" style="font-size: 80%;">Boltzmann Machines, marginal and conditional probabilities</a></li>
+     <!-- navigation toc: --> <li><a href="#generative-and-discriminative-models" style="font-size: 80%;">Generative and discriminative models</a></li>
+     <!-- navigation toc: --> <li><a href="#basics-of-the-boltzmann-machine" style="font-size: 80%;">Basics of the Boltzmann machine</a></li>
      <!-- navigation toc: --> <li><a href="#the-network" style="font-size: 80%;">The network</a></li>
      <!-- navigation toc: --> <li><a href="#joint-distribution" style="font-size: 80%;">Joint distribution</a></li>
      <!-- navigation toc: --> <li><a href="#network-elements-the-energy-function" style="font-size: 80%;">Network Elements, the energy function</a></li>
      <!-- navigation toc: --> <li><a href="#defining-different-types-of-rbms" style="font-size: 80%;">Defining different types of RBMs</a></li>
+     <!-- navigation toc: --> <li><a href="#gaussian-binary-rbm" style="font-size: 80%;">Gaussian-binary RBM</a></li>
      <!-- navigation toc: --> <li><a href="#cost-function" style="font-size: 80%;">Cost function</a></li>
      <!-- navigation toc: --> <li><a href="#optimization-training" style="font-size: 80%;">Optimization / Training</a></li>
      <!-- navigation toc: --> <li><a href="#kullback-leibler-relative-entropy" style="font-size: 80%;">Kullback-Leibler relative entropy</a></li>
@@ -424,34 +498,454 @@ $$
 $$
 
 <p>This quantity is evaluated using Monte Carlo sampling, with Gibbs sampling as the standard sampling rule.
-Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropplis-Hastings algorithm and Gibbs sampling.
+Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropolis-Hastings algorithm and Gibbs sampling.
 </p>
 
 <!-- !split -->
 <h2 id="reminder-on-markov-chain-monte-carlo" class="anchor">Reminder on Markov Chain Monte Carlo </h2>
 
+<ul>
+<li> We want to study a physical system which evolves towards equilibrium, from given  initial conditions.</li>
+<li> We start with a PDF \( w(x_0,t_0) \)  and we want to understand how the system evolves with time.</li>
+<li> We want to reach a situation where after a given number of time steps we obtain a steady state. This means that the system reaches its most likely state (equilibrium situation)</li>
+<li> Our PDF is normally a multidimensional object whose normalization constant is impossible to find.</li>
+<li> Analytical calculations from \( w(x,t) \) are not possible.</li>
+<li> To sample directly from from \( w(x,t) \) is not possible/difficult.</li>
+<li> The transition probability \( W \) is also not  known.</li>
+<li> How can we establish that we have reached a steady state?   Sounds impossible!</li>
+</ul>
+<b>Use Markov chain Monte Carlo</b>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes" class="anchor">Brownian motion and Markov processes </h2>
+<p>A Markov process is a random walk with a selected probability for making a
+move. The new move is independent of the previous history of the system.
+</p>
+
+<p>The Markov process is used repeatedly in Monte Carlo simulations in order to generate
+new random states.
+</p>
+
+<p>The reason for choosing a Markov process is that when it is run for a
+long enough time starting with a random state, we will eventually reach the most likely state of the system.
+</p>
+
+<p>In thermodynamics, this means that after a certain number of Markov processes
+we reach an equilibrium distribution.
+</p>
+
+<p>This mimicks the way a real system reaches
+its most likely state at a given temperature of the surroundings.
+</p>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes-ergodicity-and-detailed-balance" class="anchor">Brownian motion and Markov processes, Ergodicity and Detailed balance </h2>
+
+<p>To reach this distribution, the Markov process needs to obey two important conditions, that of
+<b>ergodicity</b> and <b>detailed balance</b>. These conditions impose then constraints on our algorithms
+for accepting or rejecting new random states.
+</p>
+
+<p>The Metropolis algorithm discussed here
+abides to both these constraints.
+</p>
+
+<p>The Metropolis algorithm is widely used in Monte Carlo
+simulations and the understanding of it rests within
+the interpretation of random walks and Markov processes.
+</p>
+
+<p>For a proof the ergodic theorem see <a href="https://www.pnas.org/doi/10.1073/pnas.17.2.656" target="_self"><tt>https://www.pnas.org/doi/10.1073/pnas.17.2.656</tt></a>.</p>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes-jargon" class="anchor">Brownian motion and Markov processes, jargon </h2>
+
+<p>In a random walk one defines a mathematical entity called a <b>walker</b>, 
+whose  attributes
+completely define the state of the system in question. 
+</p>
+
+<p>The state of the system  can refer to any physical quantities,
+from the vibrational state of a molecule specified by a set of quantum numbers, 
+to the brands of coffee in your favourite supermarket.
+</p>
+
+<p>The walker moves in an appropriate state space by a combination of 
+deterministic and random displacements from its previous
+position.
+</p>
+
+<p>This sequence of steps forms a <b>chain</b>.</p>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes-sequence-of-ingredients" class="anchor">Brownian motion and Markov processes, sequence of ingredients </h2>
+
+<ul>
+<li> We want to study a physical system which evolves towards equilibrium, from given  initial conditions.</li>
+<li> Markov chains are intimately linked with the physical process of diffusion.</li> 
+<li> From a Markov chain we can then derive the conditions for detailed balance and ergodicity. These are the conditions needed for obtaining a steady state.</li>
+<li> The widely used algorithm for doing this is the so-called Metropolis algorithm, in its refined form the Metropolis-Hastings algorithm.</li>
+</ul>
+<!-- !split -->
+<h2 id="markov-processes" class="anchor">Markov processes </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>A Markov process allows in principle for a microscopic description of Brownian motion.
+As with the random walk studied in the previous section, we consider a particle 
+which moves along the  \( x \)-axis in the form of a series of jumps with step length 
+\( \Delta x = l \). Time and space are discretized and the subsequent moves are
+statistically independent, i.e., the new move depends only on the previous step
+and not on the results from earlier trials. 
+We start at a position \( x=jl=j\Delta x \) and move to 
+a new position \( x =i\Delta x \) during a step \( \Delta t=\epsilon \), where 
+\( i\ge  0 \) and \( j\ge 0 \) are integers. 
+The original probability distribution function (PDF) of the particles is given by  
+\( w_i(t=0) \) where \( i \) refers to a specific position on the grid in 
+</p>
+</div>
+</div>
+
+<p>The function \( w_i(t=0) \) is now the discretized version of \( w(x,t) \).
+We can regard the discretized PDF as a vector.
+</p>
+
+<!-- !split -->
+<h2 id="markov-processes" class="anchor">Markov processes </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>For the Markov process we have a transition probability from a position
+\( x=jl \) to a position \( x=il \) given by
+</p>
+$$
+\begin{equation*}
+   W_{ij}(\epsilon)=W(il-jl,\epsilon)=\left\{\begin{array}{cc}\frac{1}{2} & |i-j| = 1\\
+             0 & \mathrm{else} \end{array} \right. ,
+\end{equation*}
+$$
+
+<p>where \( W_{ij} \) is normally called 
+the transition probability and we can represent it, see below,
+as a matrix. 
+<b>Here we have specialized to a case where the transition probability is known</b>.
+</p>
+
+<p>Our new PDF \( w_i(t=\epsilon) \) is now related to the PDF at
+\( t=0 \) through the relation
+</p>
+
+$$
+\begin{equation*} 
+   w_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)w_j(t=0).
+\end{equation*}
+$$
+
+<p>This equation represents the discretized time-development of an original 
+PDF with equal probability of jumping left or right.
+</p>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="markov-processes-the-probabilities" class="anchor">Markov processes, the probabilities </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+
+<p>Since both \( \boldsymbol{W} \) and \( \boldsymbol{w} \) represent probabilities, they have to be normalized, i.e., we require
+that at each time step we have
+</p>
+
+$$
+\begin{equation*} 
+   \sum_i w_i(t) = 1, 
+\end{equation*}
+$$
+
+<p>and</p>
+
+$$
+\begin{equation*} 
+   \sum_j W(j\rightarrow i) = 1,
+\end{equation*}
+$$
+
+<p>which applies for all \( j \)-values.
+The further constraints are
+\( 0 \le W_{ij} \le 1 \)  and  \( 0 \le w_{j} \le 1 \).
+Note that the probability for remaining at the same place is in general 
+not necessarily equal zero. 
+</p>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="markov-processes" class="anchor">Markov processes </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>The time development of our initial PDF can now be represented through the action of
+the transition probability matrix applied \( n \) times. At a 
+time  \( t_n=n\epsilon \) our initial distribution has developed into
+</p>
+
+$$
+\begin{equation*}
+   w_i(t_n) = \sum_jW_{ij}(t_n)w_j(0),
+\end{equation*}
+$$
+
+<p>and defining</p>
+
+$$
+\begin{equation*}
+   W(il-jl,n\epsilon)=(W^n(\epsilon))_{ij}
+\end{equation*}
+$$
+
+<p>we obtain</p>
+
+$$
+\begin{equation*}
+   w_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}w_j(0),
+\end{equation*}
+$$
+
+<p>or in matrix form</p>
+$$
+\begin{equation} \label{eq:wfinal}
+   \boldsymbol{w}(n\epsilon) = \boldsymbol{W}^n(\epsilon)\boldsymbol{w}(0).
+\end{equation}
+$$
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="what-do-the-results-mean" class="anchor">What do the results mean? </h2>
+
+<p>We have after \( t \)-steps</p>
+
+$$
+\begin{equation*}
+   \boldsymbol{w}(t) = \boldsymbol{W}^t\boldsymbol{w}(0),
+\end{equation*}
+$$
+
+<p>with \( \boldsymbol{w}(0) \) the distribution at \( t=0 \) and \( \boldsymbol{W} \) representing the 
+transition probability matrix. 
+</p>
+
+<!-- !split -->
+<h2 id="understanding-the-basics" class="anchor">Understanding the basics </h2>
+
+<p>We can always expand \( \boldsymbol{w}(0) \) in terms of the right eigenvectors 
+\( \boldsymbol{v} \) of \( \boldsymbol{W} \) as
+</p>
+
+$$
+\begin{equation*}
+    \boldsymbol{w}(0)  = \sum_i\alpha_i\boldsymbol{v}_i,
+\end{equation*}
+$$
+
+<p>resulting in</p>
+
+$$
+\begin{equation*}
+   \boldsymbol{w}(t) = \boldsymbol{W}^t\boldsymbol{w}(0)=\boldsymbol{W}^t\sum_i\alpha_i\boldsymbol{v}_i=
+\sum_i\lambda_i^t\alpha_i\boldsymbol{v}_i,
+\end{equation*}
+$$
+
+<p>with \( \lambda_i \) the \( i^{\mathrm{th}} \) eigenvalue corresponding to  
+the eigenvector \( \boldsymbol{v}_i \). 
+</p>
+
+<p>If we assume that \( \lambda_0 \) is the largest eigenvector we see that in the limit \( t\rightarrow \infty \),
+\( \boldsymbol{w}(t) \) becomes proportional to the corresponding eigenvector 
+\( \boldsymbol{v}_0 \). This is our steady state or final distribution. 
+</p>
+
+<!-- !split -->
+<h2 id="basics-of-the-metropolis-algorithm" class="anchor">Basics of the Metropolis Algorithm </h2>
+
+<p>The Metropolis
+algorithm is a method to sample a normalized probability
+distribution by a stochastic process. We define \( {\cal w}_i^{(n)} \) to
+be the probability for finding the system in the state \( i \) at step \( n \).
+</p>
+
+<p>In the simulations, our assumption is that we have a model for \( {\cal w}_i^{(n)} \), but we do not know \( W \).
+We will hence model \( W \) in terms of a likelihood for making transition \( T \) and a likelihood for accepting a transition.
+That is
+</p>
+$$
+W_{i\rightarrow j}=A_{i\rightarrow j}T_{i\rightarrow j}
+$$
+
+
+<!-- !split -->
+<h2 id="the-basic-of-the-metropolis-algorithm" class="anchor">The basic of the Metropolis Algorithm </h2>
+
+<ul>
+<li> Sample a possible new state \( j \) with some probability \( T_{i\rightarrow j} \).</li>
+<li> Accept the new state \( j \) with probability \( A_{i \rightarrow j} \) and use it as the next sample.</li>
+<li> With probability \( 1-A_{i\rightarrow j} \) the move is rejected and the original state \( i \) is used again as a sample.</li>
+</ul>
+<p>We wish to derive the required properties of \( T \) and \( A \) such that
+\( {\cal w}_i^{(n\rightarrow \infty)} \rightarrow p_i \) so that starting
+from any distribution, the method converges to the correct distribution.
+Note that the description here is for a discrete probability distribution.
+Replacing probabilities \( p_i \) with expressions like \( p(x_i)dx_i \) will
+take all of these over to the corresponding continuum expressions.
+</p>
+
+<!-- !split -->
+<h2 id="more-on-the-metropolis" class="anchor">More on the Metropolis </h2>
+
+<p>The dynamical equation for \( {\cal w}_i^{(n)} \) can be written directly from
+the description above. The probability of being in the state \( i \) at step \( n \)
+is given by the probability of being in any state \( j \) at the previous step,
+and making an accepted transition to \( i \) added to the probability of
+being in the state \( i \), making a transition to any state \( j \) and
+rejecting the move:
+</p>
+$$
+\begin{equation}
+\label{eq:eq1}
+{\cal w}^{(n)}_i = \sum_j \left [
+{\cal w}^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
++{\cal w}^{(n-1)}_iT_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
+\right ] \,.
+\end{equation}
+$$
+
+
+<!-- !split -->
+<h2 id="metropolis-algorithm-setting-it-up" class="anchor">Metropolis algorithm, setting it up </h2>
+<p>Since the probability of making some transition must be 1,
+\( \sum_j T_{i\rightarrow j} = 1 \), and Eq. \eqref{eq:eq1} becomes
+</p>
+
+$$
+\begin{equation}
+{\cal w}^{(n)}_i = {\cal w}^{(n-1)}_i +
+ \sum_j \left [
+{\cal w}^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
+-{\cal w}^{(n-1)}_iT_{i\rightarrow j}A_{i\rightarrow j}
+\right ] \,.
+\label{_auto1}
+\end{equation}
+$$
+
+
+<!-- !split -->
+<h2 id="metropolis-continues" class="anchor">Metropolis continues </h2>
+
+<p>For large \( n \) we require that \( {\cal w}^{(n\rightarrow \infty)}_i = p_i \),
+the desired probability distribution. Taking this limit, gives the
+balance requirement
+</p>
+
+$$
+\begin{equation}
+\sum_j \left [p_jT_{j\rightarrow i} A_{j\rightarrow i}-p_iT_{i\rightarrow j}A_{i\rightarrow j}
+\right ] = 0,
+\label{_auto2}
+\end{equation}
+$$
+
+
+<!-- !split -->
+<h2 id="detailed-balance" class="anchor">Detailed Balance </h2>
+
+<p>The balance requirement is very weak. Typically the much stronger detailed
+balance requirement is enforced, that is rather than the sum being
+set to zero, we set each term separately to zero and use this
+to determine the acceptance probabilities. Rearranging, the result is
+</p>
+
+$$
+\begin{equation}
+\frac{ A_{j\rightarrow i}}{A_{i\rightarrow j}}
+= \frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}} \,.
+\label{_auto3}
+\end{equation}
+$$
+
+<p>This is the <a href="https://cims.nyu.edu/~holmes/teaching/asa19/handout_Lecture3_2019.pdf" target="_self">detailed balance requirement</a></p>
+
+<!-- !split -->
+<h2 id="more-on-detailed-balance" class="anchor">More on Detailed Balance </h2>
+
+<p>The Metropolis choice is to maximize the \( A \) values, that is</p>
+
+$$
+\begin{equation}
+A_{j \rightarrow i} = \min \left ( 1,
+\frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}}\right ).
+\label{_auto4}
+\end{equation}
+$$
+
+<p>Other choices are possible, but they all correspond to multilplying
+\( A_{i\rightarrow j} \) and \( A_{j\rightarrow i} \) by the same constant
+smaller than unity. The penalty function method uses just such
+a factor to compensate for \( p_i \) that are evaluated stochastically
+and are therefore noisy.
+</p>
+
+<p>Having chosen the acceptance probabilities, we have guaranteed that
+if the  \( {\cal w}_i^{(n)} \) has equilibrated, that is if it is equal to \( p_i \),
+it will remain equilibrated. Next we need to find the circumstances for
+convergence to equilibrium.
+</p>
+
 <!-- !split -->
 <h2 id="gibbs-sampling" class="anchor">Gibbs sampling </h2>
+
+<p>An efficient way if performing the sampling is through the use of
+Gibbs sampling. The latter uses the conditional probability instead of
+the full probability as done in the Metropolis algorithm.
+</p>
 
 <!-- !split -->
 <h2 id="boltzmann-machines-marginal-and-conditional-probabilities" class="anchor">Boltzmann Machines, marginal and conditional probabilities  </h2>
 
-<p>Why use a generative model rather than the more well known discriminative deep neural networks (DNN)? </p>
-
-<ul>
-<li> Discriminitave methods have several limitations: They are mainly supervised learning methods, thus requiring labeled data. And there are tasks they cannot accomplish, like drawing new examples from an unknown probability distribution.</li>
-<li> A generative model can learn to represent and sample from a probability distribution. The core idea is to learn a parametric model of the probability distribution from which the training data was drawn. As an example
-<ol type="a"></li>
- <li> A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.</li>
- <li> Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.</li>
- <li> Model the trial function for Monte Carlo calculations</li>
+<p>A generative model can learn to represent and sample from a
+probability distribution. The core idea is to learn a parametric model
+of the probability distribution from which the training data was
+drawn. As an example
+</p>
+<ol>
+<li> A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.</li>
+<li> Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.</li>
+<li> Model the trial function for Monte Carlo calculations</li>
 </ol>
-<li> Both use gradient-descent based learning procedures for minimizing cost functions</li>
-<li> Energy based models don't use backpropagation and automatic differentiation for computing gradients, instead turning to Markov Chain Monte Carlo methods.</li>
-<li> DNNs often have several hidden layers. A restricted Boltzmann machine has only one hidden layer, however several RBMs can be stacked to make up Dbeep Belief Networks, of which they constitute the building blocks.</li>
-</ul>
-<p>History: The RBM was developed by amongst others Geoffrey Hinton, called by some the "Godfather of Deep Learning", working with the University of Toronto and Google.</p>
+<!-- !split -->
+<h2 id="generative-and-discriminative-models" class="anchor">Generative and discriminative models </h2>
 
+<p>Generative and discriminative models use both gradient-descent based
+learning procedures for minimizing cost functions
+</p>
+
+<p>However, energy based models don't use backpropagation and automatic
+differentiation for computing gradients, instead turning to Markov
+Chain Monte Carlo methods.
+</p>
+
+<p>A typical deep neural network has several hidden layers. A restricted
+Boltzmann machine has only one hidden layer, however several RBMs can
+be stacked to make up deep Belief Networks, of which they constitute
+the building blocks.
+</p>
+
+<!-- !split -->
+<h2 id="basics-of-the-boltzmann-machine" class="anchor">Basics of the Boltzmann machine </h2>
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
@@ -468,17 +962,6 @@ with stochastic continuous or discrete units.
 state of each unit(neurons/nodes) depends on the units it is connected
 to. The weights in the network represent thus the strength of the
 interaction between various units/nodes.
-</p>
-</div>
-</div>
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>It turns into a Hopfield network if we choose deterministic rather
-than stochastic units. In contrast to a Hopfield network, a BM is a
-so-called generative model. It allows us to generate new samples from
-the learned distribution.
 </p>
 </div>
 </div>
@@ -538,11 +1021,12 @@ over (integrated out).
 </ol>
 <!-- !split -->
 <h2 id="joint-distribution" class="anchor">Joint distribution </h2>
+
 <p>The restricted Boltzmann machine is described by a Boltzmann distribution</p>
 $$
 \begin{align}
 	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
-\label{_auto1}
+\label{_auto5}
 \end{align}
 $$
 
@@ -550,7 +1034,7 @@ $$
 $$
 \begin{align}
 	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
-\label{_auto2}
+\label{_auto6}
 \end{align}
 $$
 
@@ -580,7 +1064,7 @@ adjusting the energy function to best fit our problem.
 $$
 \begin{align}
 	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
-\label{_auto3}
+\label{_auto7}
 \end{align}
 $$
 
@@ -588,32 +1072,20 @@ $$
 </div>
 </div>
 
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+
+<!-- !split -->
+<h2 id="gaussian-binary-rbm" class="anchor">Gaussian-binary RBM </h2>
 
 <p>Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:</p>
 $$
 \begin{align}
 	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
-\label{_auto4}
+\label{_auto8}
 \end{align}
 $$
-</div>
-</div>
 
+<p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \mathbf{x} \) to be continuous)</p>
 
-<ol>
-<li> RBMs are Useful when we model continuous data (i.e., we wish \( \mathbf{x} \) to be continuous)</li>
-<li> Requires a smaller learning rate, since there's no upper bound to the value a component might take in the reconstruction</li>
-</ol>
-<p>Other types of units include:</p>
-<ol>
-<li> Softmax and multinomial units</li>
-<li> Gaussian visible and hidden units</li>
-<li> Binomial units</li>
-<li> Rectified linear units</li>
-</ol>
 <!-- !split -->
 <h2 id="cost-function" class="anchor">Cost function </h2>
 
@@ -623,9 +1095,9 @@ Denoting the parameters as \( \boldsymbol{\theta} = a_1,...,a_M,b_1,...,b_N,w_{1
 $$
 \begin{align}
 	\mathcal{L}(\{ \theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} 
-\label{_auto5}\\
+\label{_auto9}\\
 	&= - \langle E(\boldsymbol{x}; \{ \theta_i\}) \rangle_{data} - \text{log} Z(\{ \theta_i\}),
-\label{_auto6}
+\label{_auto10}
 \end{align}
 $$
 
@@ -640,7 +1112,7 @@ Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \theta_i \})
 $$
 \begin{align}
 	\boldsymbol{\theta}_{k+1} = \boldsymbol{\theta}_k - \eta \nabla \mathcal{C} (\boldsymbol{\theta}_k)
-\label{_auto7}
+\label{_auto11}
 \end{align}
 $$
 
@@ -652,9 +1124,9 @@ $$
 	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
 	&= \langle \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
 	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} 
-\label{_auto8}\\
+\label{_auto12}\\
 	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model},
-\label{_auto9}
+\label{_auto13}
 \end{align}
 $$
 
@@ -662,7 +1134,7 @@ $$
 $$
 \begin{align}
 	O_i(\boldsymbol{x}) = \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i}, 
-\label{_auto10}
+\label{_auto14}
 \end{align}
 $$
 
@@ -670,7 +1142,7 @@ $$
 $$
 \begin{align}
 	\langle O_i(\boldsymbol{x}) \rangle_{model} = \text{Tr} P_\theta(\boldsymbol{x})O_i(\boldsymbol{x}) = - \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i}.
-\label{_auto11}
+\label{_auto15}
 \end{align}
 $$
 
@@ -687,12 +1159,12 @@ their probability).
 $$
 \begin{align}
 	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial w_{ij}} =& \langle x_i h_j \rangle_{data} - \langle x_i h_j \rangle_{model} 
-\label{_auto12}\\
+\label{_auto16}\\
 	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial a_{ij}} =& \langle x_i \rangle_{data} - \langle x_i \rangle_{model} 
-\label{_auto13}\\
+\label{_auto17}\\
 	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial b_{ij}} =& \langle h_i \rangle_{data} - \langle h_i \rangle_{model}. 
-\label{_auto14}\\
-\label{_auto15}
+\label{_auto18}\\
+\label{_auto19}
 \end{align}
 $$
 
@@ -712,7 +1184,7 @@ we can measure the difference by
 $$
 \begin{align}
 	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\boldsymbol{x}) \log \frac{p(\boldsymbol{x})}{q(\boldsymbol{x})}  d\boldsymbol{x}.
-\label{_auto16}
+\label{_auto20}
 \end{align}
 $$
 
@@ -725,17 +1197,17 @@ $$
 \begin{align}
 	\text{KL} (f(\boldsymbol{x})|| p(\boldsymbol{x}| \boldsymbol{\theta})) =& \int_{-\infty}^{\infty}
 	f (\boldsymbol{x}) \log \frac{f(\boldsymbol{x})}{p(\boldsymbol{x}| \boldsymbol{\theta})} d\boldsymbol{x} 
-\label{_auto17}\\
+\label{_auto21}\\
 	=& \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log f(\boldsymbol{x}) d\boldsymbol{x} - \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log
 	p(\boldsymbol{x}| \boldsymbol{\theta}) d\boldsymbol{x} 
-\label{_auto18}\\
+\label{_auto22}\\
 	%=& \mathbb{E}_{f(\boldsymbol{x})} (\log f(\boldsymbol{x})) - \mathbb{E}_{f(\boldsymbol{x})} (\log p(\boldsymbol{x}| \boldsymbol{\theta}))
 	=& \langle \log f(\boldsymbol{x}) \rangle_{f(\boldsymbol{x})} - \langle \log p(\boldsymbol{x}| \boldsymbol{\theta}) \rangle_{f(\boldsymbol{x})} 
-\label{_auto19}\\
+\label{_auto23}\\
 	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \langle E(\boldsymbol{x}) \rangle_{data} + \log Z 
-\label{_auto20}\\
+\label{_auto24}\\
 	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \mathcal{C}_{LL} .
-\label{_auto21}
+\label{_auto25}
 \end{align}
 $$
 
@@ -756,7 +1228,7 @@ $$
 	\langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model}
 	= \int p(\boldsymbol{x}| \boldsymbol{\theta}) \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} d\boldsymbol{x} 
 	= -\frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} .
-\label{_auto22}
+\label{_auto26}
 \end{align}
 $$
 
@@ -771,11 +1243,11 @@ $$
 \begin{align}
 	\frac{\partial \mathcal{C}_{LL}}{\partial \theta_i}
 	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} + \frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} 
-\label{_auto23}\\
+\label{_auto27}\\
 	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model} 
-\label{_auto24}\\
+\label{_auto28}\\
 	%=& \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}
-\label{_auto25}
+\label{_auto29}
 \end{align}
 $$
 
@@ -835,7 +1307,7 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 $$
 \begin{align}
 	E_{BB}(\boldsymbol{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\label{_auto26}
+\label{_auto30}
 \end{align}
 $$
 
@@ -847,9 +1319,9 @@ $$
 $$
 \begin{align}
 	p_{BB}(\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} 
-\label{_auto27}\\
+\label{_auto31}\\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
-\label{_auto28}
+\label{_auto32}
 \end{align}
 $$
 
@@ -858,7 +1330,7 @@ $$
 $$
 \begin{align}
 	Z_{BB} = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
-\label{_auto29}
+\label{_auto33}
 \end{align}
 $$
 
@@ -871,7 +1343,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h}) 
-\label{_auto30}\\
+\label{_auto34}\\
 	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
@@ -880,7 +1352,7 @@ $$
 	& ... \times \sum_{h_2} e^{(b_N + \boldsymbol{x}^T \boldsymbol{w}_{\ast N})h_N} \bigg ) \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
-\label{_auto31}
+\label{_auto35}
 \end{align}
 $$
 
@@ -893,7 +1365,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{h}) = \frac{1}{Z_{BB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
-\label{_auto32}
+\label{_auto36}
 \end{align}
 $$
 
@@ -913,7 +1385,7 @@ $$
 	=& \prod_j^N \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{BB} (h_j| \boldsymbol{x}) .
-\label{_auto33}
+\label{_auto37}
 \end{align}
 $$
 
@@ -927,12 +1399,12 @@ $$
 \begin{align}
 	p_{BB} (h_j=1 | \boldsymbol{x}) =&   \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto34}\\
+\label{_auto38}\\
 	=&  \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} )}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto35}\\
+\label{_auto39}\\
 	=&  \frac{ 1 }{1 + e^{-(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})} } ,
-\label{_auto36}
+\label{_auto40}
 \end{align}
 $$
 
@@ -941,7 +1413,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (h_j=0 | \boldsymbol{x}) =\frac{ 1 }{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}} } .
-\label{_auto37}
+\label{_auto41}
 \end{align}
 $$
 
@@ -954,9 +1426,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } 
-\label{_auto38}\\
+\label{_auto42}\\
 	&= \prod_i^M p_{BB} (x_i | \boldsymbol{h}) .
-\label{_auto39}
+\label{_auto43}
 \end{align}
 $$
 
@@ -964,9 +1436,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} 
-\label{_auto40}\\
+\label{_auto44}\\
 	p_{BB} (x_i=0 | \boldsymbol{h}) =& \frac{1}{1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} }} .
-\label{_auto41}
+\label{_auto45}
 \end{align}
 $$
 
@@ -983,7 +1455,7 @@ $$
 	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
 	=& \vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 - \boldsymbol{b}^T \boldsymbol{h} 
 	- (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h} . 
-\label{_auto42}
+\label{_auto46}
 \end{align}
 $$
 
@@ -1001,7 +1473,7 @@ $$
 	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ b_j h_j 
 	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\label{_auto43}
+\label{_auto47}
 \end{align}
 $$
 
@@ -1011,7 +1483,7 @@ $$
 \begin{align}
 	Z_{GB} =& \int \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
 	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} d\tilde{\boldsymbol{x}} .
-\label{_auto44}
+\label{_auto48}
 \end{align}
 $$
 
@@ -1032,7 +1504,7 @@ $$
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
 	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) .
-\label{_auto45}
+\label{_auto49}
 \end{align}
 $$
 
@@ -1069,7 +1541,7 @@ $$
 	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
 	\sqrt{2\pi \sigma_i^2}
 	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}} .
-\label{_auto46}
+\label{_auto50}
 \end{align}
 $$
 
@@ -1089,7 +1561,7 @@ $$
 	=& \prod_j^N \frac{e^{(b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j})h_j } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{GB} (h_j|\boldsymbol{x}).
-\label{_auto47}
+\label{_auto51}
 \end{align}
 $$
 
@@ -1100,10 +1572,10 @@ $$
 	p_{GB} (h_j =1 | \boldsymbol{x}) =& \frac{e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j} } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto48}\\
+\label{_auto52}\\
 	p_{GB} (h_j =0 | \boldsymbol{x}) =&
 	\frac{1}{1 + e^{b_j +(\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} .
-\label{_auto49}
+\label{_auto53}
 \end{align}
 $$
 
@@ -1136,10 +1608,10 @@ $$
 	e^{ - \frac{(x_i - b_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}} \nonumber \\
 	=& \prod_i^M \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) 
-\label{_auto50}\\
+\label{_auto54}\\
 	\Rightarrow p_{GB} (x_i|\boldsymbol{h}) =& \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) .
-\label{_auto51}
+\label{_auto55}
 \end{align}
 $$
 

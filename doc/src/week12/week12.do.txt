@@ -203,7 +203,7 @@ that is
 !et
 
 This quantity is evaluated using Monte Carlo sampling, with Gibbs sampling as the standard sampling rule.
-Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropplis-Hastings algorithm and Gibbs sampling.
+Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropolis-Hastings algorithm and Gibbs sampling.
 
 
 
@@ -211,32 +211,395 @@ Before we discuss the explicit algorithms, we need to remind ourselves about Mar
 !split
 ===== Reminder on Markov Chain Monte Carlo =====
 
+* We want to study a physical system which evolves towards equilibrium, from given  initial conditions.
+* We start with a PDF $w(x_0,t_0)$  and we want to understand how the system evolves with time.
+* We want to reach a situation where after a given number of time steps we obtain a steady state. This means that the system reaches its most likely state (equilibrium situation)
+* Our PDF is normally a multidimensional object whose normalization constant is impossible to find.
+* Analytical calculations from $w(x,t)$ are not possible.
+* To sample directly from from $w(x,t)$ is not possible/difficult.
+* The transition probability $W$ is also not  known.
+* How can we establish that we have reached a steady state?   Sounds impossible!
+
+_Use Markov chain Monte Carlo_
+
+!split 
+===== Brownian motion and Markov processes =====
+A Markov process is a random walk with a selected probability for making a
+move. The new move is independent of the previous history of the system.
+
+The Markov process is used repeatedly in Monte Carlo simulations in order to generate
+new random states.
+
+The reason for choosing a Markov process is that when it is run for a
+long enough time starting with a random state, we will eventually reach the most likely state of the system.
+
+In thermodynamics, this means that after a certain number of Markov processes
+we reach an equilibrium distribution.
+
+This mimicks the way a real system reaches
+its most likely state at a given temperature of the surroundings.
+
+!split 
+===== Brownian motion and Markov processes, Ergodicity and Detailed balance =====
+
+To reach this distribution, the Markov process needs to obey two important conditions, that of
+_ergodicity_ and _detailed balance_. These conditions impose then constraints on our algorithms
+for accepting or rejecting new random states.
+
+
+The Metropolis algorithm discussed here
+abides to both these constraints.
+
+The Metropolis algorithm is widely used in Monte Carlo
+simulations and the understanding of it rests within
+the interpretation of random walks and Markov processes.
+
+For a proof the ergodic theorem see URL:"https://www.pnas.org/doi/10.1073/pnas.17.2.656".
+
+!split 
+===== Brownian motion and Markov processes, jargon =====
+
+In a random walk one defines a mathematical entity called a _walker_, 
+whose  attributes
+completely define the state of the system in question. 
+
+The state of the system  can refer to any physical quantities,
+from the vibrational state of a molecule specified by a set of quantum numbers, 
+to the brands of coffee in your favourite supermarket.
+
+
+The walker moves in an appropriate state space by a combination of 
+deterministic and random displacements from its previous
+position.
+
+This sequence of steps forms a _chain_.
+
+!split 
+===== Brownian motion and Markov processes, sequence of ingredients =====
+
+* We want to study a physical system which evolves towards equilibrium, from given  initial conditions.
+* Markov chains are intimately linked with the physical process of diffusion. 
+* From a Markov chain we can then derive the conditions for detailed balance and ergodicity. These are the conditions needed for obtaining a steady state.
+* The widely used algorithm for doing this is the so-called Metropolis algorithm, in its refined form the Metropolis-Hastings algorithm.
+
+!split
+===== Markov processes =====
+!bblock
+A Markov process allows in principle for a microscopic description of Brownian motion.
+As with the random walk studied in the previous section, we consider a particle 
+which moves along the  $x$-axis in the form of a series of jumps with step length 
+$\Delta x = l$. Time and space are discretized and the subsequent moves are
+statistically independent, i.e., the new move depends only on the previous step
+and not on the results from earlier trials. 
+We start at a position $x=jl=j\Delta x$ and move to 
+a new position $x =i\Delta x$ during a step $\Delta t=\epsilon$, where 
+$i\ge  0$ and $j\ge 0$ are integers. 
+The original probability distribution function (PDF) of the particles is given by  
+$w_i(t=0)$ where $i$ refers to a specific position on the grid in 
+!eblock
+The function $w_i(t=0)$ is now the discretized version of $w(x,t)$.
+We can regard the discretized PDF as a vector.
+
+!split
+===== Markov processes =====
+!bblock
+For the Markov process we have a transition probability from a position
+$x=jl$ to a position $x=il$ given by
+!bt
+\begin{equation*}
+   W_{ij}(\epsilon)=W(il-jl,\epsilon)=\left\{\begin{array}{cc}\frac{1}{2} & |i-j| = 1\\
+             0 & \mathrm{else} \end{array} \right. ,
+\end{equation*}
+!et
+where $W_{ij}$ is normally called 
+the transition probability and we can represent it, see below,
+as a matrix. 
+_Here we have specialized to a case where the transition probability is known_.
+
+Our new PDF $w_i(t=\epsilon)$ is now related to the PDF at
+$t=0$ through the relation
+
+!bt
+\begin{equation*} 
+   w_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)w_j(t=0).
+\end{equation*}
+!et
+ 
+This equation represents the discretized time-development of an original 
+PDF with equal probability of jumping left or right.
+!eblock
+
+!split
+===== Markov processes, the probabilities =====
+!bblock
+
+Since both $\bm{W}$ and $\bm{w}$ represent probabilities, they have to be normalized, i.e., we require
+that at each time step we have
+
+!bt
+\begin{equation*} 
+   \sum_i w_i(t) = 1, 
+\end{equation*}
+!et
+and
+
+!bt
+\begin{equation*} 
+   \sum_j W(j\rightarrow i) = 1,
+\end{equation*}
+!et
+which applies for all $j$-values.
+The further constraints are
+$0 \le W_{ij} \le 1$  and  $0 \le w_{j} \le 1$.
+Note that the probability for remaining at the same place is in general 
+not necessarily equal zero. 
+!eblock
+
+!split
+===== Markov processes =====
+!bblock
+The time development of our initial PDF can now be represented through the action of
+the transition probability matrix applied $n$ times. At a 
+time  $t_n=n\epsilon$ our initial distribution has developed into
+
+!bt
+\begin{equation*}
+   w_i(t_n) = \sum_jW_{ij}(t_n)w_j(0),
+\end{equation*}
+!et
+and defining
+
+!bt
+\begin{equation*}
+   W(il-jl,n\epsilon)=(W^n(\epsilon))_{ij}
+\end{equation*}
+!et
+we obtain
+
+!bt
+\begin{equation*}
+   w_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}w_j(0),
+\end{equation*}
+!et
+or in matrix form
+!bt
+\begin{equation} label{eq:wfinal}
+   \bm{w}(n\epsilon) = \bm{W}^n(\epsilon)\bm{w}(0).
+\end{equation}
+!et
+!eblock
+
+
+!split
+===== What do the results mean? =====
+
+
+We have after $t$-steps
+
+!bt
+\begin{equation*}
+   \bm{w}(t) = \bm{W}^t\bm{w}(0),
+\end{equation*}
+!et
+with $\bm{w}(0)$ the distribution at $t=0$ and $\bm{W}$ representing the 
+transition probability matrix. 
+
+
+
+!split
+===== Understanding the basics =====
+
+
+We can always expand $\bm{w}(0)$ in terms of the right eigenvectors 
+$\bm{v}$ of $\bm{W}$ as
+
+!bt
+\begin{equation*}
+    \bm{w}(0)  = \sum_i\alpha_i\bm{v}_i,
+\end{equation*}
+!et
+resulting in
+
+!bt
+\begin{equation*}
+   \bm{w}(t) = \bm{W}^t\bm{w}(0)=\bm{W}^t\sum_i\alpha_i\bm{v}_i=
+\sum_i\lambda_i^t\alpha_i\bm{v}_i,
+\end{equation*}
+!et
+with $\lambda_i$ the $i^{\mathrm{th}}$ eigenvalue corresponding to  
+the eigenvector $\bm{v}_i$. 
+
+If we assume that $\lambda_0$ is the largest eigenvector we see that in the limit $t\rightarrow \infty$,
+$\bm{w}(t)$ becomes proportional to the corresponding eigenvector 
+$\bm{v}_0$. This is our steady state or final distribution. 
+
+
+
+
+
+!split
+===== Basics of the Metropolis Algorithm =====
+
+
+The Metropolis
+algorithm is a method to sample a normalized probability
+distribution by a stochastic process. We define ${\cal w}_i^{(n)}$ to
+be the probability for finding the system in the state $i$ at step $n$.
+
+In the simulations, our assumption is that we have a model for ${\cal w}_i^{(n)}$, but we do not know $W$.
+We will hence model $W$ in terms of a likelihood for making transition $T$ and a likelihood for accepting a transition.
+That is
+!bt
+\[
+W_{i\rightarrow j}=A_{i\rightarrow j}T_{i\rightarrow j}
+\]
+!et
+
+!split
+=====  The basic of the Metropolis Algorithm =====
+
+
+
+* Sample a possible new state $j$ with some probability $T_{i\rightarrow j}$.
+* Accept the new state $j$ with probability $A_{i \rightarrow j}$ and use it as the next sample.
+* With probability $1-A_{i\rightarrow j}$ the move is rejected and the original state $i$ is used again as a sample.
+
+
+We wish to derive the required properties of $T$ and $A$ such that
+${\cal w}_i^{(n\rightarrow \infty)} \rightarrow p_i$ so that starting
+from any distribution, the method converges to the correct distribution.
+Note that the description here is for a discrete probability distribution.
+Replacing probabilities $p_i$ with expressions like $p(x_i)dx_i$ will
+take all of these over to the corresponding continuum expressions.
+
+!split
+===== More on the Metropolis =====
+
+The dynamical equation for ${\cal w}_i^{(n)}$ can be written directly from
+the description above. The probability of being in the state $i$ at step $n$
+is given by the probability of being in any state $j$ at the previous step,
+and making an accepted transition to $i$ added to the probability of
+being in the state $i$, making a transition to any state $j$ and
+rejecting the move:
+!bt
+\begin{equation}
+\label{eq:eq1}
+{\cal w}^{(n)}_i = \sum_j \left [
+{\cal w}^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
++{\cal w}^{(n-1)}_iT_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
+\right ] \,.
+\end{equation}
+!et
+
+!split
+=====  Metropolis algorithm, setting it up =====
+Since the probability of making some transition must be 1,
+$\sum_j T_{i\rightarrow j} = 1$, and Eq. (ref{eq:eq1}) becomes
+
+!bt
+\begin{equation}
+{\cal w}^{(n)}_i = {\cal w}^{(n-1)}_i +
+ \sum_j \left [
+{\cal w}^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
+-{\cal w}^{(n-1)}_iT_{i\rightarrow j}A_{i\rightarrow j}
+\right ] \,.
+\end{equation}
+!et
+
+!split
+===== Metropolis continues =====
+
+For large $n$ we require that ${\cal w}^{(n\rightarrow \infty)}_i = p_i$,
+the desired probability distribution. Taking this limit, gives the
+balance requirement
+
+!bt
+\begin{equation}
+\sum_j \left [p_jT_{j\rightarrow i} A_{j\rightarrow i}-p_iT_{i\rightarrow j}A_{i\rightarrow j}
+\right ] = 0,
+\end{equation}
+!et
+
+
+!split
+===== Detailed Balance =====
+
+The balance requirement is very weak. Typically the much stronger detailed
+balance requirement is enforced, that is rather than the sum being
+set to zero, we set each term separately to zero and use this
+to determine the acceptance probabilities. Rearranging, the result is
+
+!bt
+\begin{equation}
+\frac{ A_{j\rightarrow i}}{A_{i\rightarrow j}}
+= \frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}} \,.
+\end{equation}
+!et
+
+This is the "detailed balance requirement":"https://cims.nyu.edu/~holmes/teaching/asa19/handout_Lecture3_2019.pdf"
+
+!split
+===== More on Detailed Balance =====
+
+The Metropolis choice is to maximize the $A$ values, that is
+
+!bt
+\begin{equation}
+A_{j \rightarrow i} = \min \left ( 1,
+\frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}}\right ).
+\end{equation}
+!et
+
+Other choices are possible, but they all correspond to multilplying
+$A_{i\rightarrow j}$ and $A_{j\rightarrow i}$ by the same constant
+smaller than unity. The penalty function method uses just such
+a factor to compensate for $p_i$ that are evaluated stochastically
+and are therefore noisy.
+
+Having chosen the acceptance probabilities, we have guaranteed that
+if the  ${\cal w}_i^{(n)}$ has equilibrated, that is if it is equal to $p_i$,
+it will remain equilibrated. Next we need to find the circumstances for
+convergence to equilibrium.
+
+
+
 !split
 ===== Gibbs sampling =====
+
+An efficient way if performing the sampling is through the use of
+Gibbs sampling. The latter uses the conditional probability instead of
+the full probability as done in the Metropolis algorithm.
+
+
 
 !split
 ===== Boltzmann Machines, marginal and conditional probabilities  =====
 
+A generative model can learn to represent and sample from a
+probability distribution. The core idea is to learn a parametric model
+of the probability distribution from which the training data was
+drawn. As an example
+o A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.
+o Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.
+o Model the trial function for Monte Carlo calculations
 
+!split
+===== Generative and discriminative models =====
 
+Generative and discriminative models use both gradient-descent based
+learning procedures for minimizing cost functions
 
-Why use a generative model rather than the more well known discriminative deep neural networks (DNN)? 
+However, energy based models don't use backpropagation and automatic
+differentiation for computing gradients, instead turning to Markov
+Chain Monte Carlo methods.
 
-* Discriminitave methods have several limitations: They are mainly supervised learning methods, thus requiring labeled data. And there are tasks they cannot accomplish, like drawing new examples from an unknown probability distribution.
+A typical deep neural network has several hidden layers. A restricted
+Boltzmann machine has only one hidden layer, however several RBMs can
+be stacked to make up deep Belief Networks, of which they constitute
+the building blocks.
 
-* A generative model can learn to represent and sample from a probability distribution. The core idea is to learn a parametric model of the probability distribution from which the training data was drawn. As an example
-
-  o A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.
-  o Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.
-  o Model the trial function for Monte Carlo calculations
-
- o Both use gradient-descent based learning procedures for minimizing cost functions
- o Energy based models don't use backpropagation and automatic differentiation for computing gradients, instead turning to Markov Chain Monte Carlo methods.
- o DNNs often have several hidden layers. A restricted Boltzmann machine has only one hidden layer, however several RBMs can be stacked to make up Dbeep Belief Networks, of which they constitute the building blocks.
-History: The RBM was developed by amongst others Geoffrey Hinton, called by some the "Godfather of Deep Learning", working with the University of Toronto and Google.
-
-
-
+!split
+===== Basics of the Boltzmann machine =====
 !bblock
 A BM is what we would call an undirected probabilistic graphical model
 with stochastic continuous or discrete units.
@@ -246,12 +609,6 @@ It is interpreted as a stochastic recurrent neural network where the
 state of each unit(neurons/nodes) depends on the units it is connected
 to. The weights in the network represent thus the strength of the
 interaction between various units/nodes.
-!eblock
-!bblock
-It turns into a Hopfield network if we choose deterministic rather
-than stochastic units. In contrast to a Hopfield network, a BM is a
-so-called generative model. It allows us to generate new samples from
-the learned distribution.
 !eblock
 
 !bblock
@@ -295,6 +652,7 @@ _The network parameters, to be optimized/learned_:
 
 !split
 ===== Joint distribution =====
+
 The restricted Boltzmann machine is described by a Boltzmann distribution
 !bt
 \begin{align}
@@ -335,7 +693,10 @@ RBMs were first developed using binary units in both the visible and hidden laye
 !et
 where the binary values taken on by the nodes are most commonly 0 and 1.
 !eblock
-!bblock Gaussian-Binary RBM:
+
+
+!split
+===== Gaussian-binary RBM =====
 
 Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
 !bt
@@ -343,17 +704,9 @@ Another varient is the RBM where the visible units are Gaussian while the hidden
 	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \end{align}
 !et
-!eblock
 
+This type of RBMs are useful when we model continuous data (i.e., we wish $\mathbf{x}$ to be continuous)
 
-o RBMs are Useful when we model continuous data (i.e., we wish $\mathbf{x}$ to be continuous)
-o Requires a smaller learning rate, since there's no upper bound to the value a component might take in the reconstruction
-
-Other types of units include:
- o Softmax and multinomial units
- o Gaussian visible and hidden units
- o Binomial units
- o Rectified linear units
 
 !split
 ===== Cost function =====
@@ -932,6 +1285,9 @@ show_adn_save("real",make_grid(v.view(32,1,28,28).data))
 show_adn_save("generate",make_grid(v1.view(32,1,28,28).data))
 
 !ec
+
+
+
 
 
 
