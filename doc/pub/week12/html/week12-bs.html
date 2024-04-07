@@ -55,6 +55,15 @@ doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'optimizing-the-logarithm-instead'),
+              ('The derivative of the partition function',
+               2,
+               None,
+               'the-derivative-of-the-partition-function'),
+              ('Explicit expression for the derivative',
+               2,
+               None,
+               'explicit-expression-for-the-derivative'),
+              ('Final expression', 2, None, 'final-expression'),
               ('Reminder on Markov Chain Monte Carlo',
                2,
                None,
@@ -165,6 +174,9 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#marginal-and-conditional-probabilities" style="font-size: 80%;">Marginal and conditional probabilities</a></li>
      <!-- navigation toc: --> <li><a href="#optimization-problem" style="font-size: 80%;">Optimization problem</a></li>
      <!-- navigation toc: --> <li><a href="#optimizing-the-logarithm-instead" style="font-size: 80%;">Optimizing the logarithm instead</a></li>
+     <!-- navigation toc: --> <li><a href="#the-derivative-of-the-partition-function" style="font-size: 80%;">The derivative of the partition function</a></li>
+     <!-- navigation toc: --> <li><a href="#explicit-expression-for-the-derivative" style="font-size: 80%;">Explicit expression for the derivative</a></li>
+     <!-- navigation toc: --> <li><a href="#final-expression" style="font-size: 80%;">Final expression</a></li>
      <!-- navigation toc: --> <li><a href="#reminder-on-markov-chain-monte-carlo" style="font-size: 80%;">Reminder on Markov Chain Monte Carlo</a></li>
      <!-- navigation toc: --> <li><a href="#gibbs-sampling" style="font-size: 80%;">Gibbs sampling</a></li>
      <!-- navigation toc: --> <li><a href="#boltzmann-machines-marginal-and-conditional-probabilities" style="font-size: 80%;">Boltzmann Machines, marginal and conditional probabilities</a></li>
@@ -306,10 +318,7 @@ $$
 
 <p>and</p>
 $$
-\begin{align}
-	p(\boldsymbol{x}|\boldsymbol{h})=\prod_i p(x_i | \boldsymbol{h}).
-\label{_auto1}
-\end{align}
+p(\boldsymbol{x}|\boldsymbol{h})=\prod_i p(x_i | \boldsymbol{h}).
 $$
 
 
@@ -355,6 +364,68 @@ $$
 \nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=0.
 $$
 
+<p>This leads to the following equation</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=0.
+$$
+
+<p>The first term is called the positive phase and we assume that we have a model for the function \( f \) from which we can sample values. Below we will develop an explicit model for this.
+The second term is called the negative phase and is the one which leads to more difficulties.
+</p>
+
+<!-- !split -->
+<h2 id="the-derivative-of-the-partition-function" class="anchor">The derivative of the partition function </h2>
+
+<p>The partition function, defined above as</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+
+<p>is in general the most problematic term. In principle both \( x \) and \( h \) can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not a desirable. The above derivative of the partition function ca however be written in terms of an expectation value which can be calculated using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or MC$^2$).</p>
+
+<!-- !split -->
+<h2 id="explicit-expression-for-the-derivative" class="anchor">Explicit expression for the derivative </h2>
+<p>We can rewrite</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}}Z(\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>which reads in more detail</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}} \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta})   }{Z(\boldsymbol{\Theta})}.
+$$
+
+<p>We can rewrite the function \( f \) (we have assumed that is larger or
+equal than zero) as \( f=\exp{\log{f}} \). We can then reqrite the last
+equation as
+</p>
+
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}} \nabla_{\boldsymbol{\Theta}}\exp{\log{f(x_i;\boldsymbol{\Theta})}}   }{Z(\boldsymbol{\Theta})}.
+$$
+
+
+<!-- !split -->
+<h2 id="final-expression" class="anchor">Final expression </h2>
+
+<p>Taking the derivative gives us</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})}   }{Z(\boldsymbol{\Theta})}, 
+$$
+
+<p>which is the expectation value of \( \log{f} \)</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
+$$
+
+<p>that is</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\mathbb{E}(\log{f(x_i;\boldsymbol{\Theta})}).
+$$
+
+<p>This quantity is evaluated using Monte Carlo sampling, with Gibbs sampling as the standard sampling rule.
+Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropplis-Hastings algorithm and Gibbs sampling.
+</p>
 
 <!-- !split -->
 <h2 id="reminder-on-markov-chain-monte-carlo" class="anchor">Reminder on Markov Chain Monte Carlo </h2>
@@ -471,7 +542,7 @@ over (integrated out).
 $$
 \begin{align}
 	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
-\label{_auto2}
+\label{_auto1}
 \end{align}
 $$
 
@@ -479,7 +550,7 @@ $$
 $$
 \begin{align}
 	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
-\label{_auto3}
+\label{_auto2}
 \end{align}
 $$
 
@@ -509,7 +580,7 @@ adjusting the energy function to best fit our problem.
 $$
 \begin{align}
 	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
-\label{_auto4}
+\label{_auto3}
 \end{align}
 $$
 
@@ -525,7 +596,7 @@ $$
 $$
 \begin{align}
 	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
-\label{_auto5}
+\label{_auto4}
 \end{align}
 $$
 </div>
@@ -552,9 +623,9 @@ Denoting the parameters as \( \boldsymbol{\theta} = a_1,...,a_M,b_1,...,b_N,w_{1
 $$
 \begin{align}
 	\mathcal{L}(\{ \theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} 
-\label{_auto6}\\
+\label{_auto5}\\
 	&= - \langle E(\boldsymbol{x}; \{ \theta_i\}) \rangle_{data} - \text{log} Z(\{ \theta_i\}),
-\label{_auto7}
+\label{_auto6}
 \end{align}
 $$
 
@@ -569,7 +640,7 @@ Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \theta_i \})
 $$
 \begin{align}
 	\boldsymbol{\theta}_{k+1} = \boldsymbol{\theta}_k - \eta \nabla \mathcal{C} (\boldsymbol{\theta}_k)
-\label{_auto8}
+\label{_auto7}
 \end{align}
 $$
 
@@ -581,9 +652,9 @@ $$
 	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
 	&= \langle \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
 	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} 
-\label{_auto9}\\
+\label{_auto8}\\
 	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model},
-\label{_auto10}
+\label{_auto9}
 \end{align}
 $$
 
@@ -591,7 +662,7 @@ $$
 $$
 \begin{align}
 	O_i(\boldsymbol{x}) = \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i}, 
-\label{_auto11}
+\label{_auto10}
 \end{align}
 $$
 
@@ -599,7 +670,7 @@ $$
 $$
 \begin{align}
 	\langle O_i(\boldsymbol{x}) \rangle_{model} = \text{Tr} P_\theta(\boldsymbol{x})O_i(\boldsymbol{x}) = - \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i}.
-\label{_auto12}
+\label{_auto11}
 \end{align}
 $$
 
@@ -616,12 +687,12 @@ their probability).
 $$
 \begin{align}
 	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial w_{ij}} =& \langle x_i h_j \rangle_{data} - \langle x_i h_j \rangle_{model} 
-\label{_auto13}\\
+\label{_auto12}\\
 	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial a_{ij}} =& \langle x_i \rangle_{data} - \langle x_i \rangle_{model} 
-\label{_auto14}\\
+\label{_auto13}\\
 	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial b_{ij}} =& \langle h_i \rangle_{data} - \langle h_i \rangle_{model}. 
-\label{_auto15}\\
-\label{_auto16}
+\label{_auto14}\\
+\label{_auto15}
 \end{align}
 $$
 
@@ -641,7 +712,7 @@ we can measure the difference by
 $$
 \begin{align}
 	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\boldsymbol{x}) \log \frac{p(\boldsymbol{x})}{q(\boldsymbol{x})}  d\boldsymbol{x}.
-\label{_auto17}
+\label{_auto16}
 \end{align}
 $$
 
@@ -654,17 +725,17 @@ $$
 \begin{align}
 	\text{KL} (f(\boldsymbol{x})|| p(\boldsymbol{x}| \boldsymbol{\theta})) =& \int_{-\infty}^{\infty}
 	f (\boldsymbol{x}) \log \frac{f(\boldsymbol{x})}{p(\boldsymbol{x}| \boldsymbol{\theta})} d\boldsymbol{x} 
-\label{_auto18}\\
+\label{_auto17}\\
 	=& \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log f(\boldsymbol{x}) d\boldsymbol{x} - \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log
 	p(\boldsymbol{x}| \boldsymbol{\theta}) d\boldsymbol{x} 
-\label{_auto19}\\
+\label{_auto18}\\
 	%=& \mathbb{E}_{f(\boldsymbol{x})} (\log f(\boldsymbol{x})) - \mathbb{E}_{f(\boldsymbol{x})} (\log p(\boldsymbol{x}| \boldsymbol{\theta}))
 	=& \langle \log f(\boldsymbol{x}) \rangle_{f(\boldsymbol{x})} - \langle \log p(\boldsymbol{x}| \boldsymbol{\theta}) \rangle_{f(\boldsymbol{x})} 
-\label{_auto20}\\
+\label{_auto19}\\
 	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \langle E(\boldsymbol{x}) \rangle_{data} + \log Z 
-\label{_auto21}\\
+\label{_auto20}\\
 	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \mathcal{C}_{LL} .
-\label{_auto22}
+\label{_auto21}
 \end{align}
 $$
 
@@ -685,7 +756,7 @@ $$
 	\langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model}
 	= \int p(\boldsymbol{x}| \boldsymbol{\theta}) \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} d\boldsymbol{x} 
 	= -\frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} .
-\label{_auto23}
+\label{_auto22}
 \end{align}
 $$
 
@@ -700,11 +771,11 @@ $$
 \begin{align}
 	\frac{\partial \mathcal{C}_{LL}}{\partial \theta_i}
 	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} + \frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} 
-\label{_auto24}\\
+\label{_auto23}\\
 	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model} 
-\label{_auto25}\\
+\label{_auto24}\\
 	%=& \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}
-\label{_auto26}
+\label{_auto25}
 \end{align}
 $$
 
@@ -764,7 +835,7 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 $$
 \begin{align}
 	E_{BB}(\boldsymbol{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\label{_auto27}
+\label{_auto26}
 \end{align}
 $$
 
@@ -776,9 +847,9 @@ $$
 $$
 \begin{align}
 	p_{BB}(\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} 
-\label{_auto28}\\
+\label{_auto27}\\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
-\label{_auto29}
+\label{_auto28}
 \end{align}
 $$
 
@@ -787,7 +858,7 @@ $$
 $$
 \begin{align}
 	Z_{BB} = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
-\label{_auto30}
+\label{_auto29}
 \end{align}
 $$
 
@@ -800,7 +871,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h}) 
-\label{_auto31}\\
+\label{_auto30}\\
 	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
@@ -809,7 +880,7 @@ $$
 	& ... \times \sum_{h_2} e^{(b_N + \boldsymbol{x}^T \boldsymbol{w}_{\ast N})h_N} \bigg ) \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
-\label{_auto32}
+\label{_auto31}
 \end{align}
 $$
 
@@ -822,7 +893,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{h}) = \frac{1}{Z_{BB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
-\label{_auto33}
+\label{_auto32}
 \end{align}
 $$
 
@@ -842,7 +913,7 @@ $$
 	=& \prod_j^N \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{BB} (h_j| \boldsymbol{x}) .
-\label{_auto34}
+\label{_auto33}
 \end{align}
 $$
 
@@ -856,12 +927,12 @@ $$
 \begin{align}
 	p_{BB} (h_j=1 | \boldsymbol{x}) =&   \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto35}\\
+\label{_auto34}\\
 	=&  \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} )}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto36}\\
+\label{_auto35}\\
 	=&  \frac{ 1 }{1 + e^{-(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})} } ,
-\label{_auto37}
+\label{_auto36}
 \end{align}
 $$
 
@@ -870,7 +941,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (h_j=0 | \boldsymbol{x}) =\frac{ 1 }{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}} } .
-\label{_auto38}
+\label{_auto37}
 \end{align}
 $$
 
@@ -883,9 +954,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } 
-\label{_auto39}\\
+\label{_auto38}\\
 	&= \prod_i^M p_{BB} (x_i | \boldsymbol{h}) .
-\label{_auto40}
+\label{_auto39}
 \end{align}
 $$
 
@@ -893,9 +964,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} 
-\label{_auto41}\\
+\label{_auto40}\\
 	p_{BB} (x_i=0 | \boldsymbol{h}) =& \frac{1}{1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} }} .
-\label{_auto42}
+\label{_auto41}
 \end{align}
 $$
 
@@ -912,7 +983,7 @@ $$
 	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
 	=& \vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 - \boldsymbol{b}^T \boldsymbol{h} 
 	- (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h} . 
-\label{_auto43}
+\label{_auto42}
 \end{align}
 $$
 
@@ -930,7 +1001,7 @@ $$
 	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ b_j h_j 
 	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\label{_auto44}
+\label{_auto43}
 \end{align}
 $$
 
@@ -940,7 +1011,7 @@ $$
 \begin{align}
 	Z_{GB} =& \int \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
 	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} d\tilde{\boldsymbol{x}} .
-\label{_auto45}
+\label{_auto44}
 \end{align}
 $$
 
@@ -961,7 +1032,7 @@ $$
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
 	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) .
-\label{_auto46}
+\label{_auto45}
 \end{align}
 $$
 
@@ -998,7 +1069,7 @@ $$
 	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
 	\sqrt{2\pi \sigma_i^2}
 	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}} .
-\label{_auto47}
+\label{_auto46}
 \end{align}
 $$
 
@@ -1018,7 +1089,7 @@ $$
 	=& \prod_j^N \frac{e^{(b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j})h_j } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{GB} (h_j|\boldsymbol{x}).
-\label{_auto48}
+\label{_auto47}
 \end{align}
 $$
 
@@ -1029,10 +1100,10 @@ $$
 	p_{GB} (h_j =1 | \boldsymbol{x}) =& \frac{e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j} } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto49}\\
+\label{_auto48}\\
 	p_{GB} (h_j =0 | \boldsymbol{x}) =&
 	\frac{1}{1 + e^{b_j +(\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} .
-\label{_auto50}
+\label{_auto49}
 \end{align}
 $$
 
@@ -1065,10 +1136,10 @@ $$
 	e^{ - \frac{(x_i - b_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}} \nonumber \\
 	=& \prod_i^M \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) 
-\label{_auto51}\\
+\label{_auto50}\\
 	\Rightarrow p_{GB} (x_i|\boldsymbol{h}) =& \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) .
-\label{_auto52}
+\label{_auto51}
 \end{align}
 $$
 
