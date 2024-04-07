@@ -44,17 +44,18 @@ $\bm{H}= \{h_0,h_1, \dots , h_{m-1}\}$.
 
 We define a probability
 !bt
-p(x_i,h_j;\Theta) = \frac{f(x_i,h_j;\Theta)}{Z(\Theta)},
+\[
+p(x_i,h_j;\bm{\Theta}) = \frac{f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})},
 \]
 !et
-where $f(x_i,h_j;\Theta)$ is a function which we assume is larger or
+where $f(x_i,h_j;\bm{\Theta})$ is a function which we assume is larger or
 equal than zero and obeys all properties required for a probability
-distribution and $Z(\Theta)$ is a normalization constant. Inspired by
+distribution and $Z(\bm{\Theta})$ is a normalization constant. Inspired by
 statistical mechanics, we call it often for the partition function.
 It is defined as (assuming that we have discrete probability distributions)
 !bt
 \[
-Z(\Theta)=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\Theta).
+Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}).
 \]
 !et
 
@@ -63,12 +64,14 @@ Z(\Theta)=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\Theta).
 
 We can in turn define the marginal probabilities
 !bt
-p(x_i;\Theta) = \frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\Theta)}{Z(\Theta)},
+\[
+p(x_i;\bm{\Theta}) = \frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})},
 \]
 !et
 and 
 !bt
-p(h_i;\Theta) = \frac{\sum_{x_i\in \bm{X}}f(x_i,h_j;\Theta)}{Z(\Theta)}.
+\[
+p(h_i;\bm{\Theta}) = \frac{\sum_{x_i\in \bm{X}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}.
 \]
 !et
 
@@ -91,13 +94,44 @@ and
 We are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is 
 !bt
 \[
-p(\bm{X};\Theta)=\prod_{x_i\in \bm{X}}p(x_i;\Theta)=\prod_{x_i\in \bm{X}}\left(\frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\Theta)}{Z(\Theta)}\right),
+p(\bm{X};\bm{\Theta})=\prod_{x_i\in \bm{X}}p(x_i;\bm{\Theta})=\prod_{x_i\in \bm{X}}\left(\frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}\right),
 \]
 !et
 which we rewrite as
 !bt
 \[
-p(\bm{X};\Theta)=\frac{1}{Z(\Theta)}\prod_{x_i\in \bm{X}}\left(\sum_{h_j\in \bm{H}}f(x_i,h_j;\Theta)\right).
+p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}\left(\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})\right).
+\]
+!et
+We simplify further by rewriting it as
+!bt
+\[
+p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}f(x_i;\bm{\Theta}),
+\]
+!et
+where we used $p(x_i;\bm{\Theta}) = \sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})$.
+The optimization problem is then
+!bt
+\[
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\bm{\bm{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\bm{X};\bm{\Theta}).
+\]
+!et
+
+!split
+===== Optimizing the logarithm instead =====
+
+Computing the derivatives with respect to the parameters $\bm{\Theta}$ is
+easier (and equivalent) with taking the logarithm of the
+probability. We will thus optimize
+!bt
+\[
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\bm{\bm{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\bm{X};\bm{\Theta})},
+\]
+!et
+which leads to
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=0.
 \]
 !et
 

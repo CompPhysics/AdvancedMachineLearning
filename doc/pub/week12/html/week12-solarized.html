@@ -78,6 +78,10 @@ div.toc p,a {
                None,
                'marginal-and-conditional-probabilities'),
               ('Optimization problem', 2, None, 'optimization-problem'),
+              ('Optimizing the logarithm instead',
+               2,
+               None,
+               'optimizing-the-logarithm-instead'),
               ('Reminder on Markov Chain Monte Carlo',
                2,
                None,
@@ -235,17 +239,17 @@ $$
 
 <p>We define a probability</p>
 $$
-p(x_i,h_j;\Theta) = \frac{f(x_i,h_j;\Theta)}{Z(\Theta)},
+p(x_i,h_j;\boldsymbol{\Theta}) = \frac{f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
 $$
 
-<p>where \( f(x_i,h_j;\Theta) \) is a function which we assume is larger or
+<p>where \( f(x_i,h_j;\boldsymbol{\Theta}) \) is a function which we assume is larger or
 equal than zero and obeys all properties required for a probability
-distribution and \( Z(\Theta) \) is a normalization constant. Inspired by
+distribution and \( Z(\boldsymbol{\Theta}) \) is a normalization constant. Inspired by
 statistical mechanics, we call it often for the partition function.
 It is defined as (assuming that we have discrete probability distributions)
 </p>
 $$
-Z(\Theta)=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\Theta).
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}).
 $$
 
 
@@ -254,12 +258,12 @@ $$
 
 <p>We can in turn define the marginal probabilities</p>
 $$
-p(x_i;\Theta) = \frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\Theta)}{Z(\Theta)},
+p(x_i;\boldsymbol{\Theta}) = \frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
 $$
 
 <p>and </p>
 $$
-p(h_i;\Theta) = \frac{\sum_{x_i\in \boldsymbol{X}}f(x_i,h_j;\Theta)}{Z(\Theta)}.
+p(h_i;\boldsymbol{\Theta}) = \frac{\sum_{x_i\in \boldsymbol{X}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}.
 $$
 
 <p>Similarly, we have the conditional probabilities</p>
@@ -281,12 +285,41 @@ $$
 
 <p>We are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is </p>
 $$
-p(\boldsymbol{X};\Theta)=\prod_{x_i\in \boldsymbol{X}}p(x_i;\Theta)=\prod_{x_i\in \boldsymbol{X}}\left(\frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\Theta)}{Z(\Theta)}\right),
+p(\boldsymbol{X};\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}\left(\frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}\right),
 $$
 
 <p>which we rewrite as</p>
 $$
-p(\boldsymbol{X};\Theta)=\frac{1}{Z(\Theta)}\prod_{x_i\in \boldsymbol{X}}\left(\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\Theta)\right).
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}\left(\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})\right).
+$$
+
+<p>We simplify further by rewriting it as</p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}),
+$$
+
+<p>where we used \( p(x_i;\boldsymbol{\Theta}) = \sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta}) \).
+The optimization problem is then
+</p>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\boldsymbol{X};\boldsymbol{\Theta}).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="optimizing-the-logarithm-instead">Optimizing the logarithm instead </h2>
+
+<p>Computing the derivatives with respect to the parameters \( \boldsymbol{\Theta} \) is
+easier (and equivalent) with taking the logarithm of the
+probability. We will thus optimize
+</p>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\boldsymbol{X};\boldsymbol{\Theta})},
+$$
+
+<p>which leads to</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=0.
 $$
 
 
