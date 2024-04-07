@@ -19,7 +19,23 @@ o Reading recommendation: Goodfellow et al chapters 18,  20.1-20-7
 !split
 ===== Essential elements of generative models =====
 
-Add discussion of the partition function. Emphasise it s dependence on the parameters $\theta$.
+The aim of generative methods is to train a probability distribution $p$. The methods we will focus on are
+o Energy based models, with the family of Boltzmann distributions as a typical example
+o Variational autoencoders, based on our discussions on autoencoders
+o Generative adversarial networks (GANs) and
+o Diffusion models
+
+!split
+===== Energy models =====
+
+Last week we defined a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_1, \dots , x_{n-1}\}$ with a pertinent probability distribution
+!bt
+\[
+p(\bm{X})=\prod_{x_i\in \bm{X}}p(x_i),
+\]
+!et
+where we have assumed that the random varaibles $x_i$ are all independent and identically distributed.
+
 
 !split
 ===== Reminder on Markov Chain Monte Carlo =====
