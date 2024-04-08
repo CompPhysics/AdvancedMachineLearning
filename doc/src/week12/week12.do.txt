@@ -621,8 +621,7 @@ and are therefore noisy.
 
 Having chosen the acceptance probabilities, we have guaranteed that
 if the  $p_i^{(n)}$ has equilibrated, that is if it is equal to $p_i$,
-it will remain equilibrated. Next we need to find the circumstances for
-convergence to equilibrium.
+it will remain equilibrated.
 
 
 
@@ -677,7 +676,7 @@ interaction between various units/nodes.
 !split
 ===== More about the basics =====
 !bblock
-A standard BM network is divided into a set of observable and visible units $\hat{x}$ and a set of unknown hidden units/nodes $\hat{h}$.
+A standard BM network is divided into a set of observable and visible units $\bm{x}$ and a set of unknown hidden units/nodes $\bm{h}$.
 !eblock
 
 !bblock
@@ -718,8 +717,8 @@ over (integrated out).
 ===== The parameters =====
 
 The network parameters, to be optimized/learned:
-o $\mathbf{a}$ represents the visible bias, a vector of same length as $\mathbf{x}$.
-o $\mathbf{b}$ represents the hidden bias, a vector of same lenght as $\mathbf{h}$.
+o $\bm{a}$ represents the visible bias, a vector of same length as $\bm{x}$.
+o $\bm{b}$ represents the hidden bias, a vector of same lenght as $\bm{h}$.
 o $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
 
 
@@ -729,13 +728,13 @@ o $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
 The restricted Boltzmann machine is described by a Boltzmann distribution
 !bt
 \begin{align}
-	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
+	P_{rbm}(\bm{x},\bm{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\bm{x},\bm{h})},
 \end{align}
 !et
 where $Z$ is the normalization constant or partition function, defined as 
 !bt
 \begin{align}
-	Z = \int \int e^{-\frac{1}{T}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+	Z = \int \int e^{-\frac{1}{T}E(\bm{x},\bm{h})} d\bm{x} d\bm{h}.
 \end{align}
 !et
 It is common to ignore $T$ by setting it to one. 
@@ -743,10 +742,10 @@ It is common to ignore $T$ by setting it to one.
 !split
 ===== Network Elements, the energy function  =====
 
-The function $E(\mathbf{x},\mathbf{h})$ gives the _energy_ of a
-configuration (pair of vectors) $(\mathbf{x}, \mathbf{h})$. The lower
+The function $E(\bm{x},\bm{h})$ gives the _energy_ of a
+configuration (pair of vectors) $(\bm{x}, \bm{h})$. The lower
 the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters $\mathbf{a}$, $\mathbf{b}$ and
+function also depends on the parameters $\bm{a}$, $\bm{b}$ and
 $W$. Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 
@@ -754,14 +753,14 @@ adjusting the energy function to best fit our problem.
 !split
 ===== Defining different types of RBMs =====
 
-There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\mathbf{x},\mathbf{h})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
+There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\bm{x},\bm{h})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
 
 !bblock Binary-Binary RBM:
 
 RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:
 !bt
 \begin{align}
-	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+	E(\bm{x}, \bm{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 \end{align}
 !et
 where the binary values taken on by the nodes are most commonly 0 and 1.
@@ -774,11 +773,11 @@ where the binary values taken on by the nodes are most commonly 0 and 1.
 Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
 !bt
 \begin{align}
-	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+	E(\bm{x}, \bm{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \end{align}
 !et
 
-This type of RBMs are useful when we model continuous data (i.e., we wish $\mathbf{x}$ to be continuous)
+This type of RBMs are useful when we model continuous data (i.e., we wish $\bm{x}$ to be continuous)
 
 
 !split
@@ -1000,7 +999,7 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 
 !bt
 \begin{align}
-	E_{BB}(\bm{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
+	E_{BB}(\bm{x}, \bm{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
 \end{align}
 !et
 

@@ -952,8 +952,7 @@ and are therefore noisy.
 
 <p>Having chosen the acceptance probabilities, we have guaranteed that
 if the  \( p_i^{(n)} \) has equilibrated, that is if it is equal to \( p_i \),
-it will remain equilibrated. Next we need to find the circumstances for
-convergence to equilibrium.
+it will remain equilibrated.
 </p>
 </section>
 
@@ -1028,7 +1027,7 @@ interaction between various units/nodes.
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
-<p>A standard BM network is divided into a set of observable and visible units \( \hat{x} \) and a set of unknown hidden units/nodes \( \hat{h} \).</p>
+<p>A standard BM network is divided into a set of observable and visible units \( \boldsymbol{x} \) and a set of unknown hidden units/nodes \( \boldsymbol{h} \).</p>
 </div>
 
 
@@ -1082,8 +1081,8 @@ over (integrated out).
 
 <p>The network parameters, to be optimized/learned:</p>
 <ol>
-<p><li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
-<p><li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
+<p><li> \( \boldsymbol{a} \) represents the visible bias, a vector of same length as \( \boldsymbol{x} \).</li>
+<p><li> \( \boldsymbol{b} \) represents the hidden bias, a vector of same lenght as \( \boldsymbol{h} \).</li>
 <p><li> \( \boldsymbol{W} \) represents the interaction weights, a matrix of size \( M\times N \).</li>
 </ol>
 </section>
@@ -1095,7 +1094,7 @@ over (integrated out).
 <p>&nbsp;<br>
 $$
 \begin{align}
-	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
+	P_{rbm}(\boldsymbol{x},\boldsymbol{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\boldsymbol{x},\boldsymbol{h})},
 \tag{7}
 \end{align}
 $$
@@ -1105,7 +1104,7 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	Z = \int \int e^{-\frac{1}{T}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+	Z = \int \int e^{-\frac{1}{T}E(\boldsymbol{x},\boldsymbol{h})} d\boldsymbol{x} d\boldsymbol{h}.
 \tag{8}
 \end{align}
 $$
@@ -1117,10 +1116,10 @@ $$
 <section>
 <h2 id="network-elements-the-energy-function">Network Elements, the energy function  </h2>
 
-<p>The function \( E(\mathbf{x},\mathbf{h}) \) gives the <b>energy</b> of a
-configuration (pair of vectors) \( (\mathbf{x}, \mathbf{h}) \). The lower
+<p>The function \( E(\boldsymbol{x},\boldsymbol{h}) \) gives the <b>energy</b> of a
+configuration (pair of vectors) \( (\boldsymbol{x}, \boldsymbol{h}) \). The lower
 the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters \( \mathbf{a} \), \( \mathbf{b} \) and
+function also depends on the parameters \( \boldsymbol{a} \), \( \boldsymbol{b} \) and
 \( W \). Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 </p>
@@ -1129,7 +1128,7 @@ adjusting the energy function to best fit our problem.
 <section>
 <h2 id="defining-different-types-of-rbms">Defining different types of RBMs </h2>
 
-<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\mathbf{x},\mathbf{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
+<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\boldsymbol{x},\boldsymbol{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Binary-Binary RBM:</b>
@@ -1139,7 +1138,7 @@ adjusting the energy function to best fit our problem.
 <p>&nbsp;<br>
 $$
 \begin{align}
-	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+	E(\boldsymbol{x}, \boldsymbol{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 \tag{9}
 \end{align}
 $$
@@ -1156,13 +1155,13 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+	E(\boldsymbol{x}, \boldsymbol{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \tag{10}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \mathbf{x} \) to be continuous)</p>
+<p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \boldsymbol{x} \) to be continuous)</p>
 </section>
 
 <section>
@@ -1454,7 +1453,7 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 <p>&nbsp;<br>
 $$
 \begin{align}
-	E_{BB}(\boldsymbol{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
+	E_{BB}(\boldsymbol{x}, \boldsymbol{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
 \tag{32}
 \end{align}
 $$
