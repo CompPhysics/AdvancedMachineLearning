@@ -88,7 +88,7 @@ and
 p(\bm{x}|\bm{h})=\prod_i p(x_i | \bm{h}).
 \]
 !et
-
+Explicit expressions will be presented below.
 !split
 ===== Optimization problem =====
 
@@ -104,6 +104,10 @@ which we rewrite as
 p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}\left(\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})\right).
 \]
 !et
+
+!split
+===== Further simplifications =====
+
 We simplify further by rewriting it as
 !bt
 \[
@@ -135,6 +139,9 @@ which leads to
 \nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=0.
 \]
 !et
+
+!split
+===== Expression for the gradients =====
 This leads to the following equation
 !bt
 \[
@@ -225,7 +232,7 @@ f(\bm{x},\bm{h};\bm{\Theta})=-E(\bm{x}, \bm{h};\bm{\Theta}) = \sum_{x_i\in \bm{X
 \]
 !et
 where the set of parameters are given by the biases and weights $\bm{\Theta}=\{\bm{a},\bm{b},\bm{W}\}$.
-_Note the vector notation_ instead of $x_i$ and $h_j$ for $f$. The vectors $\bm{x}$ and $\bm{h}$ represent a specific instance of stochastic variables $x_i$ and $h_j$.
+_Note the vector notation_ instead of $x_i$ and $h_j$ for $f$. The vectors $\bm{x}$ and $\bm{h}$ represent a specific instance of stochastic variables $x_i$ and $h_j$. These arrangements of $\bm{x}$ and $\bm{h}$ lead to a specific energy configuration.
 
 !split
 ===== More compact notation =====
@@ -351,9 +358,9 @@ We start at a position $x=jl=j\Delta x$ and move to
 a new position $x =i\Delta x$ during a step $\Delta t=\epsilon$, where 
 $i\ge  0$ and $j\ge 0$ are integers. 
 The original probability distribution function (PDF) of the particles is given by  
-$w_i(t=0)$ where $i$ refers to a specific position on the grid in 
+$p_i(t=0)$ where $i$ refers to a specific position on the grid in 
 !eblock
-The function $w_i(t=0)$ is now the discretized version of $w(x,t)$.
+The function $p_i(t=0)$ is now the discretized version of $p(x,t)$.
 We can regard the discretized PDF as a vector.
 
 !split
@@ -372,12 +379,12 @@ the transition probability and we can represent it, see below,
 as a matrix. 
 _Here we have specialized to a case where the transition probability is known_.
 
-Our new PDF $w_i(t=\epsilon)$ is now related to the PDF at
+Our new PDF $p_i(t=\epsilon)$ is now related to the PDF at
 $t=0$ through the relation
 
 !bt
 \begin{equation*} 
-   w_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)w_j(t=0).
+   p_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)p_j(t=0).
 \end{equation*}
 !et
  
@@ -389,12 +396,12 @@ PDF with equal probability of jumping left or right.
 ===== Markov processes, the probabilities =====
 !bblock
 
-Since both $\bm{W}$ and $\bm{w}$ represent probabilities, they have to be normalized, i.e., we require
+Since both $\bm{W}$ and $\bm{p}$ represent probabilities, they have to be normalized, i.e., we require
 that at each time step we have
 
 !bt
 \begin{equation*} 
-   \sum_i w_i(t) = 1, 
+   \sum_i p_i(t) = 1, 
 \end{equation*}
 !et
 and
@@ -406,7 +413,7 @@ and
 !et
 which applies for all $j$-values.
 The further constraints are
-$0 \le W_{ij} \le 1$  and  $0 \le w_{j} \le 1$.
+$0 \le W_{ij} \le 1$  and  $0 \le p_{j} \le 1$.
 Note that the probability for remaining at the same place is in general 
 not necessarily equal zero. 
 !eblock
@@ -420,7 +427,7 @@ time  $t_n=n\epsilon$ our initial distribution has developed into
 
 !bt
 \begin{equation*}
-   w_i(t_n) = \sum_jW_{ij}(t_n)w_j(0),
+   p_i(t_n) = \sum_jW_{ij}(t_n)p_j(0),
 \end{equation*}
 !et
 and defining
@@ -434,13 +441,13 @@ we obtain
 
 !bt
 \begin{equation*}
-   w_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}w_j(0),
+   p_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}p_j(0),
 \end{equation*}
 !et
-or in matrix form
+or in matrix-vector form
 !bt
 \begin{equation} label{eq:wfinal}
-   \bm{w}(n\epsilon) = \bm{W}^n(\epsilon)\bm{w}(0).
+   \bm{p}(n\epsilon) = \bm{W}^n(\epsilon)\bm{p}(0).
 \end{equation}
 !et
 !eblock
@@ -454,10 +461,10 @@ We have after $t$-steps
 
 !bt
 \begin{equation*}
-   \bm{w}(t) = \bm{W}^t\bm{w}(0),
+   \bm{p}(t) = \bm{W}^t\bm{p}(0),
 \end{equation*}
 !et
-with $\bm{w}(0)$ the distribution at $t=0$ and $\bm{W}$ representing the 
+with $\bm{p}(0)$ the distribution at $t=0$ and $\bm{W}$ representing the 
 transition probability matrix. 
 
 
@@ -471,14 +478,14 @@ $\bm{v}$ of $\bm{W}$ as
 
 !bt
 \begin{equation*}
-    \bm{w}(0)  = \sum_i\alpha_i\bm{v}_i,
+    \bm{p}(0)  = \sum_i\alpha_i\bm{v}_i,
 \end{equation*}
 !et
 resulting in
 
 !bt
 \begin{equation*}
-v   \bm{w}(t) = \bm{W}^t\bm{w}(0)=\bm{W}^t\sum_i\alpha_i\bm{v}_i=
+\bm{p}(t) = \bm{W}^t\bm{p}(0)=\bm{W}^t\sum_i\alpha_i\bm{v}_i=
 \sum_i\lambda_i^t\alpha_i\bm{v}_i,
 \end{equation*}
 !et
@@ -486,7 +493,7 @@ with $\lambda_i$ the $i^{\mathrm{th}}$ eigenvalue corresponding to
 the eigenvector $\bm{v}_i$. 
 
 If we assume that $\lambda_0$ is the largest eigenvector we see that in the limit $t\rightarrow \infty$,
-$\bm{w}(t)$ becomes proportional to the corresponding eigenvector 
+$\bm{p}(t)$ becomes proportional to the corresponding eigenvector 
 $\bm{v}_0$. This is our steady state or final distribution. 
 
 
@@ -499,10 +506,10 @@ $\bm{v}_0$. This is our steady state or final distribution.
 
 The Metropolis
 algorithm is a method to sample a normalized probability
-distribution by a stochastic process. We define ${\cal w}_i^{(n)}$ to
+distribution by a stochastic process. We define $p_i^{(n)}$ to
 be the probability for finding the system in the state $i$ at step $n$.
 
-In the simulations, our assumption is that we have a model for ${\cal w}_i^{(n)}$, but we do not know $W$.
+In the simulations, our assumption is that we have a model for $p_i^{(n)}$, but we do not know $W$.
 We will hence model $W$ in terms of a likelihood for making transition $T$ and a likelihood for accepting a transition.
 That is
 !bt
@@ -522,7 +529,7 @@ W_{i\rightarrow j}=A_{i\rightarrow j}T_{i\rightarrow j}
 
 
 We wish to derive the required properties of $T$ and $A$ such that
-${\cal w}_i^{(n\rightarrow \infty)} \rightarrow p_i$ so that starting
+$p_i^{(n\rightarrow \infty)} \rightarrow p_i$ so that starting
 from any distribution, the method converges to the correct distribution.
 Note that the description here is for a discrete probability distribution.
 Replacing probabilities $p_i$ with expressions like $p(x_i)dx_i$ will
@@ -531,7 +538,7 @@ take all of these over to the corresponding continuum expressions.
 !split
 ===== More on the Metropolis =====
 
-The dynamical equation for ${\cal w}_i^{(n)}$ can be written directly from
+The dynamical equation for $p_i^{(n)}$ can be written directly from
 the description above. The probability of being in the state $i$ at step $n$
 is given by the probability of being in any state $j$ at the previous step,
 and making an accepted transition to $i$ added to the probability of
@@ -540,9 +547,9 @@ rejecting the move:
 !bt
 \begin{equation}
 \label{eq:eq1}
-{\cal w}^{(n)}_i = \sum_j \left [
-{\cal w}^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
-+{\cal w}^{(n-1)}_iT_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
+p^{(n)}_i = \sum_j \left [
+p^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
++p^{(n-1)}_iT_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
 \right ] \,.
 \end{equation}
 !et
@@ -554,10 +561,10 @@ $\sum_j T_{i\rightarrow j} = 1$, and Eq. (ref{eq:eq1}) becomes
 
 !bt
 \begin{equation}
-{\cal w}^{(n)}_i = {\cal w}^{(n-1)}_i +
+p^{(n)}_i = p^{(n-1)}_i +
  \sum_j \left [
-{\cal w}^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
--{\cal w}^{(n-1)}_iT_{i\rightarrow j}A_{i\rightarrow j}
+p^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
+-p^{(n-1)}_iT_{i\rightarrow j}A_{i\rightarrow j}
 \right ] \,.
 \end{equation}
 !et
@@ -565,7 +572,7 @@ $\sum_j T_{i\rightarrow j} = 1$, and Eq. (ref{eq:eq1}) becomes
 !split
 ===== Metropolis continues =====
 
-For large $n$ we require that ${\cal w}^{(n\rightarrow \infty)}_i = p_i$,
+For large $n$ we require that $p^{(n\rightarrow \infty)}_i = p_i$,
 the desired probability distribution. Taking this limit, gives the
 balance requirement
 
@@ -613,7 +620,7 @@ a factor to compensate for $p_i$ that are evaluated stochastically
 and are therefore noisy.
 
 Having chosen the acceptance probabilities, we have guaranteed that
-if the  ${\cal w}_i^{(n)}$ has equilibrated, that is if it is equal to $p_i$,
+if the  $p_i^{(n)}$ has equilibrated, that is if it is equal to $p_i$,
 it will remain equilibrated. Next we need to find the circumstances for
 convergence to equilibrium.
 
