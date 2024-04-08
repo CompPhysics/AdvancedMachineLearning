@@ -699,8 +699,8 @@ between nodes in the hidden layer.
 !split
 ===== The network layers =====
 
-o A function $\mathbf{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
-o The function $\mathbf{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
+o A function $\bm{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
+o The function $\bm{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
 
 
 !split
@@ -717,10 +717,12 @@ over (integrated out).
 ===== The parameters =====
 
 The network parameters, to be optimized/learned:
-o $\bm{a}$ represents the visible bias, a vector of same length as $\bm{x}$.
-o $\bm{b}$ represents the hidden bias, a vector of same lenght as $\bm{h}$.
+o $\bm{a}$ represents the visible bias, a vector of same length $M$ as $\bm{x}$.
+o $\bm{b}$ represents the hidden bias, a vector of same length $N$  as $\bm{h}$.
 o $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
 
+Note that we have specified the lengths of $bm{x}$ and $\bm{h}$. These
+lengths define the number of visible and hidden units, respectively.
 
 !split
 ===== Joint distribution =====
@@ -728,16 +730,16 @@ o $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
 The restricted Boltzmann machine is described by a Boltzmann distribution
 !bt
 \begin{align}
-	P_{rbm}(\bm{x},\bm{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\bm{x},\bm{h})},
+	P_{rbm}(\bm{x},\bm{h},\bm{\Theta}) = \frac{1}{Z(\bm{\Theta})} \exp{-(\frac{1}{T_0}E(\bm{x},\bm{h},\bm{\Theta}))},
 \end{align}
 !et
-where $Z$ is the normalization constant or partition function, defined as 
+where $Z$ is the normalization constant or partition function discussed earlier and defined as 
 !bt
 \begin{align}
-	Z = \int \int e^{-\frac{1}{T}E(\bm{x},\bm{h})} d\bm{x} d\bm{h}.
+	Z(\bm{\Theta}) = \int \int \exp{-\frac{1}{T}E(\bm{x},\bm{h},\bm{\Theta})} d\bm{x} d\bm{h}.
 \end{align}
 !et
-It is common to ignore $T$ by setting it to one. 
+It is common to set  $T$ to one. 
 
 !split
 ===== Network Elements, the energy function  =====
@@ -783,16 +785,23 @@ This type of RBMs are useful when we model continuous data (i.e., we wish $\bm{x
 !split
 ===== Cost function =====
 
-When working with a training dataset, the most common training approach is maximizing the log-likelihood of the training data. The log likelihood characterizes the log-probability of generating the observed data using our generative model. Using this method our cost function is chosen as the negative log-likelihood. The learning then consists of trying to find parameters that maximize the probability of the dataset, and is known as Maximum Likelihood Estimation (MLE).
-Denoting the parameters as $\bm{\theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN}$, the log-likelihood is given by
+When working with a training dataset, the most common training
+approach is maximizing the log-likelihood of the training data. The
+log likelihood characterizes the log-probability of generating the
+observed data using our generative model. Using this method our cost
+function is chosen as the negative log-likelihood. The learning then
+consists of trying to find parameters that maximize the probability of
+the dataset, and is known as Maximum Likelihood Estimation (MLE).
+
+Denoting the parameters as $\bm{\Theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN}$, the log-likelihood is given by
 !bt
 \begin{align}
-	\mathcal{L}(\{ \theta_i \}) &= \langle \text{log} P_\theta(\bm{x}) \rangle_{data} \\
-	&= - \langle E(\bm{x}; \{ \theta_i\}) \rangle_{data} - \text{log} Z(\{ \theta_i\}),
+	\mathcal{L}(\{ \Theta_i \}) &= \langle \text{log} P_\theta(\bm{x}) \rangle_{data} \\
+	&= - \langle E(\bm{x}; \{ \Theta_i\}) \rangle_{data} - \text{log} Z(\{ \Theta_i\}),
 \end{align}
 !et
-where we used that the normalization constant does not depend on the data, $\langle \text{log} Z(\{ \theta_i\}) \rangle = \text{log} Z(\{ \theta_i\})$
-Our cost function is the negative log-likelihood, $\mathcal{C}(\{ \theta_i \}) = - \mathcal{L}(\{ \theta_i \})$
+where we used that the normalization constant does not depend on the data, $\langle \text{log} Z(\{ \Theta_i\}) \rangle = \text{log} Z(\{ \Theta_i\})$
+Our cost function is the negative log-likelihood, $\mathcal{C}(\{ \Theta_i \}) = - \mathcal{L}(\{ \Theta_i \})$
 
 !split
 ===== Optimization / Training =====
@@ -800,7 +809,7 @@ Our cost function is the negative log-likelihood, $\mathcal{C}(\{ \theta_i \}) =
 The training procedure of choice often is Stochastic Gradient Descent (SGD). It consists of a series of iterations where we update the parameters according to the equation
 !bt
 \begin{align}
-	\bm{\theta}_{k+1} = \bm{\theta}_k - \eta \nabla \mathcal{C} (\bm{\theta}_k)
+	\bm{\Theta}_{k+1} = \bm{\Theta}_k - \eta \nabla \mathcal{C} (\bm{\Theta}_k)
 \end{align}
 !et
 at each $k$-th iteration. There are a range of variants of the algorithm which aim at making the learning rate $\eta$ more adaptive so the method might be more efficient while remaining stable.
@@ -810,9 +819,9 @@ at each $k$-th iteration. There are a range of variants of the algorithm which a
 We now need the gradient of the cost function in order to minimize it. We find that
 !bt
 \begin{align}
-	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
-	&= \langle \frac{\partial E(\bm{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
-	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} \\
+	\frac{\partial \mathcal{C}(\{ \Theta_i\})}{\partial \Theta_i}
+	&= \langle \frac{\partial E(\bm{x}; \Theta_i)}{\partial \Theta_i} \rangle_{data}
+	+ \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i} \\
 	&= \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model}.
 \end{align}
 !et
@@ -822,13 +831,13 @@ We now need the gradient of the cost function in order to minimize it. We find t
 In order to simplify notation we defined the "operator"
 !bt
 \begin{align}
-	O_i(\bm{x}) = \frac{\partial E(\bm{x}; \theta_i)}{\partial \theta_i}, 
+	O_i(\bm{x}) = \frac{\partial E(\bm{x}; \Theta_i)}{\partial \Theta_i}, 
 \end{align}
 !et
 and used the statistical mechanics relationship between expectation values and the log-partition function:
 !bt
 \begin{align}
-	\langle O_i(\bm{x}) \rangle_{model} = \text{Tr} P_\theta(\bm{x})O_i(\bm{x}) = - \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i}.
+	\langle O_i(\bm{x}) \rangle_{model} = \text{Tr} P_\Theta(\bm{x})O_i(\bm{x}) = - \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i}.
 \end{align}
 !et
 
@@ -877,26 +886,26 @@ we can measure the difference by
 
 Thus, the Kullback-Leibler divergence between the distribution of the
 training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
-\bm{\theta})$ is
+\bm{\Theta})$ is
 
 !bt
-\begin{align}
-	\text{KL} (f(\bm{x})|| p(\bm{x}| \bm{\theta})) =& \int_{-\infty}^{\infty}
-	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}| \bm{\theta})} d\bm{x} \\
+\begin{align*}
+	\text{KL} (f(\bm{x})|| p(\bm{x}| \bm{\Theta})) =& \int_{-\infty}^{\infty}
+	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}| \bm{\Theta})} d\bm{x} \\
 	=& \int_{-\infty}^{\infty} f(\bm{x}) \log f(\bm{x}) d\bm{x} - \int_{-\infty}^{\infty} f(\bm{x}) \log
-	p(\bm{x}| \bm{\theta}) d\bm{x} \\
-	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}| \bm{\theta}))
-	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x}| \bm{\theta}) \rangle_{f(\bm{x})} \\
+	p(\bm{x}| \bm{\Theta}) d\bm{x} \\
+	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}| \bm{\Theta}))
+	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x}| \bm{\Theta}) \rangle_{f(\bm{x})} \\
 	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z \\
 	=& \langle \log f(\bm{x}) \rangle_{data} + \mathcal{C}_{LL} .
-\end{align}
+\end{align*}
 !et
 
 !split
 ===== Maximizing log-likelihood =====
 
-The first term is constant with respect to $\bm{\theta}$ since
-$f(\bm{x})$ is independent of $\bm{\theta}$. Thus the Kullback-Leibler
+The first term is constant with respect to $\bm{\Theta}$ since
+$f(\bm{x})$ is independent of $\bm{\Theta}$. Thus the Kullback-Leibler
 Divergence is minimal when the second term is minimal. The second term
 is the log-likelihood cost function, hence minimizing the
 Kullback-Leibler divergence is equivalent to maximizing the
@@ -916,13 +925,13 @@ between expectation values and the log-partition function. In this
 case we have
 !bt
 \begin{align}
-	\langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{model}
-	= \int p(\bm{x}| \bm{\theta}) \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} d\bm{x} 
-	= -\frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} .
+	\langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model}
+	= \int p(\bm{x}| \bm{\Theta}) \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} d\bm{x} 
+	= -\frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} .
 \end{align}
 !et
 
-Here $\langle \cdot \rangle_{model}$ is the expectation value over the model probability distribution $p(\bm{x}| \bm{\theta})$.
+Here $\langle \cdot \rangle_{model}$ is the expectation value over the model probability distribution $p(\bm{x}| \bm{\Theta})$.
 
 !split
 ===== Setting up for gradient descent calculations =====
@@ -931,9 +940,9 @@ Using the previous relationship we can express the gradient of the cost function
 
 !bt
 \begin{align}
-	\frac{\partial \mathcal{C}_{LL}}{\partial \theta_i}
-	=& \langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{data} + \frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} \\
-	=& \langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{data} - \langle \frac{ \partial E(\bm{x}; \theta_i) } { \partial \theta_i} \rangle_{model} \\
+	\frac{\partial \mathcal{C}_{LL}}{\partial \Theta_i}
+	=& \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} + \frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} \\
+	=& \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} - \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model} \\
 	%=& \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model}
 \end{align}
 !et

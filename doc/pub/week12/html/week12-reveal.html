@@ -1059,8 +1059,8 @@ between nodes in the hidden layer.
 <h2 id="the-network-layers">The network layers </h2>
 
 <ol>
-<p><li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
-<p><li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
+<p><li> A function \( \boldsymbol{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
+<p><li> The function \( \boldsymbol{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
 </ol>
 </section>
 
@@ -1081,10 +1081,14 @@ over (integrated out).
 
 <p>The network parameters, to be optimized/learned:</p>
 <ol>
-<p><li> \( \boldsymbol{a} \) represents the visible bias, a vector of same length as \( \boldsymbol{x} \).</li>
-<p><li> \( \boldsymbol{b} \) represents the hidden bias, a vector of same lenght as \( \boldsymbol{h} \).</li>
+<p><li> \( \boldsymbol{a} \) represents the visible bias, a vector of same length \( M \) as \( \boldsymbol{x} \).</li>
+<p><li> \( \boldsymbol{b} \) represents the hidden bias, a vector of same length \( N \)  as \( \boldsymbol{h} \).</li>
 <p><li> \( \boldsymbol{W} \) represents the interaction weights, a matrix of size \( M\times N \).</li>
 </ol>
+<p>
+<p>Note that we have specified the lengths of \( bm{x} \) and \( \boldsymbol{h} \). These
+lengths define the number of visible and hidden units, respectively.
+</p>
 </section>
 
 <section>
@@ -1094,23 +1098,23 @@ over (integrated out).
 <p>&nbsp;<br>
 $$
 \begin{align}
-	P_{rbm}(\boldsymbol{x},\boldsymbol{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\boldsymbol{x},\boldsymbol{h})},
+	P_{rbm}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z(\boldsymbol{\Theta})} \exp{-(\frac{1}{T_0}E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}))},
 \tag{7}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>where \( Z \) is the normalization constant or partition function, defined as </p>
+<p>where \( Z \) is the normalization constant or partition function discussed earlier and defined as </p>
 <p>&nbsp;<br>
 $$
 \begin{align}
-	Z = \int \int e^{-\frac{1}{T}E(\boldsymbol{x},\boldsymbol{h})} d\boldsymbol{x} d\boldsymbol{h}.
+	Z(\boldsymbol{\Theta}) = \int \int \exp{-\frac{1}{T}E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta})} d\boldsymbol{x} d\boldsymbol{h}.
 \tag{8}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>It is common to ignore \( T \) by setting it to one. </p>
+<p>It is common to set  \( T \) to one. </p>
 </section>
 
 <section>
@@ -1167,22 +1171,29 @@ $$
 <section>
 <h2 id="cost-function">Cost function </h2>
 
-<p>When working with a training dataset, the most common training approach is maximizing the log-likelihood of the training data. The log likelihood characterizes the log-probability of generating the observed data using our generative model. Using this method our cost function is chosen as the negative log-likelihood. The learning then consists of trying to find parameters that maximize the probability of the dataset, and is known as Maximum Likelihood Estimation (MLE).
-Denoting the parameters as \( \boldsymbol{\theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN} \), the log-likelihood is given by
+<p>When working with a training dataset, the most common training
+approach is maximizing the log-likelihood of the training data. The
+log likelihood characterizes the log-probability of generating the
+observed data using our generative model. Using this method our cost
+function is chosen as the negative log-likelihood. The learning then
+consists of trying to find parameters that maximize the probability of
+the dataset, and is known as Maximum Likelihood Estimation (MLE).
 </p>
+
+<p>Denoting the parameters as \( \boldsymbol{\Theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN} \), the log-likelihood is given by</p>
 <p>&nbsp;<br>
 $$
 \begin{align}
-	\mathcal{L}(\{ \theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} 
+	\mathcal{L}(\{ \Theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} 
 \tag{11}\\
-	&= - \langle E(\boldsymbol{x}; \{ \theta_i\}) \rangle_{data} - \text{log} Z(\{ \theta_i\}),
+	&= - \langle E(\boldsymbol{x}; \{ \Theta_i\}) \rangle_{data} - \text{log} Z(\{ \Theta_i\}),
 \tag{12}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>where we used that the normalization constant does not depend on the data, \( \langle \text{log} Z(\{ \theta_i\}) \rangle = \text{log} Z(\{ \theta_i\}) \)
-Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \theta_i \}) = - \mathcal{L}(\{ \theta_i \}) \)
+<p>where we used that the normalization constant does not depend on the data, \( \langle \text{log} Z(\{ \Theta_i\}) \rangle = \text{log} Z(\{ \Theta_i\}) \)
+Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \Theta_i \}) = - \mathcal{L}(\{ \Theta_i \}) \)
 </p>
 </section>
 
@@ -1193,7 +1204,7 @@ Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \theta_i \})
 <p>&nbsp;<br>
 $$
 \begin{align}
-	\boldsymbol{\theta}_{k+1} = \boldsymbol{\theta}_k - \eta \nabla \mathcal{C} (\boldsymbol{\theta}_k)
+	\boldsymbol{\Theta}_{k+1} = \boldsymbol{\Theta}_k - \eta \nabla \mathcal{C} (\boldsymbol{\Theta}_k)
 \tag{13}
 \end{align}
 $$
@@ -1208,9 +1219,9 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
-	&= \langle \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
-	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} 
+	\frac{\partial \mathcal{C}(\{ \Theta_i\})}{\partial \Theta_i}
+	&= \langle \frac{\partial E(\boldsymbol{x}; \Theta_i)}{\partial \Theta_i} \rangle_{data}
+	+ \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i} 
 \tag{14}\\
 	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}.
 \tag{15}
@@ -1226,7 +1237,7 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	O_i(\boldsymbol{x}) = \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i}, 
+	O_i(\boldsymbol{x}) = \frac{\partial E(\boldsymbol{x}; \Theta_i)}{\partial \Theta_i}, 
 \tag{16}
 \end{align}
 $$
@@ -1236,7 +1247,7 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	\langle O_i(\boldsymbol{x}) \rangle_{model} = \text{Tr} P_\theta(\boldsymbol{x})O_i(\boldsymbol{x}) = - \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i}.
+	\langle O_i(\boldsymbol{x}) \rangle_{model} = \text{Tr} P_\Theta(\boldsymbol{x})O_i(\boldsymbol{x}) = - \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i}.
 \tag{17}
 \end{align}
 $$
@@ -1301,26 +1312,21 @@ $$
 
 <p>Thus, the Kullback-Leibler divergence between the distribution of the
 training data \( f(\boldsymbol{x}) \) and the model distribution \( p(\boldsymbol{x}|
-\boldsymbol{\theta}) \) is
+\boldsymbol{\Theta}) \) is
 </p>
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	\text{KL} (f(\boldsymbol{x})|| p(\boldsymbol{x}| \boldsymbol{\theta})) =& \int_{-\infty}^{\infty}
-	f (\boldsymbol{x}) \log \frac{f(\boldsymbol{x})}{p(\boldsymbol{x}| \boldsymbol{\theta})} d\boldsymbol{x} 
-\tag{23}\\
+\begin{align*}
+	\text{KL} (f(\boldsymbol{x})|| p(\boldsymbol{x}| \boldsymbol{\Theta})) =& \int_{-\infty}^{\infty}
+	f (\boldsymbol{x}) \log \frac{f(\boldsymbol{x})}{p(\boldsymbol{x}| \boldsymbol{\Theta})} d\boldsymbol{x} \\
 	=& \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log f(\boldsymbol{x}) d\boldsymbol{x} - \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log
-	p(\boldsymbol{x}| \boldsymbol{\theta}) d\boldsymbol{x} 
-\tag{24}\\
-	%=& \mathbb{E}_{f(\boldsymbol{x})} (\log f(\boldsymbol{x})) - \mathbb{E}_{f(\boldsymbol{x})} (\log p(\boldsymbol{x}| \boldsymbol{\theta}))
-	=& \langle \log f(\boldsymbol{x}) \rangle_{f(\boldsymbol{x})} - \langle \log p(\boldsymbol{x}| \boldsymbol{\theta}) \rangle_{f(\boldsymbol{x})} 
-\tag{25}\\
-	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \langle E(\boldsymbol{x}) \rangle_{data} + \log Z 
-\tag{26}\\
+	p(\boldsymbol{x}| \boldsymbol{\Theta}) d\boldsymbol{x} \\
+	%=& \mathbb{E}_{f(\boldsymbol{x})} (\log f(\boldsymbol{x})) - \mathbb{E}_{f(\boldsymbol{x})} (\log p(\boldsymbol{x}| \boldsymbol{\Theta}))
+	=& \langle \log f(\boldsymbol{x}) \rangle_{f(\boldsymbol{x})} - \langle \log p(\boldsymbol{x}| \boldsymbol{\Theta}) \rangle_{f(\boldsymbol{x})} \\
+	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \langle E(\boldsymbol{x}) \rangle_{data} + \log Z \\
 	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \mathcal{C}_{LL} .
-\tag{27}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1328,8 +1334,8 @@ $$
 <section>
 <h2 id="maximizing-log-likelihood">Maximizing log-likelihood </h2>
 
-<p>The first term is constant with respect to \( \boldsymbol{\theta} \) since
-\( f(\boldsymbol{x}) \) is independent of \( \boldsymbol{\theta} \). Thus the Kullback-Leibler
+<p>The first term is constant with respect to \( \boldsymbol{\Theta} \) since
+\( f(\boldsymbol{x}) \) is independent of \( \boldsymbol{\Theta} \). Thus the Kullback-Leibler
 Divergence is minimal when the second term is minimal. The second term
 is the log-likelihood cost function, hence minimizing the
 Kullback-Leibler divergence is equivalent to maximizing the
@@ -1353,15 +1359,15 @@ case we have
 <p>&nbsp;<br>
 $$
 \begin{align}
-	\langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model}
-	= \int p(\boldsymbol{x}| \boldsymbol{\theta}) \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} d\boldsymbol{x} 
-	= -\frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} .
-\tag{28}
+	\langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model}
+	= \int p(\boldsymbol{x}| \boldsymbol{\Theta}) \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} d\boldsymbol{x} 
+	= -\frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} .
+\tag{23}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>Here \( \langle \cdot \rangle_{model} \) is the expectation value over the model probability distribution \( p(\boldsymbol{x}| \boldsymbol{\theta}) \).</p>
+<p>Here \( \langle \cdot \rangle_{model} \) is the expectation value over the model probability distribution \( p(\boldsymbol{x}| \boldsymbol{\Theta}) \).</p>
 </section>
 
 <section>
@@ -1372,13 +1378,13 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	\frac{\partial \mathcal{C}_{LL}}{\partial \theta_i}
-	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} + \frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} 
-\tag{29}\\
-	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model} 
-\tag{30}\\
+	\frac{\partial \mathcal{C}_{LL}}{\partial \Theta_i}
+	=& \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} + \frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} 
+\tag{24}\\
+	=& \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model} 
+\tag{25}\\
 	%=& \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}
-\tag{31}
+\tag{26}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1454,7 +1460,7 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 $$
 \begin{align}
 	E_{BB}(\boldsymbol{x}, \boldsymbol{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\tag{32}
+\tag{27}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1468,9 +1474,9 @@ $$
 $$
 \begin{align}
 	p_{BB}(\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} 
-\tag{33}\\
+\tag{28}\\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
-\tag{34}
+\tag{29}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1481,7 +1487,7 @@ $$
 $$
 \begin{align}
 	Z_{BB} = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
-\tag{35}
+\tag{30}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1496,7 +1502,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h}) 
-\tag{36}\\
+\tag{31}\\
 	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
@@ -1505,7 +1511,7 @@ $$
 	& ... \times \sum_{h_2} e^{(b_N + \boldsymbol{x}^T \boldsymbol{w}_{\ast N})h_N} \bigg ) \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
 	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
-\tag{37}
+\tag{32}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1520,7 +1526,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{h}) = \frac{1}{Z_{BB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
-\tag{38}
+\tag{33}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1542,7 +1548,7 @@ $$
 	=& \prod_j^N \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{BB} (h_j| \boldsymbol{x}) .
-\tag{39}
+\tag{34}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1558,12 +1564,12 @@ $$
 \begin{align}
 	p_{BB} (h_j=1 | \boldsymbol{x}) =&   \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\tag{40}\\
+\tag{35}\\
 	=&  \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} )}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\tag{41}\\
+\tag{36}\\
 	=&  \frac{ 1 }{1 + e^{-(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})} } ,
-\tag{42}
+\tag{37}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1574,7 +1580,7 @@ $$
 $$
 \begin{align}
 	p_{BB} (h_j=0 | \boldsymbol{x}) =\frac{ 1 }{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}} } .
-\tag{43}
+\tag{38}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1589,9 +1595,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } 
-\tag{44}\\
+\tag{39}\\
 	&= \prod_i^M p_{BB} (x_i | \boldsymbol{h}) .
-\tag{45}
+\tag{40}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1600,9 +1606,9 @@ $$
 $$
 \begin{align}
 	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} 
-\tag{46}\\
+\tag{41}\\
 	p_{BB} (x_i=0 | \boldsymbol{h}) =& \frac{1}{1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} }} .
-\tag{47}
+\tag{42}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1621,7 +1627,7 @@ $$
 	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
 	=& \vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 - \boldsymbol{b}^T \boldsymbol{h} 
 	- (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h} . 
-\tag{48}
+\tag{43}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1641,7 +1647,7 @@ $$
 	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ b_j h_j 
 	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\tag{49}
+\tag{44}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1653,7 +1659,7 @@ $$
 \begin{align}
 	Z_{GB} =& \int \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
 	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} d\tilde{\boldsymbol{x}} .
-\tag{50}
+\tag{45}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1676,7 +1682,7 @@ $$
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
 	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) .
-\tag{51}
+\tag{46}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1715,7 +1721,7 @@ $$
 	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
 	\sqrt{2\pi \sigma_i^2}
 	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}} .
-\tag{52}
+\tag{47}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1737,7 +1743,7 @@ $$
 	=& \prod_j^N \frac{e^{(b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j})h_j } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{GB} (h_j|\boldsymbol{x}).
-\tag{53}
+\tag{48}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1750,10 +1756,10 @@ $$
 	p_{GB} (h_j =1 | \boldsymbol{x}) =& \frac{e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j} } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} 
-\tag{54}\\
+\tag{49}\\
 	p_{GB} (h_j =0 | \boldsymbol{x}) =&
 	\frac{1}{1 + e^{b_j +(\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} .
-\tag{55}
+\tag{50}
 \end{align}
 $$
 <p>&nbsp;<br>
@@ -1788,10 +1794,10 @@ $$
 	e^{ - \frac{(x_i - b_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}} \nonumber \\
 	=& \prod_i^M \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) 
-\tag{56}\\
+\tag{51}\\
 	\Rightarrow p_{GB} (x_i|\boldsymbol{h}) =& \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) .
-\tag{57}
+\tag{52}
 \end{align}
 $$
 <p>&nbsp;<br>
