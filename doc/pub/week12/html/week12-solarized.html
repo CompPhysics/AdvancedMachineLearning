@@ -259,6 +259,10 @@ div.toc p,a {
                2,
                None,
                'code-for-rbms-using-pytorch'),
+              ('Energy-based models and Langevin sampling',
+               2,
+               None,
+               'energy-based-models-and-langevin-sampling'),
               ('Tensor-flow examples', 2, None, 'tensor-flow-examples')]}
 end of tocinfo -->
 
@@ -1081,18 +1085,16 @@ lengths define the number of visible and hidden units, respectively.
 
 <p>The restricted Boltzmann machine is described by a Boltzmann distribution</p>
 $$
-\begin{align}
+\begin{align*}
 	P_{rbm}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z(\boldsymbol{\Theta})} \exp{-(E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}))},
-\label{_auto5}
-\end{align}
+\end{align*}
 $$
 
 <p>where \( Z \) is the normalization constant or partition function discussed earlier and defined as </p>
 $$
-\begin{align}
+\begin{align*}
 	Z(\boldsymbol{\Theta}) = \int \int \exp{-E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta})} d\boldsymbol{x} d\boldsymbol{h}.
-\label{_auto6}
-\end{align}
+\end{align*}
 $$
 
 <p>It is common to set  the temperature \( T \) to one. It is omitted in the equations above. The energy is thus a dimensionless function.</p>
@@ -1119,10 +1121,9 @@ adjusting the energy function to best fit our problem.
 
 <p>RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:</p>
 $$
-\begin{align}
+\begin{align*}
 	E(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
-\label{_auto7}
-\end{align}
+\end{align*}
 $$
 
 <p>where the binary values taken on by the nodes are most commonly 0 and 1.</p>
@@ -1134,10 +1135,9 @@ $$
 
 <p>Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:</p>
 $$
-\begin{align}
+\begin{align*}
 	E(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
-\label{_auto8}
-\end{align}
+\end{align*}
 $$
 
 <p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \boldsymbol{x} \) to be continuous). The paramater \( \sigma_i^2 \) is meant to represent a variance and is foten just set to one.</p>
@@ -1156,12 +1156,10 @@ the dataset, and is known as Maximum Likelihood Estimation (MLE).
 
 <p>Denoting the parameters as \( \boldsymbol{\Theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN} \), the log-likelihood is given by</p>
 $$
-\begin{align}
-	\mathcal{L}(\{ \Theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} 
-\label{_auto9}\\
+\begin{align*}
+	\mathcal{L}(\{ \Theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} \\
 	&= - \langle E(\boldsymbol{x}; \{ \Theta_i\}) \rangle_{data} - \text{log} Z(\{ \Theta_i\}),
-\label{_auto10}
-\end{align}
+\end{align*}
 $$
 
 <p>where we used that the normalization constant does not depend on the data, \( \langle \text{log} Z(\{ \Theta_i\}) \rangle = \text{log} Z(\{ \Theta_i\}) \)
@@ -1173,10 +1171,9 @@ Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \Theta_i \})
 
 <p>The training procedure of choice often is Stochastic Gradient Descent (SGD). It consists of a series of iterations where we update the parameters according to the equation</p>
 $$
-\begin{align}
+\begin{align*}
 	\boldsymbol{\Theta}_{k+1} = \boldsymbol{\Theta}_k - \eta \nabla \mathcal{C} (\boldsymbol{\Theta}_k)
-\label{_auto11}
-\end{align}
+\end{align*}
 $$
 
 <p>at each \( k \)-th iteration. There are a range of variants of the algorithm which aim at making the learning rate \( \eta \) more adaptive so the method might be more efficient while remaining stable.</p>
@@ -1185,14 +1182,12 @@ $$
 <h2 id="gradients">Gradients </h2>
 <p>We now need the gradient of the cost function in order to minimize it. We find that</p>
 $$
-\begin{align}
+\begin{align*}
 	\frac{\partial \mathcal{C}(\{ \Theta_i\})}{\partial \Theta_i}
 	&= \langle \frac{\partial E(\boldsymbol{x}; \Theta_i)}{\partial \Theta_i} \rangle_{data}
-	+ \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i} 
-\label{_auto12}\\
+	+ \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i} \\
 	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}.
-\label{_auto13}
-\end{align}
+\end{align*}
 $$
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -1200,18 +1195,16 @@ $$
 
 <p>In order to simplify notation we defined the "operator"</p>
 $$
-\begin{align}
+\begin{align*}
 	O_i(\boldsymbol{x}) = \frac{\partial E(\boldsymbol{x}; \Theta_i)}{\partial \Theta_i}, 
-\label{_auto14}
-\end{align}
+\end{align*}
 $$
 
 <p>and used the statistical mechanics relationship between expectation values and the log-partition function:</p>
 $$
-\begin{align}
+\begin{align*}
 	\langle O_i(\boldsymbol{x}) \rangle_{model} = \text{Tr} P_\Theta(\boldsymbol{x})O_i(\boldsymbol{x}) = - \frac{\partial \text{log} Z(\{ \Theta_i\})}{\partial \Theta_i}.
-\label{_auto15}
-\end{align}
+\end{align*}
 $$
 
 
@@ -1230,15 +1223,11 @@ their probability).
 <h2 id="gradient-examples">Gradient examples </h2>
 <p>The gradient of the negative log-likelihood cost function of a Binary-Binary RBM is then</p>
 $$
-\begin{align}
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial w_{ij}} =& \langle x_i h_j \rangle_{data} - \langle x_i h_j \rangle_{model} 
-\label{_auto16}\\
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial a_{ij}} =& \langle x_i \rangle_{data} - \langle x_i \rangle_{model} 
-\label{_auto17}\\
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial b_{ij}} =& \langle h_i \rangle_{data} - \langle h_i \rangle_{model}. 
-\label{_auto18}\\
-\label{_auto19}
-\end{align}
+\begin{align*}
+	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial w_{ij}} =& \langle x_i h_j \rangle_{data} - \langle x_i h_j \rangle_{model} \\
+	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial a_{ij}} =& \langle x_i \rangle_{data} - \langle x_i \rangle_{model} \\
+	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial b_{ij}} =& \langle h_i \rangle_{data} - \langle h_i \rangle_{model}. \\
+\end{align*}
 $$
 
 <p>To get the expectation values with respect to the <em>data</em>, we set the visible units to each of the observed samples in the training data, then update the hidden units according to the conditional probability found before. We then average over all samples in the training data to calculate expectation values with respect to the data. </p>
@@ -1255,10 +1244,9 @@ dissimilarity between two probability density functions \( p \) and
 we can measure the difference by
 </p>
 $$
-\begin{align}
+\begin{align*}
 	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\boldsymbol{x}) \log \frac{p(\boldsymbol{x})}{q(\boldsymbol{x})}  d\boldsymbol{x}.
-\label{_auto20}
-\end{align}
+\end{align*}
 $$
 
 
@@ -1309,12 +1297,11 @@ between expectation values and the log-partition function. In this
 case we have
 </p>
 $$
-\begin{align}
+\begin{align*}
 	\langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model}
 	= \int p(\boldsymbol{x}| \boldsymbol{\Theta}) \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} d\boldsymbol{x} 
 	= -\frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} .
-\label{_auto21}
-\end{align}
+\end{align*}
 $$
 
 <p>Here \( \langle \cdot \rangle_{model} \) is the expectation value over the model probability distribution \( p(\boldsymbol{x}| \boldsymbol{\Theta}) \).</p>
@@ -1325,15 +1312,12 @@ $$
 <p>Using the previous relationship we can express the gradient of the cost function as</p>
 
 $$
-\begin{align}
+\begin{align*}
 	\frac{\partial \mathcal{C}_{LL}}{\partial \Theta_i}
-	=& \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} + \frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} 
-\label{_auto22}\\
-	=& \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model} 
-\label{_auto23}\\
+	=& \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} + \frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} \\
+	=& \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model} \\
 	%=& \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}
-\label{_auto24}
-\end{align}
+\end{align*}
 $$
 
 
@@ -1400,10 +1384,9 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 </p>
 
 $$
-\begin{align}
+\begin{align*}
 	E_{BB}(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\label{_auto25}
-\end{align}
+\end{align*}
 $$
 
 
@@ -1839,6 +1822,11 @@ show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid
   </div>
 </div>
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="energy-based-models-and-langevin-sampling">Energy-based models and Langevin sampling </h2>
+
+<p>See discussions in Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="tensor-flow-examples">Tensor-flow examples </h2>
