@@ -964,7 +964,19 @@ Gibbs sampling. The latter uses the conditional probability instead of
 the full probability as done in the Metropolis algorithm.
 </p>
 
-<p>More text to be added here, see whiteboard notes April 9 and Goodfellow et al sections 18.1-18.2</p>
+<p>Gibbs sampling is useful for sampling from high-dimensional
+distributions where single-variable conditional distributions are
+known.
+</p>
+
+<p>For example, say it is too expensive to sample from \( p(x_0, x_1, x_2,
+..., x_d) \). With Gibbs sampling, we initialize all variables to
+arbitrary values. Then while taking each sample, we also iterate
+through the dimensions and replace its value with a sample from the
+univariate conditional distribution. For example we can update \( x_1 \)
+using \( p(x_1 \mid x_0, x_2, ..., x_d) \), which is easy to sample over
+because it is  only one dimension.
+</p>
 </section>
 
 <section>
