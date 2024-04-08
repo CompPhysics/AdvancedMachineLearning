@@ -8,8 +8,8 @@ doconce format html week12.do.txt --pygments_html_style=default --html_style=blo
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="April 8-12: Advanced machine learning and data analysis for the physical sciences">
-<title>April 8-12: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="Advanced machine learning and data analysis for the physical sciences">
+<title>Advanced machine learning and data analysis for the physical sciences</title>
 <style type="text/css">
 /* bloodish style */
 body {
@@ -140,10 +140,10 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the week April 8-12',
+ 'sections': [('Plans for the week April 8-12, 2024',
                2,
                None,
-               'plans-for-the-week-april-8-12'),
+               'plans-for-the-week-april-8-12-2024'),
               ('Essential elements of generative models',
                2,
                None,
@@ -173,6 +173,10 @@ div.toc p,a {
                None,
                'introducing-the-energy-model'),
               ('More compact notation', 2, None, 'more-compact-notation'),
+              ('Anticipating results to be derived',
+               2,
+               None,
+               'anticipating-results-to-be-derived'),
               ('Reminder on Markov Chain Monte Carlo',
                2,
                None,
@@ -344,7 +348,7 @@ MathJax.Hub.Config({
 
 <!-- ------------------- main content ---------------------- -->
 <center>
-<h1>April 8-12: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
@@ -360,12 +364,12 @@ MathJax.Hub.Config({
 </center>
 <br>
 <center>
-<h4>April 8-12, 2024</h4>
+<h4>April 9, 2024</h4>
 </center> <!-- date -->
 <br>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="plans-for-the-week-april-8-12">Plans for the week April 8-12  </h2>
+<h2 id="plans-for-the-week-april-8-12-2024">Plans for the week April 8-12, 2024  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Generative methods, energy models and Boltzmann machines</b>
@@ -386,7 +390,7 @@ MathJax.Hub.Config({
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="essential-elements-of-generative-models">Essential elements of generative models </h2>
 
-<p>The aim of generative methods is to train a probability distribution \( p \). The methods we will focus on are</p>
+<p>The aim of generative methods is to train a probability distribution \( p \). The methods we will focus on are:</p>
 <ol>
 <li> Energy based models, with the family of Boltzmann distributions as a typical example</li>
 <li> Variational autoencoders, based on our discussions on autoencoders</li>
@@ -453,7 +457,7 @@ $$
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="optimization-problem">Optimization problem </h2>
 
-<p>We are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is </p>
+<p>At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is </p>
 $$
 p(\boldsymbol{X};\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}\left(\frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}\right),
 $$
@@ -509,7 +513,7 @@ $$
 Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
 $$
 
-<p>is in general the most problematic term. In principle both \( x \) and \( h \) can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not a desirable. The above derivative of the partition function ca however be written in terms of an expectation value which can be calculated using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or MC$^2$).</p>
+<p>is in general the most problematic term. In principle both \( x \) and \( h \) can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="explicit-expression-for-the-derivative">Explicit expression for the derivative </h2>
@@ -551,8 +555,11 @@ $$
 \nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\mathbb{E}(\log{f(x_i;\boldsymbol{\Theta})}).
 $$
 
-<p>This quantity is evaluated using Monte Carlo sampling, with Gibbs sampling as the standard sampling rule.
-Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropolis-Hastings algorithm and Gibbs sampling.
+<p>This quantity is evaluated using Monte Carlo sampling, with Gibbs
+sampling as the standard sampling rule.  Before we discuss the
+explicit algorithms, we need to remind ourselves about Markov chains
+and sampling rules like the Metropolis-Hastings algorithm and Gibbs
+sampling.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -569,18 +576,41 @@ f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})=-E(\boldsymbol{x}, \boldsym
 $$
 
 <p>where the set of parameters are given by the biases and weights \( \boldsymbol{\Theta}=\{\boldsymbol{a},\boldsymbol{b},\boldsymbol{W}\} \).
-<b>Note the vector notation</b> instead of \( x_i \) and \( h_j \) for \( f \).
+<b>Note the vector notation</b> instead of \( x_i \) and \( h_j \) for \( f \). The vectors \( \boldsymbol{x} \) and \( \boldsymbol{h} \) represent a specific instance of stochastic variables \( x_i \) and \( h_j \).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="more-compact-notation">More compact notation </h2>
 
-<p>With the above definition we can write the probaility as</p>
+<p>With the above definition we can write the probability as</p>
 $$
 p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{\exp{(\boldsymbol{a}^T\boldsymbol{x}+\boldsymbol{b}^T\boldsymbol{h}+\boldsymbol{x}^T\boldsymbol{W}\boldsymbol{h})}}{Z(\boldsymbol{\Theta})},
 $$
 
 <p>where the biases \( \boldsymbol{a} \) and \( \boldsymbol{h} \) and the weights defined by the matrix \( \boldsymbol{W} \) are the parameters we need to optimize.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="anticipating-results-to-be-derived">Anticipating results to be derived </h2>
+
+<p>Since the binary-binary energy model is linear in the parameters \( a_i \), \( b_j \) and
+\( w_{ij} \), it is easy to see that the derivatives with respect to the
+various optimization parameters yield expressions used in the
+evaluation of gradients like
+</p>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial w_{ij}}=-x_ih_j,
+$$
+
+<p>and</p>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial a_i}=-x_i,
+$$
+
+<p>and</p>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial b_j}=-h_j.
+$$
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="reminder-on-markov-chain-monte-carlo">Reminder on Markov Chain Monte Carlo </h2>
@@ -990,7 +1020,7 @@ Gibbs sampling. The latter uses the conditional probability instead of
 the full probability as done in the Metropolis algorithm.
 </p>
 
-<p>More text to be added here, see also Goodfellow et al sections 18.1-18.2</p>
+<p>More text to be added here, see whiteboard notes April 9 and Goodfellow et al sections 18.1-18.2</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="boltzmann-machines-marginal-and-conditional-probabilities">Boltzmann Machines, marginal and conditional probabilities  </h2>

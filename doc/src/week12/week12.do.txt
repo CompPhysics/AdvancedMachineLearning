@@ -1,9 +1,9 @@
-TITLE: April 8-12: Advanced machine learning and data analysis for the physical sciences
+TITLE: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: April 8-12, 2024
+DATE: April 9, 2024
 
 !split
-===== Plans for the week April 8-12  =====
+===== Plans for the week April 8-12, 2024  =====
 
 !bblock  Generative methods, energy models and Boltzmann machines
 o Restricted Boltzmann machines, reminder from last week
@@ -20,7 +20,7 @@ o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/d
 !split
 ===== Essential elements of generative models =====
 
-The aim of generative methods is to train a probability distribution $p$. The methods we will focus on are
+The aim of generative methods is to train a probability distribution $p$. The methods we will focus on are:
 o Energy based models, with the family of Boltzmann distributions as a typical example
 o Variational autoencoders, based on our discussions on autoencoders
 o Generative adversarial networks (GANs) and
@@ -92,7 +92,7 @@ p(\bm{x}|\bm{h})=\prod_i p(x_i | \bm{h}).
 !split
 ===== Optimization problem =====
 
-We are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is 
+At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is 
 !bt
 \[
 p(\bm{X};\bm{\Theta})=\prod_{x_i\in \bm{X}}p(x_i;\bm{\Theta})=\prod_{x_i\in \bm{X}}\left(\frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}\right),
@@ -154,7 +154,7 @@ The partition function, defined above as
 Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}),
 \]
 !et
-is in general the most problematic term. In principle both $x$ and $h$ can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not a desirable. The above derivative of the partition function ca however be written in terms of an expectation value which can be calculated using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or MC$^2$).
+is in general the most problematic term. In principle both $x$ and $h$ can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).
 
 !split
 ===== Explicit expression for the derivative =====
@@ -203,8 +203,11 @@ that is
 \]
 !et
 
-This quantity is evaluated using Monte Carlo sampling, with Gibbs sampling as the standard sampling rule.
-Before we discuss the explicit algorithms, we need to remind ourselves about Markov chains and sampling rules like the Metropolis-Hastings algorithm and Gibbs sampling.
+This quantity is evaluated using Monte Carlo sampling, with Gibbs
+sampling as the standard sampling rule.  Before we discuss the
+explicit algorithms, we need to remind ourselves about Markov chains
+and sampling rules like the Metropolis-Hastings algorithm and Gibbs
+sampling.
 
 !split
 ===== Introducing the energy model =====
@@ -222,18 +225,44 @@ f(\bm{x},\bm{h};\bm{\Theta})=-E(\bm{x}, \bm{h};\bm{\Theta}) = \sum_{x_i\in \bm{X
 \]
 !et
 where the set of parameters are given by the biases and weights $\bm{\Theta}=\{\bm{a},\bm{b},\bm{W}\}$.
-_Note the vector notation_ instead of $x_i$ and $h_j$ for $f$.
+_Note the vector notation_ instead of $x_i$ and $h_j$ for $f$. The vectors $\bm{x}$ and $\bm{h}$ represent a specific instance of stochastic variables $x_i$ and $h_j$.
 
 !split
 ===== More compact notation =====
 
-With the above definition we can write the probaility as
+With the above definition we can write the probability as
 !bt
 \[
 p(\bm{x},\bm{h};\bm{\Theta}) = \frac{\exp{(\bm{a}^T\bm{x}+\bm{b}^T\bm{h}+\bm{x}^T\bm{W}\bm{h})}}{Z(\bm{\Theta})},
 \]
 !et
 where the biases $\bm{a}$ and $\bm{h}$ and the weights defined by the matrix $\bm{W}$ are the parameters we need to optimize.
+
+!split
+===== Anticipating results to be derived =====
+
+Since the binary-binary energy model is linear in the parameters $a_i$, $b_j$ and
+$w_{ij}$, it is easy to see that the derivatives with respect to the
+various optimization parameters yield expressions used in the
+evaluation of gradients like
+!bt
+\[
+\frac{\partial E(\bm{x}, \bm{h};\bm{\Theta})}{\partial w_{ij}}=-x_ih_j,
+\]
+!et
+and
+!bt
+\[
+\frac{\partial E(\bm{x}, \bm{h};\bm{\Theta})}{\partial a_i}=-x_i,
+\]
+!et
+and
+!bt
+\[
+\frac{\partial E(\bm{x}, \bm{h};\bm{\Theta})}{\partial b_j}=-h_j.
+\]
+!et
+
 
 !split
 ===== Reminder on Markov Chain Monte Carlo =====
@@ -597,7 +626,7 @@ An efficient way if performing the sampling is through the use of
 Gibbs sampling. The latter uses the conditional probability instead of
 the full probability as done in the Metropolis algorithm.
 
-More text to be added here, see also Goodfellow et al sections 18.1-18.2
+More text to be added here, see whiteboard notes April 9 and Goodfellow et al sections 18.1-18.2
 
 !split
 ===== Boltzmann Machines, marginal and conditional probabilities  =====
