@@ -10,7 +10,8 @@ o Restricted Boltzmann machines, reminder from last week
 o Reminder on Markov Chain Monte Carlo and Gibbs sampling
 o Discussions of various Boltzmann machines
 o Implementation of Boltzmann machines using TensorFlow and Pytorch
-o Reading recommendation: Goodfellow et al chapters 18,  20.1-20-7
+o Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
+o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
 #o "Video of lecture":""
 #o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril9.pdf"
 !eblock
@@ -596,7 +597,7 @@ An efficient way if performing the sampling is through the use of
 Gibbs sampling. The latter uses the conditional probability instead of
 the full probability as done in the Metropolis algorithm.
 
-
+More text to be added here, see also Goodfellow et al sections 18.1-18.2
 
 !split
 ===== Boltzmann Machines, marginal and conditional probabilities  =====
@@ -615,12 +616,12 @@ o Model the trial function for Monte Carlo calculations
 Generative and discriminative models use both gradient-descent based
 learning procedures for minimizing cost functions
 
-However, energy based models don't use backpropagation and automatic
-differentiation for computing gradients, instead turning to Markov
+However, in energy based models we don't use backpropagation and automatic
+differentiation for computing gradients, instead we turn to Markov
 Chain Monte Carlo methods.
 
 A typical deep neural network has several hidden layers. A restricted
-Boltzmann machine has only one hidden layer, however several RBMs can
+Boltzmann machine has normally one hidden layer, however several RBMs can
 be stacked to make up deep Belief Networks, of which they constitute
 the building blocks.
 
@@ -637,6 +638,8 @@ to. The weights in the network represent thus the strength of the
 interaction between various units/nodes.
 !eblock
 
+!split
+===== More about the basics =====
 !bblock
 A standard BM network is divided into a set of observable and visible units $\hat{x}$ and a set of unknown hidden units/nodes $\hat{h}$.
 !eblock
@@ -649,19 +652,24 @@ Additionally there can be bias nodes for the hidden and visible layers. These bi
 BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning
 !eblock
 
-However, they are often hard to train. This leads to the introduction of so-called restricted BMs, or RBMS.
-Here we take away all lateral connections between nodes in the visible layer as well as connections between nodes in the hidden layer. The network is illustrated in the figure below.
+!split
+===== Difficult to train =====
 
-#FIGURE: [figures/RBM.pdf, width=800 frac=1.0]
-
+However, they are often hard to train. This leads to the introduction
+of so-called restricted BMs, or RBMS.  Here we take away all lateral
+connections between nodes in the visible layer as well as connections
+between nodes in the hidden layer.
 
 
 !split
-===== The network =====
+===== The network layers =====
 
-_The network layers_:
-  o A function $\mathbf{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
-  o The function $\mathbf{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
+o A function $\mathbf{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
+o The function $\mathbf{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
+
+
+!split
+===== Goal of hidden layer =====
 
 The goal of the hidden layer is to increase the model's expressive
 power. We encode complex interactions between visible variables by
@@ -670,10 +678,13 @@ degrees of freedom in a simple manner, yet still reproduce the complex
 correlations between visible degrees in the data once marginalized
 over (integrated out).
 
-_The network parameters, to be optimized/learned_:
-  o $\mathbf{a}$ represents the visible bias, a vector of same length as $\mathbf{x}$.
-  o $\mathbf{b}$ represents the hidden bias, a vector of same lenght as $\mathbf{h}$.
-  o $W$ represents the interaction weights, a matrix of size $M\times N$.
+!split
+===== The parameters =====
+
+The network parameters, to be optimized/learned:
+o $\mathbf{a}$ represents the visible bias, a vector of same length as $\mathbf{x}$.
+o $\mathbf{b}$ represents the hidden bias, a vector of same lenght as $\mathbf{h}$.
+o $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
 
 
 !split
@@ -688,10 +699,10 @@ The restricted Boltzmann machine is described by a Boltzmann distribution
 where $Z$ is the normalization constant or partition function, defined as 
 !bt
 \begin{align}
-	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+	Z = \int \int e^{-\frac{1}{T}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
 \end{align}
 !et
-It is common to ignore $T_0$ by setting it to one. 
+It is common to ignore $T$ by setting it to one. 
 
 !split
 ===== Network Elements, the energy function  =====
@@ -759,16 +770,21 @@ The training procedure of choice often is Stochastic Gradient Descent (SGD). It 
 !et
 at each $k$-th iteration. There are a range of variants of the algorithm which aim at making the learning rate $\eta$ more adaptive so the method might be more efficient while remaining stable.
 
+!split
+===== Gradients =====
 We now need the gradient of the cost function in order to minimize it. We find that
 !bt
 \begin{align}
 	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
 	&= \langle \frac{\partial E(\bm{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
 	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} \\
-	&= \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model},
+	&= \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model}.
 \end{align}
 !et
-where in order to simplify notation we defined the "operator"
+!split
+===== Simplifications =====
+
+In order to simplify notation we defined the "operator"
 !bt
 \begin{align}
 	O_i(\bm{x}) = \frac{\partial E(\bm{x}; \theta_i)}{\partial \theta_i}, 
@@ -781,7 +797,9 @@ and used the statistical mechanics relationship between expectation values and t
 \end{align}
 !et
 
-The data-dependent term in the gradient is known as the positive phase
+!split
+===== Positive and negative phases =====
+As discussed earlier, the data-dependent term in the gradient is known as the positive phase
 of the gradient, while the model-dependent term is known as the
 negative phase of the gradient. The aim of the training is to lower
 the energy of configurations that are near observed data points
@@ -789,6 +807,8 @@ the energy of configurations that are near observed data points
 configurations that are far from observed data points (decreasing
 their probability).
 
+!split
+===== Gradient examples =====
 The gradient of the negative log-likelihood cost function of a Binary-Binary RBM is then
 !bt
 \begin{align}
@@ -817,6 +837,9 @@ we can measure the difference by
 \end{align}
 !et
 
+!split
+===== Kullback-Leibler divergence =====
+
 Thus, the Kullback-Leibler divergence between the distribution of the
 training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
 \bm{\theta})$ is
@@ -834,12 +857,23 @@ training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
 \end{align}
 !et
 
-The first term is constant with respect to $\bm{\theta}$ since $f(\bm{x})$ is independent of $\bm{\theta}$. Thus the Kullback-Leibler Divergence is minimal when the second term is minimal. The second term is the log-likelihood cost function, hence minimizing the Kullback-Leibler divergence is equivalent to maximizing the log-likelihood.
+!split
+===== Maximizing log-likelihood =====
+
+The first term is constant with respect to $\bm{\theta}$ since
+$f(\bm{x})$ is independent of $\bm{\theta}$. Thus the Kullback-Leibler
+Divergence is minimal when the second term is minimal. The second term
+is the log-likelihood cost function, hence minimizing the
+Kullback-Leibler divergence is equivalent to maximizing the
+log-likelihood.
 
 
 To further understand generative models it is useful to study the
 gradient of the cost function which is needed in order to minimize it
 using methods like stochastic gradient descent. 
+
+!split
+===== More on the partition function =====
 
 The partition function is the generating function of
 expectation values, in particular there are mathematical relationships
@@ -869,6 +903,9 @@ Using the previous relationship we can express the gradient of the cost function
 \end{align}
 !et
 
+!split
+===== Difference of moments =====
+
 This expression shows that the gradient of the log-likelihood cost
 function is a _difference of moments_, with one calculated from
 the data and one calculated from the model. The data-dependent term is
@@ -880,6 +917,8 @@ increasing the energy of configurations not observed in the training
 data. That means we increase the model's probability of configurations
 similar to those in the training data.
 
+!split
+===== More observations =====
 
 The gradient of the cost function also demonstrates why gradients of
 unsupervised, generative models must be computed differently from for
@@ -889,6 +928,10 @@ data, we must sample from the model in order to generate samples from
 which to caclulate the model-dependent term. We sample from the model
 by using MCMC-based methods. We can not sample from the model directly
 because the partition function $Z$ is generally intractable.
+
+
+!split
+===== Adding hyperparameters =====
 
 As in supervised machine learning problems, the goal is also here to
 perform well on _unseen_ data, that is to have good
@@ -1313,7 +1356,12 @@ show_adn_save("generate",make_grid(v1.view(32,1,28,28).data))
 !ec
 
 
+!split
+===== Tensor-flow examples =====
 
+
+o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
+o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
 
 
 

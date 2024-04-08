@@ -205,7 +205,8 @@ MathJax.Hub.Config({
 <p><li> Reminder on Markov Chain Monte Carlo and Gibbs sampling</li>
 <p><li> Discussions of various Boltzmann machines</li>
 <p><li> Implementation of Boltzmann machines using TensorFlow and Pytorch</li>
-<p><li> Reading recommendation: Goodfellow et al chapters 18,  20.1-20-7
+<p><li> Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+<p><li> See also Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a>
 <!-- o "Video of lecture":"" -->
 <!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril9.pdf" target="_blank">Whiteboard notes</a> --></li>
 </ol>
@@ -922,6 +923,8 @@ convergence to equilibrium.
 Gibbs sampling. The latter uses the conditional probability instead of
 the full probability as done in the Metropolis algorithm.
 </p>
+
+<p>More text to be added here, see also Goodfellow et al sections 18.1-18.2</p>
 </section>
 
 <section>
@@ -946,13 +949,13 @@ drawn. As an example
 learning procedures for minimizing cost functions
 </p>
 
-<p>However, energy based models don't use backpropagation and automatic
-differentiation for computing gradients, instead turning to Markov
+<p>However, in energy based models we don't use backpropagation and automatic
+differentiation for computing gradients, instead we turn to Markov
 Chain Monte Carlo methods.
 </p>
 
 <p>A typical deep neural network has several hidden layers. A restricted
-Boltzmann machine has only one hidden layer, however several RBMs can
+Boltzmann machine has normally one hidden layer, however several RBMs can
 be stacked to make up deep Belief Networks, of which they constitute
 the building blocks.
 </p>
@@ -977,8 +980,10 @@ to. The weights in the network represent thus the strength of the
 interaction between various units/nodes.
 </p>
 </div>
+</section>
 
-
+<section>
+<h2 id="more-about-the-basics">More about the basics </h2>
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
@@ -998,23 +1003,30 @@ interaction between various units/nodes.
 <p>
 <p>BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning</p>
 </div>
-
-<p>However, they are often hard to train. This leads to the introduction of so-called restricted BMs, or RBMS.
-Here we take away all lateral connections between nodes in the visible layer as well as connections between nodes in the hidden layer. The network is illustrated in the figure below.
-</p>
-
-<!-- FIGURE: [figures/RBM.pdf, width=800 frac=1.0] -->
 </section>
 
 <section>
-<h2 id="the-network">The network </h2>
+<h2 id="difficult-to-train">Difficult to train </h2>
 
-<b>The network layers</b>:
+<p>However, they are often hard to train. This leads to the introduction
+of so-called restricted BMs, or RBMS.  Here we take away all lateral
+connections between nodes in the visible layer as well as connections
+between nodes in the hidden layer.
+</p>
+</section>
+
+<section>
+<h2 id="the-network-layers">The network layers </h2>
+
 <ol>
- <p><li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
- <p><li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
+<p><li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
+<p><li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
 </ol>
-<p>
+</section>
+
+<section>
+<h2 id="goal-of-hidden-layer">Goal of hidden layer </h2>
+
 <p>The goal of the hidden layer is to increase the model's expressive
 power. We encode complex interactions between visible variables by
 introducing additional, hidden variables that interact with visible
@@ -1022,12 +1034,16 @@ degrees of freedom in a simple manner, yet still reproduce the complex
 correlations between visible degrees in the data once marginalized
 over (integrated out).
 </p>
+</section>
 
-<b>The network parameters, to be optimized/learned</b>:
+<section>
+<h2 id="the-parameters">The parameters </h2>
+
+<p>The network parameters, to be optimized/learned:</p>
 <ol>
- <p><li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
- <p><li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
- <p><li> \( W \) represents the interaction weights, a matrix of size \( M\times N \).</li>
+<p><li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
+<p><li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
+<p><li> \( \boldsymbol{W} \) represents the interaction weights, a matrix of size \( M\times N \).</li>
 </ol>
 </section>
 
@@ -1048,13 +1064,13 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
+	Z = \int \int e^{-\frac{1}{T}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
 \tag{8}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>It is common to ignore \( T_0 \) by setting it to one. </p>
+<p>It is common to ignore \( T \) by setting it to one. </p>
 </section>
 
 <section>
@@ -1144,7 +1160,10 @@ $$
 <p>&nbsp;<br>
 
 <p>at each \( k \)-th iteration. There are a range of variants of the algorithm which aim at making the learning rate \( \eta \) more adaptive so the method might be more efficient while remaining stable.</p>
+</section>
 
+<section>
+<h2 id="gradients">Gradients </h2>
 <p>We now need the gradient of the cost function in order to minimize it. We find that</p>
 <p>&nbsp;<br>
 $$
@@ -1153,13 +1172,17 @@ $$
 	&= \langle \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
 	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} 
 \tag{14}\\
-	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model},
+	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}.
 \tag{15}
 \end{align}
 $$
 <p>&nbsp;<br>
+</section>
 
-<p>where in order to simplify notation we defined the "operator"</p>
+<section>
+<h2 id="simplifications">Simplifications </h2>
+
+<p>In order to simplify notation we defined the "operator"</p>
 <p>&nbsp;<br>
 $$
 \begin{align}
@@ -1178,8 +1201,11 @@ $$
 \end{align}
 $$
 <p>&nbsp;<br>
+</section>
 
-<p>The data-dependent term in the gradient is known as the positive phase
+<section>
+<h2 id="positive-and-negative-phases">Positive and negative phases </h2>
+<p>As discussed earlier, the data-dependent term in the gradient is known as the positive phase
 of the gradient, while the model-dependent term is known as the
 negative phase of the gradient. The aim of the training is to lower
 the energy of configurations that are near observed data points
@@ -1187,7 +1213,10 @@ the energy of configurations that are near observed data points
 configurations that are far from observed data points (decreasing
 their probability).
 </p>
+</section>
 
+<section>
+<h2 id="gradient-examples">Gradient examples </h2>
 <p>The gradient of the negative log-likelihood cost function of a Binary-Binary RBM is then</p>
 <p>&nbsp;<br>
 $$
@@ -1225,6 +1254,10 @@ $$
 \end{align}
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="kullback-leibler-divergence">Kullback-Leibler divergence </h2>
 
 <p>Thus, the Kullback-Leibler divergence between the distribution of the
 training data \( f(\boldsymbol{x}) \) and the model distribution \( p(\boldsymbol{x}|
@@ -1250,13 +1283,27 @@ $$
 \end{align}
 $$
 <p>&nbsp;<br>
+</section>
 
-<p>The first term is constant with respect to \( \boldsymbol{\theta} \) since \( f(\boldsymbol{x}) \) is independent of \( \boldsymbol{\theta} \). Thus the Kullback-Leibler Divergence is minimal when the second term is minimal. The second term is the log-likelihood cost function, hence minimizing the Kullback-Leibler divergence is equivalent to maximizing the log-likelihood.</p>
+<section>
+<h2 id="maximizing-log-likelihood">Maximizing log-likelihood </h2>
+
+<p>The first term is constant with respect to \( \boldsymbol{\theta} \) since
+\( f(\boldsymbol{x}) \) is independent of \( \boldsymbol{\theta} \). Thus the Kullback-Leibler
+Divergence is minimal when the second term is minimal. The second term
+is the log-likelihood cost function, hence minimizing the
+Kullback-Leibler divergence is equivalent to maximizing the
+log-likelihood.
+</p>
 
 <p>To further understand generative models it is useful to study the
 gradient of the cost function which is needed in order to minimize it
 using methods like stochastic gradient descent. 
 </p>
+</section>
+
+<section>
+<h2 id="more-on-the-partition-function">More on the partition function </h2>
 
 <p>The partition function is the generating function of
 expectation values, in particular there are mathematical relationships
@@ -1295,6 +1342,10 @@ $$
 \end{align}
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="difference-of-moments">Difference of moments </h2>
 
 <p>This expression shows that the gradient of the log-likelihood cost
 function is a <b>difference of moments</b>, with one calculated from
@@ -1307,6 +1358,10 @@ increasing the energy of configurations not observed in the training
 data. That means we increase the model's probability of configurations
 similar to those in the training data.
 </p>
+</section>
+
+<section>
+<h2 id="more-observations">More observations </h2>
 
 <p>The gradient of the cost function also demonstrates why gradients of
 unsupervised, generative models must be computed differently from for
@@ -1317,6 +1372,10 @@ which to caclulate the model-dependent term. We sample from the model
 by using MCMC-based methods. We can not sample from the model directly
 because the partition function \( Z \) is generally intractable.
 </p>
+</section>
+
+<section>
+<h2 id="adding-hyperparameters">Adding hyperparameters </h2>
 
 <p>As in supervised machine learning problems, the goal is also here to
 perform well on <b>unseen</b> data, that is to have good
@@ -1831,6 +1890,15 @@ show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid
     </div>
   </div>
 </div>
+</section>
+
+<section>
+<h2 id="tensor-flow-examples">Tensor-flow examples </h2>
+
+<ol>
+<p><li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+<p><li> See also Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
+</ol>
 </section>
 
 
