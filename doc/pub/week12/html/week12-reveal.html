@@ -1098,7 +1098,7 @@ lengths define the number of visible and hidden units, respectively.
 <p>&nbsp;<br>
 $$
 \begin{align}
-	P_{rbm}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z(\boldsymbol{\Theta})} \exp{-(\frac{1}{T_0}E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}))},
+	P_{rbm}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z(\boldsymbol{\Theta})} \exp{-(E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}))},
 \tag{7}
 \end{align}
 $$
@@ -1108,19 +1108,19 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	Z(\boldsymbol{\Theta}) = \int \int \exp{-\frac{1}{T}E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta})} d\boldsymbol{x} d\boldsymbol{h}.
+	Z(\boldsymbol{\Theta}) = \int \int \exp{-E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta})} d\boldsymbol{x} d\boldsymbol{h}.
 \tag{8}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>It is common to set  \( T \) to one. </p>
+<p>It is common to set  the temperature \( T \) to one. It is omitted in the equations above. The energy is thus a dimensionless function.</p>
 </section>
 
 <section>
 <h2 id="network-elements-the-energy-function">Network Elements, the energy function  </h2>
 
-<p>The function \( E(\boldsymbol{x},\boldsymbol{h}) \) gives the <b>energy</b> of a
+<p>The function \( E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) \) gives the <b>energy</b> of a
 configuration (pair of vectors) \( (\boldsymbol{x}, \boldsymbol{h}) \). The lower
 the energy of a configuration, the higher the probability of it. This
 function also depends on the parameters \( \boldsymbol{a} \), \( \boldsymbol{b} \) and
@@ -1132,7 +1132,7 @@ adjusting the energy function to best fit our problem.
 <section>
 <h2 id="defining-different-types-of-rbms">Defining different types of RBMs </h2>
 
-<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\boldsymbol{x},\boldsymbol{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
+<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Binary-Binary RBM:</b>
@@ -1142,7 +1142,7 @@ adjusting the energy function to best fit our problem.
 <p>&nbsp;<br>
 $$
 \begin{align}
-	E(\boldsymbol{x}, \boldsymbol{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+	E(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 \tag{9}
 \end{align}
 $$
@@ -1159,13 +1159,13 @@ $$
 <p>&nbsp;<br>
 $$
 \begin{align}
-	E(\boldsymbol{x}, \boldsymbol{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+	E(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \tag{10}
 \end{align}
 $$
 <p>&nbsp;<br>
 
-<p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \boldsymbol{x} \) to be continuous)</p>
+<p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \boldsymbol{x} \) to be continuous). The paramater \( \sigma_i^2 \) is meant to represent a variance and is foten just set to one.</p>
 </section>
 
 <section>
@@ -1449,7 +1449,7 @@ strictly improved modelling power.
 </section>
 
 <section>
-<h2 id="binary-binary-rbms">Binary-binary RBMs </h2>
+<h2 id="binary-binary-bb-rbms">Binary-binary (BB) RBMs </h2>
 
 <p>The common choice of binary values
 are 0 and 1. However, in some physics applications, -1 and 1 might be
@@ -1459,7 +1459,7 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 <p>&nbsp;<br>
 $$
 \begin{align}
-	E_{BB}(\boldsymbol{x}, \boldsymbol{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
+	E_{BB}(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
 \tag{27}
 \end{align}
 $$
@@ -1472,12 +1472,10 @@ $$
 <p>We have the binary-binary marginal probability defined as </p>
 <p>&nbsp;<br>
 $$
-\begin{align}
-	p_{BB}(\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} 
-\tag{28}\\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
-\tag{29}
-\end{align}
+\begin{align*}
+	p_{BB}(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) =& \frac{1}{Z_{BB}(\boldsymbol{\Theta})} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} \\
+	=& \frac{1}{Z_{BB}(\boldsymbol{\Theta})} e^{\boldsymbol{a}^T \boldsymbol{x} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
+\end{align*}
 $$
 <p>&nbsp;<br>
 
@@ -1485,10 +1483,9 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	Z_{BB} = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
-\tag{30}
-\end{align}
+\begin{align*}
+	Z_{BB}(\boldsymbol{\Theta}) = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{a}^T \boldsymbol{x} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1500,19 +1497,17 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	p_{BB} (\boldsymbol{x}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h}) 
-\tag{31}\\
-	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \bigg ( \sum_{h_1} e^{(b_1 + \boldsymbol{x}^T \boldsymbol{w}_{\ast 1})h_1}
+\begin{align*}
+	p_{BB} (\boldsymbol{x},\boldsymbol{\Theta}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) \\
+	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{a}^T \boldsymbol{x} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\boldsymbol{a}^T \boldsymbol{x}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\boldsymbol{a}^T \boldsymbol{x}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\boldsymbol{a}^T \boldsymbol{x}} \bigg ( \sum_{h_1} e^{(b_1 + \boldsymbol{x}^T \boldsymbol{w}_{\ast 1})h_1}
 	\times \sum_{h_2} e^{(b_2 + \boldsymbol{x}^T \boldsymbol{w}_{\ast 2})h_2} \times \nonumber \\
 	& ... \times \sum_{h_2} e^{(b_N + \boldsymbol{x}^T \boldsymbol{w}_{\ast N})h_N} \bigg ) \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
-\tag{32}
-\end{align}
+	=& \frac{1}{Z_{BB}} e^{\boldsymbol{a}^T \boldsymbol{x}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\boldsymbol{a}^T \boldsymbol{x}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1524,10 +1519,9 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	p_{BB} (\boldsymbol{h}) = \frac{1}{Z_{BB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
-\tag{33}
-\end{align}
+\begin{align*}
+	p_{BB} (\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z_{BB}(\boldsymbol{\Theta})} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1535,21 +1529,21 @@ $$
 <section>
 <h2 id="conditional-probability-density-functions">Conditional Probability Density Functions </h2>
 
-<p>We derive the probability of the hidden units given the visible units using Bayes' rule</p>
-
+<p>We derive the probability of the hidden units given the visible units using Bayes' rule
+(we drop the explicit \( \boldsymbol{\Theta} \) dependence)
+</p>
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{BB} (\boldsymbol{h}|\boldsymbol{x}) =& \frac{p_{BB} (\boldsymbol{x}, \boldsymbol{h})}{p_{BB} (\boldsymbol{x})} \nonumber \\
-	=& \frac{ \frac{1}{Z_{BB}}  e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} }
-	        {\frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}})} \nonumber \\
-	=& \frac{  e^{\boldsymbol{x}^T \boldsymbol{a}} e^{ \sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j} }
-	        { e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}})} \nonumber \\
+	=& \frac{ \frac{1}{Z_{BB}}  e^{\boldsymbol{a}^T \boldsymbol{x} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} }
+	        {\frac{1}{Z_{BB}} e^{\boldsymbol{a}^T \boldsymbol{x}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}})} \nonumber \\
+	=& \frac{  e^{\boldsymbol{a}^T \boldsymbol{x}} e^{ \sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j} }
+	        { e^{\boldsymbol{a}^T \boldsymbol{x}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}})} \nonumber \\
 	=& \prod_j^N \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{BB} (h_j| \boldsymbol{x}) .
-\tag{34}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1561,16 +1555,13 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{BB} (h_j=1 | \boldsymbol{x}) =&   \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
-	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\tag{35}\\
+	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \\
 	=&  \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} )}  }
-	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\tag{36}\\
+	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \\
 	=&  \frac{ 1 }{1 + e^{-(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})} } ,
-\tag{37}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 
@@ -1578,10 +1569,9 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{BB} (h_j=0 | \boldsymbol{x}) =\frac{ 1 }{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}} } .
-\tag{38}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1593,23 +1583,20 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } 
-\tag{39}\\
+\begin{align*}
+	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } \\
 	&= \prod_i^M p_{BB} (x_i | \boldsymbol{h}) .
-\tag{40}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 
+<p>We have</p>
 <p>&nbsp;<br>
 $$
-\begin{align}
-	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} 
-\tag{41}\\
+\begin{align*}
+	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} \\
 	p_{BB} (x_i=0 | \boldsymbol{h}) =& \frac{1}{1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} }} .
-\tag{42}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1617,18 +1604,17 @@ $$
 <section>
 <h2 id="gaussian-binary-restricted-boltzmann-machines">Gaussian-Binary Restricted Boltzmann Machines </h2>
 
-<p>Inserting into the expression for \( E_{RBM}(\boldsymbol{x},\boldsymbol{h}) \) in equation  results in the energy</p>
+<p>Inserting into the expression for \( E_{RBM}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) \) in equation  results in the energy</p>
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	E_{GB}(\boldsymbol{x}, \boldsymbol{h}) =& \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
+\begin{align*}
+	E_{GB}(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) =& \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
 	- \sum_j^N b_j h_j 
 	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
 	=& \vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 - \boldsymbol{b}^T \boldsymbol{h} 
 	- (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h} . 
-\tag{43}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1638,29 +1624,31 @@ $$
 
 <p>&nbsp;<br>
 $$
-\begin{align}
-	p_{GB} (\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
+\begin{align*}
+	p_{GB} (\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) =& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{- \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ \sum_j^N b_j h_j 
 	+\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}} \nonumber \\
 	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ b_j h_j 
-	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\tag{44}
-\end{align}
+	+\frac{x_i w_{ij} h_j}{\sigma_i^2}}.
+\end{align*}
 $$
 <p>&nbsp;<br>
+</section>
 
-<p>with the partition function given by</p>
+<section>
+<h2 id="partition-function">Partition function </h2>
+
+<p>The partition function is given by</p>
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	Z_{GB} =& \int \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
 	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} d\tilde{\boldsymbol{x}} .
-\tag{45}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1675,18 +1663,20 @@ to find \( p_{GB} (\boldsymbol{x}) \)
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{GB} (\boldsymbol{x}) =& \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} p_{GB} (\boldsymbol{x}, \tilde{\boldsymbol{h}}) \nonumber \\
 	=& \frac{1}{Z_{GB}} \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} 
 	e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
 	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) .
-\tag{46}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
+</section>
 
+<section>
+<h2 id="then-the-visible-units">Then the visible units </h2>
 <p>We next marginalize over the visible units. This is the first time we
 marginalize over continuous values. We rewrite the exponential factor
 dependent on \( \boldsymbol{x} \) as a Gaussian function before we integrate in
@@ -1695,7 +1685,7 @@ the last step.
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{GB} (\boldsymbol{h}) =& \int p_{GB} (\tilde{\boldsymbol{x}}, \boldsymbol{h}) d\tilde{\boldsymbol{x}} \nonumber \\
 	=& \frac{1}{Z_{GB}} \int e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
 	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}} d\tilde{\boldsymbol{x}} \nonumber \\
@@ -1721,8 +1711,7 @@ $$
 	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
 	\sqrt{2\pi \sigma_i^2}
 	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}} .
-\tag{47}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
 </section>
@@ -1733,7 +1722,7 @@ $$
 <p>We finish by deriving the conditional probabilities.</p>
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{GB} (\boldsymbol{h}| \boldsymbol{x}) =& \frac{p_{GB} (\boldsymbol{x}, \boldsymbol{h})}{p_{GB} (\boldsymbol{x})} \nonumber \\
 	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
 	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}}}
@@ -1743,32 +1732,37 @@ $$
 	=& \prod_j^N \frac{e^{(b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j})h_j } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{GB} (h_j|\boldsymbol{x}).
-\tag{48}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="hidden-units">Hidden units </h2>
 
 <p>The conditional probability of a binary hidden unit \( h_j \) being on or off again takes the form of a sigmoid function</p>
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{GB} (h_j =1 | \boldsymbol{x}) =& \frac{e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j} } }
 	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
-	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} 
-\tag{49}\\
+	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \\
 	p_{GB} (h_j =0 | \boldsymbol{x}) =&
 	\frac{1}{1 + e^{b_j +(\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} .
-\tag{50}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="visible-units">Visible units </h2>
 
 <p>The conditional probability of the continuous \( \boldsymbol{x} \) now has another form, however.</p>
 
 <p>&nbsp;<br>
 $$
-\begin{align}
+\begin{align*}
 	p_{GB} (\boldsymbol{x}|\boldsymbol{h})
 	=& \frac{p_{GB} (\boldsymbol{x}, \boldsymbol{h})}{p_{GB} (\boldsymbol{h})} \nonumber \\
 	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
@@ -1793,14 +1787,16 @@ $$
 	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
 	e^{ - \frac{(x_i - b_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}} \nonumber \\
 	=& \prod_i^M \mathcal{N}
-	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) 
-\tag{51}\\
+	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) \\
 	\Rightarrow p_{GB} (x_i|\boldsymbol{h}) =& \mathcal{N}
 	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) .
-\tag{52}
-\end{align}
+\end{align*}
 $$
 <p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="comments">Comments </h2>
 
 <p>The form of these conditional probabilities explains the name
 "Gaussian" and the form of the Gaussian-binary energy function. We see

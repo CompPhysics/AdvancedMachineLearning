@@ -730,21 +730,21 @@ lengths define the number of visible and hidden units, respectively.
 The restricted Boltzmann machine is described by a Boltzmann distribution
 !bt
 \begin{align}
-	P_{rbm}(\bm{x},\bm{h},\bm{\Theta}) = \frac{1}{Z(\bm{\Theta})} \exp{-(\frac{1}{T_0}E(\bm{x},\bm{h},\bm{\Theta}))},
+	P_{rbm}(\bm{x},\bm{h},\bm{\Theta}) = \frac{1}{Z(\bm{\Theta})} \exp{-(E(\bm{x},\bm{h},\bm{\Theta}))},
 \end{align}
 !et
 where $Z$ is the normalization constant or partition function discussed earlier and defined as 
 !bt
 \begin{align}
-	Z(\bm{\Theta}) = \int \int \exp{-\frac{1}{T}E(\bm{x},\bm{h},\bm{\Theta})} d\bm{x} d\bm{h}.
+	Z(\bm{\Theta}) = \int \int \exp{-E(\bm{x},\bm{h},\bm{\Theta})} d\bm{x} d\bm{h}.
 \end{align}
 !et
-It is common to set  $T$ to one. 
+It is common to set  the temperature $T$ to one. It is omitted in the equations above. The energy is thus a dimensionless function.
 
 !split
 ===== Network Elements, the energy function  =====
 
-The function $E(\bm{x},\bm{h})$ gives the _energy_ of a
+The function $E(\bm{x},\bm{h},\bm{\Theta})$ gives the _energy_ of a
 configuration (pair of vectors) $(\bm{x}, \bm{h})$. The lower
 the energy of a configuration, the higher the probability of it. This
 function also depends on the parameters $\bm{a}$, $\bm{b}$ and
@@ -755,14 +755,14 @@ adjusting the energy function to best fit our problem.
 !split
 ===== Defining different types of RBMs =====
 
-There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\bm{x},\bm{h})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
+There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\bm{x},\bm{h},\bm{\Theta})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
 
 !bblock Binary-Binary RBM:
 
 RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:
 !bt
 \begin{align}
-	E(\bm{x}, \bm{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+	E(\bm{x}, \bm{h},\bm{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 \end{align}
 !et
 where the binary values taken on by the nodes are most commonly 0 and 1.
@@ -775,11 +775,11 @@ where the binary values taken on by the nodes are most commonly 0 and 1.
 Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
 !bt
 \begin{align}
-	E(\bm{x}, \bm{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+	E(\bm{x}, \bm{h},\bm{\Theta}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \end{align}
 !et
 
-This type of RBMs are useful when we model continuous data (i.e., we wish $\bm{x}$ to be continuous)
+This type of RBMs are useful when we model continuous data (i.e., we wish $\bm{x}$ to be continuous). The paramater $\sigma_i^2$ is meant to represent a variance and is foten just set to one.
 
 
 !split
@@ -1000,7 +1000,7 @@ strictly improved modelling power.
 
 
 !split
-===== Binary-binary RBMs =====
+===== Binary-binary (BB) RBMs =====
 
 The common choice of binary values
 are 0 and 1. However, in some physics applications, -1 and 1 might be
@@ -1008,27 +1008,28 @@ a more natural choice. We will here use 0 and 1. We habe the energy function
 
 !bt
 \begin{align}
-	E_{BB}(\bm{x}, \bm{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
+	E_{BB}(\bm{x}, \bm{h},\bm{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
 \end{align}
 !et
+
 
 !split
 ===== Marginal probability =====
 
 We have the binary-binary marginal probability defined as 
 !bt
-\begin{align}
-	p_{BB}(\bm{x}, \bm{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}}
-\end{align}
+\begin{align*}
+	p_{BB}(\bm{x}, \bm{h},\bm{\Theta}) =& \frac{1}{Z_{BB}(\bm{\Theta})} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} \\
+	=& \frac{1}{Z_{BB}(\bm{\Theta})} e^{\bm{a}^T \bm{x} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}}
+\end{align*}
 !et
 
 with the partition function
 
 !bt
-\begin{align}
-	Z_{BB} = \sum_{\bm{x}, \bm{h}} e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} .
-\end{align}
+\begin{align*}
+	Z_{BB}(\bm{\Theta}) = \sum_{\bm{x}, \bm{h}} e^{\bm{a}^T \bm{x} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} .
+\end{align*}
 !et
 
 !split
@@ -1037,17 +1038,17 @@ with the partition function
 In order to find the probability of any configuration of the visible units we derive the marginal probability density function.
 
 !bt
-\begin{align}
-	p_{BB} (\bm{x}) =& \sum_{\bm{h}} p_{BB} (\bm{x}, \bm{h}) \\
-	=& \frac{1}{Z_{BB}} \sum_{\bm{h}} e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \sum_{\bm{h}} e^{\sum_j^N (b_j + \bm{x}^T \bm{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \sum_{\bm{h}} \prod_j^N e^{ (b_j + \bm{x}^T \bm{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \bigg ( \sum_{h_1} e^{(b_1 + \bm{x}^T \bm{w}_{\ast 1})h_1}
+\begin{align*}
+	p_{BB} (\bm{x},\bm{\Theta}) =& \sum_{\bm{h}} p_{BB} (\bm{x}, \bm{h},\bm{\Theta}) \\
+	=& \frac{1}{Z_{BB}} \sum_{\bm{h}} e^{\bm{a}^T \bm{x} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\bm{a}^T \bm{x}} \sum_{\bm{h}} e^{\sum_j^N (b_j + \bm{x}^T \bm{w}_{\ast j})h_j} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\bm{a}^T \bm{x}} \sum_{\bm{h}} \prod_j^N e^{ (b_j + \bm{x}^T \bm{w}_{\ast j})h_j} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\bm{a}^T \bm{x}} \bigg ( \sum_{h_1} e^{(b_1 + \bm{x}^T \bm{w}_{\ast 1})h_1}
 	\times \sum_{h_2} e^{(b_2 + \bm{x}^T \bm{w}_{\ast 2})h_2} \times \nonumber \\
 	& ... \times \sum_{h_2} e^{(b_N + \bm{x}^T \bm{w}_{\ast N})h_N} \bigg ) \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N \sum_{h_j} e^{(b_j + \bm{x}^T \bm{w}_{\ast j}) h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}) .
-\end{align}
+	=& \frac{1}{Z_{BB}} e^{\bm{a}^T \bm{x}} \prod_j^N \sum_{h_j} e^{(b_j + \bm{x}^T \bm{w}_{\ast j}) h_j} \nonumber \\
+	=& \frac{1}{Z_{BB}} e^{\bm{a}^T \bm{x}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}) .
+\end{align*}
 !et
 
 !split
@@ -1056,27 +1057,27 @@ In order to find the probability of any configuration of the visible units we de
 A similar derivation yields the marginal probability of the hidden units
 
 !bt
-\begin{align}
-	p_{BB} (\bm{h}) = \frac{1}{Z_{BB}} e^{\bm{b}^T \bm{h}} \prod_i^M (1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h}}) .
-\end{align}
+\begin{align*}
+	p_{BB} (\bm{h},\bm{\Theta}) = \frac{1}{Z_{BB}(\bm{\Theta})} e^{\bm{b}^T \bm{h}} \prod_i^M (1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h}}) .
+\end{align*}
 !et
 
 !split
 ===== Conditional Probability Density Functions =====
 
 We derive the probability of the hidden units given the visible units using Bayes' rule
-
+(we drop the explicit $\bm{\Theta}$ dependence)
 !bt
-\begin{align}
+\begin{align*}
 	p_{BB} (\bm{h}|\bm{x}) =& \frac{p_{BB} (\bm{x}, \bm{h})}{p_{BB} (\bm{x})} \nonumber \\
-	=& \frac{ \frac{1}{Z_{BB}}  e^{\bm{x}^T \bm{a} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} }
-	        {\frac{1}{Z_{BB}} e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}})} \nonumber \\
-	=& \frac{  e^{\bm{x}^T \bm{a}} e^{ \sum_j^N (b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j} }
-	        { e^{\bm{x}^T \bm{a}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}})} \nonumber \\
+	=& \frac{ \frac{1}{Z_{BB}}  e^{\bm{a}^T \bm{x} + \bm{b}^T \bm{h} + \bm{x}^T \bm{W} \bm{h}} }
+	        {\frac{1}{Z_{BB}} e^{\bm{a}^T \bm{x}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}})} \nonumber \\
+	=& \frac{  e^{\bm{a}^T \bm{x}} e^{ \sum_j^N (b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j} }
+	        { e^{\bm{a}^T \bm{x}} \prod_j^N (1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}})} \nonumber \\
 	=& \prod_j^N \frac{ e^{(b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{BB} (h_j| \bm{x}) .
-\end{align}
+\end{align*}
 !et
 
 !split
@@ -1085,20 +1086,20 @@ We derive the probability of the hidden units given the visible units using Baye
 From this we find the probability of a hidden unit being "on" or "off":
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{BB} (h_j=1 | \bm{x}) =&   \frac{ e^{(b_j + \bm{x}^T \bm{w}_{\ast j} ) h_j}  }
 	{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}} \\
 	=&  \frac{ e^{(b_j + \bm{x}^T \bm{w}_{\ast j} )}  }
 	{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}}} \\
 	=&  \frac{ 1 }{1 + e^{-(b_j + \bm{x}^T \bm{w}_{\ast j})} } ,
-\end{align}
+\end{align*}
 !et
 and
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{BB} (h_j=0 | \bm{x}) =\frac{ 1 }{1 + e^{b_j + \bm{x}^T \bm{w}_{\ast j}} } .
-\end{align}
+\end{align*}
 !et
 
 !split
@@ -1107,18 +1108,18 @@ and
 Similarly we have that the conditional probability of the visible units given the hidden are
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{BB} (\bm{x}|\bm{h}) =& \prod_i^M \frac{ e^{ (a_i + \bm{w}_{i\ast}^T \bm{h}) x_i} }{ 1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h}} } \\
 	&= \prod_i^M p_{BB} (x_i | \bm{h}) .
-\end{align}
+\end{align*}
 !et
 
-
+We have
 !bt
-\begin{align}
+\begin{align*}
 	p_{BB} (x_i=1 | \bm{h}) =& \frac{1}{1 + e^{-(a_i + \bm{w}_{i\ast}^T \bm{h} )}} \\
 	p_{BB} (x_i=0 | \bm{h}) =& \frac{1}{1 + e^{a_i + \bm{w}_{i\ast}^T \bm{h} }} .
-\end{align}
+\end{align*}
 !et
 
 
@@ -1128,41 +1129,44 @@ Similarly we have that the conditional probability of the visible units given th
 ===== Gaussian-Binary Restricted Boltzmann Machines =====
 
 
-Inserting into the expression for $E_{RBM}(\bm{x},\bm{h})$ in equation  results in the energy
+Inserting into the expression for $E_{RBM}(\bm{x},\bm{h},\bm{\Theta})$ in equation  results in the energy
 
 !bt
-\begin{align}
-	E_{GB}(\bm{x}, \bm{h}) =& \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
+\begin{align*}
+	E_{GB}(\bm{x}, \bm{h},\bm{\Theta}) =& \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
 	- \sum_j^N b_j h_j 
 	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
 	=& \vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 - \bm{b}^T \bm{h} 
 	- (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h} . 
-\end{align}
+\end{align*}
 !et
 
 !split
 ===== Joint Probability Density Function =====
 
 !bt
-\begin{align}
-	p_{GB} (\bm{x}, \bm{h}) =& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
+\begin{align*}
+	p_{GB} (\bm{x}, \bm{h},\bm{\Theta}) =& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
 	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{- \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ \sum_j^N b_j h_j 
 	+\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}} \nonumber \\
 	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
 	+ b_j h_j 
-	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\end{align}
+	+\frac{x_i w_{ij} h_j}{\sigma_i^2}}.
+\end{align*}
 !et
 
-with the partition function given by
+!split
+===== Partition function =====
+
+The partition function is given by
 
 !bt
-\begin{align}
+\begin{align*}
 	Z_{GB} =& \int \sum_{\tilde{\bm{h}}}^{\tilde{\bm{H}}} e^{-\vert\vert\frac{\tilde{\bm{x}} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \tilde{\bm{h}} 
 	+ (\frac{\tilde{\bm{x}}}{\bm{\sigma}^2})^T \bm{W}\tilde{\bm{h}}} d\tilde{\bm{x}} .
-\end{align}
+\end{align*}
 !et
 
 !split
@@ -1173,23 +1177,25 @@ Gaussian-binary RBM. We first marginalize over the binary hidden units
 to find $p_{GB} (\bm{x})$
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{GB} (\bm{x}) =& \sum_{\tilde{\bm{h}}}^{\tilde{\bm{H}}} p_{GB} (\bm{x}, \tilde{\bm{h}}) \nonumber \\
 	=& \frac{1}{Z_{GB}} \sum_{\tilde{\bm{h}}}^{\tilde{\bm{H}}} 
 	e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \tilde{\bm{h}} 
 	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\tilde{\bm{h}}} \nonumber \\
 	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2}
 	\prod_j^N (1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}} ) .
-\end{align}
+\end{align*}
 !et
 
+!split
+===== Then the visible units =====
 We next marginalize over the visible units. This is the first time we
 marginalize over continuous values. We rewrite the exponential factor
 dependent on $\bm{x}$ as a Gaussian function before we integrate in
 the last step.
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{GB} (\bm{h}) =& \int p_{GB} (\tilde{\bm{x}}, \bm{h}) d\tilde{\bm{x}} \nonumber \\
 	=& \frac{1}{Z_{GB}} \int e^{-\vert\vert\frac{\tilde{\bm{x}} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
 	+ (\frac{\tilde{\bm{x}}}{\bm{\sigma}^2})^T \bm{W}\bm{h}} d\tilde{\bm{x}} \nonumber \\
@@ -1215,7 +1221,7 @@ the last step.
 	=& \frac{1}{Z_{GB}} e^{\bm{b}^T \bm{h}} \prod_i^M
 	\sqrt{2\pi \sigma_i^2}
 	e^{\frac{2a_i \bm{w}_{i\ast}^T \bm{h} +(\bm{w}_{i\ast}^T \bm{h})^2 }{2\sigma_i^2}} .
-\end{align}
+\end{align*}
 !et
 
 !split
@@ -1223,7 +1229,7 @@ the last step.
 
 We finish by deriving the conditional probabilities.
 !bt 
-\begin{align}
+\begin{align*}
 	p_{GB} (\bm{h}| \bm{x}) =& \frac{p_{GB} (\bm{x}, \bm{h})}{p_{GB} (\bm{x})} \nonumber \\
 	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
 	+ (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{W}\bm{h}}}
@@ -1233,24 +1239,32 @@ We finish by deriving the conditional probabilities.
 	=& \prod_j^N \frac{e^{(b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j})h_j } }
 	{1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} \nonumber \\
 	=& \prod_j^N p_{GB} (h_j|\bm{x}).
-\end{align}
+\end{align*}
 !et
+
+
+!split
+===== Hidden units =====
+
 The conditional probability of a binary hidden unit $h_j$ being on or off again takes the form of a sigmoid function
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{GB} (h_j =1 | \bm{x}) =& \frac{e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j} } }
 	{1 + e^{b_j + (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} \nonumber \\
 	=& \frac{1}{1 + e^{-b_j - (\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} \\
 	p_{GB} (h_j =0 | \bm{x}) =&
 	\frac{1}{1 + e^{b_j +(\frac{\bm{x}}{\bm{\sigma}^2})^T \bm{w}_{\ast j}}} .
-\end{align}
+\end{align*}
 !et
+
+!split
+===== Visible units =====
 
 The conditional probability of the continuous $\bm{x}$ now has another form, however.
 
 !bt
-\begin{align}
+\begin{align*}
 	p_{GB} (\bm{x}|\bm{h})
 	=& \frac{p_{GB} (\bm{x}, \bm{h})}{p_{GB} (\bm{h})} \nonumber \\
 	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\bm{x} -\bm{a}}{2\bm{\sigma}}\vert\vert^2 + \bm{b}^T \bm{h} 
@@ -1278,9 +1292,12 @@ The conditional probability of the continuous $\bm{x}$ now has another form, how
 	(x_i | b_i + \bm{w}_{i\ast}^T \bm{h}, \sigma_i^2) \\
 	\Rightarrow p_{GB} (x_i|\bm{h}) =& \mathcal{N}
 	(x_i | b_i + \bm{w}_{i\ast}^T \bm{h}, \sigma_i^2) .
-\end{align}
+\end{align*}
 !et
 
+
+!split
+===== Comments =====
 
 The form of these conditional probabilities explains the name
 "Gaussian" and the form of the Gaussian-binary energy function. We see
