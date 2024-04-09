@@ -646,6 +646,75 @@ because it is  only one dimension.
 
 
 !split
+===== Understanding Gibbs samoling =====
+
+This part is best seen with the jupyter-notebook.  To illustrate Gibbs
+sampling we will sample several points and compare them with those
+generated from a known distribution, in our case the well-known
+two-dimensional Gaussian defined as
+
+!bt
+\[
+p(a, b) = \mathcal N\left(\left[\begin{array}{c} a \\ b \end{array}\right]; \left[\begin{array}{c}\mu_a \\ \mu_b\end{array}\right], \left[\begin{array}{cc}\sigma_a & cov(a, b) \\ cov(a, b) & \sigma_b\end{array}\right]\right) = \mathcal N\left(\left[\begin{array}{c}a \\ b\end{array}\right]; \left[\begin{array}{c}0 \\ 0\end{array}\right], \left[\begin{array}{cc}1 & 0.5 \\ 0.5 & 1\end{array}\right]\right).
+\]
+!et
+
+!bc pycod
+import numpy as np
+import matplotlib.pyplot as plt
+# two dimensions
+D = 2
+
+# set up the means (standard normal distribution
+a_mu = 0
+b_mu = 0
+# and the variances and covariances
+a_sigma = 1
+b_sigma = 1
+a_b_cov = 0.5
+
+joint_cov = np.vstack(((a_sigma, a_b_cov), (a_b_cov, b_sigma)))
+joint_mu = np.vstack((a_mu, b_mu))
+!ec
+
+Here we have used $\epsilon \sim \mathcal N(0, 1)$ which allows us to sample from $\mathcal{N}(\mu, \sigma^2)$ by using $\sigma\epsilon + \mu$.
+In the case of multivariate Gaussians, we use the Cholesky decomposition of the covariance matrix
+and then use it and the mean to adjust numbers generated using `np.random.randn`.
+
+!bc pycod
+N = 10000
+L = np.linalg.cholesky(joint_cov)
+samples_from_true_distribution =  L @ np.random.randn(D, N) + joint_mu
+plt.plot(*samples_from_true_distribution, '.', alpha=0.1)
+plt.axis([-4, 4, -4, 4])
+plt.show()
+!ec
+
+!split
+===== Conditional probabilities =====
+
+Gibbs sampling requires conditional distributions for each variable. 
+
+In the case of Gaussians, there is  a closed-form for the conditional. With a "multivariate Gaussian":"http://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/notes/w7c_gaussian_processes.html" we have
+!bt
+\[
+p(\textbf{f}, \textbf{g}) = 
+\mathcal N\left(
+\left[\begin{array}{c} \textbf{f} \\ \textbf{g} \end{array}\right];
+\left[\begin{array}{c}\textbf{a} \\ \textbf{b}\end{array}\right], 
+\left[\begin{array}{cc}A & C^{\top} \\ C & B\end{array}\right]
+\right),
+\]
+!et
+with the conditional probability
+!bt
+\[
+p(\textbf{f} \mid \textbf{g}) = \mathcal N(\textbf{f}; \textbf{a} + CB^{-1}(\textbf{g} - \textbf{b}), A - CB^{-1}C^{\top}).
+\]
+!et
+
+
+!split
 ===== Boltzmann Machines, marginal and conditional probabilities  =====
 
 A generative model can learn to represent and sample from a
