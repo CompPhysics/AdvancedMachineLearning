@@ -8,8 +8,8 @@ doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=d
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Advanced machine learning and data analysis for the physical sciences">
-<title>Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="Advanced machine learning and data analysis for the pAhysical sciences">
+<title>Advanced machine learning and data analysis for the pAhysical sciences</title>
 <!-- Bootstrap style: bootstrap -->
 <!-- doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=default --html_admon=bootstrap_panel --html_output=week12-bs --no_mako -->
 <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -50,6 +50,7 @@ doconce format html week12.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'marginal-and-conditional-probabilities'),
+              ('Change of notation', 2, None, 'change-of-notation'),
               ('Optimization problem', 2, None, 'optimization-problem'),
               ('Further simplifications', 2, None, 'further-simplifications'),
               ('Optimizing the logarithm instead',
@@ -272,7 +273,7 @@ MathJax.Hub.Config({
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="week12-bs.html">Advanced machine learning and data analysis for the physical sciences</a>
+    <a class="navbar-brand" href="week12-bs.html">Advanced machine learning and data analysis for the pAhysical sciences</a>
   </div>
   <div class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav navbar-right">
@@ -284,6 +285,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#energy-models" style="font-size: 80%;">Energy models</a></li>
      <!-- navigation toc: --> <li><a href="#probability-model" style="font-size: 80%;">Probability model</a></li>
      <!-- navigation toc: --> <li><a href="#marginal-and-conditional-probabilities" style="font-size: 80%;">Marginal and conditional probabilities</a></li>
+     <!-- navigation toc: --> <li><a href="#change-of-notation" style="font-size: 80%;">Change of notation</a></li>
      <!-- navigation toc: --> <li><a href="#optimization-problem" style="font-size: 80%;">Optimization problem</a></li>
      <!-- navigation toc: --> <li><a href="#further-simplifications" style="font-size: 80%;">Further simplifications</a></li>
      <!-- navigation toc: --> <li><a href="#optimizing-the-logarithm-instead" style="font-size: 80%;">Optimizing the logarithm instead</a></li>
@@ -373,7 +375,7 @@ MathJax.Hub.Config({
 <!-- ------------------- main content ---------------------- -->
 <div class="jumbotron">
 <center>
-<h1>Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>Advanced machine learning and data analysis for the pAhysical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
@@ -472,17 +474,31 @@ $$
 p(h_i;\boldsymbol{\Theta}) = \frac{\sum_{x_i\in \boldsymbol{X}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}.
 $$
 
-<p>Similarly, we have the conditional probabilities</p>
+
+<!-- !split -->
+<h2 id="change-of-notation" class="anchor">Change of notation </h2>
+
+<p><b>Note the change to a vector notation</b>. A variable like \( \boldsymbol{x} \)
+represents now a specific <b>configuration</b>. We can generate an infinity
+of such configurations. The final partition function is then the sum
+over all such possible configurations, that is
+</p>
+
 $$
-p(\boldsymbol{h}|\boldsymbol{x})=\prod_j p(h_j| \boldsymbol{x}),
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
 $$
 
-<p>and</p>
+<p>changes to</p>
 $$
-p(\boldsymbol{x}|\boldsymbol{h})=\prod_i p(x_i | \boldsymbol{h}).
+Z(\boldsymbol{\Theta})=\sum_{\boldsymbol{x}}\sum_{\boldsymbol{h}} f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}).
 $$
 
-<p>Explicit expressions will be presented below.</p>
+<p>If we have a binary set of variable \( x_i \) and \( h_j \) and \( M \) values of \( x_i \) and \( N \) values of \( h_j \) we have in total \( 2^M \) and \( 2^N \) possible \( \boldsymbol{x} \) and \( \boldsymbol{h} \) configurations, respectively.</p>
+
+<p>We see that even for the modest binary case, we can easily approach a
+number of configuration which is not possible to deal with.
+</p>
+
 <!-- !split -->
 <h2 id="optimization-problem" class="anchor">Optimization problem </h2>
 
@@ -1039,7 +1055,7 @@ A_{j \rightarrow i} = \min \left ( 1,
 \end{equation}
 $$
 
-<p>Other choices are possible, but they all correspond to multilplying
+<p>Other choices are possible, but they all correspond to multiplying
 \( A_{i\rightarrow j} \) and \( A_{j\rightarrow i} \) by the same constant
 smaller than unity. The penalty function method uses just such
 a factor to compensate for \( p_i \) that are evaluated stochastically
@@ -1076,7 +1092,11 @@ because it is  only one dimension.
 <!-- !split -->
 <h2 id="understanding-gibbs-samoling" class="anchor">Understanding Gibbs samoling </h2>
 
-<p>This part is best seen with the jupyter-notebook.  To illustrate Gibbs
+<p>This part is best seen with the jupyter-notebook.
+These notes have been adapted from <a href="https://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/" target="_self"><tt>https://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/</tt></a>
+</p>
+
+<p>To illustrate Gibbs
 sampling we will sample several points and compare them with those
 generated from a known distribution, in our case the well-known
 two-dimensional Gaussian defined as

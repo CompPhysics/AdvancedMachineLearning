@@ -1,4 +1,4 @@
-TITLE: Advanced machine learning and data analysis for the physical sciences
+TITLE: Advanced machine learning and data analysis for the pAhysical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
 DATE: April 9, 2024
 
@@ -76,19 +76,31 @@ p(h_i;\bm{\Theta}) = \frac{\sum_{x_i\in \bm{X}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Th
 \]
 !et
 
-Similarly, we have the conditional probabilities
+
+!split
+===== Change of notation =====
+
+_Note the change to a vector notation_. A variable like $\bm{x}$
+represents now a specific _configuration_. We can generate an infinity
+of such configurations. The final partition function is then the sum
+over all such possible configurations, that is
+
 !bt
 \[
-p(\bm{h}|\bm{x})=\prod_j p(h_j| \bm{x}),
+Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}),
 \]
 !et
-and
+changes to
 !bt
 \[
-p(\bm{x}|\bm{h})=\prod_i p(x_i | \bm{h}).
+Z(\bm{\Theta})=\sum_{\bm{x}}\sum_{\bm{h}} f(\bm{x},\bm{h};\bm{\Theta}).
 \]
 !et
-Explicit expressions will be presented below.
+If we have a binary set of variable $x_i$ and $h_j$ and $M$ values of $x_i$ and $N$ values of $h_j$ we have in total $2^M$ and $2^N$ possible $\bm{x}$ and $\bm{h}$ configurations, respectively.
+
+We see that even for the modest binary case, we can easily approach a
+number of configuration which is not possible to deal with.
+
 !split
 ===== Optimization problem =====
 
@@ -613,7 +625,7 @@ A_{j \rightarrow i} = \min \left ( 1,
 \end{equation}
 !et
 
-Other choices are possible, but they all correspond to multilplying
+Other choices are possible, but they all correspond to multiplying
 $A_{i\rightarrow j}$ and $A_{j\rightarrow i}$ by the same constant
 smaller than unity. The penalty function method uses just such
 a factor to compensate for $p_i$ that are evaluated stochastically
@@ -648,7 +660,10 @@ because it is  only one dimension.
 !split
 ===== Understanding Gibbs samoling =====
 
-This part is best seen with the jupyter-notebook.  To illustrate Gibbs
+This part is best seen with the jupyter-notebook.
+These notes have been adapted from URL:"https://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/"
+
+To illustrate Gibbs
 sampling we will sample several points and compare them with those
 generated from a known distribution, in our case the well-known
 two-dimensional Gaussian defined as
