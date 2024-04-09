@@ -1,0 +1,268 @@
+TITLE: Advanced machine learning and data analysis for the physical sciences
+AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
+DATE: April 16, 2024
+
+
+!split
+===== Plans for the week April 15-19, 2024  =====
+
+
+!bblock  Deep generative models
+o Implementation of Boltzmann machines using TensorFlow and Pytorch
+o Discussion of other energy-based models
+o Variational Autoencoders (VAE)
+o Reading recommendation: Goodfellow et al chapter 20.10-20-14
+o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
+o See Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
+
+#o "Video of lecture":"https://youtu.be/0VBmdP_iCzA"
+#o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf"
+!eblock
+
+#todo: add about Langevin sampling, see https://www.lyndonduong.com/sgmcmc/
+# add material about VAEs
+# add code on RBMs
+# code for VAEs applied to MNIST and CIFAR perhaps
+
+!split
+===== Code for RBMs using PyTorch =====
+
+!bc pycod
+import numpy as np
+import torch
+import torch.utils.data
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.autograd import Variable
+from torchvision import datasets, transforms
+from torchvision.utils import make_grid , save_image
+import matplotlib.pyplot as plt
+
+
+batch_size = 64
+train_loader = torch.utils.data.DataLoader(
+datasets.MNIST('./data',
+    train=True,
+    download = True,
+    transform = transforms.Compose(
+        [transforms.ToTensor()])
+     ),
+     batch_size=batch_size
+)
+
+test_loader = torch.utils.data.DataLoader(
+datasets.MNIST('./data',
+    train=False,
+    transform=transforms.Compose(
+    [transforms.ToTensor()])
+    ),
+    batch_size=batch_size)
+
+
+class RBM(nn.Module):
+   def __init__(self,
+               n_vis=784,
+               n_hin=500,
+               k=5):
+        super(RBM, self).__init__()
+        self.W = nn.Parameter(torch.randn(n_hin,n_vis)*1e-2)
+        self.v_bias = nn.Parameter(torch.zeros(n_vis))
+        self.h_bias = nn.Parameter(torch.zeros(n_hin))
+        self.k = k
+    
+   def sample_from_p(self,p):
+       return F.relu(torch.sign(p - Variable(torch.rand(p.size()))))
+    
+   def v_to_h(self,v):
+        p_h = F.sigmoid(F.linear(v,self.W,self.h_bias))
+        sample_h = self.sample_from_p(p_h)
+        return p_h,sample_h
+    
+   def h_to_v(self,h):
+        p_v = F.sigmoid(F.linear(h,self.W.t(),self.v_bias))
+        sample_v = self.sample_from_p(p_v)
+        return p_v,sample_v
+        
+   def forward(self,v):
+        pre_h1,h1 = self.v_to_h(v)
+        
+        h_ = h1
+        for _ in range(self.k):
+            pre_v_,v_ = self.h_to_v(h_)
+            pre_h_,h_ = self.v_to_h(v_)
+        
+        return v,v_
+    
+   def free_energy(self,v):
+        vbias_term = v.mv(self.v_bias)
+        wx_b = F.linear(v,self.W,self.h_bias)
+        hidden_term = wx_b.exp().add(1).log().sum(1)
+        return (-hidden_term - vbias_term).mean()
+
+
+
+
+rbm = RBM(k=1)
+train_op = optim.SGD(rbm.parameters(),0.1)
+
+for epoch in range(10):
+    loss_ = []
+    for _, (data,target) in enumerate(train_loader):
+        data = Variable(data.view(-1,784))
+        sample_data = data.bernoulli()
+        
+        v,v1 = rbm(sample_data)
+        loss = rbm.free_energy(v) - rbm.free_energy(v1)
+        loss_.append(loss.data)
+        train_op.zero_grad()
+        loss.backward()
+        train_op.step()
+
+    print("Training loss for {} epoch: {}".format(epoch, np.mean(loss_)))
+
+
+def show_adn_save(file_name,img):
+    npimg = np.transpose(img.numpy(),(1,2,0))
+    f = "./%s.png" % file_name
+    plt.imshow(npimg)
+    plt.imsave(f,npimg)
+
+show_adn_save("real",make_grid(v.view(32,1,28,28).data))
+show_adn_save("generate",make_grid(v1.view(32,1,28,28).data))
+
+!ec
+
+!split
+===== Energy-based models and Langevin sampling =====
+
+See discussions in Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
+
+That notebook is based on a recent article by Du and Mordatch, _Implicit generation and modeling with energy-based models_, see URL:"https://arxiv.org/pdf/1903.08689.pdf."
+
+!split
+===== Tensor-flow examples =====
+
+
+o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
+o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
+
+
+
+
+
+
+
+
+!split
+===== Theory of Variational Autoencoders =====
+
+Notes to be added
+
+
+!split
+===== Code in PyTorch for VAEs =====
+
+!bc pycod
+import torch
+from torch.autograd import Variable
+import numpy as np
+import torch.nn.functional as F
+import torchvision
+from torchvision import transforms
+import torch.optim as optim
+from torch import nn
+import matplotlib.pyplot as plt
+from torch import distributions
+
+class Encoder(torch.nn.Module):
+    def __init__(self, D_in, H, latent_size):
+        super(Encoder, self).__init__()
+        self.linear1 = torch.nn.Linear(D_in, H)
+        self.linear2 = torch.nn.Linear(H, H)
+        self.enc_mu = torch.nn.Linear(H, latent_size)
+        self.enc_log_sigma = torch.nn.Linear(H, latent_size)
+
+    def forward(self, x):
+        x = F.relu(self.linear1(x))
+        x = F.relu(self.linear2(x))
+        mu = self.enc_mu(x)
+        log_sigma = self.enc_log_sigma(x)
+        sigma = torch.exp(log_sigma)
+        return torch.distributions.Normal(loc=mu, scale=sigma)
+
+
+class Decoder(torch.nn.Module):
+    def __init__(self, D_in, H, D_out):
+        super(Decoder, self).__init__()
+        self.linear1 = torch.nn.Linear(D_in, H)
+        self.linear2 = torch.nn.Linear(H, D_out)
+        
+
+    def forward(self, x):
+        x = F.relu(self.linear1(x))
+        mu = torch.tanh(self.linear2(x))
+        return torch.distributions.Normal(mu, torch.ones_like(mu))
+
+class VAE(torch.nn.Module):
+    def __init__(self, encoder, decoder):
+        super(VAE, self).__init__()
+        self.encoder = encoder
+        self.decoder = decoder
+
+    def forward(self, state):
+        q_z = self.encoder(state)
+        z = q_z.rsample()
+        return self.decoder(z), q_z
+
+
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     # Normalize the images to be -0.5, 0.5
+     transforms.Normalize(0.5, 1)]
+    )
+mnist = torchvision.datasets.MNIST('./', download=True, transform=transform)
+
+input_dim = 28 * 28
+batch_size = 128
+num_epochs = 100
+learning_rate = 0.001
+hidden_size = 512
+latent_size = 8
+
+if torch.cuda.is_available():
+    device = torch.device('cuda')
+else:
+    device = torch.device('cpu')
+
+dataloader = torch.utils.data.DataLoader(
+    mnist, batch_size=batch_size,
+    shuffle=True, 
+    pin_memory=torch.cuda.is_available())
+
+print('Number of samples: ', len(mnist))
+
+encoder = Encoder(input_dim, hidden_size, latent_size)
+decoder = Decoder(latent_size, hidden_size, input_dim)
+
+vae = VAE(encoder, decoder).to(device)
+
+optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
+for epoch in range(num_epochs):
+    for data in dataloader:
+        inputs, _ = data
+        inputs = inputs.view(-1, input_dim).to(device)
+        optimizer.zero_grad()
+        p_x, q_z = vae(inputs)
+        log_likelihood = p_x.log_prob(inputs).sum(-1).mean()
+        kl = torch.distributions.kl_divergence(
+            q_z, 
+            torch.distributions.Normal(0, 1.)
+        ).sum(-1).mean()
+        loss = -(log_likelihood - kl)
+        loss.backward()
+        optimizer.step()
+        l = loss.item()
+    print(epoch, l, log_likelihood.item(), kl.item())
+
+!ec
