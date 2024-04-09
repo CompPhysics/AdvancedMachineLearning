@@ -1091,6 +1091,215 @@ p(\textbf{f} \mid \textbf{g}) = \mathcal N(\textbf{f}; \textbf{a} + CB^{-1}(\tex
 $$
 
 
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">get_conditional_dist</span>(joint_mu, joint_cov, var_index):
+    <span style="color: #CD5555">&#39;&#39;&#39;Returns the conditional distribution given the joint distribution and which variable</span>
+<span style="color: #CD5555">    the conditional probability should use.</span>
+<span style="color: #CD5555">    Right now this only works for 2-variable joint distributions.</span>
+<span style="color: #CD5555">    </span>
+<span style="color: #CD5555">      joint_mu: joint distribution&#39;s mu</span>
+<span style="color: #CD5555">      joint_cov: joint distribution&#39;s covariance</span>
+<span style="color: #CD5555">      var_index: index of the variable in the joint distribution. Everything else will be </span>
+<span style="color: #CD5555">        conditioned on. For example, if the joint distribution p(a, b, c) has mu [mu_a, mu_b, mu_c],</span>
+<span style="color: #CD5555">        to get p(c | a, b), use var_index = 2.</span>
+<span style="color: #CD5555">      </span>
+<span style="color: #CD5555">    returns:</span>
+<span style="color: #CD5555">      a function that can sample from the univariate conditional distribution</span>
+<span style="color: #CD5555">    &#39;&#39;&#39;</span>
+    <span style="color: #8B008B; font-weight: bold">assert</span> joint_mu.shape[<span style="color: #B452CD">0</span>] == <span style="color: #B452CD">2</span>, <span style="color: #CD5555">&#39;Sorry, this function only works for 2-dimensional joint distributions right now&#39;</span>
+    a = joint_mu[var_index]
+    b = joint_mu[~var_index]
+    
+    A = joint_cov[var_index, var_index]
+    B = joint_cov[~var_index, ~var_index]
+    C = joint_cov[var_index, ~var_index]
+    
+    <span style="color: #228B22"># we&#39;re dealing with one dimension so</span>
+    B_inv = <span style="color: #B452CD">1</span>/B
+    
+    <span style="color: #228B22"># Return a function that can sample given a value of g</span>
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">dist</span>(g):
+        <span style="color: #228B22"># a + C*B^{-1}(g - b)</span>
+        mu = a + C * B_inv * (g - b)
+        <span style="color: #228B22"># A - C * B^{-1} * C^T</span>
+        cov = A - B_inv * C * C
+        <span style="color: #8B008B; font-weight: bold">return</span> np.sqrt(cov) * np.random.randn(<span style="color: #B452CD">1</span>) + mu
+    
+    <span style="color: #8B008B; font-weight: bold">return</span> dist
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>With this we cna set up the conditionals for this problem</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># Set up the conditional probability distribution for each dimension</span>
+<span style="color: #228B22"># For example, I can sample p(a | b) using sample_for_dim[0].</span>
+
+univariate_conditionals = [
+    get_conditional_dist(joint_mu, joint_cov, d)
+    <span style="color: #8B008B; font-weight: bold">for</span> d <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(D)
+]
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The \( gibbs\_sample \) function here only needs the univariate conditionals and how many samples to take.</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">gibbs_sample</span>(univariate_conditionals, sample_count):
+    <span style="color: #CD5555">&#39;&#39;&#39;Does Gibbs sampling given the distribution&#39;s univariate conditionals.</span>
+<span style="color: #CD5555">    </span>
+<span style="color: #CD5555">    Returns a D x N matrix</span>
+<span style="color: #CD5555">    &#39;&#39;&#39;</span>
+    D = <span style="color: #658b00">len</span>(univariate_conditionals)
+    <span style="color: #8B008B; font-weight: bold">assert</span> D == <span style="color: #B452CD">2</span>, <span style="color: #CD5555">&quot;Sorry, this only supports 2 dimensions right now&quot;</span>
+    
+    <span style="color: #228B22"># initializes an empty matrix for the samples</span>
+    samples = np.zeros((D, sample_count))
+
+    <span style="color: #228B22"># initialize the first sample to some arbitrary value</span>
+    samples[:, <span style="color: #B452CD">0</span>] = [<span style="color: #B452CD">3</span>, -<span style="color: #B452CD">3</span>]
+    
+    <span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">1</span>, sample_count):
+        <span style="color: #228B22"># first set this sample equal to the previous sample</span>
+        samples[:, i] = samples[:, i - <span style="color: #B452CD">1</span>]
+        
+        <span style="color: #228B22"># now update the dimension whose turn it is using the conditional distribution</span>
+        <span style="color: #228B22"># pass in all dimension from the previous sample except this dimension</span>
+        d = i % D
+        samples[d, i] = univariate_conditionals[d](samples[~d, i - <span style="color: #B452CD">1</span>])
+                 
+    <span style="color: #8B008B; font-weight: bold">return</span> samples
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>One thing to keep in mind about Gibbs sampling is that it only updates
+one dimension at a time. This means that samples from around the same
+time are correlated with each other. We have drawn the line connecting
+sequential samples to show this.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">samples = gibbs_sample(univariate_conditionals, sample_count=<span style="color: #B452CD">100</span>)
+fig, ax = plt.subplots()
+
+ax.plot(*samples_from_true_distribution, <span style="color: #CD5555">&#39;.&#39;</span>, alpha=<span style="color: #B452CD">0.1</span>)
+ax.plot(*samples, <span style="color: #CD5555">&#39;k&#39;</span>)
+ax.plot(*samples, <span style="color: #CD5555">&#39;.r&#39;</span>)
+ax.axis(<span style="color: #CD5555">&#39;square&#39;</span>)
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Finally we sample a bunch of points and see how they compare to those
+from the original distribution. It looks the same! What's cool is that
+the one using Gibbs sampling only used samples from the univariate
+conditionals!
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">samples = gibbs_sample(univariate_conditionals, sample_count=N)
+fig, axs = plt.subplots(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">3</span>, figsize=(<span style="color: #B452CD">12</span>, <span style="color: #B452CD">4</span>), sharex=<span style="color: #8B008B; font-weight: bold">True</span>, sharey=<span style="color: #8B008B; font-weight: bold">True</span>)
+<span style="color: #228B22"># set all the axes</span>
+axs[<span style="color: #B452CD">0</span>].axis([-<span style="color: #B452CD">4</span>, <span style="color: #B452CD">4</span>, -<span style="color: #B452CD">4</span>, <span style="color: #B452CD">4</span>])
+axs[<span style="color: #B452CD">0</span>].plot(*samples_from_true_distribution, <span style="color: #CD5555">&#39;.&#39;</span>, alpha=<span style="color: #B452CD">0.1</span>)
+axs[<span style="color: #B452CD">0</span>].set_title(<span style="color: #CD5555">&#39;original p(a, b)&#39;</span>)
+axs[<span style="color: #B452CD">1</span>].plot(*samples, <span style="color: #CD5555">&#39;k&#39;</span>, alpha=<span style="color: #B452CD">0.8</span>)
+axs[<span style="color: #B452CD">1</span>].set_title(<span style="color: #CD5555">&#39;gibbs sampling path&#39;</span>)
+axs[<span style="color: #B452CD">2</span>].plot(*samples, <span style="color: #CD5555">&#39;.g&#39;</span>, alpha=<span style="color: #B452CD">0.1</span>)
+axs[<span style="color: #B452CD">2</span>].set_title(<span style="color: #CD5555">&#39;gibbs samples&#39;</span>)
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="boltzmann-machines-marginal-and-conditional-probabilities">Boltzmann Machines, marginal and conditional probabilities  </h2>
 
