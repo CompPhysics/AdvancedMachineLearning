@@ -113,15 +113,22 @@ Furthermore, all teaching material is available from this GitHub link.
 
 
 ## April 8-12: Deep generative models
-- Boltzmann machines
-- Reading recommendation: Goodfellow et al chapters 16, 17 and 18
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb  
+- Restricted Boltzmann machines, reminder from last week
+- Reminder on Markov Chain Monte Carlo and Gibbs sampling
+- Discussions of various Boltzmann machines
+- Implementation of Boltzmann machines using TensorFlow and Pytorch
+- Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
+- See also Foster, chapter 7 on energy-based models
+- Video of lecture at https://youtu.be/hEjcK0ZkuAA
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril9.pdf
 
 
 ## April 15-19: Deep generative models
+- Energy-based models and Langevin sampling
 - Variational autoencoders
 - Generative Adversarial Networks (GANs)
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
+- See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
 
 ## April 22-26: Deep generative models
