@@ -67,6 +67,20 @@ div.toc p,a {
                2,
                None,
                'plans-for-the-week-april-15-19-2024'),
+              ('Code for RBMs using PyTorch',
+               2,
+               None,
+               'code-for-rbms-using-pytorch'),
+              ('Energy-based models and Langevin sampling',
+               2,
+               None,
+               'energy-based-models-and-langevin-sampling'),
+              ('Tensor-flow examples', 2, None, 'tensor-flow-examples'),
+              ('Theory of Variational Autoencoders',
+               2,
+               None,
+               'theory-of-variational-autoencoders'),
+              ('Code in PyTorch for VAEs', 2, None, 'code-in-pytorch-for-vaes'),
               ('Generative Adversarial Networks',
                2,
                None,
@@ -127,12 +141,301 @@ MathJax.Hub.Config({
 <b>Deep generative models</b>
 <p>
 <ol>
+<li> Implementation of Boltzmann machines using TensorFlow and Pytorch</li>
+<li> Discussion of other energy-based models</li>
 <li> Variational Autoencoders (VAE)</li>
-<li> Generative Adversarial Networks (GANs)</li>
-<li> Reading recommendation: Goodfellow et al chapter 20.10-20-14
+<li> Generative Adversarial Networks (GANs)
 <!-- o <a href="https://youtu.be/0VBmdP_iCzA" target="_blank">Video of lecture</a> -->
 <!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr262023.pdf" target="_blank">Whiteboard notes</a> --></li>
 </ol>
+</div>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Readings</b>
+<p>
+<ol>
+<li> Reading recommendation: Goodfellow et al chapter 20.10-20-14</li>
+<li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+<li> See Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
+</ol>
+</div>
+
+
+<!-- todo: add about Langevin sampling, see <a href="https://www.lyndonduong.com/sgmcmc/" target="_blank"><tt>https://www.lyndonduong.com/sgmcmc/</tt></a> -->
+<!-- add material about VAEs -->
+<!-- add code on RBMs -->
+<!-- code for VAEs applied to MNIST and CIFAR perhaps -->
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="code-for-rbms-using-pytorch">Code for RBMs using PyTorch </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.utils.data</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch.autograd</span> <span style="color: #8B008B; font-weight: bold">import</span> Variable
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, transforms
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> make_grid , save_image
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+
+
+batch_size = <span style="color: #B452CD">64</span>
+train_loader = torch.utils.data.DataLoader(
+datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
+    train=<span style="color: #8B008B; font-weight: bold">True</span>,
+    download = <span style="color: #8B008B; font-weight: bold">True</span>,
+    transform = transforms.Compose(
+        [transforms.ToTensor()])
+     ),
+     batch_size=batch_size
+)
+
+test_loader = torch.utils.data.DataLoader(
+datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
+    train=<span style="color: #8B008B; font-weight: bold">False</span>,
+    transform=transforms.Compose(
+    [transforms.ToTensor()])
+    ),
+    batch_size=batch_size)
+
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">RBM</span>(nn.Module):
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>,
+               n_vis=<span style="color: #B452CD">784</span>,
+               n_hin=<span style="color: #B452CD">500</span>,
+               k=<span style="color: #B452CD">5</span>):
+        <span style="color: #658b00">super</span>(RBM, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.W = nn.Parameter(torch.randn(n_hin,n_vis)*<span style="color: #B452CD">1e-2</span>)
+        <span style="color: #658b00">self</span>.v_bias = nn.Parameter(torch.zeros(n_vis))
+        <span style="color: #658b00">self</span>.h_bias = nn.Parameter(torch.zeros(n_hin))
+        <span style="color: #658b00">self</span>.k = k
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">sample_from_p</span>(<span style="color: #658b00">self</span>,p):
+       <span style="color: #8B008B; font-weight: bold">return</span> F.relu(torch.sign(p - Variable(torch.rand(p.size()))))
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">v_to_h</span>(<span style="color: #658b00">self</span>,v):
+        p_h = F.sigmoid(F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias))
+        sample_h = <span style="color: #658b00">self</span>.sample_from_p(p_h)
+        <span style="color: #8B008B; font-weight: bold">return</span> p_h,sample_h
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">h_to_v</span>(<span style="color: #658b00">self</span>,h):
+        p_v = F.sigmoid(F.linear(h,<span style="color: #658b00">self</span>.W.t(),<span style="color: #658b00">self</span>.v_bias))
+        sample_v = <span style="color: #658b00">self</span>.sample_from_p(p_v)
+        <span style="color: #8B008B; font-weight: bold">return</span> p_v,sample_v
+        
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>,v):
+        pre_h1,h1 = <span style="color: #658b00">self</span>.v_to_h(v)
+        
+        h_ = h1
+        <span style="color: #8B008B; font-weight: bold">for</span> _ <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">self</span>.k):
+            pre_v_,v_ = <span style="color: #658b00">self</span>.h_to_v(h_)
+            pre_h_,h_ = <span style="color: #658b00">self</span>.v_to_h(v_)
+        
+        <span style="color: #8B008B; font-weight: bold">return</span> v,v_
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">free_energy</span>(<span style="color: #658b00">self</span>,v):
+        vbias_term = v.mv(<span style="color: #658b00">self</span>.v_bias)
+        wx_b = F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias)
+        hidden_term = wx_b.exp().add(<span style="color: #B452CD">1</span>).log().sum(<span style="color: #B452CD">1</span>)
+        <span style="color: #8B008B; font-weight: bold">return</span> (-hidden_term - vbias_term).mean()
+
+
+
+
+rbm = RBM(k=<span style="color: #B452CD">1</span>)
+train_op = optim.SGD(rbm.parameters(),<span style="color: #B452CD">0.1</span>)
+
+<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">10</span>):
+    loss_ = []
+    <span style="color: #8B008B; font-weight: bold">for</span> _, (data,target) <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(train_loader):
+        data = Variable(data.view(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>))
+        sample_data = data.bernoulli()
+        
+        v,v1 = rbm(sample_data)
+        loss = rbm.free_energy(v) - rbm.free_energy(v1)
+        loss_.append(loss.data)
+        train_op.zero_grad()
+        loss.backward()
+        train_op.step()
+
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Training loss for {} epoch: {}&quot;</span>.format(epoch, np.mean(loss_)))
+
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">show_adn_save</span>(file_name,img):
+    npimg = np.transpose(img.numpy(),(<span style="color: #B452CD">1</span>,<span style="color: #B452CD">2</span>,<span style="color: #B452CD">0</span>))
+    f = <span style="color: #CD5555">&quot;./%s.png&quot;</span> % file_name
+    plt.imshow(npimg)
+    plt.imsave(f,npimg)
+
+show_adn_save(<span style="color: #CD5555">&quot;real&quot;</span>,make_grid(v.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
+show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid(v1.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="energy-based-models-and-langevin-sampling">Energy-based models and Langevin sampling </h2>
+
+<p>See discussions in Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></p>
+
+<p>That notebook is based on a recent article by Du and Mordatch, <b>Implicit generation and modeling with energy-based models</b>, see <a href="https://arxiv.org/pdf/1903.08689.pdf." target="_blank"><tt>https://arxiv.org/pdf/1903.08689.pdf.</tt></a></p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="tensor-flow-examples">Tensor-flow examples </h2>
+
+<ol>
+<li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+<li> See also Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="theory-of-variational-autoencoders">Theory of Variational Autoencoders </h2>
+
+<p>Notes to be added</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="code-in-pytorch-for-vaes">Code in PyTorch for VAEs </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch.autograd</span> <span style="color: #8B008B; font-weight: bold">import</span> Variable
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torchvision</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> transforms
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch</span> <span style="color: #8B008B; font-weight: bold">import</span> nn
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch</span> <span style="color: #8B008B; font-weight: bold">import</span> distributions
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">Encoder</span>(torch.nn.Module):
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>, D_in, H, latent_size):
+        <span style="color: #658b00">super</span>(Encoder, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.linear1 = torch.nn.Linear(D_in, H)
+        <span style="color: #658b00">self</span>.linear2 = torch.nn.Linear(H, H)
+        <span style="color: #658b00">self</span>.enc_mu = torch.nn.Linear(H, latent_size)
+        <span style="color: #658b00">self</span>.enc_log_sigma = torch.nn.Linear(H, latent_size)
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x):
+        x = F.relu(<span style="color: #658b00">self</span>.linear1(x))
+        x = F.relu(<span style="color: #658b00">self</span>.linear2(x))
+        mu = <span style="color: #658b00">self</span>.enc_mu(x)
+        log_sigma = <span style="color: #658b00">self</span>.enc_log_sigma(x)
+        sigma = torch.exp(log_sigma)
+        <span style="color: #8B008B; font-weight: bold">return</span> torch.distributions.Normal(loc=mu, scale=sigma)
+
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">Decoder</span>(torch.nn.Module):
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>, D_in, H, D_out):
+        <span style="color: #658b00">super</span>(Decoder, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.linear1 = torch.nn.Linear(D_in, H)
+        <span style="color: #658b00">self</span>.linear2 = torch.nn.Linear(H, D_out)
+        
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x):
+        x = F.relu(<span style="color: #658b00">self</span>.linear1(x))
+        mu = torch.tanh(<span style="color: #658b00">self</span>.linear2(x))
+        <span style="color: #8B008B; font-weight: bold">return</span> torch.distributions.Normal(mu, torch.ones_like(mu))
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">VAE</span>(torch.nn.Module):
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>, encoder, decoder):
+        <span style="color: #658b00">super</span>(VAE, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.encoder = encoder
+        <span style="color: #658b00">self</span>.decoder = decoder
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, state):
+        q_z = <span style="color: #658b00">self</span>.encoder(state)
+        z = q_z.rsample()
+        <span style="color: #8B008B; font-weight: bold">return</span> <span style="color: #658b00">self</span>.decoder(z), q_z
+
+
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     <span style="color: #228B22"># Normalize the images to be -0.5, 0.5</span>
+     transforms.Normalize(<span style="color: #B452CD">0.5</span>, <span style="color: #B452CD">1</span>)]
+    )
+mnist = torchvision.datasets.MNIST(<span style="color: #CD5555">&#39;./&#39;</span>, download=<span style="color: #8B008B; font-weight: bold">True</span>, transform=transform)
+
+input_dim = <span style="color: #B452CD">28</span> * <span style="color: #B452CD">28</span>
+batch_size = <span style="color: #B452CD">128</span>
+num_epochs = <span style="color: #B452CD">100</span>
+learning_rate = <span style="color: #B452CD">0.001</span>
+hidden_size = <span style="color: #B452CD">512</span>
+latent_size = <span style="color: #B452CD">8</span>
+
+<span style="color: #8B008B; font-weight: bold">if</span> torch.cuda.is_available():
+    device = torch.device(<span style="color: #CD5555">&#39;cuda&#39;</span>)
+<span style="color: #8B008B; font-weight: bold">else</span>:
+    device = torch.device(<span style="color: #CD5555">&#39;cpu&#39;</span>)
+
+dataloader = torch.utils.data.DataLoader(
+    mnist, batch_size=batch_size,
+    shuffle=<span style="color: #8B008B; font-weight: bold">True</span>, 
+    pin_memory=torch.cuda.is_available())
+
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Number of samples: &#39;</span>, <span style="color: #658b00">len</span>(mnist))
+
+encoder = Encoder(input_dim, hidden_size, latent_size)
+decoder = Decoder(latent_size, hidden_size, input_dim)
+
+vae = VAE(encoder, decoder).to(device)
+
+optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
+<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(num_epochs):
+    <span style="color: #8B008B; font-weight: bold">for</span> data <span style="color: #8B008B">in</span> dataloader:
+        inputs, _ = data
+        inputs = inputs.view(-<span style="color: #B452CD">1</span>, input_dim).to(device)
+        optimizer.zero_grad()
+        p_x, q_z = vae(inputs)
+        log_likelihood = p_x.log_prob(inputs).sum(-<span style="color: #B452CD">1</span>).mean()
+        kl = torch.distributions.kl_divergence(
+            q_z, 
+            torch.distributions.Normal(<span style="color: #B452CD">0</span>, <span style="color: #B452CD">1.</span>)
+        ).sum(-<span style="color: #B452CD">1</span>).mean()
+        loss = -(log_likelihood - kl)
+        loss.backward()
+        optimizer.step()
+        l = loss.item()
+    <span style="color: #658b00">print</span>(epoch, l, log_likelihood.item(), kl.item())
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -1087,6 +1390,7 @@ generated_images = generate_images(generate_latent_points(number=plot_number,
 <p>A pretty cool result! We see that our generator indeed has learned a
 distribution which qualitatively looks a whole lot like the MNIST dataset.
 </p>
+
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
 <!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
