@@ -67,15 +67,22 @@ div.toc p,a {
                2,
                None,
                'plans-for-the-week-april-15-19-2024'),
+              ('Reminder from last week and layout of lecture this week',
+               2,
+               None,
+               'reminder-from-last-week-and-layout-of-lecture-this-week'),
               ('Code for RBMs using PyTorch',
                2,
                None,
                'code-for-rbms-using-pytorch'),
+              ('RBM using TensorFlow and Keras',
+               2,
+               None,
+               'rbm-using-tensorflow-and-keras'),
               ('Energy-based models and Langevin sampling',
                2,
                None,
                'energy-based-models-and-langevin-sampling'),
-              ('Tensor-flow examples', 2, None, 'tensor-flow-examples'),
               ('Theory of Variational Autoencoders',
                2,
                None,
@@ -85,6 +92,13 @@ div.toc p,a {
                2,
                None,
                'generative-adversarial-networks'),
+              ('Discriminator', 2, None, 'discriminator'),
+              ('Zero-sum game', 2, None, 'zero-sum-game'),
+              ('Maximizing reward', 2, None, 'maximizing-reward'),
+              ('Progression in training', 2, None, 'progression-in-training'),
+              ('Deafault choice', 2, None, 'deafault-choice'),
+              ('Design of GANs', 2, None, 'design-of-gans'),
+              ('More references', 2, None, 'more-references'),
               ('Writing Our First Generative Adversarial Network',
                2,
                None,
@@ -141,8 +155,8 @@ MathJax.Hub.Config({
 <b>Deep generative models</b>
 <p>
 <ol>
-<li> Implementation of Boltzmann machines using TensorFlow and Pytorch</li>
-<li> Discussion of other energy-based models</li>
+<li> Finalizing discussion of Boltzmann machines, implementations using TensorFlow and Pytorch</li>
+<li> Discussion of other energy-based models and Langevin sampling</li>
 <li> Variational Autoencoders (VAE)</li>
 <li> Generative Adversarial Networks (GANs)
 <!-- o <a href="https://youtu.be/0VBmdP_iCzA" target="_blank">Video of lecture</a> -->
@@ -166,6 +180,14 @@ MathJax.Hub.Config({
 <!-- add code on RBMs -->
 <!-- code for VAEs applied to MNIST and CIFAR perhaps -->
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reminder-from-last-week-and-layout-of-lecture-this-week">Reminder from last week and layout of lecture this week </h2>
+
+<ol>
+<li> We will present first a short reminder from last week, see for example the jupyter-notebook at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb</tt></a></li>
+<li> We will then discuss codes as well as other energy-based models and Langevin sampling instead of Gibbs or Metropolis sampling.</li>
+<li> Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks</li>
+</ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="code-for-rbms-using-pytorch">Code for RBMs using PyTorch </h2>
 
@@ -295,19 +317,18 @@ show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rbm-using-tensorflow-and-keras">RBM using TensorFlow and Keras </h2>
+
+<ol>
+<li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="energy-based-models-and-langevin-sampling">Energy-based models and Langevin sampling </h2>
 
 <p>See discussions in Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></p>
 
 <p>That notebook is based on a recent article by Du and Mordatch, <b>Implicit generation and modeling with energy-based models</b>, see <a href="https://arxiv.org/pdf/1903.08689.pdf." target="_blank"><tt>https://arxiv.org/pdf/1903.08689.pdf.</tt></a></p>
 
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="tensor-flow-examples">Tensor-flow examples </h2>
-
-<ol>
-<li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
-<li> See also Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
-</ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="theory-of-variational-autoencoders">Theory of Variational Autoencoders </h2>
 
@@ -441,6 +462,7 @@ optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="generative-adversarial-networks">Generative Adversarial Networks </h2>
+
 <p><b>Generative Adversarial Networks</b> are a type of unsupervised machine learning
 algorithm proposed by <a href="https://arxiv.org/pdf/1406.2661.pdf" target="_blank">Goodfellow et. al</a>
 in 2014 (Read the paper first it's only 6 pages). The simplest formulation of
@@ -450,11 +472,12 @@ generator \( g \), and one discriminator \( d \). The generator directly produce
 samples
 </p>
 $$
-\begin{equation}
-    x = g(z; \theta^{(g)})
-\label{_auto1}
-\end{equation}
+    x = g(z; \theta^{(g)}).
 $$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="discriminator">Discriminator </h2>
 
 <p>The discriminator attempts to distinguish between samples drawn from the
 training data and samples drawn from the generator. In other words, it tries to
@@ -464,23 +487,23 @@ value given by
 </p>
 
 $$
-\begin{equation}
-    d(x; \theta^{(d)})
-\label{_auto2}
-\end{equation}
+    d(x; \theta^{(d)}).
 $$
 
 <p>indicating the probability that \( x \) is a real training example rather than a
-fake sample the generator has generated. The simplest way to formulate the
+fake sample the generator has generated.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="zero-sum-game">Zero-sum game </h2>
+
+<p>The simplest way to formulate the
 learning process in a generative adversarial network is a zero-sum game, in
 which a function
 </p>
 
 $$
-\begin{equation}
-    v(\theta^{(g)}, \theta^{(d)})
-\label{_auto3}
-\end{equation}
+    v(\theta^{(g)}, \theta^{(d)}),
 $$
 
 <p>determines the reward for the discriminator, while the generator gets the
@@ -490,9 +513,13 @@ conjugate reward
 $$
 \begin{equation}
     -v(\theta^{(g)}, \theta^{(d)})
-\label{_auto4}
+\label{_auto1}
 \end{equation}
 $$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="maximizing-reward">Maximizing reward </h2>
 
 <p>During learning both of the networks maximize their own reward function, so that
 the generator gets better and better at tricking the discriminator, while the
@@ -505,7 +532,13 @@ tackle otherwise intractable generative problems. As the generator improves with
  training, the discriminator's performance gets worse because it cannot easily
  tell the difference between real and fake. If the generator ends up succeeding
  perfectly, the the discriminator will do no better than random guessing i.e.
- 50\%. This progression in the training poses a problem for the convergence
+ 50\%.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="progression-in-training">Progression in training </h2>
+
+<p>This progression in the training poses a problem for the convergence
  criteria for GANs. The discriminator feedback gets less meaningful over time,
  if we continue training after this point then the generator is effectively
  training on junk data which can undo the learning up to that point. Therefore,
@@ -514,32 +547,29 @@ tackle otherwise intractable generative problems. As the generator improves with
 </p>
 
 $$
-\begin{equation}
     g^* = \underset{g}{\mathrm{argmin}}\hspace{2pt}
-          \underset{d}{\mathrm{max}}v(\theta^{(g)}, \theta^{(d)})
-\label{_auto5}
-\end{equation}
+          \underset{d}{\mathrm{max}}v(\theta^{(g)}, \theta^{(d)}),
 $$
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="deafault-choice">Deafault choice </h2>
 <p>The default choice for \( v \) is</p>
 $$
-\begin{equation}
     v(\theta^{(g)}, \theta^{(d)}) = \mathbb{E}_{x\sim p_\mathrm{data}}\log d(x)
                                   + \mathbb{E}_{x\sim p_\mathrm{model}}
-                                  \log (1 - d(x))
-\label{_auto6}
-\end{equation}
+                                  \log (1 - d(x)).
 $$
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="design-of-gans">Design of GANs </h2>
 <p>The main motivation for the design of GANs is that the learning process requires
 neither approximate inference (variational autoencoders for example) nor
 approximation of a partition function. In the case where
 </p>
 $$
-\begin{equation}
     \underset{d}{\mathrm{max}}v(\theta^{(g)}, \theta^{(d)})
-\label{_auto7}
-\end{equation}
 $$
 
 <p>is convex in \( \theta^{(g)} \) then the procedure is guaranteed to converge and is
@@ -547,23 +577,30 @@ asymptotically consistent
 ( <a href="https://arxiv.org/pdf/1804.09139.pdf" target="_blank">Seth Lloyd on QuGANs</a>  ). This is in
 general not the case and it is possible to get situations where the training
 process never converges because the generator and discriminator chase one
-another around in the parameter space indefinitely. A much deeper discussion on
+another around in the parameter space indefinitely.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-references">More references </h2>
+
+<p>A much deeper discussion on
 the currently open research problem of GAN convergence is available
-<a href="https://www.deeplearningbook.org/contents/generative_models.html" target="_blank">here</a>. To
+from <a href="https://www.deeplearningbook.org/contents/generative_models.html" target="_blank"><tt>https://www.deeplearningbook.org/contents/generative_models.html</tt></a>. To
 anyone interested in learning more about GANs it is a highly recommended read.
-Direct quote: "In this best-performing formulation, the generator aims to
+Direct quote: <b>In this best-performing formulation, the generator aims to
 increase the log probability that the discriminator makes a mistake, rather than
 aiming to decrease the log probability that the discriminator makes the correct
-prediction." <a href="https://arxiv.org/abs/1701.00160" target="_blank">Another interesting read</a>
+prediction.</b> Another interesting read can be found at <a href="https://arxiv.org/abs/1701.00160" target="_blank"><tt>https://arxiv.org/abs/1701.00160</tt></a>.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="writing-our-first-generative-adversarial-network">Writing Our First Generative Adversarial Network </h2>
 
-<p>Let us now move on to actually implementing a GAN in tensorflow. We will study
+<p>This part is best seen using the jupyter-notebook.</p>
+
+<p>Let us implement a GAN in tensorflow. We will study
 the performance of our GAN on the MNIST dataset. This code is based on and
-adapted from the
-<a href="https://www.tensorflow.org/tutorials/generative/dcgan" target="_blank">google tutorial</a>
+adapted from the Google tutorial at <a href="https://www.tensorflow.org/tutorials/generative/dcgan" target="_blank"><tt>https://www.tensorflow.org/tutorials/generative/dcgan</tt></a>
 </p>
 
 <p>First we import our libraries</p>
