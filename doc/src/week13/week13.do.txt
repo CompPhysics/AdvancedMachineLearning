@@ -1025,3 +1025,143 @@ generated_images = generate_images(generate_latent_points(number=plot_number,
 A pretty cool result! We see that our generator indeed has learned a
 distribution which qualitatively looks a whole lot like the MNIST dataset.
 
+
+
+
+
+\subsection{Setting up the objective}
+
+Is there a shortcut we can take when using sampling to compute Equation~\ref{eq:total}? 
+In practice, for most $z$, $P(X|z)$ will be nearly zero, and hence contribute almost nothing to our estimate of $P(X)$.
+The key idea behind the variational autoencoder is to attempt to sample values of $z$ that are likely to have produced $X$, and compute $P(X)$ just from those.
+This means that we need a new function $Q(z|X)$ which can take a value of $X$ and give us a distribution over $z$ values that are likely to produce $X$.  
+Hopefully the space of $z$ values that are likely under $Q$ will be much smaller than the space of all $z$'s that are likely under the prior $P(z)$.
+This lets us, for example, compute $E_{z\sim Q}P(X|z)$ relatively easily.
+%Given that we are sampling $z$ from some distribution other than $\mathcal{N}(0,I)$, however, the math becomes a bit less straightforward.
+%Hence, the variational ``autoencoder'' framework first samples $z$ from some distribution different from $\mathcal{N}(0,1)$ (specifically, a distribution of $z$ values which are likely to give rise to $Y_i$ given $X_i$), and uses that sample to approximate $P(Y|X)$ in the following way.  
+However, if $z$ is sampled from an arbitrary distribution with PDF $Q(z)$, which is not $\mathcal{N}(0,I)$, then how does that help us optimize $P(X)$?
+The first thing we need to do is relate $E_{z\sim Q}P(X|z)$ and $P(X)$.
+We'll see where $Q$ comes from later.
+
+The relationship between $E_{z\sim Q}P(X|z)$ and $P(X)$ is one of the cornerstones of variational Bayesian methods.
+We begin with the definition of Kullback-Leibler divergence (KL divergence or $\mathcal{D}$) between $P(z|X)$ and $Q(z)$, for some arbitrary $Q$ (which may or may not depend on $X$):
+\begin{equation}
+    \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log Q(z) - \log P(z|X) \right].
+\label{eq:kl}
+\end{equation}
+\noindent We can get both $P(X)$ and $P(X|z)$ into this equation by applying Bayes rule to $P(z|X)$:
+\begin{equation}
+    \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log Q(z) - \log P(X|z) - \log P(z) \right] + \log P(X).
+\end{equation}
+\noindent Here, $\log P(X)$ comes out of the expectation because it does not depend on $z$.  Negating both sides, rearranging, and contracting part of $E_{z\sim Q}$ into a KL-divergence terms yields:
+\begin{equation}
+    \log P(X) - \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z)\|P(z)\right].
+\end{equation}
+%By Bayes rule, we have:
+%\vspace{-0.05in}
+%\begin{equation}
+%    E_{z\sim Q}\left[\log P(Y_i|z,X_i)\right]=E_{z\sim Q}\left[\log P(z|Y_i,X_i) - \log P(z|X_i) + \log P(Y_i|X_i) \right]
+%\end{equation}
+%\vspace{-0.05in}
+%\noindent Rearranging the terms and subtracting $E_{z\sim Q}\log Q(z)$ from both sides:
+%\vspace{-0.05in}
+%\begin{equation}
+%\begin{array}{c}
+%  \log P(Y_i|X_i) - E_{z\sim Q}\left[\log Q(z)-\log P(z|X_i,Y_i)\right]=\hspace{10em}\\
+%  \hspace{10em}E_{z\sim Q}\left[\log P(Y_i|z,X_i)+\log P(z|X_i)-\log Q(z)\right]
+%\end{array}
+%\end{equation}
+%\vspace{-0.05in}
+\noindent Note that $X$ is fixed, and $Q$ can be \textit{any} distribution, not just a distribution which does a good job mapping $X$ to the $z$'s that can produce $X$.  
+Since we're interested in inferring $P(X)$, it makes sense to construct a $Q$ which \textit{does} depend on $X$, and in particular, one which makes $\mathcal{D}\left[Q(z)\|P(z|X)\right]$ small:
+\begin{equation}
+    \log P(X) - \mathcal{D}\left[Q(z|X)\|P(z|X)\right]=E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z|X)\|P(z)\right].
+    \label{eq:variational}
+\end{equation}
+%Hence, during training, it makes sense to choose a $Q$ which will make $E_{z\sim Q}[\log Q(z)-$ 
+%$\log P(z|X_i,Y_i)]$ (a $\mathcal{D}$-divergence) small, such that the right hand side is a close approximation to $\log P(Y_i|X_i)$.  
+\noindent This equation serves as the core of the variational autoencoder, and it's worth spending some time thinking about what it says\footnote{
+Historically, this math (particularly Equation~\ref{eq:variational}) was known long before VAEs.
+For example, Helmholtz Machines~\cite{dayan1995helmholtz} (see Equation 5) use nearly identical mathematics, with one crucial difference.
+The integral in our expectations is replaced with a sum in Dayan et al.~\cite{dayan1995helmholtz}, because Helmholtz Machines assume a discrete distribution for the latent variables.  
+This choice prevents the transformations that make gradient descent tractable in VAEs.
+}.  
+In two sentences, the left hand side has the quantity we want to maximize: $\log P(X)$ (plus an error term, which makes $Q$ produce $z$'s that can reproduce a given $X$; this term will become small if $Q$ is high-capacity).
+The right hand side is something we can optimize via stochastic gradient descent given the right choice of $Q$ (although it may not be obvious yet how).
+Note that the framework---in particular, the right hand side of Equation~\ref{eq:variational}---has suddenly taken a form which looks like an autoencoder, since $Q$ is ``encoding'' $X$ into $z$, and $P$ is ``decoding'' it to reconstruct $X$.
+We'll explore this connection in more detail later.
+%That is, we have solved our problem of sampling $z$ by training a distribution $Q$ to predict which values of $z$ are likely to produce $X$, and not considering the rest. %we can optimize $P(X)$ in our model just by optimizing the right hand side of this equation! 
+
+Now for a bit more detail on Equatinon~\ref{eq:variational}.
+Starting with the left hand side, we are maximizing $\log P(X)$ while simultaneously minimizing $\mathcal{D}\left[Q(z|X)\|P(z|X)\right]$.  
+$P(z|X)$ is not something we can compute analytically: it describes the values of $z$ that are likely to give rise to a sample like $X$ under our model in Figure~\ref{fig:model}.  
+However, the second term on the left is pulling $Q(z|x)$ to match $P(z|X)$.
+Assuming we use an arbitrarily high-capacity model for $Q(z|x)$, then $Q(z|x)$ will hopefully actually \textit{match} $P(z|X)$, in which case this KL-divergence term will be zero, and we will be directly optimizing $\log P(X)$.  
+As an added bonus, we have made the intractable $P(z|X)$ tractable: we can just use $Q(z|x)$ to compute it.
+
+\subsection{Optimizing the objective}
+
+So how can we perform stochastic gradient descent on the right hand side of Equation~\ref{eq:variational}?
+First we need to be a bit more specific about the form that $Q(z|X)$ will take.  
+The usual choice is to say that $Q(z|X)=\mathcal{N}(z|\mu(X;\vartheta),\Sigma(X;\vartheta))$, where $\mu$ and $\Sigma$ are arbitrary deterministic functions with parameters $\vartheta$ that can be learned from data (we will omit $\vartheta$ in later equations).
+In practice, $\mu$ and $\Sigma$ are again implemented via neural networks, and $\Sigma$ is constrained to be a diagonal matrix.
+%The name variational ``autoencoder'' comes from the fact that $\mu$ and $\Sigma$ are ``encoding'' $X$ into the latent space $z$.  
+The advantages of this choice are computational, as they make it clear how to compute the right hand side.
+The last term---$\mathcal{D}\left[Q(z|X)\|P(z)\right]$---is now a KL-divergence between two multivariate Gaussian distributions, which can be computed in closed form as:
+\begin{equation}
+\begin{array}{c}
+ \mathcal{D}[\mathcal{N}(\mu_0,\Sigma_0) \| \mathcal{N}(\mu_1,\Sigma_1)] = \hspace{20em}\\
+  \hspace{5em}\frac{ 1 }{ 2 } \left( \mathrm{tr} \left( \Sigma_1^{-1} \Sigma_0 \right) + \left( \mu_1 - \mu_0\right)^\top \Sigma_1^{-1} ( \mu_1 - \mu_0 ) - k + \log \left( \frac{ \det \Sigma_1 }{ \det \Sigma_0  } \right)  \right)
+\end{array}
+\end{equation}
+\noindent where $k$ is the dimensionality of the distribution.  In our case, this simplifies to:
+\begin{equation}
+\begin{array}{c}
+ \mathcal{D}[\mathcal{N}(\mu(X),\Sigma(X)) \| \mathcal{N}(0,I)] = \hspace{20em}\\
+\hspace{6em}\frac{ 1 }{ 2 } \left( \mathrm{tr} \left( \Sigma(X) \right) + \left( \mu(X)\right)^\top ( \mu(X) ) - k - \log\det\left(  \Sigma(X)  \right)  \right).
+\end{array}
+\end{equation}
+
+The first term on the right hand side of Equation~\ref{eq:variational} is a bit more tricky.
+We could use sampling to estimate $E_{z\sim Q}\left[\log P(X|z)  \right]$, but getting a good estimate would require passing many samples of $z$ through $f$, which would be expensive.
+Hence, as is standard in stochastic gradient descent, we take one sample of $z$ and treat $\log P(X|z)$ for that $z$ as an approximation of $E_{z\sim Q}\left[\log P(X|z)  \right]$.
+After all, we are already doing stochastic gradient descent over different values of $X$ sampled from a dataset $D$.
+%, since we need to compute Equation~\ref{eq:variational} on 
+The full equation we want to optimize is:
+\begin{equation}
+\begin{array}{c}
+    E_{X\sim D}\left[\log P(X) - \mathcal{D}\left[Q(z|X)\|P(z|X)\right]\right]=\hspace{16em}\\
+\hspace{10em}E_{X\sim D}\left[E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z|X)\|P(z)\right]\right].
+\end{array}
+    \label{eq:expected}
+\end{equation}
+If we take the gradient of this equation, the gradient symbol can be moved into the expectations.
+Therefore, we can sample a single value of $X$ and a single value of $z$ from the distribution $Q(z|X)$, and compute the gradient of:
+\begin{equation}
+ \log P(X|z)-\mathcal{D}\left[Q(z|X)\|P(z)\right].
+  \label{eq:onesamp}
+\end{equation}
+We can then average the gradient of this function over arbitrarily many samples of $X$ and $z$, and the result converges to the gradient of Equation~\ref{eq:expected}.
+
+There is, however, a significant problem with Equation~\ref{eq:onesamp}.
+$E_{z\sim Q}\left[\log P(X|z)  \right]$ depends not just on the parameters of $P$, but also on the parameters of $Q$.
+However, in Equation~\ref{eq:onesamp}, this dependency has disappeared!
+In order to make VAEs work, it's essential to drive $Q$ to produce codes for $X$ that $P$ can reliably decode.  
+To see the problem a different way, the network described in Equation~\ref{eq:onesamp} is much like the network shown in Figure~\ref{fig:net} (left).
+The forward pass of this network works fine and, if the output is averaged over many samples of $X$ and $z$, produces the correct expected value.
+However, we need to back-propagate the error through a layer that samples $z$ from $Q(z|X)$, which is a non-continuous operation and has no gradient.
+Stochastic gradient descent via backpropagation can handle stochastic inputs, but not stochastic units within the network!
+The solution, called the ``reparameterization trick'' in~\cite{Kingma14a}, is to move the sampling to an input layer.
+Given $\mu(X)$ and $\Sigma(X)$---the mean and covariance of $Q(z|X)$---we can sample from $\mathcal{N}(\mu(X),\Sigma(X))$ by first sampling $\epsilon \sim \mathcal{N}(0,I)$, then computing $z=\mu(X)+\Sigma^{1/2}(X)*\epsilon$. %, where $\circ$ denotes elementwise product.  
+Thus, the equation we actually take the gradient of is:
+\begin{equation}
+ E_{X\sim D}\left[E_{\epsilon\sim\mathcal{N}(0,I)}[\log P(X|z=\mu(X)+\Sigma^{1/2}(X)*\epsilon)]-\mathcal{D}\left[Q(z|X)\|P(z)\right]\right].
+\end{equation}
+This is shown schematically in Figure~\ref{fig:net} (right).  
+Note that none of the expectations are with respect to distributions that depend on our model parameters, so we can safely move a gradient symbol into them while maintaning equality.
+That is, given a fixed $X$ and $\epsilon$, this function is deterministic and continuous in the parameters of $P$ and $Q$, meaning backpropagation can compute a gradient that will work for stochastic gradient descent.
+It's worth pointing out that the ``reparameterization trick'' only works if we can sample from $Q(z|X)$ by evaluating a function $h(\eta,X)$, where $\eta$ is noise from a distribution that is not learned.
+Furthermore, $h$ must be \textit{continuous} in $X$ so that we can backprop through it.  
+This means $Q(z|X)$ (and therefore $P(z)$) can't be a discrete distribution!
+If $Q$ is discrete, then for a fixed $\eta$, either $h$ needs to ignore $X$, or there needs to be some point at which $h(\eta,X)$ ``jumps'' from one possible value in $Q$'s sample space to another, i.e., a discontinuity.
+
