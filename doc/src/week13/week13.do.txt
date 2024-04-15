@@ -443,7 +443,9 @@ $\bm{\Theta}$ from here and for notational simplicity.
 
 However, if $\bm{h}$ is sampled from an arbitrary distribution with
 PDF $Q(\bm{h})$, which is not $\mathcal{N}(0,I)$, then how does that
-help us optimize $p(\bm{x})$?  The first thing we need to do is relate
+help us optimize $p(\bm{x})$?
+
+The first thing we need to do is relate
 $E_{\bm{h}\sim Q}P(\bm{x}\vert \bm{h})$ and $p(\bm{x})$.  We will see where $Q$ comes from later.
 
 The relationship between $E_{\bm{h}\sim Q}p(\bm{x}\vert \bm{h})$ and $p(\bm{x})$ is one of the cornerstones of variational Bayesian methods.
@@ -460,15 +462,15 @@ We begin with the definition of Kullback-Leibler divergence (KL divergence or $\
 We can get both $p(\bm{x})$ and $p(\bm{x}\vert \bm{h})$ into this equation by applying Bayes rule to $p(\bm{h}|\bm{x})$
 !bt
 \[
-    \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log Q(z) - \log P(X|z) - \log P(z) \right] + \log P(X).
+    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{x}|\bm{h}) - \log p(\bm{h}) \right] + \log p(\bm{x}).
 \]
 !et
 
-Here, $\log P(X)$ comes out of the expectation because it does not depend on $z$.
-Negating both sides, rearranging, and contracting part of $E_{z\sim Q}$ into a KL-divergence terms yields:
+Here, $\log p(\bm{x})$ comes out of the expectation because it does not depend on $\bm{h}$.
+Negating both sides, rearranging, and contracting part of $E_{\bm{h}\sim Q}$ into a KL-divergence terms yields:
 !bt
 \[
-\log P(X) - \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z)\|P(z)\right].
+\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}\vert\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h})\|P(\bm{h})\right].
 \]
 !et
 
@@ -478,40 +480,40 @@ Negating both sides, rearranging, and contracting part of $E_{z\sim Q}$ into a K
 Using Bayes rule we obtain
 !bt
 \[
-E_{z\sim Q}\left[\log P(Y_i|z,X_i)\right]=E_{z\sim Q}\left[\log P(z|Y_i,X_i) - \log P(z|X_i) + \log P(Y_i|X_i) \right]
+E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{h}|y_i,x_i) - \log p(\bm{h}|x_i) + \log p(y_i|x_i) \right]
 \]
 !et
 
-Rearranging the terms and subtracting $E_{z\sim Q}\log Q(z)$ from both sides gives
+Rearranging the terms and subtracting $E_{\bm{h}\sim Q}\log Q(\bm{h})$ from both sides gives
 !bt
 \[
 \begin{array}{c}
-\log P(Y_i|X_i) - E_{z\sim Q}\left[\log Q(z)-\log P(z|X_i,Y_i)\right]=\hspace{10em}\\
-\hspace{10em}E_{z\sim Q}\left[\log P(Y_i|z,X_i)+\log P(z|X_i)-\log Q(z)\right]
+\log P(y_i|x_i) - E_{\bm{h}\sim Q}\left[\log Q(\bm{h})-\log p(\bm{h}|x_i,y_i)\right]=\hspace{10em}\\
+\hspace{10em}E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)+\log p(\bm{h}|x_i)-\log Q(\bm{h})\right]
 \end{array}
 \]
 !et
-Note that $X$ is fixed, and $Q$ can be \textit{any} distribution, not
-just a distribution which does a good job mapping $X$ to the $z$'s
+Note that $\bm{x}$ is fixed, and $Q$ can be \textit{any} distribution, not
+just a distribution which does a good job mapping $\bm{x}$ to the $\bm{h}$'s
 that can produce $X$.
 
 
 !split
 ===== Inferring the probability =====
 
-Since we are interested in inferring $P(X)$, it makes sense to
-construct a $Q$ which \textit{does} depend on $X$, and in particular,
-one which makes $\mathcal{D}\left[Q(z)\|P(z|X)\right]$ small
+Since we are interested in inferring $p(\bm{x})$, it makes sense to
+construct a $Q$ which \textit{does} depend on $\bm{x}$, and in particular,
+one which makes $\mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]$ small
 !bt
 \[
-\log P(X) - \mathcal{D}\left[Q(z|X)\|P(z|X)\right]=E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z|X)\|P(z)\right].
+\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}|\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h})\right].
 \]
 !et
 
 Hence, during training, it makes sense to choose a $Q$ which will make
-$E_{z\sim Q}[\log Q(z)-$ $\log P(z|X_i,Y_i)]$ (a
+$E_{\bm{h}\sim Q}[\log Q(\bm{h})-$ $\log p(\bm{h}|x_i,y_i)]$ (a
 $\mathcal{D}$-divergence) small, such that the right hand side is a
-close approximation to $\log P(Y_i|X_i)$.
+close approximation to $\log p(y_i|y_i)$.
 
 !split
 ===== Central equation of VAEs =====
@@ -519,7 +521,7 @@ close approximation to $\log P(Y_i|X_i)$.
 This equation serves as the core of the variational autoencoder, and
 it is worth spending some time thinking about what it means.
 
-o The left hand side has the quantity we want to maximize, namely $\log P(X)$ plus an error term.
+o The left hand side has the quantity we want to maximize, namely $\log p(\bm{x})$ plus an error term.
 o The right hand side is something we can optimize via stochastic gradient descent given the right choice of $Q$.
 
 
@@ -527,9 +529,9 @@ o The right hand side is something we can optimize via stochastic gradient desce
 ===== Setting up SGD =====
 So how can we perform stochastic gradient descent?
 
-First we need to be a bit more specific about the form that $Q(z|X)$
+First we need to be a bit more specific about the form that $Q(\bm{h}|\bm{x})$
 will take.  The usual choice is to say that
-$Q(z|X)=\mathcal{N}(z|\mu(X;\vartheta),\Sigma(X;\vartheta))$, where
+$Q(\bm{h}|\bm{x})=\mathcal{N}(\bm{h}|\mu(\bm{x};\vartheta),\Sigma(;\vartheta))$, where
 $\mu$ and $\Sigma$ are arbitrary deterministic functions with
 parameters $\vartheta$ that can be learned from data (we will omit
 $\vartheta$ in later equations).  In practice, $\mu$ and $\Sigma$ are
@@ -541,10 +543,10 @@ be a diagonal matrix.
 ===== More on the SGD =====
 
 The name variational ``autoencoder'' comes from
-the fact that $\mu$ and $\Sigma$ are ``encoding'' $X$ into the latent
-space $z$.  The advantages of this choice are computational, as they
+the fact that $\mu$ and $\Sigma$ are ``encoding'' $\bm{x}$ into the latent
+space $\bm{h}$.  The advantages of this choice are computational, as they
 make it clear how to compute the right hand side.  The last
-term---$\mathcal{D}\left[Q(z|X)\|P(z)\right]$---is now a KL-divergence
+term---$\mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h})\right]$---is now a KL-divergence
 between two multivariate Gaussian distributions, which can be computed
 in closed form as:
 !bt
