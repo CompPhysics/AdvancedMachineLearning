@@ -193,16 +193,11 @@ The goal is to minimize the construction error.
 !split
 ===== Schematic image of an Autoencoder =====
 
-FIGURE: [figures/ae1.png, width=700 frac=1.0]
+#FIGURE: [figures/ae1.png, width=700 frac=1.0]
 
 
 !split
-===== Mathematics of VAEs =====
-
-More material will be added here
-
-!split
-===== Kullback-Leibler relative entropy (to be corrected) =====
+===== Kullback-Leibler relative entropy =====
 
 When the goal of the training is to approximate a probability
 distribution, as it is in generative modeling, another relevant
@@ -1033,94 +1028,11 @@ distribution which qualitatively looks a whole lot like the MNIST dataset.
 
 
 
-!split
-===== Marginal distribution again =====
 
-We have defined earlier a probability (marginal) distribution with hidden variables $\bm{h}$ and parameters $\bm{\Theta}$ as
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for continuous variables $\bm{h}$ and
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \sum_{\bm{h}}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for discrete stochastic events $\bm{h}$. The variables $\bm{h}$ are normally called the _latent variables_ in the theory of autoencoders. We will also call then for that here.
+\subsection{Setting up the objective}
 
-!split
-===== Using the conditional probability =====
-
-Using the the definition of the conditional probabilities $p(\bm{x}\vert\bm{h};\bm{\Theta})$, $p(\bm{h}\vert\bm{x};\bm{\Theta})$ and 
-and the prior $p{\bm{h})$, we can rewrite the above equation as
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \sum_{\bm{h}}p(\bm{x}\vert\bm{h};\bm{\Theta})p(\bm{h},
-\]
-!et
-
-which allows us to make the dependence of $\bm{x}$ on $\bm{h}$
-explicit by using the law of total probability. The intuition behind
-this approach for finding the marginal probability for $\bm{x}$ is to
-optimize the above equations with respect to the parameters
-$\bm{\Theta}$.  This is done normally by maximizing the probability,
-the so-called maximum-likelihood approach discussed earlier.
-
-!split
-===== VAEs versus autoencoders =====
-
-This trained probability is assumed to be able to produce similar
-samples as the input.  In VAEs it is then common to compare via for
-example the mean-squared error or the cross-entropy the predicted
-values with the input values.  Compared with autoencoders, we are now
-producing a probability instead of a functions which mimicks the
-input.
-
-In VAEs, the choice of this output distribution is often Gaussian,
-meaning that the conditional probability is
-!bt
-\[
-p(\bm{x}\vert\bm{h};\bm{\Theta})=N(\bm{x}\vert f(\bm{h};\bm{\Theta}), \sigma^2\times \bm{I}),
-\]
-!et
-with mean value given by the function $f(\bm{h};\bm{\Theta})$ and a
-diagonal covariance matrix multiplied by a parameter $\sigma^2$ which
-is treated as a hyperparameter.
-
-!split
-====== Gradient descent =====
-
-By having a Gaussian distribution, we can use gradient descent (or any
-other optimization technique) to increase $p(\bm{x};\bm{\Theta})) by
-making $f(\bm{h}; \bm{\Theta})$ approach $bm{x}$ for some $\bm{h}$,
-gradually making the training data more likely under the generative
-model. The important property is simply that the marginal probability
-can be computed, and is continuous in $\bm{\Theta}$..
-
-!split
-===== Are VAEs just modified autoencoders? =====
-
-The mathematical basis of VAEs actually has relatively little to do
-with classical autoencoders, for example the sparse autoencoders or
-denoising autoencoders discussed earlier.
-
-VAEs approximately maximize
-the probability equation discussed above. They are called
-autoencoders only because the final training objective that
-derives from this setup does have an encoder and a decoder, and
-resembles a traditional autoencoder. Unlike sparse autoencoders, there
-are generally no tuning parameters analogous to the sparsity
-penalties. And unlike sparse and denoising autoencoders, we can sample directly from $p(\bm{x})$
-without performing Markov Chain Monte Carlo.
-
-To solve the integral or sum for $p(\bm{x})$, there are two problems that VAEs must deal with: how to define the latent variables $\bm{h}$, that is decide what information they represent, and how to deal with the integral over $\bm{h}$.
-VAEs give a definite answer to both.
-
-
+Is there a shortcut we can take when using sampling to compute Equation~\ref{eq:total}? 
 In practice, for most $z$, $P(X|z)$ will be nearly zero, and hence contribute almost nothing to our estimate of $P(X)$.
-
 The key idea behind the variational autoencoder is to attempt to sample values of $z$ that are likely to have produced $X$, and compute $P(X)$ just from those.
 This means that we need a new function $Q(z|X)$ which can take a value of $X$ and give us a distribution over $z$ values that are likely to produce $X$.  
 Hopefully the space of $z$ values that are likely under $Q$ will be much smaller than the space of all $z$'s that are likely under the prior $P(z)$.
