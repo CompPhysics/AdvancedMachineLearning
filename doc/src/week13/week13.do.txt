@@ -162,7 +162,34 @@ That notebook is based on a recent article by Du and Mordatch, _Implicit generat
 !split
 ===== Langevin sampling =====
 
-_Note_: Notes to be added
+Also called Stochastic gradient Langevin dynamics (SGLD), is sampling
+technique composed of characteristics from Stochastic gradient descent
+(SGD) and Langevin dynamics, a mathematical extension of the Langevin
+equation.  The SGLD is an iterative
+optimization algorithm which uses minibatching to create a stochastic
+gradient estimator, as used in SGD to optimize a differentiable
+objective function.[1] Unlike traditional SGD, SGLD can be used for
+Bayesian learning as a sampling method. SGLD may be viewed as Langevin
+dynamics applied to posterior distributions, but the key difference is
+that the likelihood gradient terms are minibatched, like in SGD. SGLD,
+like Langevin dynamics, produces samples from a posterior distribution
+of parameters based on available data.
+
+!split
+===== More on the SGLD =====
+
+The SGLD uses the probability $p(\theta)$ (note that we limit
+ourselves to just a variable $\theta$) and updates the _log_ of this
+probability by initializing it through some random prior distribution.
+
+The update is given by
+!bt
+\[
+\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+z_i\sqrt{,
+\]
+!et
+where $z_i$ are normally distributed with mean zero and variance one and $i=0,1,\dots,k$, with $k$ the final number of iterations.
+
 
 !split
 ===== Theory of Variational Autoencoders =====
