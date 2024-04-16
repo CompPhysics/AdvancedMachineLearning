@@ -130,18 +130,20 @@ Furthermore, all teaching material is available from this GitHub link.
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
+- Video of lecture at https://youtu.be/rw-NBN293o4
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf
 
 ## April 22-26: Deep generative models
 - Generative Adversarial Networks (GANs)
+- Diffusion models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
 ## April 29-May 3: Deep generative models
-- TBA
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+- No lecture due to public holiday
 
 ## May 6-10: Deep generative models
-- TBA
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
+- Diffusion models and summary of course
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week15.ipynb  
 
 
 
