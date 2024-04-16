@@ -134,16 +134,20 @@ Furthermore, all teaching material is available from this GitHub link.
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf
 
 ## April 22-26: Deep generative models
-- Generative Adversarial Networks (GANs)
+- Variational Autoencoders
 - Diffusion models
+- Reading recommendation: An Introduction to Variational Autoencoders, by Kingma and Welling, see https://arxiv.org/abs/1906.02691 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
 ## April 29-May 3: Deep generative models
-- No lecture due to public holiday
+- Diffusion models
+- Generative Adversarial Networks (GANs)
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 
 ## May 6-10: Deep generative models
-- Diffusion models and summary of course
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week15.ipynb  
+- Summary of course and discussion of projects
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+
 
 
 
