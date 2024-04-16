@@ -24,14 +24,12 @@ o See Foster, chapter 7 on energy-based models at URL:"https://github.com/davidA
 !eblock
 
 #todo: add about Langevin sampling, see https://www.lyndonduong.com/sgmcmc/
-# add material about VAEs
-# add code on RBMs
 # code for VAEs applied to MNIST and CIFAR perhaps
 
 !split
 ===== Reminder from last week and layout of lecture this week =====
 
-o We will present first a short reminder from last week, see for example the jupyter-notebook at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb"
+o We will present first a reminder from last week, see for example the jupyter-notebook at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb"
 o We will then discuss codes as well as other energy-based models and Langevin sampling instead of Gibbs or Metropolis sampling.
 o Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks
 
@@ -153,7 +151,7 @@ o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see U
 
 
 !split
-===== Energy-based models and Langevin sampling =====
+===== Codes for Energy-based models =====
 
 See discussions in Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
 
@@ -356,22 +354,20 @@ we can measure the difference by
 !et
 
 !split
-===== Kullback-Leibler divergence =====
+===== Kullback-Leibler divergence and RBMs =====
 
 Thus, the Kullback-Leibler divergence between the distribution of the
-training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
-\bm{\Theta})$ is
+training data $f(\bm{x})$ and the model marginal distribution $p(\bm{x};\bm{\Theta})$ from an RBM is
 
 !bt
 \begin{align*}
 	\text{KL} (f(\bm{x})|| p(\bm{x}| \bm{\Theta})) =& \int_{-\infty}^{\infty}
-	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}| \bm{\Theta})} d\bm{x} \\
+	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}; \bm{\Theta})} d\bm{x} \\
 	=& \int_{-\infty}^{\infty} f(\bm{x}) \log f(\bm{x}) d\bm{x} - \int_{-\infty}^{\infty} f(\bm{x}) \log
-	p(\bm{x}| \bm{\Theta}) d\bm{x} \\
-	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}| \bm{\Theta}))
-	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x}| \bm{\Theta}) \rangle_{f(\bm{x})} \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \mathcal{C}_{LL} .
+	p(\bm{x};\bm{\Theta}) d\bm{x} \\
+	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}; \bm{\Theta}))
+	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x};\bm{\Theta}) \rangle_{f(\bm{x})} \\
+	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z.
 \end{align*}
 !et
 
@@ -380,86 +376,22 @@ training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
 
 The first term is constant with respect to $\bm{\Theta}$ since
 $f(\bm{x})$ is independent of $\bm{\Theta}$. Thus the Kullback-Leibler
-Divergence is minimal when the second term is minimal. The second term
+divergence is minimal when the second term is minimal. The second term
 is the log-likelihood cost function, hence minimizing the
 Kullback-Leibler divergence is equivalent to maximizing the
-log-likelihood.
+log-likelihood. 
 
-
-To further understand generative models it is useful to study the
-gradient of the cost function which is needed in order to minimize it
-using methods like stochastic gradient descent. 
 
 !split
-===== More on the partition function =====
+===== Back to VAEs =====
 
-The partition function is the generating function of
-expectation values, in particular there are mathematical relationships
-between expectation values and the log-partition function. In this
-case we have
+We want to train the marginal probability with some latent varriables $\bm{h}$
 !bt
-\begin{align*}
-	\langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model}
-	= \int p(\bm{x}| \bm{\Theta}) \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} d\bm{x} 
-	= -\frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} .
-\end{align*}
+\[
+p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
+\]
 !et
-
-Here $\langle \cdot \rangle_{model}$ is the expectation value over the model probability distribution $p(\bm{x}| \bm{\Theta})$.
-
-!split
-===== Setting up for gradient descent calculations =====
-
-Using the previous relationship we can express the gradient of the cost function as
-
-!bt
-\begin{align*}
-	\frac{\partial \mathcal{C}_{LL}}{\partial \Theta_i}
-	=& \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} + \frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} \\
-	=& \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} - \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model} \\
-	%=& \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model}
-\end{align*}
-!et
-
-!split
-===== Difference of moments =====
-
-This expression shows that the gradient of the log-likelihood cost
-function is a _difference of moments_, with one calculated from
-the data and one calculated from the model. The data-dependent term is
-called the _positive phase_ and the model-dependent term is
-called the _negative phase_ of the gradient. We see now that
-minimizing the cost function results in lowering the energy of
-configurations $\bm{x}$ near points in the training data and
-increasing the energy of configurations not observed in the training
-data. That means we increase the model's probability of configurations
-similar to those in the training data.
-
-!split
-===== More observations =====
-
-The gradient of the cost function also demonstrates why gradients of
-unsupervised, generative models must be computed differently from for
-those of for example FNNs. While the data-dependent expectation value
-is easily calculated based on the samples $\bm{x}_i$ in the training
-data, we must sample from the model in order to generate samples from
-which to caclulate the model-dependent term. We sample from the model
-by using MCMC-based methods. We can not sample from the model directly
-because the partition function $Z$ is generally intractable.
-
-
-!split
-===== Adding hyperparameters =====
-
-As in supervised machine learning problems, the goal is also here to
-perform well on _unseen_ data, that is to have good
-generalization from the training data. The distribution $f(x)$ we
-approximate is not the _true_ distribution we wish to estimate,
-it is limited to the training data. Hence, in unsupervised training as
-well it is important to prevent overfitting to the training data. Thus
-it is common to add regularizers to the cost function in the same
-manner as  discussed for say linear regression.
-
+for the continuous version (see previous slides for the discrete variant).
 
 
 !split
@@ -497,7 +429,7 @@ The relationship between $E_{\bm{h}\sim Q}p(\bm{x}\vert \bm{h})$ and $p(\bm{x})$
 We begin with the definition of Kullback-Leibler divergence (KL divergence or $\mathcal{D}$) between $p(\bm{h}\vert \bm{x})$ and $Q(\bm{h})$, for some arbitrary $Q$ (which may or may not depend on $\bm{x}$):
 !bt
 \[
-    \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log Q(z) - \log P(z|X) \right].
+    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{h}|\bm{x}) \right].
 \]
 !et
 
