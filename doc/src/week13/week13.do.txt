@@ -34,7 +34,7 @@ o We will then discuss codes as well as other energy-based models and Langevin s
 o Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks
 
 !split
-===== Code for RBMs using PyTorch =====
+===== Code for RBMs using PyTorch for a binary-binary RBM =====
 
 !bc pycod
 import numpy as np
@@ -196,7 +196,7 @@ iterations.  The parameter $\eta$ is the learning rate. The term
 $\sqrt{\eta}w_i$ introduces _noise_ in the equation.
 
 !split
-===== Code example of Langevin Samplig =====
+===== Code example of Langevin Sampling =====
 
 In our calculations the gradient is calculated using the model we have
 for the probability distribution. For an energy-based model this gives
