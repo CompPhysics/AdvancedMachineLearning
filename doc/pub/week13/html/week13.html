@@ -162,6 +162,11 @@ div.toc p,a {
                None,
                'energy-based-models-and-langevin-sampling'),
               ('Langevin sampling', 2, None, 'langevin-sampling'),
+              ('More on the SGLD', 2, None, 'more-on-the-sgld'),
+              ('Code example of Langevin Samplig',
+               2,
+               None,
+               'code-example-of-langevin-samplig'),
               ('Theory of Variational Autoencoders',
                2,
                None,
@@ -485,7 +490,57 @@ show_adn_save(<span style="color: #BA2121">&quot;generate&quot;</span>,make_grid
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="langevin-sampling">Langevin sampling </h2>
 
-<p><b>Note</b>: Notes to be added</p>
+<p>Also called Stochastic gradient Langevin dynamics (SGLD), is sampling
+technique composed of characteristics from Stochastic gradient descent
+(SGD) and Langevin dynamics, a mathematical extension of the Langevin
+equation.  The SGLD is an iterative
+optimization algorithm which uses minibatching to create a stochastic
+gradient estimator, as used in SGD to optimize a differentiable
+objective function.
+</p>
+
+<p>Unlike traditional SGD, SGLD can be used for
+Bayesian learning as a sampling method. SGLD may be viewed as Langevin
+dynamics applied to posterior distributions, but the key difference is
+that the likelihood gradient terms are minibatched, like in SGD. SGLD,
+like Langevin dynamics, produces samples from a posterior distribution
+of parameters based on available data.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-on-the-sgld">More on the SGLD </h2>
+
+<p>The SGLD uses the probability \( p(\theta) \) (note that we limit
+ourselves to just a variable \( \theta \)) and updates the <b>log</b> of this
+probability by initializing it through some random prior distribution,
+normally just a uniform distribution which takes values between
+\( \theta\in [-1,1] \),
+</p>
+
+<p>The update is given by</p>
+$$
+\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+\sqrt{\eta}w_i,
+$$
+
+<p>where \( w_i\sim N(0,1) \) are normally distributed with mean zero and
+variance one and \( i=0,1,\dots,k \), with \( k \) the final number of
+iterations.  The parameter \( \eta \) is the learning rate. The term
+\( \sqrt{\eta}w_i \) introduces <b>noise</b> in the equation.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="code-example-of-langevin-samplig">Code example of Langevin Samplig </h2>
+
+<p>In our calculations the gradient is calculated using the model we have
+for the probability distribution. For an energy-based model this gives
+us a derivative which involves the so-called positive and negative
+phases discussed last week.
+</p>
+
+<p>Read more about Langevin sampling at for example
+<a href="https://www.lyndonduong.com/sgmcmc/" target="_blank"><tt>https://www.lyndonduong.com/sgmcmc/</tt></a>. This site contains a nice
+example of a PyTorch code which implements Langevin sampling.
+</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="theory-of-variational-autoencoders">Theory of Variational Autoencoders </h2>

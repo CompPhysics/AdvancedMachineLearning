@@ -168,7 +168,9 @@ technique composed of characteristics from Stochastic gradient descent
 equation.  The SGLD is an iterative
 optimization algorithm which uses minibatching to create a stochastic
 gradient estimator, as used in SGD to optimize a differentiable
-objective function.[1] Unlike traditional SGD, SGLD can be used for
+objective function.
+
+Unlike traditional SGD, SGLD can be used for
 Bayesian learning as a sampling method. SGLD may be viewed as Langevin
 dynamics applied to posterior distributions, but the key difference is
 that the likelihood gradient terms are minibatched, like in SGD. SGLD,
@@ -180,16 +182,32 @@ of parameters based on available data.
 
 The SGLD uses the probability $p(\theta)$ (note that we limit
 ourselves to just a variable $\theta$) and updates the _log_ of this
-probability by initializing it through some random prior distribution.
+probability by initializing it through some random prior distribution,
+normally just a uniform distribution which takes values between
+$\theta\in [-1,1]$,
 
 The update is given by
 !bt
 \[
-\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+z_i\sqrt{,
+\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+\sqrt{\eta}w_i,
 \]
 !et
-where $z_i$ are normally distributed with mean zero and variance one and $i=0,1,\dots,k$, with $k$ the final number of iterations.
+where $w_i\sim N(0,1)$ are normally distributed with mean zero and
+variance one and $i=0,1,\dots,k$, with $k$ the final number of
+iterations.  The parameter $\eta$ is the learning rate. The term
+$\sqrt{\eta}w_i$ introduces _noise_ in the equation.
 
+!split
+===== Code example of Langevin Samplig =====
+
+In our calculations the gradient is calculated using the model we have
+for the probability distribution. For an energy-based model this gives
+us a derivative which involves the so-called positive and negative
+phases discussed last week.
+
+Read more about Langevin sampling at for example
+URL:"https://www.lyndonduong.com/sgmcmc/". This site contains a nice
+example of a PyTorch code which implements Langevin sampling.
 
 !split
 ===== Theory of Variational Autoencoders =====
