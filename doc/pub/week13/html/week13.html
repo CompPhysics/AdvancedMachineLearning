@@ -919,7 +919,221 @@ $$
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="code-examples-using-keras">Code examples using Keras </h2>
 
-<p>See <a href="https://keras.io/examples/generative/vae/" target="_blank"><tt>https://keras.io/examples/generative/vae/</tt></a></p>
+<p>Code taken from  <a href="https://keras.io/examples/generative/vae/" target="_blank"><tt>https://keras.io/examples/generative/vae/</tt></a></p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">Title: Variational AutoEncoder</span>
+<span style="color: #BA2121; font-style: italic">Author: [fchollet](https://twitter.com/fchollet)</span>
+<span style="color: #BA2121; font-style: italic">Date created: 2020/05/03</span>
+<span style="color: #BA2121; font-style: italic">Last modified: 2023/11/22</span>
+<span style="color: #BA2121; font-style: italic">Description: Convolutional Variational AutoEncoder (VAE) trained on MNIST digits.</span>
+<span style="color: #BA2121; font-style: italic">Accelerator: GPU</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Setup</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+
+os<span style="color: #666666">.</span>environ[<span style="color: #BA2121">&quot;KERAS_BACKEND&quot;</span>] <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;tensorflow&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">keras</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">keras</span> <span style="color: #008000; font-weight: bold">import</span> layers
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Create a sampling layer</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Sampling</span>(layers<span style="color: #666666">.</span>Layer):
+    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Uses (z_mean, z_log_var) to sample z, the vector encoding a digit.&quot;&quot;&quot;</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">call</span>(<span style="color: #008000">self</span>, inputs):
+        z_mean, z_log_var <span style="color: #666666">=</span> inputs
+        batch <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>shape(z_mean)[<span style="color: #666666">0</span>]
+        dim <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>shape(z_mean)[<span style="color: #666666">1</span>]
+        epsilon <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>random<span style="color: #666666">.</span>normal(shape<span style="color: #666666">=</span>(batch, dim))
+        <span style="color: #008000; font-weight: bold">return</span> z_mean <span style="color: #666666">+</span> tf<span style="color: #666666">.</span>exp(<span style="color: #666666">0.5</span> <span style="color: #666666">*</span> z_log_var) <span style="color: #666666">*</span> epsilon
+
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Build the encoder</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+latent_dim <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+
+encoder_inputs <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>Input(shape<span style="color: #666666">=</span>(<span style="color: #666666">28</span>, <span style="color: #666666">28</span>, <span style="color: #666666">1</span>))
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">32</span>, <span style="color: #666666">3</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;same&quot;</span>)(encoder_inputs)
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, <span style="color: #666666">3</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;same&quot;</span>)(x)
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Flatten()(x)
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">16</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>)(x)
+z_mean <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(latent_dim, name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;z_mean&quot;</span>)(x)
+z_log_var <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(latent_dim, name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;z_log_var&quot;</span>)(x)
+z <span style="color: #666666">=</span> Sampling()([z_mean, z_log_var])
+encoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>Model(encoder_inputs, [z_mean, z_log_var, z], name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;encoder&quot;</span>)
+encoder<span style="color: #666666">.</span>summary()
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Build the decoder</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+latent_inputs <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>Input(shape<span style="color: #666666">=</span>(latent_dim,))
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">7</span> <span style="color: #666666">*</span> <span style="color: #666666">7</span> <span style="color: #666666">*</span> <span style="color: #666666">64</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>)(latent_inputs)
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Reshape((<span style="color: #666666">7</span>, <span style="color: #666666">7</span>, <span style="color: #666666">64</span>))(x)
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Conv2DTranspose(<span style="color: #666666">64</span>, <span style="color: #666666">3</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;same&quot;</span>)(x)
+x <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Conv2DTranspose(<span style="color: #666666">32</span>, <span style="color: #666666">3</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>, strides<span style="color: #666666">=2</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;same&quot;</span>)(x)
+decoder_outputs <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Conv2DTranspose(<span style="color: #666666">1</span>, <span style="color: #666666">3</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sigmoid&quot;</span>, padding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;same&quot;</span>)(x)
+decoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>Model(latent_inputs, decoder_outputs, name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;decoder&quot;</span>)
+decoder<span style="color: #666666">.</span>summary()
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Define the VAE as a `Model` with a custom `train_step`</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">VAE</span>(keras<span style="color: #666666">.</span>Model):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, encoder, decoder, <span style="color: #666666">**</span>kwargs):
+        <span style="color: #008000">super</span>()<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>(<span style="color: #666666">**</span>kwargs)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>encoder <span style="color: #666666">=</span> encoder
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>decoder <span style="color: #666666">=</span> decoder
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>total_loss_tracker <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>metrics<span style="color: #666666">.</span>Mean(name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;total_loss&quot;</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>reconstruction_loss_tracker <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>metrics<span style="color: #666666">.</span>Mean(
+            name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;reconstruction_loss&quot;</span>
+        )
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>kl_loss_tracker <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>metrics<span style="color: #666666">.</span>Mean(name<span style="color: #666666">=</span><span style="color: #BA2121">&quot;kl_loss&quot;</span>)
+
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">metrics</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> [
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>total_loss_tracker,
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>reconstruction_loss_tracker,
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>kl_loss_tracker,
+        ]
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">train_step</span>(<span style="color: #008000">self</span>, data):
+        <span style="color: #008000; font-weight: bold">with</span> tf<span style="color: #666666">.</span>GradientTape() <span style="color: #008000; font-weight: bold">as</span> tape:
+            z_mean, z_log_var, z <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>encoder(data)
+            reconstruction <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>decoder(z)
+            reconstruction_loss <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>reduce_mean(
+                tf<span style="color: #666666">.</span>reduce_sum(
+                    keras<span style="color: #666666">.</span>losses<span style="color: #666666">.</span>binary_crossentropy(data, reconstruction),
+                    axis<span style="color: #666666">=</span>(<span style="color: #666666">1</span>, <span style="color: #666666">2</span>),
+                )
+            )
+            kl_loss <span style="color: #666666">=</span> <span style="color: #666666">-0.5</span> <span style="color: #666666">*</span> (<span style="color: #666666">1</span> <span style="color: #666666">+</span> z_log_var <span style="color: #666666">-</span> tf<span style="color: #666666">.</span>square(z_mean) <span style="color: #666666">-</span> tf<span style="color: #666666">.</span>exp(z_log_var))
+            kl_loss <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>reduce_mean(tf<span style="color: #666666">.</span>reduce_sum(kl_loss, axis<span style="color: #666666">=1</span>))
+            total_loss <span style="color: #666666">=</span> reconstruction_loss <span style="color: #666666">+</span> kl_loss
+        grads <span style="color: #666666">=</span> tape<span style="color: #666666">.</span>gradient(total_loss, <span style="color: #008000">self</span><span style="color: #666666">.</span>trainable_weights)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>optimizer<span style="color: #666666">.</span>apply_gradients(<span style="color: #008000">zip</span>(grads, <span style="color: #008000">self</span><span style="color: #666666">.</span>trainable_weights))
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>total_loss_tracker<span style="color: #666666">.</span>update_state(total_loss)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>reconstruction_loss_tracker<span style="color: #666666">.</span>update_state(reconstruction_loss)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>kl_loss_tracker<span style="color: #666666">.</span>update_state(kl_loss)
+        <span style="color: #008000; font-weight: bold">return</span> {
+            <span style="color: #BA2121">&quot;loss&quot;</span>: <span style="color: #008000">self</span><span style="color: #666666">.</span>total_loss_tracker<span style="color: #666666">.</span>result(),
+            <span style="color: #BA2121">&quot;reconstruction_loss&quot;</span>: <span style="color: #008000">self</span><span style="color: #666666">.</span>reconstruction_loss_tracker<span style="color: #666666">.</span>result(),
+            <span style="color: #BA2121">&quot;kl_loss&quot;</span>: <span style="color: #008000">self</span><span style="color: #666666">.</span>kl_loss_tracker<span style="color: #666666">.</span>result(),
+        }
+
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Train the VAE</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+(x_train, _), (x_test, _) <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>mnist<span style="color: #666666">.</span>load_data()
+mnist_digits <span style="color: #666666">=</span> np<span style="color: #666666">.</span>concatenate([x_train, x_test], axis<span style="color: #666666">=0</span>)
+mnist_digits <span style="color: #666666">=</span> np<span style="color: #666666">.</span>expand_dims(mnist_digits, <span style="color: #666666">-1</span>)<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&quot;float32&quot;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255</span>
+
+vae <span style="color: #666666">=</span> VAE(encoder, decoder)
+vae<span style="color: #666666">.</span>compile(optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>Adam())
+vae<span style="color: #666666">.</span>fit(mnist_digits, epochs<span style="color: #666666">=30</span>, batch_size<span style="color: #666666">=128</span>)
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Display a grid of sampled digits</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">plot_latent_space</span>(vae, n<span style="color: #666666">=30</span>, figsize<span style="color: #666666">=15</span>):
+    <span style="color: #408080; font-style: italic"># display a n*n 2D manifold of digits</span>
+    digit_size <span style="color: #666666">=</span> <span style="color: #666666">28</span>
+    scale <span style="color: #666666">=</span> <span style="color: #666666">1.0</span>
+    figure <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((digit_size <span style="color: #666666">*</span> n, digit_size <span style="color: #666666">*</span> n))
+    <span style="color: #408080; font-style: italic"># linearly spaced coordinates corresponding to the 2D plot</span>
+    <span style="color: #408080; font-style: italic"># of digit classes in the latent space</span>
+    grid_x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>linspace(<span style="color: #666666">-</span>scale, scale, n)
+    grid_y <span style="color: #666666">=</span> np<span style="color: #666666">.</span>linspace(<span style="color: #666666">-</span>scale, scale, n)[::<span style="color: #666666">-1</span>]
+
+    <span style="color: #008000; font-weight: bold">for</span> i, yi <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(grid_y):
+        <span style="color: #008000; font-weight: bold">for</span> j, xi <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(grid_x):
+            z_sample <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[xi, yi]])
+            x_decoded <span style="color: #666666">=</span> vae<span style="color: #666666">.</span>decoder<span style="color: #666666">.</span>predict(z_sample, verbose<span style="color: #666666">=0</span>)
+            digit <span style="color: #666666">=</span> x_decoded[<span style="color: #666666">0</span>]<span style="color: #666666">.</span>reshape(digit_size, digit_size)
+            figure[
+                i <span style="color: #666666">*</span> digit_size : (i <span style="color: #666666">+</span> <span style="color: #666666">1</span>) <span style="color: #666666">*</span> digit_size,
+                j <span style="color: #666666">*</span> digit_size : (j <span style="color: #666666">+</span> <span style="color: #666666">1</span>) <span style="color: #666666">*</span> digit_size,
+            ] <span style="color: #666666">=</span> digit
+
+    plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(figsize, figsize))
+    start_range <span style="color: #666666">=</span> digit_size <span style="color: #666666">//</span> <span style="color: #666666">2</span>
+    end_range <span style="color: #666666">=</span> n <span style="color: #666666">*</span> digit_size <span style="color: #666666">+</span> start_range
+    pixel_range <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(start_range, end_range, digit_size)
+    sample_range_x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>round(grid_x, <span style="color: #666666">1</span>)
+    sample_range_y <span style="color: #666666">=</span> np<span style="color: #666666">.</span>round(grid_y, <span style="color: #666666">1</span>)
+    plt<span style="color: #666666">.</span>xticks(pixel_range, sample_range_x)
+    plt<span style="color: #666666">.</span>yticks(pixel_range, sample_range_y)
+    plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;z[0]&quot;</span>)
+    plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;z[1]&quot;</span>)
+    plt<span style="color: #666666">.</span>imshow(figure, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Greys_r&quot;</span>)
+    plt<span style="color: #666666">.</span>show()
+
+
+plot_latent_space(vae)
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">## Display how the latent space clusters different digit classes</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">plot_label_clusters</span>(vae, data, labels):
+    <span style="color: #408080; font-style: italic"># display a 2D plot of the digit classes in the latent space</span>
+    z_mean, _, _ <span style="color: #666666">=</span> vae<span style="color: #666666">.</span>encoder<span style="color: #666666">.</span>predict(data, verbose<span style="color: #666666">=0</span>)
+    plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">12</span>, <span style="color: #666666">10</span>))
+    plt<span style="color: #666666">.</span>scatter(z_mean[:, <span style="color: #666666">0</span>], z_mean[:, <span style="color: #666666">1</span>], c<span style="color: #666666">=</span>labels)
+    plt<span style="color: #666666">.</span>colorbar()
+    plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&quot;z[0]&quot;</span>)
+    plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&quot;z[1]&quot;</span>)
+    plt<span style="color: #666666">.</span>show()
+
+
+(x_train, y_train), _ <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>mnist<span style="color: #666666">.</span>load_data()
+x_train <span style="color: #666666">=</span> np<span style="color: #666666">.</span>expand_dims(x_train, <span style="color: #666666">-1</span>)<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&quot;float32&quot;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255</span>
+
+plot_label_clusters(vae, x_train, y_train)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="code-in-pytorch-for-vaes">Code in PyTorch for VAEs </h2>
