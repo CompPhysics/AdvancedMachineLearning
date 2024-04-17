@@ -9,34 +9,31 @@ DATE: April 16, 2024
 !bblock  Deep generative models
 o Finalizing discussion of Boltzmann machines, implementations using TensorFlow and Pytorch
 o Discussion of other energy-based models and Langevin sampling
-o Variational Autoencoders (VAE)
-o Generative Adversarial Networks (GANs)
-#o "Video of lecture":"https://youtu.be/0VBmdP_iCzA"
-#o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/NotesApr262023.pdf"
+o Variational Autoencoders (VAE), mathematics and code examples
+o "Video of lecture":"https://youtu.be/rw-NBN293o4"
+o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf"
 !eblock
 
 !split
 ===== Readings =====
 !bblock 
-o Reading recommendation: Goodfellow et al, for VAEs and GANs see sections 20.10-20.11
+o Reading recommendation: Goodfellow et al, for VAEs see sections 20.10-20.11
 o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
 o See Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
 !eblock
 
 #todo: add about Langevin sampling, see https://www.lyndonduong.com/sgmcmc/
-# add material about VAEs
-# add code on RBMs
 # code for VAEs applied to MNIST and CIFAR perhaps
 
 !split
 ===== Reminder from last week and layout of lecture this week =====
 
-o We will present first a short reminder from last week, see for example the jupyter-notebook at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb"
+o We will present first a reminder from last week, see for example the jupyter-notebook at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb"
 o We will then discuss codes as well as other energy-based models and Langevin sampling instead of Gibbs or Metropolis sampling.
 o Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks
 
 !split
-===== Code for RBMs using PyTorch =====
+===== Code for RBMs using PyTorch for a binary-binary RBM =====
 
 !bc pycod
 import numpy as np
@@ -153,7 +150,7 @@ o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see U
 
 
 !split
-===== Energy-based models and Langevin sampling =====
+===== Codes for Energy-based models =====
 
 See discussions in Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
 
@@ -162,7 +159,52 @@ That notebook is based on a recent article by Du and Mordatch, _Implicit generat
 !split
 ===== Langevin sampling =====
 
-_Note_: Notes to be added
+Also called Stochastic gradient Langevin dynamics (SGLD), is sampling
+technique composed of characteristics from Stochastic gradient descent
+(SGD) and Langevin dynamics, a mathematical extension of the Langevin
+equation.  The SGLD is an iterative
+optimization algorithm which uses minibatching to create a stochastic
+gradient estimator, as used in SGD to optimize a differentiable
+objective function.
+
+Unlike traditional SGD, SGLD can be used for
+Bayesian learning as a sampling method. SGLD may be viewed as Langevin
+dynamics applied to posterior distributions, but the key difference is
+that the likelihood gradient terms are minibatched, like in SGD. SGLD,
+like Langevin dynamics, produces samples from a posterior distribution
+of parameters based on available data.
+
+!split
+===== More on the SGLD =====
+
+The SGLD uses the probability $p(\theta)$ (note that we limit
+ourselves to just a variable $\theta$) and updates the _log_ of this
+probability by initializing it through some random prior distribution,
+normally just a uniform distribution which takes values between
+$\theta\in [-1,1]$,
+
+The update is given by
+!bt
+\[
+\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+\sqrt{\eta}w_i,
+\]
+!et
+where $w_i\sim N(0,1)$ are normally distributed with mean zero and
+variance one and $i=0,1,\dots,k$, with $k$ the final number of
+iterations.  The parameter $\eta$ is the learning rate. The term
+$\sqrt{\eta}w_i$ introduces _noise_ in the equation.
+
+!split
+===== Code example of Langevin Sampling =====
+
+In our calculations the gradient is calculated using the model we have
+for the probability distribution. For an energy-based model this gives
+us a derivative which involves the so-called positive and negative
+phases discussed last week.
+
+Read more about Langevin sampling at for example
+URL:"https://www.lyndonduong.com/sgmcmc/". This site contains a nice
+example of a PyTorch code which implements Langevin sampling.
 
 !split
 ===== Theory of Variational Autoencoders =====
@@ -311,22 +353,20 @@ we can measure the difference by
 !et
 
 !split
-===== Kullback-Leibler divergence =====
+===== Kullback-Leibler divergence and RBMs =====
 
 Thus, the Kullback-Leibler divergence between the distribution of the
-training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
-\bm{\Theta})$ is
+training data $f(\bm{x})$ and the model marginal distribution $p(\bm{x};\bm{\Theta})$ from an RBM is
 
 !bt
 \begin{align*}
 	\text{KL} (f(\bm{x})|| p(\bm{x}| \bm{\Theta})) =& \int_{-\infty}^{\infty}
-	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}| \bm{\Theta})} d\bm{x} \\
+	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}; \bm{\Theta})} d\bm{x} \\
 	=& \int_{-\infty}^{\infty} f(\bm{x}) \log f(\bm{x}) d\bm{x} - \int_{-\infty}^{\infty} f(\bm{x}) \log
-	p(\bm{x}| \bm{\Theta}) d\bm{x} \\
-	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}| \bm{\Theta}))
-	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x}| \bm{\Theta}) \rangle_{f(\bm{x})} \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \mathcal{C}_{LL} .
+	p(\bm{x};\bm{\Theta}) d\bm{x} \\
+	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}; \bm{\Theta}))
+	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x};\bm{\Theta}) \rangle_{f(\bm{x})} \\
+	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z.
 \end{align*}
 !et
 
@@ -335,86 +375,22 @@ training data $f(\bm{x})$ and the model distribution $p(\bm{x}|
 
 The first term is constant with respect to $\bm{\Theta}$ since
 $f(\bm{x})$ is independent of $\bm{\Theta}$. Thus the Kullback-Leibler
-Divergence is minimal when the second term is minimal. The second term
+divergence is minimal when the second term is minimal. The second term
 is the log-likelihood cost function, hence minimizing the
 Kullback-Leibler divergence is equivalent to maximizing the
-log-likelihood.
+log-likelihood. 
 
-
-To further understand generative models it is useful to study the
-gradient of the cost function which is needed in order to minimize it
-using methods like stochastic gradient descent. 
 
 !split
-===== More on the partition function =====
+===== Back to VAEs =====
 
-The partition function is the generating function of
-expectation values, in particular there are mathematical relationships
-between expectation values and the log-partition function. In this
-case we have
+We want to train the marginal probability with some latent varriables $\bm{h}$
 !bt
-\begin{align*}
-	\langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model}
-	= \int p(\bm{x}| \bm{\Theta}) \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} d\bm{x} 
-	= -\frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} .
-\end{align*}
+\[
+p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
+\]
 !et
-
-Here $\langle \cdot \rangle_{model}$ is the expectation value over the model probability distribution $p(\bm{x}| \bm{\Theta})$.
-
-!split
-===== Setting up for gradient descent calculations =====
-
-Using the previous relationship we can express the gradient of the cost function as
-
-!bt
-\begin{align*}
-	\frac{\partial \mathcal{C}_{LL}}{\partial \Theta_i}
-	=& \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} + \frac{\partial \log Z(\Theta_i)}{ \partial  \Theta_i} \\
-	=& \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{data} - \langle \frac{ \partial E(\bm{x}; \Theta_i) } { \partial \Theta_i} \rangle_{model} \\
-	%=& \langle O_i(\bm{x}) \rangle_{data} - \langle O_i(\bm{x}) \rangle_{model}
-\end{align*}
-!et
-
-!split
-===== Difference of moments =====
-
-This expression shows that the gradient of the log-likelihood cost
-function is a _difference of moments_, with one calculated from
-the data and one calculated from the model. The data-dependent term is
-called the _positive phase_ and the model-dependent term is
-called the _negative phase_ of the gradient. We see now that
-minimizing the cost function results in lowering the energy of
-configurations $\bm{x}$ near points in the training data and
-increasing the energy of configurations not observed in the training
-data. That means we increase the model's probability of configurations
-similar to those in the training data.
-
-!split
-===== More observations =====
-
-The gradient of the cost function also demonstrates why gradients of
-unsupervised, generative models must be computed differently from for
-those of for example FNNs. While the data-dependent expectation value
-is easily calculated based on the samples $\bm{x}_i$ in the training
-data, we must sample from the model in order to generate samples from
-which to caclulate the model-dependent term. We sample from the model
-by using MCMC-based methods. We can not sample from the model directly
-because the partition function $Z$ is generally intractable.
-
-
-!split
-===== Adding hyperparameters =====
-
-As in supervised machine learning problems, the goal is also here to
-perform well on _unseen_ data, that is to have good
-generalization from the training data. The distribution $f(x)$ we
-approximate is not the _true_ distribution we wish to estimate,
-it is limited to the training data. Hence, in unsupervised training as
-well it is important to prevent overfitting to the training data. Thus
-it is common to add regularizers to the cost function in the same
-manner as  discussed for say linear regression.
-
+for the continuous version (see previous slides for the discrete variant).
 
 
 !split
@@ -452,7 +428,7 @@ The relationship between $E_{\bm{h}\sim Q}p(\bm{x}\vert \bm{h})$ and $p(\bm{x})$
 We begin with the definition of Kullback-Leibler divergence (KL divergence or $\mathcal{D}$) between $p(\bm{h}\vert \bm{x})$ and $Q(\bm{h})$, for some arbitrary $Q$ (which may or may not depend on $\bm{x}$):
 !bt
 \[
-    \mathcal{D}\left[Q(z)\|P(z|X)\right]=E_{z\sim Q}\left[\log Q(z) - \log P(z|X) \right].
+    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{h}|\bm{x}) \right].
 \]
 !et
 
@@ -619,8 +595,202 @@ In order to make VAEs work, it is essential to drive $Q$ to produce codes for $X
 !split
 ===== Code examples using Keras =====
 
-See URL:"https://keras.io/examples/generative/vae/"
+Code taken from  URL:"https://keras.io/examples/generative/vae/"
+!bc pycod
+"""
+Title: Variational AutoEncoder
+Author: [fchollet](https://twitter.com/fchollet)
+Date created: 2020/05/03
+Last modified: 2023/11/22
+Description: Convolutional Variational AutoEncoder (VAE) trained on MNIST digits.
+Accelerator: GPU
+"""
 
+"""
+## Setup
+"""
+
+import os
+
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
+import numpy as np
+import tensorflow as tf
+import keras
+from keras import layers
+
+"""
+## Create a sampling layer
+"""
+
+
+class Sampling(layers.Layer):
+    """Uses (z_mean, z_log_var) to sample z, the vector encoding a digit."""
+
+    def call(self, inputs):
+        z_mean, z_log_var = inputs
+        batch = tf.shape(z_mean)[0]
+        dim = tf.shape(z_mean)[1]
+        epsilon = tf.random.normal(shape=(batch, dim))
+        return z_mean + tf.exp(0.5 * z_log_var) * epsilon
+
+
+"""
+## Build the encoder
+"""
+
+latent_dim = 2
+
+encoder_inputs = keras.Input(shape=(28, 28, 1))
+x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
+x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Flatten()(x)
+x = layers.Dense(16, activation="relu")(x)
+z_mean = layers.Dense(latent_dim, name="z_mean")(x)
+z_log_var = layers.Dense(latent_dim, name="z_log_var")(x)
+z = Sampling()([z_mean, z_log_var])
+encoder = keras.Model(encoder_inputs, [z_mean, z_log_var, z], name="encoder")
+encoder.summary()
+
+"""
+## Build the decoder
+"""
+
+latent_inputs = keras.Input(shape=(latent_dim,))
+x = layers.Dense(7 * 7 * 64, activation="relu")(latent_inputs)
+x = layers.Reshape((7, 7, 64))(x)
+x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
+decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
+decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
+decoder.summary()
+
+"""
+## Define the VAE as a `Model` with a custom `train_step`
+"""
+
+
+class VAE(keras.Model):
+    def __init__(self, encoder, decoder, **kwargs):
+        super().__init__(**kwargs)
+        self.encoder = encoder
+        self.decoder = decoder
+        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+        self.reconstruction_loss_tracker = keras.metrics.Mean(
+            name="reconstruction_loss"
+        )
+        self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+
+    @property
+    def metrics(self):
+        return [
+            self.total_loss_tracker,
+            self.reconstruction_loss_tracker,
+            self.kl_loss_tracker,
+        ]
+
+    def train_step(self, data):
+        with tf.GradientTape() as tape:
+            z_mean, z_log_var, z = self.encoder(data)
+            reconstruction = self.decoder(z)
+            reconstruction_loss = tf.reduce_mean(
+                tf.reduce_sum(
+                    keras.losses.binary_crossentropy(data, reconstruction),
+                    axis=(1, 2),
+                )
+            )
+            kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+            kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
+            total_loss = reconstruction_loss + kl_loss
+        grads = tape.gradient(total_loss, self.trainable_weights)
+        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+        self.total_loss_tracker.update_state(total_loss)
+        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+        self.kl_loss_tracker.update_state(kl_loss)
+        return {
+            "loss": self.total_loss_tracker.result(),
+            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+            "kl_loss": self.kl_loss_tracker.result(),
+        }
+
+
+"""
+## Train the VAE
+"""
+
+(x_train, _), (x_test, _) = keras.datasets.mnist.load_data()
+mnist_digits = np.concatenate([x_train, x_test], axis=0)
+mnist_digits = np.expand_dims(mnist_digits, -1).astype("float32") / 255
+
+vae = VAE(encoder, decoder)
+vae.compile(optimizer=keras.optimizers.Adam())
+vae.fit(mnist_digits, epochs=30, batch_size=128)
+
+"""
+## Display a grid of sampled digits
+"""
+
+import matplotlib.pyplot as plt
+
+
+def plot_latent_space(vae, n=30, figsize=15):
+    # display a n*n 2D manifold of digits
+    digit_size = 28
+    scale = 1.0
+    figure = np.zeros((digit_size * n, digit_size * n))
+    # linearly spaced coordinates corresponding to the 2D plot
+    # of digit classes in the latent space
+    grid_x = np.linspace(-scale, scale, n)
+    grid_y = np.linspace(-scale, scale, n)[::-1]
+
+    for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_sample = np.array([[xi, yi]])
+            x_decoded = vae.decoder.predict(z_sample, verbose=0)
+            digit = x_decoded[0].reshape(digit_size, digit_size)
+            figure[
+                i * digit_size : (i + 1) * digit_size,
+                j * digit_size : (j + 1) * digit_size,
+            ] = digit
+
+    plt.figure(figsize=(figsize, figsize))
+    start_range = digit_size // 2
+    end_range = n * digit_size + start_range
+    pixel_range = np.arange(start_range, end_range, digit_size)
+    sample_range_x = np.round(grid_x, 1)
+    sample_range_y = np.round(grid_y, 1)
+    plt.xticks(pixel_range, sample_range_x)
+    plt.yticks(pixel_range, sample_range_y)
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+    plt.imshow(figure, cmap="Greys_r")
+    plt.show()
+
+
+plot_latent_space(vae)
+
+"""
+## Display how the latent space clusters different digit classes
+"""
+
+
+def plot_label_clusters(vae, data, labels):
+    # display a 2D plot of the digit classes in the latent space
+    z_mean, _, _ = vae.encoder.predict(data, verbose=0)
+    plt.figure(figsize=(12, 10))
+    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
+    plt.colorbar()
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+    plt.show()
+
+
+(x_train, y_train), _ = keras.datasets.mnist.load_data()
+x_train = np.expand_dims(x_train, -1).astype("float32") / 255
+
+plot_label_clusters(vae, x_train, y_train)
+
+!ec
 
 
 !split
@@ -729,600 +899,3 @@ for epoch in range(num_epochs):
     print(epoch, l, log_likelihood.item(), kl.item())
 
 !ec
-
-!split
-===== What is a GAN? =====
-
-A GAN is a deep neural network which consists of two networks, a
-so-called generator network and a discriminating network, or just
-discriminator. Through several iterations of generation and
-discrimination, the idea is that these networks will train each other,
-while also trying to outsmart each other.
-
-!split
-===== What is a generator network? =====
-
-A generator network is often a deep network which uses existing data
-to generate new data (from for example simulations of physical
-systems, imagesm video, audio and more) from randomly generated
-inputs, the so-called latent space. Training the network allows us to
-generate say new data, images etc. As an example a generator network
-could for example be a Boltzmann machine as discussed earlier. This
-machine is trained to produce for example a quantum mechanical
-probability distribution.
-
-It can a simple neural network with an input layer and an output layer and a given number of hidden layers.
-
-!split
-===== And what is a discriminator network? =====
-
-A discriminator tries to distinguish between real data and those generated by the abovementioned generator.
-
-!split
-===== Appplications of GANs =====
-
-There are exteremely many applications of GANs
-o Image generation
-o Text-to-image analysis
-o Face-aging
-o Image-to-image translation
-o Video synthesis
-o High-resolution image generation
-o Completing missing parts of images and much more
-
-!split
-===== Generative Adversarial Networks =====
-
-_Generative Adversarial Networks_ are a type of unsupervised machine learning
-algorithm proposed by Goodfellow et. al, see URL:"https://arxiv.org/pdf/1406.2661.pdf"
-in 2014 (Read the paper first it's only 6 pages). The simplest formulation of
-the model is based on a game theoretic approach, *zero sum game*, where we pit
-two neural networks against one another. We define two rival networks, one
-generator $g$, and one discriminator $d$. The generator directly produces
-samples
-!bt
-\[
-    x = g(z; \theta^{(g)}).
-\]
-!et
-
-
-!split
-===== Discriminator =====
-
-The discriminator attempts to distinguish between samples drawn from the
-training data and samples drawn from the generator. In other words, it tries to
-tell the difference between the fake data produced by $g$ and the actual data
-samples we want to do prediction on. The discriminator outputs a probability
-value given by
-
-!bt
-\[
-    d(x; \theta^{(d)}).
-\]
-!et
-
-indicating the probability that $x$ is a real training example rather than a
-fake sample the generator has generated.
-
-
-!split
-===== Zero-sum game =====
-
-The simplest way to formulate the
-learning process in a generative adversarial network is a zero-sum game, in
-which a function
-
-!bt
-\[
-    v(\theta^{(g)}, \theta^{(d)}),
-\]
-!et
-
-determines the reward for the discriminator, while the generator gets the
-conjugate reward
-
-!bt
-\[
-    -v(\theta^{(g)}, \theta^{(d)})
-\]
-!et
-
-
-!split
-===== Maximizing reward =====
-
-During learning both of the networks maximize their own reward function, so that
-the generator gets better and better at tricking the discriminator, while the
-discriminator gets better and better at telling the difference between the fake
-and real data. The generator and discriminator alternate on which one trains at
-one time (i.e. for one epoch). In other words, we keep the generator constant
-and train the discriminator, then we keep the discriminator constant to train
-the generator and repeat. It is this back and forth dynamic which lets GANs
-tackle otherwise intractable generative problems. As the generator improves with
- training, the discriminator's performance gets worse because it cannot easily
- tell the difference between real and fake. If the generator ends up succeeding
- perfectly, the the discriminator will do no better than random guessing i.e.
- 50\%.
-
-
-!split
-===== Progression in training =====
-
-This progression in the training poses a problem for the convergence
- criteria for GANs. The discriminator feedback gets less meaningful over time,
- if we continue training after this point then the generator is effectively
- training on junk data which can undo the learning up to that point. Therefore,
- we stop training when the discriminator starts outputting $1/2$ everywhere.
- At convergence we have
-
-!bt
-\[
-    g^* = \underset{g}{\mathrm{argmin}}\hspace{2pt}
-          \underset{d}{\mathrm{max}}v(\theta^{(g)}, \theta^{(d)}),
-\]
-!et
-
-
-!split
-===== Deafault choice =====
-The default choice for $v$ is
-!bt
-\[
-    v(\theta^{(g)}, \theta^{(d)}) = \mathbb{E}_{x\sim p_\mathrm{data}}\log d(x)
-                                  + \mathbb{E}_{x\sim p_\mathrm{model}}
-                                  \log (1 - d(x)).
-\]
-!et
-
-
-!split
-===== Design of GANs =====
-The main motivation for the design of GANs is that the learning process requires
-neither approximate inference (variational autoencoders for example) nor
-approximation of a partition function. In the case where
-!bt
-\[
-    \underset{d}{\mathrm{max}}v(\theta^{(g)}, \theta^{(d)})
-\]
-!et
-is convex in $\theta^{(g)}$ then the procedure is guaranteed to converge and is
-asymptotically consistent
-( "Seth Lloyd on QuGANs": "https://arxiv.org/pdf/1804.09139.pdf"  ). This is in
-general not the case and it is possible to get situations where the training
-process never converges because the generator and discriminator chase one
-another around in the parameter space indefinitely.
-
-
-!split
-===== More references =====
-
-A much deeper discussion on
-the currently open research problem of GAN convergence is available
-from URL:"https://www.deeplearningbook.org/contents/generative_models.html". To
-anyone interested in learning more about GANs it is a highly recommended read.
-Direct quote: _In this best-performing formulation, the generator aims to
-increase the log probability that the discriminator makes a mistake, rather than
-aiming to decrease the log probability that the discriminator makes the correct
-prediction._ Another interesting read can be found at URL:"https://arxiv.org/abs/1701.00160".
-
-!split
-===== Writing Our First Generative Adversarial Network =====
-
-This part is best seen using the jupyter-notebook.
-
-Let us implement a GAN in tensorflow. We will study
-the performance of our GAN on the MNIST dataset. This code is based on and
-adapted from the Google tutorial at URL:"https://www.tensorflow.org/tutorials/generative/dcgan"
-
-First we import our libraries
-
-!bc pycod
-import os
-import time
-import numpy as np
-import tensorflow as tf
-import matplotlib.pyplot as plt
-from tensorflow.keras import layers
-from tensorflow.keras.utils import plot_model
-!ec
-
-Next we define our hyperparameters and import our data the usual way
-
-!bc pycod
-BUFFER_SIZE = 60000
-BATCH_SIZE = 256
-EPOCHS = 30
-
-data = tf.keras.datasets.mnist.load_data()
-(train_images, train_labels), (test_images, test_labels) = data
-train_images = np.reshape(train_images, (train_images.shape[0],
-                                         28,
-                                         28,
-                                         1)).astype('float32')
-
-# we normalize between -1 and 1
-train_images = (train_images - 127.5) / 127.5
-training_dataset = tf.data.Dataset.from_tensor_slices(
-                      train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
-!ec
-
-Let's have a quick look
-
-!bc pycod
-plt.imshow(train_images[0], cmap='Greys')
-plt.show()
-!ec
-
-Now we define our two models. This is where the 'magic' happens. There are a
-huge amount of possible formulations for both models. A lot of engineering and
-trial and error can be done here to try to produce better performing models. For
-more advanced GANs this is by far the step where you can 'make or break' a
-model.
-
-We start with the generator. As stated in the introductory text the generator
-$g$ upsamples from a random sample to the shape of what we want to predict. In
-our case we are trying to predict MNIST images ($28\times 28$ pixels).
-
-!bc pycod
-def generator_model():
-    """
-    The generator uses upsampling layers tf.keras.layers.Conv2DTranspose() to
-    produce an image from a random seed. We start with a Dense layer taking this
-    random sample as an input and subsequently upsample through multiple
-    convolutional layers.
-    """
-
-    # we define our model
-    model = tf.keras.Sequential()
-
-
-    # adding our input layer. Dense means that every neuron is connected and
-    # the input shape is the shape of our random noise. The units need to match
-    # in some sense the upsampling strides to reach our desired output shape.
-    # we are using 100 random numbers as our seed
-    model.add(layers.Dense(units=7*7*BATCH_SIZE,
-                           use_bias=False,
-                           input_shape=(100, )))
-    # we normalize the output form the Dense layer
-    model.add(layers.BatchNormalization())
-    # and add an activation function to our 'layer'. LeakyReLU avoids vanishing
-    # gradient problem
-    model.add(layers.LeakyReLU())
-    model.add(layers.Reshape((7, 7, BATCH_SIZE)))
-    assert model.output_shape == (None, 7, 7, BATCH_SIZE)
-    # even though we just added four keras layers we think of everything above
-    # as 'one' layer
-
-    # next we add our upscaling convolutional layers
-    model.add(layers.Conv2DTranspose(filters=128,
-                                     kernel_size=(5, 5),
-                                     strides=(1, 1),
-                                     padding='same',
-                                     use_bias=False))
-    model.add(layers.BatchNormalization())
-    model.add(layers.LeakyReLU())
-    assert model.output_shape == (None, 7, 7, 128)
-
-    model.add(layers.Conv2DTranspose(filters=64,
-                                     kernel_size=(5, 5),
-                                     strides=(2, 2),
-                                     padding='same',
-                                     use_bias=False))
-    model.add(layers.BatchNormalization())
-    model.add(layers.LeakyReLU())
-    assert model.output_shape == (None, 14, 14, 64)
-
-    model.add(layers.Conv2DTranspose(filters=1,
-                                     kernel_size=(5, 5),
-                                     strides=(2, 2),
-                                     padding='same',
-                                     use_bias=False,
-                                     activation='tanh'))
-    assert model.output_shape == (None, 28, 28, 1)
-
-    return model
-
-!ec
-
-And there we have our 'simple' generator model. Now we move on to defining our
-discriminator model $d$, which is a convolutional neural network based image
-classifier.
-
-!bc pycod
-def discriminator_model():
-    """
-    The discriminator is a convolutional neural network based image classifier
-    """
-
-    # we define our model
-    model = tf.keras.Sequential()
-    model.add(layers.Conv2D(filters=64,
-                            kernel_size=(5, 5),
-                            strides=(2, 2),
-                            padding='same',
-                            input_shape=[28, 28, 1]))
-    model.add(layers.LeakyReLU())
-    # adding a dropout layer as you do in conv-nets
-    model.add(layers.Dropout(0.3))
-
-
-    model.add(layers.Conv2D(filters=128,
-                            kernel_size=(5, 5),
-                            strides=(2, 2),
-                            padding='same'))
-    model.add(layers.LeakyReLU())
-    # adding a dropout layer as you do in conv-nets
-    model.add(layers.Dropout(0.3))
-
-    model.add(layers.Flatten())
-    model.add(layers.Dense(1))
-
-    return model
-!ec
-
-Let us take a look at our models. _Note_: double click images for bigger view.
-
-!bc pycod
-generator = generator_model()
-plot_model(generator, show_shapes=True, rankdir='LR')
-!ec
-
-!bc pycod
-discriminator = discriminator_model()
-plot_model(discriminator, show_shapes=True, rankdir='LR')
-!ec
-
-Next we need a few helper objects we will use in training
-
-!bc pycod
-cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-generator_optimizer = tf.keras.optimizers.Adam(1e-4)
-discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
-!ec
-
-The first object, $cross\_entropy$ is our loss function and the two others are
-our optimizers. Notice we use the same learning rate for both $g$ and $d$. This
-is because they need to improve their accuracy at approximately equal speeds to
-get convergence (not necessarily exactly equal). Now we define our loss
-functions
-
-!bc pycod
-def generator_loss(fake_output):
-    loss = cross_entropy(tf.ones_like(fake_output), fake_output)
-
-    return loss
-!ec
-
-!bc pycod
-def discriminator_loss(real_output, fake_output):
-    real_loss = cross_entropy(tf.ones_like(real_output), real_output)
-    fake_loss = cross_entropy(tf.zeros_liks(fake_output), fake_output)
-    total_loss = real_loss + fake_loss
-
-    return total_loss
-!ec
-
-Next we define a kind of seed to help us compare the learning process over
-multiple training epochs.
-
-!bc pycod
-noise_dimension = 100
-n_examples_to_generate = 16
-seed_images = tf.random.normal([n_examples_to_generate, noise_dimension])
-!ec
-
-Now we have everything we need to define our training step, which we will apply
-for every step in our training loop. Notice the @tf.function flag signifying
-that the function is tensorflow 'compiled'. Removing this flag doubles the
-computation time.
-
-!bc pycod
-@tf.function
-def train_step(images):
-    noise = tf.random.normal([BATCH_SIZE, noise_dimension])
-
-    with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
-        generated_images = generator(noise, training=True)
-
-        real_output = discriminator(images, training=True)
-        fake_output = discriminator(generated_images, training=True)
-
-        gen_loss = generator_loss(fake_output)
-        disc_loss = discriminator_loss(real_output, fake_output)
-
-    gradients_of_generator = gen_tape.gradient(gen_loss,
-                                            generator.trainable_variables)
-    gradients_of_discriminator = disc_tape.gradient(disc_loss,
-                                            discriminator.trainable_variables)
-    generator_optimizer.apply_gradients(zip(gradients_of_generator,
-                                            generator.trainable_variables))
-    discriminator_optimizer.apply_gradients(zip(gradients_of_discriminator,
-                                            discriminator.trainable_variables))
-
-    return gen_loss, disc_loss
-!ec
-
-
-Next we define a helper function to produce an output over our training epochs
-to see the predictive progression of our generator model. _Note_: I am including
-this code here, but comment it out in the training loop.
-!bc pycod
-def generate_and_save_images(model, epoch, test_input):
-    # we're making inferences here
-    predictions = model(test_input, training=False)
-
-    fig = plt.figure(figsize=(4, 4))
-
-    for i in range(predictions.shape[0]):
-        plt.subplot(4, 4, i+1)
-        plt.imshow(predictions[i, :, :, 0] * 127.5 + 127.5, cmap='gray')
-        plt.axis('off')
-
-    plt.savefig(f'./images_from_seed_images/image_at_epoch_{str(epoch).zfill(3)}.png')
-    plt.close()
-    #plt.show()
-!ec
-
-Setting up checkpoints to periodically save our model during training so that
-everything is not lost even if the program were to somehow terminate while
-training.
-
-!bc pycod
-# Setting up checkpoints to save model during training
-checkpoint_dir = './training_checkpoints'
-checkpoint_prefix = os.path.join(checkpoint_dir, 'ckpt')
-checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
-                            discriminator_optimizer=discriminator_optimizer,
-                            generator=generator,
-                            discriminator=discriminator)
-!ec
-
-Now we define our training loop
-
-!bc pycod
-def train(dataset, epochs):
-    generator_loss_list = []
-    discriminator_loss_list = []
-
-    for epoch in range(epochs):
-        start = time.time()
-
-        for image_batch in dataset:
-            gen_loss, disc_loss = train_step(image_batch)
-            generator_loss_list.append(gen_loss.numpy())
-            discriminator_loss_list.append(disc_loss.numpy())
-
-        #generate_and_save_images(generator, epoch + 1, seed_images)
-
-        if (epoch + 1) % 15 == 0:
-            checkpoint.save(file_prefix=checkpoint_prefix)
-
-        print(f'Time for epoch {epoch} is {time.time() - start}')
-
-    #generate_and_save_images(generator, epochs, seed_images)
-
-    loss_file = './data/lossfile.txt'
-    with open(loss_file, 'w') as outfile:
-        outfile.write(str(generator_loss_list))
-        outfile.write('\n')
-        outfile.write('\n')
-        outfile.write(str(discriminator_loss_list))
-        outfile.write('\n')
-        outfile.write('\n')
-!ec
-
-
-To train simply call this function. _Warning_: this might take a long time so
-there is a folder of a pretrained network already included in the repository.
-
-!bc pycod
-train(train_dataset, EPOCHS)
-!ec
-
-And here is the result of training our model for 100 epochs
-
-MOVIE: [images_from_seed_images/generation.gif]
-
-Now to avoid having to train and everything, which will take a while depending
-on your computer setup we now load in the model which produced the above gif.
-
-!bc pycod
-checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
-restored_generator = checkpoint.generator
-restored_discriminator = checkpoint.discriminator
-
-print(restored_generator)
-print(restored_discriminator)
-!ec
-
-
-===== Exploring the Latent Space =====
-
-So we have successfully loaded in our latest model. Let us now play around a bit
-and see what kind of things we can learn about this model. Our generator takes
-an array of 100 numbers. One idea can be to try to systematically change our
-input. Let us try and see what we get
-
-!bc pycod
-def generate_latent_points(number=100, scale_means=1, scale_stds=1):
-    latent_dim = 100
-    means = scale_means * tf.linspace(-1, 1, num=latent_dim)
-    stds = scale_stds * tf.linspace(-1, 1, num=latent_dim)
-    latent_space_value_range = tf.random.normal([number, number],
-                                                means,
-                                                stds,
-                                                dtype=tf.float64)
-
-    return latent_space_value_range
-
-def generate_images(latent_points):
-    # notice we set training to false because we are making inferences
-    generated_images = restored_generator(latent_space_value_range,
-                                          training=False)
-
-    return generated_images
-!ec
-
-!bc pycod
-def plot_result(generated_images, number):
-    # obviously this assumes sqrt number is an int
-    fig, axs = plt.subplots(int(np.sqrt(number)), int(np.sqrt(number)),
-                            figsize=(10, 10))
-
-    for i in range(int(np.sqrt(number))):
-        for j in range(int(np.sqrt(number))):
-            axs[i, j].imshow(generated_images[i*j], cmap='Greys')
-            axs[i, j].axis('off')
-
-    plt.show()
-!ec
-
-!bc pycod
-generated_images = generate_images(generate_latent_points())
-plot_result(generated_images, number)
-!ec
-
-Interesting! We see that the generator generates images that look like MNIST
-numbers: $1, 4, 7, 9$. Let's try to tweak it a bit more to see if we are able
-to generate a similar plot where we generate every MNIST number. Let us now try
-to 'move' a bit around in the latent space. _Note_: decrease the plot number if
-these following cells take too long to run on your computer.
-
-!bc pycod
-plot_number = 225
-
-generated_images = generate_images(generate_latent_points(number=plot_number,
-                                                          scale_means=5,
-                                                          scale_stds=1))
-plot_result(generated_images, plot_number)
-
-generated_images = generate_images(generate_latent_points(number=plot_number,
-                                                          scale_means=-5,
-                                                          scale_stds=1))
-plot_result(generated_images, plot_number)
-
-generated_images = generate_images(generate_latent_points(number=plot_number,
-                                                          scale_means=1,
-                                                          scale_stds=5))
-plot_result(generated_images, plot_number)
-!ec
-
-Again, we have found something interesting. *Moving* around using our means
-takes us from digit to digit, while *moving* around using our standard
-deviations seem to increase the number of different digits! In the last image
-above, we can barely make out every MNIST digit. Let us make on last plot using
-this information by upping the standard deviation of our Gaussian noises.
-
-!bc pycod
-plot_number = 400
-generated_images = generate_images(generate_latent_points(number=plot_number,
-                                                          scale_means=1,
-                                                          scale_stds=10))
-!ec
-A pretty cool result! We see that our generator indeed has learned a
-distribution which qualitatively looks a whole lot like the MNIST dataset.
-
-
-
-
