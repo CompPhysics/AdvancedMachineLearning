@@ -1,0 +1,261 @@
+%%
+%% Automatically generated file from DocOnce source
+%% (https://github.com/doconce/doconce/)
+%% doconce format latex Project2.do.txt --print_latex_style=trac --latex_admon=paragraph
+%%
+% #ifdef PTEX2TEX_EXPLANATION
+%%
+%% The file follows the ptex2tex extended LaTeX format, see
+%% ptex2tex: https://code.google.com/p/ptex2tex/
+%%
+%% Run
+%%      ptex2tex myfile
+%% or
+%%      doconce ptex2tex myfile
+%%
+%% to turn myfile.p.tex into an ordinary LaTeX file myfile.tex.
+%% (The ptex2tex program: https://code.google.com/p/ptex2tex)
+%% Many preprocess options can be added to ptex2tex or doconce ptex2tex
+%%
+%%      ptex2tex -DMINTED myfile
+%%      doconce ptex2tex myfile envir=minted
+%%
+%% ptex2tex will typeset code environments according to a global or local
+%% .ptex2tex.cfg configure file. doconce ptex2tex will typeset code
+%% according to options on the command line (just type doconce ptex2tex to
+%% see examples). If doconce ptex2tex has envir=minted, it enables the
+%% minted style without needing -DMINTED.
+% #endif
+
+% #define PREAMBLE
+
+% #ifdef PREAMBLE
+%-------------------- begin preamble ----------------------
+
+\documentclass[%
+oneside,                 % oneside: electronic viewing, twoside: printing
+final,                   % draft: marks overfull hboxes, figures with paths
+10pt]{article}
+
+\listfiles               %  print all files needed to compile this document
+
+\usepackage{relsize,makeidx,color,setspace,amsmath,amsfonts,amssymb}
+\usepackage[table]{xcolor}
+\usepackage{bm,ltablex,microtype}
+
+\usepackage[pdftex]{graphicx}
+
+\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{lmodern}         % Latin Modern fonts derived from Computer Modern
+
+% Hyperlinks in PDF:
+\definecolor{linkcolor}{rgb}{0,0,0.4}
+\usepackage{hyperref}
+\hypersetup{
+    breaklinks=true,
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    citecolor=black,
+    filecolor=black,
+    %filecolor=blue,
+    pdfmenubar=true,
+    pdftoolbar=true,
+    bookmarksdepth=3   % Uncomment (and tweak) for PDF bookmarks with more levels than the TOC
+    }
+%\hyperbaseurl{}   % hyperlinks are relative to this root
+
+\setcounter{tocdepth}{2}  % levels in table of contents
+
+% prevent orhpans and widows
+\clubpenalty = 10000
+\widowpenalty = 10000
+
+% --- end of standard preamble for documents ---
+
+
+% insert custom LaTeX commands...
+
+\raggedbottom
+\makeindex
+\usepackage[totoc]{idxlayout}   % for index in the toc
+\usepackage[nottoc]{tocbibind}  % for references/bibliography in the toc
+
+%-------------------- end preamble ----------------------
+
+\begin{document}
+
+% matching end for #ifdef PREAMBLE
+% #endif
+
+\newcommand{\exercisesection}[1]{\subsection*{#1}}
+
+
+% ------------------- main content ----------------------
+
+
+
+% ----------------- title -------------------------
+
+\thispagestyle{empty}
+
+\begin{center}
+{\LARGE\bf
+\begin{spacing}{1.25}
+Project 2
+\end{spacing}
+}
+\end{center}
+
+% ----------------- author(s) -------------------------
+
+\begin{center}
+{\bf \href{{https://www.uio.no/studier/emner/matnat/fys/FYS5429/index-eng.html}}{FYS5429/9429}, Advanced machine learning and data analysis for the physical sciences, University of Oslo, Norway${}^{}$} \\ [0mm]
+\end{center}
+
+\begin{center}
+% List of all institutions:
+\end{center}
+    
+% ----------------- end author(s) -------------------------
+
+% --- begin date ---
+\begin{center}
+Spring semester 2024, deadline June 7
+\end{center}
+% --- end date ---
+
+\vspace{1cm}
+
+
+\section{Possible paths for project 2}
+
+We discuss here several paths as well as data sets for the second project (or as parts of a larger project)
+Tentative deadline June 7.
+
+The report should also be styled as a scientific report. The guidelines
+we have established at
+\href{{https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/EvaluationGrading}}{\nolinkurl{https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/EvaluationGrading}}
+could be useful in structuring your report. We have also added a
+lecture set by Anne Ruimy (director of EDP journals) on how to write
+effective titles and abstracts. See
+\href{{https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/WritingAbstracts}}{\nolinkurl{https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/WritingAbstracts}}
+for these lectures. Finally, at
+\href{{https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/2023/ProjectExamples}}{\nolinkurl{https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/2023/ProjectExamples}}
+you can find different examples of previous reports. See also the literature suggestions below.
+
+For those of you who have planned to write one project only, feel free to proceed with that.
+
+For those of you who plan to write a second project, we would like to
+propose that you focus on generative methods, in particular those we
+have discussed during the lectures. These are
+
+\begin{enumerate}
+\item Boltzmann machines
+
+\item Variational autoencoders and GANs
+
+\item Diffusion models
+\end{enumerate}
+
+\noindent
+\paragraph{Here you can opt for the following paths.}
+\begin{enumerate}
+\item The computational path: Here we propose a path where you develop your own code for say a Boltzmann machine or a variational autoencoder
+\end{enumerate}
+
+\noindent
+and apply this to data of your own selection. The code should be object oriented and flexible allowing for eventual extensions by including different Loss/Cost functions and other functionalities. Feel free to select data sets from those suggested below here. You can compare your own codes with implementations using TensorFlow(Keras)/PyTorch or other libraries. The codes in the examples from the various lectures use MNIST as example dataset. Feel free to use the same dataset or other ones. 
+
+\begin{enumerate}
+\item The differential equation path: Here you can use the same differential equations as discussed in project 1, but now solving these with either Boltzmann machines or Variational Autoencoders (see for example \href{{https://arxiv.org/abs/2203.11363}}{\nolinkurl{https://arxiv.org/abs/2203.11363}}), or GANs (see for example \href{{https://proceedings.neurips.cc/paper/2020/file/3c8f9a173f749710d6377d3150cf90da-Paper.pdf}}{\nolinkurl{https://proceedings.neurips.cc/paper/2020/file/3c8f9a173f749710d6377d3150cf90da-Paper.pdf}}).  
+
+\item The application path: Here you can use the most relevant method(s) (say variational autoencoders, GANs or diffusion models) and apply this(these) to datasets relevant for your own research.
+
+\item Variational Autoencoders (VAEs) and Bayesian statistics path: Here you can compare VAEs with Bayesian Neural Networks, see \href{{https://github.com/ibarrond/VariationalAutoencoders}}{\nolinkurl{https://github.com/ibarrond/VariationalAutoencoders}}. For this project we recommend the pedagogical article by Kingma and Welling, An Introduction to Variational Autoencoders, see \href{{https://arxiv.org/abs/1906.02691}}{\nolinkurl{https://arxiv.org/abs/1906.02691}} as background literature and the literature list below here.
+\end{enumerate}
+
+\noindent
+\subsection{Defining the data sets to analyze yourself}
+
+You can propose own data sets that relate to your research interests or just use existing data sets from say
+\begin{enumerate}
+\item \href{{https://www.kaggle.com/datasets}}{Kaggle} 
+
+\item The \href{{https://archive.ics.uci.edu/ml/index.php}}{University of California at Irvine (UCI) with its  machine learning repository}.
+
+\item For the differential equation problems, you can generate your own datasets, as described below.
+
+\item If possible, you should link the data sets with existing research and analyses thereof. Scientific articles which have used Machine Learning algorithms to analyze the data are highly welcome. Perhaps you can improve previous analyses and even publish a new article? 
+\end{enumerate}
+
+\noindent
+\subsection{Literature}
+
+The following articles and books (with codes) are relevant here:
+
+\begin{enumerate}
+\item Kingma and Welling, An Introduction to Variational Autoencoders, see \href{{https://arxiv.org/abs/1906.02691}}{\nolinkurl{https://arxiv.org/abs/1906.02691}}.
+
+\item To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see \href{{https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py}}{\nolinkurl{https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py}}
+
+\item See also Foster, chapter 7 on energy-based models at \href{{https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm}}{\nolinkurl{https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm}} and chapter 3 for VAEs and chapter 8 for diffusion models.
+
+\item Du and Mordatch, Implicit generation and modeling with energy-based models, see \href{{https://arxiv.org/pdf/1903.08689.pdf}}{\nolinkurl{https://arxiv.org/pdf/1903.08689.pdf}}
+
+\item Calvin Luo gives an excellent link between VAEs and diffusion models, see \href{{https://calvinyluo.com/2022/08/26/diffusion-tutorial.html}}{\nolinkurl{https://calvinyluo.com/2022/08/26/diffusion-tutorial.html}}
+\end{enumerate}
+
+\noindent
+\subsection{Introduction to numerical projects}
+
+Here follows a brief recipe and recommendation on how to write a report for each
+project.
+
+\begin{itemize}
+  \item Give a short description of the nature of the problem and the eventual  numerical methods you have used.
+
+  \item Describe the algorithm you have used and/or developed. Here you may find it convenient to use pseudocoding. In many cases you can describe the algorithm in the program itself.
+
+  \item Include the source code of your program. Comment your program properly.
+
+  \item If possible, try to find analytic solutions, or known limits in order to test your program when developing the code.
+
+  \item Include your results either in figure form or in a table. Remember to        label your results. All tables and figures should have relevant captions        and labels on the axes.
+
+  \item Try to evaluate the reliabilty and numerical stability/precision of your results. If possible, include a qualitative and/or quantitative discussion of the numerical stability, eventual loss of precision etc.
+
+  \item Try to give an interpretation of you results in your answers to  the problems.
+
+  \item Critique: if possible include your comments and reflections about the  exercise, whether you felt you learnt something, ideas for improvements and  other thoughts you've made when solving the exercise. We wish to keep this course at the interactive level and your comments can help us improve it.
+
+  \item Try to establish a practice where you log your work at the  computerlab. You may find such a logbook very handy at later stages in your work, especially when you don't properly remember  what a previous test version  of your program did. Here you could also record  the time spent on solving the exercise, various algorithms you may have tested or other topics which you feel worthy of mentioning.
+\end{itemize}
+
+\noindent
+\subsection{Format for electronic delivery of report and programs}
+
+The preferred format for the report is a PDF file. You can also use DOC or postscript formats or as an ipython notebook file.  As programming language we prefer that you choose between C/C++, Fortran2008 or Python. The following prescription should be followed when preparing the report:
+
+\begin{itemize}
+  \item Send us an email in order  to hand in your projects with a link to your GitHub/Gitlab repository.
+
+  \item In your GitHub/GitLab or similar repository, please include a folder which contains selected results. These can be in the form of output from your code for a selected set of runs and input parameters.
+\end{itemize}
+
+\noindent
+Finally, 
+we encourage you to collaborate. Optimal working groups consist of 
+2-3 students. You can then hand in a common report. 
+
+
+% ------------------- end of main content ---------------
+
+% #ifdef PREAMBLE
+\end{document}
+% #endif
+
