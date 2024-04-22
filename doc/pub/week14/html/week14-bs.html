@@ -44,7 +44,7 @@ doconce format html week14.do.txt --html_style=bootstrap --pygments_html_style=d
               ('Using the KL divergence', 2, None, 'using-the-kl-divergence'),
               ('Kullback-Leibler again', 2, None, 'kullback-leibler-again'),
               ('And applying Bayes rule', 2, None, 'and-applying-bayes-rule'),
-              ('Rearraning', 2, None, 'rearraning'),
+              ('Rearranging', 2, None, 'rearranging'),
               ('Inferring the probability',
                2,
                None,
@@ -60,10 +60,10 @@ doconce format html week14.do.txt --html_style=bootstrap --pygments_html_style=d
                None,
                'code-examples-using-keras'),
               ('Code in PyTorch for VAEs', 2, None, 'code-in-pytorch-for-vaes'),
-              ('Variational diffusion models',
+              ('More notes to be added on VAEs',
                2,
                None,
-               'variational-diffusion-models')]}
+               'more-notes-to-be-added-on-vaes')]}
 end of tocinfo -->
 
 <body>
@@ -103,7 +103,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#using-the-kl-divergence" style="font-size: 80%;">Using the KL divergence</a></li>
      <!-- navigation toc: --> <li><a href="#kullback-leibler-again" style="font-size: 80%;">Kullback-Leibler again</a></li>
      <!-- navigation toc: --> <li><a href="#and-applying-bayes-rule" style="font-size: 80%;">And applying Bayes rule</a></li>
-     <!-- navigation toc: --> <li><a href="#rearraning" style="font-size: 80%;">Rearraning</a></li>
+     <!-- navigation toc: --> <li><a href="#rearranging" style="font-size: 80%;">Rearranging</a></li>
      <!-- navigation toc: --> <li><a href="#inferring-the-probability" style="font-size: 80%;">Inferring the probability</a></li>
      <!-- navigation toc: --> <li><a href="#central-equation-of-vaes" style="font-size: 80%;">Central equation of VAEs</a></li>
      <!-- navigation toc: --> <li><a href="#setting-up-sgd" style="font-size: 80%;">Setting up SGD</a></li>
@@ -113,7 +113,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#computing-the-gradients" style="font-size: 80%;">Computing the gradients</a></li>
      <!-- navigation toc: --> <li><a href="#code-examples-using-keras" style="font-size: 80%;">Code examples using Keras</a></li>
      <!-- navigation toc: --> <li><a href="#code-in-pytorch-for-vaes" style="font-size: 80%;">Code in PyTorch for VAEs</a></li>
-     <!-- navigation toc: --> <li><a href="#variational-diffusion-models" style="font-size: 80%;">Variational diffusion models</a></li>
+     <!-- navigation toc: --> <li><a href="#more-notes-to-be-added-on-vaes" style="font-size: 80%;">More notes to be added on VAEs</a></li>
 
         </ul>
       </li>
@@ -174,7 +174,7 @@ MathJax.Hub.Config({
 <!-- !split -->
 <h2 id="mathematics-of-vaes" class="anchor">Mathematics of  VAEs </h2>
 
-<p>We want to train the marginal probability with some latent varriables \( \boldsymbol{h} \)</p>
+<p>We want to train the marginal probability with some latent varrables \( \boldsymbol{h} \)</p>
 $$
 p(\boldsymbol{x};\boldsymbol{\Theta}) = \int d\boldsymbol{h}p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}),
 $$
@@ -241,7 +241,7 @@ $$
 
 
 <!-- !split -->
-<h2 id="rearraning" class="anchor">Rearraning </h2>
+<h2 id="rearranging" class="anchor">Rearranging </h2>
 
 <p>Using Bayes rule we obtain</p>
 $$
@@ -723,7 +723,9 @@ optimizer <span style="color: #666666">=</span> optim<span style="color: #666666
 
 
 <!-- !split -->
-<h2 id="variational-diffusion-models" class="anchor">Variational diffusion models </h2>
+<h2 id="more-notes-to-be-added-on-vaes" class="anchor">More notes to be added on VAEs </h2>
+
+<p>Variational diffusion models to be discussed on whiteboard</p>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
