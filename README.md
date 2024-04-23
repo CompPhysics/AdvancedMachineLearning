@@ -135,9 +135,11 @@ Furthermore, all teaching material is available from this GitHub link.
 
 ## April 22-26: Deep generative models
 - Variational Autoencoders
-- Diffusion models
 - Reading recommendation: An Introduction to Variational Autoencoders, by Kingma and Welling, see https://arxiv.org/abs/1906.02691 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
+- Video of lecture at https://youtu.be/tkOweMYCMVg
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril23.pdf
+
 
 ## April 29-May 3: Deep generative models
 - Diffusion models
