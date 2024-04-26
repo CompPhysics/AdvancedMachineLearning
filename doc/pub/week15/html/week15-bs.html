@@ -41,6 +41,10 @@ doconce format html week15.do.txt --html_style=bootstrap --pygments_html_style=d
                None,
                'plans-for-the-week-of-april-29-may-3-2024'),
               ('Readings', 2, None, 'readings'),
+              ('Summary of Variational Autoencoders (VAEs)',
+               2,
+               None,
+               'summary-of-variational-autoencoders-vaes'),
               ('What is a GAN?', 2, None, 'what-is-a-gan'),
               ('What is a generator network?',
                2,
@@ -69,7 +73,8 @@ doconce format html week15.do.txt --html_style=bootstrap --pygments_html_style=d
               ('Exploring the Latent Space',
                2,
                None,
-               'exploring-the-latent-space')]}
+               'exploring-the-latent-space'),
+              ('Diffusion models, basics', 2, None, 'diffusion-models-basics')]}
 end of tocinfo -->
 
 <body>
@@ -106,6 +111,7 @@ MathJax.Hub.Config({
         <ul class="dropdown-menu">
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-of-april-29-may-3-2024" style="font-size: 80%;">Plans for the week of April 29- May 3, 2024</a></li>
      <!-- navigation toc: --> <li><a href="#readings" style="font-size: 80%;">Readings</a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-variational-autoencoders-vaes" style="font-size: 80%;">Summary of Variational Autoencoders (VAEs)</a></li>
      <!-- navigation toc: --> <li><a href="#what-is-a-gan" style="font-size: 80%;">What is a GAN?</a></li>
      <!-- navigation toc: --> <li><a href="#what-is-a-generator-network" style="font-size: 80%;">What is a generator network?</a></li>
      <!-- navigation toc: --> <li><a href="#and-what-is-a-discriminator-network" style="font-size: 80%;">And what is a discriminator network?</a></li>
@@ -120,6 +126,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#more-references" style="font-size: 80%;">More references</a></li>
      <!-- navigation toc: --> <li><a href="#writing-our-first-generative-adversarial-network" style="font-size: 80%;">Writing Our First Generative Adversarial Network</a></li>
      <!-- navigation toc: --> <li><a href="#exploring-the-latent-space" style="font-size: 80%;">Exploring the Latent Space</a></li>
+     <!-- navigation toc: --> <li><a href="#diffusion-models-basics" style="font-size: 80%;">Diffusion models, basics</a></li>
 
         </ul>
       </li>
@@ -160,9 +167,9 @@ MathJax.Hub.Config({
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 <ol>
-<li> Finalizing discussion of diffusion models</li>
+<li> Summary of Variational Autoencoders</li>
 <li> Generative Adversarial Networks (GANs)</li>
-<li> Summary of course and plans for the lab sessions
+<li> Discussion of diffusion models
 <!-- o <a href="https://youtu.be/rw-NBN293o4" target="_self">Video of lecture</a> -->
 <!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril30.pdf" target="_self">Whiteboard notes</a> --></li>
 </ol>
@@ -181,6 +188,9 @@ MathJax.Hub.Config({
 </div>
 </div>
 
+
+<!-- !split -->
+<h2 id="summary-of-variational-autoencoders-vaes" class="anchor">Summary of Variational Autoencoders (VAEs) </h2>
 
 <!-- !split -->
 <h2 id="what-is-a-gan" class="anchor">What is a GAN? </h2>
@@ -1190,6 +1200,8 @@ generated_images <span style="color: #666666">=</span> generate_images(generate_
 distribution which qualitatively looks a whole lot like the MNIST dataset.
 </p>
 
+<!-- !split -->
+<h2 id="diffusion-models-basics" class="anchor">Diffusion models, basics </h2>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
