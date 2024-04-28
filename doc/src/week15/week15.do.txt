@@ -17,7 +17,8 @@ o Discussion of diffusion models
 ===== Readings =====
 !bblock 
 o Reading recommendation: Goodfellow et al, for GANs see sections 20.10-20.11
-
+o For codes and background, see Raschka et al, Machine with PyTorch and Scikit-Learn, chapter 17, see URL:"https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17" for codes
+o Babcock and Bali, Generative AI with Python and TensorFlow2, chapter 6 and codes at URL:"https://github.com/raghavbali/generative_ai_with_tensorflow/blob/master/Chapter_6/conditional_gan.ipynb"
 !eblock
 
 
@@ -34,6 +35,8 @@ We will also discuss what is called
 
 !split
 ===== Boltzmann machines and energy-based models and contrastive optimization =====
+
+Text to be added here
 
 !split
 ===== The Kullback-Leibler divergence =====
@@ -218,7 +221,10 @@ prediction._ Another interesting read can be found at URL:"https://arxiv.org/abs
 !split
 ===== Writing Our First Generative Adversarial Network =====
 
-This part is best seen using the jupyter-notebook. We follow here closely the code developed by Raschka et al from chapter 17 of their textbook.
+This part is best seen using the jupyter-notebook. We follow here
+closely the code developed by Raschka et al from chapter 17 of their
+textbook, see URL:"https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17" for codes.
+
 
 !bc pycod
 import torch
@@ -641,3 +647,8 @@ desired data samples from the noise. Unlike VAE or flow models,
 diffusion models are learned with a fixed procedure and the latent
 variable has high dimensionality (same as the original data).
 
+
+!split
+===== Mathematics of diffusion models =====
+
+More text will be added here.
