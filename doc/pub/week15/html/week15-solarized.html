@@ -81,6 +81,11 @@ div.toc p,a {
                2,
                None,
                'the-kullback-leibler-divergence'),
+              ('Generative model,  basic overview (Borrowed from Rashcka et '
+               'al)',
+               2,
+               None,
+               'generative-model-basic-overview-borrowed-from-rashcka-et-al'),
               ('What is a GAN?', 2, None, 'what-is-a-gan'),
               ('What is a generator network?',
                2,
@@ -91,6 +96,10 @@ div.toc p,a {
                None,
                'and-what-is-a-discriminator-network'),
               ('Appplications of GANs', 2, None, 'appplications-of-gans'),
+              ('Discriminator versus generator  (Borrowed from Rashcka et al)',
+               2,
+               None,
+               'discriminator-versus-generator-borrowed-from-rashcka-et-al'),
               ('Generative Adversarial Networks',
                2,
                None,
@@ -101,11 +110,20 @@ div.toc p,a {
               ('Progression in training', 2, None, 'progression-in-training'),
               ('Deafault choice', 2, None, 'deafault-choice'),
               ('Design of GANs', 2, None, 'design-of-gans'),
+              ('Steps in building a GAN  (Borrowed from Rashcka et al)',
+               2,
+               None,
+               'steps-in-building-a-gan-borrowed-from-rashcka-et-al'),
               ('More references', 2, None, 'more-references'),
               ('Writing Our First Generative Adversarial Network',
                2,
                None,
                'writing-our-first-generative-adversarial-network'),
+              ('Implementing the networks   (Borrowed from Rashcka et al)',
+               2,
+               None,
+               'implementing-the-networks-borrowed-from-rashcka-et-al'),
+              ('Code elements', 2, None, 'code-elements'),
               ('Setting up the GAN', 2, None, 'setting-up-the-gan'),
               ('Printing the model', 2, None, 'printing-the-model'),
               ('Defining the training set',
@@ -223,6 +241,15 @@ distributions, namely what is called
 <h2 id="the-kullback-leibler-divergence">The Kullback-Leibler divergence </h2>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="generative-model-basic-overview-borrowed-from-rashcka-et-al">Generative model,  basic overview (Borrowed from Rashcka et al) </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure1.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="what-is-a-gan">What is a GAN? </h2>
 
 <p>A GAN is a deep neural network which consists of two networks, a
@@ -265,6 +292,15 @@ probability distribution.
 <li> High-resolution image generation</li>
 <li> Completing missing parts of images and much more</li>
 </ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="discriminator-versus-generator-borrowed-from-rashcka-et-al">Discriminator versus generator  (Borrowed from Rashcka et al) </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure2.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="generative-adversarial-networks">Generative Adversarial Networks </h2>
 
@@ -383,6 +419,15 @@ another around in the parameter space indefinitely.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="steps-in-building-a-gan-borrowed-from-rashcka-et-al">Steps in building a GAN  (Borrowed from Rashcka et al) </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure3.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="more-references">More references </h2>
 
 <p>A much deeper discussion on
@@ -402,6 +447,18 @@ prediction.</b> Another interesting read can be found at <a href="https://arxiv.
 closely the code developed by Raschka et al from chapter 17 of their
 textbook, see <a href="https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17" target="_blank"><tt>https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17</tt></a> for codes.
 </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="implementing-the-networks-borrowed-from-rashcka-et-al">Implementing the networks   (Borrowed from Rashcka et al) </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure4.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="code-elements">Code elements </h2>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
