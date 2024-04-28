@@ -207,20 +207,14 @@ div.toc p,a {
                2,
                None,
                'defining-the-training-set'),
-              ('Defining the training set',
+              ('Defining the training set, part 2',
                2,
                None,
-               'defining-the-training-set'),
-              ('Defining the training set',
-               2,
-               None,
-               'defining-the-training-set'),
+               'defining-the-training-set-part-2'),
               ('Training the GAN', 2, None, 'training-the-gan'),
-              ('Defining the training set',
-               2,
-               None,
-               'defining-the-training-set'),
+              ('More on training', 2, None, 'more-on-training'),
               ('Visualizing', 2, None, 'visualizing'),
+              ('Calculating scores', 2, None, 'calculating-scores'),
               ('Diffusion models, basics', 2, None, 'diffusion-models-basics'),
               ('Mathematics of diffusion models',
                2,
@@ -715,33 +709,6 @@ gen_model <span style="color: #666666">=</span> make_generator_network(
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="defining-the-training-set">Defining the training set </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
   <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torchvision</span> 
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torchvision</span> <span style="color: #008000; font-weight: bold">import</span> transforms 
 
@@ -754,7 +721,7 @@ transform <span style="color: #666666">=</span> transforms<span style="color: #6
 mnist_dataset <span style="color: #666666">=</span> torchvision<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span>image_path, 
                                            train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, 
                                            transform<span style="color: #666666">=</span>transform, 
-                                           download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+                                           download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
 
 example, label <span style="color: #666666">=</span> <span style="color: #008000">next</span>(<span style="color: #008000">iter</span>(mnist_dataset))
 <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Min: </span><span style="color: #BB6688; font-weight: bold">{</span>example<span style="color: #666666">.</span>min()<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121"> Max: </span><span style="color: #BB6688; font-weight: bold">{</span>example<span style="color: #666666">.</span>max()<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
@@ -776,7 +743,7 @@ example, label <span style="color: #666666">=</span> <span style="color: #008000
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="defining-the-training-set">Defining the training set </h2>
+<h2 id="defining-the-training-set-part-2">Defining the training set, part 2 </h2>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "default" -->
@@ -872,7 +839,7 @@ d_loss_fake <span style="color: #666666">=</span> loss_fn(d_proba_fake, d_labels
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="defining-the-training-set">Defining the training set </h2>
+<h2 id="more-on-training">More on training  </h2>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "default" -->
@@ -1110,15 +1077,19 @@ plt<span style="color: #666666">.</span>show()
       </div>
     </div>
   </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="calculating-scores">Calculating scores </h2>
+
 <!-- code=python (!bc pycod) typeset with pygments style "default" -->
 <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #666666">=====</span> Calculating scores <span style="color: #666666">=====</span>
-
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">math</span>
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">math</span>
 
 
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance</span>(X, Y, sqrt):

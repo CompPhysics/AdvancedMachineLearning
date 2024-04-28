@@ -675,33 +675,6 @@ gen_model = make_generator_network(
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #eeeedd">
-  <pre style="font-size: 80%; line-height: 125%;">
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</section>
-
-<section>
-<h2 id="defining-the-training-set">Defining the training set </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
   <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> 
 <span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> transforms 
 
@@ -714,7 +687,7 @@ transform = transforms.Compose([
 mnist_dataset = torchvision.datasets.MNIST(root=image_path, 
                                            train=<span style="color: #8B008B; font-weight: bold">True</span>, 
                                            transform=transform, 
-                                           download=<span style="color: #8B008B; font-weight: bold">False</span>)
+                                           download=<span style="color: #8B008B; font-weight: bold">True</span>)
 
 example, label = <span style="color: #658b00">next</span>(<span style="color: #658b00">iter</span>(mnist_dataset))
 <span style="color: #658b00">print</span>(<span style="color: #CD5555">f&#39;Min: {</span>example.min()<span style="color: #CD5555">} Max: {</span>example.max()<span style="color: #CD5555">}&#39;</span>)
@@ -736,7 +709,7 @@ example, label = <span style="color: #658b00">next</span>(<span style="color: #6
 </section>
 
 <section>
-<h2 id="defining-the-training-set">Defining the training set </h2>
+<h2 id="defining-the-training-set-part-2">Defining the training set, part 2 </h2>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
@@ -832,7 +805,7 @@ d_loss_fake = loss_fn(d_proba_fake, d_labels_fake)
 </section>
 
 <section>
-<h2 id="defining-the-training-set">Defining the training set </h2>
+<h2 id="more-on-training">More on training  </h2>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
@@ -1070,15 +1043,19 @@ plt.show()
       </div>
     </div>
   </div>
+</div>
+</section>
+
+<section>
+<h2 id="calculating-scores">Calculating scores </h2>
+
 <!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
 <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #eeeedd">
-  <pre style="font-size: 80%; line-height: 125%;">===== Calculating scores =====
-
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">math</span>
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">math</span>
 
 
 <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">distance</span>(X, Y, sqrt):

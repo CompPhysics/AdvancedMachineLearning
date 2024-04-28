@@ -352,14 +352,6 @@ disc_model = make_discriminator_network(
 print(disc_model)
 !ec
 
-!split
-===== Defining the training set =====
-
-!bc pycod
-
-!ec
-
-
 
 !split
 ===== Defining the training set =====
@@ -377,7 +369,7 @@ transform = transforms.Compose([
 mnist_dataset = torchvision.datasets.MNIST(root=image_path, 
                                            train=True, 
                                            transform=transform, 
-                                           download=False)
+                                           download=True)
 
 example, label = next(iter(mnist_dataset))
 print(f'Min: {example.min()} Max: {example.max()}')
@@ -387,7 +379,7 @@ print(example.shape)
 
 
 !split
-===== Defining the training set =====
+===== Defining the training set, part 2 =====
 
 !bc pycod
 def create_noise(batch_size, z_size, mode_z):
@@ -446,7 +438,7 @@ print(f'Discriminator Losses: Real {d_loss_real:.4f} Fake {d_loss_fake:.4f}')
 
 
 !split
-===== Defining the training set =====
+===== More on training  =====
 
 !bc pycod
 batch_size = 64
@@ -619,9 +611,9 @@ plt.show()
 !ec
 
 
-!bc pycod
+!split
 ===== Calculating scores =====
-
+!bc pycod
 import math
 
 
