@@ -144,14 +144,18 @@ Furthermore, all teaching material is available from this GitHub link.
 - Diffusion models
 - Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+- Video of lecture at https://youtu.be/Cg8n9aWwHuU
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril30.pdf
+
 
 ## May 6-10: Deep generative models
+- Generative Adversarial Networks (GANs)
 - Diffusion models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week16.ipynb  
 
 
 ## May 13-17: Deep generative models
-- Summary of course and discussion of pro
+- Summary of course and discussion of projects
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week17.ipynb  
 
 
