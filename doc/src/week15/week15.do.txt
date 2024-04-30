@@ -284,8 +284,7 @@ variables $\bm{h}$, which is intractable for
 complex models, or it involves having access to a ground truth latent
 encoder $p(\bm{h}|\bm{x})$.
 
-Using the last  two equations, we can derive a term called the \textbf{E}vidence
-\textbf{L}ower \textbf{Bo}und (ELBO), which as its name suggests, is a lower
+Using the last  two equations, we can derive a term called the Evidence Lower Bound (ELBO), which as its name suggests, is a lower
   bound of the evidence.  The evidence is quantified in this case as
 the log likelihood of the observed data.  Then, maximizing the ELBO
 becomes a proxy objective with which to optimize a latent variable
@@ -421,7 +420,7 @@ A defining feature of the VAE is how the ELBO is optimized jointly over paramete
 Then, the KL divergence term of the ELBO can be computed analytically, and the reconstruction term can be approximated using a Monte Carlo estimate.  Our objective can then be rewritten as:
 !bt
 \begin{align*}
-  argmax_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx argmax_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
+  \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
 \end{align*}
 !et
 where latents $\{\bm{h}^{(l)}\}_{l=1}^L$ are sampled from $q_{\bm{\phi}}(\bm{h}|\bm{x})$, for every observation $\bm{x}$ in the dataset.
@@ -1120,7 +1119,53 @@ variable has high dimensionality (same as the original data).
 
 
 !split
-===== Mathematics of diffusion models =====
+=====  Problems with probabilistic models =====
 
-See whiteboard notes
+Historically, probabilistic models suffer from a tradeoff between two
+conflicting objectives: \textit{tractability} and
+\textit{flexibility}. Models that are \textit{tractable} can be
+analytically evaluated and easily fit to data (e.g. a Gaussian or
+Laplace). However, these models are unable to aptly describe structure
+in rich datasets. On the other hand, models that are \textit{flexible}
+can be molded to fit structure in arbitrary data. For example, we can
+define models in terms of any (non-negative) function $\phi(\bm{x})$
+yielding the flexible distribution $p\left(\bm{x}\right) =
+\frac{\phi\left(\bm{x} \right)}{Z}$, where $Z$ is a normalization
+constant. However, computing this normalization constant is generally
+intractable. Evaluating, training, or drawing samples from such
+flexible models typically requires a very expensive Monte Carlo
+process.
+
+!split
+===== Diffusion models =====
+Diffusion models have several interesting features
+* extreme flexibility in model structure,
+* exact sampling,
+* easy multiplication with other distributions, e.g. in order to compute a posterior, and
+* the model log likelihood, and the probability of individual states, to be cheaply evaluated.
+
+!split
+===== Original idea =====
+
+In the original formulation, one uses a Markov chain to gradually
+convert one distribution into another, an idea used in non-equilibrium
+statistical physics and sequential Monte Carlo. Diffusion models build
+a generative Markov chain which converts a simple known distribution
+(e.g. a Gaussian) into a target (data) distribution using a diffusion
+process. Rather than use this Markov chain to approximately evaluate a
+model which has been otherwise defined, one can  explicitly define the
+probabilistic model as the endpoint of the Markov chain. Since each
+step in the diffusion chain has an analytically evaluable probability,
+the full chain can also be analytically evaluated.
+
+!split
+===== Diffusion learning =====
+
+Learning in this framework involves estimating small perturbations to
+a diffusion process. Estimating small, analytically tractable,
+perturbations is more tractable than explicitly describing the full
+distribution with a single, non-analytically-normalizable, potential
+function.  Furthermore, since a diffusion process exists for any
+smooth target distribution, this method can capture data distributions
+of arbitrary form.
 

@@ -265,10 +265,13 @@ div.toc p,a {
               ('Visualizing', 2, None, 'visualizing'),
               ('Calculating scores', 2, None, 'calculating-scores'),
               ('Diffusion models, basics', 2, None, 'diffusion-models-basics'),
-              ('Mathematics of diffusion models',
+              ('Problems with probabilistic models',
                2,
                None,
-               'mathematics-of-diffusion-models')]}
+               'problems-with-probabilistic-models'),
+              ('Diffusion models', 2, None, 'diffusion-models'),
+              ('Original idea', 2, None, 'original-idea'),
+              ('Diffusion learning', 2, None, 'diffusion-learning')]}
 end of tocinfo -->
 
 <body>
@@ -587,8 +590,7 @@ complex models, or it involves having access to a ground truth latent
 encoder \( p(\boldsymbol{h}|\boldsymbol{x}) \).
 </p>
 
-<p>Using the last  two equations, we can derive a term called the \textbf{E}vidence
-\textbf{L}ower \textbf{Bo}und (ELBO), which as its name suggests, is a lower
+<p>Using the last  two equations, we can derive a term called the Evidence Lower Bound (ELBO), which as its name suggests, is a lower
   bound of the evidence.  The evidence is quantified in this case as
 the log likelihood of the observed data.  Then, maximizing the ELBO
 becomes a proxy objective with which to optimize a latent variable
@@ -732,7 +734,7 @@ $$
 <p>Then, the KL divergence term of the ELBO can be computed analytically, and the reconstruction term can be approximated using a Monte Carlo estimate.  Our objective can then be rewritten as:</p>
 $$
 \begin{align*}
-  argmax_{\boldsymbol{\phi}, \boldsymbol{\theta}} \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})}\left[\log p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h})\right] - KL(q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})\vert\vert p(\boldsymbol{h})) \approx argmax_{\boldsymbol{\phi}, \boldsymbol{\theta}} \sum_{l=1}^{L}\log p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}^{(l)}) - KL(q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})\vert\vert p(\boldsymbol{h}))
+  \mathrm{argmax}_{\boldsymbol{\phi}, \boldsymbol{\theta}} \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})}\left[\log p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h})\right] - KL(q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})\vert\vert p(\boldsymbol{h})) \approx \mathrm{argmax}_{\boldsymbol{\phi}, \boldsymbol{\theta}} \sum_{l=1}^{L}\log p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}^{(l)}) - KL(q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})\vert\vert p(\boldsymbol{h}))
 \end{align*}
 $$
 
@@ -1652,9 +1654,59 @@ variable has high dimensionality (same as the original data).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="mathematics-of-diffusion-models">Mathematics of diffusion models </h2>
+<h2 id="problems-with-probabilistic-models">Problems with probabilistic models </h2>
 
-<p>See whiteboard notes</p>
+<p>Historically, probabilistic models suffer from a tradeoff between two
+conflicting objectives: \textit{tractability} and
+\textit{flexibility}. Models that are \textit{tractable} can be
+analytically evaluated and easily fit to data (e.g. a Gaussian or
+Laplace). However, these models are unable to aptly describe structure
+in rich datasets. On the other hand, models that are \textit{flexible}
+can be molded to fit structure in arbitrary data. For example, we can
+define models in terms of any (non-negative) function \( \phi(\boldsymbol{x}) \)
+yielding the flexible distribution \( p\left(\boldsymbol{x}\right) =
+\frac{\phi\left(\boldsymbol{x} \right)}{Z} \), where \( Z \) is a normalization
+constant. However, computing this normalization constant is generally
+intractable. Evaluating, training, or drawing samples from such
+flexible models typically requires a very expensive Monte Carlo
+process.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-models">Diffusion models </h2>
+<p>Diffusion models have several interesting features</p>
+<ul>
+<li> extreme flexibility in model structure,</li>
+<li> exact sampling,</li>
+<li> easy multiplication with other distributions, e.g. in order to compute a posterior, and</li>
+<li> the model log likelihood, and the probability of individual states, to be cheaply evaluated.</li>
+</ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="original-idea">Original idea </h2>
+
+<p>In the original formulation, one uses a Markov chain to gradually
+convert one distribution into another, an idea used in non-equilibrium
+statistical physics and sequential Monte Carlo. Diffusion models build
+a generative Markov chain which converts a simple known distribution
+(e.g. a Gaussian) into a target (data) distribution using a diffusion
+process. Rather than use this Markov chain to approximately evaluate a
+model which has been otherwise defined, one can  explicitly define the
+probabilistic model as the endpoint of the Markov chain. Since each
+step in the diffusion chain has an analytically evaluable probability,
+the full chain can also be analytically evaluated.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-learning">Diffusion learning </h2>
+
+<p>Learning in this framework involves estimating small perturbations to
+a diffusion process. Estimating small, analytically tractable,
+perturbations is more tractable than explicitly describing the full
+distribution with a single, non-analytically-normalizable, potential
+function.  Furthermore, since a diffusion process exists for any
+smooth target distribution, this method can capture data distributions
+of arbitrary form.
+</p>
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
 <!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
