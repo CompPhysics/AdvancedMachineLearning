@@ -2,6 +2,7 @@ TITLE: Advanced machine learning and data analysis for the physical sciences
 AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
 DATE: April 30, 2024
 
+!split
 ===== Plans for the week of April 29- May 3, 2024  =====
 
 
@@ -31,8 +32,6 @@ mathematics of Boltzmann machines and the Kullback-Leibler divergence,
 leading to used ways to optimize the probability
 distributions, namely what is called 
 * Contrastive optimization
-We will also discuss what is called
-* Score-based models
 
 !split
 ===== Boltzmann machines and energy-based models and contrastive optimization =====
@@ -277,9 +276,226 @@ p(\bm{x}) = \frac{p(\bm{x}, \bm{h})}{p(\bm{h}|\bm{x})}
 !et
 We suppress here the dependence	on the optimization parameters $\bm{\Theta}$.
 
+!split
+===== Evidence Lower Bound =====
+Directly computing and maximizing the likelihood $p(\bm{x})$ is
+difficult because it either involves integrating out all latent
+variables $\bm{h}$, which is intractable for
+complex models, or it involves having access to a ground truth latent
+encoder $p(\bm{h}|\bm{x})$.
+
+Using the last  two equations, we can derive a term called the \textbf{E}vidence
+\textbf{L}ower \textbf{Bo}und (ELBO), which as its name suggests, is a lower
+  bound of the evidence.  The evidence is quantified in this case as
+the log likelihood of the observed data.  Then, maximizing the ELBO
+becomes a proxy objective with which to optimize a latent variable
+model; in the best case, when the ELBO is powerfully parameterized and
+perfectly optimized, it becomes exactly equivalent to the evidence.
+
+
 
 !split
-===== 
+===== ELBO equations =====
+Formally, the equation of the ELBO is
+!bt
+\begin{equation*}
+\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]
+\end{equation*}
+!et
+To make the relationship with the evidence explicit, we can mathematically write:
+!bt
+\begin{equation*}
+\log p(\bm{x}) \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]
+\end{equation*}
+!et
+
+!split
+===== Introducing the encoder function =====
+
+Here, $q_{\bm{\phi}}(\bm{h}|\bm{x})$ is a flexible approximate
+variational distribution with parameters $\bm{\phi}$ that we seek to
+optimize.  Intuitively, it can be thought of as a parameterizable
+model that is learned to estimate the true distribution over latent
+variables for given observations $\bm{x}$; in other words, it seeks to
+approximate true posterior $p(\bm{h}|\bm{x})$.  As we saw last week when we
+explored Variational Autoencoders, as we increase the lower bound
+by tuning the parameters $\bm{\phi}$ to maximize the ELBO, we gain
+access to components that can be used to model the true data
+distribution and sample from it, thus learning a generative model.
+
+!split
+===== The derivation from last week =====
+
+To better understand the relationship between the evidence and the ELBO, let us perform another derivation, this time using
+
+!bt
+\begin{align*}
+\log p(\bm{x}) & = \log p(\bm{x}) \int q_{\bm{\phi}}(\bm{h}|\bm{x})dz && \text{(Multiply by $1 = \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h}$)}\\
+          & = \int q_{\bm{\phi}}(\bm{h}|\bm{x})(\log p(\bm{x}))dz && \text{(Bring evidence into integral)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p(\bm{x})\right] && \text{(Definition of Expectation)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{p(\bm{h}|\bm{x})}\right]&& \\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})q_{\bm{\phi}}(\bm{h}|\bm{x})}{p(\bm{h}|\bm{x})q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]&& \text{(Multiply by $1 = \frac{q_{\bm{\phi}}(\bm{h}|\bm{x})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}$)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{q_{\bm{\phi}}(\bm{h}|\bm{x})}{p(\bm{h}|\bm{x})}\right] && \text{(Split the Expectation)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right] +
+	  KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}|\bm{x}))  && \text{(Definition of KL Divergence)}\\
+          & \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]  && \text{(KL Divergence always $\geq 0$)}
+\end{align*}
+!et
+
+!split
+===== Analysis =====
+
+From this derivation, we clearly observe from the last equation
+that the evidence is equal to the ELBO plus the KL Divergence between
+the approximate posterior $q_{\bm{\phi}}(\bm{h}|\bm{x})$ and the true
+posterior $p(\bm{h}|\bm{x})$.  Understanding this term is the
+key to understanding not only the relationship between the ELBO and
+the evidence, but also the reason why optimizing the ELBO is an
+appropriate objective at all.
+
+!split
+===== The VAE =====
+
+
+In the default formulation of the VAE by Kingma and Welling (2015), we directly maximize the ELBO.  This
+approach is \textit{variational}, because we optimize for the best
+$q_{\bm{\phi}}(\bm{h}|\bm{x})$ amongst a family of potential posterior
+distributions parameterized by $\bm{\phi}$.  It is called an
+\textit{autoencoder} because it is reminiscent of a traditional
+autoencoder model, where input data is trained to predict itself after
+undergoing an intermediate bottlenecking representation step.
+
+!split
+===== Dissecting the equations =====
+To make
+this connection explicit, let us dissect the ELBO term further:
+
+!bt
+\begin{align*}
+{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}
+&= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p_{\bm{\theta}}(\bm{x}|\bm{h})p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Chain Rule of Probability)}}\\
+&= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Split the Expectation)}}\\
+&= \underbrace{{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right]}}_\text{reconstruction term} - \underbrace{{KL(q_{\bm{\phi}}(\bm{h}|\bm{x})}\vert\vert{p(\bm{h}))}}_\text{prior matching term} && {\text{(Definition of KL Divergence)}}
+\end{align*}
+!et
+
+
+!split
+===== Bottlenecking distribution =====
+
+In this case, we learn an intermediate bottlenecking distribution
+$q_{\bm{\phi}}(\bm{h}|\bm{x})$ that can be treated as
+an \textit{encoder}; it transforms inputs into a distribution over
+possible latents.  Simultaneously, we learn a deterministic function
+$p_{\bm{\theta}}(\bm{x}|\bm{h})$ to convert a given latent vector
+$\bm{h}$ into an observation $\bm{x}$, which can be interpreted as
+a \textit{decoder}.
+
+!split
+===== Decoder and encoder =====
+The two terms in the last equation each have intuitive descriptions: the first
+term measures the reconstruction likelihood of the decoder from our
+variational distribution; this ensures that the learned distribution
+is modeling effective latents that the original data can be
+regenerated from.  The second term measures how similar the learned
+variational distribution is to a prior belief held over latent
+variables.  Minimizing this term encourages the encoder to actually
+learn a distribution rather than collapse into a Dirac delta function.
+Maximizing the ELBO is thus equivalent to maximizing its first term
+and minimizing its second term.
+
+!split
+===== Defining feature of VAEs =====
+
+A defining feature of the VAE is how the ELBO is optimized jointly over parameters $\bm{\phi}$ and $\bm{\theta}$.  The encoder of the VAE is commonly chosen to model a multivariate Gaussian with diagonal covariance, and the prior is often selected to be a standard multivariate Gaussian: 
+!bt
+\begin{align*}
+    q_{\bm{\phi}}(\bm{h}|\bm{x}) &= N(\bm{h}; \bm{\mu}_{\bm{\phi}}(\bm{x}), \bm{\sigma}_{\bm{\phi}}^2(\bm{x})\textbf{I})\\
+    p(\bm{h}) &= N(\bm{h}; \bm{0}, \textbf{I})
+\end{align*}
+!et
+
+!split
+===== Analytical evaluation =====
+
+Then, the KL divergence term of the ELBO can be computed analytically, and the reconstruction term can be approximated using a Monte Carlo estimate.  Our objective can then be rewritten as:
+!bt
+\begin{align*}
+  argmax_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx argmax_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
+\end{align*}
+!et
+where latents $\{\bm{h}^{(l)}\}_{l=1}^L$ are sampled from $q_{\bm{\phi}}(\bm{h}|\bm{x})$, for every observation $\bm{x}$ in the dataset.
+
+
+!split
+===== Reparameterization trick =====
+
+However, a problem arises in this default setup: each $\bm{h}^{(l)}$
+that our loss is computed on is generated by a stochastic sampling
+procedure, which is generally non-differentiable.  Fortunately, this
+can be addressed via the \textit{reparameterization trick} when
+$q_{\bm{\phi}}(\bm{h}|\bm{x})$ is designed to model certain
+distributions, including the multivariate Gaussian.
+
+!split
+===== Actual implementation =====
+
+The reparameterization trick rewrites a random variable as a
+deterministic function of a noise variable; this allows for the
+optimization of the non-stochastic terms through gradient descent.
+For example, samples from a normal distribution
+$x \sim N(x;\mu, \sigma^2)$ with arbitrary mean $\mu$ and
+variance $\sigma^2$ can be rewritten as
+
+!bt
+\begin{align*}
+    x &= \mu + \sigma\epsilon \quad \text{with } \epsilon \sim N(\epsilon; 0, \bm{I})
+\end{align*}
+!et
+
+!split
+===== Interpretation =====
+An arbitrary Gaussian distributions can be interpreted as
+standard Gaussians (of which $\epsilon$ is a sample) that have their
+mean shifted from zero to the target mean $\mu$ by addition, and their
+variance stretched by the target variance $\sigma^2$.  Therefore, by
+the reparameterization trick, sampling from an arbitrary Gaussian
+distribution can be performed by sampling from a standard Gaussian,
+scaling the result by the target standard deviation, and shifting it
+by the target mean.
+
+!split
+===== Deterministic function  =====
+
+In a VAE, each $\bm{h}$ is thus computed as a deterministic function of input $\bm{x}$ and auxiliary noise variable $\bm{\epsilon}$:
+!bt
+\begin{align*}
+    \bm{h} &= \bm{\mu}_{\bm{\phi}}(\bm{x}) + \bm{\sigma}_{\bm{\phi}}(\bm{x})\odot\bm{\epsilon} \quad \text{with } \bm{\epsilon} \sim N(\bm{\epsilon};\bm{0}, \textbf{I})
+\end{align*}
+!et
+
+where $\odot$ represents an element-wise product.  Under this
+reparameterized version of $\bm{h}$, gradients can then be computed
+with respect to $\bm{\phi}$ as desired, to optimize
+$\bm{\mu}_{\bm{\phi}}$ and $\bm{\sigma}_{\bm{\phi}}$.  The VAE
+therefore utilizes the reparameterization trick and Monte Carlo
+estimates to optimize the ELBO jointly over $\bm{\phi}$ and
+$\bm{\theta}$.
+
+!split
+===== After training =====
+
+After training a VAE, generating new data can be performed by sampling
+directly from the latent space $p(\bm{h})$ and then running it through
+the decoder.  Variational Autoencoders are particularly interesting
+when the dimensionality of $\bm{h}$ is less than that of input
+$\bm{x}$, as we might then be learning compact, useful
+representations.  Furthermore, when a semantically meaningful latent
+space is learned, latent vectors can be edited before being passed to
+the decoder to more precisely control the data generated.
+
+
+
 
 !split
 ===== What is a GAN? =====
@@ -906,7 +1122,5 @@ variable has high dimensionality (same as the original data).
 !split
 ===== Mathematics of diffusion models =====
 
-More text will be added here.
-
-
+See whiteboard notes
 
