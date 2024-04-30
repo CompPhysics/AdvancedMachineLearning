@@ -154,15 +154,39 @@ div.toc p,a {
                2,
                None,
                'boltzmann-machines-and-energy-based-models-and-contrastive-optimization'),
-              ('The Kullback-Leibler divergence',
+              ('Energy models', 2, None, 'energy-models'),
+              ('Probability model', 2, None, 'probability-model'),
+              ('Marginal and conditional probabilities',
                2,
                None,
-               'the-kullback-leibler-divergence'),
+               'marginal-and-conditional-probabilities'),
+              ('Partition function', 2, None, 'partition-function'),
+              ('Optimization problem', 2, None, 'optimization-problem'),
+              ('Further simplifications', 2, None, 'further-simplifications'),
+              ('Optimizing the logarithm instead',
+               2,
+               None,
+               'optimizing-the-logarithm-instead'),
+              ('Expression for the gradients',
+               2,
+               None,
+               'expression-for-the-gradients'),
+              ('Contrastive optimization', 2, None, 'contrastive-optimization'),
+              ('The derivative of the partition function',
+               2,
+               None,
+               'the-derivative-of-the-partition-function'),
+              ('Explicit expression for the derivative',
+               2,
+               None,
+               'explicit-expression-for-the-derivative'),
+              ('Final expression', 2, None, 'final-expression'),
               ('Generative model,  basic overview (Borrowed from Rashcka et '
                'al)',
                2,
                None,
                'generative-model-basic-overview-borrowed-from-rashcka-et-al'),
+              ('Reminder on VAEs', 2, None, 'reminder-on-vaes'),
               ('What is a GAN?', 2, None, 'what-is-a-gan'),
               ('What is a generator network?',
                2,
@@ -307,10 +331,193 @@ distributions, namely what is called
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="boltzmann-machines-and-energy-based-models-and-contrastive-optimization">Boltzmann machines and energy-based models and contrastive optimization </h2>
 
-<p>Text to be added here</p>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="energy-models">Energy models </h2>
+
+<p>For Boltzmann machines  we defined a domain \( \boldsymbol{X} \) of stochastic variables \( \boldsymbol{X}= \{x_0,x_1, \dots , x_{n-1}\} \) with a pertinent probability distribution</p>
+$$
+p(\boldsymbol{X})=\prod_{x_i\in \boldsymbol{X}}p(x_i),
+$$
+
+<p>where we have assumed that the random varaibles \( x_i \) are all independent and identically distributed (iid).</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-kullback-leibler-divergence">The Kullback-Leibler divergence </h2>
+<h2 id="probability-model">Probability model </h2>
+
+<p>We defined a probability</p>
+$$
+p(x_i,h_j;\boldsymbol{\Theta}) = \frac{f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>where \( f(x_i,h_j;\boldsymbol{\Theta}) \) is a function which we assume is larger or
+equal than zero and obeys all properties required for a probability
+distribution and \( Z(\boldsymbol{\Theta}) \) is a normalization constant. Inspired by
+statistical mechanics, we call it often for the partition function.
+It is defined as (assuming that we have discrete probability distributions)
+</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="marginal-and-conditional-probabilities">Marginal and conditional probabilities </h2>
+
+<p>We can in turn define the marginal probabilities</p>
+$$
+p(x_i;\boldsymbol{\Theta}) = \frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>and </p>
+$$
+p(h_i;\boldsymbol{\Theta}) = \frac{\sum_{x_i\in \boldsymbol{X}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="partition-function">Partition function  </h2>
+
+<p><b>Note the change to a vector notation</b>. A variable like \( \boldsymbol{x} \)
+represents now a specific <b>configuration</b>. We can generate an infinity
+of such configurations. The final partition function is then the sum
+over all such possible configurations, that is
+</p>
+
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+
+<p>changes to</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{\boldsymbol{x}}\sum_{\boldsymbol{h}} f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}).
+$$
+
+<p>If we have a binary set of variable \( x_i \) and \( h_j \) and \( M \) values of \( x_i \) and \( N \) values of \( h_j \) we have in total \( 2^M \) and \( 2^N \) possible \( \boldsymbol{x} \) and \( \boldsymbol{h} \) configurations, respectively.</p>
+
+<p>We see that even for the modest binary case, we can easily approach a
+number of configuration which is not possible to deal with.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="optimization-problem">Optimization problem </h2>
+
+<p>At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is </p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}\left(\frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}\right),
+$$
+
+<p>which we rewrite as</p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}\left(\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})\right).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="further-simplifications">Further simplifications </h2>
+
+<p>We simplify further by rewriting it as</p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}),
+$$
+
+<p>where we used \( p(x_i;\boldsymbol{\Theta}) = \sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta}) \).
+The optimization problem is then
+</p>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\boldsymbol{X};\boldsymbol{\Theta}).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="optimizing-the-logarithm-instead">Optimizing the logarithm instead </h2>
+
+<p>Computing the derivatives with respect to the parameters \( \boldsymbol{\Theta} \) is
+easier (and equivalent) with taking the logarithm of the
+probability. We will thus optimize
+</p>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\boldsymbol{X};\boldsymbol{\Theta})},
+$$
+
+<p>which leads to</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=0.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="expression-for-the-gradients">Expression for the gradients </h2>
+
+<p>This leads to the following equation</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=0.
+$$
+
+<p>The first term is called the positive phase and we assume that we have a model for the function \( f \) from which we can sample values. Below we will develop an explicit model for this.
+The second term is called the negative phase and is the one which leads to more difficulties.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="contrastive-optimization">Contrastive optimization </h2>
+<p>The evaluation of these two terms leads to what in the literature is called contrastive optimization.</p>
+
+<p>If we optimize the negative <b>log</b> of the PDF, the aboves phases simply change sign.</p>
+
+<p>For a further discussion of energy-based models, see the notes by Philip Lippe at <a href="https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial8/Deep_Energy_Models.html" target="_blank"><tt>https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial8/Deep_Energy_Models.html</tt></a></p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-derivative-of-the-partition-function">The derivative of the partition function </h2>
+
+<p>The partition function, defined above as</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+
+<p>is in general the most problematic term. In principle both \( x \) and \( h \) can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="explicit-expression-for-the-derivative">Explicit expression for the derivative </h2>
+<p>We can rewrite</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}}Z(\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>which reads in more detail</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}} \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta})   }{Z(\boldsymbol{\Theta})}.
+$$
+
+<p>We can rewrite the function \( f \) (we have assumed that is larger or
+equal than zero) as \( f=\exp{\log{f}} \). We can then reqrite the last
+equation as
+</p>
+
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}} \nabla_{\boldsymbol{\Theta}}\exp{\log{f(x_i;\boldsymbol{\Theta})}}   }{Z(\boldsymbol{\Theta})}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="final-expression">Final expression </h2>
+
+<p>Taking the derivative gives us</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})}   }{Z(\boldsymbol{\Theta})}, 
+$$
+
+<p>which is the expectation value of \( \log{f} \)</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
+$$
+
+<p>that is</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\mathbb{E}(\log{f(x_i;\boldsymbol{\Theta})}).
+$$
+
+<p>This quantity is evaluated using Monte Carlo sampling, with Gibbs
+sampling as the standard sampling rule.  
+</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="generative-model-basic-overview-borrowed-from-rashcka-et-al">Generative model,  basic overview (Borrowed from Rashcka et al) </h2>
@@ -320,6 +527,36 @@ distributions, namely what is called
 <p><img src="figures/figure1.png" width="900" align="bottom"></p>
 </center>
 <br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reminder-on-vaes">Reminder on VAEs </h2>
+
+<p>Mathematically, we can imagine the latent variables and the data we
+observe as modeled by a joint distribution \( p(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta}) \).  Recall one
+approach of generative modeling, termed likelihood-based, is to
+learn a model to maximize the likelihood \( p(\boldsymbol{x};\boldsymbol{\Theta}) \) of all observed
+\( \boldsymbol{x} \).  There are two ways we can manipulate this joint distribution
+to recover the likelihood of purely our observed data \( p(\boldsymbol{x};\boldsymbol{\Theta}) \); we can
+explicitly marginalize
+out the latent variable \( \boldsymbol{h} \)
+</p>
+$$
+\begin{equation*}
+p(\boldsymbol{x}) = \int p(\boldsymbol{x}, \boldsymbol{h})d\boldsymbol{h}
+\end{equation*}
+$$
+
+<p>or, we could also appeal to the chain rule of probability</p>
+$$
+\begin{equation*}
+p(\boldsymbol{x}) = \frac{p(\boldsymbol{x}, \boldsymbol{h})}{p(\boldsymbol{h}|\boldsymbol{x})}
+\end{equation*}
+$$
+
+<p>We suppress here the dependence	on the optimization parameters \( \boldsymbol{\Theta} \).</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<p>===== </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="what-is-a-gan">What is a GAN? </h2>
@@ -1165,6 +1402,7 @@ variable has high dimensionality (same as the original data).
 <h2 id="mathematics-of-diffusion-models">Mathematics of diffusion models </h2>
 
 <p>More text will be added here.</p>
+
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
 <!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license

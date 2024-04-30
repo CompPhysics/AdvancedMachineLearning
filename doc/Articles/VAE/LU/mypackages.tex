@@ -1,0 +1,147 @@
+% This is the default as of April 2018; we include in case the compiler is super old.
+\usepackage[utf8]{inputenc}
+
+% The T1 font encoding is an 8-bit encoding and uses fonts that have 256 glyphs. 
+% Among other things, this makes underscores correct in listings.
+\usepackage[T1]{fontenc}
+
+%\usepackage{savetrees}
+
+\usepackage[numbers]{natbib} % Calvin added a bibliography package
+
+\usepackage{verbatim}
+\usepackage[sumlimits,]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{srcltx}
+
+% Table of Contents package, also enable dot-filling
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+% Boldface package for highlighting vectors
+\usepackage{bm}
+
+\usepackage[bb=boondox]{mathalfa}   % Enables \mathbb{0}, \mathbb{1}, etc.
+
+
+%\usepackage{rotating}
+\usepackage{array}
+%\usepackage{subfigure}
+\usepackage{graphics,graphicx,psfrag,epsfig}
+\usepackage{wrapfig}
+\graphicspath{{.} {./figures/}}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\usepackage[parfill]{parskip}
+\usepackage{geometry}
+
+\usepackage{xcolor}
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{deeporange}{rgb}{0.6,0.25,0}
+\definecolor{verylightgray}{rgb}{0.97,0.97,0.97}
+\definecolor{bluegray}{rgb}{0.3,0.3,0.6}
+%\definecolor{darkgreen}{rgb}{0.1333,0.5451,0.1333}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=black,       urlcolor=bluegray,
+    anchorcolor=bluegray,  filecolor=bluegray,
+    menucolor=bluegray,    citecolor=bluegray
+]{hyperref}
+
+
+% Attempt to make hyperref and algorithmic work together better:
+%\usepackage{algorithm}
+%\usepackage{algpseudocode}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage{cleveref}
+\usepackage{cancel}
+\usepackage{ulem}
+\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
+
+
+% Python style for highlighting
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{8} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{8}  % for normal
+
+\usepackage{listings}
+\usepackage{textcomp}  % Ensures apostrophes exist.
+
+% To get correct underscores etc, ensure you are also using:
+% \usepackage[T1]{fontenc}
+
+%\lstdefinestyle{pythonstyle}{
+%language=Python,
+%basicstyle=\footnotesize\ttm,
+%keywordstyle=\ttb\color{deepblue},
+%commentstyle=\ttm\color{deepgreen},
+%stringstyle=\color{deeporange},
+%emphstyle=\ttb\color{deepred},      % Custom highlighting style.
+%emph={__init__, __call__},          % Custom highlighting.
+%otherkeywords={self,yield},         % Additional keywords.
+%frame=single,                       % `tb` for top-bottom, `single` for square.
+%showstringspaces=false,
+%breaklines=true,
+%backgroundcolor=\color{verylightgray},
+%}
+
+
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\footnotesize\ttm,
+  keywordstyle=\ttb\color{deepblue},
+  commentstyle=\ttm\color{deepgreen},
+  stringstyle=\color{deeporange},
+  emphstyle=\ttb\color{deepred},
+  backgroundcolor=\color{verylightgray},
+  %numbers=left,
+  %numberstyle=\tiny\color{gray},        % line number style
+  %
+  emph={__init__, __call__},      % Custom highlighting.
+  morekeywords = {self,yield},
+  %
+  %escapeinside=||,               % if you want to add a comment within your code
+  %
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code; `tb` for top-bottom, `single` for square.
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=false,               % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  %title=\lstname,                % show the filename of files included with \lstinputlisting; also try caption instead
+  columns=fullflexible,           % ensures empty spaces not inserted; also DONT use: footnotesize (seems to work tho?)
+  extendedchars=false,
+  %
+  keepspaces=true,
+  upquote=true,                   % ensure that backtick displays correctly
+  %alsoletter={'},
+  literate={-}{-}1 {*}{*}1
+}
+
+% Make python the default.
+%\lstset{style=pythonstyle}
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\lstset{style=pythonstyle}
+\lstset{#1}
+}
+{}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\lstset{style=pythonstyle}\lstinline!#1!}}
+\renewcommand{\v}[1]{\pythoninline{#1}}
+
+% Python wholesale file input
+\newcommand\pythoninput[1]{\lstinputlisting[style=pythonstyle]{#1}}
