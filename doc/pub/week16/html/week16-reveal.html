@@ -149,6 +149,22 @@ td.padding {
 
 
 
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+     equationNumbers: {  autoNumber: "none"  },
+     extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "color.js"]
+  }
+});
+</script>
+<script type="text/javascript" async
+ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 <section>
 <!-- ------------------- main content ---------------------- -->
 <center>
@@ -193,13 +209,75 @@ td.padding {
 </section>
 
 <section>
-<h2 id="diffusion-models">Diffusion models </h2>
+<h2 id="diffusion-models-basics">Diffusion models, basics </h2>
 
-<p>Text to come here.</p>
+<p>Diffusion models are inspired by non-equilibrium thermodynamics. They
+define a Markov chain of diffusion steps to slowly add random noise to
+data and then learn to reverse the diffusion process to construct
+desired data samples from the noise. Unlike VAE or flow models,
+diffusion models are learned with a fixed procedure and the latent
+variable has high dimensionality (same as the original data).
+</p>
 </section>
 
 <section>
-<h2 id="summary-of-course-and-topics-covered">Summary of course and topics covered </h2>
+<h2 id="problems-with-probabilistic-models">Problems with probabilistic models </h2>
+
+<p>Historically, probabilistic models suffer from a tradeoff between two
+conflicting objectives: \textit{tractability} and
+\textit{flexibility}. Models that are \textit{tractable} can be
+analytically evaluated and easily fit to data (e.g. a Gaussian or
+Laplace). However, these models are unable to aptly describe structure
+in rich datasets. On the other hand, models that are \textit{flexible}
+can be molded to fit structure in arbitrary data. For example, we can
+define models in terms of any (non-negative) function \( \phi(\boldsymbol{x}) \)
+yielding the flexible distribution \( p\left(\boldsymbol{x}\right) =
+\frac{\phi\left(\boldsymbol{x} \right)}{Z} \), where \( Z \) is a normalization
+constant. However, computing this normalization constant is generally
+intractable. Evaluating, training, or drawing samples from such
+flexible models typically requires a very expensive Monte Carlo
+process.
+</p>
+</section>
+
+<section>
+<h2 id="diffusion-models">Diffusion models </h2>
+<p>Diffusion models have several interesting features</p>
+<ul>
+<p><li> extreme flexibility in model structure,</li>
+<p><li> exact sampling,</li>
+<p><li> easy multiplication with other distributions, e.g. in order to compute a posterior, and</li>
+<p><li> the model log likelihood, and the probability of individual states, to be cheaply evaluated.</li>
+</ul>
+</section>
+
+<section>
+<h2 id="original-idea">Original idea </h2>
+
+<p>In the original formulation, one uses a Markov chain to gradually
+convert one distribution into another, an idea used in non-equilibrium
+statistical physics and sequential Monte Carlo. Diffusion models build
+a generative Markov chain which converts a simple known distribution
+(e.g. a Gaussian) into a target (data) distribution using a diffusion
+process. Rather than use this Markov chain to approximately evaluate a
+model which has been otherwise defined, one can  explicitly define the
+probabilistic model as the endpoint of the Markov chain. Since each
+step in the diffusion chain has an analytically evaluable probability,
+the full chain can also be analytically evaluated.
+</p>
+</section>
+
+<section>
+<h2 id="diffusion-learning">Diffusion learning </h2>
+
+<p>Learning in this framework involves estimating small perturbations to
+a diffusion process. Estimating small, analytically tractable,
+perturbations is more tractable than explicitly describing the full
+distribution with a single, non-analytically-normalizable, potential
+function.  Furthermore, since a diffusion process exists for any
+smooth target distribution, this method can capture data distributions
+of arbitrary form.
+</p>
 </section>
 
 
