@@ -1210,10 +1210,13 @@ of arbitrary form.
 
 
 
-Generative adversarial network (GAN)~\cite{gan2014} has shown great results in many generative tasks to replicate the real-world rich content such as images, human language, and music. It is inspired by game theory: two models, a generator and a critic, are competing with each other while making each other stronger at the same time. However, it is rather challenging to train a GAN model, as people are facing issues like training instability or failure to converge. 
-
-Here I would like to explain the math behind the generative adversarial network framework,  why it is hard to be trained, and finally introduce a modified version of GAN intended to solve the training difficulties.
-
+Generative adversarial networks (GANs) have shown great results in
+many generative tasks to replicate the real-world rich content such as
+images, human language, and music. It is inspired by game theory: two
+models, a generator and a discriminator, are competing with each other while
+making each other stronger at the same time. However, it is rather
+challenging to train a GANs model, 
+training instability or failure to converge.
 
 
 
@@ -1225,12 +1228,6 @@ GAN consists of two models:
 	\item A generator $G$ outputs synthetic samples given a noise variable input $z$ ($z$ brings in potential output diversity). It is trained to capture the real data distribution so that its generative samples can be as real as possible, or in other words, can trick the discriminator to offer a high probability.
 \end{itemize}
 
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.85\linewidth]{GAN.png}
-	\caption{Architecture of a generative adversarial network. (Image source: \href{http://www.kdnuggets.com/2017/01/generative-adversarial-networks-hot-topic-machine-learning.html}{KDNuggets}).}
-	\label{fig:fig2}
-\end{figure}
 
 These two models compete against each other during the training process: the generator $G$ is trying hard to trick the discriminator, while the critic model $D$ is trying hard not to be cheated. This interesting zero-sum game between two models motivates both to improve their functionalities.
 
