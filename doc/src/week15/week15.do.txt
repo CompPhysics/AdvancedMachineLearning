@@ -9,7 +9,7 @@ DATE: April 30, 2024
 !bblock  Deep generative models
 o Summary of Variational Autoencoders
 o Generative Adversarial Networks (GANs), see URL:"https://lilianweng.github.io/posts/2017-08-20-gan/" for nice overview
-o Start discussion of diffusion models
+o Start discussion of diffusion models, motivation
 o "Video of lecture":"https://youtu.be/Cg8n9aWwHuU"
 o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril30.pdf"
 !eblock
@@ -243,7 +243,46 @@ This quantity is evaluated using Monte Carlo sampling, with Gibbs
 sampling as the standard sampling rule.  
 
 
+!split
+===== Kullback-Leibler divergence =====
 
+Before we continue, we need to remind ourselves about the
+Kullback-Leibler divergence introduced earlier. This will also allow
+us to introduce another measure used in connection with the training
+of Generative Adversarial Networks, the so-called Jensen-Shannon divergence..
+These metrics are useful for quantifying the similarity between two probability distributions.
+
+The Kullback–Leibler (KL) divergence, labeled $D_{KL}$,   measures how one probability distribution $p$ diverges from a second expected probability distribution $q$,
+that is
+!bt
+\[
+D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx.
+\]
+!et
+
+The KL-divegrnece $D_{KL}$ achieves the minimum zero when $p(x) == q(x)$ everywhere.
+
+Note that the KL divergence is asymmetric. In cases where $p(x)$ is
+close to zero, but $q(x)$ is significantly non-zero, the $q$'s effect
+is disregarded. It could cause buggy results when we just want to
+measure the similarity between two equally important distributions.
+
+!split
+===== Jensen-Shannon divergence =====
+
+The Jensen–Shannon (JS) divergence is another measure of similarity between
+two probability distributions, bounded by $[0, 1]$. The JS-divergence is
+symmetric and more smooth than the KL-divergence.
+It is defined as
+!bt
+\[
+D_{JS}(p \| q) = \frac{1}{2} D_{KL}(p \| \frac{p + q}{2}) + \frac{1}{2} D_{KL}(q \| \frac{p + q}{2})
+\]
+!et
+
+Many practitioners believe that one reason behind GANs' big success is
+switching the loss function from asymmetric KL-divergence in
+traditional maximum-likelihood approach to symmetric JS-divergence.
 
 
 !split
@@ -329,14 +368,14 @@ To better understand the relationship between the evidence and the ELBO, let us 
 
 !bt
 \begin{align*}
-\log p(\bm{x}) & = \log p(\bm{x}) \int q_{\bm{\phi}}(\bm{h}|\bm{x})dz && \text{(Multiply by $1 = \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h}$)}\\
-          & = \int q_{\bm{\phi}}(\bm{h}|\bm{x})(\log p(\bm{x}))dz && \text{(Bring evidence into integral)}\\
+\log p(\bm{x}) & = \log p(\bm{x}) \int q_{\bm{\phi}}(\bm{h}|\bm{x})dh && \text{(Multiply by $1 = \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h}$)}\\
+          & = \int q_{\bm{\phi}}(\bm{h}|\bm{x})(\log p(\bm{x}))dh && \text{(Bring evidence into integral)}\\
           & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p(\bm{x})\right] && \text{(Definition of Expectation)}\\
           & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{p(\bm{h}|\bm{x})}\right]&& \\
           & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})q_{\bm{\phi}}(\bm{h}|\bm{x})}{p(\bm{h}|\bm{x})q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]&& \text{(Multiply by $1 = \frac{q_{\bm{\phi}}(\bm{h}|\bm{x})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}$)}\\
           & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{q_{\bm{\phi}}(\bm{h}|\bm{x})}{p(\bm{h}|\bm{x})}\right] && \text{(Split the Expectation)}\\
           & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right] +
-	  KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}|\bm{x}))  && \text{(Definition of KL Divergence)}\\
+	  D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}|\bm{x}))  && \text{(Definition of KL Divergence)}\\
           & \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]  && \text{(KL Divergence always $\geq 0$)}
 \end{align*}
 !et
@@ -374,7 +413,7 @@ this connection explicit, let us dissect the ELBO term further:
 {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}
 &= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p_{\bm{\theta}}(\bm{x}|\bm{h})p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Chain Rule of Probability)}}\\
 &= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Split the Expectation)}}\\
-&= \underbrace{{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right]}}_\text{reconstruction term} - \underbrace{{KL(q_{\bm{\phi}}(\bm{h}|\bm{x})}\vert\vert{p(\bm{h}))}}_\text{prior matching term} && {\text{(Definition of KL Divergence)}}
+&= \underbrace{{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right]}}_\text{reconstruction term} - \underbrace{{D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})}\vert\vert{p(\bm{h}))}}_\text{prior matching term} && {\text{(Definition of KL Divergence)}}
 \end{align*}
 !et
 
@@ -420,7 +459,7 @@ A defining feature of the VAE is how the ELBO is optimized jointly over paramete
 Then, the KL divergence term of the ELBO can be computed analytically, and the reconstruction term can be approximated using a Monte Carlo estimate.  Our objective can then be rewritten as:
 !bt
 \begin{align*}
-  \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - KL(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
+  \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
 \end{align*}
 !et
 where latents $\{\bm{h}^{(l)}\}_{l=1}^L$ are sampled from $q_{\bm{\phi}}(\bm{h}|\bm{x})$, for every observation $\bm{x}$ in the dataset.
@@ -1176,38 +1215,6 @@ Generative adversarial network (GAN)~\cite{gan2014} has shown great results in m
 Here I would like to explain the math behind the generative adversarial network framework,  why it is hard to be trained, and finally introduce a modified version of GAN intended to solve the training difficulties.
 
 
-\section{Kullback–Leibler and Jensen–Shannon Divergence}
-\label{sec:kl_and_js}
-
-Before we start examining GANs closely, let us first review two metrics for quantifying the similarity between two probability distributions.
-
-(1) \textbf{KL (Kullback–Leibler) Divergence} measures how one probability distribution $p$ diverges from a second expected probability distribution $q$.
-
-\[
-D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx
-\]
-
-$D_{KL}$ achieves the minimum zero when $p(x) == q(x)$ everywhere.
-
-It is noticeable according to the formula that KL divergence is asymmetric. In cases where $p(x)$ is close to zero, but $q(x)$ is significantly non-zero, the $q$'s effect is disregarded. It could cause buggy results when we just want to measure the similarity between two equally important distributions.
-
-
-(2) \textbf{Jensen–Shannon Divergence} is another measure of similarity between two probability distributions, bounded by $[0, 1]$. JS divergence is symmetric and more smooth. Check this \href{https://www.quora.com/Why-isnt-the-Jensen-Shannon-divergence-used-more-often-than-the-Kullback-Leibler-since-JS-is-symmetric-thus-possibly-a-better-indicator-of-distance}{post} if you are interested in reading more about the comparison between KL divergence and JS divergence.
-
-\[
-D_{JS}(p \| q) = \frac{1}{2} D_{KL}(p \| \frac{p + q}{2}) + \frac{1}{2} D_{KL}(q \| \frac{p + q}{2})
-\]
-
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=\linewidth]{KL_JS_divergence.png}
-	\caption{Given two Gaussian distribution, $p$ with mean=0 and std=1 and $q$ with mean=1 and std=1. The average of two distributions is labeled as $m=(p+q)/2$. KL divergence $D_{KL}$ is asymmetric but JS divergence $D_{JS}$ is symmetric.}
-	\label{fig:fig1}
-\end{figure}
-
-
-Some~\cite{gan2015train} believe that one reason behind GANs' big success is switching the loss function from asymmetric KL divergence in traditional maximum-likelihood approach to symmetric JS divergence. We will discuss more on this point in the next section.
 
 
 \section{Generative Adversarial Network}
