@@ -79,6 +79,15 @@ doconce format html week16.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'mathematics-of-diffusion-models'),
+              ('Chains of VAEs', 2, None, 'chains-of-vaes'),
+              ('Mathematical representation',
+               2,
+               None,
+               'mathematical-representation'),
+              ('Back to the marginal probability',
+               2,
+               None,
+               'back-to-the-marginal-probability'),
               ('Diffusion models for hierarchical VAE, from '
                'URL:"https://arxiv.org/abs/2208.11970"',
                2,
@@ -154,6 +163,9 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#original-idea" style="font-size: 80%;">Original idea</a></li>
      <!-- navigation toc: --> <li><a href="#diffusion-learning" style="font-size: 80%;">Diffusion learning</a></li>
      <!-- navigation toc: --> <li><a href="#mathematics-of-diffusion-models" style="font-size: 80%;">Mathematics of diffusion models</a></li>
+     <!-- navigation toc: --> <li><a href="#chains-of-vaes" style="font-size: 80%;">Chains of VAEs</a></li>
+     <!-- navigation toc: --> <li><a href="#mathematical-representation" style="font-size: 80%;">Mathematical representation</a></li>
+     <!-- navigation toc: --> <li><a href="#back-to-the-marginal-probability" style="font-size: 80%;">Back to the marginal probability</a></li>
      <!-- navigation toc: --> <li><a href="#diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970" style="font-size: 80%;">Diffusion models for hierarchical VAE, from URL:"https://arxiv.org/abs/2208.11970"</a></li>
      <!-- navigation toc: --> <li><a href="#diffusion-models-from-url-https-arxiv-org-abs-2208-11970" style="font-size: 80%;">Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"</a></li>
      <!-- navigation toc: --> <li><a href="#diffusion-models-part-2-from-url-https-arxiv-org-abs-2208-11970" style="font-size: 80%;">Diffusion models, part 2, from URL:"https://arxiv.org/abs/2208.11970"</a></li>
@@ -499,7 +511,55 @@ include multiple hierarchies of latent spaces.
 </p>
 
 <!-- !split -->
+<h2 id="chains-of-vaes" class="anchor">Chains of VAEs </h2>
+<p>As an intermediate step, we introduce what is often called Markovian
+VAE where the generative process is a Markov chain and build a hierarchy of VAEs.
+</p>
+
+<p>Each transition down the hierarchy is Markovian, where we decode each
+latent set of variables \( \boldsymbol{h}_t \) in terms of the previous latent variable$\boldsymbol{h}_{t-1}$.
+Intuitively, and visually, this can be seen as simply stacking VAEs on
+top of each other (see figure next slide).
+</p>
+
+<p>One can think of such a model as a recursive VAE.</p>
+
+<!-- !split -->
+<h2 id="mathematical-representation" class="anchor">Mathematical representation </h2>
+
+<p>Mathematically, we represent the joint distribution and the posterior
+of a Markovian VAE as
+</p>
+$$
+\begin{align*}
+    p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) &= p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})\\
+    q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x}) &= q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="back-to-the-marginal-probability" class="anchor">Back to the marginal probability </h2>
+
+<p>We can then define the marginal probability we want to optimize as</p>
+$$
+\begin{align*}
+\log p(\boldsymbol{x}) &= \log \int p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) d\boldsymbol{h}_{1:T}  \\
+&= \log \int \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})} d\boldsymbol{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}$)}\\
+&= \log \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Definition of Expectation)}\\
+&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Apply Jensen's Inequality)}
+\end{align*}
+$$
+
+
+<!-- !split -->
 <h2 id="diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970" class="anchor">Diffusion models for hierarchical VAE, from <a href="https://arxiv.org/abs/2208.11970" target="_self"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
+
+<p>A Markovian hierarchical Variational Autoencoder with \( T \) hierarchical
+latents.  The generative process is modeled as a Markov chain, where
+each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
+\( \boldsymbol{h}_{t+1} \)
+</p>
 
 <br/><br/>
 <center>
@@ -533,6 +593,7 @@ include multiple hierarchies of latent spaces.
 <p><img src="figures/figure4.png" width="800" align="bottom"></p>
 </center>
 <br/><br/>
+
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->

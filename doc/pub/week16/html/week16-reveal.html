@@ -531,7 +531,58 @@ include multiple hierarchies of latent spaces.
 </section>
 
 <section>
+<h2 id="chains-of-vaes">Chains of VAEs </h2>
+<p>As an intermediate step, we introduce what is often called Markovian
+VAE where the generative process is a Markov chain and build a hierarchy of VAEs.
+</p>
+
+<p>Each transition down the hierarchy is Markovian, where we decode each
+latent set of variables \( \boldsymbol{h}_t \) in terms of the previous latent variable$\boldsymbol{h}_{t-1}$.
+Intuitively, and visually, this can be seen as simply stacking VAEs on
+top of each other (see figure next slide).
+</p>
+
+<p>One can think of such a model as a recursive VAE.</p>
+</section>
+
+<section>
+<h2 id="mathematical-representation">Mathematical representation </h2>
+
+<p>Mathematically, we represent the joint distribution and the posterior
+of a Markovian VAE as
+</p>
+<p>&nbsp;<br>
+$$
+\begin{align*}
+    p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) &= p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})\\
+    q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x}) &= q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})
+\end{align*}
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="back-to-the-marginal-probability">Back to the marginal probability </h2>
+
+<p>We can then define the marginal probability we want to optimize as</p>
+$$
+\begin{align*}
+\log p(\boldsymbol{x}) &= \log \int p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) d\boldsymbol{h}_{1:T}  \\
+&= \log \int \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})} d\boldsymbol{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}$)}\\
+&= \log \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Definition of Expectation)}\\
+&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Apply Jensen's Inequality)}
+\end{align*}
+$$
+</section>
+
+<section>
 <h2 id="diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970">Diffusion models for hierarchical VAE, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
+
+<p>A Markovian hierarchical Variational Autoencoder with \( T \) hierarchical
+latents.  The generative process is modeled as a Markov chain, where
+each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
+\( \boldsymbol{h}_{t+1} \)
+</p>
 
 <br/><br/>
 <center>

@@ -293,9 +293,52 @@ hierarchical VAEs, which can be seen as a generalization of VAEs that
 include multiple hierarchies of latent spaces.
 
 
+!split
+===== Chains of VAEs =====
+As an intermediate step, we introduce what is often called Markovian
+VAE where the generative process is a Markov chain and build a hierarchy of VAEs.
+
+Each transition down the hierarchy is Markovian, where we decode each
+latent set of variables $\bm{h}_t$ in terms of the previous latent variable$\bm{h}_{t-1}$.
+Intuitively, and visually, this can be seen as simply stacking VAEs on
+top of each other (see figure next slide).
+
+One can think of such a model as a recursive VAE.
+
+
+!split
+===== Mathematical representation =====
+
+Mathematically, we represent the joint distribution and the posterior
+of a Markovian VAE as
+!bt
+\begin{align*}
+    p(\bm{x}, \bm{h}_{1:T}) &= p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})\\
+    q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x}) &= q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})
+\end{align*}
+!et
+
+
+!split
+===== Back to the marginal probability =====
+
+We can then define the marginal probability we want to optimize as
+!bt
+\begin{align*}
+\log p(\bm{x}) &= \log \int p(\bm{x}, \bm{h}_{1:T}) d\bm{h}_{1:T}  \\
+&= \log \int \frac{p(\bm{x}, \bm{h}_{1:T})q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})} d\bm{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}$)}\\
+&= \log \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Definition of Expectation)}\\
+&\geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Apply Jensen's Inequality)}
+\end{align*}
+!et
 
 !split
 ===== Diffusion models for hierarchical VAE, from URL:"https://arxiv.org/abs/2208.11970"  =====
+
+A Markovian hierarchical Variational Autoencoder with $T$ hierarchical
+latents.  The generative process is modeled as a Markov chain, where
+each latent $\bm{h}_t$ is generated only from the previous latent
+$\bm{h}_{t+1}$
 
 FIGURE: [figures/figure1.png, width=800 frac=1.0]
 
@@ -318,4 +361,7 @@ FIGURE: [figures/figure3.png, width=800 frac=1.0]
 ===== Diffusion models, part 3, from URL:"https://arxiv.org/abs/2208.11970"  =====
 
 FIGURE: [figures/figure4.png, width=800 frac=1.0]
+
+
+
 
