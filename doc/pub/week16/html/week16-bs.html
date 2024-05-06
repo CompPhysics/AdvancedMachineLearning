@@ -184,6 +184,17 @@ MathJax.Hub.Config({
 </div>
 
 
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<ol>
+<li> A central paper is the one by Sohl-Dickstein et al, Deep Unsupervised Learning using Nonequilibrium Thermodynamics, <a href="https://arxiv.org/abs/1503.03585" target="_self"><tt>https://arxiv.org/abs/1503.03585</tt></a></li>
+<li> See also Diederik P. Kingma, Tim Salimans, Ben Poole, Jonathan Ho, Variational Diffusion Models, <a href="https://arxiv.org/abs/2107.00630" target="_self"><tt>https://arxiv.org/abs/2107.00630</tt></a></li>
+</ol>
+</div>
+</div>
+
+
 <!-- !split -->
 <h2 id="reminder-from-last-week-what-is-a-gan" class="anchor">Reminder from last week, what is a GAN? </h2>
 
@@ -452,7 +463,17 @@ of arbitrary form.
 <!-- !split -->
 <h2 id="mathematics-of-diffusion-models" class="anchor">Mathematics of diffusion models </h2>
 
-<p>Notes to be added  here</p>
+<p>Let us go back our discussions of the variational autoencoders from
+last week, see
+<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb</tt></a>. As
+a first attempt at understanding diffusion models, we can think of
+these as stacked VAEs, or better, recursive VAEs.
+</p>
+
+<p>Let us try to see why. As an intermediate step, we consider so-called
+hierarchical VAEs, which can be seen as a generalization of VAEs that
+include multiple hierarchies of latent spaces.
+</p>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
