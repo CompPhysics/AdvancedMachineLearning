@@ -701,7 +701,7 @@ $$
 <p><li> The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep \( T \) is a standard Gaussian</li>
 </ol>
 <p>
-<p>The VDM posterior is (simply rewrite) </p>
+<p>The VDM posterior is</p>
 <p>&nbsp;<br>
 $$
 \begin{align*}
@@ -714,11 +714,39 @@ $$
 <section>
 <h2 id="second-assumption">Second assumption </h2>
 
-<p>The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.  Here then,</p>
+<p>The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.
+Here then, the structure of the encoder at each timestep \( t \) is not learned; it
+is fixed as a linear Gaussian model, where the mean and standard
+deviation can be set beforehand as hyperparameters, or learned as
+parameters.
+</p>
+</section>
 
-<p>the structure of the encoder at each timestep \( t \) is not learned; it is fixed as a linear Gaussian model, where the mean and standard deviation can be set beforehand as hyperparameters, or learned as parameters.</p>
+<section>
+<h2 id="parameterizing-gaussian-encoder">Parameterizing Gaussian encoder </h2>
 
-<p>We parameterize the Gaussian encoder with mean \( \boldsymbol{\mu}_t(\boldsymbol{x}_t) = \sqrt{\alpha_t} \boldsymbol{x}_{t-1} \), and variance \( \boldsymbol{\Sigma}_t(\boldsymbol{x}_t) = (1 - \alpha_t) \textbf{I} \), where the form of the coefficients are chosen such that the variance of the latent variables stay at a similar scale; in other words, the encoding process is variance-preserving.  Note that alternate Gaussian parameterizations are allowed, and lead to similar derivations.  The main takeaway is that \( \alpha_t \) is a (potentially learnable) coefficient that can vary with the hierarchical depth \( t \), for flexibility.</p>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>We parameterize the Gaussian encoder with mean \( \boldsymbol{\mu}_t(\boldsymbol{x}_t) =
+\sqrt{\alpha_t} \boldsymbol{x}_{t-1} \), and variance \( \boldsymbol{\Sigma}_t(\boldsymbol{x}_t) =
+(1 - \alpha_t) \textbf{I} \), where the form of the coefficients are
+chosen such that the variance of the latent variables stay at a
+similar scale; in other words, the encoding process is
+variance-preserving.
+</p>
+</div>
+
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>Note that alternate Gaussian parameterizations
+are allowed, and lead to similar derivations.  The main takeaway is
+that \( \alpha_t \) is a (potentially learnable) coefficient that can vary
+with the hierarchical depth \( t \), for flexibility.
+</p>
+</div>
 </section>
 
 <section>
@@ -766,6 +794,16 @@ identical to pure Gaussian noise.  See figure on next slide.
 </section>
 
 <section>
+<h2 id="diffusion-models-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure2.png" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
 <h2 id="gaussian-modeling">Gaussian modeling </h2>
 
 <p>Note that our encoder distributions \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \) are no
@@ -779,16 +817,6 @@ running the denoising transitions
 \( p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_{t}) \) for \( T \) steps to generate a
 novel \( \boldsymbol{x}_0 \).
 </p>
-</section>
-
-<section>
-<h2 id="diffusion-models-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figures/figure2.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
 </section>
 
 <section>
