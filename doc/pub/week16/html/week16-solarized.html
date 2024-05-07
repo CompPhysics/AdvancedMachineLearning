@@ -73,6 +73,7 @@ div.toc p,a {
                'reminder-from-last-week-what-is-a-gan'),
               ('Labeling the networks', 2, None, 'labeling-the-networks'),
               ('Which data?', 2, None, 'which-data'),
+              ('Semi-supervised learning', 2, None, 'semi-supervised-learning'),
               ('Improving functionalities',
                2,
                None,
@@ -123,6 +124,19 @@ div.toc p,a {
                2,
                None,
                'diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970'),
+              ('Equation for the Markovian hierarchical VAE',
+               2,
+               None,
+               'equation-for-the-markovian-hierarchical-vae'),
+              ('Variational Diffusion Models',
+               2,
+               None,
+               'variational-diffusion-models'),
+              ('Second assumption', 2, None, 'second-assumption'),
+              ('Encoder transitions', 2, None, 'encoder-transitions'),
+              ('Third assumption', 2, None, 'third-assumption'),
+              ('Noisification', 2, None, 'noisification'),
+              ('Gaussian modeling', 2, None, 'gaussian-modeling'),
               ('Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"',
                2,
                None,
@@ -243,6 +257,9 @@ problem and tries to find adversarial examples, that is  samples which
 will be misclassified by the discriminator.
 </p>
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="semi-supervised-learning">Semi-supervised learning </h2>
+
 <p>One can also design GAN architectures which work in a
 semi-supervised learning setting. A semi-supervised learning environment includes both labeled and unlabeled data.
 See <a href="https://proceedings.neurips.cc/paper_files/paper/2016/file/8a3363abe792db2d8761d6403605aeb7-Paper.pdf" target="_blank"><tt>https://proceedings.neurips.cc/paper_files/paper/2016/file/8a3363abe792db2d8761d6403605aeb7-Paper.pdf</tt></a> for a further discussion.
@@ -269,7 +286,7 @@ their functionalities.
 
 <p>We define a probability \( p_{\boldsymbol{h}} \) which is used by the
 generator. Usually it is given by a uniform distribution over the
-input input \( \boldsymbol{h} \). Thereafter we define the distribution of the
+input \( \boldsymbol{h} \). Thereafter we define the distribution of the
 generator which we want to train, \( p_{g} \) This is the generator's
 distribution over the data \( \boldsymbol{x} \). Finally, we have the distribution
 \( p_{r} \) over the real sample \( \boldsymbol{x} \)
@@ -312,7 +329,7 @@ $$
 <p>Now we have a well-defined loss function. Let's first examine what is the best value for \( D \).</p>
 
 $$
-L(G, D) = \int_{\boldsymbol{x}} \bigg( p_{r}(\boldsymbol{x}) \log(D(\boldsymbol{x})) + p_g (\boldsymbol{x}) \log(1 - D(\boldsymbol{x})) \bigg) dx
+L(G, D) = \int_{\boldsymbol{x}} \bigg( p_{r}(\boldsymbol{x}) \log(D(\boldsymbol{x})) + p_g (\boldsymbol{x}) \log(1 - D(\boldsymbol{x})) \bigg) d\boldsymbol{x}
 $$
 
 
@@ -362,7 +379,7 @@ $$
 
 <p>Once the generator is trained to its optimal, \( p_g \) gets
 very close to \( p_{r} \). When \( p_g = p_{r} \), \( D^*(\boldsymbol{x}) \) becomes
-\( 1/2 \). We will observe this when running the code below here.
+\( 1/2 \). We will observe this when running the code from last week (see jupyter-notebook from week 15).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -399,16 +416,16 @@ $$
 <h2 id="what-does-the-loss-function-quantify">What does the loss function quantify? </h2>
 
 <p>We have </p>
+
 $$
 L(G, D^*) = 2D_{JS}(p_{r} \| p_g) - 2\log2.
 $$
 
-<p>Essentially the loss function of GAN quantifies the similarity between
+<p>The loss function of GANs quantifies the similarity between
 the generative data distribution \( p_g \) and the real sample
-distribution \( p_{r} \) by JS divergence when the discriminator is
+distribution \( p_{r} \) by the so-called JS divergence when the discriminator is
 optimal. The best \( G^* \) that replicates the real data distribution
-leads to the minimum \( L(G^*, D^*) = -2\log2 \) which is aligned with
-equations above.
+leads to the minimum \( L(G^*, D^*) = -2\log2 \).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -432,7 +449,7 @@ convergence.
 <h2 id="vanishing-gradient">Vanishing Gradient  </h2>
 
 <p>When the discriminator is perfect, we are guaranteed with
-\( D(x) = 1, \forall x \in p_r \) and \( D(x) = 0, \forall x \in p_g \).
+\( D(\boldsymbol{x}) = 1, \forall \boldsymbol{x} \in p_r \) and \( D(\boldsymbol{x}) = 0, \forall \boldsymbol{x} \in p_g \).
 </p>
 
 <p>Then, the
@@ -453,8 +470,8 @@ the discriminator gets better and the gradient vanishes fast.
 what is called the Wasserstein diatance, which is a way to compute the
 difference/distance between two probability distribitions. For those
 interested in reading more, we recommend for example chapter 17 of
-Rashcka's et al textbook, Machine Learning with PyTorch and Scikit-Learn, chapter 17, see URL:"https://github.com/rasbt/python-machine-learning-book\
--3rd-edition/tree/master/ch17"
+Rashcka's et al textbook,
+Machine Learning with PyTorch and Scikit-Learn, chapter 17, see <a href="https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17" target="_blank"><tt>https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17</tt></a>
 </p>
 
 <p>For a definition of the Wasserstein distance, see for example <a href="https://arxiv.org/pdf/2103.01678" target="_blank"><tt>https://arxiv.org/pdf/2103.01678</tt></a></p>
@@ -561,7 +578,7 @@ VAE where the generative process is a Markov chain and build a hierarchy of VAEs
 </p>
 
 <p>Each transition down the hierarchy is Markovian, where we decode each
-latent set of variables \( \boldsymbol{h}_t \) in terms of the previous latent variable$\boldsymbol{h}_{t-1}$.
+latent set of variables \( \boldsymbol{h}_t \) in terms of the previous latent variable \( \boldsymbol{h}_{t-1} \).
 Intuitively, and visually, this can be seen as simply stacking VAEs on
 top of each other (see figure next slide).
 </p>
@@ -610,6 +627,100 @@ each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
 <p><img src="figures/figure1.png" width="800" align="bottom"></p>
 </center>
 <br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="equation-for-the-markovian-hierarchical-vae">Equation for the Markovian hierarchical VAE </h2>
+
+<p>We obtain then</p>
+$$
+\begin{align*}
+\mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]
+&= \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})}\right]
+\end{align*}
+$$
+
+<p>We will modify this equation when we discuss what are normally called Variational Diffusion Models.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="variational-diffusion-models">Variational Diffusion Models </h2>
+
+<p>The easiest way to think of a Variational Diffusion Model (VDM) is as a Markovian Hierarchical Variational Autoencoder with three key restrictions:</p>
+
+<ol>
+<li> The latent dimension is exactly equal to the data dimension</li>
+<li> The structure of the latent encoder at each timestep is not learned; it is pre-defined as a linear Gaussian model.  In other words, it is a Gaussian distribution centered around the output of the previous timestep</li>
+<li> The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep \( T \) is a standard Gaussian</li>
+</ol>
+<p>The VDM posterior is (simply rewrite) </p>
+$$
+\begin{align*}
+    q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0) = \prod_{t = 1}^{T}q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="second-assumption">Second assumption </h2>
+
+<p>The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.  Here then,</p>
+
+<p>the structure of the encoder at each timestep \( t \) is not learned; it is fixed as a linear Gaussian model, where the mean and standard deviation can be set beforehand as hyperparameters, or learned as parameters.</p>
+
+<p>We parameterize the Gaussian encoder with mean \( \boldsymbol{\mu}_t(\boldsymbol{x}_t) = \sqrt{\alpha_t} \boldsymbol{x}_{t-1} \), and variance \( \boldsymbol{\Sigma}_t(\boldsymbol{x}_t) = (1 - \alpha_t) \textbf{I} \), where the form of the coefficients are chosen such that the variance of the latent variables stay at a similar scale; in other words, the encoding process is variance-preserving.  Note that alternate Gaussian parameterizations are allowed, and lead to similar derivations.  The main takeaway is that \( \alpha_t \) is a (potentially learnable) coefficient that can vary with the hierarchical depth \( t \), for flexibility.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="encoder-transitions">Encoder transitions </h2>
+
+<p>Mathematically, the encoder transitions are defined as</p>
+$$
+\begin{align*}
+    q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1}) = \mathcal{N}(\boldsymbol{x}_{t} ; \sqrt{\alpha_t} \boldsymbol{x}_{t-1}, (1 - \alpha_t) \textbf{I}) \label{eq:27}
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="third-assumption">Third assumption </h2>
+
+<p>From the third assumption, we know that \( \alpha_t \) evolves over time
+according to a fixed or learnable schedule structured such that the
+distribution of the final latent \( p(\boldsymbol{x}_T) \) is a standard Gaussian.
+We can then update the joint distribution of a Markovian VAE to write
+the joint distribution for a VDM as
+</p>
+
+$$
+\begin{align*}
+p(\boldsymbol{x}_{0:T}) &= p(\boldsymbol{x}_T)\prod_{t=1}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_t) \\
+\text{where,}&\nonumber\\
+p(\boldsymbol{x}_T) &= \mathcal{N}(\boldsymbol{x}_T; \boldsymbol{0}, \textbf{I})
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="noisification">Noisification </h2>
+
+<p>Collectively, what this set of assumptions describes is a steady
+noisification of an image input over time. We progressively corrupt an
+image by adding Gaussian noise until eventually it becomes completely
+identical to pure Gaussian noise.  See figure on next slide.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gaussian-modeling">Gaussian modeling </h2>
+
+<p>Note that our encoder distributions \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \) are no
+longer parameterized by \( \boldsymbol{\phi} \), as they are completely modeled as
+Gaussians with defined mean and variance parameters at each timestep.
+Therefore, in a VDM, we are only interested in learning conditionals
+\( p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_{t}) \), so that we can simulate
+new data.  After optimizing the VDM, the sampling procedure is as
+simple as sampling Gaussian noise from \( p(\boldsymbol{x}_T) \) and iteratively
+running the denoising transitions
+\( p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_{t}) \) for \( T \) steps to generate a
+novel \( \boldsymbol{x}_0 \).
+</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="diffusion-models-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>

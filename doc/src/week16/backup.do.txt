@@ -1,85 +1,81 @@
 
 !split
-===== Chains of VAEs =====
-As an intermediate step, we introduce what is often called Markovian
-VAE where the generative process is a Markov chain and build a hierarchy of VAEs.
+===== Equation for the Markovian hierarchical VAE =====
 
-Each transition down the hierarchy is Markovian, where we decode each
-latent set of variables $\bm{h}_t$ in terms of the previous latent variable$\bm{h}_{t-1}$.
-Intuitively, and visually, this can be seen as simply stacking VAEs on
-top of each other (see figure next slide).
-
-One can think of such a model as a recursive VAE.
-
-
-!split
-===== Mathematical representation =====
-
-Mathematically, we represent the joint distribution and the posterior
-of a Markovian VAE as
+We obtain then
 !bt
 \begin{align*}
-    p(\bm{x}, \bm{h}_{1:T}) &= p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})\\
-    q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x}) &= q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})
+\mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]
+&= \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})}{q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})}\right]
 \end{align*}
 !et
 
+We will modify this equation when we discuss what are normally called Variational Diffusion Models.
 
-We can then define the marginal probability we want to optimize as
+
+!split
+===== Variational Diffusion Models =====
+
+The easiest way to think of a Variational Diffusion Model (VDM) is as a Markovian Hierarchical Variational Autoencoder with three key restrictions:
+
+o The latent dimension is exactly equal to the data dimension
+o The structure of the latent encoder at each timestep is not learned; it is pre-defined as a linear Gaussian model.  In other words, it is a Gaussian distribution centered around the output of the previous timestep
+o The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep $T$ is a standard Gaussian
+
+
+The VDM posterior is (simply rewrite) 
 !bt
 \begin{align*}
-\log p(\bm{x}) &= \log \int p(\bm{x}, \bm{h}_{1:T}) d\bm{h}_{1:T}  \\
-&= \log \int \frac{p(\bm{x}, \bm{h}_{1:T})q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})} d\bm{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}$)}\\
-&= \log \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Apply Jensen's Inequality)}
-\end{align*}
-
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\linewidth]{images/hvae.png}
-  \caption{A Markovian Hierarchical Variational Autoencoder with $T$ hierarchical latents.  The generative process is modeled as a Markov chain, where each latent $\bm{h}_t$ is generated only from the previous latent $\bm{h}_{t+1}$.}
-  \label{fig:hvae}
-\end{figure}
-
-We can then plug our joint distribution (Equation \ref{eq:20}) and posterior (Equation \ref{eq:21}) into Equation \ref{eq:25} to produce an alternate form:
-\begin{align}
-\mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]
-&= \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})}{q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})}\right]
-\end{align}
-As we will show below, when we investigate Variational Diffusion Models, this objective can be further decomposed into interpretable components.
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{images/vdm_base.png}
-  \caption{A visual representation of a Variational Diffusion Model; $\bm{x}_0$ represents true data observations such as natural images, $\bm{x}_T$ represents pure Gaussian noise, and $\bm{x}_t$ is an intermediate noisy version of $\bm{x}_0$.  Each $q(\bm{x}_t|\bm{x}_{t-1})$ is modeled as a Gaussian distribution that uses the output of the previous state as its mean.}
-  \label{fig:vdm}
-\end{figure}
-\section*{Variational Diffusion Models}
-\addcontentsline{toc}{section}{\protect\numberline{}Variational Diffusion Models}%
-The easiest way to think of a Variational Diffusion Model (VDM)~\cite{sohl2015deep, ho2020denoising, kingma2021variational} is simply as a Markovian Hierarchical Variational Autoencoder with three key restrictions:
-\begin{itemize}
-    \item The latent dimension is exactly equal to the data dimension
-    \item The structure of the latent encoder at each timestep is not learned; it is pre-defined as a linear Gaussian model.  In other words, it is a Gaussian distribution centered around the output of the previous timestep
-    \item The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep $T$ is a standard Gaussian
-\end{itemize}
-Furthermore, we explicitly maintain the Markov property between hierarchical transitions from a standard Markovian Hierarchical Variational Autoencoder.
-
-Let us expand on the implications of these assumptions.  From the first restriction, with some abuse of notation, we can now represent both true data samples and latent variables as $\bm{x}_t$, where $t=0$ represents true data samples and $t \in \left[1, T\right]$ represents a corresponding latent with hierarchy indexed by $t$.  The VDM posterior is the same as the MHVAE posterior (Equation \ref{eq:21}), but can now be rewritten as:
-\begin{align}
     q(\bm{x}_{1:T}|\bm{x}_0) = \prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})
-\end{align}
-From the second assumption, we know that the distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.  Unlike a Markovian HVAE, the structure of the encoder at each timestep $t$ is not learned; it is fixed as a linear Gaussian model, where the mean and standard deviation can be set beforehand as hyperparameters~\cite{ho2020denoising}, or learned as parameters~\cite{kingma2021variational}.  We parameterize the Gaussian encoder with mean $\bm{\mu}_t(\bm{x}_t) = \sqrt{\alpha_t} \bm{x}_{t-1}$, and variance $\bm{\Sigma}_t(\bm{x}_t) = (1 - \alpha_t) \textbf{I}$, where the form of the coefficients are chosen such that the variance of the latent variables stay at a similar scale; in other words, the encoding process is \textit{variance-preserving}.  Note that alternate Gaussian parameterizations are allowed, and lead to similar derivations.  The main takeaway is that $\alpha_t$ is a (potentially learnable) coefficient that can vary with the hierarchical depth $t$, for flexibility.  Mathematically, encoder transitions are denoted as:
-\begin{align}
+\end{align*}
+!et
+
+!split
+===== Second assumption =====
+
+The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.  Here then,
+
+the structure of the encoder at each timestep $t$ is not learned; it is fixed as a linear Gaussian model, where the mean and standard deviation can be set beforehand as hyperparameters, or learned as parameters.
+
+We parameterize the Gaussian encoder with mean $\bm{\mu}_t(\bm{x}_t) = \sqrt{\alpha_t} \bm{x}_{t-1}$, and variance $\bm{\Sigma}_t(\bm{x}_t) = (1 - \alpha_t) \textbf{I}$, where the form of the coefficients are chosen such that the variance of the latent variables stay at a similar scale; in other words, the encoding process is variance-preserving.  Note that alternate Gaussian parameterizations are allowed, and lead to similar derivations.  The main takeaway is that $\alpha_t$ is a (potentially learnable) coefficient that can vary with the hierarchical depth $t$, for flexibility.
+
+!split
+===== Encoder transitions =====
+
+Mathematically, the encoder transitions are defined as
+!bt
+\begin{align*}
     q(\bm{x}_{t}|\bm{x}_{t-1}) = \mathcal{N}(\bm{x}_{t} ; \sqrt{\alpha_t} \bm{x}_{t-1}, (1 - \alpha_t) \textbf{I}) \label{eq:27}
-\end{align}
-From the third assumption, we know that $\alpha_t$ evolves over time according to a fixed or learnable schedule structured such that the distribution of the final latent $p(\bm{x}_T)$ is a standard Gaussian.  We can then update the joint distribution of a Markovian HVAE (Equation \ref{eq:20}) to write the joint distribution for a VDM as: 
-\begin{align}
-p(\bm{x}_{0:T}) &= p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t) \label{eq:36} \\
+\end{align*}
+!et
+
+!split
+===== Third assumption =====
+
+
+From the third assumption, we know that $\alpha_t$ evolves over time
+according to a fixed or learnable schedule structured such that the
+distribution of the final latent $p(\bm{x}_T)$ is a standard Gaussian.
+We can then update the joint distribution of a Markovian VAE to write
+the joint distribution for a VDM as
+
+!bt
+\begin{align*}
+p(\bm{x}_{0:T}) &= p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t) \\
 \text{where,}&\nonumber\\
 p(\bm{x}_T) &= \mathcal{N}(\bm{x}_T; \bm{0}, \textbf{I})
-\end{align}
-Collectively, what this set of assumptions describes is a steady noisification of an image input over time; we progressively corrupt an image by adding Gaussian noise until eventually it becomes completely identical to pure Gaussian noise.  Visually, this process is depicted in Figure \ref{fig:vdm}.
+\end{align*}
+!et
 
+Collectively, what this set of assumptions describes is a steady
+noisification of an image input over time. We progressively corrupt an
+image by adding Gaussian noise until eventually it becomes completely
+identical to pure Gaussian noise.  See figure on next slide.
+
+
+
+
+!split
 Note that our encoder distributions $q(\bm{x}_t|\bm{x}_{t-1})$ are no longer parameterized by $\bm{\phi}$, as they are completely modeled as Gaussians with defined mean and variance parameters at each timestep.  Therefore, in a VDM, we are only interested in learning conditionals $p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_{t})$, so that we can simulate new data.  After optimizing the VDM, the sampling procedure is as simple as sampling Gaussian noise from $p(\bm{x}_T)$ and iteratively running the denoising transitions $p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_{t})$ for $T$ steps to generate a novel $\bm{x}_0$.
 
 Like any HVAE, the VDM can be optimized by maximizing the ELBO, which can be derived as:
