@@ -363,8 +363,9 @@ include multiple hierarchies of latent spaces.
 
 !split
 ===== Chains of VAEs =====
-As an intermediate step, we introduce what is often called Markovian
-VAE where the generative process is a Markov chain and build a hierarchy of VAEs.
+
+Markovian
+VAEs represent a  generative process where we use  Markov chain to build a hierarchy of VAEs.
 
 Each transition down the hierarchy is Markovian, where we decode each
 latent set of variables $\bm{h}_t$ in terms of the previous latent variable $\bm{h}_{t-1}$.
