@@ -9,7 +9,7 @@ DATE: May 7, 2024
 o Finalizing discussion of Generative Adversarial Networks
 o Mathematics of diffusion models and selected examples
 #o "Video of lecture":""
-#o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMay7.pdf"
+o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMay7.pdf"
 !eblock
 
 !bblock Reading on diffusion models
@@ -48,7 +48,7 @@ probability.
 !split
 ===== Which data? =====
 
-GANs are generally a form of unsupervised machine learning, although
+_GANs are generally a form of unsupervised machine learning_, although
 they also incorporate aspects of supervised learning. Internally the
 discriminator sets up a supervised learning problem. Its goal is to
 learn to distinguish between the two classes of generated data and
@@ -140,9 +140,9 @@ B=p_g(\bm{x})
 !et
 
 !split
-===== Ignore integral =====
+=====  Integral evaluation =====
 
-And then what is inside the integral (we can safely ignore the integral because $\bm{x}$ is sampled over all the possible values) is:
+The integral (we can safely ignore the integral because $\bm{x}$ is sampled over all the possible values) is:
 
 !bt
 \begin{align*}
@@ -157,15 +157,33 @@ f(\tilde{\bm{x}})
 !split
 ===== Best values =====
 
-Thus, if we set $\frac{d f(\tilde{\bm{x}})}{d \tilde{\bm{x}}} = 0$, we get
-the best value of the discriminator: $D^*(\bm{x}) = \tilde{\bm{x}}^* =
-\frac{A}{A + B} = \frac{p_{r}(\bm{x})}{p_{r}(\bm{x}) + p_g(\bm{x})}
-\in [0, 1]$.  Once the generator is trained to its optimal, $p_g$ gets
+If we set
+
+!bt
+\[
+\frac{d f(\tilde{\bm{x}})}{d \tilde{\bm{x}}} = 0,
+\]
+!et
+
+we get
+the best value of the discriminator:
+
+!bt
+\[
+D^*(\bm{x}) = \tilde{\bm{x}}^* =\frac{A}{A + B} = \frac{p_{r}(\bm{x})}{p_{r}(\bm{x}) + p_g(\bm{x})}
+\in [0, 1].
+\]
+!et
+
+Once the generator is trained to its optimal, $p_g$ gets
 very close to $p_{r}$. When $p_g = p_{r}$, $D^*(\bm{x})$ becomes
 $1/2$. We will observe this when running the code below here.
 
 
-When both $G$ and $D$ are at their optimal values, we have $p_g = p_{r}$ and $D^*(\bm{x}) = 1/2$ and the loss function becomes:
+!split
+===== At their optimal values =====
+
+When both $G$ and $D$ are at their optimal values, we have $p_g = p_{r}$ and $D^*(\bm{x}) = 1/2$, the loss function becomes
 
 !bt
 \begin{align*}
@@ -226,13 +244,15 @@ convergence.
 ===== Vanishing Gradient  =====
 
 When the discriminator is perfect, we are guaranteed with
-$D(x) = 1, \forall x \in p_r$ and $D(x) = 0, \forall x \in p_g$. Therefore the
+$D(x) = 1, \forall x \in p_r$ and $D(x) = 0, \forall x \in p_g$.
+
+Then, the
 loss function $L$ falls to zero and we end up with no gradient to
 update the loss during learning iterations. One can encouter situations where 
 the discriminator gets better and the gradient vanishes fast.
 
 As a result, training GANs may face the following problems 
-o If the discriminator behaves badly, the generator does not have accurate feedback and the loss function cannot represent the reality
+o If the discriminator behaves badly, the generator does not have accurate feedback and the loss function cannot represent the real data
 o If the discriminator does a great job, the gradient of the loss function drops down to close to zero and the learning can become slow
 
 
@@ -365,7 +385,7 @@ We can then define the marginal probability we want to optimize as
 \log p(\bm{x}) &= \log \int p(\bm{x}, \bm{h}_{1:T}) d\bm{h}_{1:T}  \\
 &= \log \int \frac{p(\bm{x}, \bm{h}_{1:T})q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})} d\bm{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}$)}\\
 &= \log \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Apply Jensen's Inequality)}
+&\geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Discussed last week)}
 \end{align*}
 !et
 

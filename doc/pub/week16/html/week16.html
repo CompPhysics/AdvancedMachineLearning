@@ -159,8 +159,9 @@ div.toc p,a {
               ('Minimax game', 2, None, 'minimax-game'),
               ('Optimal value for $D$', 2, None, 'optimal-value-for-d'),
               ('Best value of $D$', 2, None, 'best-value-of-d'),
-              ('Ignore integral', 2, None, 'ignore-integral'),
+              ('Integral evaluation', 2, None, 'integral-evaluation'),
               ('Best values', 2, None, 'best-values'),
+              ('At their optimal values', 2, None, 'at-their-optimal-values'),
               ('What does the Loss Function Represent?',
                2,
                None,
@@ -169,8 +170,9 @@ div.toc p,a {
                2,
                None,
                'what-does-the-loss-function-quantify'),
-              ('Modification of GANs', 2, None, 'modification-of-gans'),
-              ('Pros and Cons of GANs', 2, None, 'pros-and-cons-of-gans'),
+              ('Problems with GANs', 2, None, 'problems-with-gans'),
+              ('Vanishing Gradient', 2, None, 'vanishing-gradient'),
+              ('Improved GANs', 2, None, 'improved-gans'),
               ('Diffusion models, basics', 2, None, 'diffusion-models-basics'),
               ('Problems with probabilistic models',
                2,
@@ -261,8 +263,8 @@ MathJax.Hub.Config({
 <ol>
 <li> Finalizing discussion of Generative Adversarial Networks</li>
 <li> Mathematics of diffusion models and selected examples
-<!-- o "Video of lecture":"" -->
-<!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMay7.pdf" target="_blank">Whiteboard notes</a> --></li>
+<!-- o "Video of lecture":"" --></li>
+<li> <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMay7.pdf" target="_blank">Whiteboard notes</a></li>
 </ol>
 </div>
 
@@ -308,7 +310,7 @@ probability.
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="which-data">Which data? </h2>
 
-<p>GANs are generally a form of unsupervised machine learning, although
+<p><b>GANs are generally a form of unsupervised machine learning</b>, although
 they also incorporate aspects of supervised learning. Internally the
 discriminator sets up a supervised learning problem. Its goal is to
 learn to distinguish between the two classes of generated data and
@@ -402,9 +404,9 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="ignore-integral">Ignore integral </h2>
+<h2 id="integral-evaluation">Integral evaluation </h2>
 
-<p>And then what is inside the integral (we can safely ignore the integral because \( \boldsymbol{x} \) is sampled over all the possible values) is:</p>
+<p>The integral (we can safely ignore the integral because \( \boldsymbol{x} \) is sampled over all the possible values) is:</p>
 
 $$
 \begin{align*}
@@ -419,15 +421,30 @@ $$
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="best-values">Best values </h2>
 
-<p>Thus, if we set \( \frac{d f(\tilde{\boldsymbol{x}})}{d \tilde{\boldsymbol{x}}} = 0 \), we get
-the best value of the discriminator: \( D^*(\boldsymbol{x}) = \tilde{\boldsymbol{x}}^* =
-\frac{A}{A + B} = \frac{p_{r}(\boldsymbol{x})}{p_{r}(\boldsymbol{x}) + p_g(\boldsymbol{x})}
-\in [0, 1] \).  Once the generator is trained to its optimal, \( p_g \) gets
+<p>If we set</p>
+
+$$
+\frac{d f(\tilde{\boldsymbol{x}})}{d \tilde{\boldsymbol{x}}} = 0,
+$$
+
+<p>we get
+the best value of the discriminator:
+</p>
+
+$$
+D^*(\boldsymbol{x}) = \tilde{\boldsymbol{x}}^* =\frac{A}{A + B} = \frac{p_{r}(\boldsymbol{x})}{p_{r}(\boldsymbol{x}) + p_g(\boldsymbol{x})}
+\in [0, 1].
+$$
+
+<p>Once the generator is trained to its optimal, \( p_g \) gets
 very close to \( p_{r} \). When \( p_g = p_{r} \), \( D^*(\boldsymbol{x}) \) becomes
 \( 1/2 \). We will observe this when running the code below here.
 </p>
 
-<p>When both \( G \) and \( D \) are at their optimal values, we have \( p_g = p_{r} \) and \( D^*(\boldsymbol{x}) = 1/2 \) and the loss function becomes:</p>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="at-their-optimal-values">At their optimal values </h2>
+
+<p>When both \( G \) and \( D \) are at their optimal values, we have \( p_g = p_{r} \) and \( D^*(\boldsymbol{x}) = 1/2 \), the loss function becomes</p>
 
 $$
 \begin{align*}
@@ -471,10 +488,52 @@ equations above.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="modification-of-gans">Modification of GANs </h2>
+<h2 id="problems-with-gans">Problems with GANs </h2>
+
+<p>Although GANs have achieved  great success in the generation of realistic images, the training is not easy; The process is known to be slow and unstable.</p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Hard to reach equilibrium.</b>
+<p>
+<p>Two models are trained simultaneously to an equilibrium to a
+two-player non-cooperative game. However, each model updates its cost
+independently with no respect to another player in the game. Updating
+the gradient of both models concurrently cannot guarantee a
+convergence.
+</p>
+</div>
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="pros-and-cons-of-gans">Pros and Cons of GANs </h2>
+<h2 id="vanishing-gradient">Vanishing Gradient  </h2>
+
+<p>When the discriminator is perfect, we are guaranteed with
+\( D(x) = 1, \forall x \in p_r \) and \( D(x) = 0, \forall x \in p_g \).
+</p>
+
+<p>Then, the
+loss function \( L \) falls to zero and we end up with no gradient to
+update the loss during learning iterations. One can encouter situations where 
+the discriminator gets better and the gradient vanishes fast.
+</p>
+
+<p>As a result, training GANs may face the following problems </p>
+<ol>
+<li> If the discriminator behaves badly, the generator does not have accurate feedback and the loss function cannot represent the real data</li>
+<li> If the discriminator does a great job, the gradient of the loss function drops down to close to zero and the learning can become slow</li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="improved-gans">Improved GANs </h2>
+
+<p>One of the solutions to improved GANs training, is the introduction of
+what is called the Wasserstein diatance, which is a way to compute the
+difference/distance between two probability distribitions. For those
+interested in reading more, we recommend for example chapter 17 of
+Rashcka's et al textbook, Machine Learning with PyTorch and Scikit-Learn, chapter 17, see URL:"https://github.com/rasbt/python-machine-learning-book\
+-3rd-edition/tree/master/ch17"
+</p>
+
+<p>For a definition of the Wasserstein distance, see for example <a href="https://arxiv.org/pdf/2103.01678" target="_blank"><tt>https://arxiv.org/pdf/2103.01678</tt></a></p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="diffusion-models-basics">Diffusion models, basics </h2>
@@ -594,7 +653,7 @@ $$
 \log p(\boldsymbol{x}) &= \log \int p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) d\boldsymbol{h}_{1:T}  \\
 &= \log \int \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})} d\boldsymbol{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}$)}\\
 &= \log \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Apply Jensen's Inequality)}
+&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Discussed last week)}
 \end{align*}
 $$
 
