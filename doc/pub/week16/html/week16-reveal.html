@@ -611,6 +611,8 @@ these as stacked VAEs, or better, recursive VAEs.
 hierarchical VAEs, which can be seen as a generalization of VAEs that
 include multiple hierarchies of latent spaces.
 </p>
+
+<p><b>Note</b>: Many of the derivations and figures here are inspired and borrowed from the excellent exposition of diffusion models by Calvin Luo at  <a href=" URL:" target="_blank"><tt> URL:</tt></a>https://arxiv.org/abs/2208.11970". </p>
 </section>
 
 <section>
@@ -665,7 +667,7 @@ $$
 <p>A Markovian hierarchical Variational Autoencoder with \( T \) hierarchical
 latents.  The generative process is modeled as a Markov chain, where
 each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
-\( \boldsymbol{h}_{t+1} \)
+\( \boldsymbol{h}_{t+1} \). Here \( \boldsymbol{z} \) is our latent variable \( \boldsymbol{h} \).
 </p>
 
 <br/><br/>

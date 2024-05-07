@@ -360,6 +360,7 @@ Let us try to see why. As an intermediate step, we consider so-called
 hierarchical VAEs, which can be seen as a generalization of VAEs that
 include multiple hierarchies of latent spaces.
 
+_Note_: Many of the derivations and figures here are inspired and borrowed from the excellent exposition of diffusion models by Calvin Luo at  URL:" URL:"https://arxiv.org/abs/2208.11970". 
 
 !split
 ===== Chains of VAEs =====
@@ -407,7 +408,7 @@ We can then define the marginal probability we want to optimize as
 A Markovian hierarchical Variational Autoencoder with $T$ hierarchical
 latents.  The generative process is modeled as a Markov chain, where
 each latent $\bm{h}_t$ is generated only from the previous latent
-$\bm{h}_{t+1}$
+$\bm{h}_{t+1}$. Here $\bm{z}$ is our latent variable $\bm{h}$.
 
 FIGURE: [figures/figure1.png, width=800 frac=1.0]
 
