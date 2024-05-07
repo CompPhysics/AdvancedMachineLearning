@@ -208,12 +208,49 @@ leads to the minimum $L(G^*, D^*) = -2\log2$ which is aligned with
 equations above.
 
 
+
 !split
-===== Modification of GANs =====
+===== Problems with GANs =====
+
+Although GANs have achieved  great success in the generation of realistic images, the training is not easy; The process is known to be slow and unstable.
+
+!bblock Hard to reach equilibrium.
+Two models are trained simultaneously to an equilibrium to a
+two-player non-cooperative game. However, each model updates its cost
+independently with no respect to another player in the game. Updating
+the gradient of both models concurrently cannot guarantee a
+convergence.
+!eblock
+
+!split
+===== Vanishing Gradient  =====
+
+When the discriminator is perfect, we are guaranteed with
+$D(x) = 1, \forall x \in p_r$ and $D(x) = 0, \forall x \in p_g$. Therefore the
+loss function $L$ falls to zero and we end up with no gradient to
+update the loss during learning iterations. One can encouter situations where 
+the discriminator gets better and the gradient vanishes fast.
+
+As a result, training GANs may face the following problems 
+o If the discriminator behaves badly, the generator does not have accurate feedback and the loss function cannot represent the reality
+o If the discriminator does a great job, the gradient of the loss function drops down to close to zero and the learning can become slow
 
 
 !split
-===== Pros and Cons of GANs =====
+===== Improved GANs =====
+
+One of the solutions to improved GANs training, is the introduction of
+what is called the Wasserstein diatance, which is a way to compute the
+difference/distance between two probability distribitions. For those
+interested in reading more, we recommend for example chapter 17 of
+Rashcka's et al textbook, Machine Learning with PyTorch and Scikit-Learn, chapter 17, see URL:"https://github.com/rasbt/python-machine-learning-book\
+-3rd-edition/tree/master/ch17"
+
+
+For a definition of the Wasserstein distance, see for example URL:"https://arxiv.org/pdf/2103.01678"
+
+
+
 
 
 !split
