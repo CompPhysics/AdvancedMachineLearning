@@ -537,8 +537,54 @@ novel $\bm{x}_0$.
 
 
 
+!split
+===== Optimizing the variational diffusion model =====
+
+!bt
+\begin{align*}
+\log p(\bm{x})
+&= \log \int p(\bm{x}_{0:T}) d\bm{x}_{1:T}\\
+&= \log \int \frac{p(\bm{x}_{0:T})q(\bm{x}_{1:T}|\bm{x}_0)}{q(\bm{x}_{1:T}|\bm{x}_0)} d\bm{x}_{1:T}\\
+&= \log \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]\\
+&\geq {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{\prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=1}^{T-1}p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+\end{align*}
+!et
 
 
+!split
+===== Continues =====
+
+!bt
+\begin{align*}
+\log p(\bm{x})
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \sum_{t=1}^{T-1} \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{T-1}, \bm{x}_T|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_t, \bm{x}_{t+1}|\bm{x}_0)}\left[\log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+\end{align*}
+!et
+
+
+
+
+
+!split
+===== Interpretations =====
+
+These equations can be interpreted as
+
+* $\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right]$ can be interpreted as a _reconstruction term_, predicting the log probability of the original data sample given the first-step latent.  This term also appears in a vanilla VAE, and can be trained similarly.
+* $\mathbb{E}_{q(\bm{x}_{T-1}|\bm{x}_0)}\left[D_{KL}(q(\bm{x}_T|\bm{x}_{T-1})\vert\vert p(\bm{x}_T))\right]$ is a _prior matching term_; it is minimized when the final latent distribution matches the Gaussian prior.  This term requires no optimization, as it has no trainable parameters; furthermore, as we have assumed a large enough $T$ such that the final distribution is Gaussian, this term effectively becomes zero.
+
+
+!split
+===== The last term =====
+
+* $\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_{t+1}|\bm{x}_0)}\left[D_{KL}(q(\bm{x}_{t}|\bm{x}_{t-1})\vert\vert p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1}))\right]$ is a \textit{consistency term}; it endeavors to make the distribution at $\bm{x}_t$ consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train $p_{\theta}(\bm{x}_t|\bm{x}_{t+1})$ to match the Gaussian distribution $q(\bm{x}_t|\bm{x}_{t-1})$.
 
 !split
 ===== Diffusion models, part 2, from URL:"https://arxiv.org/abs/2208.11970"  =====
@@ -547,9 +593,31 @@ FIGURE: [figures/figure3.png, width=800 frac=1.0]
 
 
 !split
-===== Diffusion models, part 3, from URL:"https://arxiv.org/abs/2208.11970"  =====
+===== Optimization cost =====
 
-FIGURE: [figures/figure4.png, width=800 frac=1.0]
+The cost of optimizing a VDM is primarily dominated by the third term, since we must optimize over all timesteps $t$.
+
+Under this derivation, all three terms are computed as expectations,
+and can therefore be approximated using Monte Carlo estimates.
+However, actually optimizing the ELBO using the terms we just derived
+might be suboptimal; because the consistency term is computed as an
+expectation over two random variables $\left\{\bm{x}_{t-1},
+\bm{x}_{t+1}\right\}$ for every timestep, the variance of its Monte
+Carlo estimate could potentially be higher than a term that is
+estimated using only one random variable per timestep.  As it is
+computed by summing up $T-1$ consistency terms, the final estimated
+value may have high variance for large $T$ values.
+
+
+
+!split
+===== More details =====
+
+For more details and implementaions, see Calvin Luo at URL:"https://arxiv.org/abs/2208.11970"
+
+
+
+#FIGURE: [figures/figure4.png, width=800 frac=1.0]
 
 
 

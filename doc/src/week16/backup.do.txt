@@ -1,120 +1,49 @@
-
 !split
-===== Equation for the Markovian hierarchical VAE =====
+===== Optimizing the variational diffusion model
+This derivation is best seen using the jupyter-notebook.
 
-We obtain then
-!bt
 \begin{align*}
-\mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]
-&= \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})}{q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})}\right]
-\end{align*}
-!et
-
-We will modify this equation when we discuss what are normally called Variational Diffusion Models.
-
-
-!split
-===== Variational Diffusion Models =====
-
-The easiest way to think of a Variational Diffusion Model (VDM) is as a Markovian Hierarchical Variational Autoencoder with three key restrictions:
-
-o The latent dimension is exactly equal to the data dimension
-o The structure of the latent encoder at each timestep is not learned; it is pre-defined as a linear Gaussian model.  In other words, it is a Gaussian distribution centered around the output of the previous timestep
-o The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep $T$ is a standard Gaussian
-
-
-The VDM posterior is (simply rewrite) 
-!bt
-\begin{align*}
-    q(\bm{x}_{1:T}|\bm{x}_0) = \prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})
-\end{align*}
-!et
-
-!split
-===== Second assumption =====
-
-The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.  Here then,
-
-the structure of the encoder at each timestep $t$ is not learned; it is fixed as a linear Gaussian model, where the mean and standard deviation can be set beforehand as hyperparameters, or learned as parameters.
-
-We parameterize the Gaussian encoder with mean $\bm{\mu}_t(\bm{x}_t) = \sqrt{\alpha_t} \bm{x}_{t-1}$, and variance $\bm{\Sigma}_t(\bm{x}_t) = (1 - \alpha_t) \textbf{I}$, where the form of the coefficients are chosen such that the variance of the latent variables stay at a similar scale; in other words, the encoding process is variance-preserving.  Note that alternate Gaussian parameterizations are allowed, and lead to similar derivations.  The main takeaway is that $\alpha_t$ is a (potentially learnable) coefficient that can vary with the hierarchical depth $t$, for flexibility.
-
-!split
-===== Encoder transitions =====
-
-Mathematically, the encoder transitions are defined as
-!bt
-\begin{align*}
-    q(\bm{x}_{t}|\bm{x}_{t-1}) = \mathcal{N}(\bm{x}_{t} ; \sqrt{\alpha_t} \bm{x}_{t-1}, (1 - \alpha_t) \textbf{I}) \label{eq:27}
-\end{align*}
-!et
-
-!split
-===== Third assumption =====
-
-
-From the third assumption, we know that $\alpha_t$ evolves over time
-according to a fixed or learnable schedule structured such that the
-distribution of the final latent $p(\bm{x}_T)$ is a standard Gaussian.
-We can then update the joint distribution of a Markovian VAE to write
-the joint distribution for a VDM as
-
-!bt
-\begin{align*}
-p(\bm{x}_{0:T}) &= p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t) \\
-\text{where,}&\nonumber\\
-p(\bm{x}_T) &= \mathcal{N}(\bm{x}_T; \bm{0}, \textbf{I})
-\end{align*}
-!et
-
-Collectively, what this set of assumptions describes is a steady
-noisification of an image input over time. We progressively corrupt an
-image by adding Gaussian noise until eventually it becomes completely
-identical to pure Gaussian noise.  See figure on next slide.
-
-
-
-
-!split
-Note that our encoder distributions $q(\bm{x}_t|\bm{x}_{t-1})$ are no longer parameterized by $\bm{\phi}$, as they are completely modeled as Gaussians with defined mean and variance parameters at each timestep.  Therefore, in a VDM, we are only interested in learning conditionals $p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_{t})$, so that we can simulate new data.  After optimizing the VDM, the sampling procedure is as simple as sampling Gaussian noise from $p(\bm{x}_T)$ and iteratively running the denoising transitions $p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_{t})$ for $T$ steps to generate a novel $\bm{x}_0$.
-
-Like any HVAE, the VDM can be optimized by maximizing the ELBO, which can be derived as:
-\begingroup
-\allowdisplaybreaks
-\begin{align}
-\scalemath{0.9}{\log p(\bm{x})}
-&= \scalemath{0.9}{\log \int p(\bm{x}_{0:T}) d\bm{x}_{1:T}}\\
-&= \scalemath{0.9}{\log \int \frac{p(\bm{x}_{0:T})q(\bm{x}_{1:T}|\bm{x}_0)}{q(\bm{x}_{1:T}|\bm{x}_0)} d\bm{x}_{1:T}}\\
-&= \scalemath{0.9}{\log \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]}\\
-&\geq \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]} \label{eq:34}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{\prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=1}^{T-1}p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \sum_{t=1}^{T-1} \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= \scalemath{0.9}{\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{T-1}, \bm{x}_T|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_t, \bm{x}_{t+1}|\bm{x}_0)}\left[\log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+\log p(\bm{x})
+&= {\log \int p(\bm{x}_{0:T}) d\bm{x}_{1:T}}\\
+&= {\log \int \frac{p(\bm{x}_{0:T})q(\bm{x}_{1:T}|\bm{x}_0)}{q(\bm{x}_{1:T}|\bm{x}_0)} d\bm{x}_{1:T}}\\
+&= {\log \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]}\\
+&\geq {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{\prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=1}^{T-1}p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \sum_{t=1}^{T-1} \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{T-1}, \bm{x}_T|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_t, \bm{x}_{t+1}|\bm{x}_0)}\left[\log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
 &=  \begin{aligned}[t]
-      \scalemath{0.9}{\underbrace{\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\theta}(\bm{x}_0|\bm{x}_1)\right]}_\text{reconstruction term}} &- \scalemath{0.9}{\underbrace{\mathbb{E}_{q(\bm{x}_{T-1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_T|\bm{x}_{T-1})}{p(\bm{x}_T)}\right]}_\text{prior matching term}} \\
-      &- \scalemath{0.9}{\sum_{t=1}^{T-1}\underbrace{\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_{t+1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_{t}|\bm{x}_{t-1})}{p_{\theta}(\bm{x}_{t}|\bm{x}_{t+1})}\right]}_\text{consistency term}}
-    \end{aligned} \label{eq:45}
-\end{align}
-\endgroup
-The derived form of the ELBO can be interpreted in terms of its individual components:
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{images/first_derivation.png}
-  \caption{Under our first derivation, a VDM can be optimized by ensuring that for every intermediate $\bm{x}_t$, the posterior from the latent above it $p_{\bm{\theta}}(\bm{x}_t|\bm{x}_{t+1})$ matches the Gaussian corruption of the latent before it $q(\bm{x}_t|\bm{x}_{t-1})$.  In this figure, for each intermediate $\bm{x}_t$, we minimize the difference between the distributions represented by the pink and green arrows.}
-  \label{fig:first_deriv}
-\end{figure}
-\begin{enumerate}
-    \item $\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right]$ can be interpreted as a \textit{reconstruction term}, predicting the log probability of the original data sample given the first-step latent.  This term also appears in a vanilla VAE, and can be trained similarly.
-    \item $\mathbb{E}_{q(\bm{x}_{T-1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_T|\bm{x}_{T-1})}{p(\bm{x}_T)}\right]$ is a \textit{prior matching term}; it is minimized when the final latent distribution matches the Gaussian prior.  This term requires no optimization, as it has no trainable parameters; furthermore, as we have assumed a large enough $T$ such that the final distribution is Gaussian, this term effectively becomes zero.
-    \item $\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_{t+1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_{t}|\bm{x}_{t-1})}{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}\right]$ is a \textit{consistency term}; it endeavors to make the distribution at $\bm{x}_t$ consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train $p_{\theta}(\bm{x}_t|\bm{x}_{t+1})$ to match the Gaussian distribution $q(\bm{x}_t|\bm{x}_{t-1})$, which is defined in Equation \ref{eq:27}.
-\end{enumerate}
-Visually, this interpretation of the ELBO is depicted in Figure \ref{fig:first_deriv}.  The cost of optimizing a VDM is primarily dominated by the third term, since we must optimize over all timesteps $t$.
+      {\underbrace{\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\theta}(\bm{x}_0|\bm{x}_1)\right]}_\text{reconstruction term}} &- {\underbrace{\mathbb{E}_{q(\bm{x}_{T-1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_T|\bm{x}_{T-1})}{p(\bm{x}_T)}\right]}_\text{prior matching term}} \\
+      &- {\sum_{t=1}^{T-1}\underbrace{\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_{t+1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_{t}|\bm{x}_{t-1})}{p_{\theta}(\bm{x}_{t}|\bm{x}_{t+1})}\right]}_\text{consistency term}}
+    \end{aligned}
+\end{align*}
 
-Under this derivation, all terms of the ELBO are computed as expectations, and can therefore be approximated using Monte Carlo estimates.  However, actually optimizing the ELBO using the terms we just derived might be suboptimal; because the consistency term is computed as an expectation over two random variables $\left\{\bm{x}_{t-1}, \bm{x}_{t+1}\right\}$ for every timestep, the variance of its Monte Carlo estimate could potentially be higher than a term that is estimated using only one random variable per timestep.  As it is computed by summing up $T-1$ consistency terms, the final estimated value of the ELBO may have high variance for large $T$ values.
+
+!split
+===== Interpretations =====
+These equations can be interpreted as
+
+o $\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right]$ can be interpreted as a _reconstruction term_, predicting the log probability of the original data sample given the first-step latent.  This term also appears in a vanilla VAE, and can be trained similarly.
+o $\mathbb{E}_{q(\bm{x}_{T-1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_T|\bm{x}_{T-1})}{p(\bm{x}_T)}\right]$ is a _prior matching term_; it is minimized when the final latent distribution matches the Gaussian prior.  This term requires no optimization, as it has no trainable parameters; furthermore, as we have assumed a large enough $T$ such that the final distribution is Gaussian, this term effectively becomes zero.
+o $\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_{t+1}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_{t}|\bm{x}_{t-1})}{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}\right]$ is a \textit{consistency term}; it endeavors to make the distribution at $\bm{x}_t$ consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train $p_{\theta}(\bm{x}_t|\bm{x}_{t+1})$ to match the Gaussian distribution $q(\bm{x}_t|\bm{x}_{t-1})$.
+
+!split
+===== Optimization cost =====
+The cost of optimizing a VDM is primarily dominated by the third term, since we must optimize over all timesteps $t$.
+
+Under this derivation, all three terms are computed as expectations,
+and can therefore be approximated using Monte Carlo estimates.
+However, actually optimizing the ELBO using the terms we just derived
+might be suboptimal; because the consistency term is computed as an
+expectation over two random variables $\left\{\bm{x}_{t-1},
+\bm{x}_{t+1}\right\}$ for every timestep, the variance of its Monte
+Carlo estimate could potentially be higher than a term that is
+estimated using only one random variable per timestep.  As it is
+computed by summing up $T-1$ consistency terms, the final estimated
+value of the ELBO may have high variance for large $T$ values.
 
 Let us instead try to derive a form for our ELBO where each term is computed as an expectation over only one random variable at a time.  The key insight is that we can rewrite encoder transitions as $q(\bm{x}_t|\bm{x}_{t-1}) = q(\bm{x}_t|\bm{x}_{t-1}, \bm{x}_0)$, where the extra conditioning term is superfluous due to the Markov property.  Then, according to Bayes rule, we can rewrite each transition as: 
 \begin{align}
@@ -136,7 +65,7 @@ Armed with this new equation, we can retry the derivation resuming from the ELBO
 &= \scalemath{0.90}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_0)} +  \sum_{t=2}^{T}\log\frac{p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_{t-1}|\bm{x}_{t}, \bm{x}_0)}\right]}\\
 &= \scalemath{0.90}{\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_0)}\right] + \sum_{t=2}^{T}\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log\frac{p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_{t-1}|\bm{x}_{t}, \bm{x}_0)}\right]}\\
 &= \scalemath{0.90}{\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_0)}\right] + \sum_{t=2}^{T}\mathbb{E}_{q(\bm{x}_{t}, \bm{x}_{t-1}|\bm{x}_0)}\left[\log\frac{p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_{t-1}|\bm{x}_{t}, \bm{x}_0)}\right]}\\
-&= \scalemath{0.9}{\underbrace{\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right]}_\text{reconstruction term} - \underbrace{\infdiv{q(\bm{x}_T|\bm{x}_0)}{p(\bm{x}_T)}}_\text{prior matching term} - \sum_{t=2}^{T} \underbrace{\mathbb{E}_{q(\bm{x}_{t}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_{t-1}|\bm{x}_t, \bm{x}_0)}{p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}\right]}_\text{denoising matching term}} \label{eq:51}
+&= {\underbrace{\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right]}_\text{reconstruction term} - \underbrace{\infdiv{q(\bm{x}_T|\bm{x}_0)}{p(\bm{x}_T)}}_\text{prior matching term} - \sum_{t=2}^{T} \underbrace{\mathbb{E}_{q(\bm{x}_{t}|\bm{x}_0)}\left[\infdiv{q(\bm{x}_{t-1}|\bm{x}_t, \bm{x}_0)}{p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}\right]}_\text{denoising matching term}} \label{eq:51}
 \end{align}
 \endgroup
 We have therefore successfully derived an interpretation for the ELBO that can be estimated with lower variance, as each term is computed as an expectation of at most one random variable at a time.  This formulation also has an elegant interpretation, which is revealed when inspecting each individual term:
@@ -256,15 +185,15 @@ which can then be optimized using stochastic samples over timesteps.
 \addcontentsline{toc}{section}{\protect\numberline{}\protect\numberline{}Learning Diffusion Noise Parameters}%
 Let us investigate how the noise parameters of a VDM can be jointly learned.  One potential approach is to model $\alpha_t$ using a neural network $\hat\alpha_{\bm{\eta}}(t)$ with parameters $\bm{\eta}$.  However, this is inefficient as inference must be performed multiple times at each timestep $t$ to compute $\bar\alpha_t$.  Whereas caching can mitigate this computational cost, we can also derive an alternate way to learn the diffusion noise parameters. By substituting our variance equation from Equation \ref{eq:79} into our derived per-timestep objective in Equation \ref{eq:93}, we can reduce:
 \begin{align}
-\scalemath{0.9}{\frac{1}{2\sigma_q^2(t)}\frac{\bar\alpha_{t-1}(1-\alpha_t)^2}{(1 -\bar\alpha_{t})^2}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}
-&= \scalemath{0.9}{\frac{1}{2\frac{(1 - \alpha_t)(1 - \bar\alpha_{t-1})}{1 -\bar\alpha_{t}}}\frac{\bar\alpha_{t-1}(1-\alpha_t)^2}{(1 -\bar\alpha_{t})^2}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\frac{1 -\bar\alpha_{t}}{(1 - \alpha_t)(1 - \bar\alpha_{t-1})}\frac{\bar\alpha_{t-1}(1-\alpha_t)^2}{(1 -\bar\alpha_{t})^2}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\frac{\bar\alpha_{t-1}(1-\alpha_t)}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\frac{\bar\alpha_{t-1}-\bar\alpha_t}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\frac{\bar\alpha_{t-1} - \bar\alpha_{t-1}\bar\alpha_t + \bar\alpha_{t-1}\bar\alpha_t-\bar\alpha_t}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\frac{\bar\alpha_{t-1}(1 - \bar\alpha_t) -\bar\alpha_t(1 - \bar\alpha_{t-1})}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\left(\frac{\bar\alpha_{t-1}(1 - \bar\alpha_t)}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})} -\frac{\bar\alpha_t(1 - \bar\alpha_{t-1})}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\right)\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
-&= \scalemath{0.9}{\frac{1}{2}\left(\frac{\bar\alpha_{t-1}}{1 - \bar\alpha_{t-1}} -\frac{\bar\alpha_t}{1 -\bar\alpha_{t}}\right)\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]} \label{eq:102}
+{\frac{1}{2\sigma_q^2(t)}\frac{\bar\alpha_{t-1}(1-\alpha_t)^2}{(1 -\bar\alpha_{t})^2}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}
+&= {\frac{1}{2\frac{(1 - \alpha_t)(1 - \bar\alpha_{t-1})}{1 -\bar\alpha_{t}}}\frac{\bar\alpha_{t-1}(1-\alpha_t)^2}{(1 -\bar\alpha_{t})^2}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\frac{1 -\bar\alpha_{t}}{(1 - \alpha_t)(1 - \bar\alpha_{t-1})}\frac{\bar\alpha_{t-1}(1-\alpha_t)^2}{(1 -\bar\alpha_{t})^2}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\frac{\bar\alpha_{t-1}(1-\alpha_t)}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\frac{\bar\alpha_{t-1}-\bar\alpha_t}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\frac{\bar\alpha_{t-1} - \bar\alpha_{t-1}\bar\alpha_t + \bar\alpha_{t-1}\bar\alpha_t-\bar\alpha_t}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\frac{\bar\alpha_{t-1}(1 - \bar\alpha_t) -\bar\alpha_t(1 - \bar\alpha_{t-1})}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\left(\frac{\bar\alpha_{t-1}(1 - \bar\alpha_t)}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})} -\frac{\bar\alpha_t(1 - \bar\alpha_{t-1})}{(1 - \bar\alpha_{t-1})(1 -\bar\alpha_{t})}\right)\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]}\\
+&= {\frac{1}{2}\left(\frac{\bar\alpha_{t-1}}{1 - \bar\alpha_{t-1}} -\frac{\bar\alpha_t}{1 -\bar\alpha_{t}}\right)\left[\left\lVert\hat \bm{x}_{\bm{\theta}}(\bm{x}_t, t) - \bm{x}_0\right\rVert_2^2\right]} \label{eq:102}
 \end{align}
 Recall from Equation \ref{eq:61} that $q(\bm{x}_t|\bm{x}_0)$ is a Gaussian of form $\mathcal{N}(\bm{x}_{t} ; \sqrt{\bar\alpha_t}\bm{x}_0, \left(1 - \bar\alpha_t\right)\textbf{I})$.  Then, following the definition of the \href{https://en.wikipedia.org/wiki/Signal-to-noise_ratio#Alternate_definition}{signal-to-noise ratio (SNR)} as $\text{SNR} = \frac{\mu^2}{\sigma^2}$, we can write the SNR at each timestep $t$ as:
 \begin{align}
