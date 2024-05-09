@@ -1,0 +1,10 @@
+\frametitle{After training}
+
+After training a VAE, generating new data can be performed by sampling
+directly from the latent space $p(\bm{h})$ and then running it through
+the decoder.  Variational Autoencoders are particularly interesting
+when the dimensionality of $\bm{h}$ is less than that of input
+$\bm{x}$, as we might then be learning compact, useful
+representations.  Furthermore, when a semantically meaningful latent
+space is learned, latent vectors can be edited before being passed to
+the decoder to more precisely control the data generated.

@@ -1,0 +1,106 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{torch}
+\PYG{k+kn}{import} \PYG{n+nn}{torch.utils.data}
+\PYG{k+kn}{import} \PYG{n+nn}{torch.nn} \PYG{k}{as} \PYG{n+nn}{nn}
+\PYG{k+kn}{import} \PYG{n+nn}{torch.nn.functional} \PYG{k}{as} \PYG{n+nn}{F}
+\PYG{k+kn}{import} \PYG{n+nn}{torch.optim} \PYG{k}{as} \PYG{n+nn}{optim}
+\PYG{k+kn}{from} \PYG{n+nn}{torch.autograd} \PYG{k+kn}{import} \PYG{n}{Variable}
+\PYG{k+kn}{from} \PYG{n+nn}{torchvision} \PYG{k+kn}{import} \PYG{n}{datasets}\PYG{p}{,} \PYG{n}{transforms}
+\PYG{k+kn}{from} \PYG{n+nn}{torchvision.utils} \PYG{k+kn}{import} \PYG{n}{make\PYGZus{}grid} \PYG{p}{,} \PYG{n}{save\PYGZus{}image}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+
+\PYG{n}{batch\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{64}
+\PYG{n}{train\PYGZus{}loader} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{utils}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{DataLoader}\PYG{p}{(}
+\PYG{n}{datasets}\PYG{o}{.}\PYG{n}{MNIST}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}./data\PYGZsq{}}\PYG{p}{,}
+    \PYG{n}{train}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,}
+    \PYG{n}{download} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{,}
+    \PYG{n}{transform} \PYG{o}{=} \PYG{n}{transforms}\PYG{o}{.}\PYG{n}{Compose}\PYG{p}{(}
+        \PYG{p}{[}\PYG{n}{transforms}\PYG{o}{.}\PYG{n}{ToTensor}\PYG{p}{()])}
+     \PYG{p}{),}
+     \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{batch\PYGZus{}size}
+\PYG{p}{)}
+
+\PYG{n}{test\PYGZus{}loader} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{utils}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{DataLoader}\PYG{p}{(}
+\PYG{n}{datasets}\PYG{o}{.}\PYG{n}{MNIST}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}./data\PYGZsq{}}\PYG{p}{,}
+    \PYG{n}{train}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+    \PYG{n}{transform}\PYG{o}{=}\PYG{n}{transforms}\PYG{o}{.}\PYG{n}{Compose}\PYG{p}{(}
+    \PYG{p}{[}\PYG{n}{transforms}\PYG{o}{.}\PYG{n}{ToTensor}\PYG{p}{()])}
+    \PYG{p}{),}
+    \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{batch\PYGZus{}size}\PYG{p}{)}
+
+
+\PYG{k}{class} \PYG{n+nc}{RBM}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{):}
+   \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}
+               \PYG{n}{n\PYGZus{}vis}\PYG{o}{=}\PYG{l+m+mi}{784}\PYG{p}{,}
+               \PYG{n}{n\PYGZus{}hin}\PYG{o}{=}\PYG{l+m+mi}{500}\PYG{p}{,}
+               \PYG{n}{k}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{):}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{RBM}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{()}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{W} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Parameter}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{n\PYGZus{}hin}\PYG{p}{,}\PYG{n}{n\PYGZus{}vis}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mf}{1e\PYGZhy{}2}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{v\PYGZus{}bias} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Parameter}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{n\PYGZus{}vis}\PYG{p}{))}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{h\PYGZus{}bias} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Parameter}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{n\PYGZus{}hin}\PYG{p}{))}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{k} \PYG{o}{=} \PYG{n}{k}
+
+   \PYG{k}{def} \PYG{n+nf}{sample\PYGZus{}from\PYGZus{}p}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{p}\PYG{p}{):}
+       \PYG{k}{return} \PYG{n}{F}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{sign}\PYG{p}{(}\PYG{n}{p} \PYG{o}{\PYGZhy{}} \PYG{n}{Variable}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{p}\PYG{o}{.}\PYG{n}{size}\PYG{p}{()))))}
+
+   \PYG{k}{def} \PYG{n+nf}{v\PYGZus{}to\PYGZus{}h}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{v}\PYG{p}{):}
+        \PYG{n}{p\PYGZus{}h} \PYG{o}{=} \PYG{n}{F}\PYG{o}{.}\PYG{n}{sigmoid}\PYG{p}{(}\PYG{n}{F}\PYG{o}{.}\PYG{n}{linear}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{W}\PYG{p}{,}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{h\PYGZus{}bias}\PYG{p}{))}
+        \PYG{n}{sample\PYGZus{}h} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sample\PYGZus{}from\PYGZus{}p}\PYG{p}{(}\PYG{n}{p\PYGZus{}h}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{p\PYGZus{}h}\PYG{p}{,}\PYG{n}{sample\PYGZus{}h}
+
+   \PYG{k}{def} \PYG{n+nf}{h\PYGZus{}to\PYGZus{}v}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{h}\PYG{p}{):}
+        \PYG{n}{p\PYGZus{}v} \PYG{o}{=} \PYG{n}{F}\PYG{o}{.}\PYG{n}{sigmoid}\PYG{p}{(}\PYG{n}{F}\PYG{o}{.}\PYG{n}{linear}\PYG{p}{(}\PYG{n}{h}\PYG{p}{,}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{W}\PYG{o}{.}\PYG{n}{t}\PYG{p}{(),}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{v\PYGZus{}bias}\PYG{p}{))}
+        \PYG{n}{sample\PYGZus{}v} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sample\PYGZus{}from\PYGZus{}p}\PYG{p}{(}\PYG{n}{p\PYGZus{}v}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{p\PYGZus{}v}\PYG{p}{,}\PYG{n}{sample\PYGZus{}v}
+
+   \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{v}\PYG{p}{):}
+        \PYG{n}{pre\PYGZus{}h1}\PYG{p}{,}\PYG{n}{h1} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{v\PYGZus{}to\PYGZus{}h}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)}
+
+        \PYG{n}{h\PYGZus{}} \PYG{o}{=} \PYG{n}{h1}
+        \PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{k}\PYG{p}{):}
+            \PYG{n}{pre\PYGZus{}v\PYGZus{}}\PYG{p}{,}\PYG{n}{v\PYGZus{}} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{h\PYGZus{}to\PYGZus{}v}\PYG{p}{(}\PYG{n}{h\PYGZus{}}\PYG{p}{)}
+            \PYG{n}{pre\PYGZus{}h\PYGZus{}}\PYG{p}{,}\PYG{n}{h\PYGZus{}} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{v\PYGZus{}to\PYGZus{}h}\PYG{p}{(}\PYG{n}{v\PYGZus{}}\PYG{p}{)}
+
+        \PYG{k}{return} \PYG{n}{v}\PYG{p}{,}\PYG{n}{v\PYGZus{}}
+
+   \PYG{k}{def} \PYG{n+nf}{free\PYGZus{}energy}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{v}\PYG{p}{):}
+        \PYG{n}{vbias\PYGZus{}term} \PYG{o}{=} \PYG{n}{v}\PYG{o}{.}\PYG{n}{mv}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{v\PYGZus{}bias}\PYG{p}{)}
+        \PYG{n}{wx\PYGZus{}b} \PYG{o}{=} \PYG{n}{F}\PYG{o}{.}\PYG{n}{linear}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{W}\PYG{p}{,}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{h\PYGZus{}bias}\PYG{p}{)}
+        \PYG{n}{hidden\PYGZus{}term} \PYG{o}{=} \PYG{n}{wx\PYGZus{}b}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{()}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{log}\PYG{p}{()}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{k}{return} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{hidden\PYGZus{}term} \PYG{o}{\PYGZhy{}} \PYG{n}{vbias\PYGZus{}term}\PYG{p}{)}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{()}
+
+
+
+
+\PYG{n}{rbm} \PYG{o}{=} \PYG{n}{RBM}\PYG{p}{(}\PYG{n}{k}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{train\PYGZus{}op} \PYG{o}{=} \PYG{n}{optim}\PYG{o}{.}\PYG{n}{SGD}\PYG{p}{(}\PYG{n}{rbm}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{(),}\PYG{l+m+mf}{0.1}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{epoch} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{):}
+    \PYG{n}{loss\PYGZus{}} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{\PYGZus{}}\PYG{p}{,} \PYG{p}{(}\PYG{n}{data}\PYG{p}{,}\PYG{n}{target}\PYG{p}{)} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{train\PYGZus{}loader}\PYG{p}{):}
+        \PYG{n}{data} \PYG{o}{=} \PYG{n}{Variable}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{784}\PYG{p}{))}
+        \PYG{n}{sample\PYGZus{}data} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{bernoulli}\PYG{p}{()}
+
+        \PYG{n}{v}\PYG{p}{,}\PYG{n}{v1} \PYG{o}{=} \PYG{n}{rbm}\PYG{p}{(}\PYG{n}{sample\PYGZus{}data}\PYG{p}{)}
+        \PYG{n}{loss} \PYG{o}{=} \PYG{n}{rbm}\PYG{o}{.}\PYG{n}{free\PYGZus{}energy}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{rbm}\PYG{o}{.}\PYG{n}{free\PYGZus{}energy}\PYG{p}{(}\PYG{n}{v1}\PYG{p}{)}
+        \PYG{n}{loss\PYGZus{}}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loss}\PYG{o}{.}\PYG{n}{data}\PYG{p}{)}
+        \PYG{n}{train\PYGZus{}op}\PYG{o}{.}\PYG{n}{zero\PYGZus{}grad}\PYG{p}{()}
+        \PYG{n}{loss}\PYG{o}{.}\PYG{n}{backward}\PYG{p}{()}
+        \PYG{n}{train\PYGZus{}op}\PYG{o}{.}\PYG{n}{step}\PYG{p}{()}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Training loss for }\PYG{l+s+si}{\PYGZob{}\PYGZcb{}}\PYG{l+s+s2}{ epoch: }\PYG{l+s+si}{\PYGZob{}\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{epoch}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{loss\PYGZus{}}\PYG{p}{)))}
+
+
+\PYG{k}{def} \PYG{n+nf}{show\PYGZus{}adn\PYGZus{}save}\PYG{p}{(}\PYG{n}{file\PYGZus{}name}\PYG{p}{,}\PYG{n}{img}\PYG{p}{):}
+    \PYG{n}{npimg} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{transpose}\PYG{p}{(}\PYG{n}{img}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{(),(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{))}
+    \PYG{n}{f} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}./}\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s+s2}{.png\PYGZdq{}} \PYG{o}{\PYGZpc{}} \PYG{n}{file\PYGZus{}name}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{npimg}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{imsave}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,}\PYG{n}{npimg}\PYG{p}{)}
+
+\PYG{n}{show\PYGZus{}adn\PYGZus{}save}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}real\PYGZdq{}}\PYG{p}{,}\PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{v}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{l+m+mi}{32}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{)}\PYG{o}{.}\PYG{n}{data}\PYG{p}{))}
+\PYG{n}{show\PYGZus{}adn\PYGZus{}save}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}generate\PYGZdq{}}\PYG{p}{,}\PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{v1}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{l+m+mi}{32}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{)}\PYG{o}{.}\PYG{n}{data}\PYG{p}{))}
+
+
+\end{Verbatim}

@@ -1,62 +1,227 @@
-TITLE: Mathematics of discriminative and generative deep learning, from deep neural networks to diffusion models
-AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: STREAMLINE meeting, May 9-10, MSU, 2024
+
+% LaTeX Beamer file automatically generated from DocOnce
+% https://github.com/doconce/doconce
+
+%-------------------- begin beamer-specific preamble ----------------------
+
+\documentclass{beamer}
+
+\usetheme{red_plain}
+\usecolortheme{default}
+
+% turn off the almost invisible, yet disturbing, navigation symbols:
+\setbeamertemplate{navigation symbols}{}
+
+% Examples on customization:
+%\usecolortheme[named=RawSienna]{structure}
+%\usetheme[height=7mm]{Rochester}
+%\setbeamerfont{frametitle}{family=\rmfamily,shape=\itshape}
+%\setbeamertemplate{items}[ball]
+%\setbeamertemplate{blocks}[rounded][shadow=true]
+%\useoutertheme{infolines}
+%
+%\usefonttheme{}
+%\useinntertheme{}
+%
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
+
+% fine for B/W printing:
+%\usecolortheme{seahorse}
+
+\usepackage{pgf}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{relsize}
+
+\usepackage{fancybox}  % make sure fancybox is loaded before fancyvrb
+
+\usepackage{fancyvrb}
+\usepackage{minted} % requires pygments and latex -shell-escape filename
+%\usepackage{anslistings}
+%\usepackage{listingsutf8}
+
+\usepackage{amsmath,amssymb,bm}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{colortbl}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{framed}
+% Use some nice templates
+\beamertemplatetransparentcovereddynamic
+
+% --- begin table of contents based on sections ---
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each section:
+% (Only section headings can enter the table of contents in Beamer
+% slides generated from DocOnce source, while subsections are used
+% for the title in ordinary slides.)
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>[plain]
+  \frametitle{}
+  %\frametitle{Outline}
+  \tableofcontents[currentsection]
+  \end{frame}
+}
+% --- end table of contents based on sections ---
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command:
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\newcommand{\shortinlinecomment}[3]{\note{\textbf{#1}: #2}}
+\newcommand{\longinlinecomment}[3]{\shortinlinecomment{#1}{#2}{#3}}
+
+\definecolor{linkcolor}{rgb}{0,0,0.4}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    pdfmenubar=true,
+    pdftoolbar=true,
+    bookmarksdepth=3
+    }
+\setlength{\parskip}{0pt}  % {1em}
+
+\newenvironment{doconceexercise}{}{}
+\newcounter{doconceexercisecounter}
+\newenvironment{doconce:movie}{}{}
+\newcounter{doconce:movie:counter}
+
+\newcommand{\subex}[1]{\noindent\textbf{#1}}  % for subexercises: a), b), etc
+
+\logo{{\tiny \copyright\ 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license}}
+
+%-------------------- end beamer-specific preamble ----------------------
+
+% Add user's preamble
 
 
-!split
-===== Types of machine learning =====
 
-!bblock
+
+% insert custom LaTeX commands...
+
+\raggedbottom
+\makeindex
+
+%-------------------- end preamble ----------------------
+
+\begin{document}
+
+% matching end for #ifdef PREAMBLE
+
+\newcommand{\exercisesection}[1]{\subsection*{#1}}
+
+
+
+% ------------------- main content ----------------------
+
+
+
+% ----------------- title -------------------------
+
+\title{Mathematics of discriminative and generative deep learning, from deep neural networks to diffusion models}
+
+% ----------------- author(s) -------------------------
+
+\author{Morten Hjorth-Jensen\inst{1,2}}
+\institute{Department of Physics and Center for Computing in Science Education, University of Oslo, Norway\inst{1}
+\and
+Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA\inst{2}}
+% ----------------- end author(s) -------------------------
+
+\date{STREAMLINE meeting, May 9-10, MSU, 2024
+% <optional titlepage figure>
+\ \\ 
+{\tiny \copyright\ 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license}
+}
+
+\begin{frame}[plain,fragile]
+\titlepage
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Types of machine learning}
+
+\begin{block}{}
 The approaches to machine learning are many, but are often split into two main categories. 
-In *supervised learning* we know the answer to a problem,
-and let the computer deduce the logic behind it. On the other hand, *unsupervised learning*
+In \emph{supervised learning} we know the answer to a problem,
+and let the computer deduce the logic behind it. On the other hand, \emph{unsupervised learning}
 is a method for finding patterns and relationship in data sets without any prior knowledge of the system.
 
-An emerging  third category is  *reinforcement learning*. This is a paradigm 
+An emerging  third category is  \emph{reinforcement learning}. This is a paradigm 
 of learning inspired by behavioural psychology, where learning is achieved by trial-and-error, 
 solely from rewards and punishment.
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== Main categories =====
-!bblock
+\begin{frame}[plain,fragile]
+\frametitle{Main categories}
+
+\begin{block}{}
 Another way to categorize machine learning tasks is to consider the desired output of a system.
 Some of the most common tasks are:
 
-  * Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.
+\begin{itemize}
+  \item Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.
 
-  * Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.
+  \item Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.
 
-  * Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.
-!eblock
+  \item Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.
+\end{itemize}
 
+\noindent
+\end{block}
+\end{frame}
 
-!split
-===== Machine learning. A simple perspective on the interface between ML and Physics =====
+\begin{frame}[plain,fragile]
+\frametitle{Machine learning. A simple perspective on the interface between ML and Physics}
 
-FIGURE: [figures/mlimage.png, width=800 frac=1.0]
+\vspace{6mm}
 
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/mlimage.png}}
 
-!split
-===== ML in Nuclear  Physics (or any field in physics) =====
+\vspace{6mm}
+\end{frame}
 
-FIGURE: [figures/ML-NP.pdf, width=900 frac=1.0]
+\begin{frame}[plain,fragile]
+\frametitle{ML in Nuclear  Physics (or any field in physics)}
 
+\vspace{6mm}
 
-!split
-=====  The plethora  of machine learning algorithms/methods =====
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/ML-NP.pdf}}
 
-o Deep learning: Neural Networks (NN), Convolutional NN, Recurrent NN, Boltzmann machines, autoencoders and variational autoencoders  and generative adversarial networks, stable diffusion and many more generative models
-o Bayesian statistics and Bayesian Machine Learning, Bayesian experimental design, Bayesian Regression models, Bayesian neural networks, Gaussian processes and much more
-o Dimensionality reduction (Principal component analysis), Clustering Methods and more
-o Ensemble Methods, Random forests, bagging and voting methods, gradient boosting approaches 
-o Linear and logistic regression, Kernel methods, support vector machines and more
-o Reinforcement Learning; Transfer Learning and more 
+\vspace{6mm}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{The plethora  of machine learning algorithms/methods}
 
-!split
-===== What Is Generative Modeling? =====
+\begin{enumerate}
+\item Deep learning: Neural Networks (NN), Convolutional NN, Recurrent NN, Boltzmann machines, autoencoders and variational autoencoders  and generative adversarial networks, stable diffusion and many more generative models
 
+\item Bayesian statistics and Bayesian Machine Learning, Bayesian experimental design, Bayesian Regression models, Bayesian neural networks, Gaussian processes and much more
+
+\item Dimensionality reduction (Principal component analysis), Clustering Methods and more
+
+\item Ensemble Methods, Random forests, bagging and voting methods, gradient boosting approaches 
+
+\item Linear and logistic regression, Kernel methods, support vector machines and more
+
+\item Reinforcement Learning; Transfer Learning and more 
+\end{enumerate}
+
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{What Is Generative Modeling?}
 
 Generative modeling can be broadly defined as follows:
 
@@ -69,16 +234,22 @@ photos of horses. We can train a generative model on this dataset to
 capture the rules that govern the complex relationships between pixels
 in images of horses. Then we can sample from this model to create
 novel, realistic images of horses that did not exist in the original
-dataset. 
+dataset.
+\end{frame}
 
-!split
-===== Example of generative modeling, "taken from Generative Deep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
+\begin{frame}[plain,fragile]
+\frametitle{Example of generative modeling, \href{{https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html}}{taken from Generative Deep Learning by David Foster}}
 
-FIGURE: [figures/generativelearning.png, width=900 frac=1.0]
+\vspace{6mm}
 
-!split
-===== Generative Modeling =====
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/generativelearning.png}}
 
+\vspace{6mm}
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Generative Modeling}
 
 In order to build a generative model, we require a dataset consisting
 of many examples of the entity we are trying to generate. This is
@@ -95,27 +266,31 @@ this is an incredibly difficult task, considering the vast number of
 ways that individual pixel values can be assigned and the relatively
 tiny number of such arrangements that constitute an image of the
 entity we are trying to generate.
+\end{frame}
 
-
-!split
-===== Generative Versus Discriminative Modeling =====
+\begin{frame}[plain,fragile]
+\frametitle{Generative Versus Discriminative Modeling}
 
 In order to truly understand what generative modeling aims to achieve
 and why this is important, it is useful to compare it to its
 counterpart, discriminative modeling. If you have studied machine
 learning, most problems you will have faced will have most likely been
-discriminative in nature. 
+discriminative in nature.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Example of discriminative modeling, \href{{https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html}}{taken from Generative Deeep Learning by David Foster}}
 
-!split
-===== Example of discriminative modeling, "taken from Generative Deeep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
+\vspace{6mm}
 
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/standarddeeplearning.png}}
 
-FIGURE: [figures/standarddeeplearning.png, width=900 frac=1.0]
+\vspace{6mm}
+\end{frame}
 
-
-!split
-===== Discriminative Modeling =====
+\begin{frame}[plain,fragile]
+\frametitle{Discriminative Modeling}
 
 When performing discriminative modeling, each observation in the
 training data has a label. For a binary classification problem such as
@@ -126,78 +301,95 @@ a new observation has label 1 or 0
 In contrast, generative modeling doesn’t require the dataset to be
 labeled because it concerns itself with generating entirely new
 data (for example an image), rather than trying to predict a label for say  a given image.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Taxonomy of generative deep learning, \href{{https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html}}{taken from Generative Deep Learning by David Foster}}
 
+\vspace{6mm}
 
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/generativemodels.png}}
 
+\vspace{6mm}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Good books with hands-on material and codes}
 
+\begin{block}{}
+\begin{itemize}
+\item \href{{https://sebastianraschka.com/blog/2022/ml-pytorch-book.html}}{Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch}
 
-!split
-===== Taxonomy of generative deep learning, "taken from Generative Deep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"  =====
+\item \href{{https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html}}{David Foster, Generative Deep Learning with TensorFlow}
 
-FIGURE: [figures/generativemodels.png, width=900 frac=1.0]
+\item \href{{https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2}}{Babcock and Gavras, Generative AI with Python and TensorFlow 2}
+\end{itemize}
 
-
-
-
-!split
-===== Good books with hands-on material and codes =====
-!bblock
-* "Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
-* "David Foster, Generative Deep Learning with TensorFlow":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"
-* "Babcock and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
-!eblock
+\noindent
+\end{block}
 
 All three books have GitHub sites from where  one can download all codes. A good and more general text (2016)
-is Goodfellow, Bengio and Courville, "Deep Learning":"https://www.deeplearningbook.org/"
+is Goodfellow, Bengio and Courville, \href{{https://www.deeplearningbook.org/}}{Deep Learning}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{More references}
 
-!split
-===== More references =====
+\begin{block}{Reading on diffusion models }
+\begin{enumerate}
+\item A central paper is the one by Sohl-Dickstein et al, Deep Unsupervised Learning using Nonequilibrium Thermodynamics, \href{{https://arxiv.org/abs/1503.03585}}{\nolinkurl{https://arxiv.org/abs/1503.03585}}
 
-!bblock Reading on diffusion models
-o A central paper is the one by Sohl-Dickstein et al, Deep Unsupervised Learning using Nonequilibrium Thermodynamics, URL:"https://arxiv.org/abs/1503.03585"
-o See also Diederik P. Kingma, Tim Salimans, Ben Poole, Jonathan Ho, Variational Diffusion Models, URL:"https://arxiv.org/abs/2107.00630"
-!eblock   
+\item See also Diederik P. Kingma, Tim Salimans, Ben Poole, Jonathan Ho, Variational Diffusion Models, \href{{https://arxiv.org/abs/2107.00630}}{\nolinkurl{https://arxiv.org/abs/2107.00630}}
+\end{enumerate}
 
-!bblock and VAEs
-o Calvin Luo URL:"https://calvinyluo.com/2022/08/26/diffusion-tutorial.html"
-o An Introduction to Variational Autoencoders, by Kingma and Welling, see URL:"https://arxiv.org/abs/1906.02691"
-!eblock
+\noindent
+\end{block}   
 
+\begin{block}{and VAEs }
+\begin{enumerate}
+\item Calvin Luo \href{{https://calvinyluo.com/2022/08/26/diffusion-tutorial.html}}{\nolinkurl{https://calvinyluo.com/2022/08/26/diffusion-tutorial.html}}
 
+\item An Introduction to Variational Autoencoders, by Kingma and Welling, see \href{{https://arxiv.org/abs/1906.02691}}{\nolinkurl{https://arxiv.org/abs/1906.02691}}
+\end{enumerate}
 
+\noindent
+\end{block}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{What are the basic Machine Learning ingredients?}
 
-
-!split
-===== What are the basic Machine Learning ingredients? =====
-!bblock
+\begin{block}{}
 Almost every problem in ML and data science starts with the same ingredients:
-* The dataset $\bm{x}$ (could be some observable quantity of the system we are studying)
-* A model which is a function of a set of parameters $\bm{\alpha}$ that relates to the dataset, say a likelihood  function $p(\bm{x}\vert \bm{\alpha})$ or just a simple model $f(\bm{\alpha})$
-* A so-called _loss/cost/risk_ function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ which allows us to decide how well our model represents the dataset. 
+\begin{itemize}
+\item The dataset $\bm{x}$ (could be some observable quantity of the system we are studying)
 
+\item A model which is a function of a set of parameters $\bm{\alpha}$ that relates to the dataset, say a likelihood  function $p(\bm{x}\vert \bm{\alpha})$ or just a simple model $f(\bm{\alpha})$
+
+\item A so-called \textbf{loss/cost/risk} function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ which allows us to decide how well our model represents the dataset. 
+\end{itemize}
+
+\noindent
 We seek to minimize the function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ by finding the parameter values which minimize $\mathcal{C}$. This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. 
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== Low-level machine learning, the family of ordinary least squares methods  =====
+\begin{frame}[plain,fragile]
+\frametitle{Low-level machine learning, the family of ordinary least squares methods}
 
 Our data which we want to apply a machine learning method on, consist
 of a set of inputs $\bm{x}^T=[x_0,x_1,x_2,\dots,x_{n-1}]$ and the
 outputs we want to model $\bm{y}^T=[y_0,y_1,y_2,\dots,y_{n-1}]$.
 We assume  that the output data can be represented (for a regression case) by a continuous function $f$
 through
-!bt
 \[
 \bm{y}=f(\bm{x})+\bm{\epsilon}.
 \]
-!et
+\end{frame}
 
-!split
-===== Setting up the equations =====
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the equations}
 
 In linear regression we approximate the unknown function with another
 continuous function $\tilde{\bm{y}}(\bm{x})$ which depends linearly on
@@ -206,147 +398,122 @@ $\bm{\theta}^T=[\theta_0,\theta_1,\theta_2,\dots,\theta_{p-1}]$.
 
 The input data can be organized in terms of a so-called design matrix 
 with an approximating function $\bm{\tilde{y}}$ 
-!bt
 \[
 \bm{\tilde{y}}= \bm{X}\bm{\theta},
 \]
-!et
+\end{frame}
 
-
-!split
-===== The objective/cost/loss function =====
+\begin{frame}[plain,fragile]
+\frametitle{The objective/cost/loss function}
 
 The  simplest approach is the mean squared error
-!bt
 \[
 C(\bm{\Theta})=\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\left\{\left(\bm{y}-\bm{\tilde{y}}\right)^T\left(\bm{y}-\bm{\tilde{y}}\right)\right\},
 \]
-!et
 or using the matrix $\bm{X}$ and in a more compact matrix-vector notation as
-!bt
 \[
 C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
 \]
-!et
 This function represents one of many possible ways to define the so-called cost function.
+\end{frame}
 
-
-!split
-===== Training solution  =====
+\begin{frame}[plain,fragile]
+\frametitle{Training solution}
 
 Optimizing with respect to the unknown parameters $\theta_j$ we get 
-!bt
 \[
 \bm{X}^T\bm{y} = \bm{X}^T\bm{X}\bm{\theta},  
 \]
-!et
 and if the matrix $\bm{X}^T\bm{X}$ is invertible we have the optimal values
-!bt
 \[
 \hat{\bm{\theta}} =\left(\bm{X}^T\bm{X}\right)^{-1}\bm{X}^T\bm{y}.
 \]
-!et
 
 We say we 'learn' the unknown parameters $\bm{\theta}$ from the last equation.
+\end{frame}
 
-
-
-!split
-===== Ridge and LASSO Regression =====
-
+\begin{frame}[plain,fragile]
+\frametitle{Ridge and LASSO Regression}
 
 Our optimization problem is
-!bt
 \[
 {\displaystyle \min_{\bm{\theta}\in {\mathbb{R}}^{p}}}\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
 \]
-!et
 or we can state it as
-!bt
 \[
 {\displaystyle \min_{\bm{\theta}\in
 {\mathbb{R}}^{p}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2,
 \]
-!et
 where we have used the definition of  a norm-2 vector, that is
-!bt
 \[
 \vert\vert \bm{x}\vert\vert_2 = \sqrt{\sum_i x_i^2}. 
 \]
-!et
+\end{frame}
 
-!split
-===== From OLS to Ridge and Lasso =====
+\begin{frame}[plain,fragile]
+\frametitle{From OLS to Ridge and Lasso}
 
 By minimizing the above equation with respect to the parameters
 $\bm{\theta}$ we could then obtain an analytical expression for the
 parameters $\bm{\theta}$.  We can add a regularization parameter $\lambda$ by
 defining a new cost function to be optimized, that is
 
-!bt
 \[
 {\displaystyle \min_{\bm{\theta}\in
 {\mathbb{R}}^{p}}}\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2+\lambda\vert\vert \bm{\theta}\vert\vert_2^2
 \]
-!et
 
 which leads to the Ridge regression minimization problem where we
 require that $\vert\vert \bm{\theta}\vert\vert_2^2\le t$, where $t$ is
 a finite number larger than zero. We do not include such a constraints in the discussions here.
+\end{frame}
 
-!split
-===== Lasso regression  =====
+\begin{frame}[plain,fragile]
+\frametitle{Lasso regression}
 
 Defining
 
-!bt
 \[
 C(\bm{X},\bm{\theta})=\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2+\lambda\vert\vert \bm{\theta}\vert\vert_1,
 \]
-!et
 we have a new optimization equation
-!bt
 \[
 {\displaystyle \min_{\bm{\theta}\in
 {\mathbb{R}}^{p}}}\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2+\lambda\vert\vert \bm{\theta}\vert\vert_1
 \]
-!et
 which leads to Lasso regression. Lasso stands for least absolute shrinkage and selection operator. 
 Here we have defined the norm-1 as 
-!bt
 \[
 \vert\vert \bm{x}\vert\vert_1 = \sum_i \vert x_i\vert. 
 \]
-!et
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Selected references}
 
+\begin{block}{}
+\begin{itemize}
+\item \href{{https://arxiv.org/abs/1803.08823}}{Mehta et al.} and \href{{https://www.sciencedirect.com/science/article/pii/S0370157319300766?via%3Dihub}}{Physics Reports (2019)}.
 
+\item \href{{https://link.aps.org/doi/10.1103/RevModPhys.91.045002}}{Machine Learning and the Physical Sciences by Carleo et al}
 
+\item \href{{https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.94.031003}}{Artificial Intelligence and Machine Learning in Nuclear Physics, Amber Boehnlein et al., Reviews Modern of Physics 94, 031003 (2022)} 
 
+\item \href{{https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062}}{Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)}
 
-!split
-===== Selected references =====
-!bblock
-* "Mehta et al.":"https://arxiv.org/abs/1803.08823" and "Physics Reports (2019)":"https://www.sciencedirect.com/science/article/pii/S0370157319300766?via%3Dihub".
-* "Machine Learning and the Physical Sciences by Carleo et al":"https://link.aps.org/doi/10.1103/RevModPhys.91.045002"
-* "Artificial Intelligence and Machine Learning in Nuclear Physics, Amber Boehnlein et al., Reviews Modern of Physics 94, 031003 (2022)":"https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.94.031003" 
-* "Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)":"https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062"
-* Neural-network quantum states for ultra-cold Fermi gases, Jane Kim et al, Nature Physics Communcication, in press, see URL:"https://doi.org/10.48550/arXiv.2305.08831"
-* "Message-Passing Neural Quantum States for the Homogeneous Electron Gas, Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,":"https://doi.org/10.48550/arXiv.2305.07240"
-* "Particle Data Group summary on ML methods":"https://pdg.lbl.gov/2021/reviews/rpp2021-rev-machine-learning.pdf"
-!eblock
+\item Neural-network quantum states for ultra-cold Fermi gases, Jane Kim et al, Nature Physics Communcication, in press, see \href{{https://doi.org/10.48550/arXiv.2305.08831}}{\nolinkurl{https://doi.org/10.48550/arXiv.2305.08831}}
 
+\item \href{{https://doi.org/10.48550/arXiv.2305.07240}}{Message-Passing Neural Quantum States for the Homogeneous Electron Gas, Gabriel Pescia, Jane Kim et al.~arXiv.2305.07240,}
 
+\item \href{{https://pdg.lbl.gov/2021/reviews/rpp2021-rev-machine-learning.pdf}}{Particle Data Group summary on ML methods}
+\end{itemize}
 
+\noindent
+\end{block}
+\end{frame}
 
-
-
-
-
-
-
-!split
-===== Setting up the basic equations for neural networks =====
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the basic equations for neural networks}
 
 Neural networks, in its so-called feed-forward form, where each
 iterations contains a feed-forward stage and a back-propgagation
@@ -359,9 +526,10 @@ automatic differentation algorithm. These algorithms will be discussed
 in more detail below.
 
 We start however first with the  definitions of the various variables which make up a neural network.
+\end{frame}
 
-!split
-===== Overarching view of a neural network =====
+\begin{frame}[plain,fragile]
+\frametitle{Overarching view of a neural network}
 
 The architecture of a neural network defines our model. This model
 aims at describing some function $f(\bm{x}$ which aims at describing
@@ -370,21 +538,35 @@ $\bm{x}$. Note that here $\bm{y}$ and $\bm{x}$ are not limited to be
 vectors.
 
 The architecture consists of
-o An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with the target value $\bm{y}$
-o A given number of hidden layers and neurons/nodes/units for each layer (this may vary)
-o A given activation function $\sigma(\bm{z})$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer.
-o The last layer, normally called _output_ layer has normally an activation function tailored to the specific problem
-o Finally we define a so-called cost or loss function which is used to gauge the quality of our model. 
+\begin{enumerate}
+\item An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with the target value $\bm{y}$
 
-!split
-=====  Illustration of a single perceptron model and a multilayer FFNN =====
+\item A given number of hidden layers and neurons/nodes/units for each layer (this may vary)
 
-FIGURE: [figures/nns.png, width=600 frac=0.7]  In a) we show a single perceptron model while in b) we dispay a network with two  hidden layers, an input layer and an output layer.
+\item A given activation function $\sigma(\bm{z})$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer.
 
+\item The last layer, normally called \textbf{output} layer has normally an activation function tailored to the specific problem
 
+\item Finally we define a so-called cost or loss function which is used to gauge the quality of our model. 
+\end{enumerate}
 
-!split
-===== The optimization problem =====
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Illustration of a single perceptron model and a multilayer FFNN}
+
+\begin{figure}[!ht]  % 
+  \centerline{\includegraphics[width=0.7\linewidth]{figures/nns.png}}
+  \caption{
+  In a) we show a single perceptron model while in b) we dispay a network with two  hidden layers, an input layer and an output layer.
+  }
+\end{figure}
+%\clearpage % flush figures
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{The optimization problem}
 
 The cost function is a function of the unknown parameters
 $\bm{\Theta}$ where the latter is a container for all possible
@@ -392,16 +574,15 @@ parameters needed to define a neural network
 
 If we are dealing with a regression task a typical cost/loss function
 is the mean squared error
-!bt
 \[
 C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
 \]
-!et
 This function represents one of many possible ways to define
 the so-called cost function.
+\end{frame}
 
-!split
-===== Weights and biases =====
+\begin{frame}[plain,fragile]
+\frametitle{Weights and biases}
 
 For neural networks the parameters
 $\bm{\Theta}$ are given by the so-called weights and biases (to be
@@ -411,97 +592,101 @@ The weights are given by matrix elements $w_{ij}^{(l)}$ where the
 superscript indicates the layer number. The biases are typically given
 by vector elements representing each single node of a given layer,
 that is $b_j^{(l)}$.
+\end{frame}
 
-!split
-===== Other ingredients of a neural network =====
+\begin{frame}[plain,fragile]
+\frametitle{Other ingredients of a neural network}
 
 Having defined the architecture of a neural network, the optimization
 of the cost function with respect to the parameters $\bm{\Theta}$,
 involves the calculations of gradients and their optimization. The
 gradients represent the derivatives of a multidimensional object and
 are often approximated by various gradient methods, including
-o various quasi-Newton methods,
-o plain gradient descent (GD) with a constant learning rate $\eta$,
-o GD with momentum and other approximations to the learning rates such as
-  * Adapative gradient (ADAgrad)
-  * Root mean-square propagation (RMSprop)
-  * Adaptive gradient with momentum (ADAM) and many other
-o Stochastic gradient descent and various families of learning rate approximations
+\begin{enumerate}
+\item various quasi-Newton methods,
 
-!split
-===== Other parameters =====
+\item plain gradient descent (GD) with a constant learning rate $\eta$,
+
+\item GD with momentum and other approximations to the learning rates such as
+\begin{itemize}
+
+  \item Adapative gradient (ADAgrad)
+
+  \item Root mean-square propagation (RMSprop)
+
+  \item Adaptive gradient with momentum (ADAM) and many other
+
+\end{itemize}
+
+\noindent
+\item Stochastic gradient descent and various families of learning rate approximations
+\end{enumerate}
+
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Other parameters}
 
 In addition to the above, there are often additional hyperparamaters
 which are included in the setup of a neural network. These will be
 discussed below.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Why Feed Forward Neural Networks (FFNN)?}
 
-
-
-
-!split
-===== Why Feed Forward Neural Networks (FFNN)?  =====
-
-According to the *Universal approximation theorem*, a feed-forward
+According to the \emph{Universal approximation theorem}, a feed-forward
 neural network with just a single hidden layer containing a finite
 number of neurons can approximate a continuous multidimensional
 function to arbitrary accuracy, assuming the activation function for
-the hidden layer is a _non-constant, bounded and
-monotonically-increasing continuous function_.
+the hidden layer is a \textbf{non-constant, bounded and
+monotonically-increasing continuous function}.
+\end{frame}
 
-
-!split
-===== Universal approximation theorem =====
+\begin{frame}[plain,fragile]
+\frametitle{Universal approximation theorem}
 
 The universal approximation theorem plays a central role in deep
-learning.  "Cybenko (1989)":"https://link.springer.com/article/10.1007/BF02551274" showed
+learning.  \href{{https://link.springer.com/article/10.1007/BF02551274}}{Cybenko (1989)} showed
 the following:
 
-!bblock
+\begin{block}{}
 Let $\sigma$ be any continuous sigmoidal function such that
-!bt
 \[
 \sigma(z) = \left\{\begin{array}{cc} 1 & z\rightarrow \infty\\ 0 & z \rightarrow -\infty \end{array}\right.
 \]
-!et
 Given a continuous and deterministic function $F(\bm{x})$ on the unit
 cube in $d$-dimensions $F\in [0,1]^d$, $x\in [0,1]^d$ and a parameter
 $\epsilon >0$, there is a one-layer (hidden) neural network
 $f(\bm{x};\bm{\Theta})$ with $\bm{\Theta}=(\bm{W},\bm{b})$ and $\bm{W}\in
 \mathbb{R}^{m\times n}$ and $\bm{b}\in \mathbb{R}^{n}$, for which
-!bt
 \[
 \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert < \epsilon \hspace{0.1cm} \forall \bm{x}\in[0,1]^d.
 \]
-!et
 
-!eblock
+\end{block}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{The approximation theorem in words}
 
-
-!split
-===== The approximation theorem in words =====
-
-_Any continuous function $y=F(\bm{x})$ supported on the unit cube in
+\textbf{Any continuous function $y=F(\bm{x})$ supported on the unit cube in
 $d$-dimensions can be approximated by a one-layer sigmoidal network to
-arbitrary accuracy._
+arbitrary accuracy.}
 
-"Hornik (1991)":"https://www.sciencedirect.com/science/article/abs/pii/089360809190009T" extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value
-!bt
+\href{{https://www.sciencedirect.com/science/article/abs/pii/089360809190009T}}{Hornik (1991)} extended the theorem by letting any non-constant, bounded activation function to be included using that the expectation value
 \[
 \mathbb{E}[\vert F(\bm{x})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})\vert^2p(\bm{x})d\bm{x} < \infty.
 \]
-!et
 Then we have
-!bt
 \[
 \mathbb{E}[\vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2] =\int_{\bm{x}\in D} \vert F(\bm{x})-f(\bm{x};\bm{\Theta})\vert^2p(\bm{x})d\bm{x} < \epsilon.
 \]
-!et
+\end{frame}
 
-
-!split
-===== More on the general approximation theorem =====
+\begin{frame}[plain,fragile]
+\frametitle{More on the general approximation theorem}
 
 None of the proofs give any insight into the relation between the
 number of of hidden layers and nodes and the approximation error
@@ -509,103 +694,141 @@ $\epsilon$, nor the magnitudes of $\bm{W}$ and $\bm{b}$.
 
 Neural networks (NNs) have what we may call a kind of universality no matter what function we want to compute.
 
-!bblock
+\begin{block}{}
 It does not mean that an NN can be used to exactly compute any function. Rather, we get an approximation that is as good as we want. 
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== Class of functions we can approximate =====
+\begin{frame}[plain,fragile]
+\frametitle{Class of functions we can approximate}
 
-!bblock
+\begin{block}{}
 The class of functions that can be approximated are the continuous ones.
 If the function $F(\bm{x})$ is discontinuous, it won't in general be possible to approximate it. However, an NN may still give an approximation even if we fail in some points.
-!eblock
+\end{block}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Simple example, fitting nuclear masses}
 
-!split
-===== Simple example, fitting nuclear masses =====
+See example at \href{{https://github.com/CompPhysics/MachineLearning/blob/master/doc/pub/week34/ipynb/week34.ipynb}}{\nolinkurl{https://github.com/CompPhysics/MachineLearning/blob/master/doc/pub/week34/ipynb/week34.ipynb}}, and scroll down to nuclear masses.
 
-See example at URL:"https://github.com/CompPhysics/MachineLearning/blob/master/doc/pub/week34/ipynb/week34.ipynb", and scroll down to nuclear masses.
+And the recent article \href{{https://www.sciencedirect.com/science/article/pii/S0375947423001100}}{\nolinkurl{https://www.sciencedirect.com/science/article/pii/S0375947423001100}}
+\end{frame}
 
-And the recent article URL:"https://www.sciencedirect.com/science/article/pii/S0375947423001100"
-
-
-
-
-!split
-===== First network example, simple percepetron with one input =====
+\begin{frame}[plain,fragile]
+\frametitle{First network example, simple percepetron with one input}
 
 As yet another example we define now a simple perceptron model with
 all quantities given by scalars. We consider only one input variable
 $x$ and one target value $y$.  We define an activation function
 $\sigma_1$ which takes as input
 
-!bt
 \[
 z_1 = w_1x+b_1,
 \]
-!et
 where $w_1$ is the weight and $b_1$ is the bias. These are the
 parameters we want to optimize.  The output is $a_1=\sigma(z_1)$ (see
 graph from whiteboard notes). This output is then fed into the
-_cost/loss_ function, which we here for the sake of simplicity just
+\textbf{cost/loss} function, which we here for the sake of simplicity just
 define as the squared error
 
-!bt
 \[
 C(x;w_1,b_1)=\frac{1}{2}(a_1-y)^2.
 \]
-!et
+\end{frame}
 
-
-!split
-===== Optimizing the parameters =====
+\begin{frame}[plain,fragile]
+\frametitle{Optimizing the parameters}
 
 In setting up the feed forward and back propagation parts of the
 algorithm, we need now the derivative of the various variables we want
 to train.
 
 We need
-!bt
 \[
 \frac{\partial C}{\partial w_1} \hspace{0.1cm}\mathrm{and}\hspace{0.1cm}\frac{\partial C}{\partial b_1}. 
 \]
-!et
 
 Using the chain rule we find 
-!bt
 \[
 \frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_1-y)\sigma_1'x,
 \]
-!et
 and
-!bt
 \[
 \frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_1-y)\sigma_1',
 \]
-!et
 which we later will just define as
-!bt
 \[
 \frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}=\delta_1.
 \]
-!et
+\end{frame}
 
-!split
-===== Implementing the simple perceptron model =====
+\begin{frame}[plain,fragile]
+\frametitle{Implementing the simple perceptron model}
 
 In the example code here we implement the above equations (with explict
 expressions for the derivatives) with just one input variable $x$ and
 one output variable.  The target value $y=2x+1$ is a simple linear
 function in $x$. Since this is a regression problem, we define the cost function to be proportional to the least squares error
-!bt
 \[
 C(y,w_1,b_1)=\frac{1}{2}(a_1-y)^2,
 \]
-!et
 with $a_1$ the output from the network.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 # import necessary packages
 import numpy as np
 import matplotlib.pyplot as plt
@@ -657,11 +880,21 @@ for i in range(40):
 ytilde = output_weights*x+output_bias
 print(0.5*((ytilde-y)**2))
 
-!ec
-Running this code gives us an acceptable results after some 40-50 iterations. Note that the results depend on the value of the learning rate.
 
-!split
-===== Exercise: Extensions to the above code =====
+\end{minted}
+
+Running this code gives us an acceptable results after some 40-50 iterations. Note that the results depend on the value of the learning rate.
+\end{frame}
+
+\begin{frame}[plain,fragile]
+% No title on this slide
+
+% --- begin exercise ---
+\begin{doconceexercise}
+\refstepcounter{doconceexercisecounter}
+
+\exercisesection{Exercise \thedoconceexercisecounter: Extensions to the above code}
+                             
 
 Feel free to add more input nodes and weights to the above
 code. Furthermore, try to increase the amount of input and
@@ -672,105 +905,87 @@ $l_1$ norm or an $l_2$ norm and discuss your results.
 You could also try to change the function $f(x)=y$ from a linear polynomial in $x$ to a higher-order polynomial.
 Comment your results.
 
-_Hint_: Increasing the number of input variables and input nodes requires a rewrite of the input data in terms of a matrix. You need to figure out the correct dimensionalities.
+\textbf{Hint}: Increasing the number of input variables and input nodes requires a rewrite of the input data in terms of a matrix. You need to figure out the correct dimensionalities.
 
+\end{doconceexercise}
+% --- end exercise ---
+\end{frame}
 
-!split
-===== Adding a hidden layer =====
+\begin{frame}[plain,fragile]
+\frametitle{Adding a hidden layer}
 
 We change our simple model to (see graph below)
 a network with just one hidden layer but with scalar variables only.
 
 Our output variable changes to $a_2$ and $a_1$ is now the output from the hidden node and $a_0=x$.
 We have then
-!bt
 \[
 z_1 = w_1a_0+b_1 \hspace{0.1cm} \wedge a_1 = \sigma_1(z_1),
 \]
-!et
-!bt
 \[
 z_2 = w_2a_1+b_2 \hspace{0.1cm} \wedge a_2 = \sigma_2(z_2),
 \]
-!et
 and the cost function
-!bt
 \[
 C(x;\bm{\Theta})=\frac{1}{2}(a_2-y)^2,
 \]
-!et
 with $\bm{\Theta}=[w_1,w_2,b_1,b_2]$.
+\end{frame}
 
-
-
-!split
-===== The derivatives =====
+\begin{frame}[plain,fragile]
+\frametitle{The derivatives}
 
 The derivatives are now, using the chain rule again
 
-!bt
 \[
 \frac{\partial C}{\partial w_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial w_2}=(a_2-y)\sigma_2'a_1=\delta_2a_1,
 \]
-!et
-!bt
 \[
 \frac{\partial C}{\partial b_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial b_2}=(a_2-y)\sigma_2'=\delta_2,
 \]
-!et
-!bt
 \[
 \frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_2-y)\sigma_2'a_1\sigma_1'a_0,
 \]
-!et
-!bt
 \[
 \frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'=\delta_1.
 \]
-!et
 
 Can you generalize this to more than one hidden layer?
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Important observations}
 
-!split
-===== Important observations =====
-
-!bblock
+\begin{block}{}
 From the above equations we see that the derivatives of the activation
 functions play a central role. If they vanish, the training may
 stop. This is called the vanishing gradient problem, see discussions below. If they become
 large, the parameters $w_i$ and $b_i$ may simply go to infinity. This
 is referenced as  the exploding gradient problem.
-!eblock
+\end{block}
+\end{frame}
 
-
-
-
-!split
-===== The training =====
+\begin{frame}[plain,fragile]
+\frametitle{The training}
 
 The training of the parameters is done through various gradient descent approximations with
 
-!bt
 \[
 w_{i}\leftarrow w_{i}- \eta \delta_i a_{i-1},
 \]
-!et
 and
-!bt
 \[
 b_i \leftarrow b_i-\eta \delta_i,
 \]
-!et
 with $\eta$ is the learning rate.
 
 One iteration consists of one feed forward step and one back-propagation step. Each back-propagation step does one update of the parameters $\bm{\Theta}$.
 
 For the first hidden layer $a_{i-1}=a_0=x$ for this simple model.
+\end{frame}
 
-
-!split
-===== Code example  =====
+\begin{frame}[plain,fragile]
+\frametitle{Code example}
 
 The code here implements the above model with one hidden layer and
 scalar variables for the same function we studied in the previous
@@ -779,7 +994,72 @@ inputs $x$ and target values $y$. Note also that we have the
 possibility of defining a feature matrix $\bm{X}$ with more than just
 one column for the input values. This will turn useful in our next example. We have also defined matrices and vectors for all of our operations although it is not necessary here.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import numpy as np
 # We use the Sigmoid function as activation function
 def sigmoid(z):
@@ -844,12 +1124,22 @@ for i in range(50):
     b_1 -= eta * derivB1
 
 
-!ec
+
+\end{minted}
+
 
 We see that after some few iterations (the results do depend on the learning rate however), we get an error which is rather small.
+\end{frame}
 
-!split
-===== Exercise: Including more data =====
+\begin{frame}[plain,fragile]
+% No title on this slide
+
+% --- begin exercise ---
+\begin{doconceexercise}
+\refstepcounter{doconceexercisecounter}
+
+\exercisesection{Exercise \thedoconceexercisecounter: Including more data}
+                             
 
 Try to increase the amount of input and
 target/output data. Try also to perform calculations for more values
@@ -857,10 +1147,14 @@ of the learning rates. Feel free to add either hyperparameters with an
 $l_1$ norm or an $l_2$ norm and discuss your results.
 Discuss your results as functions of the amount of training data and various learning rates.
 
-_Challenge:_ Try to change the activation functions and replace the hard-coded analytical expressions with automatic derivation via either _autograd_ or _JAX_.
+\textbf{Challenge:} Try to change the activation functions and replace the hard-coded analytical expressions with automatic derivation via either \textbf{autograd} or \textbf{JAX}.
 
-!split
-===== Simple neural network and the  back propagation equations  =====
+\end{doconceexercise}
+% --- end exercise ---
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Simple neural network and the  back propagation equations}
 
 Let us now try to increase our level of ambition and attempt at setting 
 up the equations for a neural network with two input nodes, one hidden
@@ -868,79 +1162,60 @@ layer with two hidden nodes and one output layer with one output node/neuron onl
 
 We need to define the following parameters and variables with the input layer (layer $(0)$) 
 where we label the  nodes $x_0$ and $x_1$
-!bt
 \[
 x_0 = a_0^{(0)} \wedge x_1 = a_1^{(0)}.
 \]
-!et
 
 The  hidden layer (layer $(1)$) has  nodes which yield the outputs $a_0^{(1)}$ and $a_1^{(1)}$) with  weight $\bm{w}$ and bias $\bm{b}$ parameters
-!bt
 \[
 w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
 \]
-!et
+\end{frame}
 
-
-
-!split
-===== The ouput layer =====
+\begin{frame}[plain,fragile]
+\frametitle{The ouput layer}
 
 Finally, we have the ouput layer given by layer label $(2)$ with output $a^{(2)}$ and weights and biases to be determined given by the variables
-!bt
 \[
 w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
 \]
-!et
-
 
 Our output is $\tilde{y}=a^{(2)}$ and we define a generic cost function $C(a^{(2)},y;\bm{\Theta})$ where $y$ is the target value (a scalar here).
 The parameters we need to optimize are given by
-!bt
 \[
 \bm{\Theta}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)},w_{0}^{(2)},w_{1}^{(2)},b_0^{(1)},b_1^{(1)},b^{(2)}\right\}.
 \]
-!et
+\end{frame}
 
-!split
-===== Compact expressions =====
+\begin{frame}[plain,fragile]
+\frametitle{Compact expressions}
 
 We can define the inputs to the activation functions for the various layers in terms of various matrix-vector multiplications and vector additions.
 The inputs to the first hidden layer are
-!bt
 \[
 \begin{bmatrix}z_0^{(1)} \\ z_1^{(1)} \end{bmatrix}=\begin{bmatrix}w_{00}^{(1)} & w_{01}^{(1)}\\ w_{10}^{(1)} &w_{11}^{(1)} \end{bmatrix}\begin{bmatrix}a_0^{(0)} \\ a_1^{(0)} \end{bmatrix}+\begin{bmatrix}b_0^{(1)} \\ b_1^{(1)} \end{bmatrix},
 \]
-!et
 with outputs
-!bt
 \[
 \begin{bmatrix}a_0^{(1)} \\ a_1^{(1)} \end{bmatrix}=\begin{bmatrix}\sigma^{(1)}(z_0^{(1)}) \\ \sigma^{(1)}(z_1^{(1)}) \end{bmatrix}.
 \]
-!et
+\end{frame}
 
-!split
-===== Output layer =====
+\begin{frame}[plain,fragile]
+\frametitle{Output layer}
 
 For the final output layer we have the inputs to the final activation function 
-!bt
 \[
 z^{(2)} = w_{0}^{(2)}a_0^{(1)} +w_{1}^{(2)}a_1^{(1)}+b^{(2)},
 \]
-!et
 resulting in the  output
-!bt
 \[
 a^{(2)}=\sigma^{(2)}(z^{(2)}).
 \]
-!et
+\end{frame}
 
-
-
-
-
-!split
-===== Explicit derivatives =====
+\begin{frame}[plain,fragile]
+\frametitle{Explicit derivatives}
 
 In total we have nine parameters which we need to train.  Using the
 chain rule (or just the back-propagation algorithm) we can find all
@@ -948,188 +1223,157 @@ derivatives. Since we will use automatic differentiation in reverse
 mode, we start with the derivatives of the cost function with respect
 to the parameters of the output layer, namely
 
-!bt
 \[
 \frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
 \]
-!et
 with
-!bt
 \[
 \delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
 \]
-!et
 and finally
-!bt
 \[
 \frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
 \]
-!et
+\end{frame}
 
-
-!split
-===== Derivatives of the hidden layer =====
+\begin{frame}[plain,fragile]
+\frametitle{Derivatives of the hidden layer}
 
 Using the chain rule we have the following expressions for say one of the weight parameters (it is easy to generalize to the other weight parameters)
-!bt
 \[
 \frac{\partial C}{\partial w_{00}^{(1)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
 \frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=    \delta^{(2)}\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}},
 \]
-!et
 which, noting that
-!bt
 \[
 z^{(2)} =w_0^{(2)}a_0^{(1)}+w_1^{(2)}a_1^{(1)}+b^{(2)},
 \]
-!et
 allows us to rewrite 
-!bt
 \[
 \frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}a_0^{(1)}.
 \]
-!et
+\end{frame}
 
-!split
-===== Final expression =====
+\begin{frame}[plain,fragile]
+\frametitle{Final expression}
+
 Defining
-!bt
 \[
 \delta_0^{(1)}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}\delta^{(2)},
 \]
-!et
 we have 
-!bt
 \[
 \frac{\partial C}{\partial w_{00}^{(1)}}=\delta_0^{(1)}a_0^{(1)}.
 \]
-!et
 Similarly, we obtain
-!bt
 \[
 \frac{\partial C}{\partial w_{01}^{(1)}}=\delta_0^{(1)}a_1^{(1)}.
 \]
-!et
+\end{frame}
 
-!split
-===== Completing the list =====
+\begin{frame}[plain,fragile]
+\frametitle{Completing the list}
 
 Similarly, we find
-!bt
 \[
 \frac{\partial C}{\partial w_{10}^{(1)}}=\delta_1^{(1)}a_0^{(1)},
 \]
-!et
 and 
-!bt
 \[
 \frac{\partial C}{\partial w_{11}^{(1)}}=\delta_1^{(1)}a_1^{(1)},
 \]
-!et
 where we have defined 
-!bt
 \[
 \delta_1^{(1)}=w_1^{(2)}\frac{\partial a_1^{(1)}}{\partial z_1^{(1)}}\delta^{(2)}.
 \]
-!et
+\end{frame}
 
-!split
-===== Final expressions for the biases of the hidden layer =====
+\begin{frame}[plain,fragile]
+\frametitle{Final expressions for the biases of the hidden layer}
 
 For the sake of completeness, we list the derivatives of the biases, which are
-!bt
 \[
 \frac{\partial C}{\partial b_{0}^{(1)}}=\delta_0^{(1)},
 \]
-!et
 and
-!bt
 \[
 \frac{\partial C}{\partial b_{1}^{(1)}}=\delta_1^{(1)}.
 \]
-!et
-As we will see below, these expressions can be generalized in a more compact form. 
+As we will see below, these expressions can be generalized in a more compact form.
+\end{frame}
 
-
-!split
-===== Gradient expressions =====
+\begin{frame}[plain,fragile]
+\frametitle{Gradient expressions}
 
 For this specific model, with just one output node and two hidden
 nodes, the gradient descent equations take the following form for output layer
-!bt
 \[
 w_{i}^{(2)}\leftarrow w_{i}^{(2)}- \eta \delta^{(2)} a_{i}^{(1)},
 \]
-!et
 and
-!bt
 \[
 b^{(2)} \leftarrow b^{(2)}-\eta \delta^{(2)},
 \]
-!et
 and
-!bt
 \[
 w_{ij}^{(1)}\leftarrow w_{ij}^{(1)}- \eta \delta_{i}^{(1)} a_{j}^{(0)},
 \]
-!et
 and
-!bt
 \[
 b_{i}^{(1)} \leftarrow b_{i}^{(1)}-\eta \delta_{i}^{(1)},
 \]
-!et
 where $\eta$ is the learning rate.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+% No title on this slide
 
+% --- begin exercise ---
+\begin{doconceexercise}
+\refstepcounter{doconceexercisecounter}
 
-!split
-===== Exercise: Extended program  =====
+\exercisesection{Exercise \thedoconceexercisecounter: Extended program}
+                             
 
 We extend our simple code to a function which depends on two variable $x_0$ and $x_1$, that is
-!bt
 \[
 y=f(x_0,x_1)=x_0^2+3x_0x_1+x_1^2+5.
 \]
-!et
 We feed our network with $n=100$ entries $x_0$ and $x_1$. We have thus two features represented by these variable and an input matrix/design matrix $\bm{X}\in \mathbf{R}^{n\times 2}$
-!bt
 \[
 \bm{X}=\begin{bmatrix} x_{00} & x_{01} \\ x_{00} & x_{01} \\ x_{10} & x_{11} \\ x_{20} & x_{21} \\ \dots & \dots \\ \dots & \dots \\ x_{n-20} & x_{n-21} \\ x_{n-10} & x_{n-11} \end{bmatrix}.
 \]
-!et
 Write a code, based on the previous code examples, which takes as input these data and fit the above function.
 You can extend your code to include automatic differentiation.
 
 With these examples, we are now ready to embark upon the writing of more a general code for neural networks.
 
-!split
-===== Getting serious, the  back propagation equations for a neural network =====
+\end{doconceexercise}
+% --- end exercise ---
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Getting serious, the  back propagation equations for a neural network}
 
 Now it is time to move away from one node in each layer only. Our inputs are also represented either by several inputs.
 
 We have thus
-!bt
 \[
 \frac{\partial{\cal C}((\bm{\Theta}^L)}{\partial w_{jk}^L}  =  \left(a_j^L - y_j\right)a_j^L(1-a_j^L)a_k^{L-1}, 
 \]
-!et
 
 Defining
-!bt
 \[
 \delta_j^L = a_j^L(1-a_j^L)\left(a_j^L - y_j\right) = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
 \]
-!et
 and using the Hadamard product of two vectors we can write this as
-!bt
 \[
 \bm{\delta}^L = \sigma'(\hat{z}^L)\circ\frac{\partial {\cal C}}{\partial (\bm{a}^L)}.
 \]
-!et
+\end{frame}
 
-!split
-===== Analyzing the last results =====
+\begin{frame}[plain,fragile]
+\frametitle{Analyzing the last results}
 
 This is an important expression. The second term on the right handside
 measures how fast the cost function is changing as a function of the $j$th
@@ -1138,10 +1382,10 @@ much on a particular output node $j$, then $\delta_j^L$ will be small,
 which is what we would expect. The first term on the right, measures
 how fast the activation function $f$ is changing at a given activation
 value $z_j^L$.
+\end{frame}
 
-!split
-===== More considerations =====
-
+\begin{frame}[plain,fragile]
+\frametitle{More considerations}
 
 Notice that everything in the above equations is easily computed.  In
 particular, we compute $z_j^L$ while computing the behaviour of the
@@ -1151,459 +1395,399 @@ output depends on the form of the cost function.
 However, provided the cost function is known there should be little
 trouble in calculating
 
-!bt
 \[
 \frac{\partial {\cal C}}{\partial (a_j^L)}
 \]
-!et
 
 With the definition of $\delta_j^L$ we have a more compact definition of the derivative of the cost function in terms of the weights, namely
-!bt
 \[
 \frac{\partial{\cal C}}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1}.
 \]
-!et
+\end{frame}
 
-!split
-===== Derivatives in terms of $z_j^L$ =====
+\begin{frame}[plain,fragile]
+\frametitle{Derivatives in terms of $z_j^L$}
 
 It is also easy to see that our previous equation can be written as
 
-!bt
 \[
 \delta_j^L =\frac{\partial {\cal C}}{\partial z_j^L}= \frac{\partial {\cal C}}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L},
 \]
-!et
 which can also be interpreted as the partial derivative of the cost function with respect to the biases $b_j^L$, namely
-!bt
 \[
 \delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L}\frac{\partial b_j^L}{\partial z_j^L}=\frac{\partial {\cal C}}{\partial b_j^L},
 \]
-!et
-That is, the error $\delta_j^L$ is exactly equal to the rate of change of the cost function as a function of the bias. 
+That is, the error $\delta_j^L$ is exactly equal to the rate of change of the cost function as a function of the bias.
+\end{frame}
 
-!split
-===== Bringing it together =====
+\begin{frame}[plain,fragile]
+\frametitle{Bringing it together}
 
 We have now three equations that are essential for the computations of the derivatives of the cost function at the output layer. These equations are needed to start the algorithm and they are
 
-!bt
 \begin{equation}
 \frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1},
 \end{equation}
-!et
 and
-!bt
 \begin{equation}
 \delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
 \end{equation}
-!et
 and
 
-!bt
 \begin{equation}
 \delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L},
 \end{equation}
-!et
+\end{frame}
 
-
-!split
-===== Final back propagating equation =====
+\begin{frame}[plain,fragile]
+\frametitle{Final back propagating equation}
 
 We have that (replacing $L$ with a general layer $l$)
-!bt
 \[
 \delta_j^l =\frac{\partial {\cal C}}{\partial z_j^l}.
 \]
-!et
 We want to express this in terms of the equations for layer $l+1$.
+\end{frame}
 
-!split
-===== Using the chain rule and summing over all $k$ entries =====
+\begin{frame}[plain,fragile]
+\frametitle{Using the chain rule and summing over all $k$ entries}
 
 We obtain
-!bt
 \[
 \delta_j^l =\sum_k \frac{\partial {\cal C}}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^{l}}=\sum_k \delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^{l}},
 \]
-!et
 and recalling that
-!bt
 \[
 z_j^{l+1} = \sum_{i=1}^{M_{l}}w_{ij}^{l+1}a_i^{l}+b_j^{l+1},
 \]
-!et
 with $M_l$ being the number of nodes in layer $l$, we obtain
-!bt
 \[
 \delta_j^l =\sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l),
 \]
-!et
 This is our final equation.
 
 We are now ready to set up the algorithm for back propagation and learning the weights and biases.
+\end{frame}
 
-!split
-===== Setting up the back propagation algorithm =====
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the back propagation algorithm}
 
 The four equations  provide us with a way of computing the gradient of the cost function. Let us write this out in the form of an algorithm.
 
-_First_, we set up the input data $\hat{x}$ and the activations
+\textbf{First}, we set up the input data $\hat{x}$ and the activations
 $\hat{z}_1$ of the input layer and compute the activation function and
 the pertinent outputs $\hat{a}^1$.
 
-_Secondly_, we perform then the feed forward till we reach the output
+\textbf{Secondly}, we perform then the feed forward till we reach the output
 layer and compute all $\hat{z}_l$ of the input layer and compute the
 activation function and the pertinent outputs $\hat{a}^l$ for
 $l=1,2,3,\dots,L$.
 
+\textbf{Notation}: The first hidden layer has $l=1$ as label and the final output layer has $l=L$.
+\end{frame}
 
-_Notation_: The first hidden layer has $l=1$ as label and the final output layer has $l=L$.
-
-!split
-===== Setting up the back propagation algorithm, part 2 =====
-
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the back propagation algorithm, part 2}
 
 Thereafter we compute the ouput error $\hat{\delta}^L$ by computing all
-!bt
 \[
 \delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
 \]
-!et
 
 Then we compute the back propagate error for each $l=L-1,L-2,\dots,1$ as
-!bt
 \[
 \delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
 \]
-!et
+\end{frame}
 
-!split
-===== Setting up the Back propagation algorithm, part 3 =====
-
+\begin{frame}[plain,fragile]
+\frametitle{Setting up the Back propagation algorithm, part 3}
 
 Finally, we update the weights and the biases using gradient descent
 for each $l=L-1,L-2,\dots,1$ and update the weights and biases
 according to the rules
 
-!bt
 \[
 w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
 \]
-!et
 
-!bt
 \[
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 \]
-!et
 with $\eta$ being the learning rate.
+\end{frame}
 
-!split
-===== Updating the gradients  =====
+\begin{frame}[plain,fragile]
+\frametitle{Updating the gradients}
 
 With the back propagate error for each $l=L-1,L-2,\dots,1$ as
-!bt
 \[
 \delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}sigma'(z_j^l),
 \]
-!et
 we update the weights and the biases using gradient descent for each $l=L-1,L-2,\dots,1$ and update the weights and biases according to the rules
-!bt
 \[
 w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
 \]
-!et
 
-!bt
 \[
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 \]
-!et
+\end{frame}
 
-
-
-
-!split
-===== Essential elements of generative models =====
+\begin{frame}[plain,fragile]
+\frametitle{Essential elements of generative models}
 
 The aim of generative methods is to train a probability distribution $p$. The methods we will focus on are:
-o Energy based models, with the family of Boltzmann distributions as a typical example
-o Variational autoencoders, based on our discussions on autoencoders
-o Generative adversarial networks (GANs) and
-o Diffusion models
+\begin{enumerate}
+\item Energy based models, with the family of Boltzmann distributions as a typical example
 
-!split
-===== Energy models =====
+\item Variational autoencoders, based on our discussions on autoencoders
+
+\item Generative adversarial networks (GANs) and
+
+\item Diffusion models
+\end{enumerate}
+
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Energy models}
 
 Last week we defined a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_1, \dots , x_{n-1}\}$ with a pertinent probability distribution
-!bt
 \[
 p(\bm{X})=\prod_{x_i\in \bm{X}}p(x_i),
 \]
-!et
 where we have assumed that the random varaibles $x_i$ are all independent and identically distributed (iid).
 
 We will now assume that we can defined this function in terms of optimization parameters $\bm{\Theta}$, which could be the biases and weights of deep network, and a set of hidden variables we also assume to be random variables which also are iid. The domain of these variables is
 $\bm{H}= \{h_0,h_1, \dots , h_{m-1}\}$.
+\end{frame}
 
-!split
-===== Probability model =====
+\begin{frame}[plain,fragile]
+\frametitle{Probability model}
 
 We define a probability
-!bt
 \[
 p(x_i,h_j;\bm{\Theta}) = \frac{f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})},
 \]
-!et
 where $f(x_i,h_j;\bm{\Theta})$ is a function which we assume is larger or
 equal than zero and obeys all properties required for a probability
 distribution and $Z(\bm{\Theta})$ is a normalization constant. Inspired by
 statistical mechanics, we call it often for the partition function.
 It is defined as (assuming that we have discrete probability distributions)
-!bt
 \[
 Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}).
 \]
-!et
+\end{frame}
 
-!split
-===== Marginal and conditional probabilities =====
+\begin{frame}[plain,fragile]
+\frametitle{Marginal and conditional probabilities}
 
 We can in turn define the marginal probabilities
-!bt
 \[
 p(x_i;\bm{\Theta}) = \frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})},
 \]
-!et
 and 
-!bt
 \[
 p(h_i;\bm{\Theta}) = \frac{\sum_{x_i\in \bm{X}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}.
 \]
-!et
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Change of notation}
 
-!split
-===== Change of notation =====
-
-_Note the change to a vector notation_. A variable like $\bm{x}$
-represents now a specific _configuration_. We can generate an infinity
+\textbf{Note the change to a vector notation}. A variable like $\bm{x}$
+represents now a specific \textbf{configuration}. We can generate an infinity
 of such configurations. The final partition function is then the sum
 over all such possible configurations, that is
 
-!bt
 \[
 Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}),
 \]
-!et
 changes to
-!bt
 \[
 Z(\bm{\Theta})=\sum_{\bm{x}}\sum_{\bm{h}} f(\bm{x},\bm{h};\bm{\Theta}).
 \]
-!et
 If we have a binary set of variable $x_i$ and $h_j$ and $M$ values of $x_i$ and $N$ values of $h_j$ we have in total $2^M$ and $2^N$ possible $\bm{x}$ and $\bm{h}$ configurations, respectively.
 
 We see that even for the modest binary case, we can easily approach a
 number of configuration which is not possible to deal with.
+\end{frame}
 
-!split
-===== Optimization problem =====
+\begin{frame}[plain,fragile]
+\frametitle{Optimization problem}
 
 At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is 
-!bt
 \[
 p(\bm{X};\bm{\Theta})=\prod_{x_i\in \bm{X}}p(x_i;\bm{\Theta})=\prod_{x_i\in \bm{X}}\left(\frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}\right),
 \]
-!et
 which we rewrite as
-!bt
 \[
 p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}\left(\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})\right).
 \]
-!et
+\end{frame}
 
-!split
-===== Further simplifications =====
+\begin{frame}[plain,fragile]
+\frametitle{Further simplifications}
 
 We simplify further by rewriting it as
-!bt
 \[
 p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}f(x_i;\bm{\Theta}),
 \]
-!et
 where we used $p(x_i;\bm{\Theta}) = \sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})$.
 The optimization problem is then
-!bt
 \[
 {\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\bm{\bm{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\bm{X};\bm{\Theta}).
 \]
-!et
+\end{frame}
 
-!split
-===== Optimizing the logarithm instead =====
+\begin{frame}[plain,fragile]
+\frametitle{Optimizing the logarithm instead}
 
 Computing the derivatives with respect to the parameters $\bm{\Theta}$ is
 easier (and equivalent) with taking the logarithm of the
 probability. We will thus optimize
-!bt
 \[
 {\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\bm{\bm{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\bm{X};\bm{\Theta})},
 \]
-!et
 which leads to
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=0.
 \]
-!et
+\end{frame}
 
-!split
-===== Expression for the gradients =====
+\begin{frame}[plain,fragile]
+\frametitle{Expression for the gradients}
+
 This leads to the following equation
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=\nabla_{\bm{\Theta}}\left(\sum_{x_i\in \bm{X}}\log{f(x_i;\bm{\Theta})}\right)-\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=0.
 \]
-!et
 
 The first term is called the positive phase and we assume that we have a model for the function $f$ from which we can sample values. Below we will develop an explicit model for this.
 The second term is called the negative phase and is the one which leads to more difficulties.
+\end{frame}
 
-!split
-===== The derivative of the partition function =====
+\begin{frame}[plain,fragile]
+\frametitle{The derivative of the partition function}
 
 The partition function, defined above as
-!bt
 \[
 Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}),
 \]
-!et
 is in general the most problematic term. In principle both $x$ and $h$ can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).
+\end{frame}
 
-!split
-===== Explicit expression for the derivative =====
+\begin{frame}[plain,fragile]
+\frametitle{Explicit expression for the derivative}
+
 We can rewrite
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{\nabla_{\bm{\Theta}}Z(\bm{\Theta})}{Z(\bm{\Theta})},
 \]
-!et
 which reads in more detail
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{\nabla_{\bm{\Theta}} \sum_{x_i\in \bm{X}}f(x_i;\bm{\Theta})   }{Z(\bm{\Theta})}.
 \]
-!et
 
 We can rewrite the function $f$ (we have assumed that is larger or
 equal than zero) as $f=\exp{\log{f}}$. We can then reqrite the last
 equation as
 
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{ \sum_{x_i\in \bm{X}} \nabla_{\bm{\Theta}}\exp{\log{f(x_i;\bm{\Theta})}}   }{Z(\bm{\Theta})}.
 \]
-!et
+\end{frame}
 
-!split
-===== Final expression =====
+\begin{frame}[plain,fragile]
+\frametitle{Final expression}
 
 Taking the derivative gives us
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{ \sum_{x_i\in \bm{X}}f(x_i;\bm{\Theta}) \nabla_{\bm{\Theta}}\log{f(x_i;\bm{\Theta})}   }{Z(\bm{\Theta})}, 
 \]
-!et
 which is the expectation value of $\log{f}$
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\sum_{x_i\in \bm{X}}p(x_i;\bm{\Theta}) \nabla_{\bm{\Theta}}\log{f(x_i;\bm{\Theta})},
 \]
-!et
 that is
-!bt
 \[
 \nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\mathbb{E}(\log{f(x_i;\bm{\Theta})}).
 \]
-!et
 
 This quantity is evaluated using Monte Carlo sampling, with Gibbs
 sampling as the standard sampling rule.  Before we discuss the
 explicit algorithms, we need to remind ourselves about Markov chains
 and sampling rules like the Metropolis-Hastings algorithm and Gibbs
 sampling.
+\end{frame}
 
-!split
-===== Introducing the energy model =====
+\begin{frame}[plain,fragile]
+\frametitle{Introducing the energy model}
 
 As we will see below, a typical Boltzmann machines employs a probability distribution
-!bt
 \[
 p(\bm{x},\bm{h};\bm{\Theta}) = \frac{f(\bm{x},\bm{h};\bm{\Theta})}{Z(\bm{\Theta})},
 \]
-!et
 where $f(\bm{x},\bm{h};\bm{\Theta})$ is given by a so-called energy model. If we assume that the random variables $x_i$ and $h_j$ take binary values only, for example $x_i,h_j=\{0,1\}$, we have a so-called binary-binary model where
-!bt
 \[
 f(\bm{x},\bm{h};\bm{\Theta})=-E(\bm{x}, \bm{h};\bm{\Theta}) = \sum_{x_i\in \bm{X}} x_i a_i+\sum_{h_j\in \bm{H}} b_j h_j + \sum_{x_i\in \bm{X},h_j\in\bm{H}} x_i w_{ij} h_j,
 \]
-!et
 where the set of parameters are given by the biases and weights $\bm{\Theta}=\{\bm{a},\bm{b},\bm{W}\}$.
-_Note the vector notation_ instead of $x_i$ and $h_j$ for $f$. The vectors $\bm{x}$ and $\bm{h}$ represent a specific instance of stochastic variables $x_i$ and $h_j$. These arrangements of $\bm{x}$ and $\bm{h}$ lead to a specific energy configuration.
+\textbf{Note the vector notation} instead of $x_i$ and $h_j$ for $f$. The vectors $\bm{x}$ and $\bm{h}$ represent a specific instance of stochastic variables $x_i$ and $h_j$. These arrangements of $\bm{x}$ and $\bm{h}$ lead to a specific energy configuration.
+\end{frame}
 
-!split
-===== More compact notation =====
+\begin{frame}[plain,fragile]
+\frametitle{More compact notation}
 
 With the above definition we can write the probability as
-!bt
 \[
 p(\bm{x},\bm{h};\bm{\Theta}) = \frac{\exp{(\bm{a}^T\bm{x}+\bm{b}^T\bm{h}+\bm{x}^T\bm{W}\bm{h})}}{Z(\bm{\Theta})},
 \]
-!et
 where the biases $\bm{a}$ and $\bm{h}$ and the weights defined by the matrix $\bm{W}$ are the parameters we need to optimize.
+\end{frame}
 
-!split
-===== Anticipating results to be derived =====
+\begin{frame}[plain,fragile]
+\frametitle{Anticipating results to be derived}
 
 Since the binary-binary energy model is linear in the parameters $a_i$, $b_j$ and
 $w_{ij}$, it is easy to see that the derivatives with respect to the
 various optimization parameters yield expressions used in the
 evaluation of gradients like
-!bt
 \[
 \frac{\partial E(\bm{x}, \bm{h};\bm{\Theta})}{\partial w_{ij}}=-x_ih_j,
 \]
-!et
 and
-!bt
 \[
 \frac{\partial E(\bm{x}, \bm{h};\bm{\Theta})}{\partial a_i}=-x_i,
 \]
-!et
 and
-!bt
 \[
 \frac{\partial E(\bm{x}, \bm{h};\bm{\Theta})}{\partial b_j}=-h_j.
 \]
-!et
+\end{frame}
 
-
-
-!split
-===== Boltzmann Machines, marginal and conditional probabilities  =====
+\begin{frame}[plain,fragile]
+\frametitle{Boltzmann Machines, marginal and conditional probabilities}
 
 A generative model can learn to represent and sample from a
 probability distribution. The core idea is to learn a parametric model
 of the probability distribution from which the training data was
 drawn. As an example
-o A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.
-o Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.
-o Model the trial function for Monte Carlo calculations
+\begin{enumerate}
+\item A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.
 
-!split
-===== Generative and discriminative models =====
+\item Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.
+
+\item Model the trial function for Monte Carlo calculations
+\end{enumerate}
+
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Generative and discriminative models}
 
 Generative and discriminative models use both gradient-descent based
 learning procedures for minimizing cost functions
@@ -1616,52 +1800,62 @@ A typical deep neural network has several hidden layers. A restricted
 Boltzmann machine has normally one hidden layer, however several RBMs can
 be stacked to make up deep Belief Networks, of which they constitute
 the building blocks.
+\end{frame}
 
-!split
-===== Basics of the Boltzmann machine =====
-!bblock
+\begin{frame}[plain,fragile]
+\frametitle{Basics of the Boltzmann machine}
+
+\begin{block}{}
 A BM is what we would call an undirected probabilistic graphical model
 with stochastic continuous or discrete units.
-!eblock
-!bblock
+\end{block}
+\begin{block}{}
 It is interpreted as a stochastic recurrent neural network where the
 state of each unit(neurons/nodes) depends on the units it is connected
 to. The weights in the network represent thus the strength of the
 interaction between various units/nodes.
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== More about the basics =====
-!bblock
+\begin{frame}[plain,fragile]
+\frametitle{More about the basics}
+
+\begin{block}{}
 A standard BM network is divided into a set of observable and visible units $\bm{x}$ and a set of unknown hidden units/nodes $\bm{h}$.
-!eblock
+\end{block}
 
-!bblock
+\begin{block}{}
 Additionally there can be bias nodes for the hidden and visible layers. These biases are normally set to $1$.
-!eblock
+\end{block}
 
-!bblock
+\begin{block}{}
 BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning
-!eblock
+\end{block}
+\end{frame}
 
-!split
-===== Difficult to train =====
+\begin{frame}[plain,fragile]
+\frametitle{Difficult to train}
 
 However, they are often hard to train. This leads to the introduction
 of so-called restricted BMs, or RBMS.  Here we take away all lateral
 connections between nodes in the visible layer as well as connections
 between nodes in the hidden layer.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{The network layers}
 
-!split
-===== The network layers =====
+\begin{enumerate}
+\item A function $\bm{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
 
-o A function $\bm{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
-o The function $\bm{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
+\item The function $\bm{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
+\end{enumerate}
 
+\noindent
+\end{frame}
 
-!split
-===== Goal of hidden layer =====
+\begin{frame}[plain,fragile]
+\frametitle{Goal of hidden layer}
 
 The goal of the hidden layer is to increase the model's expressive
 power. We encode complex interactions between visible variables by
@@ -1669,82 +1863,80 @@ introducing additional, hidden variables that interact with visible
 degrees of freedom in a simple manner, yet still reproduce the complex
 correlations between visible degrees in the data once marginalized
 over (integrated out).
+\end{frame}
 
-!split
-===== The parameters =====
+\begin{frame}[plain,fragile]
+\frametitle{The parameters}
 
 The network parameters, to be optimized/learned:
-o $\bm{a}$ represents the visible bias, a vector of same length $M$ as $\bm{x}$.
-o $\bm{b}$ represents the hidden bias, a vector of same length $N$  as $\bm{h}$.
-o $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
+\begin{enumerate}
+\item $\bm{a}$ represents the visible bias, a vector of same length $M$ as $\bm{x}$.
 
+\item $\bm{b}$ represents the hidden bias, a vector of same length $N$  as $\bm{h}$.
+
+\item $\bm{W}$ represents the interaction weights, a matrix of size $M\times N$.
+\end{enumerate}
+
+\noindent
 Note that we have specified the lengths of $bm{x}$ and $\bm{h}$. These
 lengths define the number of visible and hidden units, respectively.
+\end{frame}
 
-!split
-===== Joint distribution =====
+\begin{frame}[plain,fragile]
+\frametitle{Joint distribution}
 
 The restricted Boltzmann machine is described by a Boltzmann distribution
-!bt
 \begin{align*}
 	P_{rbm}(\bm{x},\bm{h},\bm{\Theta}) = \frac{1}{Z(\bm{\Theta})} \exp{-(E(\bm{x},\bm{h},\bm{\Theta}))},
 \end{align*}
-!et
 where $Z$ is the normalization constant or partition function discussed earlier and defined as 
-!bt
 \begin{align*}
 	Z(\bm{\Theta}) = \int \int \exp{-E(\bm{x},\bm{h},\bm{\Theta})} d\bm{x} d\bm{h}.
 \end{align*}
-!et
 It is common to set  the temperature $T$ to one. It is omitted in the equations above. The energy is thus a dimensionless function.
+\end{frame}
 
-!split
-===== Network Elements, the energy function  =====
+\begin{frame}[plain,fragile]
+\frametitle{Network Elements, the energy function}
 
-The function $E(\bm{x},\bm{h},\bm{\Theta})$ gives the _energy_ of a
+The function $E(\bm{x},\bm{h},\bm{\Theta})$ gives the \textbf{energy} of a
 configuration (pair of vectors) $(\bm{x}, \bm{h})$. The lower
 the energy of a configuration, the higher the probability of it. This
 function also depends on the parameters $\bm{a}$, $\bm{b}$ and
 $W$. Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
+\end{frame}
 
-
-!split
-===== Defining different types of RBMs =====
+\begin{frame}[plain,fragile]
+\frametitle{Defining different types of RBMs}
 
 There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\bm{x},\bm{h},\bm{\Theta})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
 
-!bblock Binary-Binary RBM:
+\begin{block}{Binary-Binary RBM: }
 
 RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:
-!bt
 \begin{align*}
 	E(\bm{x}, \bm{h},\bm{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
 \end{align*}
-!et
 where the binary values taken on by the nodes are most commonly 0 and 1.
-!eblock
+\end{block}
+\end{frame}
 
-
-!split
-===== Gaussian-binary RBM =====
+\begin{frame}[plain,fragile]
+\frametitle{Gaussian-binary RBM}
 
 Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
-!bt
 \begin{align*}
 	E(\bm{x}, \bm{h},\bm{\Theta}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
 \end{align*}
-!et
 
 This type of RBMs are useful when we model continuous data (i.e., we wish $\bm{x}$ to be continuous). The paramater $\sigma_i^2$ is meant to represent a variance and is foten just set to one.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Code for RBMs using PyTorch}
 
-
-
-!split
-===== Code for RBMs using PyTorch =====
-
-!bc pycod
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
 import numpy as np
 import torch
 import torch.utils.data
@@ -1848,25 +2040,32 @@ def show_adn_save(file_name,img):
 show_adn_save("real",make_grid(v.view(32,1,28,28).data))
 show_adn_save("generate",make_grid(v1.view(32,1,28,28).data))
 
-!ec
 
-!split
-===== Energy-based models and Langevin sampling =====
+\end{minted}
+\end{frame}
 
-See discussions in Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
+\begin{frame}[plain,fragile]
+\frametitle{Energy-based models and Langevin sampling}
 
-That notebook is based on a recent article by Du and Mordatch, _Implicit generation and modeling with energy-based models_, see URL:"https://arxiv.org/pdf/1903.08689.pdf."
+See discussions in Foster, chapter 7 on energy-based models at \href{{https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm}}{\nolinkurl{https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm}}
 
-!split
-===== Tensor-flow examples =====
+That notebook is based on a recent article by Du and Mordatch, \textbf{Implicit generation and modeling with energy-based models}, see \href{{https://arxiv.org/pdf/1903.08689.pdf.}}{\nolinkurl{https://arxiv.org/pdf/1903.08689.pdf.}}
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{Tensor-flow examples}
 
-o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
-o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
+\begin{enumerate}
+\item To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see \href{{https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py}}{\nolinkurl{https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py}}
 
+\item See also Foster, chapter 7 on energy-based models at \href{{https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm}}{\nolinkurl{https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm}}
+\end{enumerate}
 
-!split
-===== Kullback-Leibler divergence =====
+\noindent
+\end{frame}
+
+\begin{frame}[plain,fragile]
+\frametitle{Kullback-Leibler divergence}
 
 Before we continue, we need to remind ourselves about the
 Kullback-Leibler divergence introduced earlier. This will also allow
@@ -1876,11 +2075,9 @@ These metrics are useful for quantifying the similarity between two probability 
 
 The Kullback–Leibler (KL) divergence, labeled $D_{KL}$,   measures how one probability distribution $p$ diverges from a second expected probability distribution $q$,
 that is
-!bt
 \[
 D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx.
 \]
-!et
 
 The KL-divegrnece $D_{KL}$ achieves the minimum zero when $p(x) == q(x)$ everywhere.
 
@@ -1888,33 +2085,26 @@ Note that the KL divergence is asymmetric. In cases where $p(x)$ is
 close to zero, but $q(x)$ is significantly non-zero, the $q$'s effect
 is disregarded. It could cause buggy results when we just want to
 measure the similarity between two equally important distributions.
+\end{frame}
 
-!split
-===== Jensen-Shannon divergence =====
+\begin{frame}[plain,fragile]
+\frametitle{Jensen-Shannon divergence}
 
 The Jensen–Shannon (JS) divergence is another measure of similarity between
 two probability distributions, bounded by $[0, 1]$. The JS-divergence is
 symmetric and more smooth than the KL-divergence.
 It is defined as
-!bt
 \[
 D_{JS}(p \| q) = \frac{1}{2} D_{KL}(p \| \frac{p + q}{2}) + \frac{1}{2} D_{KL}(q \| \frac{p + q}{2})
 \]
-!et
 
 Many practitioners believe that one reason behind GANs' big success is
 switching the loss function from asymmetric KL-divergence in
 traditional maximum-likelihood approach to symmetric JS-divergence.
+\end{frame}
 
-
-!split
-=====  Generative model,  basic overview (Borrowed from Rashcka et al) =====
-
-#FIGURE: [figures/figure1.png, width=900 frac=1.0]
-
-
-!split
-===== Reminder on VAEs =====
+\begin{frame}[plain,fragile]
+\frametitle{Reminder on VAEs}
 
 Mathematically, we can imagine the latent variables and the data we
 observe as modeled by a joint distribution $p(\bm{x}, \bm{h};\bm{\Theta})$.  Recall one
@@ -1924,21 +2114,19 @@ $\bm{x}$.  There are two ways we can manipulate this joint distribution
 to recover the likelihood of purely our observed data $p(\bm{x};\bm{\Theta})$; we can
 explicitly marginalize
 out the latent variable $\bm{h}$
-!bt
 \begin{equation*}
 p(\bm{x}) = \int p(\bm{x}, \bm{h})d\bm{h}
 \end{equation*}
-!et
 or, we could also appeal to the chain rule of probability
-!bt
 \begin{equation*}
 p(\bm{x}) = \frac{p(\bm{x}, \bm{h})}{p(\bm{h}|\bm{x})}
 \end{equation*}
-!et
 We suppress here the dependence	on the optimization parameters $\bm{\Theta}$.
+\end{frame}
 
-!split
-===== Evidence Lower Bound =====
+\begin{frame}[plain,fragile]
+\frametitle{Evidence Lower Bound}
+
 Directly computing and maximizing the likelihood $p(\bm{x})$ is
 difficult because it either involves integrating out all latent
 variables $\bm{h}$, which is intractable for
@@ -1951,26 +2139,23 @@ the log likelihood of the observed data.  Then, maximizing the ELBO
 becomes a proxy objective with which to optimize a latent variable
 model; in the best case, when the ELBO is powerfully parameterized and
 perfectly optimized, it becomes exactly equivalent to the evidence.
+\end{frame}
 
+\begin{frame}[plain,fragile]
+\frametitle{ELBO equations}
 
-
-!split
-===== ELBO equations =====
 Formally, the equation of the ELBO is
-!bt
 \begin{equation*}
 \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]
 \end{equation*}
-!et
 To make the relationship with the evidence explicit, we can mathematically write:
-!bt
 \begin{equation*}
 \log p(\bm{x}) \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]
 \end{equation*}
-!et
+\end{frame}
 
-!split
-===== Introducing the encoder function =====
+\begin{frame}[plain,fragile]
+\frametitle{Introducing the encoder function}
 
 Here, $q_{\bm{\phi}}(\bm{h}|\bm{x})$ is a flexible approximate
 variational distribution with parameters $\bm{\phi}$ that we seek to
@@ -1982,13 +2167,13 @@ explored Variational Autoencoders, as we increase the lower bound
 by tuning the parameters $\bm{\phi}$ to maximize the ELBO, we gain
 access to components that can be used to model the true data
 distribution and sample from it, thus learning a generative model.
+\end{frame}
 
-!split
-===== ELBO  =====
+\begin{frame}[plain,fragile]
+\frametitle{ELBO}
 
 To better understand the relationship between the evidence and the ELBO, let us perform another derivation, this time using
 
-!bt
 \begin{align*}
 \log p(\bm{x}) & = \log p(\bm{x}) \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h} && \text{(Multiply by $1 = \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h}$)}\\
           & = \int q_{\bm{\phi}}(\bm{h}|\bm{x})(\log p(\bm{x}))d\bm{h} && \text{(Bring evidence into integral)}\\
@@ -2000,10 +2185,10 @@ To better understand the relationship between the evidence and the ELBO, let us 
 	  D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}|\bm{x}))  && \text{(Definition of KL Divergence)}\\
           & \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]  && \text{(KL Divergence always $\geq 0$)}
 \end{align*}
-!et
+\end{frame}
 
-!split
-===== Analysis =====
+\begin{frame}[plain,fragile]
+\frametitle{Analysis}
 
 From this derivation, we clearly observe from the last equation
 that the evidence is equal to the ELBO plus the KL Divergence between
@@ -2012,10 +2197,10 @@ posterior $p(\bm{h}|\bm{x})$.  Understanding this term is the
 key to understanding not only the relationship between the ELBO and
 the evidence, but also the reason why optimizing the ELBO is an
 appropriate objective at all.
+\end{frame}
 
-!split
-===== The VAE =====
-
+\begin{frame}[plain,fragile]
+\frametitle{The VAE}
 
 In the default formulation of the VAE by Kingma and Welling (2015), we directly maximize the ELBO.  This
 approach is \textit{variational}, because we optimize for the best
@@ -2024,24 +2209,24 @@ distributions parameterized by $\bm{\phi}$.  It is called an
 \textit{autoencoder} because it is reminiscent of a traditional
 autoencoder model, where input data is trained to predict itself after
 undergoing an intermediate bottlenecking representation step.
+\end{frame}
 
-!split
-===== Dissecting the equations =====
+\begin{frame}[plain,fragile]
+\frametitle{Dissecting the equations}
+
 To make
 this connection explicit, let us dissect the ELBO term further:
 
-!bt
 \begin{align*}
 {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}
 &= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p_{\bm{\theta}}(\bm{x}|\bm{h})p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Chain Rule of Probability)}}\\
 &= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Split the Expectation)}}\\
 &= \underbrace{{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right]}}_\text{reconstruction term} - \underbrace{{D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})}\vert\vert{p(\bm{h}))}}_\text{prior matching term} && {\text{(Definition of KL Divergence)}}
 \end{align*}
-!et
+\end{frame}
 
-
-!split
-===== Bottlenecking distribution =====
+\begin{frame}[plain,fragile]
+\frametitle{Bottlenecking distribution}
 
 In this case, we learn an intermediate bottlenecking distribution
 $q_{\bm{\phi}}(\bm{h}|\bm{x})$ that can be treated as
@@ -2050,9 +2235,11 @@ possible latents.  Simultaneously, we learn a deterministic function
 $p_{\bm{\theta}}(\bm{x}|\bm{h})$ to convert a given latent vector
 $\bm{h}$ into an observation $\bm{x}$, which can be interpreted as
 a \textit{decoder}.
+\end{frame}
 
-!split
-===== Decoder and encoder =====
+\begin{frame}[plain,fragile]
+\frametitle{Decoder and encoder}
+
 The two terms in the last equation each have intuitive descriptions: the first
 term measures the reconstruction likelihood of the decoder from our
 variational distribution; this ensures that the learned distribution
@@ -2063,32 +2250,30 @@ variables.  Minimizing this term encourages the encoder to actually
 learn a distribution rather than collapse into a Dirac delta function.
 Maximizing the ELBO is thus equivalent to maximizing its first term
 and minimizing its second term.
+\end{frame}
 
-!split
-===== Defining feature of VAEs =====
+\begin{frame}[plain,fragile]
+\frametitle{Defining feature of VAEs}
 
 A defining feature of the VAE is how the ELBO is optimized jointly over parameters $\bm{\phi}$ and $\bm{\theta}$.  The encoder of the VAE is commonly chosen to model a multivariate Gaussian with diagonal covariance, and the prior is often selected to be a standard multivariate Gaussian: 
-!bt
 \begin{align*}
     q_{\bm{\phi}}(\bm{h}|\bm{x}) &= N(\bm{h}; \bm{\mu}_{\bm{\phi}}(\bm{x}), \bm{\sigma}_{\bm{\phi}}^2(\bm{x})\textbf{I})\\
     p(\bm{h}) &= N(\bm{h}; \bm{0}, \textbf{I})
 \end{align*}
-!et
+\end{frame}
 
-!split
-===== Analytical evaluation =====
+\begin{frame}[plain,fragile]
+\frametitle{Analytical evaluation}
 
 Then, the KL divergence term of the ELBO can be computed analytically, and the reconstruction term can be approximated using a Monte Carlo estimate.  Our objective can then be rewritten as:
-!bt
 \begin{align*}
   \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
 \end{align*}
-!et
 where latents $\{\bm{h}^{(l)}\}_{l=1}^L$ are sampled from $q_{\bm{\phi}}(\bm{h}|\bm{x})$, for every observation $\bm{x}$ in the dataset.
+\end{frame}
 
-
-!split
-===== Reparameterization trick =====
+\begin{frame}[plain,fragile]
+\frametitle{Reparameterization trick}
 
 However, a problem arises in this default setup: each $\bm{h}^{(l)}$
 that our loss is computed on is generated by a stochastic sampling
@@ -2096,9 +2281,10 @@ procedure, which is generally non-differentiable.  Fortunately, this
 can be addressed via the \textit{reparameterization trick} when
 $q_{\bm{\phi}}(\bm{h}|\bm{x})$ is designed to model certain
 distributions, including the multivariate Gaussian.
+\end{frame}
 
-!split
-===== Actual implementation =====
+\begin{frame}[plain,fragile]
+\frametitle{Actual implementation}
 
 The reparameterization trick rewrites a random variable as a
 deterministic function of a noise variable; this allows for the
@@ -2107,14 +2293,14 @@ For example, samples from a normal distribution
 $x \sim N(x;\mu, \sigma^2)$ with arbitrary mean $\mu$ and
 variance $\sigma^2$ can be rewritten as
 
-!bt
 \begin{align*}
     x &= \mu + \sigma\epsilon \quad \text{with } \epsilon \sim N(\epsilon; 0, \bm{I})
 \end{align*}
-!et
+\end{frame}
 
-!split
-===== Interpretation =====
+\begin{frame}[plain,fragile]
+\frametitle{Interpretation}
+
 An arbitrary Gaussian distributions can be interpreted as
 standard Gaussians (of which $\epsilon$ is a sample) that have their
 mean shifted from zero to the target mean $\mu$ by addition, and their
@@ -2123,16 +2309,15 @@ the reparameterization trick, sampling from an arbitrary Gaussian
 distribution can be performed by sampling from a standard Gaussian,
 scaling the result by the target standard deviation, and shifting it
 by the target mean.
+\end{frame}
 
-!split
-===== Deterministic function  =====
+\begin{frame}[plain,fragile]
+\frametitle{Deterministic function}
 
 In a VAE, each $\bm{h}$ is thus computed as a deterministic function of input $\bm{x}$ and auxiliary noise variable $\bm{\epsilon}$:
-!bt
 \begin{align*}
     \bm{h} &= \bm{\mu}_{\bm{\phi}}(\bm{x}) + \bm{\sigma}_{\bm{\phi}}(\bm{x})\odot\bm{\epsilon} \quad \text{with } \bm{\epsilon} \sim N(\bm{\epsilon};\bm{0}, \textbf{I})
 \end{align*}
-!et
 
 where $\odot$ represents an element-wise product.  Under this
 reparameterized version of $\bm{h}$, gradients can then be computed
@@ -2141,9 +2326,10 @@ $\bm{\mu}_{\bm{\phi}}$ and $\bm{\sigma}_{\bm{\phi}}$.  The VAE
 therefore utilizes the reparameterization trick and Monte Carlo
 estimates to optimize the ELBO jointly over $\bm{\phi}$ and
 $\bm{\theta}$.
+\end{frame}
 
-!split
-===== After training =====
+\begin{frame}[plain,fragile]
+\frametitle{After training}
 
 After training a VAE, generating new data can be performed by sampling
 directly from the latent space $p(\bm{h})$ and then running it through
@@ -2153,346 +2339,6 @@ $\bm{x}$, as we might then be learning compact, useful
 representations.  Furthermore, when a semantically meaningful latent
 space is learned, latent vectors can be edited before being passed to
 the decoder to more precisely control the data generated.
+\end{frame}
 
-
-
-
-
-!split
-===== Diffusion models, basics =====
-
-Diffusion models are inspired by non-equilibrium thermodynamics. They
-define a Markov chain of diffusion steps to slowly add random noise to
-data and then learn to reverse the diffusion process to construct
-desired data samples from the noise. Unlike VAE or flow models,
-diffusion models are learned with a fixed procedure and the latent
-variable has high dimensionality (same as the original data).
-
-
-!split
-=====  Problems with probabilistic models =====
-
-Historically, probabilistic models suffer from a tradeoff between two
-conflicting objectives: \textit{tractability} and
-\textit{flexibility}. Models that are \textit{tractable} can be
-analytically evaluated and easily fit to data (e.g. a Gaussian or
-Laplace). However, these models are unable to aptly describe structure
-in rich datasets. On the other hand, models that are \textit{flexible}
-can be molded to fit structure in arbitrary data. For example, we can
-define models in terms of any (non-negative) function $\phi(\bm{x})$
-yielding the flexible distribution $p\left(\bm{x}\right) =
-\frac{\phi\left(\bm{x} \right)}{Z}$, where $Z$ is a normalization
-constant. However, computing this normalization constant is generally
-intractable. Evaluating, training, or drawing samples from such
-flexible models typically requires a very expensive Monte Carlo
-process.
-
-!split
-===== Diffusion models =====
-Diffusion models have several interesting features
-* extreme flexibility in model structure,
-* exact sampling,
-* easy multiplication with other distributions, e.g. in order to compute a posterior, and
-* the model log likelihood, and the probability of individual states, to be cheaply evaluated.
-
-!split
-===== Original idea =====
-
-In the original formulation, one uses a Markov chain to gradually
-convert one distribution into another, an idea used in non-equilibrium
-statistical physics and sequential Monte Carlo. Diffusion models build
-a generative Markov chain which converts a simple known distribution
-(e.g. a Gaussian) into a target (data) distribution using a diffusion
-process. Rather than use this Markov chain to approximately evaluate a
-model which has been otherwise defined, one can  explicitly define the
-probabilistic model as the endpoint of the Markov chain. Since each
-step in the diffusion chain has an analytically evaluable probability,
-the full chain can also be analytically evaluated.
-
-!split
-===== Diffusion learning =====
-
-Learning in this framework involves estimating small perturbations to
-a diffusion process. Estimating small, analytically tractable,
-perturbations is more tractable than explicitly describing the full
-distribution with a single, non-analytically-normalizable, potential
-function.  Furthermore, since a diffusion process exists for any
-smooth target distribution, this method can capture data distributions
-of arbitrary form.
-
-
-!split
-===== Mathematics of diffusion models =====
-
-Let us go back our discussions of the variational autoencoders from
-last week, see
-URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb". As
-a first attempt at understanding diffusion models, we can think of
-these as stacked VAEs, or better, recursive VAEs.
-
-Let us try to see why. As an intermediate step, we consider so-called
-hierarchical VAEs, which can be seen as a generalization of VAEs that
-include multiple hierarchies of latent spaces.
-
-_Note_: Many of the derivations and figures here are inspired and borrowed from the excellent exposition of diffusion models by Calvin Luo at URL:"https://arxiv.org/abs/2208.11970". 
-
-!split
-===== Chains of VAEs =====
-
-Markovian
-VAEs represent a  generative process where we use  Markov chain to build a hierarchy of VAEs.
-
-Each transition down the hierarchy is Markovian, where we decode each
-latent set of variables $\bm{h}_t$ in terms of the previous latent variable $\bm{h}_{t-1}$.
-Intuitively, and visually, this can be seen as simply stacking VAEs on
-top of each other (see figure next slide).
-
-One can think of such a model as a recursive VAE.
-
-
-!split
-===== Mathematical representation =====
-
-Mathematically, we represent the joint distribution and the posterior
-of a Markovian VAE as
-!bt
-\begin{align*}
-    p(\bm{x}, \bm{h}_{1:T}) &= p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})\\
-    q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x}) &= q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})
-\end{align*}
-!et
-
-
-!split
-===== Back to the marginal probability =====
-
-We can then define the marginal probability we want to optimize as
-!bt
-\begin{align*}
-\log p(\bm{x}) &= \log \int p(\bm{x}, \bm{h}_{1:T}) d\bm{h}_{1:T}  \\
-&= \log \int \frac{p(\bm{x}, \bm{h}_{1:T})q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})} d\bm{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}$)}\\
-&= \log \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Discussed last week)}
-\end{align*}
-!et
-
-!split
-===== Diffusion models for hierarchical VAE, from URL:"https://arxiv.org/abs/2208.11970"  =====
-
-A Markovian hierarchical Variational Autoencoder with $T$ hierarchical
-latents.  The generative process is modeled as a Markov chain, where
-each latent $\bm{h}_t$ is generated only from the previous latent
-$\bm{h}_{t+1}$. Here $\bm{z}$ is our latent variable $\bm{h}$.
-
-FIGURE: [figures/figure1.png, width=800 frac=1.0]
-
-!split
-===== Equation for the Markovian hierarchical VAE =====
-
-We obtain then
-!bt
-\begin{align*}
-\mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]
-&= \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})}{q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})}\right]
-\end{align*}
-!et
-
-We will modify this equation when we discuss what are normally called Variational Diffusion Models.
-
-
-!split
-===== Variational Diffusion Models =====
-
-The easiest way to think of a Variational Diffusion Model (VDM) is as a Markovian Hierarchical Variational Autoencoder with three key restrictions:
-
-o The latent dimension is exactly equal to the data dimension
-o The structure of the latent encoder at each timestep is not learned; it is pre-defined as a linear Gaussian model.  In other words, it is a Gaussian distribution centered around the output of the previous timestep
-o The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep $T$ is a standard Gaussian
-
-
-The VDM posterior is
-!bt
-\begin{align*}
-    q(\bm{x}_{1:T}|\bm{x}_0) = \prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})
-\end{align*}
-!et
-
-!split
-===== Second assumption =====
-
-The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.
-Here then, the structure of the encoder at each timestep $t$ is not learned; it
-is fixed as a linear Gaussian model, where the mean and standard
-deviation can be set beforehand as hyperparameters, or learned as
-parameters.
-
-
-!split
-===== Parameterizing Gaussian encoder =====
-
-!bblock
-We parameterize the Gaussian encoder with mean $\bm{\mu}_t(\bm{x}_t) =
-\sqrt{\alpha_t} \bm{x}_{t-1}$, and variance $\bm{\Sigma}_t(\bm{x}_t) =
-(1 - \alpha_t) \textbf{I}$, where the form of the coefficients are
-chosen such that the variance of the latent variables stay at a
-similar scale; in other words, the encoding process is
-variance-preserving.
-!eblock
-
-!bblock
-Note that alternate Gaussian parameterizations
-are allowed, and lead to similar derivations.  The main takeaway is
-that $\alpha_t$ is a (potentially learnable) coefficient that can vary
-with the hierarchical depth $t$, for flexibility.
-!eblock
-
-!split
-===== Encoder transitions =====
-
-Mathematically, the encoder transitions are defined as
-!bt
-\begin{align*}
-    q(\bm{x}_{t}|\bm{x}_{t-1}) = \mathcal{N}(\bm{x}_{t} ; \sqrt{\alpha_t} \bm{x}_{t-1}, (1 - \alpha_t) \textbf{I}) \label{eq:27}
-\end{align*}
-!et
-
-!split
-===== Third assumption =====
-
-
-From the third assumption, we know that $\alpha_t$ evolves over time
-according to a fixed or learnable schedule structured such that the
-distribution of the final latent $p(\bm{x}_T)$ is a standard Gaussian.
-We can then update the joint distribution of a Markovian VAE to write
-the joint distribution for a VDM as
-
-!bt
-\begin{align*}
-p(\bm{x}_{0:T}) &= p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t) \\
-\text{where,}&\nonumber\\
-p(\bm{x}_T) &= \mathcal{N}(\bm{x}_T; \bm{0}, \textbf{I})
-\end{align*}
-!et
-
-
-!split
-===== Noisification =====
-
-Collectively, what this set of assumptions describes is a steady
-noisification of an image input over time. We progressively corrupt an
-image by adding Gaussian noise until eventually it becomes completely
-identical to pure Gaussian noise.  See figure on next slide.
-
-!split
-===== Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"  =====
-
-FIGURE: [figures/figure2.png, width=800 frac=1.0]
-
-
-
-
-!split
-===== Gaussian modeling =====
-
-Note that our encoder distributions $q(\bm{x}_t|\bm{x}_{t-1})$ are no
-longer parameterized by $\bm{\phi}$, as they are completely modeled as
-Gaussians with defined mean and variance parameters at each timestep.
-Therefore, in a VDM, we are only interested in learning conditionals
-$p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_{t})$, so that we can simulate
-new data.  After optimizing the VDM, the sampling procedure is as
-simple as sampling Gaussian noise from $p(\bm{x}_T)$ and iteratively
-running the denoising transitions
-$p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_{t})$ for $T$ steps to generate a
-novel $\bm{x}_0$.
-
-
-
-
-
-
-!split
-===== Optimizing the variational diffusion model =====
-
-!bt
-\begin{align*}
-\log p(\bm{x})
-&= \log \int p(\bm{x}_{0:T}) d\bm{x}_{1:T}\\
-&= \log \int \frac{p(\bm{x}_{0:T})q(\bm{x}_{1:T}|\bm{x}_0)}{q(\bm{x}_{1:T}|\bm{x}_0)} d\bm{x}_{1:T}\\
-&= \log \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]\\
-&\geq {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_{0:T})}{q(\bm{x}_{1:T}|\bm{x}_0)}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)\prod_{t=1}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{\prod_{t = 1}^{T}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{x}_{t-1}|\bm{x}_t)}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\prod_{t=1}^{T-1}p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_T|\bm{x}_{T-1})\prod_{t = 1}^{T-1}q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-\end{align*}
-!et
-
-
-!split
-===== Continues =====
-
-!bt
-\begin{align*}
-\log p(\bm{x})
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \sum_{t=1}^{T-1} \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{1:T}|\bm{x}_0)}\left[ \log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-&= {\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right] + \mathbb{E}_{q(\bm{x}_{T-1}, \bm{x}_T|\bm{x}_0)}\left[\log \frac{p(\bm{x}_T)}{q(\bm{x}_T|\bm{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_t, \bm{x}_{t+1}|\bm{x}_0)}\left[\log \frac{p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1})}{q(\bm{x}_{t}|\bm{x}_{t-1})}\right]}\\
-\end{align*}
-!et
-
-
-
-
-
-!split
-===== Interpretations =====
-
-These equations can be interpreted as
-
-* $\mathbb{E}_{q(\bm{x}_{1}|\bm{x}_0)}\left[\log p_{\bm{\theta}}(\bm{x}_0|\bm{x}_1)\right]$ can be interpreted as a _reconstruction term_, predicting the log probability of the original data sample given the first-step latent.  This term also appears in a vanilla VAE, and can be trained similarly.
-* $\mathbb{E}_{q(\bm{x}_{T-1}|\bm{x}_0)}\left[D_{KL}(q(\bm{x}_T|\bm{x}_{T-1})\vert\vert p(\bm{x}_T))\right]$ is a _prior matching term_; it is minimized when the final latent distribution matches the Gaussian prior.  This term requires no optimization, as it has no trainable parameters; furthermore, as we have assumed a large enough $T$ such that the final distribution is Gaussian, this term effectively becomes zero.
-
-
-!split
-===== The last term =====
-
-* $\mathbb{E}_{q(\bm{x}_{t-1}, \bm{x}_{t+1}|\bm{x}_0)}\left[D_{KL}(q(\bm{x}_{t}|\bm{x}_{t-1})\vert\vert p_{\bm{\theta}}(\bm{x}_{t}|\bm{x}_{t+1}))\right]$ is a \textit{consistency term}; it endeavors to make the distribution at $\bm{x}_t$ consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train $p_{\theta}(\bm{x}_t|\bm{x}_{t+1})$ to match the Gaussian distribution $q(\bm{x}_t|\bm{x}_{t-1})$.
-
-!split
-===== Diffusion models, part 2, from URL:"https://arxiv.org/abs/2208.11970"  =====
-
-FIGURE: [figures/figure3.png, width=800 frac=1.0]
-
-
-!split
-===== Optimization cost =====
-
-The cost of optimizing a VDM is primarily dominated by the third term, since we must optimize over all timesteps $t$.
-
-Under this derivation, all three terms are computed as expectations,
-and can therefore be approximated using Monte Carlo estimates.
-However, actually optimizing the ELBO using the terms we just derived
-might be suboptimal; because the consistency term is computed as an
-expectation over two random variables $\left\{\bm{x}_{t-1},
-\bm{x}_{t+1}\right\}$ for every timestep, the variance of its Monte
-Carlo estimate could potentially be higher than a term that is
-estimated using only one random variable per timestep.  As it is
-computed by summing up $T-1$ consistency terms, the final estimated
-value may have high variance for large $T$ values.
-
-
-
-!split
-===== More details =====
-
-For more details and implementaions, see Calvin Luo at URL:"https://arxiv.org/abs/2208.11970"
-
-
-
-#FIGURE: [figures/figure4.png, width=800 frac=1.0]
-
-
-
-
-
+\end{document}

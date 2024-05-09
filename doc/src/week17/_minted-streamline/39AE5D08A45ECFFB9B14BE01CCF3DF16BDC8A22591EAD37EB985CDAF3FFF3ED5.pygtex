@@ -1,0 +1,54 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+c1}{\PYGZsh{} import necessary packages}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+\PYG{k}{def} \PYG{n+nf}{feed\PYGZus{}forward}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} weighted sum of inputs to the output layer}
+    \PYG{n}{z\PYGZus{}1} \PYG{o}{=} \PYG{n}{x}\PYG{o}{*}\PYG{n}{output\PYGZus{}weights} \PYG{o}{+} \PYG{n}{output\PYGZus{}bias}
+    \PYG{c+c1}{\PYGZsh{} Output from output node (one node only)}
+    \PYG{c+c1}{\PYGZsh{} Here the output is equal to the input}
+    \PYG{n}{a\PYGZus{}1} \PYG{o}{=} \PYG{n}{z\PYGZus{}1}
+    \PYG{k}{return} \PYG{n}{a\PYGZus{}1}
+
+\PYG{k}{def} \PYG{n+nf}{backpropagation}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{):}
+    \PYG{n}{a\PYGZus{}1} \PYG{o}{=} \PYG{n}{feed\PYGZus{}forward}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} derivative of cost function}
+    \PYG{n}{derivative\PYGZus{}cost} \PYG{o}{=} \PYG{n}{a\PYGZus{}1} \PYG{o}{\PYGZhy{}} \PYG{n}{y}
+    \PYG{c+c1}{\PYGZsh{} the variable delta in the equations, note that output a\PYGZus{}1 = z\PYGZus{}1, its derivatives wrt z\PYGZus{}o is thus 1}
+    \PYG{n}{delta\PYGZus{}1} \PYG{o}{=} \PYG{n}{derivative\PYGZus{}cost}
+    \PYG{c+c1}{\PYGZsh{} gradients for the output layer}
+    \PYG{n}{output\PYGZus{}weights\PYGZus{}gradient} \PYG{o}{=} \PYG{n}{delta\PYGZus{}1}\PYG{o}{*}\PYG{n}{x}
+    \PYG{n}{output\PYGZus{}bias\PYGZus{}gradient} \PYG{o}{=} \PYG{n}{delta\PYGZus{}1}
+    \PYG{c+c1}{\PYGZsh{} The cost function is 0.5*(a\PYGZus{}1\PYGZhy{}y)\PYGZca{}2. This gives a measure of the error for each iteration}
+    \PYG{k}{return} \PYG{n}{output\PYGZus{}weights\PYGZus{}gradient}\PYG{p}{,} \PYG{n}{output\PYGZus{}bias\PYGZus{}gradient}
+
+\PYG{c+c1}{\PYGZsh{} ensure the same random numbers appear every time}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Input variable}
+\PYG{n}{x} \PYG{o}{=} \PYG{l+m+mf}{4.0}
+\PYG{c+c1}{\PYGZsh{} Target values}
+\PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{x}\PYG{o}{+}\PYG{l+m+mf}{1.0}
+
+\PYG{c+c1}{\PYGZsh{} Defining the neural network}
+\PYG{n}{n\PYGZus{}inputs} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{n\PYGZus{}outputs} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{c+c1}{\PYGZsh{} Initialize the network}
+\PYG{c+c1}{\PYGZsh{} weights and bias in the output layer}
+\PYG{n}{output\PYGZus{}weights} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{()}
+\PYG{n}{output\PYGZus{}bias} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} implementing a simple gradient descent approach with fixed learning rate}
+\PYG{n}{eta} \PYG{o}{=} \PYG{l+m+mf}{0.01}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{40}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} calculate gradients from back propagation}
+    \PYG{n}{derivative\PYGZus{}w1}\PYG{p}{,} \PYG{n}{derivative\PYGZus{}b1} \PYG{o}{=} \PYG{n}{backpropagation}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} update weights and biases}
+    \PYG{n}{output\PYGZus{}weights} \PYG{o}{\PYGZhy{}=} \PYG{n}{eta} \PYG{o}{*} \PYG{n}{derivative\PYGZus{}w1}
+    \PYG{n}{output\PYGZus{}bias} \PYG{o}{\PYGZhy{}=} \PYG{n}{eta} \PYG{o}{*} \PYG{n}{derivative\PYGZus{}b1}
+\PYG{c+c1}{\PYGZsh{} our final prediction after training}
+\PYG{n}{ytilde} \PYG{o}{=} \PYG{n}{output\PYGZus{}weights}\PYG{o}{*}\PYG{n}{x}\PYG{o}{+}\PYG{n}{output\PYGZus{}bias}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{p}{((}\PYG{n}{ytilde}\PYG{o}{\PYGZhy{}}\PYG{n}{y}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+
+
+\end{Verbatim}
