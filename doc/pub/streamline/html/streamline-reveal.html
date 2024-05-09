@@ -1756,23 +1756,6 @@ $$
 </section>
 
 <section>
-<h2 id="energy-models">Energy models </h2>
-
-<p>Last week we defined a domain \( \boldsymbol{X} \) of stochastic variables \( \boldsymbol{X}= \{x_0,x_1, \dots , x_{n-1}\} \) with a pertinent probability distribution</p>
-<p>&nbsp;<br>
-$$
-p(\boldsymbol{X})=\prod_{x_i\in \boldsymbol{X}}p(x_i),
-$$
-<p>&nbsp;<br>
-
-<p>where we have assumed that the random varaibles \( x_i \) are all independent and identically distributed (iid).</p>
-
-<p>We will now assume that we can defined this function in terms of optimization parameters \( \boldsymbol{\Theta} \), which could be the biases and weights of deep network, and a set of hidden variables we also assume to be random variables which also are iid. The domain of these variables is
-\( \boldsymbol{H}= \{h_0,h_1, \dots , h_{m-1}\} \).
-</p>
-</section>
-
-<section>
 <h2 id="probability-model">Probability model </h2>
 
 <p>We define a probability</p>
@@ -1992,7 +1975,7 @@ sampling as the standard sampling rule.
 <p>This leads to the following equation</p>
 <p>&nbsp;<br>
 $$
-\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\mathbb{E}{x\sim p}(\log{f(x_i;\boldsymbol{\Theta})})=0.
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\mathbb{E}_{x\sim p}(\log{f(x_i;\boldsymbol{\Theta})})=0.
 $$
 <p>&nbsp;<br>
 </section>
@@ -2059,154 +2042,6 @@ $$
 \frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial b_j}=-h_j.
 $$
 <p>&nbsp;<br>
-</section>
-
-<section>
-<h2 id="boltzmann-machines-marginal-and-conditional-probabilities">Boltzmann Machines, marginal and conditional probabilities  </h2>
-
-<p>A generative model can learn to represent and sample from a
-probability distribution. The core idea is to learn a parametric model
-of the probability distribution from which the training data was
-drawn. As an example
-</p>
-<ol>
-<p><li> A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.</li>
-<p><li> Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.</li>
-<p><li> Model the trial function for Monte Carlo calculations</li>
-</ol>
-</section>
-
-<section>
-<h2 id="generative-and-discriminative-models">Generative and discriminative models </h2>
-
-<p>Generative and discriminative models use both gradient-descent based
-learning procedures for minimizing cost functions
-</p>
-
-<p>However, in energy based models we don't use backpropagation and automatic
-differentiation for computing gradients, instead we turn to Markov
-Chain Monte Carlo methods.
-</p>
-
-<p>A typical deep neural network has several hidden layers. A restricted
-Boltzmann machine has normally one hidden layer, however several RBMs can
-be stacked to make up deep Belief Networks, of which they constitute
-the building blocks.
-</p>
-</section>
-
-<section>
-<h2 id="basics-of-the-boltzmann-machine">Basics of the Boltzmann machine </h2>
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>A BM is what we would call an undirected probabilistic graphical model
-with stochastic continuous or discrete units.
-</p>
-</div>
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>It is interpreted as a stochastic recurrent neural network where the
-state of each unit(neurons/nodes) depends on the units it is connected
-to. The weights in the network represent thus the strength of the
-interaction between various units/nodes.
-</p>
-</div>
-</section>
-
-<section>
-<h2 id="more-about-the-basics">More about the basics </h2>
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>A standard BM network is divided into a set of observable and visible units \( \boldsymbol{x} \) and a set of unknown hidden units/nodes \( \boldsymbol{h} \).</p>
-</div>
-
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>Additionally there can be bias nodes for the hidden and visible layers. These biases are normally set to \( 1 \).</p>
-</div>
-
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning</p>
-</div>
-</section>
-
-<section>
-<h2 id="difficult-to-train">Difficult to train </h2>
-
-<p>However, they are often hard to train. This leads to the introduction
-of so-called restricted BMs, or RBMS.  Here we take away all lateral
-connections between nodes in the visible layer as well as connections
-between nodes in the hidden layer.
-</p>
-</section>
-
-<section>
-<h2 id="the-network-layers">The network layers </h2>
-
-<ol>
-<p><li> A function \( \boldsymbol{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
-<p><li> The function \( \boldsymbol{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
-</ol>
-</section>
-
-<section>
-<h2 id="goal-of-hidden-layer">Goal of hidden layer </h2>
-
-<p>The goal of the hidden layer is to increase the model's expressive
-power. We encode complex interactions between visible variables by
-introducing additional, hidden variables that interact with visible
-degrees of freedom in a simple manner, yet still reproduce the complex
-correlations between visible degrees in the data once marginalized
-over (integrated out).
-</p>
-</section>
-
-<section>
-<h2 id="the-parameters">The parameters </h2>
-
-<p>The network parameters, to be optimized/learned:</p>
-<ol>
-<p><li> \( \boldsymbol{a} \) represents the visible bias, a vector of same length \( M \) as \( \boldsymbol{x} \).</li>
-<p><li> \( \boldsymbol{b} \) represents the hidden bias, a vector of same length \( N \)  as \( \boldsymbol{h} \).</li>
-<p><li> \( \boldsymbol{W} \) represents the interaction weights, a matrix of size \( M\times N \).</li>
-</ol>
-<p>
-<p>Note that we have specified the lengths of \( bm{x} \) and \( \boldsymbol{h} \). These
-lengths define the number of visible and hidden units, respectively.
-</p>
-</section>
-
-<section>
-<h2 id="joint-distribution">Joint distribution </h2>
-
-<p>The restricted Boltzmann machine is described by a Boltzmann distribution</p>
-<p>&nbsp;<br>
-$$
-\begin{align*}
-	P_{rbm}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z(\boldsymbol{\Theta})} \exp{-(E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}))},
-\end{align*}
-$$
-<p>&nbsp;<br>
-
-<p>where \( Z \) is the normalization constant or partition function discussed earlier and defined as </p>
-<p>&nbsp;<br>
-$$
-\begin{align*}
-	Z(\boldsymbol{\Theta}) = \int \int \exp{-E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta})} d\boldsymbol{x} d\boldsymbol{h}.
-\end{align*}
-$$
-<p>&nbsp;<br>
-
-<p>It is common to set  the temperature \( T \) to one. It is omitted in the equations above. The energy is thus a dimensionless function.</p>
 </section>
 
 <section>
@@ -2424,16 +2259,6 @@ $$
 </section>
 
 <section>
-<h2 id="generative-model-basic-overview-borrowed-from-rashcka-et-al">Generative model,  basic overview (Borrowed from Rashcka et al) </h2>
-
-<br/><br/>
-<center>
-<p><img src="figures/genmodel.png" width="900" align="bottom"></p>
-</center>
-<br/><br/>
-</section>
-
-<section>
 <h2 id="vaes">VAEs </h2>
 
 <p>Mathematically, we can imagine the latent variables and the data we
@@ -2463,48 +2288,6 @@ $$
 <p>&nbsp;<br>
 
 <p>We suppress here the dependence	on the optimization parameters \( \boldsymbol{\Theta} \).</p>
-</section>
-
-<section>
-<h2 id="evidence-lower-bound">Evidence Lower Bound </h2>
-
-<p>Directly computing and maximizing the likelihood \( p(\boldsymbol{x}) \) is
-difficult because it either involves integrating out all latent
-variables \( \boldsymbol{h} \), which is intractable for
-complex models, or it involves having access to a ground truth latent
-encoder \( p(\boldsymbol{h}|\boldsymbol{x}) \).
-</p>
-
-<p>Using the last two equations, we can derive a term called the Evidence
-Lower Bound (ELBO), which as its name suggests, is a lower bound of
-the evidence.  The evidence is quantified in this case as the log
-  likelihood of the observed data.  Then, maximizing the ELBO becomes
-  a proxy objective with which to optimize a latent variable model; in
-  the best case, when the ELBO is powerfully parameterized and
-  perfectly optimized, it becomes exactly equivalent to the evidence.
-</p>
-</section>
-
-<section>
-<h2 id="elbo-equations">ELBO equations </h2>
-
-<p>Formally, the equation of the ELBO is</p>
-<p>&nbsp;<br>
-$$
-\begin{equation*}
-\mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})}\left[\log\frac{p(\boldsymbol{x}, \boldsymbol{h})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})}\right]
-\end{equation*}
-$$
-<p>&nbsp;<br>
-
-<p>To make the relationship with the evidence explicit, we can mathematically write:</p>
-<p>&nbsp;<br>
-$$
-\begin{equation*}
-\log p(\boldsymbol{x}) \geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})}\left[\log\frac{p(\boldsymbol{x}, \boldsymbol{h})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x})}\right]
-\end{equation*}
-$$
-<p>&nbsp;<br>
 </section>
 
 <section>
@@ -2549,10 +2332,7 @@ $$
 <p>From this derivation, we clearly observe from the last equation
 that the evidence is equal to the ELBO plus the KL Divergence between
 the approximate posterior \( q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x}) \) and the true
-posterior \( p(\boldsymbol{h}|\boldsymbol{x}) \).  Understanding this term is the
-key to understanding not only the relationship between the ELBO and
-the evidence, but also the reason why optimizing the ELBO is an
-appropriate objective at all.
+posterior \( p(\boldsymbol{h}|\boldsymbol{x}) \).  
 </p>
 </section>
 
