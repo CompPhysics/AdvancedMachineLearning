@@ -814,6 +814,1784 @@ If the function \( F(\boldsymbol{x}) \) is discontinuous, it won't in general be
 <p>And the recent article <a href="https://www.sciencedirect.com/science/article/pii/S0375947423001100" target="_blank"><tt>https://www.sciencedirect.com/science/article/pii/S0375947423001100</tt></a></p>
 </section>
 
+<section>
+<h2 id="first-network-example-simple-percepetron-with-one-input">First network example, simple percepetron with one input </h2>
+
+<p>As yet another example we define now a simple perceptron model with
+all quantities given by scalars. We consider only one input variable
+\( x \) and one target value \( y \).  We define an activation function
+\( \sigma_1 \) which takes as input
+</p>
+
+<p>&nbsp;<br>
+$$
+z_1 = w_1x+b_1,
+$$
+<p>&nbsp;<br>
+
+<p>where \( w_1 \) is the weight and \( b_1 \) is the bias. These are the
+parameters we want to optimize.  The output is \( a_1=\sigma(z_1) \) (see
+graph from whiteboard notes). This output is then fed into the
+<b>cost/loss</b> function, which we here for the sake of simplicity just
+define as the squared error
+</p>
+
+<p>&nbsp;<br>
+$$
+C(x;w_1,b_1)=\frac{1}{2}(a_1-y)^2.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="optimizing-the-parameters">Optimizing the parameters </h2>
+
+<p>In setting up the feed forward and back propagation parts of the
+algorithm, we need now the derivative of the various variables we want
+to train.
+</p>
+
+<p>We need</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_1} \hspace{0.1cm}\mathrm{and}\hspace{0.1cm}\frac{\partial C}{\partial b_1}. 
+$$
+<p>&nbsp;<br>
+
+<p>Using the chain rule we find </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_1-y)\sigma_1'x,
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_1-y)\sigma_1',
+$$
+<p>&nbsp;<br>
+
+<p>which we later will just define as</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial a_1}\frac{\partial a_1}{\partial z_1}=\delta_1.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="implementing-the-simple-perceptron-model">Implementing the simple perceptron model </h2>
+
+<p>In the example code here we implement the above equations (with explict
+expressions for the derivatives) with just one input variable \( x \) and
+one output variable.  The target value \( y=2x+1 \) is a simple linear
+function in \( x \). Since this is a regression problem, we define the cost function to be proportional to the least squares error
+</p>
+<p>&nbsp;<br>
+$$
+C(y,w_1,b_1)=\frac{1}{2}(a_1-y)^2,
+$$
+<p>&nbsp;<br>
+
+<p>with \( a_1 \) the output from the network.</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #228B22"># import necessary packages</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">feed_forward</span>(x):
+    <span style="color: #228B22"># weighted sum of inputs to the output layer</span>
+    z_1 = x*output_weights + output_bias
+    <span style="color: #228B22"># Output from output node (one node only)</span>
+    <span style="color: #228B22"># Here the output is equal to the input</span>
+    a_1 = z_1
+    <span style="color: #8B008B; font-weight: bold">return</span> a_1
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">backpropagation</span>(x, y):
+    a_1 = feed_forward(x)
+    <span style="color: #228B22"># derivative of cost function</span>
+    derivative_cost = a_1 - y
+    <span style="color: #228B22"># the variable delta in the equations, note that output a_1 = z_1, its derivatives wrt z_o is thus 1</span>
+    delta_1 = derivative_cost
+    <span style="color: #228B22"># gradients for the output layer</span>
+    output_weights_gradient = delta_1*x
+    output_bias_gradient = delta_1
+    <span style="color: #228B22"># The cost function is 0.5*(a_1-y)^2. This gives a measure of the error for each iteration</span>
+    <span style="color: #8B008B; font-weight: bold">return</span> output_weights_gradient, output_bias_gradient
+
+<span style="color: #228B22"># ensure the same random numbers appear every time</span>
+np.random.seed(<span style="color: #B452CD">0</span>)
+<span style="color: #228B22"># Input variable</span>
+x = <span style="color: #B452CD">4.0</span>
+<span style="color: #228B22"># Target values</span>
+y = <span style="color: #B452CD">2</span>*x+<span style="color: #B452CD">1.0</span>
+
+<span style="color: #228B22"># Defining the neural network</span>
+n_inputs = <span style="color: #B452CD">1</span>
+n_outputs = <span style="color: #B452CD">1</span>
+<span style="color: #228B22"># Initialize the network</span>
+<span style="color: #228B22"># weights and bias in the output layer</span>
+output_weights = np.random.randn()
+output_bias = np.random.randn()
+
+<span style="color: #228B22"># implementing a simple gradient descent approach with fixed learning rate</span>
+eta = <span style="color: #B452CD">0.01</span>
+<span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">40</span>):
+    <span style="color: #228B22"># calculate gradients from back propagation</span>
+    derivative_w1, derivative_b1 = backpropagation(x, y)
+    <span style="color: #228B22"># update weights and biases</span>
+    output_weights -= eta * derivative_w1
+    output_bias -= eta * derivative_b1
+<span style="color: #228B22"># our final prediction after training</span>
+ytilde = output_weights*x+output_bias
+<span style="color: #658b00">print</span>(<span style="color: #B452CD">0.5</span>*((ytilde-y)**<span style="color: #B452CD">2</span>))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Running this code gives us an acceptable results after some 40-50 iterations. Note that the results depend on the value of the learning rate.</p>
+</section>
+
+<section>
+
+<!-- --- begin exercise --- -->
+<h2 id="exercise-1-extensions-to-the-above-code">Exercise 1: Extensions to the above code </h2>
+
+<p>Feel free to add more input nodes and weights to the above
+code. Furthermore, try to increase the amount of input and
+target/output data. Try also to perform calculations for more values
+of the learning rates. Feel free to add either hyperparameters with an
+\( l_1 \) norm or an \( l_2 \) norm and discuss your results.
+</p>
+
+<p>You could also try to change the function \( f(x)=y \) from a linear polynomial in \( x \) to a higher-order polynomial.
+Comment your results.
+</p>
+
+<p><b>Hint</b>: Increasing the number of input variables and input nodes requires a rewrite of the input data in terms of a matrix. You need to figure out the correct dimensionalities.</p>
+
+<!-- --- end exercise --- -->
+</section>
+
+<section>
+<h2 id="adding-a-hidden-layer">Adding a hidden layer </h2>
+
+<p>We change our simple model to (see graph below)
+a network with just one hidden layer but with scalar variables only.
+</p>
+
+<p>Our output variable changes to \( a_2 \) and \( a_1 \) is now the output from the hidden node and \( a_0=x \).
+We have then
+</p>
+<p>&nbsp;<br>
+$$
+z_1 = w_1a_0+b_1 \hspace{0.1cm} \wedge a_1 = \sigma_1(z_1),
+$$
+<p>&nbsp;<br>
+
+<p>&nbsp;<br>
+$$
+z_2 = w_2a_1+b_2 \hspace{0.1cm} \wedge a_2 = \sigma_2(z_2),
+$$
+<p>&nbsp;<br>
+
+<p>and the cost function</p>
+<p>&nbsp;<br>
+$$
+C(x;\boldsymbol{\Theta})=\frac{1}{2}(a_2-y)^2,
+$$
+<p>&nbsp;<br>
+
+<p>with \( \boldsymbol{\Theta}=[w_1,w_2,b_1,b_2] \).</p>
+</section>
+
+<section>
+<h2 id="the-derivatives">The derivatives </h2>
+
+<p>The derivatives are now, using the chain rule again</p>
+
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial w_2}=(a_2-y)\sigma_2'a_1=\delta_2a_1,
+$$
+<p>&nbsp;<br>
+
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b_2}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial b_2}=(a_2-y)\sigma_2'=\delta_2,
+$$
+<p>&nbsp;<br>
+
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial w_1}=(a_2-y)\sigma_2'a_1\sigma_1'a_0,
+$$
+<p>&nbsp;<br>
+
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b_1}=\frac{\partial C}{\partial a_2}\frac{\partial a_2}{\partial z_2}\frac{\partial z_2}{\partial a_1}\frac{\partial a_1}{\partial z_1}\frac{\partial z_1}{\partial b_1}=(a_2-y)\sigma_2'\sigma_1'=\delta_1.
+$$
+<p>&nbsp;<br>
+
+<p>Can you generalize this to more than one hidden layer?</p>
+</section>
+
+<section>
+<h2 id="important-observations">Important observations </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>From the above equations we see that the derivatives of the activation
+functions play a central role. If they vanish, the training may
+stop. This is called the vanishing gradient problem, see discussions below. If they become
+large, the parameters \( w_i \) and \( b_i \) may simply go to infinity. This
+is referenced as  the exploding gradient problem.
+</p>
+</div>
+</section>
+
+<section>
+<h2 id="the-training">The training </h2>
+
+<p>The training of the parameters is done through various gradient descent approximations with</p>
+
+<p>&nbsp;<br>
+$$
+w_{i}\leftarrow w_{i}- \eta \delta_i a_{i-1},
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+b_i \leftarrow b_i-\eta \delta_i,
+$$
+<p>&nbsp;<br>
+
+<p>with \( \eta \) is the learning rate.</p>
+
+<p>One iteration consists of one feed forward step and one back-propagation step. Each back-propagation step does one update of the parameters \( \boldsymbol{\Theta} \).</p>
+
+<p>For the first hidden layer \( a_{i-1}=a_0=x \) for this simple model.</p>
+</section>
+
+<section>
+<h2 id="code-example">Code example  </h2>
+
+<p>The code here implements the above model with one hidden layer and
+scalar variables for the same function we studied in the previous
+example.  The code is however set up so that we can add multiple
+inputs \( x \) and target values \( y \). Note also that we have the
+possibility of defining a feature matrix \( \boldsymbol{X} \) with more than just
+one column for the input values. This will turn useful in our next example. We have also defined matrices and vectors for all of our operations although it is not necessary here.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #228B22"># We use the Sigmoid function as activation function</span>
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">sigmoid</span>(z):
+    <span style="color: #8B008B; font-weight: bold">return</span> <span style="color: #B452CD">1.0</span>/(<span style="color: #B452CD">1.0</span>+np.exp(-z))
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forwardpropagation</span>(x):
+    <span style="color: #228B22"># weighted sum of inputs to the hidden layer</span>
+    z_1 = np.matmul(x, w_1) + b_1
+    <span style="color: #228B22"># activation in the hidden layer</span>
+    a_1 = sigmoid(z_1)
+    <span style="color: #228B22"># weighted sum of inputs to the output layer</span>
+    z_2 = np.matmul(a_1, w_2) + b_2
+    a_2 = z_2
+    <span style="color: #8B008B; font-weight: bold">return</span> a_1, a_2
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">backpropagation</span>(x, y):
+    a_1, a_2 = forwardpropagation(x)
+    <span style="color: #228B22"># parameter delta for the output layer, note that a_2=z_2 and its derivative wrt z_2 is just 1</span>
+    delta_2 = a_2 - y
+    <span style="color: #658b00">print</span>(<span style="color: #B452CD">0.5</span>*((a_2-y)**<span style="color: #B452CD">2</span>))
+    <span style="color: #228B22"># delta for  the hidden layer</span>
+    delta_1 = np.matmul(delta_2, w_2.T) * a_1 * (<span style="color: #B452CD">1</span> - a_1)
+    <span style="color: #228B22"># gradients for the output layer</span>
+    output_weights_gradient = np.matmul(a_1.T, delta_2)
+    output_bias_gradient = np.sum(delta_2, axis=<span style="color: #B452CD">0</span>)
+    <span style="color: #228B22"># gradient for the hidden layer</span>
+    hidden_weights_gradient = np.matmul(x.T, delta_1)
+    hidden_bias_gradient = np.sum(delta_1, axis=<span style="color: #B452CD">0</span>)
+    <span style="color: #8B008B; font-weight: bold">return</span> output_weights_gradient, output_bias_gradient, hidden_weights_gradient, hidden_bias_gradient
+
+
+<span style="color: #228B22"># ensure the same random numbers appear every time</span>
+np.random.seed(<span style="color: #B452CD">0</span>)
+<span style="color: #228B22"># Input variable</span>
+x = np.array([<span style="color: #B452CD">4.0</span>],dtype=np.float64)
+<span style="color: #228B22"># Target values</span>
+y = <span style="color: #B452CD">2</span>*x+<span style="color: #B452CD">1.0</span> 
+
+<span style="color: #228B22"># Defining the neural network, only scalars here</span>
+n_inputs = x.shape
+n_features = <span style="color: #B452CD">1</span>
+n_hidden_neurons = <span style="color: #B452CD">1</span>
+n_outputs = <span style="color: #B452CD">1</span>
+
+<span style="color: #228B22"># Initialize the network</span>
+<span style="color: #228B22"># weights and bias in the hidden layer</span>
+w_1 = np.random.randn(n_features, n_hidden_neurons)
+b_1 = np.zeros(n_hidden_neurons) + <span style="color: #B452CD">0.01</span>
+
+<span style="color: #228B22"># weights and bias in the output layer</span>
+w_2 = np.random.randn(n_hidden_neurons, n_outputs)
+b_2 = np.zeros(n_outputs) + <span style="color: #B452CD">0.01</span>
+
+eta = <span style="color: #B452CD">0.1</span>
+<span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">50</span>):
+    <span style="color: #228B22"># calculate gradients</span>
+    derivW2, derivB2, derivW1, derivB1 = backpropagation(x, y)
+    <span style="color: #228B22"># update weights and biases</span>
+    w_2 -= eta * derivW2
+    b_2 -= eta * derivB2
+    w_1 -= eta * derivW1
+    b_1 -= eta * derivB1
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>We see that after some few iterations (the results do depend on the learning rate however), we get an error which is rather small.</p>
+</section>
+
+<section>
+
+<!-- --- begin exercise --- -->
+<h2 id="exercise-2-including-more-data">Exercise 2: Including more data </h2>
+
+<p>Try to increase the amount of input and
+target/output data. Try also to perform calculations for more values
+of the learning rates. Feel free to add either hyperparameters with an
+\( l_1 \) norm or an \( l_2 \) norm and discuss your results.
+Discuss your results as functions of the amount of training data and various learning rates.
+</p>
+
+<p><b>Challenge:</b> Try to change the activation functions and replace the hard-coded analytical expressions with automatic derivation via either <b>autograd</b> or <b>JAX</b>.</p>
+
+<!-- --- end exercise --- -->
+</section>
+
+<section>
+<h2 id="simple-neural-network-and-the-back-propagation-equations">Simple neural network and the  back propagation equations  </h2>
+
+<p>Let us now try to increase our level of ambition and attempt at setting 
+up the equations for a neural network with two input nodes, one hidden
+layer with two hidden nodes and one output layer with one output node/neuron only (see graph)..
+</p>
+
+<p>We need to define the following parameters and variables with the input layer (layer \( (0) \)) 
+where we label the  nodes \( x_0 \) and \( x_1 \)
+</p>
+<p>&nbsp;<br>
+$$
+x_0 = a_0^{(0)} \wedge x_1 = a_1^{(0)}.
+$$
+<p>&nbsp;<br>
+
+<p>The  hidden layer (layer \( (1) \)) has  nodes which yield the outputs \( a_0^{(1)} \) and \( a_1^{(1)} \)) with  weight \( \boldsymbol{w} \) and bias \( \boldsymbol{b} \) parameters</p>
+<p>&nbsp;<br>
+$$
+w_{ij}^{(1)}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)}\right\} \wedge b^{(1)}=\left\{b_0^{(1)},b_1^{(1)}\right\}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="the-ouput-layer">The ouput layer </h2>
+
+<p>Finally, we have the ouput layer given by layer label \( (2) \) with output \( a^{(2)} \) and weights and biases to be determined given by the variables</p>
+<p>&nbsp;<br>
+$$
+w_{i}^{(2)}=\left\{w_{0}^{(2)},w_{1}^{(2)}\right\} \wedge b^{(2)}.
+$$
+<p>&nbsp;<br>
+
+<p>Our output is \( \tilde{y}=a^{(2)} \) and we define a generic cost function \( C(a^{(2)},y;\boldsymbol{\Theta}) \) where \( y \) is the target value (a scalar here).
+The parameters we need to optimize are given by
+</p>
+<p>&nbsp;<br>
+$$
+\boldsymbol{\Theta}=\left\{w_{00}^{(1)},w_{01}^{(1)},w_{10}^{(1)},w_{11}^{(1)},w_{0}^{(2)},w_{1}^{(2)},b_0^{(1)},b_1^{(1)},b^{(2)}\right\}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="compact-expressions">Compact expressions </h2>
+
+<p>We can define the inputs to the activation functions for the various layers in terms of various matrix-vector multiplications and vector additions.
+The inputs to the first hidden layer are
+</p>
+<p>&nbsp;<br>
+$$
+\begin{bmatrix}z_0^{(1)} \\ z_1^{(1)} \end{bmatrix}=\begin{bmatrix}w_{00}^{(1)} & w_{01}^{(1)}\\ w_{10}^{(1)} &w_{11}^{(1)} \end{bmatrix}\begin{bmatrix}a_0^{(0)} \\ a_1^{(0)} \end{bmatrix}+\begin{bmatrix}b_0^{(1)} \\ b_1^{(1)} \end{bmatrix},
+$$
+<p>&nbsp;<br>
+
+<p>with outputs</p>
+<p>&nbsp;<br>
+$$
+\begin{bmatrix}a_0^{(1)} \\ a_1^{(1)} \end{bmatrix}=\begin{bmatrix}\sigma^{(1)}(z_0^{(1)}) \\ \sigma^{(1)}(z_1^{(1)}) \end{bmatrix}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="output-layer">Output layer </h2>
+
+<p>For the final output layer we have the inputs to the final activation function </p>
+<p>&nbsp;<br>
+$$
+z^{(2)} = w_{0}^{(2)}a_0^{(1)} +w_{1}^{(2)}a_1^{(1)}+b^{(2)},
+$$
+<p>&nbsp;<br>
+
+<p>resulting in the  output</p>
+<p>&nbsp;<br>
+$$
+a^{(2)}=\sigma^{(2)}(z^{(2)}).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="explicit-derivatives">Explicit derivatives </h2>
+
+<p>In total we have nine parameters which we need to train.  Using the
+chain rule (or just the back-propagation algorithm) we can find all
+derivatives. Since we will use automatic differentiation in reverse
+mode, we start with the derivatives of the cost function with respect
+to the parameters of the output layer, namely
+</p>
+
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{i}^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial w_{i}^{(2)}}=\delta^{(2)}a_i^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>with</p>
+<p>&nbsp;<br>
+$$
+\delta^{(2)}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+$$
+<p>&nbsp;<br>
+
+<p>and finally</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b^{(2)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}\frac{\partial z^{(2)}}{\partial b^{(2)}}=\delta^{(2)}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="derivatives-of-the-hidden-layer">Derivatives of the hidden layer </h2>
+
+<p>Using the chain rule we have the following expressions for say one of the weight parameters (it is easy to generalize to the other weight parameters)</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{00}^{(1)}}=\frac{\partial C}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial z^{(2)}}
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=    \delta^{(2)}\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}},
+$$
+<p>&nbsp;<br>
+
+<p>which, noting that</p>
+<p>&nbsp;<br>
+$$
+z^{(2)} =w_0^{(2)}a_0^{(1)}+w_1^{(2)}a_1^{(1)}+b^{(2)},
+$$
+<p>&nbsp;<br>
+
+<p>allows us to rewrite </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial z^{(2)}}{\partial z_0^{(1)}}\frac{\partial z_0^{(1)}}{\partial w_{00}^{(1)}}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}a_0^{(1)}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="final-expression">Final expression </h2>
+<p>Defining</p>
+<p>&nbsp;<br>
+$$
+\delta_0^{(1)}=w_0^{(2)}\frac{\partial a_0^{(1)}}{\partial z_0^{(1)}}\delta^{(2)},
+$$
+<p>&nbsp;<br>
+
+<p>we have </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{00}^{(1)}}=\delta_0^{(1)}a_0^{(1)}.
+$$
+<p>&nbsp;<br>
+
+<p>Similarly, we obtain</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{01}^{(1)}}=\delta_0^{(1)}a_1^{(1)}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="completing-the-list">Completing the list </h2>
+
+<p>Similarly, we find</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{10}^{(1)}}=\delta_1^{(1)}a_0^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>and </p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial w_{11}^{(1)}}=\delta_1^{(1)}a_1^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>where we have defined </p>
+<p>&nbsp;<br>
+$$
+\delta_1^{(1)}=w_1^{(2)}\frac{\partial a_1^{(1)}}{\partial z_1^{(1)}}\delta^{(2)}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="final-expressions-for-the-biases-of-the-hidden-layer">Final expressions for the biases of the hidden layer </h2>
+
+<p>For the sake of completeness, we list the derivatives of the biases, which are</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b_{0}^{(1)}}=\delta_0^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial C}{\partial b_{1}^{(1)}}=\delta_1^{(1)}.
+$$
+<p>&nbsp;<br>
+
+<p>As we will see below, these expressions can be generalized in a more compact form. </p>
+</section>
+
+<section>
+<h2 id="gradient-expressions">Gradient expressions </h2>
+
+<p>For this specific model, with just one output node and two hidden
+nodes, the gradient descent equations take the following form for output layer
+</p>
+<p>&nbsp;<br>
+$$
+w_{i}^{(2)}\leftarrow w_{i}^{(2)}- \eta \delta^{(2)} a_{i}^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+b^{(2)} \leftarrow b^{(2)}-\eta \delta^{(2)},
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+w_{ij}^{(1)}\leftarrow w_{ij}^{(1)}- \eta \delta_{i}^{(1)} a_{j}^{(0)},
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+b_{i}^{(1)} \leftarrow b_{i}^{(1)}-\eta \delta_{i}^{(1)},
+$$
+<p>&nbsp;<br>
+
+<p>where \( \eta \) is the learning rate.</p>
+</section>
+
+<section>
+
+<!-- --- begin exercise --- -->
+<h2 id="exercise-3-extended-program">Exercise 3: Extended program </h2>
+
+<p>We extend our simple code to a function which depends on two variable \( x_0 \) and \( x_1 \), that is</p>
+<p>&nbsp;<br>
+$$
+y=f(x_0,x_1)=x_0^2+3x_0x_1+x_1^2+5.
+$$
+<p>&nbsp;<br>
+
+<p>We feed our network with \( n=100 \) entries \( x_0 \) and \( x_1 \). We have thus two features represented by these variable and an input matrix/design matrix \( \boldsymbol{X}\in \mathbf{R}^{n\times 2} \)</p>
+<p>&nbsp;<br>
+$$
+\boldsymbol{X}=\begin{bmatrix} x_{00} & x_{01} \\ x_{00} & x_{01} \\ x_{10} & x_{11} \\ x_{20} & x_{21} \\ \dots & \dots \\ \dots & \dots \\ x_{n-20} & x_{n-21} \\ x_{n-10} & x_{n-11} \end{bmatrix}.
+$$
+<p>&nbsp;<br>
+
+<p>Write a code, based on the previous code examples, which takes as input these data and fit the above function.
+You can extend your code to include automatic differentiation.
+</p>
+
+<p>With these examples, we are now ready to embark upon the writing of more a general code for neural networks.</p>
+
+<!-- --- end exercise --- -->
+</section>
+
+<section>
+<h2 id="getting-serious-the-back-propagation-equations-for-a-neural-network">Getting serious, the  back propagation equations for a neural network </h2>
+
+<p>Now it is time to move away from one node in each layer only. Our inputs are also represented either by several inputs.</p>
+
+<p>We have thus</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial{\cal C}((\boldsymbol{\Theta}^L)}{\partial w_{jk}^L}  =  \left(a_j^L - y_j\right)a_j^L(1-a_j^L)a_k^{L-1}, 
+$$
+<p>&nbsp;<br>
+
+<p>Defining</p>
+<p>&nbsp;<br>
+$$
+\delta_j^L = a_j^L(1-a_j^L)\left(a_j^L - y_j\right) = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
+$$
+<p>&nbsp;<br>
+
+<p>and using the Hadamard product of two vectors we can write this as</p>
+<p>&nbsp;<br>
+$$
+\boldsymbol{\delta}^L = \sigma'(\hat{z}^L)\circ\frac{\partial {\cal C}}{\partial (\boldsymbol{a}^L)}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="analyzing-the-last-results">Analyzing the last results </h2>
+
+<p>This is an important expression. The second term on the right handside
+measures how fast the cost function is changing as a function of the $j$th
+output activation.  If, for example, the cost function doesn't depend
+much on a particular output node \( j \), then \( \delta_j^L \) will be small,
+which is what we would expect. The first term on the right, measures
+how fast the activation function \( f \) is changing at a given activation
+value \( z_j^L \).
+</p>
+</section>
+
+<section>
+<h2 id="more-considerations">More considerations </h2>
+
+<p>Notice that everything in the above equations is easily computed.  In
+particular, we compute \( z_j^L \) while computing the behaviour of the
+network, and it is only a small additional overhead to compute
+\( \sigma'(z^L_j) \).  The exact form of the derivative with respect to the
+output depends on the form of the cost function.
+However, provided the cost function is known there should be little
+trouble in calculating
+</p>
+
+<p>&nbsp;<br>
+$$
+\frac{\partial {\cal C}}{\partial (a_j^L)}
+$$
+<p>&nbsp;<br>
+
+<p>With the definition of \( \delta_j^L \) we have a more compact definition of the derivative of the cost function in terms of the weights, namely</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial{\cal C}}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="derivatives-in-terms-of-z-j-l">Derivatives in terms of \( z_j^L \) </h2>
+
+<p>It is also easy to see that our previous equation can be written as</p>
+
+<p>&nbsp;<br>
+$$
+\delta_j^L =\frac{\partial {\cal C}}{\partial z_j^L}= \frac{\partial {\cal C}}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L},
+$$
+<p>&nbsp;<br>
+
+<p>which can also be interpreted as the partial derivative of the cost function with respect to the biases \( b_j^L \), namely</p>
+<p>&nbsp;<br>
+$$
+\delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L}\frac{\partial b_j^L}{\partial z_j^L}=\frac{\partial {\cal C}}{\partial b_j^L},
+$$
+<p>&nbsp;<br>
+
+<p>That is, the error \( \delta_j^L \) is exactly equal to the rate of change of the cost function as a function of the bias. </p>
+</section>
+
+<section>
+<h2 id="bringing-it-together">Bringing it together </h2>
+
+<p>We have now three equations that are essential for the computations of the derivatives of the cost function at the output layer. These equations are needed to start the algorithm and they are</p>
+
+<p>&nbsp;<br>
+$$
+\begin{equation}
+\frac{\partial{\cal C}(\hat{W^L})}{\partial w_{jk}^L}  =  \delta_j^La_k^{L-1},
+\tag{1}
+\end{equation}
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\begin{equation}
+\delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)},
+\tag{2}
+\end{equation}
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+
+<p>&nbsp;<br>
+$$
+\begin{equation}
+\delta_j^L = \frac{\partial {\cal C}}{\partial b_j^L},
+\tag{3}
+\end{equation}
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="final-back-propagating-equation">Final back propagating equation </h2>
+
+<p>We have that (replacing \( L \) with a general layer \( l \))</p>
+<p>&nbsp;<br>
+$$
+\delta_j^l =\frac{\partial {\cal C}}{\partial z_j^l}.
+$$
+<p>&nbsp;<br>
+
+<p>We want to express this in terms of the equations for layer \( l+1 \).</p>
+</section>
+
+<section>
+<h2 id="using-the-chain-rule-and-summing-over-all-k-entries">Using the chain rule and summing over all \( k \) entries </h2>
+
+<p>We obtain</p>
+<p>&nbsp;<br>
+$$
+\delta_j^l =\sum_k \frac{\partial {\cal C}}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^{l}}=\sum_k \delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^{l}},
+$$
+<p>&nbsp;<br>
+
+<p>and recalling that</p>
+<p>&nbsp;<br>
+$$
+z_j^{l+1} = \sum_{i=1}^{M_{l}}w_{ij}^{l+1}a_i^{l}+b_j^{l+1},
+$$
+<p>&nbsp;<br>
+
+<p>with \( M_l \) being the number of nodes in layer \( l \), we obtain</p>
+<p>&nbsp;<br>
+$$
+\delta_j^l =\sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l),
+$$
+<p>&nbsp;<br>
+
+<p>This is our final equation.</p>
+
+<p>We are now ready to set up the algorithm for back propagation and learning the weights and biases.</p>
+</section>
+
+<section>
+<h2 id="setting-up-the-back-propagation-algorithm">Setting up the back propagation algorithm </h2>
+
+<p>The four equations  provide us with a way of computing the gradient of the cost function. Let us write this out in the form of an algorithm.</p>
+
+<p><b>First</b>, we set up the input data \( \hat{x} \) and the activations
+\( \hat{z}_1 \) of the input layer and compute the activation function and
+the pertinent outputs \( \hat{a}^1 \).
+</p>
+
+<p><b>Secondly</b>, we perform then the feed forward till we reach the output
+layer and compute all \( \hat{z}_l \) of the input layer and compute the
+activation function and the pertinent outputs \( \hat{a}^l \) for
+\( l=1,2,3,\dots,L \).
+</p>
+
+<p><b>Notation</b>: The first hidden layer has \( l=1 \) as label and the final output layer has \( l=L \).</p>
+</section>
+
+<section>
+<h2 id="setting-up-the-back-propagation-algorithm-part-2">Setting up the back propagation algorithm, part 2 </h2>
+
+<p>Thereafter we compute the ouput error \( \hat{\delta}^L \) by computing all</p>
+<p>&nbsp;<br>
+$$
+\delta_j^L = \sigma'(z_j^L)\frac{\partial {\cal C}}{\partial (a_j^L)}.
+$$
+<p>&nbsp;<br>
+
+<p>Then we compute the back propagate error for each \( l=L-1,L-2,\dots,1 \) as</p>
+<p>&nbsp;<br>
+$$
+\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="setting-up-the-back-propagation-algorithm-part-3">Setting up the Back propagation algorithm, part 3 </h2>
+
+<p>Finally, we update the weights and the biases using gradient descent
+for each \( l=L-1,L-2,\dots,1 \) and update the weights and biases
+according to the rules
+</p>
+
+<p>&nbsp;<br>
+$$
+w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
+$$
+<p>&nbsp;<br>
+
+<p>&nbsp;<br>
+$$
+b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
+$$
+<p>&nbsp;<br>
+
+<p>with \( \eta \) being the learning rate.</p>
+</section>
+
+<section>
+<h2 id="updating-the-gradients">Updating the gradients  </h2>
+
+<p>With the back propagate error for each \( l=L-1,L-2,\dots,1 \) as</p>
+<p>&nbsp;<br>
+$$
+\delta_j^l = \sum_k \delta_k^{l+1}w_{kj}^{l+1}sigma'(z_j^l),
+$$
+<p>&nbsp;<br>
+
+<p>we update the weights and the biases using gradient descent for each \( l=L-1,L-2,\dots,1 \) and update the weights and biases according to the rules</p>
+<p>&nbsp;<br>
+$$
+w_{jk}^l\leftarrow  = w_{jk}^l- \eta \delta_j^la_k^{l-1},
+$$
+<p>&nbsp;<br>
+
+<p>&nbsp;<br>
+$$
+b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="essential-elements-of-generative-models">Essential elements of generative models </h2>
+
+<p>The aim of generative methods is to train a probability distribution \( p \). The methods we will focus on are:</p>
+<ol>
+<p><li> Energy based models, with the family of Boltzmann distributions as a typical example</li>
+<p><li> Variational autoencoders, based on our discussions on autoencoders</li>
+<p><li> Generative adversarial networks (GANs) and</li>
+<p><li> Diffusion models</li>
+</ol>
+</section>
+
+<section>
+<h2 id="energy-models">Energy models </h2>
+
+<p>Last week we defined a domain \( \boldsymbol{X} \) of stochastic variables \( \boldsymbol{X}= \{x_0,x_1, \dots , x_{n-1}\} \) with a pertinent probability distribution</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{X})=\prod_{x_i\in \boldsymbol{X}}p(x_i),
+$$
+<p>&nbsp;<br>
+
+<p>where we have assumed that the random varaibles \( x_i \) are all independent and identically distributed (iid).</p>
+
+<p>We will now assume that we can defined this function in terms of optimization parameters \( \boldsymbol{\Theta} \), which could be the biases and weights of deep network, and a set of hidden variables we also assume to be random variables which also are iid. The domain of these variables is
+\( \boldsymbol{H}= \{h_0,h_1, \dots , h_{m-1}\} \).
+</p>
+</section>
+
+<section>
+<h2 id="probability-model">Probability model </h2>
+
+<p>We define a probability</p>
+<p>&nbsp;<br>
+$$
+p(x_i,h_j;\boldsymbol{\Theta}) = \frac{f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>where \( f(x_i,h_j;\boldsymbol{\Theta}) \) is a function which we assume is larger or
+equal than zero and obeys all properties required for a probability
+distribution and \( Z(\boldsymbol{\Theta}) \) is a normalization constant. Inspired by
+statistical mechanics, we call it often for the partition function.
+It is defined as (assuming that we have discrete probability distributions)
+</p>
+<p>&nbsp;<br>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="marginal-and-conditional-probabilities">Marginal and conditional probabilities </h2>
+
+<p>We can in turn define the marginal probabilities</p>
+<p>&nbsp;<br>
+$$
+p(x_i;\boldsymbol{\Theta}) = \frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>and </p>
+<p>&nbsp;<br>
+$$
+p(h_i;\boldsymbol{\Theta}) = \frac{\sum_{x_i\in \boldsymbol{X}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="change-of-notation">Change of notation </h2>
+
+<p><b>Note the change to a vector notation</b>. A variable like \( \boldsymbol{x} \)
+represents now a specific <b>configuration</b>. We can generate an infinity
+of such configurations. The final partition function is then the sum
+over all such possible configurations, that is
+</p>
+
+<p>&nbsp;<br>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+<p>&nbsp;<br>
+
+<p>changes to</p>
+<p>&nbsp;<br>
+$$
+Z(\boldsymbol{\Theta})=\sum_{\boldsymbol{x}}\sum_{\boldsymbol{h}} f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}).
+$$
+<p>&nbsp;<br>
+
+<p>If we have a binary set of variable \( x_i \) and \( h_j \) and \( M \) values of \( x_i \) and \( N \) values of \( h_j \) we have in total \( 2^M \) and \( 2^N \) possible \( \boldsymbol{x} \) and \( \boldsymbol{h} \) configurations, respectively.</p>
+
+<p>We see that even for the modest binary case, we can easily approach a
+number of configuration which is not possible to deal with.
+</p>
+</section>
+
+<section>
+<h2 id="optimization-problem">Optimization problem </h2>
+
+<p>At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is </p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}\left(\frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}\right),
+$$
+<p>&nbsp;<br>
+
+<p>which we rewrite as</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}\left(\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})\right).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="further-simplifications">Further simplifications </h2>
+
+<p>We simplify further by rewriting it as</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}),
+$$
+<p>&nbsp;<br>
+
+<p>where we used \( p(x_i;\boldsymbol{\Theta}) = \sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta}) \).
+The optimization problem is then
+</p>
+<p>&nbsp;<br>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\boldsymbol{X};\boldsymbol{\Theta}).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="optimizing-the-logarithm-instead">Optimizing the logarithm instead </h2>
+
+<p>Computing the derivatives with respect to the parameters \( \boldsymbol{\Theta} \) is
+easier (and equivalent) with taking the logarithm of the
+probability. We will thus optimize
+</p>
+<p>&nbsp;<br>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\boldsymbol{X};\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>which leads to</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=0.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="expression-for-the-gradients">Expression for the gradients </h2>
+<p>This leads to the following equation</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=0.
+$$
+<p>&nbsp;<br>
+
+<p>The first term is called the positive phase and we assume that we have a model for the function \( f \) from which we can sample values. Below we will develop an explicit model for this.
+The second term is called the negative phase and is the one which leads to more difficulties.
+</p>
+</section>
+
+<section>
+<h2 id="the-derivative-of-the-partition-function">The derivative of the partition function </h2>
+
+<p>The partition function, defined above as</p>
+<p>&nbsp;<br>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+<p>&nbsp;<br>
+
+<p>is in general the most problematic term. In principle both \( x \) and \( h \) can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).</p>
+</section>
+
+<section>
+<h2 id="explicit-expression-for-the-derivative">Explicit expression for the derivative </h2>
+<p>We can rewrite</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}}Z(\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>which reads in more detail</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}} \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta})   }{Z(\boldsymbol{\Theta})}.
+$$
+<p>&nbsp;<br>
+
+<p>We can rewrite the function \( f \) (we have assumed that is larger or
+equal than zero) as \( f=\exp{\log{f}} \). We can then reqrite the last
+equation as
+</p>
+
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}} \nabla_{\boldsymbol{\Theta}}\exp{\log{f(x_i;\boldsymbol{\Theta})}}   }{Z(\boldsymbol{\Theta})}.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="final-expression">Final expression </h2>
+
+<p>Taking the derivative gives us</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})}   }{Z(\boldsymbol{\Theta})}, 
+$$
+<p>&nbsp;<br>
+
+<p>which is the expectation value of \( \log{f} \)</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>that is</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\mathbb{E}(\log{f(x_i;\boldsymbol{\Theta})}).
+$$
+<p>&nbsp;<br>
+
+<p>This quantity is evaluated using Monte Carlo sampling, with Gibbs
+sampling as the standard sampling rule.  Before we discuss the
+explicit algorithms, we need to remind ourselves about Markov chains
+and sampling rules like the Metropolis-Hastings algorithm and Gibbs
+sampling.
+</p>
+</section>
+
+<section>
+<h2 id="introducing-the-energy-model">Introducing the energy model </h2>
+
+<p>As we will see below, a typical Boltzmann machines employs a probability distribution</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>where \( f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) \) is given by a so-called energy model. If we assume that the random variables \( x_i \) and \( h_j \) take binary values only, for example \( x_i,h_j=\{0,1\} \), we have a so-called binary-binary model where</p>
+<p>&nbsp;<br>
+$$
+f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})=-E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta}) = \sum_{x_i\in \boldsymbol{X}} x_i a_i+\sum_{h_j\in \boldsymbol{H}} b_j h_j + \sum_{x_i\in \boldsymbol{X},h_j\in\boldsymbol{H}} x_i w_{ij} h_j,
+$$
+<p>&nbsp;<br>
+
+<p>where the set of parameters are given by the biases and weights \( \boldsymbol{\Theta}=\{\boldsymbol{a},\boldsymbol{b},\boldsymbol{W}\} \).
+<b>Note the vector notation</b> instead of \( x_i \) and \( h_j \) for \( f \). The vectors \( \boldsymbol{x} \) and \( \boldsymbol{h} \) represent a specific instance of stochastic variables \( x_i \) and \( h_j \). These arrangements of \( \boldsymbol{x} \) and \( \boldsymbol{h} \) lead to a specific energy configuration.
+</p>
+</section>
+
+<section>
+<h2 id="more-compact-notation">More compact notation </h2>
+
+<p>With the above definition we can write the probability as</p>
+<p>&nbsp;<br>
+$$
+p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{\exp{(\boldsymbol{a}^T\boldsymbol{x}+\boldsymbol{b}^T\boldsymbol{h}+\boldsymbol{x}^T\boldsymbol{W}\boldsymbol{h})}}{Z(\boldsymbol{\Theta})},
+$$
+<p>&nbsp;<br>
+
+<p>where the biases \( \boldsymbol{a} \) and \( \boldsymbol{h} \) and the weights defined by the matrix \( \boldsymbol{W} \) are the parameters we need to optimize.</p>
+</section>
+
+<section>
+<h2 id="anticipating-results-to-be-derived">Anticipating results to be derived </h2>
+
+<p>Since the binary-binary energy model is linear in the parameters \( a_i \), \( b_j \) and
+\( w_{ij} \), it is easy to see that the derivatives with respect to the
+various optimization parameters yield expressions used in the
+evaluation of gradients like
+</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial w_{ij}}=-x_ih_j,
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial a_i}=-x_i,
+$$
+<p>&nbsp;<br>
+
+<p>and</p>
+<p>&nbsp;<br>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial b_j}=-h_j.
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="boltzmann-machines-marginal-and-conditional-probabilities">Boltzmann Machines, marginal and conditional probabilities  </h2>
+
+<p>A generative model can learn to represent and sample from a
+probability distribution. The core idea is to learn a parametric model
+of the probability distribution from which the training data was
+drawn. As an example
+</p>
+<ol>
+<p><li> A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.</li>
+<p><li> Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.</li>
+<p><li> Model the trial function for Monte Carlo calculations</li>
+</ol>
+</section>
+
+<section>
+<h2 id="generative-and-discriminative-models">Generative and discriminative models </h2>
+
+<p>Generative and discriminative models use both gradient-descent based
+learning procedures for minimizing cost functions
+</p>
+
+<p>However, in energy based models we don't use backpropagation and automatic
+differentiation for computing gradients, instead we turn to Markov
+Chain Monte Carlo methods.
+</p>
+
+<p>A typical deep neural network has several hidden layers. A restricted
+Boltzmann machine has normally one hidden layer, however several RBMs can
+be stacked to make up deep Belief Networks, of which they constitute
+the building blocks.
+</p>
+</section>
+
+<section>
+<h2 id="basics-of-the-boltzmann-machine">Basics of the Boltzmann machine </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>A BM is what we would call an undirected probabilistic graphical model
+with stochastic continuous or discrete units.
+</p>
+</div>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>It is interpreted as a stochastic recurrent neural network where the
+state of each unit(neurons/nodes) depends on the units it is connected
+to. The weights in the network represent thus the strength of the
+interaction between various units/nodes.
+</p>
+</div>
+</section>
+
+<section>
+<h2 id="more-about-the-basics">More about the basics </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>A standard BM network is divided into a set of observable and visible units \( \boldsymbol{x} \) and a set of unknown hidden units/nodes \( \boldsymbol{h} \).</p>
+</div>
+
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>Additionally there can be bias nodes for the hidden and visible layers. These biases are normally set to \( 1 \).</p>
+</div>
+
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning</p>
+</div>
+</section>
+
+<section>
+<h2 id="difficult-to-train">Difficult to train </h2>
+
+<p>However, they are often hard to train. This leads to the introduction
+of so-called restricted BMs, or RBMS.  Here we take away all lateral
+connections between nodes in the visible layer as well as connections
+between nodes in the hidden layer.
+</p>
+</section>
+
+<section>
+<h2 id="the-network-layers">The network layers </h2>
+
+<ol>
+<p><li> A function \( \boldsymbol{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
+<p><li> The function \( \boldsymbol{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
+</ol>
+</section>
+
+<section>
+<h2 id="goal-of-hidden-layer">Goal of hidden layer </h2>
+
+<p>The goal of the hidden layer is to increase the model's expressive
+power. We encode complex interactions between visible variables by
+introducing additional, hidden variables that interact with visible
+degrees of freedom in a simple manner, yet still reproduce the complex
+correlations between visible degrees in the data once marginalized
+over (integrated out).
+</p>
+</section>
+
+<section>
+<h2 id="the-parameters">The parameters </h2>
+
+<p>The network parameters, to be optimized/learned:</p>
+<ol>
+<p><li> \( \boldsymbol{a} \) represents the visible bias, a vector of same length \( M \) as \( \boldsymbol{x} \).</li>
+<p><li> \( \boldsymbol{b} \) represents the hidden bias, a vector of same length \( N \)  as \( \boldsymbol{h} \).</li>
+<p><li> \( \boldsymbol{W} \) represents the interaction weights, a matrix of size \( M\times N \).</li>
+</ol>
+<p>
+<p>Note that we have specified the lengths of \( bm{x} \) and \( \boldsymbol{h} \). These
+lengths define the number of visible and hidden units, respectively.
+</p>
+</section>
+
+<section>
+<h2 id="joint-distribution">Joint distribution </h2>
+
+<p>The restricted Boltzmann machine is described by a Boltzmann distribution</p>
+<p>&nbsp;<br>
+$$
+\begin{align*}
+	P_{rbm}(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) = \frac{1}{Z(\boldsymbol{\Theta})} \exp{-(E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}))},
+\end{align*}
+$$
+<p>&nbsp;<br>
+
+<p>where \( Z \) is the normalization constant or partition function discussed earlier and defined as </p>
+<p>&nbsp;<br>
+$$
+\begin{align*}
+	Z(\boldsymbol{\Theta}) = \int \int \exp{-E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta})} d\boldsymbol{x} d\boldsymbol{h}.
+\end{align*}
+$$
+<p>&nbsp;<br>
+
+<p>It is common to set  the temperature \( T \) to one. It is omitted in the equations above. The energy is thus a dimensionless function.</p>
+</section>
+
+<section>
+<h2 id="network-elements-the-energy-function">Network Elements, the energy function  </h2>
+
+<p>The function \( E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) \) gives the <b>energy</b> of a
+configuration (pair of vectors) \( (\boldsymbol{x}, \boldsymbol{h}) \). The lower
+the energy of a configuration, the higher the probability of it. This
+function also depends on the parameters \( \boldsymbol{a} \), \( \boldsymbol{b} \) and
+\( W \). Thus, when we adjust them during the learning procedure, we are
+adjusting the energy function to best fit our problem.
+</p>
+</section>
+
+<section>
+<h2 id="defining-different-types-of-rbms">Defining different types of RBMs </h2>
+
+<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\boldsymbol{x},\boldsymbol{h},\boldsymbol{\Theta}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Binary-Binary RBM:</b>
+<p>
+
+<p>RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:</p>
+<p>&nbsp;<br>
+$$
+\begin{align*}
+	E(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
+\end{align*}
+$$
+<p>&nbsp;<br>
+
+<p>where the binary values taken on by the nodes are most commonly 0 and 1.</p>
+</div>
+</section>
+
+<section>
+<h2 id="gaussian-binary-rbm">Gaussian-binary RBM </h2>
+
+<p>Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:</p>
+<p>&nbsp;<br>
+$$
+\begin{align*}
+	E(\boldsymbol{x}, \boldsymbol{h},\boldsymbol{\Theta}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
+\end{align*}
+$$
+<p>&nbsp;<br>
+
+<p>This type of RBMs are useful when we model continuous data (i.e., we wish \( \boldsymbol{x} \) to be continuous). The paramater \( \sigma_i^2 \) is meant to represent a variance and is foten just set to one.</p>
+</section>
+
+<section>
+<h2 id="code-for-rbms-using-pytorch">Code for RBMs using PyTorch </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.utils.data</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch.autograd</span> <span style="color: #8B008B; font-weight: bold">import</span> Variable
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, transforms
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> make_grid , save_image
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+
+
+batch_size = <span style="color: #B452CD">64</span>
+train_loader = torch.utils.data.DataLoader(
+datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
+    train=<span style="color: #8B008B; font-weight: bold">True</span>,
+    download = <span style="color: #8B008B; font-weight: bold">True</span>,
+    transform = transforms.Compose(
+        [transforms.ToTensor()])
+     ),
+     batch_size=batch_size
+)
+
+test_loader = torch.utils.data.DataLoader(
+datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
+    train=<span style="color: #8B008B; font-weight: bold">False</span>,
+    transform=transforms.Compose(
+    [transforms.ToTensor()])
+    ),
+    batch_size=batch_size)
+
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">RBM</span>(nn.Module):
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>,
+               n_vis=<span style="color: #B452CD">784</span>,
+               n_hin=<span style="color: #B452CD">500</span>,
+               k=<span style="color: #B452CD">5</span>):
+        <span style="color: #658b00">super</span>(RBM, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.W = nn.Parameter(torch.randn(n_hin,n_vis)*<span style="color: #B452CD">1e-2</span>)
+        <span style="color: #658b00">self</span>.v_bias = nn.Parameter(torch.zeros(n_vis))
+        <span style="color: #658b00">self</span>.h_bias = nn.Parameter(torch.zeros(n_hin))
+        <span style="color: #658b00">self</span>.k = k
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">sample_from_p</span>(<span style="color: #658b00">self</span>,p):
+       <span style="color: #8B008B; font-weight: bold">return</span> F.relu(torch.sign(p - Variable(torch.rand(p.size()))))
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">v_to_h</span>(<span style="color: #658b00">self</span>,v):
+        p_h = F.sigmoid(F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias))
+        sample_h = <span style="color: #658b00">self</span>.sample_from_p(p_h)
+        <span style="color: #8B008B; font-weight: bold">return</span> p_h,sample_h
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">h_to_v</span>(<span style="color: #658b00">self</span>,h):
+        p_v = F.sigmoid(F.linear(h,<span style="color: #658b00">self</span>.W.t(),<span style="color: #658b00">self</span>.v_bias))
+        sample_v = <span style="color: #658b00">self</span>.sample_from_p(p_v)
+        <span style="color: #8B008B; font-weight: bold">return</span> p_v,sample_v
+        
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>,v):
+        pre_h1,h1 = <span style="color: #658b00">self</span>.v_to_h(v)
+        
+        h_ = h1
+        <span style="color: #8B008B; font-weight: bold">for</span> _ <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">self</span>.k):
+            pre_v_,v_ = <span style="color: #658b00">self</span>.h_to_v(h_)
+            pre_h_,h_ = <span style="color: #658b00">self</span>.v_to_h(v_)
+        
+        <span style="color: #8B008B; font-weight: bold">return</span> v,v_
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">free_energy</span>(<span style="color: #658b00">self</span>,v):
+        vbias_term = v.mv(<span style="color: #658b00">self</span>.v_bias)
+        wx_b = F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias)
+        hidden_term = wx_b.exp().add(<span style="color: #B452CD">1</span>).log().sum(<span style="color: #B452CD">1</span>)
+        <span style="color: #8B008B; font-weight: bold">return</span> (-hidden_term - vbias_term).mean()
+
+
+
+
+rbm = RBM(k=<span style="color: #B452CD">1</span>)
+train_op = optim.SGD(rbm.parameters(),<span style="color: #B452CD">0.1</span>)
+
+<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">10</span>):
+    loss_ = []
+    <span style="color: #8B008B; font-weight: bold">for</span> _, (data,target) <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(train_loader):
+        data = Variable(data.view(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>))
+        sample_data = data.bernoulli()
+        
+        v,v1 = rbm(sample_data)
+        loss = rbm.free_energy(v) - rbm.free_energy(v1)
+        loss_.append(loss.data)
+        train_op.zero_grad()
+        loss.backward()
+        train_op.step()
+
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Training loss for {} epoch: {}&quot;</span>.format(epoch, np.mean(loss_)))
+
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">show_adn_save</span>(file_name,img):
+    npimg = np.transpose(img.numpy(),(<span style="color: #B452CD">1</span>,<span style="color: #B452CD">2</span>,<span style="color: #B452CD">0</span>))
+    f = <span style="color: #CD5555">&quot;./%s.png&quot;</span> % file_name
+    plt.imshow(npimg)
+    plt.imsave(f,npimg)
+
+show_adn_save(<span style="color: #CD5555">&quot;real&quot;</span>,make_grid(v.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
+show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid(v1.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="energy-based-models-and-langevin-sampling">Energy-based models and Langevin sampling </h2>
+
+<p>See discussions in Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></p>
+
+<p>That notebook is based on a recent article by Du and Mordatch, <b>Implicit generation and modeling with energy-based models</b>, see <a href="https://arxiv.org/pdf/1903.08689.pdf." target="_blank"><tt>https://arxiv.org/pdf/1903.08689.pdf.</tt></a></p>
+</section>
+
+<section>
+<h2 id="tensor-flow-examples">Tensor-flow examples </h2>
+
+<ol>
+<p><li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+<p><li> See also Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
+</ol>
+<p>
+<center>
+<h1 style="text-align: center;">Advanced machine learning and data analysis for the physical sciences</h1>
+</center>  <!-- document title -->
+
+<!-- author(s): Morten Hjorth-Jensen -->
+<center>
+<b>Morten Hjorth-Jensen</b> [1, 2]
+</center>
+<!-- institution(s) -->
+<center>
+[1] <b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
+</center>
+<center>
+[2] <b>Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA</b>
+</center>
+<br>
+<center>
+<h4>April 16, 2024</h4>
+</center> <!-- date -->
+<br>
+</section>
+
+<section>
+<h2 id="plans-for-the-week-april-15-19-2024">Plans for the week April 15-19, 2024  </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Deep generative models</b>
+<p>
+<ol>
+<p><li> Finalizing discussion of Boltzmann machines, implementations using TensorFlow and Pytorch</li>
+<p><li> Discussion of other energy-based models and Langevin sampling</li>
+<p><li> Variational Autoencoders (VAE), mathematics</li>
+<p><li> <a href="https://youtu.be/rw-NBN293o4" target="_blank">Video of lecture</a></li>
+<p><li> <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf" target="_blank">Whiteboard notes</a></li>
+</ol>
+</div>
+</section>
+
+<section>
+<h2 id="readings">Readings </h2>
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<ol>
+<p><li> Reading recommendation: Goodfellow et al, for VAEs see sections 20.10-20.11</li>
+<p><li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+<p><li> See Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
+</ol>
+</div>
+
+
+<!-- todo: add about Langevin sampling, see <a href="https://www.lyndonduong.com/sgmcmc/" target="_blank"><tt>https://www.lyndonduong.com/sgmcmc/</tt></a> -->
+<!-- code for VAEs applied to MNIST and CIFAR perhaps -->
+</section>
+
+<section>
+<h2 id="reminder-from-last-week-and-layout-of-lecture-this-week">Reminder from last week and layout of lecture this week </h2>
+
+<ol>
+<p><li> We will present first a reminder from last week, see for example the jupyter-notebook at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb</tt></a></li>
+<p><li> We will then discuss codes as well as other energy-based models and Langevin sampling instead of Gibbs or Metropolis sampling.</li>
+<p><li> Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks</li>
+</ol>
+</section>
+
+<section>
+<h2 id="code-for-rbms-using-pytorch-for-a-binary-binary-rbm">Code for RBMs using PyTorch for a binary-binary RBM </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.utils.data</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch.autograd</span> <span style="color: #8B008B; font-weight: bold">import</span> Variable
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, transforms
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> make_grid , save_image
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+
+
+batch_size = <span style="color: #B452CD">64</span>
+train_loader = torch.utils.data.DataLoader(
+datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
+    train=<span style="color: #8B008B; font-weight: bold">True</span>,
+    download = <span style="color: #8B008B; font-weight: bold">True</span>,
+    transform = transforms.Compose(
+        [transforms.ToTensor()])
+     ),
+     batch_size=batch_size
+)
+
+test_loader = torch.utils.data.DataLoader(
+datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
+    train=<span style="color: #8B008B; font-weight: bold">False</span>,
+    transform=transforms.Compose(
+    [transforms.ToTensor()])
+    ),
+    batch_size=batch_size)
+
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">RBM</span>(nn.Module):
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>,
+               n_vis=<span style="color: #B452CD">784</span>,
+               n_hin=<span style="color: #B452CD">500</span>,
+               k=<span style="color: #B452CD">5</span>):
+        <span style="color: #658b00">super</span>(RBM, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.W = nn.Parameter(torch.randn(n_hin,n_vis)*<span style="color: #B452CD">1e-2</span>)
+        <span style="color: #658b00">self</span>.v_bias = nn.Parameter(torch.zeros(n_vis))
+        <span style="color: #658b00">self</span>.h_bias = nn.Parameter(torch.zeros(n_hin))
+        <span style="color: #658b00">self</span>.k = k
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">sample_from_p</span>(<span style="color: #658b00">self</span>,p):
+       <span style="color: #8B008B; font-weight: bold">return</span> F.relu(torch.sign(p - Variable(torch.rand(p.size()))))
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">v_to_h</span>(<span style="color: #658b00">self</span>,v):
+        p_h = F.sigmoid(F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias))
+        sample_h = <span style="color: #658b00">self</span>.sample_from_p(p_h)
+        <span style="color: #8B008B; font-weight: bold">return</span> p_h,sample_h
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">h_to_v</span>(<span style="color: #658b00">self</span>,h):
+        p_v = F.sigmoid(F.linear(h,<span style="color: #658b00">self</span>.W.t(),<span style="color: #658b00">self</span>.v_bias))
+        sample_v = <span style="color: #658b00">self</span>.sample_from_p(p_v)
+        <span style="color: #8B008B; font-weight: bold">return</span> p_v,sample_v
+        
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>,v):
+        pre_h1,h1 = <span style="color: #658b00">self</span>.v_to_h(v)
+        
+        h_ = h1
+        <span style="color: #8B008B; font-weight: bold">for</span> _ <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">self</span>.k):
+            pre_v_,v_ = <span style="color: #658b00">self</span>.h_to_v(h_)
+            pre_h_,h_ = <span style="color: #658b00">self</span>.v_to_h(v_)
+        
+        <span style="color: #8B008B; font-weight: bold">return</span> v,v_
+    
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">free_energy</span>(<span style="color: #658b00">self</span>,v):
+        vbias_term = v.mv(<span style="color: #658b00">self</span>.v_bias)
+        wx_b = F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias)
+        hidden_term = wx_b.exp().add(<span style="color: #B452CD">1</span>).log().sum(<span style="color: #B452CD">1</span>)
+        <span style="color: #8B008B; font-weight: bold">return</span> (-hidden_term - vbias_term).mean()
+
+
+
+
+rbm = RBM(k=<span style="color: #B452CD">1</span>)
+train_op = optim.SGD(rbm.parameters(),<span style="color: #B452CD">0.1</span>)
+
+<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">10</span>):
+    loss_ = []
+    <span style="color: #8B008B; font-weight: bold">for</span> _, (data,target) <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(train_loader):
+        data = Variable(data.view(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>))
+        sample_data = data.bernoulli()
+        
+        v,v1 = rbm(sample_data)
+        loss = rbm.free_energy(v) - rbm.free_energy(v1)
+        loss_.append(loss.data)
+        train_op.zero_grad()
+        loss.backward()
+        train_op.step()
+
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Training loss for {} epoch: {}&quot;</span>.format(epoch, np.mean(loss_)))
+
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">show_adn_save</span>(file_name,img):
+    npimg = np.transpose(img.numpy(),(<span style="color: #B452CD">1</span>,<span style="color: #B452CD">2</span>,<span style="color: #B452CD">0</span>))
+    f = <span style="color: #CD5555">&quot;./%s.png&quot;</span> % file_name
+    plt.imshow(npimg)
+    plt.imsave(f,npimg)
+
+show_adn_save(<span style="color: #CD5555">&quot;real&quot;</span>,make_grid(v.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
+show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid(v1.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="rbm-using-tensorflow-and-keras">RBM using TensorFlow and Keras </h2>
+
+<ol>
+<p><li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
+</ol>
+</section>
+
+<section>
+<h2 id="codes-for-energy-based-models">Codes for Energy-based models </h2>
+
+<p>See discussions in Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></p>
+
+<p>That notebook is based on a recent article by Du and Mordatch, <b>Implicit generation and modeling with energy-based models</b>, see <a href="https://arxiv.org/pdf/1903.08689.pdf." target="_blank"><tt>https://arxiv.org/pdf/1903.08689.pdf.</tt></a></p>
+</section>
+
 
 
 </div> <!-- class="slides" -->
