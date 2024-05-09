@@ -1,0 +1,120 @@
+# Information about all exercises in the file week1.do.txt.
+# The information can be loaded into a Python list of dicts by
+#
+# f = open('.week1.exerinfo', 'r')
+# exer = eval(f.read())
+#
+[{'ans_docend': '',
+  'answer': '',
+  'chapter_exercise': None,
+  'chapter_no': None,
+  'chapter_title': None,
+  'chapter_type': None,
+  'closing_remarks': '',
+  'file': None,
+  'heading': '=====',
+  'hints': [],
+  'keywords': None,
+  'label': None,
+  'no': 1,
+  'sol_docend': '',
+  'solution': '',
+  'solution_file': None,
+  'subex': [],
+  'text': 'Feel free to add more input nodes and weights to the above\n'
+          'code. Furthermore, try to increase the amount of input and\n'
+          'target/output data. Try also to perform calculations for more '
+          'values\n'
+          'of the learning rates. Feel free to add either hyperparameters with '
+          'an\n'
+          '$l_1$ norm or an $l_2$ norm and discuss your results.\n'
+          '\n'
+          'You could also try to change the function $f(x)=y$ from a linear '
+          'polynomial in $x$ to a higher-order polynomial.\n'
+          'Comment your results.\n'
+          '\n'
+          '_Hint_: Increasing the number of input variables and input nodes '
+          'requires a rewrite of the input data in terms of a matrix. You need '
+          'to figure out the correct dimensionalities.',
+  'title': 'Extensions to the above code',
+  'type': 'Exercise',
+  'type_visible': True},
+ {'ans_docend': '',
+  'answer': '',
+  'chapter_exercise': None,
+  'chapter_no': None,
+  'chapter_title': None,
+  'chapter_type': None,
+  'closing_remarks': '',
+  'file': None,
+  'heading': '=====',
+  'hints': [],
+  'keywords': None,
+  'label': None,
+  'no': 2,
+  'sol_docend': '',
+  'solution': '',
+  'solution_file': None,
+  'subex': [],
+  'text': 'Try to increase the amount of input and\n'
+          'target/output data. Try also to perform calculations for more '
+          'values\n'
+          'of the learning rates. Feel free to add either hyperparameters with '
+          'an\n'
+          '$l_1$ norm or an $l_2$ norm and discuss your results.\n'
+          'Discuss your results as functions of the amount of training data '
+          'and various learning rates.\n'
+          '\n'
+          '_Challenge:_ Try to change the activation functions and replace the '
+          'hard-coded analytical expressions with automatic derivation via '
+          'either _autograd_ or _JAX_.',
+  'title': 'Including more data',
+  'type': 'Exercise',
+  'type_visible': True},
+ {'ans_docend': '',
+  'answer': '',
+  'chapter_exercise': None,
+  'chapter_no': None,
+  'chapter_title': None,
+  'chapter_type': None,
+  'closing_remarks': '',
+  'file': None,
+  'heading': '=====',
+  'hints': [],
+  'keywords': None,
+  'label': None,
+  'no': 3,
+  'sol_docend': '',
+  'solution': '',
+  'solution_file': None,
+  'subex': [],
+  'text': 'We extend our simple code to a function which depends on two '
+          'variable $x_0$ and $x_1$, that is\n'
+          '!bt\n'
+          '\\[\n'
+          'y=f(x_0,x_1)=x_0^2+3x_0x_1+x_1^2+5.\n'
+          '\\]\n'
+          '\n'
+          '!et\n'
+          'We feed our network with $n=100$ entries $x_0$ and $x_1$. We have '
+          'thus two features represented by these variable and an input '
+          'matrix/design matrix $\\boldsymbol{X}\\in \\mathbf{R}^{n\\times '
+          '2}$\n'
+          '!bt\n'
+          '\\[\n'
+          '\\boldsymbol{X}=\\begin{bmatrix} x_{00} & x_{01} \\\\ x_{00} & '
+          'x_{01} \\\\ x_{10} & x_{11} \\\\ x_{20} & x_{21} \\\\ \\dots & '
+          '\\dots \\\\ \\dots & \\dots \\\\ x_{n-20} & x_{n-21} \\\\ x_{n-10} '
+          '& x_{n-11} \\end{bmatrix}.\n'
+          '\\]\n'
+          '\n'
+          '!et\n'
+          'Write a code, based on the previous code examples, which takes as '
+          'input these data and fit the above function.\n'
+          'You can extend your code to include automatic differentiation.\n'
+          '\n'
+          'With these examples, we are now ready to embark upon the writing of '
+          'more a general code for neural networks.',
+  'title': 'Extended program',
+  'type': 'Exercise',
+  'type_visible': True}]
