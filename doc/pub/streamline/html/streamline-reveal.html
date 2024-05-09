@@ -629,13 +629,11 @@ vectors.
 <section>
 <h2 id="illustration-of-a-single-perceptron-model-and-a-multilayer-ffnn">Illustration of a single perceptron model and a multilayer FFNN </h2>
 
-<center>  <!-- FIGURE -->
-<hr class="figure">
+<br/><br/>
 <center>
-<p class="caption">Figure 1:  In a) we show a single perceptron model while in b) we dispay a network with two  hidden layers, an input layer and an output layer. </p>
-</center>
 <p><img src="figures/nns.png" width="600" align="bottom"></p>
 </center>
+<br/><br/>
 </section>
 
 <section>
@@ -1734,14 +1732,26 @@ $$
 </section>
 
 <section>
+<h2 id="nn-code">NN code </h2>
+
+<p>For an OO-code in Python for a feed-forward NN, see <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/NNpart5code/ipynb/NNpart5code.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/NNpart5code/ipynb/NNpart5code.ipynb</tt></a></p>
+</section>
+
+<section>
 <h2 id="essential-elements-of-generative-models">Essential elements of generative models </h2>
 
 <p>The aim of generative methods is to train a probability distribution \( p \). The methods we will focus on are:</p>
 <ol>
 <p><li> Energy based models, with the family of Boltzmann distributions as a typical example</li>
 <p><li> Variational autoencoders, based on our discussions on autoencoders</li>
-<p><li> Generative adversarial networks (GANs) and</li>
 <p><li> Diffusion models</li>
+</ol>
+<p>
+<p>Not included here</p>
+<ol>
+<p><li> Generative adversarial networks (GANs) and</li>
+<p><li> Autoregressive models</li>
+<p><li> Normalizing flow models</li>
 </ol>
 </section>
 
@@ -1893,6 +1903,7 @@ $$
 
 <section>
 <h2 id="expression-for-the-gradients">Expression for the gradients </h2>
+
 <p>This leads to the following equation</p>
 <p>&nbsp;<br>
 $$
@@ -1959,7 +1970,7 @@ $$
 <p>which is the expectation value of \( \log{f} \)</p>
 <p>&nbsp;<br>
 $$
-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\sim p}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
 $$
 <p>&nbsp;<br>
 
@@ -1971,11 +1982,19 @@ $$
 <p>&nbsp;<br>
 
 <p>This quantity is evaluated using Monte Carlo sampling, with Gibbs
-sampling as the standard sampling rule.  Before we discuss the
-explicit algorithms, we need to remind ourselves about Markov chains
-and sampling rules like the Metropolis-Hastings algorithm and Gibbs
-sampling.
+sampling as the standard sampling rule.  
 </p>
+</section>
+
+<section>
+<h2 id="final-expression-for-the-gradients">Final expression for the gradients </h2>
+
+<p>This leads to the following equation</p>
+<p>&nbsp;<br>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\mathbb{E}{x\sim p}(\log{f(x_i;\boldsymbol{\Theta})})=0.
+$$
+<p>&nbsp;<br>
 </section>
 
 <section>
@@ -2388,9 +2407,7 @@ show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid
 <h2 id="kullback-leibler-divergence">Kullback-Leibler divergence </h2>
 
 <p>Before we continue, we need to remind ourselves about the
-Kullback-Leibler divergence introduced earlier. This will also allow
-us to introduce another measure used in connection with the training
-of Generative Adversarial Networks, the so-called Jensen-Shannon divergence..
+Kullback-Leibler divergence introduced earlier.
 These metrics are useful for quantifying the similarity between two probability distributions.
 </p>
 
@@ -2404,12 +2421,6 @@ $$
 <p>&nbsp;<br>
 
 <p>The KL-divegernce \( D_{KL} \) achieves the minimum zero when \( p(x) == q(x) \) everywhere.</p>
-
-<p>Note that the KL divergence is asymmetric. In cases where \( p(x) \) is
-close to zero, but \( q(x) \) is significantly non-zero, the \( q \)'s effect
-is disregarded. It could cause buggy results when we just want to
-measure the similarity between two equally important distributions.
-</p>
 </section>
 
 <section>
@@ -2423,7 +2434,7 @@ measure the similarity between two equally important distributions.
 </section>
 
 <section>
-<h2 id="reminder-on-vaes">Reminder on VAEs </h2>
+<h2 id="vaes">VAEs </h2>
 
 <p>Mathematically, we can imagine the latent variables and the data we
 observe as modeled by a joint distribution \( p(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta}) \).  Recall one
@@ -2464,12 +2475,13 @@ complex models, or it involves having access to a ground truth latent
 encoder \( p(\boldsymbol{h}|\boldsymbol{x}) \).
 </p>
 
-<p>Using the last  two equations, we can derive a term called the Evidence Lower Bound (ELBO), which as its name suggests, is a lower
-  bound of the evidence.  The evidence is quantified in this case as
-the log likelihood of the observed data.  Then, maximizing the ELBO
-becomes a proxy objective with which to optimize a latent variable
-model; in the best case, when the ELBO is powerfully parameterized and
-perfectly optimized, it becomes exactly equivalent to the evidence.
+<p>Using the last two equations, we can derive a term called the Evidence
+Lower Bound (ELBO), which as its name suggests, is a lower bound of
+the evidence.  The evidence is quantified in this case as the log
+  likelihood of the observed data.  Then, maximizing the ELBO becomes
+  a proxy objective with which to optimize a latent variable model; in
+  the best case, when the ELBO is powerfully parameterized and
+  perfectly optimized, it becomes exactly equivalent to the evidence.
 </p>
 </section>
 

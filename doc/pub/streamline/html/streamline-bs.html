@@ -240,6 +240,7 @@ doconce format html streamline.do.txt --html_style=bootstrap --pygments_html_sty
                None,
                'setting-up-the-back-propagation-algorithm-part-3'),
               ('Updating the gradients', 2, None, 'updating-the-gradients'),
+              ('NN code', 2, None, 'nn-code'),
               ('Essential elements of generative models',
                2,
                None,
@@ -270,6 +271,10 @@ doconce format html streamline.do.txt --html_style=bootstrap --pygments_html_sty
                None,
                'explicit-expression-for-the-derivative'),
               ('Final expression', 2, None, 'final-expression'),
+              ('Final expression for the gradients',
+               2,
+               None,
+               'final-expression-for-the-gradients'),
               ('Introducing the energy model',
                2,
                None,
@@ -324,7 +329,7 @@ doconce format html streamline.do.txt --html_style=bootstrap --pygments_html_sty
                2,
                None,
                'generative-model-basic-overview-borrowed-from-rashcka-et-al'),
-              ('Reminder on VAEs', 2, None, 'reminder-on-vaes'),
+              ('VAEs', 2, None, 'vaes'),
               ('Evidence Lower Bound', 2, None, 'evidence-lower-bound'),
               ('ELBO equations', 2, None, 'elbo-equations'),
               ('Introducing the encoder function',
@@ -510,6 +515,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-2" style="font-size: 80%;">Setting up the back propagation algorithm, part 2</a></li>
      <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-3" style="font-size: 80%;">Setting up the Back propagation algorithm, part 3</a></li>
      <!-- navigation toc: --> <li><a href="#updating-the-gradients" style="font-size: 80%;">Updating the gradients</a></li>
+     <!-- navigation toc: --> <li><a href="#nn-code" style="font-size: 80%;">NN code</a></li>
      <!-- navigation toc: --> <li><a href="#essential-elements-of-generative-models" style="font-size: 80%;">Essential elements of generative models</a></li>
      <!-- navigation toc: --> <li><a href="#energy-models" style="font-size: 80%;">Energy models</a></li>
      <!-- navigation toc: --> <li><a href="#probability-model" style="font-size: 80%;">Probability model</a></li>
@@ -522,6 +528,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#the-derivative-of-the-partition-function" style="font-size: 80%;">The derivative of the partition function</a></li>
      <!-- navigation toc: --> <li><a href="#explicit-expression-for-the-derivative" style="font-size: 80%;">Explicit expression for the derivative</a></li>
      <!-- navigation toc: --> <li><a href="#final-expression" style="font-size: 80%;">Final expression</a></li>
+     <!-- navigation toc: --> <li><a href="#final-expression-for-the-gradients" style="font-size: 80%;">Final expression for the gradients</a></li>
      <!-- navigation toc: --> <li><a href="#introducing-the-energy-model" style="font-size: 80%;">Introducing the energy model</a></li>
      <!-- navigation toc: --> <li><a href="#more-compact-notation" style="font-size: 80%;">More compact notation</a></li>
      <!-- navigation toc: --> <li><a href="#anticipating-results-to-be-derived" style="font-size: 80%;">Anticipating results to be derived</a></li>
@@ -542,7 +549,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#tensor-flow-examples" style="font-size: 80%;">Tensor-flow examples</a></li>
      <!-- navigation toc: --> <li><a href="#kullback-leibler-divergence" style="font-size: 80%;">Kullback-Leibler divergence</a></li>
      <!-- navigation toc: --> <li><a href="#generative-model-basic-overview-borrowed-from-rashcka-et-al" style="font-size: 80%;">Generative model,  basic overview (Borrowed from Rashcka et al)</a></li>
-     <!-- navigation toc: --> <li><a href="#reminder-on-vaes" style="font-size: 80%;">Reminder on VAEs</a></li>
+     <!-- navigation toc: --> <li><a href="#vaes" style="font-size: 80%;">VAEs</a></li>
      <!-- navigation toc: --> <li><a href="#evidence-lower-bound" style="font-size: 80%;">Evidence Lower Bound</a></li>
      <!-- navigation toc: --> <li><a href="#elbo-equations" style="font-size: 80%;">ELBO equations</a></li>
      <!-- navigation toc: --> <li><a href="#introducing-the-encoder-function" style="font-size: 80%;">Introducing the encoder function</a></li>
@@ -1015,13 +1022,11 @@ vectors.
 <!-- !split -->
 <h2 id="illustration-of-a-single-perceptron-model-and-a-multilayer-ffnn" class="anchor">Illustration of a single perceptron model and a multilayer FFNN </h2>
 
-<center>  <!-- FIGURE -->
-<hr class="figure">
+<br/><br/>
 <center>
-<p class="caption">Figure 1:  In a) we show a single perceptron model while in b) we dispay a network with two  hidden layers, an input layer and an output layer. </p>
-</center>
 <p><img src="figures/nns.png" width="600" align="bottom"></p>
 </center>
+<br/><br/>
 
 <!-- !split -->
 <h2 id="the-optimization-problem" class="anchor">The optimization problem </h2>
@@ -1958,14 +1963,24 @@ $$
 
 
 <!-- !split -->
+<h2 id="nn-code" class="anchor">NN code </h2>
+
+<p>For an OO-code in Python for a feed-forward NN, see <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/NNpart5code/ipynb/NNpart5code.ipynb" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/NNpart5code/ipynb/NNpart5code.ipynb</tt></a></p>
+
+<!-- !split -->
 <h2 id="essential-elements-of-generative-models" class="anchor">Essential elements of generative models </h2>
 
 <p>The aim of generative methods is to train a probability distribution \( p \). The methods we will focus on are:</p>
 <ol>
 <li> Energy based models, with the family of Boltzmann distributions as a typical example</li>
 <li> Variational autoencoders, based on our discussions on autoencoders</li>
-<li> Generative adversarial networks (GANs) and</li>
 <li> Diffusion models</li>
+</ol>
+<p>Not included here</p>
+<ol>
+<li> Generative adversarial networks (GANs) and</li>
+<li> Autoregressive models</li>
+<li> Normalizing flow models</li>
 </ol>
 <!-- !split -->
 <h2 id="energy-models" class="anchor">Energy models </h2>
@@ -2087,6 +2102,7 @@ $$
 
 <!-- !split -->
 <h2 id="expression-for-the-gradients" class="anchor">Expression for the gradients </h2>
+
 <p>This leads to the following equation</p>
 $$
 \nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=0.
@@ -2138,7 +2154,7 @@ $$
 
 <p>which is the expectation value of \( \log{f} \)</p>
 $$
-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\sim p}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
 $$
 
 <p>that is</p>
@@ -2147,11 +2163,17 @@ $$
 $$
 
 <p>This quantity is evaluated using Monte Carlo sampling, with Gibbs
-sampling as the standard sampling rule.  Before we discuss the
-explicit algorithms, we need to remind ourselves about Markov chains
-and sampling rules like the Metropolis-Hastings algorithm and Gibbs
-sampling.
+sampling as the standard sampling rule.  
 </p>
+
+<!-- !split -->
+<h2 id="final-expression-for-the-gradients" class="anchor">Final expression for the gradients </h2>
+
+<p>This leads to the following equation</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\mathbb{E}{x\sim p}(\log{f(x_i;\boldsymbol{\Theta})})=0.
+$$
+
 
 <!-- !split -->
 <h2 id="introducing-the-energy-model" class="anchor">Introducing the energy model </h2>
@@ -2532,9 +2554,7 @@ show_adn_save(<span style="color: #BA2121">&quot;generate&quot;</span>,make_grid
 <h2 id="kullback-leibler-divergence" class="anchor">Kullback-Leibler divergence </h2>
 
 <p>Before we continue, we need to remind ourselves about the
-Kullback-Leibler divergence introduced earlier. This will also allow
-us to introduce another measure used in connection with the training
-of Generative Adversarial Networks, the so-called Jensen-Shannon divergence..
+Kullback-Leibler divergence introduced earlier.
 These metrics are useful for quantifying the similarity between two probability distributions.
 </p>
 
@@ -2547,12 +2567,6 @@ $$
 
 <p>The KL-divegernce \( D_{KL} \) achieves the minimum zero when \( p(x) == q(x) \) everywhere.</p>
 
-<p>Note that the KL divergence is asymmetric. In cases where \( p(x) \) is
-close to zero, but \( q(x) \) is significantly non-zero, the \( q \)'s effect
-is disregarded. It could cause buggy results when we just want to
-measure the similarity between two equally important distributions.
-</p>
-
 <!-- !split -->
 <h2 id="generative-model-basic-overview-borrowed-from-rashcka-et-al" class="anchor">Generative model,  basic overview (Borrowed from Rashcka et al) </h2>
 
@@ -2563,7 +2577,7 @@ measure the similarity between two equally important distributions.
 <br/><br/>
 
 <!-- !split -->
-<h2 id="reminder-on-vaes" class="anchor">Reminder on VAEs </h2>
+<h2 id="vaes" class="anchor">VAEs </h2>
 
 <p>Mathematically, we can imagine the latent variables and the data we
 observe as modeled by a joint distribution \( p(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta}) \).  Recall one
@@ -2599,12 +2613,13 @@ complex models, or it involves having access to a ground truth latent
 encoder \( p(\boldsymbol{h}|\boldsymbol{x}) \).
 </p>
 
-<p>Using the last  two equations, we can derive a term called the Evidence Lower Bound (ELBO), which as its name suggests, is a lower
-  bound of the evidence.  The evidence is quantified in this case as
-the log likelihood of the observed data.  Then, maximizing the ELBO
-becomes a proxy objective with which to optimize a latent variable
-model; in the best case, when the ELBO is powerfully parameterized and
-perfectly optimized, it becomes exactly equivalent to the evidence.
+<p>Using the last two equations, we can derive a term called the Evidence
+Lower Bound (ELBO), which as its name suggests, is a lower bound of
+the evidence.  The evidence is quantified in this case as the log
+  likelihood of the observed data.  Then, maximizing the ELBO becomes
+  a proxy objective with which to optimize a latent variable model; in
+  the best case, when the ELBO is powerfully parameterized and
+  perfectly optimized, it becomes exactly equivalent to the evidence.
 </p>
 
 <!-- !split -->

@@ -379,7 +379,7 @@ o Finally we define a so-called cost or loss function which is used to gauge the
 !split
 =====  Illustration of a single perceptron model and a multilayer FFNN =====
 
-FIGURE: [figures/nns.png, width=600 frac=0.7]  In a) we show a single perceptron model while in b) we dispay a network with two  hidden layers, an input layer and an output layer.
+FIGURE: [figures/nns.png, width=600 frac=0.7] 
 
 
 
@@ -1321,7 +1321,10 @@ b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta 
 \]
 !et
 
+!split
+===== NN code =====
 
+For an OO-code in Python for a feed-forward NN, see URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/NNpart5code/ipynb/NNpart5code.ipynb"
 
 
 !split
@@ -1330,8 +1333,12 @@ b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta 
 The aim of generative methods is to train a probability distribution $p$. The methods we will focus on are:
 o Energy based models, with the family of Boltzmann distributions as a typical example
 o Variational autoencoders, based on our discussions on autoencoders
-o Generative adversarial networks (GANs) and
 o Diffusion models
+
+Not included here
+o Generative adversarial networks (GANs) and
+o Autoregressive models
+o Normalizing flow models
 
 !split
 ===== Energy models =====
@@ -1461,6 +1468,7 @@ which leads to
 
 !split
 ===== Expression for the gradients =====
+
 This leads to the following equation
 !bt
 \[
@@ -1519,7 +1527,7 @@ Taking the derivative gives us
 which is the expectation value of $\log{f}$
 !bt
 \[
-\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\sum_{x_i\in \bm{X}}p(x_i;\bm{\Theta}) \nabla_{\bm{\Theta}}\log{f(x_i;\bm{\Theta})},
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\sum_{x_i\sim p}p(x_i;\bm{\Theta}) \nabla_{\bm{\Theta}}\log{f(x_i;\bm{\Theta})},
 \]
 !et
 that is
@@ -1530,10 +1538,19 @@ that is
 !et
 
 This quantity is evaluated using Monte Carlo sampling, with Gibbs
-sampling as the standard sampling rule.  Before we discuss the
-explicit algorithms, we need to remind ourselves about Markov chains
-and sampling rules like the Metropolis-Hastings algorithm and Gibbs
-sampling.
+sampling as the standard sampling rule.  
+
+!split
+===== Final expression for the gradients =====
+
+This leads to the following equation
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=\nabla_{\bm{\Theta}}\left(\sum_{x_i\in \bm{X}}\log{f(x_i;\bm{\Theta})}\right)-\mathbb{E}{x\sim p}(\log{f(x_i;\bm{\Theta})})=0.
+\]
+!et
+
+
 
 !split
 ===== Introducing the energy model =====
@@ -1869,9 +1886,7 @@ o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/d
 ===== Kullback-Leibler divergence =====
 
 Before we continue, we need to remind ourselves about the
-Kullback-Leibler divergence introduced earlier. This will also allow
-us to introduce another measure used in connection with the training
-of Generative Adversarial Networks, the so-called Jensen-Shannon divergence..
+Kullback-Leibler divergence introduced earlier.
 These metrics are useful for quantifying the similarity between two probability distributions.
 
 The Kullback–Leibler (KL) divergence, labeled $D_{KL}$,   measures how one probability distribution $p$ diverges from a second expected probability distribution $q$,
@@ -1884,11 +1899,6 @@ D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx.
 
 The KL-divegernce $D_{KL}$ achieves the minimum zero when $p(x) == q(x)$ everywhere.
 
-Note that the KL divergence is asymmetric. In cases where $p(x)$ is
-close to zero, but $q(x)$ is significantly non-zero, the $q$'s effect
-is disregarded. It could cause buggy results when we just want to
-measure the similarity between two equally important distributions.
-
 
 !split
 =====  Generative model,  basic overview (Borrowed from Rashcka et al) =====
@@ -1897,7 +1907,7 @@ FIGURE: [figures/genmodel.png, width=900 frac=1.0]
 
 
 !split
-===== Reminder on VAEs =====
+===== VAEs =====
 
 Mathematically, we can imagine the latent variables and the data we
 observe as modeled by a joint distribution $p(\bm{x}, \bm{h};\bm{\Theta})$.  Recall one
@@ -1929,12 +1939,13 @@ variables $\bm{h}$, which is intractable for
 complex models, or it involves having access to a ground truth latent
 encoder $p(\bm{h}|\bm{x})$.
 
-Using the last  two equations, we can derive a term called the Evidence Lower Bound (ELBO), which as its name suggests, is a lower
-  bound of the evidence.  The evidence is quantified in this case as
-the log likelihood of the observed data.  Then, maximizing the ELBO
-becomes a proxy objective with which to optimize a latent variable
-model; in the best case, when the ELBO is powerfully parameterized and
-perfectly optimized, it becomes exactly equivalent to the evidence.
+Using the last two equations, we can derive a term called the Evidence
+Lower Bound (ELBO), which as its name suggests, is a lower bound of
+the evidence.  The evidence is quantified in this case as the log
+  likelihood of the observed data.  Then, maximizing the ELBO becomes
+  a proxy objective with which to optimize a latent variable model; in
+  the best case, when the ELBO is powerfully parameterized and
+  perfectly optimized, it becomes exactly equivalent to the evidence.
 
 
 
