@@ -423,10 +423,6 @@ div.toc p,a {
                2,
                None,
                'kullback-leibler-divergence'),
-              ('Jensen-Shannon divergence',
-               2,
-               None,
-               'jensen-shannon-divergence'),
               ('Generative model,  basic overview (Borrowed from Rashcka et '
                'al)',
                2,
@@ -454,7 +450,68 @@ div.toc p,a {
               ('Actual implementation', 2, None, 'actual-implementation'),
               ('Interpretation', 2, None, 'interpretation'),
               ('Deterministic function', 2, None, 'deterministic-function'),
-              ('After training', 2, None, 'after-training')]}
+              ('After training', 2, None, 'after-training'),
+              ('Diffusion models, basics', 2, None, 'diffusion-models-basics'),
+              ('Problems with probabilistic models',
+               2,
+               None,
+               'problems-with-probabilistic-models'),
+              ('Diffusion models', 2, None, 'diffusion-models'),
+              ('Original idea', 2, None, 'original-idea'),
+              ('Diffusion learning', 2, None, 'diffusion-learning'),
+              ('Mathematics of diffusion models',
+               2,
+               None,
+               'mathematics-of-diffusion-models'),
+              ('Chains of VAEs', 2, None, 'chains-of-vaes'),
+              ('Mathematical representation',
+               2,
+               None,
+               'mathematical-representation'),
+              ('Back to the marginal probability',
+               2,
+               None,
+               'back-to-the-marginal-probability'),
+              ('Diffusion models for hierarchical VAE, from '
+               'URL:"https://arxiv.org/abs/2208.11970"',
+               2,
+               None,
+               'diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970'),
+              ('Equation for the Markovian hierarchical VAE',
+               2,
+               None,
+               'equation-for-the-markovian-hierarchical-vae'),
+              ('Variational Diffusion Models',
+               2,
+               None,
+               'variational-diffusion-models'),
+              ('Second assumption', 2, None, 'second-assumption'),
+              ('Parameterizing Gaussian encoder',
+               2,
+               None,
+               'parameterizing-gaussian-encoder'),
+              ('Encoder transitions', 2, None, 'encoder-transitions'),
+              ('Third assumption', 2, None, 'third-assumption'),
+              ('Noisification', 2, None, 'noisification'),
+              ('Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"',
+               2,
+               None,
+               'diffusion-models-from-url-https-arxiv-org-abs-2208-11970'),
+              ('Gaussian modeling', 2, None, 'gaussian-modeling'),
+              ('Optimizing the variational diffusion model',
+               2,
+               None,
+               'optimizing-the-variational-diffusion-model'),
+              ('Continues', 2, None, 'continues'),
+              ('Interpretations', 2, None, 'interpretations'),
+              ('The last term', 2, None, 'the-last-term'),
+              ('Diffusion models, part 2, from '
+               'URL:"https://arxiv.org/abs/2208.11970"',
+               2,
+               None,
+               'diffusion-models-part-2-from-url-https-arxiv-org-abs-2208-11970'),
+              ('Optimization cost', 2, None, 'optimization-cost'),
+              ('More details', 2, None, 'more-details')]}
 end of tocinfo -->
 
 <body>
@@ -2404,29 +2461,12 @@ $$
 D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx.
 $$
 
-<p>The KL-divegrnece \( D_{KL} \) achieves the minimum zero when \( p(x) == q(x) \) everywhere.</p>
+<p>The KL-divegernce \( D_{KL} \) achieves the minimum zero when \( p(x) == q(x) \) everywhere.</p>
 
 <p>Note that the KL divergence is asymmetric. In cases where \( p(x) \) is
 close to zero, but \( q(x) \) is significantly non-zero, the \( q \)'s effect
 is disregarded. It could cause buggy results when we just want to
 measure the similarity between two equally important distributions.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="jensen-shannon-divergence">Jensen-Shannon divergence </h2>
-
-<p>The Jensen&#8211;Shannon (JS) divergence is another measure of similarity between
-two probability distributions, bounded by \( [0, 1] \). The JS-divergence is
-symmetric and more smooth than the KL-divergence.
-It is defined as
-</p>
-$$
-D_{JS}(p \| q) = \frac{1}{2} D_{KL}(p \| \frac{p + q}{2}) + \frac{1}{2} D_{KL}(q \| \frac{p + q}{2})
-$$
-
-<p>Many practitioners believe that one reason behind GANs' big success is
-switching the loss function from asymmetric KL-divergence in
-traditional maximum-likelihood approach to symmetric JS-divergence.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -2692,6 +2732,358 @@ representations.  Furthermore, when a semantically meaningful latent
 space is learned, latent vectors can be edited before being passed to
 the decoder to more precisely control the data generated.
 </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-models-basics">Diffusion models, basics </h2>
+
+<p>Diffusion models are inspired by non-equilibrium thermodynamics. They
+define a Markov chain of diffusion steps to slowly add random noise to
+data and then learn to reverse the diffusion process to construct
+desired data samples from the noise. Unlike VAE or flow models,
+diffusion models are learned with a fixed procedure and the latent
+variable has high dimensionality (same as the original data).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="problems-with-probabilistic-models">Problems with probabilistic models </h2>
+
+<p>Historically, probabilistic models suffer from a tradeoff between two
+conflicting objectives: \textit{tractability} and
+\textit{flexibility}. Models that are \textit{tractable} can be
+analytically evaluated and easily fit to data (e.g. a Gaussian or
+Laplace). However, these models are unable to aptly describe structure
+in rich datasets. On the other hand, models that are \textit{flexible}
+can be molded to fit structure in arbitrary data. For example, we can
+define models in terms of any (non-negative) function \( \phi(\boldsymbol{x}) \)
+yielding the flexible distribution \( p\left(\boldsymbol{x}\right) =
+\frac{\phi\left(\boldsymbol{x} \right)}{Z} \), where \( Z \) is a normalization
+constant. However, computing this normalization constant is generally
+intractable. Evaluating, training, or drawing samples from such
+flexible models typically requires a very expensive Monte Carlo
+process.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-models">Diffusion models </h2>
+<p>Diffusion models have several interesting features</p>
+<ul>
+<li> extreme flexibility in model structure,</li>
+<li> exact sampling,</li>
+<li> easy multiplication with other distributions, e.g. in order to compute a posterior, and</li>
+<li> the model log likelihood, and the probability of individual states, to be cheaply evaluated.</li>
+</ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="original-idea">Original idea </h2>
+
+<p>In the original formulation, one uses a Markov chain to gradually
+convert one distribution into another, an idea used in non-equilibrium
+statistical physics and sequential Monte Carlo. Diffusion models build
+a generative Markov chain which converts a simple known distribution
+(e.g. a Gaussian) into a target (data) distribution using a diffusion
+process. Rather than use this Markov chain to approximately evaluate a
+model which has been otherwise defined, one can  explicitly define the
+probabilistic model as the endpoint of the Markov chain. Since each
+step in the diffusion chain has an analytically evaluable probability,
+the full chain can also be analytically evaluated.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-learning">Diffusion learning </h2>
+
+<p>Learning in this framework involves estimating small perturbations to
+a diffusion process. Estimating small, analytically tractable,
+perturbations is more tractable than explicitly describing the full
+distribution with a single, non-analytically-normalizable, potential
+function.  Furthermore, since a diffusion process exists for any
+smooth target distribution, this method can capture data distributions
+of arbitrary form.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="mathematics-of-diffusion-models">Mathematics of diffusion models </h2>
+
+<p>Let us go back our discussions of the variational autoencoders from
+last week, see
+<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb</tt></a>. As
+a first attempt at understanding diffusion models, we can think of
+these as stacked VAEs, or better, recursive VAEs.
+</p>
+
+<p>Let us try to see why. As an intermediate step, we consider so-called
+hierarchical VAEs, which can be seen as a generalization of VAEs that
+include multiple hierarchies of latent spaces.
+</p>
+
+<p><b>Note</b>: Many of the derivations and figures here are inspired and borrowed from the excellent exposition of diffusion models by Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>. </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="chains-of-vaes">Chains of VAEs </h2>
+
+<p>Markovian
+VAEs represent a  generative process where we use  Markov chain to build a hierarchy of VAEs.
+</p>
+
+<p>Each transition down the hierarchy is Markovian, where we decode each
+latent set of variables \( \boldsymbol{h}_t \) in terms of the previous latent variable \( \boldsymbol{h}_{t-1} \).
+Intuitively, and visually, this can be seen as simply stacking VAEs on
+top of each other (see figure next slide).
+</p>
+
+<p>One can think of such a model as a recursive VAE.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="mathematical-representation">Mathematical representation </h2>
+
+<p>Mathematically, we represent the joint distribution and the posterior
+of a Markovian VAE as
+</p>
+$$
+\begin{align*}
+    p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) &= p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})\\
+    q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x}) &= q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="back-to-the-marginal-probability">Back to the marginal probability </h2>
+
+<p>We can then define the marginal probability we want to optimize as</p>
+$$
+\begin{align*}
+\log p(\boldsymbol{x}) &= \log \int p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) d\boldsymbol{h}_{1:T}  \\
+&= \log \int \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})} d\boldsymbol{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}$)}\\
+&= \log \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Definition of Expectation)}\\
+&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Discussed last week)}
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970">Diffusion models for hierarchical VAE, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
+
+<p>A Markovian hierarchical Variational Autoencoder with \( T \) hierarchical
+latents.  The generative process is modeled as a Markov chain, where
+each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
+\( \boldsymbol{h}_{t+1} \). Here \( \boldsymbol{z} \) is our latent variable \( \boldsymbol{h} \).
+</p>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure1.png" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="equation-for-the-markovian-hierarchical-vae">Equation for the Markovian hierarchical VAE </h2>
+
+<p>We obtain then</p>
+$$
+\begin{align*}
+\mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]
+&= \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})}\right]
+\end{align*}
+$$
+
+<p>We will modify this equation when we discuss what are normally called Variational Diffusion Models.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="variational-diffusion-models">Variational Diffusion Models </h2>
+
+<p>The easiest way to think of a Variational Diffusion Model (VDM) is as a Markovian Hierarchical Variational Autoencoder with three key restrictions:</p>
+
+<ol>
+<li> The latent dimension is exactly equal to the data dimension</li>
+<li> The structure of the latent encoder at each timestep is not learned; it is pre-defined as a linear Gaussian model.  In other words, it is a Gaussian distribution centered around the output of the previous timestep</li>
+<li> The Gaussian parameters of the latent encoders vary over time in such a way that the distribution of the latent at final timestep \( T \) is a standard Gaussian</li>
+</ol>
+<p>The VDM posterior is</p>
+$$
+\begin{align*}
+    q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0) = \prod_{t = 1}^{T}q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="second-assumption">Second assumption </h2>
+
+<p>The distribution of each latent variable in the encoder is a Gaussian centered around its previous hierarchical latent.
+Here then, the structure of the encoder at each timestep \( t \) is not learned; it
+is fixed as a linear Gaussian model, where the mean and standard
+deviation can be set beforehand as hyperparameters, or learned as
+parameters.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="parameterizing-gaussian-encoder">Parameterizing Gaussian encoder </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>We parameterize the Gaussian encoder with mean \( \boldsymbol{\mu}_t(\boldsymbol{x}_t) =
+\sqrt{\alpha_t} \boldsymbol{x}_{t-1} \), and variance \( \boldsymbol{\Sigma}_t(\boldsymbol{x}_t) =
+(1 - \alpha_t) \textbf{I} \), where the form of the coefficients are
+chosen such that the variance of the latent variables stay at a
+similar scale; in other words, the encoding process is
+variance-preserving.
+</p>
+</div>
+
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>Note that alternate Gaussian parameterizations
+are allowed, and lead to similar derivations.  The main takeaway is
+that \( \alpha_t \) is a (potentially learnable) coefficient that can vary
+with the hierarchical depth \( t \), for flexibility.
+</p>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="encoder-transitions">Encoder transitions </h2>
+
+<p>Mathematically, the encoder transitions are defined as</p>
+$$
+\begin{align*}
+    q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1}) = \mathcal{N}(\boldsymbol{x}_{t} ; \sqrt{\alpha_t} \boldsymbol{x}_{t-1}, (1 - \alpha_t) \textbf{I}) \label{eq:27}
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="third-assumption">Third assumption </h2>
+
+<p>From the third assumption, we know that \( \alpha_t \) evolves over time
+according to a fixed or learnable schedule structured such that the
+distribution of the final latent \( p(\boldsymbol{x}_T) \) is a standard Gaussian.
+We can then update the joint distribution of a Markovian VAE to write
+the joint distribution for a VDM as
+</p>
+
+$$
+\begin{align*}
+p(\boldsymbol{x}_{0:T}) &= p(\boldsymbol{x}_T)\prod_{t=1}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_t) \\
+\text{where,}&\nonumber\\
+p(\boldsymbol{x}_T) &= \mathcal{N}(\boldsymbol{x}_T; \boldsymbol{0}, \textbf{I})
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="noisification">Noisification </h2>
+
+<p>Collectively, what this set of assumptions describes is a steady
+noisification of an image input over time. We progressively corrupt an
+image by adding Gaussian noise until eventually it becomes completely
+identical to pure Gaussian noise.  See figure on next slide.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-models-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure2.png" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gaussian-modeling">Gaussian modeling </h2>
+
+<p>Note that our encoder distributions \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \) are no
+longer parameterized by \( \boldsymbol{\phi} \), as they are completely modeled as
+Gaussians with defined mean and variance parameters at each timestep.
+Therefore, in a VDM, we are only interested in learning conditionals
+\( p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_{t}) \), so that we can simulate
+new data.  After optimizing the VDM, the sampling procedure is as
+simple as sampling Gaussian noise from \( p(\boldsymbol{x}_T) \) and iteratively
+running the denoising transitions
+\( p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_{t}) \) for \( T \) steps to generate a
+novel \( \boldsymbol{x}_0 \).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="optimizing-the-variational-diffusion-model">Optimizing the variational diffusion model </h2>
+
+$$
+\begin{align*}
+\log p(\boldsymbol{x})
+&= \log \int p(\boldsymbol{x}_{0:T}) d\boldsymbol{x}_{1:T}\\
+&= \log \int \frac{p(\boldsymbol{x}_{0:T})q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)} d\boldsymbol{x}_{1:T}\\
+&= \log \mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\frac{p(\boldsymbol{x}_{0:T})}{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\right]\\
+&\geq {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_{0:T})}{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)\prod_{t=1}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_t)}{\prod_{t = 1}^{T}q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t-1}|\boldsymbol{x}_t)}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})\prod_{t = 1}^{T-1}q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)\prod_{t=1}^{T-1}p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1})}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})\prod_{t = 1}^{T-1}q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})}\right] + \mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1})}{q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="continues">Continues </h2>
+
+$$
+\begin{align*}
+\log p(\boldsymbol{x})
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})}\right] + \mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \prod_{t = 1}^{T-1}\frac{p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1})}{q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)\right] + \mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})}\right] + \mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[ \sum_{t=1}^{T-1} \log \frac{p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1})}{q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)\right] + \mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\boldsymbol{x}_{1:T}|\boldsymbol{x}_0)}\left[ \log \frac{p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1})}{q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+&= {\mathbb{E}_{q(\boldsymbol{x}_{1}|\boldsymbol{x}_0)}\left[\log p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)\right] + \mathbb{E}_{q(\boldsymbol{x}_{T-1}, \boldsymbol{x}_T|\boldsymbol{x}_0)}\left[\log \frac{p(\boldsymbol{x}_T)}{q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})}\right] + \sum_{t=1}^{T-1}\mathbb{E}_{q(\boldsymbol{x}_{t-1}, \boldsymbol{x}_t, \boldsymbol{x}_{t+1}|\boldsymbol{x}_0)}\left[\log \frac{p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1})}{q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})}\right]}\\
+\end{align*}
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="interpretations">Interpretations </h2>
+
+<p>These equations can be interpreted as</p>
+
+<ul>
+<li> \( \mathbb{E}_{q(\boldsymbol{x}_{1}|\boldsymbol{x}_0)}\left[\log p_{\boldsymbol{\theta}}(\boldsymbol{x}_0|\boldsymbol{x}_1)\right] \) can be interpreted as a <b>reconstruction term</b>, predicting the log probability of the original data sample given the first-step latent.  This term also appears in a vanilla VAE, and can be trained similarly.</li>
+<li> \( \mathbb{E}_{q(\boldsymbol{x}_{T-1}|\boldsymbol{x}_0)}\left[D_{KL}(q(\boldsymbol{x}_T|\boldsymbol{x}_{T-1})\vert\vert p(\boldsymbol{x}_T))\right] \) is a <b>prior matching term</b>; it is minimized when the final latent distribution matches the Gaussian prior.  This term requires no optimization, as it has no trainable parameters; furthermore, as we have assumed a large enough \( T \) such that the final distribution is Gaussian, this term effectively becomes zero.</li>
+</ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-last-term">The last term </h2>
+
+<ul>
+<li> \( \mathbb{E}_{q(\boldsymbol{x}_{t-1}, \boldsymbol{x}_{t+1}|\boldsymbol{x}_0)}\left[D_{KL}(q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})\vert\vert p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1}))\right] \) is a \textit{consistency term}; it endeavors to make the distribution at \( \boldsymbol{x}_t \) consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train \( p_{\theta}(\boldsymbol{x}_t|\boldsymbol{x}_{t+1}) \) to match the Gaussian distribution \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \).</li>
+</ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="diffusion-models-part-2-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, part 2, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/figure3.png" width="800" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="optimization-cost">Optimization cost </h2>
+
+<p>The cost of optimizing a VDM is primarily dominated by the third term, since we must optimize over all timesteps \( t \).</p>
+
+<p>Under this derivation, all three terms are computed as expectations,
+and can therefore be approximated using Monte Carlo estimates.
+However, actually optimizing the ELBO using the terms we just derived
+might be suboptimal; because the consistency term is computed as an
+expectation over two random variables \( \left\{\boldsymbol{x}_{t-1},
+\boldsymbol{x}_{t+1}\right\} \) for every timestep, the variance of its Monte
+Carlo estimate could potentially be higher than a term that is
+estimated using only one random variable per timestep.  As it is
+computed by summing up \( T-1 \) consistency terms, the final estimated
+value may have high variance for large \( T \) values.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-details">More details </h2>
+
+<p>For more details and implementaions, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
+
+<!-- FIGURE: [figures/figure4.png, width=800 frac=1.0] -->
 
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
