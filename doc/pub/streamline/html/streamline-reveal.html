@@ -2415,7 +2415,11 @@ measure the similarity between two equally important distributions.
 <section>
 <h2 id="generative-model-basic-overview-borrowed-from-rashcka-et-al">Generative model,  basic overview (Borrowed from Rashcka et al) </h2>
 
-<!-- FIGURE: [figures/figure1.png, width=900 frac=1.0] -->
+<br/><br/>
+<center>
+<p><img src="figures/genmodel.png" width="900" align="bottom"></p>
+</center>
+<br/><br/>
 </section>
 
 <section>
@@ -2452,6 +2456,7 @@ $$
 
 <section>
 <h2 id="evidence-lower-bound">Evidence Lower Bound </h2>
+
 <p>Directly computing and maximizing the likelihood \( p(\boldsymbol{x}) \) is
 difficult because it either involves integrating out all latent
 variables \( \boldsymbol{h} \), which is intractable for
@@ -2470,6 +2475,7 @@ perfectly optimized, it becomes exactly equivalent to the evidence.
 
 <section>
 <h2 id="elbo-equations">ELBO equations </h2>
+
 <p>Formally, the equation of the ELBO is</p>
 <p>&nbsp;<br>
 $$

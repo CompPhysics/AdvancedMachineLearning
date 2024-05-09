@@ -1893,7 +1893,7 @@ measure the similarity between two equally important distributions.
 !split
 =====  Generative model,  basic overview (Borrowed from Rashcka et al) =====
 
-#FIGURE: [figures/figure1.png, width=900 frac=1.0]
+FIGURE: [figures/genmodel.png, width=900 frac=1.0]
 
 
 !split
@@ -1922,6 +1922,7 @@ We suppress here the dependence	on the optimization parameters $\bm{\Theta}$.
 
 !split
 ===== Evidence Lower Bound =====
+
 Directly computing and maximizing the likelihood $p(\bm{x})$ is
 difficult because it either involves integrating out all latent
 variables $\bm{h}$, which is intractable for
@@ -1939,6 +1940,7 @@ perfectly optimized, it becomes exactly equivalent to the evidence.
 
 !split
 ===== ELBO equations =====
+
 Formally, the equation of the ELBO is
 !bt
 \begin{equation*}
