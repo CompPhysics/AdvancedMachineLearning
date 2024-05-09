@@ -383,10 +383,10 @@ div.toc p,a {
                None,
                'introducing-the-energy-model'),
               ('More compact notation', 2, None, 'more-compact-notation'),
-              ('Anticipating results to be derived',
+              ('Examples of gradient expressions',
                2,
                None,
-               'anticipating-results-to-be-derived'),
+               'examples-of-gradient-expressions'),
               ('Network Elements, the energy function',
                2,
                None,
@@ -415,7 +415,6 @@ div.toc p,a {
                None,
                'introducing-the-encoder-function'),
               ('ELBO', 2, None, 'elbo'),
-              ('Analysis', 2, None, 'analysis'),
               ('The VAE', 2, None, 'the-vae'),
               ('Dissecting the equations', 2, None, 'dissecting-the-equations'),
               ('Bottlenecking distribution',
@@ -447,10 +446,6 @@ div.toc p,a {
                2,
                None,
                'mathematical-representation'),
-              ('Back to the marginal probability',
-               2,
-               None,
-               'back-to-the-marginal-probability'),
               ('Diffusion models for hierarchical VAE, from '
                'URL:"https://arxiv.org/abs/2208.11970"',
                2,
@@ -2083,7 +2078,7 @@ $$
 <p>where the biases \( \boldsymbol{a} \) and \( \boldsymbol{h} \) and the weights defined by the matrix \( \boldsymbol{W} \) are the parameters we need to optimize.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="anticipating-results-to-be-derived">Anticipating results to be derived </h2>
+<h2 id="examples-of-gradient-expressions">Examples of gradient expressions  </h2>
 
 <p>Since the binary-binary energy model is linear in the parameters \( a_i \), \( b_j \) and
 \( w_{ij} \), it is easy to see that the derivatives with respect to the
@@ -2370,15 +2365,6 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="analysis">Analysis </h2>
-
-<p>From this derivation, we clearly observe from the last equation
-that the evidence is equal to the ELBO plus the KL Divergence between
-the approximate posterior \( q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x}) \) and the true
-posterior \( p(\boldsymbol{h}|\boldsymbol{x}) \).  
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="the-vae">The VAE </h2>
 
 <p>In the default formulation of the VAE by Kingma and Welling (2015), we directly maximize the ELBO.  This
@@ -2637,20 +2623,6 @@ $$
 \begin{align*}
     p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) &= p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})\\
     q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x}) &= q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-to-the-marginal-probability">Back to the marginal probability </h2>
-
-<p>We can then define the marginal probability we want to optimize as</p>
-$$
-\begin{align*}
-\log p(\boldsymbol{x}) &= \log \int p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) d\boldsymbol{h}_{1:T}  \\
-&= \log \int \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})} d\boldsymbol{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}$)}\\
-&= \log \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Discussed last week)}
 \end{align*}
 $$
 

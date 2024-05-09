@@ -1569,7 +1569,7 @@ p(\bm{x},\bm{h};\bm{\Theta}) = \frac{\exp{(\bm{a}^T\bm{x}+\bm{b}^T\bm{h}+\bm{x}^
 where the biases $\bm{a}$ and $\bm{h}$ and the weights defined by the matrix $\bm{W}$ are the parameters we need to optimize.
 
 !split
-===== Anticipating results to be derived =====
+===== Examples of gradient expressions  =====
 
 Since the binary-binary energy model is linear in the parameters $a_i$, $b_j$ and
 $w_{ij}$, it is easy to see that the derivatives with respect to the
@@ -1840,15 +1840,6 @@ To better understand the relationship between the evidence and the ELBO, let us 
 !et
 
 !split
-===== Analysis =====
-
-From this derivation, we clearly observe from the last equation
-that the evidence is equal to the ELBO plus the KL Divergence between
-the approximate posterior $q_{\bm{\phi}}(\bm{h}|\bm{x})$ and the true
-posterior $p(\bm{h}|\bm{x})$.  
-
-
-!split
 ===== The VAE =====
 
 
@@ -2094,20 +2085,6 @@ of a Markovian VAE as
 \begin{align*}
     p(\bm{x}, \bm{h}_{1:T}) &= p(\bm{h}_T)p_{\bm{\theta}}(\bm{x}|\bm{h}_1)\prod_{t=2}^{T}p_{\bm{\theta}}(\bm{h}_{t-1}|\bm{h}_{t})\\
     q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x}) &= q_{\bm{\phi}}(\bm{h}_1|\bm{x})\prod_{t=2}^{T}q_{\bm{\phi}}(\bm{h}_{t}|\bm{h}_{t-1})
-\end{align*}
-!et
-
-
-!split
-===== Back to the marginal probability =====
-
-We can then define the marginal probability we want to optimize as
-!bt
-\begin{align*}
-\log p(\bm{x}) &= \log \int p(\bm{x}, \bm{h}_{1:T}) d\bm{h}_{1:T}  \\
-&= \log \int \frac{p(\bm{x}, \bm{h}_{1:T})q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})} d\bm{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}$)}\\
-&= \log \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\left[\log \frac{p(\bm{x}, \bm{h}_{1:T})}{q_{\bm{\phi}}(\bm{h}_{1:T}|\bm{x})}\right]         && \text{(Discussed last week)}
 \end{align*}
 !et
 

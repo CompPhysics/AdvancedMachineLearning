@@ -279,10 +279,10 @@ doconce format html streamline.do.txt --html_style=bootstrap --pygments_html_sty
                None,
                'introducing-the-energy-model'),
               ('More compact notation', 2, None, 'more-compact-notation'),
-              ('Anticipating results to be derived',
+              ('Examples of gradient expressions',
                2,
                None,
-               'anticipating-results-to-be-derived'),
+               'examples-of-gradient-expressions'),
               ('Network Elements, the energy function',
                2,
                None,
@@ -311,7 +311,6 @@ doconce format html streamline.do.txt --html_style=bootstrap --pygments_html_sty
                None,
                'introducing-the-encoder-function'),
               ('ELBO', 2, None, 'elbo'),
-              ('Analysis', 2, None, 'analysis'),
               ('The VAE', 2, None, 'the-vae'),
               ('Dissecting the equations', 2, None, 'dissecting-the-equations'),
               ('Bottlenecking distribution',
@@ -343,10 +342,6 @@ doconce format html streamline.do.txt --html_style=bootstrap --pygments_html_sty
                2,
                None,
                'mathematical-representation'),
-              ('Back to the marginal probability',
-               2,
-               None,
-               'back-to-the-marginal-probability'),
               ('Diffusion models for hierarchical VAE, from '
                'URL:"https://arxiv.org/abs/2208.11970"',
                2,
@@ -504,7 +499,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#final-expression-for-the-gradients" style="font-size: 80%;">Final expression for the gradients</a></li>
      <!-- navigation toc: --> <li><a href="#introducing-the-energy-model" style="font-size: 80%;">Introducing the energy model</a></li>
      <!-- navigation toc: --> <li><a href="#more-compact-notation" style="font-size: 80%;">More compact notation</a></li>
-     <!-- navigation toc: --> <li><a href="#anticipating-results-to-be-derived" style="font-size: 80%;">Anticipating results to be derived</a></li>
+     <!-- navigation toc: --> <li><a href="#examples-of-gradient-expressions" style="font-size: 80%;">Examples of gradient expressions</a></li>
      <!-- navigation toc: --> <li><a href="#network-elements-the-energy-function" style="font-size: 80%;">Network Elements, the energy function</a></li>
      <!-- navigation toc: --> <li><a href="#defining-different-types-of-rbms" style="font-size: 80%;">Defining different types of RBMs</a></li>
      <!-- navigation toc: --> <li><a href="#gaussian-binary-rbm" style="font-size: 80%;">Gaussian-binary RBM</a></li>
@@ -515,7 +510,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#vaes" style="font-size: 80%;">VAEs</a></li>
      <!-- navigation toc: --> <li><a href="#introducing-the-encoder-function" style="font-size: 80%;">Introducing the encoder function</a></li>
      <!-- navigation toc: --> <li><a href="#elbo" style="font-size: 80%;">ELBO</a></li>
-     <!-- navigation toc: --> <li><a href="#analysis" style="font-size: 80%;">Analysis</a></li>
      <!-- navigation toc: --> <li><a href="#the-vae" style="font-size: 80%;">The VAE</a></li>
      <!-- navigation toc: --> <li><a href="#dissecting-the-equations" style="font-size: 80%;">Dissecting the equations</a></li>
      <!-- navigation toc: --> <li><a href="#bottlenecking-distribution" style="font-size: 80%;">Bottlenecking distribution</a></li>
@@ -535,7 +529,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#mathematics-of-diffusion-models" style="font-size: 80%;">Mathematics of diffusion models</a></li>
      <!-- navigation toc: --> <li><a href="#chains-of-vaes" style="font-size: 80%;">Chains of VAEs</a></li>
      <!-- navigation toc: --> <li><a href="#mathematical-representation" style="font-size: 80%;">Mathematical representation</a></li>
-     <!-- navigation toc: --> <li><a href="#back-to-the-marginal-probability" style="font-size: 80%;">Back to the marginal probability</a></li>
      <!-- navigation toc: --> <li><a href="#diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970" style="font-size: 80%;">Diffusion models for hierarchical VAE, from URL:"https://arxiv.org/abs/2208.11970"</a></li>
      <!-- navigation toc: --> <li><a href="#equation-for-the-markovian-hierarchical-vae" style="font-size: 80%;">Equation for the Markovian hierarchical VAE</a></li>
      <!-- navigation toc: --> <li><a href="#variational-diffusion-models" style="font-size: 80%;">Variational Diffusion Models</a></li>
@@ -2150,7 +2143,7 @@ $$
 <p>where the biases \( \boldsymbol{a} \) and \( \boldsymbol{h} \) and the weights defined by the matrix \( \boldsymbol{W} \) are the parameters we need to optimize.</p>
 
 <!-- !split -->
-<h2 id="anticipating-results-to-be-derived" class="anchor">Anticipating results to be derived </h2>
+<h2 id="examples-of-gradient-expressions" class="anchor">Examples of gradient expressions  </h2>
 
 <p>Since the binary-binary energy model is linear in the parameters \( a_i \), \( b_j \) and
 \( w_{ij} \), it is easy to see that the derivatives with respect to the
@@ -2438,15 +2431,6 @@ $$
 
 
 <!-- !split -->
-<h2 id="analysis" class="anchor">Analysis </h2>
-
-<p>From this derivation, we clearly observe from the last equation
-that the evidence is equal to the ELBO plus the KL Divergence between
-the approximate posterior \( q_{\boldsymbol{\phi}}(\boldsymbol{h}|\boldsymbol{x}) \) and the true
-posterior \( p(\boldsymbol{h}|\boldsymbol{x}) \).  
-</p>
-
-<!-- !split -->
 <h2 id="the-vae" class="anchor">The VAE </h2>
 
 <p>In the default formulation of the VAE by Kingma and Welling (2015), we directly maximize the ELBO.  This
@@ -2705,20 +2689,6 @@ $$
 \begin{align*}
     p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) &= p(\boldsymbol{h}_T)p_{\boldsymbol{\theta}}(\boldsymbol{x}|\boldsymbol{h}_1)\prod_{t=2}^{T}p_{\boldsymbol{\theta}}(\boldsymbol{h}_{t-1}|\boldsymbol{h}_{t})\\
     q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x}) &= q_{\boldsymbol{\phi}}(\boldsymbol{h}_1|\boldsymbol{x})\prod_{t=2}^{T}q_{\boldsymbol{\phi}}(\boldsymbol{h}_{t}|\boldsymbol{h}_{t-1})
-\end{align*}
-$$
-
-
-<!-- !split -->
-<h2 id="back-to-the-marginal-probability" class="anchor">Back to the marginal probability </h2>
-
-<p>We can then define the marginal probability we want to optimize as</p>
-$$
-\begin{align*}
-\log p(\boldsymbol{x}) &= \log \int p(\boldsymbol{x}, \boldsymbol{h}_{1:T}) d\boldsymbol{h}_{1:T}  \\
-&= \log \int \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})} d\boldsymbol{h}_{1:T}         && \text{(Multiply by 1 = $\frac{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}$)}\\
-&= \log \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Definition of Expectation)}\\
-&\geq \mathbb{E}_{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\left[\log \frac{p(\boldsymbol{x}, \boldsymbol{h}_{1:T})}{q_{\boldsymbol{\phi}}(\boldsymbol{h}_{1:T}|\boldsymbol{x})}\right]         && \text{(Discussed last week)}
 \end{align*}
 $$
 
