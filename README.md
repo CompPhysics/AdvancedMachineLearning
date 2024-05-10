@@ -126,7 +126,6 @@ Furthermore, all teaching material is available from this GitHub link.
 ## April 15-19: Deep generative models
 - Energy-based models and Langevin sampling
 - Variational autoencoders
-- Generative Adversarial Networks (GANs)
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
