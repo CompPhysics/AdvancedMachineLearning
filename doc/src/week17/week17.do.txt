@@ -7,6 +7,8 @@ DATE: May 13, 2024
 
 !bblock  Summary of course
 o Summary of methods covered
+  o Discriminative methods
+  o Generative methods
 #o "Video of lecture":"https://youtu.be/lYgKGCQRUhQ"
 #o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMay7.pdf"
 !eblock
@@ -47,11 +49,6 @@ Some of the most common tasks are:
 FIGURE: [figures/mlimage.png, width=800 frac=1.0]
 
 
-!split
-===== ML in Nuclear  Physics (or any field in physics) =====
-
-FIGURE: [figures/ML-NP.pdf, width=900 frac=1.0]
-
 
 !split
 =====  The plethora  of machine learning algorithms/methods =====
@@ -63,6 +60,7 @@ o Ensemble Methods, Random forests, bagging and voting methods, gradient boostin
 o Linear and logistic regression, Kernel methods, support vector machines and more
 o Reinforcement Learning; Transfer Learning and more 
 
+Our focus has been on deep learning. But to discuss autoencoders we have also discussed PCA.
 
 !split
 ===== What Is Generative Modeling? =====
@@ -175,181 +173,6 @@ o See also Diederik P. Kingma, Tim Salimans, Ben Poole, Jonathan Ho, Variational
 o Calvin Luo URL:"https://calvinyluo.com/2022/08/26/diffusion-tutorial.html"
 o An Introduction to Variational Autoencoders, by Kingma and Welling, see URL:"https://arxiv.org/abs/1906.02691"
 !eblock
-
-
-
-
-
-
-!split
-===== What are the basic Machine Learning ingredients? =====
-!bblock
-Almost every problem in ML and data science starts with the same ingredients:
-* The dataset $\bm{x}$ (could be some observable quantity of the system we are studying)
-* A model which is a function of a set of parameters $\bm{\alpha}$ that relates to the dataset, say a likelihood  function $p(\bm{x}\vert \bm{\alpha})$ or just a simple model $f(\bm{\alpha})$
-* A so-called _loss/cost/risk_ function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ which allows us to decide how well our model represents the dataset. 
-
-We seek to minimize the function $\mathcal{C} (\bm{x}, f(\bm{\alpha}))$ by finding the parameter values which minimize $\mathcal{C}$. This leads to  various minimization algorithms. It may surprise many, but at the heart of all machine learning algortihms there is an optimization problem. 
-!eblock
-
-!split
-===== Low-level machine learning, the family of ordinary least squares methods  =====
-
-Our data which we want to apply a machine learning method on, consist
-of a set of inputs $\bm{x}^T=[x_0,x_1,x_2,\dots,x_{n-1}]$ and the
-outputs we want to model $\bm{y}^T=[y_0,y_1,y_2,\dots,y_{n-1}]$.
-We assume  that the output data can be represented (for a regression case) by a continuous function $f$
-through
-!bt
-\[
-\bm{y}=f(\bm{x})+\bm{\epsilon}.
-\]
-!et
-
-!split
-===== Setting up the equations =====
-
-In linear regression we approximate the unknown function with another
-continuous function $\tilde{\bm{y}}(\bm{x})$ which depends linearly on
-some unknown parameters
-$\bm{\theta}^T=[\theta_0,\theta_1,\theta_2,\dots,\theta_{p-1}]$.
-
-The input data can be organized in terms of a so-called design matrix 
-with an approximating function $\bm{\tilde{y}}$ 
-!bt
-\[
-\bm{\tilde{y}}= \bm{X}\bm{\theta},
-\]
-!et
-
-
-!split
-===== The objective/cost/loss function =====
-
-The  simplest approach is the mean squared error
-!bt
-\[
-C(\bm{\Theta})=\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\left\{\left(\bm{y}-\bm{\tilde{y}}\right)^T\left(\bm{y}-\bm{\tilde{y}}\right)\right\},
-\]
-!et
-or using the matrix $\bm{X}$ and in a more compact matrix-vector notation as
-!bt
-\[
-C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
-\]
-!et
-This function represents one of many possible ways to define the so-called cost function.
-
-
-!split
-===== Training solution  =====
-
-Optimizing with respect to the unknown parameters $\theta_j$ we get 
-!bt
-\[
-\bm{X}^T\bm{y} = \bm{X}^T\bm{X}\bm{\theta},  
-\]
-!et
-and if the matrix $\bm{X}^T\bm{X}$ is invertible we have the optimal values
-!bt
-\[
-\hat{\bm{\theta}} =\left(\bm{X}^T\bm{X}\right)^{-1}\bm{X}^T\bm{y}.
-\]
-!et
-
-We say we 'learn' the unknown parameters $\bm{\theta}$ from the last equation.
-
-
-
-!split
-===== Ridge and LASSO Regression =====
-
-
-Our optimization problem is
-!bt
-\[
-{\displaystyle \min_{\bm{\theta}\in {\mathbb{R}}^{p}}}\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
-\]
-!et
-or we can state it as
-!bt
-\[
-{\displaystyle \min_{\bm{\theta}\in
-{\mathbb{R}}^{p}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2=\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2,
-\]
-!et
-where we have used the definition of  a norm-2 vector, that is
-!bt
-\[
-\vert\vert \bm{x}\vert\vert_2 = \sqrt{\sum_i x_i^2}. 
-\]
-!et
-
-!split
-===== From OLS to Ridge and Lasso =====
-
-By minimizing the above equation with respect to the parameters
-$\bm{\theta}$ we could then obtain an analytical expression for the
-parameters $\bm{\theta}$.  We can add a regularization parameter $\lambda$ by
-defining a new cost function to be optimized, that is
-
-!bt
-\[
-{\displaystyle \min_{\bm{\theta}\in
-{\mathbb{R}}^{p}}}\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2+\lambda\vert\vert \bm{\theta}\vert\vert_2^2
-\]
-!et
-
-which leads to the Ridge regression minimization problem where we
-require that $\vert\vert \bm{\theta}\vert\vert_2^2\le t$, where $t$ is
-a finite number larger than zero. We do not include such a constraints in the discussions here.
-
-!split
-===== Lasso regression  =====
-
-Defining
-
-!bt
-\[
-C(\bm{X},\bm{\theta})=\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2+\lambda\vert\vert \bm{\theta}\vert\vert_1,
-\]
-!et
-we have a new optimization equation
-!bt
-\[
-{\displaystyle \min_{\bm{\theta}\in
-{\mathbb{R}}^{p}}}\frac{1}{n}\vert\vert \bm{y}-\bm{X}\bm{\theta}\vert\vert_2^2+\lambda\vert\vert \bm{\theta}\vert\vert_1
-\]
-!et
-which leads to Lasso regression. Lasso stands for least absolute shrinkage and selection operator. 
-Here we have defined the norm-1 as 
-!bt
-\[
-\vert\vert \bm{x}\vert\vert_1 = \sum_i \vert x_i\vert. 
-\]
-!et
-
-
-
-
-
-
-!split
-===== Selected references =====
-!bblock
-* "Mehta et al.":"https://arxiv.org/abs/1803.08823" and "Physics Reports (2019)":"https://www.sciencedirect.com/science/article/pii/S0370157319300766?via%3Dihub".
-* "Machine Learning and the Physical Sciences by Carleo et al":"https://link.aps.org/doi/10.1103/RevModPhys.91.045002"
-* "Artificial Intelligence and Machine Learning in Nuclear Physics, Amber Boehnlein et al., Reviews Modern of Physics 94, 031003 (2022)":"https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.94.031003" 
-* "Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)":"https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062"
-* Neural-network quantum states for ultra-cold Fermi gases, Jane Kim et al, Nature Physics Communcication, in press, see URL:"https://doi.org/10.48550/arXiv.2305.08831"
-* "Message-Passing Neural Quantum States for the Homogeneous Electron Gas, Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,":"https://doi.org/10.48550/arXiv.2305.07240"
-* "Particle Data Group summary on ML methods":"https://pdg.lbl.gov/2021/reviews/rpp2021-rev-machine-learning.pdf"
-!eblock
-
-
-
-
-
 
 
 
