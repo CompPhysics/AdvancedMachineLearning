@@ -239,7 +239,35 @@ div.toc p,a {
                2,
                None,
                'recurrent-neural-networks'),
-              ('Autoencoders', 2, None, 'autoencoders'),
+              ('Autoencoders: Overarching view',
+               2,
+               None,
+               'autoencoders-overarching-view'),
+              ('Powerful detectors', 2, None, 'powerful-detectors'),
+              ('First introduction of AEs',
+               2,
+               None,
+               'first-introduction-of-aes'),
+              ('Autoencoder structure', 2, None, 'autoencoder-structure'),
+              ('Schematic image of an Autoencoder',
+               2,
+               None,
+               'schematic-image-of-an-autoencoder'),
+              ('More on the structure', 2, None, 'more-on-the-structure'),
+              ('Decoder part', 2, None, 'decoder-part'),
+              ('Typical AEs', 2, None, 'typical-aes'),
+              ('Feed Forward Autoencoder', 2, None, 'feed-forward-autoencoder'),
+              ('Mirroring', 2, None, 'mirroring'),
+              ('Output of middle layer', 2, None, 'output-of-middle-layer'),
+              ('Activation Function of the Output Layer',
+               2,
+               None,
+               'activation-function-of-the-output-layer'),
+              ('ReLU', 2, None, 'relu'),
+              ('Sigmoid', 2, None, 'sigmoid'),
+              ('Cost/Loss Function', 2, None, 'cost-loss-function'),
+              ('Binary Cross-Entropy', 2, None, 'binary-cross-entropy'),
+              ('Reconstruction Error', 2, None, 'reconstruction-error'),
               ('Essential elements of generative models',
                2,
                None,
@@ -839,7 +867,285 @@ If the function \( F(\boldsymbol{x}) \) is discontinuous, it won't in general be
 <h2 id="recurrent-neural-networks">Recurrent Neural networks </h2>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="autoencoders">Autoencoders </h2>
+<h2 id="autoencoders-overarching-view">Autoencoders: Overarching view </h2>
+
+<p>Autoencoders are artificial neural networks capable of learning
+efficient representations of the input data (these representations are called codings)  without
+any supervision (i.e., the training set is unlabeled). These codings
+typically have a much lower dimensionality than the input data, making
+autoencoders useful for dimensionality reduction. 
+</p>
+
+<p>Autoencoders learn to encode the
+input data into a lower-dimensional representation, and then decode it
+back to the original data. The goal of autoencoders is to minimize the
+reconstruction error, which measures how well the output matches the
+input. Autoencoders can be seen as a way of learning the latent
+features or hidden structure of the data, and they can be used for
+data compression, denoising, anomaly detection, and generative
+modeling.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="powerful-detectors">Powerful detectors </h2>
+
+<p>More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+</p>
+
+<p>Lastly, they are capable of randomly generating new data that looks
+very similar to the training data; this is called a generative
+model. For example, you could train an autoencoder on pictures of
+faces, and it would then be able to generate new faces.  Surprisingly,
+autoencoders work by simply learning to copy their inputs to their
+outputs. This may sound like a trivial task, but we will see that
+constraining the network in various ways can make it rather
+difficult. For example, you can limit the size of the internal
+representation, or you can add noise to the inputs and train the
+network to recover the original inputs. These constraints prevent the
+autoencoder from trivially copying the inputs directly to the outputs,
+which forces it to learn efficient ways of representing the data. In
+short, the codings are byproducts of the autoencoder&#8217;s attempt to
+learn the identity function under some constraints.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="first-introduction-of-aes">First introduction of AEs </h2>
+
+<p>Autoencoders were first introduced by Rumelhart, Hinton, and Williams
+in 1986 with the goal of learning to reconstruct the input
+observations with the lowest error possible.
+</p>
+
+<p>Why would one want to learn to reconstruct the input observations? If
+you have problems imagining what that means, think of having a dataset
+made of images. An autoencoder would be an algorithm that can give as
+output an image that is as similar as possible to the input one. You
+may be confused, as there is no apparent reason of doing so. To better
+understand why autoencoders are useful we need a more informative
+(although not yet unambiguous) definition.
+</p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications (<a href="https://arxiv.org/abs/2003.05991" target="_blank">see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders</a>) by learning to reconstruct a set of input observations well enough.</p>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="autoencoder-structure">Autoencoder structure </h2>
+
+<p>Autoencoders are neural networks where the outputs are its own
+inputs. They are split into an <b>encoder part</b>
+which maps the input \( \boldsymbol{x} \) via a function \( f(\boldsymbol{x},\boldsymbol{W}) \) (this
+is the encoder part) to a <b>so-called code part</b> (or intermediate part)
+with the result \( \boldsymbol{h} \)
+</p>
+
+$$
+\boldsymbol{h} = f(\boldsymbol{x},\boldsymbol{W})),
+$$
+
+<p>where \( \boldsymbol{W} \) are the weights to be determined.  The <b>decoder</b> parts maps, via its own parameters (weights given by the matrix \( \boldsymbol{V} \) and its own biases) to 
+the final ouput
+</p>
+$$
+\tilde{\boldsymbol{x}} = g(\boldsymbol{h},\boldsymbol{V})).
+$$
+
+<p>The goal is to minimize the construction error.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="schematic-image-of-an-autoencoder">Schematic image of an Autoencoder </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/ae1.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-on-the-structure">More on the structure </h2>
+
+<p>In most typical architectures, the encoder and the decoder are neural networks
+since they can be easily trained with existing software libraries such as TensorFlow or PyTorch with back propagation.
+</p>
+
+<p>In general, the encoder can be written as a function \( g \) that will depend on some parameters</p>
+$$
+\mathbf{h}_{i} = g(\mathbf{x}_{i}),
+$$
+
+<p>where \( \mathbf{h}_{i}\in\mathbb{R}^{q} \)  (the latent feature representation) is the output of the encoder block where we evaluate
+it using the input \( \mathbf{x}_{i} \).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="decoder-part">Decoder part </h2>
+
+<p>Note that we have \( g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{q} \)
+The decoder and the output of the network \( \tilde{\mathbf{x}}_{i} \) can be written then as a second generic function
+of the latent features
+</p>
+$$
+\tilde{\mathbf{x}}_{i} = f\left(\mathbf{h}_{i}\right) = f\left(g\left(\mathbf{x}_{i}\right)\right),
+$$
+
+<p>where \( \tilde{\mathbf{x}}_{i}\mathbf{\in }\mathbb{R}^{n} \).</p>
+
+<p>Training an autoencoder simply means finding the functions \( g(\cdot) \) and \( f(\cdot) \)
+that satisfy
+</p>
+$$
+\textrm{arg}\min_{f,g}< \left[\Delta (\mathbf{x}_{i}, f(g\left(\mathbf{x}_{i}\right))\right]>.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="typical-aes">Typical AEs </h2>
+
+<p>The standard setup is done via a standard feed forward neural network (FFNN), or what is called a Feed Forward Autoencoder.</p>
+
+<p>A typical FFNN architecture has an odd number of layers and is symmetrical with respect to the middle layer.</p>
+
+<p>Typically, the first layer has a number of neurons \( n_{1} = n \) which equals the size of the input observation \( \mathbf{x}_{\mathbf{i}} \).</p>
+
+<p>As we move toward the center of the network, the number of neurons in each layer drops in some measure.
+The middle layer usually has the smallest number of neurons.
+The fact that the number of neurons in this layer is smaller than the size of the input, is often called the <b>bottleneck</b>.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="feed-forward-autoencoder">Feed Forward Autoencoder </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/ae2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="mirroring">Mirroring </h2>
+
+<p>In almost all practical applications,
+the layers after the middle one are a mirrored version of the layers before the middle one.
+For example, an autoencoder with three layers could have the following numbers of neurons:
+</p>
+
+<p>\( n_{1} = 10 \), \( n_{2} = 5 \) and then \( n_{3} = n_{1} = 10 \) where the input dimension is equal to ten.</p>
+
+<p>All the layers up to and including the middle one, make what is called the encoder, and all the layers from and including
+the middle one (up to the output) make what is called the decoder.
+</p>
+
+<p>If the FFNN training is successful, the result will
+be a good approximation of the input \( \tilde{\mathbf{x}}_{i}\approx\mathbf{x}_{i} \).
+</p>
+
+<p>What is essential to notice is that the decoder can reconstruct the
+input by using only a much smaller number of features than the input
+observations initially have.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="output-of-middle-layer">Output of middle layer </h2>
+
+<p>The output of the middle layer
+\( \mathbf{h}_{\mathbf{i}} \) are also called a <b>learned representation</b> of the input observation \( \mathbf{x}_{i} \).
+</p>
+
+<p>The encoder can reduce the number of dimensions of the input
+observation and create a learned representation
+\( \mathbf{h}_{\mathbf{i}}\mathbf{) } \) of the input that has a smaller
+dimension \( q < n \).
+</p>
+
+<p>This learned representation is enough for the decoder to reconstruct
+the input accurately (if the autoencoder training was successful as
+intended).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="activation-function-of-the-output-layer">Activation Function of the Output Layer </h2>
+
+<p>In autoencoders based on neural networks, the output layer's
+activation function plays a particularly important role.  The most
+used functions are ReLU and Sigmoid. 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="relu">ReLU </h2>
+
+<p>The  ReLU activation function can assume all values in the range \( \left[0,\infty\right] \). As a remainder, its formula is</p>
+$$
+\textrm{ReLU}\left(x\right) = \max\left(0,x\right).
+$$
+
+<p>This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
+If the input \( \mathbf{x}_{i} \) can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called <b>Leaky ReLu</b> or just modified ReLU.
+</p>
+
+<p>The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="sigmoid">Sigmoid </h2>
+
+<p>The sigmoid function \( \sigma \) can assume all values in the range \( [0,1] \),</p>
+$$
+\sigma\left(x\right) =\frac{1}{1+e^{-x}}.
+$$
+
+<p>This activation function can only be used if the input observations
+\( \mathbf{x}_{i} \) are all in the range \( [0,1] \)  or if you have
+normalized them to be in that range. Consider as an example the MNIST
+dataset. Each value of the input observation \( \mathbf{x}_{i} \) (one
+image) is the gray values of the pixels that can assume any value from
+0 to 255. Normalizing the data by dividing the pixel values by 255
+would make each observation (each image) have only pixel values
+between 0 and 1. In this case, the sigmoid would be a good choice for
+the output layer's activation function.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="cost-loss-function">Cost/Loss Function </h2>
+
+<p>If an autoencoder is trying to solve a regression problem, the most
+common choice as a loss function is the Mean Square Error
+</p>
+
+$$
+L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="binary-cross-entropy">Binary Cross-Entropy </h2>
+
+<p>If the activation function of the output layer of the AE is a sigmoid
+function, thus limiting neuron outputs to be between 0 and 1, and the
+input features are normalized to be between 0 and 1 we can use as loss
+function the binary cross-entropy. This cots/loss function is
+typically used in classification problems, but it works well for
+autoencoders. The formula for it is
+</p>
+
+$$
+L_{\textrm{CE}} = -\frac{1}{n}\sum_{i = 1}^{n}\sum_{j = 1}^{p}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})].
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reconstruction-error">Reconstruction Error </h2>
+
+<p>The reconstruction error (RE) is a metric that gives you an indication of how good (or bad) the autoencoder was able to reconstruct
+the input observation \( \mathbf{x}_{i} \). The most typical RE used is the MSE
+</p>
+
+$$
+\textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+$$
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="essential-elements-of-generative-models">Essential elements of generative models </h2>

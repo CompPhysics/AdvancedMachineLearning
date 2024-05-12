@@ -358,8 +358,279 @@ For an OO-code in Python for a feed-forward NN, see URL:"https://github.com/Comp
 ===== Recurrent Neural networks =====
 
 
+
 !split
-===== Autoencoders =====
+===== Autoencoders: Overarching view =====
+
+Autoencoders are artificial neural networks capable of learning
+efficient representations of the input data (these representations are called codings)  without
+any supervision (i.e., the training set is unlabeled). These codings
+typically have a much lower dimensionality than the input data, making
+autoencoders useful for dimensionality reduction. 
+
+Autoencoders learn to encode the
+input data into a lower-dimensional representation, and then decode it
+back to the original data. The goal of autoencoders is to minimize the
+reconstruction error, which measures how well the output matches the
+input. Autoencoders can be seen as a way of learning the latent
+features or hidden structure of the data, and they can be used for
+data compression, denoising, anomaly detection, and generative
+modeling.
+
+!split
+===== Powerful detectors =====
+
+More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+
+Lastly, they are capable of randomly generating new data that looks
+very similar to the training data; this is called a generative
+model. For example, you could train an autoencoder on pictures of
+faces, and it would then be able to generate new faces.  Surprisingly,
+autoencoders work by simply learning to copy their inputs to their
+outputs. This may sound like a trivial task, but we will see that
+constraining the network in various ways can make it rather
+difficult. For example, you can limit the size of the internal
+representation, or you can add noise to the inputs and train the
+network to recover the original inputs. These constraints prevent the
+autoencoder from trivially copying the inputs directly to the outputs,
+which forces it to learn efficient ways of representing the data. In
+short, the codings are byproducts of the autoencoder’s attempt to
+learn the identity function under some constraints.
+
+
+
+
+!split
+===== First introduction of AEs =====
+
+Autoencoders were first introduced by Rumelhart, Hinton, and Williams
+in 1986 with the goal of learning to reconstruct the input
+observations with the lowest error possible.
+
+
+Why would one want to learn to reconstruct the input observations? If
+you have problems imagining what that means, think of having a dataset
+made of images. An autoencoder would be an algorithm that can give as
+output an image that is as similar as possible to the input one. You
+may be confused, as there is no apparent reason of doing so. To better
+understand why autoencoders are useful we need a more informative
+(although not yet unambiguous) definition.
+
+!bblock
+An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications ("see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders":"https://arxiv.org/abs/2003.05991") by learning to reconstruct a set of input observations well enough.
+!eblock
+
+
+
+!split
+===== Autoencoder structure =====
+
+
+Autoencoders are neural networks where the outputs are its own
+inputs. They are split into an _encoder part_
+which maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this
+is the encoder part) to a _so-called code part_ (or intermediate part)
+with the result $\bm{h}$
+
+!bt
+\[
+\bm{h} = f(\bm{x},\bm{W})),
+\]
+!et
+where $\bm{W}$ are the weights to be determined.  The _decoder_ parts maps, via its own parameters (weights given by the matrix $\bm{V}$ and its own biases) to 
+the final ouput
+!bt
+\[
+\tilde{\bm{x}} = g(\bm{h},\bm{V})).
+\]
+!et
+
+The goal is to minimize the construction error.
+
+!split
+===== Schematic image of an Autoencoder =====
+
+FIGURE: [figures/ae1.png, width=700 frac=1.0]
+
+
+
+!split
+===== More on the structure =====
+
+In most typical architectures, the encoder and the decoder are neural networks
+since they can be easily trained with existing software libraries such as TensorFlow or PyTorch with back propagation.
+
+
+
+In general, the encoder can be written as a function $g$ that will depend on some parameters
+!bt
+\[
+\mathbf{h}_{i} = g(\mathbf{x}_{i}),
+\]
+!et
+where $\mathbf{h}_{i}\in\mathbb{R}^{q}$  (the latent feature representation) is the output of the encoder block where we evaluate
+it using the input $\mathbf{x}_{i}$.
+
+!split
+===== Decoder part =====
+
+Note that we have $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{q}$
+The decoder and the output of the network $\tilde{\mathbf{x}}_{i}$ can be written then as a second generic function
+of the latent features
+!bt
+\[
+\tilde{\mathbf{x}}_{i} = f\left(\mathbf{h}_{i}\right) = f\left(g\left(\mathbf{x}_{i}\right)\right),
+\]
+!et
+where $\tilde{\mathbf{x}}_{i}\mathbf{\in }\mathbb{R}^{n}$.
+
+Training an autoencoder simply means finding the functions $g(\cdot)$ and $f(\cdot)$
+that satisfy
+!bt
+\[
+\textrm{arg}\min_{f,g}<\left[\Delta (\mathbf{x}_{i}, f(g\left(\mathbf{x}_{i}\right))\right]>.
+\]
+!et
+
+
+!split
+===== Typical AEs =====
+
+The standard setup is done via a standard feed forward neural network (FFNN), or what is called a Feed Forward Autoencoder.
+
+A typical FFNN architecture has an odd number of layers and is symmetrical with respect to the middle layer.
+
+Typically, the first layer has a number of neurons $n_{1} = n$ which equals the size of the input observation $\mathbf{x}_{\mathbf{i}}$.
+
+As we move toward the center of the network, the number of neurons in each layer drops in some measure.
+The middle layer usually has the smallest number of neurons.
+The fact that the number of neurons in this layer is smaller than the size of the input, is often called the _bottleneck_.
+
+!split
+===== Feed Forward Autoencoder =====
+
+FIGURE: [figures/ae2.pdf, width=700 frac=1.0]
+
+
+!split
+===== Mirroring =====
+
+In almost all practical applications,
+the layers after the middle one are a mirrored version of the layers before the middle one.
+For example, an autoencoder with three layers could have the following numbers of neurons:
+
+$n_{1} = 10$, $n_{2} = 5$ and then $n_{3} = n_{1} = 10$ where the input dimension is equal to ten.
+
+
+All the layers up to and including the middle one, make what is called the encoder, and all the layers from and including
+the middle one (up to the output) make what is called the decoder.
+
+If the FFNN training is successful, the result will
+be a good approximation of the input $\tilde{\mathbf{x}}_{i}\approx\mathbf{x}_{i}$.
+
+What is essential to notice is that the decoder can reconstruct the
+input by using only a much smaller number of features than the input
+observations initially have.
+
+!split
+===== Output of middle layer =====
+
+The output of the middle layer
+$\mathbf{h}_{\mathbf{i}}$ are also called a _learned representation_ of the input observation $\mathbf{x}_{i}$.
+
+The encoder can reduce the number of dimensions of the input
+observation and create a learned representation
+$\mathbf{h}_{\mathbf{i}}\mathbf{) }$ of the input that has a smaller
+dimension $q<n$.
+
+This learned representation is enough for the decoder to reconstruct
+the input accurately (if the autoencoder training was successful as
+intended).
+
+!split
+===== Activation Function of the Output Layer =====
+
+In autoencoders based on neural networks, the output layer's
+activation function plays a particularly important role.  The most
+used functions are ReLU and Sigmoid. 
+
+!split
+===== ReLU =====
+
+The  ReLU activation function can assume all values in the range $\left[0,\infty\right]$. As a remainder, its formula is
+!bt
+\[
+\textrm{ReLU}\left(x\right) = \max\left(0,x\right).
+\]
+!et
+This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
+If the input $\mathbf{x}_{i}$ can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called _Leaky ReLu_ or just modified ReLU.
+
+The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  
+
+!split
+===== Sigmoid =====
+
+The sigmoid function $\sigma$ can assume all values in the range $[0,1]$,
+!bt
+\[
+\sigma\left(x\right) =\frac{1}{1+e^{-x}}.
+\]
+!et
+
+
+This activation function can only be used if the input observations
+$\mathbf{x}_{i}$ are all in the range $[0,1]$  or if you have
+normalized them to be in that range. Consider as an example the MNIST
+dataset. Each value of the input observation $\mathbf{x}_{i}$ (one
+image) is the gray values of the pixels that can assume any value from
+0 to 255. Normalizing the data by dividing the pixel values by 255
+would make each observation (each image) have only pixel values
+between 0 and 1. In this case, the sigmoid would be a good choice for
+the output layer's activation function.
+
+!split
+===== Cost/Loss Function =====
+
+If an autoencoder is trying to solve a regression problem, the most
+common choice as a loss function is the Mean Square Error
+
+!bt
+\[
+L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+\]
+!et
+
+
+!split
+===== Binary Cross-Entropy =====
+
+If the activation function of the output layer of the AE is a sigmoid
+function, thus limiting neuron outputs to be between 0 and 1, and the
+input features are normalized to be between 0 and 1 we can use as loss
+function the binary cross-entropy. This cots/loss function is
+typically used in classification problems, but it works well for
+autoencoders. The formula for it is
+
+!bt
+\[
+L_{\textrm{CE}} = -\frac{1}{n}\sum_{i = 1}^{n}\sum_{j = 1}^{p}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})].
+\]
+!et
+
+!split
+===== Reconstruction Error =====
+
+The reconstruction error (RE) is a metric that gives you an indication of how good (or bad) the autoencoder was able to reconstruct
+the input observation $\mathbf{x}_{i}$. The most typical RE used is the MSE
+
+!bt
+\[
+\textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+\]
+!et
+
 
 
 
