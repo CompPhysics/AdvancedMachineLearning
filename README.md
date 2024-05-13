@@ -158,7 +158,7 @@ Furthermore, all teaching material is available from this GitHub link.
 ## May 13-17: Deep generative models
 - Summary of course and discussion of projects
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week17.ipynb  
-
+- Video of lecture at https://youtu.be/HWW3vnR4RZE
 
 ## Recommended textbooks:
 
