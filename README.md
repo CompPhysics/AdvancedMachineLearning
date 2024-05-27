@@ -160,6 +160,8 @@ Furthermore, all teaching material is available from this GitHub link.
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week17.ipynb  
 - Video of lecture at https://youtu.be/HWW3vnR4RZE
 
+## May 20-31: Lab only and work on project 2 each Thursday
+
 ## Recommended textbooks:
 
 o Goodfellow, Bengio and Courville, Deep Learning at https://www.deeplearningbook.org/
