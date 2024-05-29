@@ -7,7 +7,7 @@ learning algorithms, starting with the mathematics of neural networks
 (NNs), moving on to convolutional NNs (CNNs) and recurrent NNs (RNNs),
 autoencoders and other dimensionality reduction methods to finally
 discuss generative methods. These will include Boltzmann machines,
-variational autoencoders, generalized adversarial networks and more.
+variational autoencoders, generalized adversarial networks, diffusion methods and other.
 
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
