@@ -161,7 +161,7 @@ Furthermore, all teaching material is available from this GitHub link.
 - Video of lecture at https://youtu.be/HWW3vnR4RZE
 
 ## May 20-31: Lab only and work on project 2 each Thursday
-- Only project work May 20 to  end of May , Thursdays 215pm-4pm, room FØ397
+- Only project work May 20 to  end of May, Thursdays 215pm-4pm, room FØ397
 
 ## Recommended textbooks:
 
@@ -172,3 +172,4 @@ o Sebastian Raschka, Yuxi Lie, and Vahid Mirjalili,  Machine Learning with PyTor
 o David Foster, Generative Deep Learning, https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/
 
 o Babcock and Gavras, Generative AI with Python and TensorFlow, https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2
+
