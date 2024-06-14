@@ -54,6 +54,28 @@ doconce format html catania.do.txt --html_style=bootstrap --pygments_html_style=
                2,
                None,
                'the-plethora-of-machine-learning-algorithms-methods'),
+              ('Extrapolations and model interpretability',
+               2,
+               None,
+               'extrapolations-and-model-interpretability'),
+              ('Generative and discriminative models',
+               2,
+               None,
+               'generative-and-discriminative-models'),
+              ('"Dilute neutron star matter from neural-network quantum states '
+               'by Fore et al, Physical Review Research 5, 033062 '
+               '(2023)":"https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062" '
+               'at density $\\rho=0.04$ fm$^{-3}$',
+               2,
+               None,
+               'dilute-neutron-star-matter-from-neural-network-quantum-states-by-fore-et-al-physical-review-research-5-033062-2023-https-journals-aps-org-prresearch-pdf-10-1103-physrevresearch-5-033062-at-density-rho-0-04-fm-3'),
+              ('The electron gas in three dimensions with $N=14$ electrons '
+               '(Wigner-Seitz radius $r_s=2$ a.u.), "Gabriel Pescia, Jane Kim '
+               'et al. '
+               'arXiv.2305.07240,":"https://doi.org/10.48550/arXiv.2305.07240"',
+               2,
+               None,
+               'the-electron-gas-in-three-dimensions-with-n-14-electrons-wigner-seitz-radius-r-s-2-a-u-gabriel-pescia-jane-kim-et-al-arxiv-2305-07240-https-doi-org-10-48550-arxiv-2305-07240'),
               ('What Is Generative Modeling?',
                2,
                None,
@@ -421,6 +443,10 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#machine-learning-a-simple-perspective-on-the-interface-between-ml-and-physics" style="font-size: 80%;">Machine learning. A simple perspective on the interface between ML and Physics</a></li>
      <!-- navigation toc: --> <li><a href="#ml-in-nuclear-physics-or-any-field-in-physics" style="font-size: 80%;">ML in Nuclear  Physics (or any field in physics)</a></li>
      <!-- navigation toc: --> <li><a href="#the-plethora-of-machine-learning-algorithms-methods" style="font-size: 80%;">The plethora  of machine learning algorithms/methods</a></li>
+     <!-- navigation toc: --> <li><a href="#extrapolations-and-model-interpretability" style="font-size: 80%;">Extrapolations and model interpretability</a></li>
+     <!-- navigation toc: --> <li><a href="#generative-and-discriminative-models" style="font-size: 80%;">Generative and discriminative models</a></li>
+     <!-- navigation toc: --> <li><a href="#dilute-neutron-star-matter-from-neural-network-quantum-states-by-fore-et-al-physical-review-research-5-033062-2023-https-journals-aps-org-prresearch-pdf-10-1103-physrevresearch-5-033062-at-density-rho-0-04-fm-3" style="font-size: 80%;">"Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)":"https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062" at density \( \rho=0.04 \) fm$^{-3}$</a></li>
+     <!-- navigation toc: --> <li><a href="#the-electron-gas-in-three-dimensions-with-n-14-electrons-wigner-seitz-radius-r-s-2-a-u-gabriel-pescia-jane-kim-et-al-arxiv-2305-07240-https-doi-org-10-48550-arxiv-2305-07240" style="font-size: 80%;">The electron gas in three dimensions with \( N=14 \) electrons (Wigner-Seitz radius \( r_s=2 \) a.u.), "Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,":"https://doi.org/10.48550/arXiv.2305.07240"</a></li>
      <!-- navigation toc: --> <li><a href="#what-is-generative-modeling" style="font-size: 80%;">What Is Generative Modeling?</a></li>
      <!-- navigation toc: --> <li><a href="#example-of-generative-modeling-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html" style="font-size: 80%;">Example of generative modeling, "taken from Generative Deep Learning by David Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"</a></li>
      <!-- navigation toc: --> <li><a href="#generative-modeling" style="font-size: 80%;">Generative Modeling</a></li>
@@ -648,6 +674,71 @@ Some of the most common tasks are:
 <li> Linear and logistic regression, Kernel methods, support vector machines and more</li>
 <li> Reinforcement Learning; Transfer Learning and more</li> 
 </ol>
+<!-- !split -->
+<h2 id="extrapolations-and-model-interpretability" class="anchor">Extrapolations and model interpretability  </h2>
+
+<p>When you hear phrases like <b>predictions and estimations</b> and
+<b>correlations and causations</b>, what do you think of?
+</p>
+
+<p>May be you think
+of the difference between classifying new data points and generating
+new data points.
+</p>
+
+<p>Or perhaps you consider that correlations represent some kind of symmetric statements like
+if \( A \) is correlated with \( B \), then \( B \) is correlated with
+\( A \). Causation on the other hand is directional, that is if \( A \) causes \( B \), \( B \) does not
+necessarily cause \( A \).
+</p>
+
+<!-- !split -->
+<h2 id="generative-and-discriminative-models" class="anchor">Generative and discriminative models </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<ol>
+<li> Balance between tractability and flexibility</li>
+<li> We want to extract information about correlations, to make predictions, quantify uncertainties and express causality</li>
+<li> How do we represent reliably our effective degrees of freedom?</li>
+</ol>
+</div>
+</div>
+
+
+<p>A teaser first, see next slides.</p>
+
+<!-- !split -->
+<h2 id="dilute-neutron-star-matter-from-neural-network-quantum-states-by-fore-et-al-physical-review-research-5-033062-2023-https-journals-aps-org-prresearch-pdf-10-1103-physrevresearch-5-033062-at-density-rho-0-04-fm-3" class="anchor"><a href="https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062" target="_self">Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)</a> at density \( \rho=0.04 \) fm$^{-3}$ </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<br/><br/>
+<center>
+<p><img src="figures/nmatter.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="the-electron-gas-in-three-dimensions-with-n-14-electrons-wigner-seitz-radius-r-s-2-a-u-gabriel-pescia-jane-kim-et-al-arxiv-2305-07240-https-doi-org-10-48550-arxiv-2305-07240" class="anchor">The electron gas in three dimensions with \( N=14 \) electrons (Wigner-Seitz radius \( r_s=2 \) a.u.), <a href="https://doi.org/10.48550/arXiv.2305.07240" target="_self">Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,</a> </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<br/><br/>
+<center>
+<p><img src="figures/elgasnew.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</div>
+</div>
+
+
 <!-- !split -->
 <h2 id="what-is-generative-modeling" class="anchor">What Is Generative Modeling? </h2>
 
@@ -2650,19 +2741,9 @@ of arbitrary form.
 <!-- !split -->
 <h2 id="mathematics-of-diffusion-models" class="anchor">Mathematics of diffusion models </h2>
 
-<p>Let us go back our discussions of the variational autoencoders from
-last week, see
-<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb</tt></a>. As
-a first attempt at understanding diffusion models, we can think of
-these as stacked VAEs, or better, recursive VAEs.
-</p>
-
-<p>Let us try to see why. As an intermediate step, we consider so-called
-hierarchical VAEs, which can be seen as a generalization of VAEs that
-include multiple hierarchies of latent spaces.
-</p>
-
 <p><b>Note</b>: Many of the derivations and figures here are inspired and borrowed from the excellent exposition of diffusion models by Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_self"><tt>https://arxiv.org/abs/2208.11970</tt></a>. </p>
+
+<p>But first VAEs as an intermediate step.</p>
 
 <!-- !split -->
 <h2 id="chains-of-vaes" class="anchor">Chains of VAEs </h2>

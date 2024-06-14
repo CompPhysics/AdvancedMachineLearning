@@ -57,6 +57,52 @@ o Reinforcement Learning; Transfer Learning and more
 
 
 !split
+===== Extrapolations and model interpretability  =====
+
+When you hear phrases like _predictions and estimations_ and
+_correlations and causations_, what do you think of?
+
+May be you think
+of the difference between classifying new data points and generating
+new data points.
+
+Or perhaps you consider that correlations represent some kind of symmetric statements like
+if $A$ is correlated with $B$, then $B$ is correlated with
+$A$. Causation on the other hand is directional, that is if $A$ causes $B$, $B$ does not
+necessarily cause $A$.
+
+!split
+===== Generative and discriminative models =====
+
+!bblock
+o Balance between tractability and flexibility
+o We want to extract information about correlations, to make predictions, quantify uncertainties and express causality
+o How do we represent reliably our effective degrees of freedom?
+!eblock
+
+A teaser first, see next slides.
+
+!split
+===== "Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)":"https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062" at density $\rho=0.04$ fm$^{-3}$ =====
+
+!bblock
+FIGURE: [figures/nmatter.png, width=700 frac=0.9]
+!eblock
+
+
+
+!split
+===== The electron gas in three dimensions with $N=14$ electrons (Wigner-Seitz radius $r_s=2$ a.u.), "Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,":"https://doi.org/10.48550/arXiv.2305.07240" =====
+
+!bblock
+FIGURE: [figures/elgasnew.png, width=700 frac=0.9]
+!eblock
+
+
+
+
+
+!split
 ===== What Is Generative Modeling? =====
 
 
@@ -2048,21 +2094,13 @@ function.  Furthermore, since a diffusion process exists for any
 smooth target distribution, this method can capture data distributions
 of arbitrary form.
 
-
 !split
 ===== Mathematics of diffusion models =====
 
-Let us go back our discussions of the variational autoencoders from
-last week, see
-URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb". As
-a first attempt at understanding diffusion models, we can think of
-these as stacked VAEs, or better, recursive VAEs.
-
-Let us try to see why. As an intermediate step, we consider so-called
-hierarchical VAEs, which can be seen as a generalization of VAEs that
-include multiple hierarchies of latent spaces.
 
 _Note_: Many of the derivations and figures here are inspired and borrowed from the excellent exposition of diffusion models by Calvin Luo at URL:"https://arxiv.org/abs/2208.11970". 
+
+But first VAEs as an intermediate step.
 
 !split
 ===== Chains of VAEs =====
