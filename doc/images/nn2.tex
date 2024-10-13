@@ -36,43 +36,39 @@
 \begin{document}
 
 
-
-% NEURAL NETWORK with coefficients, shifted
+% NEURAL NETWORK with coefficients, arrows
 \begin{tikzpicture}[x=2.2cm,y=1.4cm]
-  \message{^^JNeural network, shifted}
+  \message{^^JNeural network with arrows}
   \readlist\Nnod{4,5,5,5,3} % array of number of nodes per layer
-  \readlist\Nstr{n,m,m,m,k} % array of string number of nodes per layer
-  \readlist\Cstr{\strut x,a^{(\prev)},a^{(\prev)},a^{(\prev)},\tilde{y}} % array of coefficient symbol per layer
-  \def\yshift{0.5} % shift last node for dots
   
   \message{^^J  Layer}
   \foreachitem \N \in \Nnod{ % loop over layers
-    \def\lay{\Ncnt} % alias of index of current layer
-    \pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+    \edef\lay{\Ncnt} % alias of index of current layer
     \message{\lay,}
-    \foreach \i [evaluate={\c=int(\i==\N); \y=\N/2-\i-\c*\yshift;
-                 \index=(\i<\N?int(\i):"\Nstr[\lay]");
-                 \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+    \pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+    \foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+      
       % NODES
-      \node[node \n] (N\lay-\i) at (\x,\y) {$\Cstr[\lay]_{\index}$};
+      \node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
+      %\node[circle,inner sep=2] (N\lay-\i') at (\x-0.15,\y) {}; % shifted node
+      %\draw[node] (N\lay-\i) circle (\R);
       
       % CONNECTIONS
       \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
-          \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
-          \draw[connect] (N\prev-\j) -- (N\lay-\i);
-          %\draw[connect] (N\prev-\j.0) -- (N\lay-\i.180); % connect to left
+          \draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+          %\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
         }
       \fi % else: nothing to connect first layer
       
     }
-    \path (N\lay-\N) --++ (0,1+\yshift) node[midway,scale=1.5] {$\vdots$};
+    
   }
   
   % LABELS
-  \node[above=5,align=center,mygreen!60!black] at (N1-1.90) {input layer\\[-0.2em]layer};
-  \node[above=2,align=center,myblue!60!black] at (N3-1.90) {Three hidden layers};
-  \node[above=10,align=center,myred!60!black] at (N\Nnodlen-1.90) {output\\[-0.2em]layer};
+  \node[above=5,align=center,mygreen!60!black] at (N1-1.90) {input\\[-0.2em]layer};
+  \node[above=2,align=center,myblue!60!black] at (N3-1.90) {hidden layers};
+  \node[above=8,align=center,myred!60!black] at (N\Nnodlen-1.90) {output\\[-0.2em]layer};
   
 \end{tikzpicture}
 
