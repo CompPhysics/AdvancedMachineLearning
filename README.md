@@ -12,8 +12,8 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
 
-### Time: Each Tuesday at 1015am-12pm CET (The sessions will be recorded), first time January 16, 2024
-### Lab session: Each Thursday at 215pm-4pm CET, room FØ397
+### Time: Each Thursday at 1215pm-2pm CET room FØ434, (The sessions will be recorded), first time January 23, 2025
+### Lab session: Each Thursday at 215pm-3pm CET, room FØ434
 
 FYS5429 zoom link
 https://msu.zoom.us/j/6424997467?pwd=TEhTL0lmTmpGbHlnejZQa1pCdzRKdz09
@@ -24,144 +24,125 @@ Passcode: FYS4411
 
 Furthermore, all teaching material is available from this GitHub link.
 
-## January 15-19: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
+## January 20-24: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
 - Presentation of course and overview
 - Discussion of possible projects
 - Deep learning, neural networks, basic equations
-- Recommended reading Goodfellow et al chapters 6 and 7
-- Video of first lecture at https://youtu.be/dP8g_tjQ_9c
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
+- Recommended reading Goodfellow et al chapters 6 and 7 and Raschka chapter 11
 
-##  January 22-26
-- Mathematics  of deep learning, basics of neural networks
+##  January 27-31
+- Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
-- Link to video of lecture at https://youtu.be/SEYuOoMws_k
-- Link to whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesJanuary23.pdf
 
-## January 29-February 2
-- Mathematics of deep learning
-- Discussion of first project
-- Video of lecture at https://youtu.be/OUTFo0oJadU
+## February 3-7
+- From neural networks to convolutional neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 
-## February 5-9
-- Mathematics of deep learning
+## February 10-14
+- Mathematics of convolutional neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
-- Video of lecture at https://youtu.be/b9ni34-sMRI
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary6.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary6.pdf
 
 
-## February 12-16
-- Convolutional neural networks (CNNs), basic mathematics of CNNs
-- Video of lecture at https://youtu.be/iNNVYdFw8CI
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary13.pdf
+## February 17-21
+- Mathematics of  CNNs and discussion of codes
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary13.pdf
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
-## February 19-23
-- Mathematics of  CNNs and discussion of codes
+## February 24-28
+- From CNNs to recurrent neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
-- Recommended reading Goodfellow et al chapters 9 and Raschka et al chapter 14
-- Video of lecture at https://youtu.be/jqgSED0tF70
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary20.pdf
+- Recommended reading Goodfellow et al chapters 9 and 10 and Raschka et al chapters 14 and 15
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary20.pdf
 
-## February 26-March 1
-- Repetion of CNNs and discussion codes
-- Recurrent neural networks, basic mathematics and structure
+## March 3-7
+- Recurrent neural networks, mathematics and codes
+- Long-Short-Term memory and applications to differential equations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
-- Video of lecture at https://youtu.be/VkQGq84ml_0
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary27.pdf
 - Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15
 
 
-## March 4-8
-- Structure of RNNs 
-- Long-Short-Term memory and applications to differential equations
-- Start discussing autoencoders
+## March 10-14
+- More on structure of RNNs
+- Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders
-- Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch5.pdf
+- Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch5.pdf
 
-## March 11-15: Autoencoders
-- Autoencoders and discussions of codes and links with PCA
+## March 17-21: Autoencoders
+- Autoencoders and discussions of codes
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
 - Reading recommendation: Goodfellow et al chapter 14
-- Video of Lecture at https://youtu.be/PU_8riCscQg
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch12.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch12.pdf
 
 
-## March 18-22: Autoencoders and start discussion of generative models
+## March 24-28: Autoencoders and start discussion of generative models
 - Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
 - Summary of deep learning methods and links with generative models and discussion of possible paths for project 2
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters, 14 and 16
-- Video of lecture at https://youtu.be/8s0QC1MvdYg
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch19.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch19.pdf
 
-## April 1-5: Deep generative models
+## March 31-April 4: Deep generative models
 - Monte Carlo methods and structured probabilistic models for deep learning
 - Partition function and Boltzmann machines
 - Boltzmann machines
 - Reading recommendation: Goodfellow et al chapters 16, 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
-- Video of lecture at https://youtu.be/zIG0iEGN05c
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril2.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril2.pdf
 
 
-## April 8-12: Deep generative models
+## April 7-11: Deep generative models
 - Restricted Boltzmann machines, reminder from last week
 - Reminder on Markov Chain Monte Carlo and Gibbs sampling
 - Discussions of various Boltzmann machines
 - Implementation of Boltzmann machines using TensorFlow and Pytorch
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
-- Video of lecture at https://youtu.be/hEjcK0ZkuAA
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril9.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril9.pdf
 
 
-## April 15-19: Deep generative models
+## April 21-25: Deep generative models
 - Energy-based models and Langevin sampling
 - Variational autoencoders
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
-- Video of lecture at https://youtu.be/rw-NBN293o4
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril16.pdf
 
-## April 22-26: Deep generative models
+## May 5-9: Deep generative models
 - Variational Autoencoders
 - Reading recommendation: An Introduction to Variational Autoencoders, by Kingma and Welling, see https://arxiv.org/abs/1906.02691 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
-- Video of lecture at https://youtu.be/tkOweMYCMVg
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril23.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril23.pdf
 
-## April 29-May 3: Deep generative models
+## May 12-16: Deep generative models
 - Summarizing discussion of VAEs
-- Generative Adversarial Networks (GANs)
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
-- Video of lecture at https://youtu.be/Cg8n9aWwHuU
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril30.pdf
-
-
-## May 6-10: Deep generative models
-- Generative Adversarial Networks (GANs)
 - Diffusion models
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril30.pdf
+
+
+## May 19-23: Deep generative models
+- Diffusion models
+- Generative Adversarial Networks (GANs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week16.ipynb  
-- Video of lecture at https://youtu.be/lYgKGCQRUhQ
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMay7.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay7.pdf
 
 
-## May 13-17: Deep generative models
+## May 12-16: Deep generative models
+- Generative Adversarial Networks (GANs)
 - Summary of course and discussion of projects
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week17.ipynb  
-- Video of lecture at https://youtu.be/HWW3vnR4RZE
 
-## May 20-31: Lab only and work on project 2 each Thursday
-- Only project work May 20 to  end of May, Thursdays 215pm-4pm, room FØ397
+
 
 ## Recommended textbooks:
 
