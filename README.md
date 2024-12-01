@@ -103,44 +103,36 @@ Furthermore, all teaching material is available from this GitHub link.
 - Restricted Boltzmann machines, reminder from last week
 - Reminder on Markov Chain Monte Carlo and Gibbs sampling
 - Discussions of various Boltzmann machines
+- Energy-based models and Langevin sampling
 - Implementation of Boltzmann machines using TensorFlow and Pytorch
+- Generative Adversarial Networks (GANs)
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril9.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril10.pdf
 
 
 ## April 21-25: Deep generative models
-- Energy-based models and Langevin sampling
+
+- Generative Adversarial Networks (GANs)
 - Variational autoencoders
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril16.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril24.pdf
 
 ## May 5-9: Deep generative models
 - Variational Autoencoders
+- Diffusion models
 - Reading recommendation: An Introduction to Variational Autoencoders, by Kingma and Welling, see https://arxiv.org/abs/1906.02691 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril23.pdf
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay8.pdf
 
 ## May 12-16: Deep generative models
 - Summarizing discussion of VAEs
 - Diffusion models
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril30.pdf
-
-
-## May 19-23: Deep generative models
-- Diffusion models
-- Generative Adversarial Networks (GANs)
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week16.ipynb  
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay7.pdf
-
-
-## May 12-16: Deep generative models
-- Generative Adversarial Networks (GANs)
 - Summary of course and discussion of projects
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week17.ipynb  
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay15.pdf
 
 
 
