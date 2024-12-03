@@ -13,16 +13,11 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 
 
 ### Time: Each Thursday at 1215pm-2pm CET room FØ434, (The sessions will be recorded), first time January 23, 2025
-### Lab session: Each Thursday at 215pm-3pm CET, room FØ434
+### Additional lab sessions: Each Thursday at 215pm-3pm CET, room FØ434
 
-FYS5429 zoom link
-https://msu.zoom.us/j/6424997467?pwd=TEhTL0lmTmpGbHlnejZQa1pCdzRKdz09
+FYS5429 zoom link to be announced when semester starts
 
-Meeting ID: 642 499 7467
-Passcode: FYS4411
-
-
-Furthermore, all teaching material is available from this GitHub link.
+All teaching material is available from this GitHub link.
 
 ## January 20-24: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
@@ -51,18 +46,19 @@ Furthermore, all teaching material is available from this GitHub link.
 
 ## February 17-21
 - Mathematics of  CNNs and discussion of codes
+- Recurrent neural networks (RNNs)
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary13.pdf
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
 
 ## February 24-28
-- From CNNs to recurrent neural networks
+- Mathematics of recurrent neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and 10 and Raschka et al chapters 14 and 15
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary20.pdf
 
 ## March 3-7
-- Recurrent neural networks, mathematics and codes
+- Recurrent neural networks and codes
 - Long-Short-Term memory and applications to differential equations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary27.pdf
@@ -70,41 +66,38 @@ Furthermore, all teaching material is available from this GitHub link.
 
 
 ## March 10-14
-- More on structure of RNNs
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders
 - Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch5.pdf
 
 ## March 17-21: Autoencoders
-- Autoencoders and discussions of codes
+- Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
 - Reading recommendation: Goodfellow et al chapter 14
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch12.pdf
 
 
-## March 24-28: Autoencoders and start discussion of generative models
-- Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
-- Summary of deep learning methods and links with generative models and discussion of possible paths for project 2
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
-- Reading recommendation: Goodfellow et al chapters, 14 and 16
-- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch19.pdf
-
-## March 31-April 4: Deep generative models
+## March 24-28: Generative models
 - Monte Carlo methods and structured probabilistic models for deep learning
 - Partition function and Boltzmann machines
 - Boltzmann machines
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
+- Reading recommendation: Goodfellow et al chapters 16-18
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch19.pdf
+
+## March 31-April 4: Deep generative models, Boltzmann machines
+- Restricted Boltzmann machines
+- Reminder on Markov Chain Monte Carlo and Gibbs sampling
+- Discussions of various Boltzmann machines
 - Reading recommendation: Goodfellow et al chapters 16, 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril2.pdf
 
 
 ## April 7-11: Deep generative models
-- Restricted Boltzmann machines, reminder from last week
-- Reminder on Markov Chain Monte Carlo and Gibbs sampling
-- Discussions of various Boltzmann machines
-- Energy-based models and Langevin sampling
 - Implementation of Boltzmann machines using TensorFlow and Pytorch
+- Energy-based models and Langevin sampling
 - Generative Adversarial Networks (GANs)
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
