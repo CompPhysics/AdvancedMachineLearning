@@ -5,7 +5,7 @@ Analysis and Machine Learning, spanning from weekly plans to lecture
 material and various reading assignments.  The emphasis is on deep
 learning algorithms, starting with the mathematics of neural networks
 (NNs), moving on to convolutional NNs (CNNs) and recurrent NNs (RNNs),
-autoencoders and other dimensionality reduction methods to finally
+autoencoders, graph neural networks and other dimensionality reduction methods to finally
 discuss generative methods. These will include Boltzmann machines,
 variational autoencoders, generalized adversarial networks, diffusion methods and other.
 
@@ -60,15 +60,17 @@ All teaching material is available from this GitHub link.
 ## March 3-7
 - Recurrent neural networks and codes
 - Long-Short-Term memory and applications to differential equations
+- Graph neural network (GNN)s
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary27.pdf
-- Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15
+- Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15 and 18
 
 
 ## March 10-14
+- GNNs
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
-- Recommended reading Goodfellow et al chapter 14 for Autoenconders
+- Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
 - Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch5.pdf
 
 ## March 17-21: Autoencoders
@@ -127,7 +129,7 @@ All teaching material is available from this GitHub link.
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay15.pdf
 
-
+## May 19-23: Kab only and discussion of projects
 
 ## Recommended textbooks:
 
