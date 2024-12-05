@@ -19,6 +19,24 @@ FYS5429 zoom link to be announced when semester starts
 
 All teaching material is available from this GitHub link.
 
+
+The course can also be used as a self-study course and besides the
+lectures, many of you may wish to independently work on your own projects related to for example your thesis or research. In
+general, in addition to the lectures, we have often followed five main
+paths:
+
+- Projects (two in total)  and exercises that follow the lectures
+
+- The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.
+
+- The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs. 
+
+- The own data path. Some of you may have data you wish to analyze with different deep learning methods
+
+- The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
+
+
+
 ## January 20-24: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
 - Presentation of course and overview
