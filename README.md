@@ -5,7 +5,7 @@ Analysis and Machine Learning, spanning from weekly plans to lecture
 material and various reading assignments.  The emphasis is on deep
 learning algorithms, starting with the mathematics of neural networks
 (NNs), moving on to convolutional NNs (CNNs) and recurrent NNs (RNNs),
-autoencoders and other dimensionality reduction methods to finally
+autoencoders, graph neural networks and other dimensionality reduction methods to finally
 discuss generative methods. These will include Boltzmann machines,
 variational autoencoders, generalized adversarial networks, diffusion methods and other.
 
@@ -18,6 +18,24 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 FYS5429 zoom link to be announced when semester starts
 
 All teaching material is available from this GitHub link.
+
+
+The course can also be used as a self-study course and besides the
+lectures, many of you may wish to independently work on your own projects related to for example your thesis or research. In
+general, in addition to the lectures, we have often followed five main
+paths:
+
+- Projects (two in total)  and exercises that follow the lectures
+
+- The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.
+
+- The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs. 
+
+- The own data path. Some of you may have data you wish to analyze with different deep learning methods
+
+- The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
+
+
 
 ## January 20-24: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
 
@@ -60,15 +78,17 @@ All teaching material is available from this GitHub link.
 ## March 3-7
 - Recurrent neural networks and codes
 - Long-Short-Term memory and applications to differential equations
+- Graph neural network (GNN)s
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary27.pdf
-- Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15
+- Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15 and 18
 
 
 ## March 10-14
+- GNNs
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
-- Recommended reading Goodfellow et al chapter 14 for Autoenconders
+- Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
 - Whiteboard notes https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch5.pdf
 
 ## March 17-21: Autoencoders
@@ -127,7 +147,7 @@ All teaching material is available from this GitHub link.
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay15.pdf
 
-
+## May 19-23: Kab only and discussion of projects
 
 ## Recommended textbooks:
 
