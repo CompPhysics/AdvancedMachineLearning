@@ -13,7 +13,7 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 
 
 ### Time: Each Thursday at 1215pm-2pm CET room FØ434, (The sessions will be recorded), first time January 23, 2025
-### Additional lab sessions: Each Thursday at 215pm-3pm CET, room FØ434
+### Additional lab sessions: Each Thursday at 215pm-4pm CET, room FØ434, first time January 23, 2025
 
 FYS5429 zoom link to be announced when semester starts
 
