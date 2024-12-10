@@ -12,8 +12,32 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
 
-### Time: Each Thursday at 1215pm-2pm CET room FØ434, (The sessions will be recorded), first time January 23, 2025
-### Additional lab sessions: Each Thursday at 215pm-4pm CET, room FØ434, first time January 23, 2025
+## Practicalities
+
+- Lectures Thursdays 1215pm-2pm, room FØ434, Department of Physics
+- Lab and exercise sessions Thursdays 215pm-4pm, , room FØ434, Department of Physics
+- We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
+- No exam, only two projects. Each projects counts 1/2 of the final grade. Aleternatively one long project.
+- All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
+
+## Deep learning methods covered, tentative =====
+
+### Deep learning, classics
+- Feed forward neural networks and its mathematics (NNs)
+- Convolutional neural networks (CNNs)
+- Recurrent neural networks (RNNs)
+- Graph neural networks
+- Transformers
+- Autoencoders and principal component analysis
+### Deep learning, generative methods
+- Basics of generative models
+- Boltzmann machines and energy based methods
+- Diffusion models (tentative)
+- Variational autoencoders (VAEe)
+- Generative Adversarial Networks (GANs)
+- Autoregressive methods (tentative)
+### Physical Sciences (often just called Physics informed) informed machine learning
+
 
 FYS5429 zoom link to be announced when semester starts
 
