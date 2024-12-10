@@ -20,7 +20,7 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - No exam, only two projects. Each projects counts 1/2 of the final grade. Aleternatively one long project.
 - All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
 
-## Deep learning methods covered, tentative =====
+## Deep learning methods covered (tentative plan)
 
 ### Deep learning, classics
 - Feed forward neural networks and its mathematics (NNs)
