@@ -5,7 +5,7 @@ Analysis and Machine Learning, spanning from weekly plans to lecture
 material and various reading assignments.  The emphasis is on deep
 learning algorithms, starting with the mathematics of neural networks
 (NNs), moving on to convolutional NNs (CNNs) and recurrent NNs (RNNs),
-autoencoders, graph neural networks and other dimensionality reduction methods to finally
+autoencoders, transformers, graph neural networks and other dimensionality reduction methods to finally
 discuss generative methods. These will include Boltzmann machines,
 variational autoencoders, generalized adversarial networks, diffusion methods and other.
 
@@ -37,7 +37,7 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Generative Adversarial Networks (GANs)
 - Autoregressive methods (tentative)
 ### Physical Sciences (often just called Physics informed) informed machine learning
-
+- Basic set up of PINNs with discussion of projects
 
 FYS5429 zoom link to be announced when semester starts
 
