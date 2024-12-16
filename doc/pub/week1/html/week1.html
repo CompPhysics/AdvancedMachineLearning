@@ -155,28 +155,11 @@ div.toc p,a {
                2,
                None,
                'additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html'),
-              ('Scientific Machine Learning',
-               2,
-               None,
-               'scientific-machine-learning'),
-              ('Physics driven Machine Learning',
-               2,
-               None,
-               'physics-driven-machine-learning'),
               ('Good books with hands-on material and codes',
                2,
                None,
                'good-books-with-hands-on-material-and-codes'),
-              ('Machine learning. A simple perspective on the interface '
-               'between ML and Physics, HPC is essential',
-               2,
-               None,
-               'machine-learning-a-simple-perspective-on-the-interface-between-ml-and-physics-hpc-is-essential'),
-              ('AI/ML and some statements you may have heard (and what do they '
-               'mean?)',
-               2,
-               None,
-               'ai-ml-and-some-statements-you-may-have-heard-and-what-do-they-mean'),
+              ('Project paths', 2, None, 'project-paths'),
               ('Types of machine learning',
                2,
                None,
@@ -474,6 +457,7 @@ MathJax.Hub.Config({
  <li> Discussion of possible projects and presentation of participants</li>
  <li> Deep learning methods, mathematics and  review of neural networks</li>
  <li> <a href="https://youtu.be/" target="_blank">Video of lecture to be posted after lecture</a></li>
+ <li> Test your background knowledge (to be added later)</li>
 </ol>
 </div>
 
@@ -525,40 +509,6 @@ variable).
 <p>We have not made plans for Reinforcement learning, but this can be another option.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="scientific-machine-learning">Scientific Machine Learning </h2>
-
-<p>An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al <a href="https://doi.org/10.3389/fdata.2022.787421" target="_blank">Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)</a></p>
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b></b>
-<p>
-<p>The authors discuss applications and techniques for fast machine
-learning (ML) in science &ndash; the concept of integrating power ML
-methods into the real-time experimental data processing loop to
-accelerate scientific discovery. The report covers three main areas
-</p>
-
-<ol>
-<li> applications for fast ML across a number of scientific domains;</li>
-<li> techniques for training and implementing performant and resource-efficient ML algorithms;</li>
-<li> and computing architectures, platforms, and technologies for deploying these algorithms.</li>
-</ol>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="physics-driven-machine-learning">Physics driven Machine Learning </h2>
-
-<p>Another hot topic is what has loosely been dubbed <b>Physics-driven deep learning</b>. See the recent work on <a href="https://www.nature.com/articles/s42256-021-00302-5" target="_blank">Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)</a>.</p>
-
-<div class="alert alert-block alert-block alert-text-normal">
-<b>From their abstract</b>
-<p>
-<p>A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. </p>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="good-books-with-hands-on-material-and-codes">Good books with hands-on material and codes </h2>
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
@@ -576,26 +526,21 @@ from Goodfellow, Bengio and Courville's text <a href="https://www.deeplearningbo
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="machine-learning-a-simple-perspective-on-the-interface-between-ml-and-physics-hpc-is-essential">Machine learning. A simple perspective on the interface between ML and Physics, HPC is essential </h2>
+<h2 id="project-paths">Project paths </h2>
 
-<br/><br/>
-<center>
-<p><img src="figures/mlimage.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="ai-ml-and-some-statements-you-may-have-heard-and-what-do-they-mean">AI/ML and some statements you may have heard (and what do they mean?)  </h2>
+<p>The course can also be used as a self-study course and besides the
+lectures, many of you may wish to independently work on your own
+projects related to for example your thesis or research. In general,
+in addition to the lectures, we have often followed five main paths:
+</p>
 
 <ol>
-<li> Fei-Fei Li on ImageNet: <b>map out the entire world of objects</b> (<a href="https://cacm.acm.org/news/219702-the-data-that-transformed-ai-research-and-possibly-the-world/fulltext" target="_blank">The data that transformed AI research</a>)</li>
-<li> Russell and Norvig in their popular textbook: <b>relevant to any intellectual task; it is truly a universal field</b> (<a href="http://aima.cs.berkeley.edu/" target="_blank">Artificial Intelligence, A modern approach</a>)</li>
-<li> Woody Bledsoe puts it more bluntly: <b>in the long run, AI is the only science</b> (quoted in Pamilla McCorduck, <a href="https://www.pamelamccorduck.com/machines-who-think" target="_blank">Machines who think</a>)</li>
+<li> The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.</li>
+<li> The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs.</li>
+<li> Implementing generative methods</li>
+<li> The own data path. Some of you may have data you wish to analyze with different deep learning methods</li>
+<li> The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.</li>
 </ol>
-<p>If you wish to have a critical read on AI/ML from a societal point of view, see <a href="https://www.katecrawford.net/" target="_blank">Kate Crawford's recent text Atlas of AI</a>. See also <a href="https://www.nationaldefensemagazine.org/articles/2023/3/24/ukraine-a-living-lab-for-ai-warfare" target="_blank"><tt>https://www.nationaldefensemagazine.org/articles/2023/3/24/ukraine-a-living-lab-for-ai-warfare</tt></a></p>
-
-<b>Here: with AI/ML we intend a collection of machine learning methods with an emphasis on statistical learning and data analysis</b>
-
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="types-of-machine-learning">Types of machine learning </h2>
 
@@ -608,10 +553,7 @@ and let the computer deduce the logic behind it. On the other hand, <em>unsuperv
 is a method for finding patterns and relationship in data sets without any prior knowledge of the system.
 </p>
 
-<p>An emerging  third category is  <em>reinforcement learning</em>. This is a paradigm 
-of learning inspired by behavioural psychology, where learning is achieved by trial-and-error, 
-solely from rewards and punishment.
-</p>
+<p>An emerging  third category is  <em>reinforcement learning</em>. </p>
 </div>
 
 
@@ -620,15 +562,16 @@ solely from rewards and punishment.
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
+
 <p>Another way to categorize machine learning tasks is to consider the desired output of a system.
 Some of the most common tasks are:
 </p>
 
-<ul>
-  <li> Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.</li>
-  <li> Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.</li>
-  <li> Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.</li>
-</ul>
+<ol>
+<li> Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.</li>
+<li> Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.</li>
+<li> Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.</li>
+</ol>
 </div>
 
 

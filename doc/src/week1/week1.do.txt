@@ -55,34 +55,6 @@ variable).
 
 We have not made plans for Reinforcement learning, but this can be another option.
 
-!split
-===== Scientific Machine Learning =====
-
-An important and emerging field is what has been dubbed as scientific ML, see the article by Deiana et al "Applications and Techniques for Fast Machine Learning in Science, Big Data 5, 787421 (2022)":"https://doi.org/10.3389/fdata.2022.787421"
-
-!bblock
-The authors discuss applications and techniques for fast machine
-learning (ML) in science -- the concept of integrating power ML
-methods into the real-time experimental data processing loop to
-accelerate scientific discovery. The report covers three main areas
-
-o applications for fast ML across a number of scientific domains;
-o techniques for training and implementing performant and resource-efficient ML algorithms;
-o and computing architectures, platforms, and technologies for deploying these algorithms.
-
-!eblock
-
-
-!split
-===== Physics driven Machine Learning =====
-
-Another hot topic is what has loosely been dubbed _Physics-driven deep learning_. See the recent work on "Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nature Machine Learning, vol 3, 218 (2021)":"https://www.nature.com/articles/s42256-021-00302-5".
-
-!bblock From their abstract
-A less known but powerful result is that an NN with a single hidden layer can accurately approximate any nonlinear continuous operator. This universal approximation theorem of operators is suggestive of the structure and potential of deep neural networks (DNNs) in learning continuous operators or complex systems from streams of scattered data. ...  We demonstrate that DeepONet can learn various explicit operators, such as integrals and fractional Laplacians, as well as implicit operators that represent deterministic and stochastic differential equations. 
-!eblock
-
-
 
 !split
 ===== Good books with hands-on material and codes =====
@@ -95,26 +67,24 @@ A less known but powerful result is that an NN with a single hidden layer can ac
 All three books have GitHub addresses from where  one can download all codes. We will borrow most of the material from these three texts as well as 
 from Goodfellow, Bengio and Courville's text "Deep Learning":"https://www.deeplearningbook.org/"
 
-
 !split
-===== Machine learning. A simple perspective on the interface between ML and Physics, HPC is essential =====
+===== Project paths =====
 
-FIGURE: [figures/mlimage.png, width=800 frac=1.0]
-
-
-
-!split
-=====  AI/ML and some statements you may have heard (and what do they mean?)  =====
-
-o Fei-Fei Li on ImageNet: _map out the entire world of objects_ ("The data that transformed AI research":"https://cacm.acm.org/news/219702-the-data-that-transformed-ai-research-and-possibly-the-world/fulltext")
-o Russell and Norvig in their popular textbook: _relevant to any intellectual task; it is truly a universal field_ ("Artificial Intelligence, A modern approach":"http://aima.cs.berkeley.edu/")
-o Woody Bledsoe puts it more bluntly: _in the long run, AI is the only science_ (quoted in Pamilla McCorduck, "Machines who think":"https://www.pamelamccorduck.com/machines-who-think")
+The course can also be used as a self-study course and besides the
+lectures, many of you may wish to independently work on your own
+projects related to for example your thesis or research. In general,
+in addition to the lectures, we have often followed five main paths:
 
 
-If you wish to have a critical read on AI/ML from a societal point of view, see "Kate Crawford's recent text Atlas of AI":"https://www.katecrawford.net/". See also URL:"https://www.nationaldefensemagazine.org/articles/2023/3/24/ukraine-a-living-lab-for-ai-warfare"
+o The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.
 
-_Here: with AI/ML we intend a collection of machine learning methods with an emphasis on statistical learning and data analysis_
+o The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs.
 
+o Implementing generative methods
+
+o The own data path. Some of you may have data you wish to analyze with different deep learning methods
+
+o The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
 
 
 !split
@@ -126,22 +96,22 @@ In *supervised learning* we know the answer to a problem,
 and let the computer deduce the logic behind it. On the other hand, *unsupervised learning*
 is a method for finding patterns and relationship in data sets without any prior knowledge of the system.
 
-An emerging  third category is  *reinforcement learning*. This is a paradigm 
-of learning inspired by behavioural psychology, where learning is achieved by trial-and-error, 
-solely from rewards and punishment.
+An emerging  third category is  *reinforcement learning*. 
+
 !eblock
 
 !split
 ===== Main categories =====
 !bblock
+
 Another way to categorize machine learning tasks is to consider the desired output of a system.
 Some of the most common tasks are:
 
-  * Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.
+o Classification: Outputs are divided into two or more classes. The goal is to   produce a model that assigns inputs into one of these classes. An example is to identify  digits based on pictures of hand-written ones. Classification is typically supervised learning.
 
-  * Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.
+o Regression: Finding a functional relationship between an input data set and a reference data set.   The goal is to construct a function that maps input data to continuous output values.
 
-  * Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.
+o Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.  It is thus a form of unsupervised learning.
 !eblock
 
 
