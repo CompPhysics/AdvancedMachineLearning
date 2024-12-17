@@ -155,11 +155,32 @@ div.toc p,a {
                2,
                None,
                'additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html'),
+              ('Project paths, overarching view',
+               2,
+               None,
+               'project-paths-overarching-view'),
+              ('Possible paths for the projects',
+               2,
+               None,
+               'possible-paths-for-the-projects'),
+              ('The generative models', 2, None, 'the-generative-models'),
+              ('Paths for projects, writing own codes',
+               2,
+               None,
+               'paths-for-projects-writing-own-codes'),
+              ('The application path/own data',
+               2,
+               None,
+               'the-application-path-own-data'),
+              ('Gaussian processes and Bayesian analysis',
+               2,
+               None,
+               'gaussian-processes-and-bayesian-analysis'),
+              ('HPC path', 2, None, 'hpc-path'),
               ('Good books with hands-on material and codes',
                2,
                None,
                'good-books-with-hands-on-material-and-codes'),
-              ('Project paths', 2, None, 'project-paths'),
               ('Types of machine learning',
                2,
                None,
@@ -173,12 +194,12 @@ div.toc p,a {
                2,
                None,
                'what-is-generative-modeling'),
-              ('Example of generative modeling, "taken from Generative Deeep '
+              ('Example of generative modeling, "taken from Generative Deep '
                'Learning by David '
                'Foster":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"',
                2,
                None,
-               'example-of-generative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
+               'example-of-generative-modeling-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
               ('Generative Modeling', 2, None, 'generative-modeling'),
               ('Generative Versus Discriminative Modeling',
                2,
@@ -197,25 +218,10 @@ div.toc p,a {
                2,
                None,
                'taxonomy-of-generative-deep-learning-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html'),
-              ('Possible paths for the projects',
+              ('Reminder on  the basic Machine Learning ingredients',
                2,
                None,
-               'possible-paths-for-the-projects'),
-              ('The generative models', 2, None, 'the-generative-models'),
-              ('Paths for projects, writing own codes',
-               2,
-               None,
-               'paths-for-projects-writing-own-codes'),
-              ('The application path', 2, None, 'the-application-path'),
-              ('Gaussian processes and Bayesian analysis',
-               2,
-               None,
-               'gaussian-processes-and-bayesian-analysis'),
-              ('HPC path', 2, None, 'hpc-path'),
-              ('What are the basic Machine Learning ingredients?',
-               2,
-               None,
-               'what-are-the-basic-machine-learning-ingredients'),
+               'reminder-on-the-basic-machine-learning-ingredients'),
               ('Low-level machine learning, the family of ordinary least '
                'squares methods',
                2,
@@ -467,16 +473,16 @@ MathJax.Hub.Config({
 
 <ol>
 <li> Lectures Thursdays 1215pm-2pm, room F&#216;434, Department of Physics</li>
-<li> Lab and exercise sessions Thursdays 215pm-4pm, , room F&#216;434, Department of Physics</li> 
+<li> Lab and exercise sessions Thursdays 215pm-4pm, room F&#216;434, Department of Physics</li> 
 <li> We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants</li>
-<li> No exam, only two projects. Each projects counts 1/2 of the final grade. Aleternatively one long project.</li>
+<li> No exam, only two projects. Each projects counts 1/2 of the final grade. Aleternatively, one long project which counts 100% of the final grade</li>
 <li> All info at the GitHub address <a href="https://github.com/CompPhysics/AdvancedMachineLearning" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning</tt></a></li>
 </ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="deep-learning-methods-covered-tentative">Deep learning methods covered, tentative </h2>
 
 <ol>
-<li> <b>Deep learning, classics</b>
+<li> <b>Deep learning</b>
 <ol type="a"></li>
  <li> Feed forward neural networks and its mathematics (NNs)</li>
  <li> Convolutional neural networks (CNNs)</li>
@@ -494,7 +500,7 @@ MathJax.Hub.Config({
  <li> Generative Adversarial Networks (GANs)</li>
  <li> Autoregressive methods (tentative)</li>
 </ol>
-<li> <b>Physical Sciences (often just called Physics informed) informed machine learning</b></li>
+<li> <b>Physical Sciences (often just called Physics informed neural networks, PINNs) informed machine learning</b></li>
 </ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html"><a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
@@ -506,7 +512,95 @@ large number of variables and a particular outcome (dependent
 variable).
 </p>
 
-<p>We have not made plans for Reinforcement learning, but this can be another option.</p>
+<p>We have not made plans for Reinforcement learning.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="project-paths-overarching-view">Project paths, overarching view </h2>
+
+<p>The course can also be used as a self-study course and besides the
+lectures, many of you may wish to independently work on your own
+projects related to for example your thesis or research. In general,
+in addition to the lectures, we have often followed five main paths:
+</p>
+
+<ol>
+<li> The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.</li>
+<li> The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs.</li>
+<li> Implementing generative methods</li>
+<li> The own data path. Some of you may have data you wish to analyze with different deep learning methods</li>
+<li> The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.</li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="possible-paths-for-the-projects">Possible paths for the projects </h2>
+
+<p>The differential equation path: Here we propose a set of differential
+equations (ordinary and/or partial) to be solved first using neural
+networks (using either your own code or TensorFlow/Pytorch or similar
+libraries). Thereafter we can extend the set of methods for
+solving these equations to recurrent neural networks and autoencoders
+(AE) and/or Generalized Adversarial Networks (GANs). All these
+approaches can be expanded into one large project. This project can
+also be extended into including <a href="https://github.com/maziarraissi/PINNs" target="_blank">Physics informed machine
+learning</a>. Here we can discuss
+neural networks that are trained to solve supervised learning tasks
+while respecting any given law of physics described by general
+nonlinear partial differential equations.
+</p>
+
+<p>For those interested in mathematical aspects of deep learning, this could also be included.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-generative-models">The generative models </h2>
+
+<p>This path brings us from discriminative models (like the standard application of NNs, CNNs etc) to generative models. Two projects that follow to a large extent
+the lectures. Topics for data sets will be discussed.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="paths-for-projects-writing-own-codes">Paths for projects, writing own codes </h2>
+
+<p>The computational path: Here we propose a path where you develop your
+own code for a convolutional or eventually recurrent neural network
+and apply this to data selects of your own selection. The code should
+be object oriented and flexible allowing for eventual extensions by
+including different Loss/Cost functions and other
+functionalities. Feel free to select data sets from those suggested
+below here. This code can also be extended upon by adding for example
+autoencoders. You can compare your own codes with implementations
+using TensorFlow(Keras)/PyTorch or other libraries.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-application-path-own-data">The application path/own data </h2>
+
+<p>The application path: Here you can use the most relevant method(s)
+(say convolutional neural networks for images) and apply this(these)
+to data sets relevant for your own research.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="gaussian-processes-and-bayesian-analysis">Gaussian processes and Bayesian analysis </h2>
+
+<p>The Gaussian processes/Bayesian statistics path: <a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression
+(Gaussian processes) and Bayesian
+statistics</a> are popular
+tools in the machine learning literature. The main idea behind these
+approaches is to flexibly model the relationship between a large
+number of variables and a particular outcome (dependent
+variable). This can form a second part of a project where for example
+standard Kernel regression methods are used on a specific data
+set. Alternatively, participants can opt to work on a large project
+relevant for their own research using gaussian processes and/or
+Bayesian machine Learning.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="hpc-path">HPC path </h2>
+
+<p>Another alternative is to study high-performance computing aspects in
+designing ML codes. This can also be linked with an exploration of
+mathematical aspects of deep learning methods.
+</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="good-books-with-hands-on-material-and-codes">Good books with hands-on material and codes </h2>
@@ -525,22 +619,6 @@ variable).
 from Goodfellow, Bengio and Courville's text <a href="https://www.deeplearningbook.org/" target="_blank">Deep Learning</a>
 </p>
 
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="project-paths">Project paths </h2>
-
-<p>The course can also be used as a self-study course and besides the
-lectures, many of you may wish to independently work on your own
-projects related to for example your thesis or research. In general,
-in addition to the lectures, we have often followed five main paths:
-</p>
-
-<ol>
-<li> The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.</li>
-<li> The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs.</li>
-<li> Implementing generative methods</li>
-<li> The own data path. Some of you may have data you wish to analyze with different deep learning methods</li>
-<li> The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.</li>
-</ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="types-of-machine-learning">Types of machine learning </h2>
 
@@ -605,7 +683,7 @@ dataset.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="example-of-generative-modeling-taken-from-generative-deeep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Example of generative modeling, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deeep Learning by David Foster</a>  </h2>
+<h2 id="example-of-generative-modeling-taken-from-generative-deep-learning-by-david-foster-https-www-oreilly-com-library-view-generative-deep-learning-9781098134174-ch01-html">Example of generative modeling, <a href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank">taken from Generative Deep Learning by David Foster</a>  </h2>
 
 <br/><br/>
 <center>
@@ -678,79 +756,7 @@ data (for example an image), rather than trying to predict a label for say  a gi
 <br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="possible-paths-for-the-projects">Possible paths for the projects </h2>
-
-<p>The differential equation path: Here we propose a set of differential
-equations (ordinary and/or partial) to be solved first using neural
-networks (using either your own code or TensorFlow/Pytorch or similar
-libraries). Thereafter we can extend the set of methods for
-solving these equations to recurrent neural networks and autoencoders
-(AE) and/or Generalized Adversarial Networks (GANs). All these
-approaches can be expanded into one large project. This project can
-also be extended into including <a href="https://github.com/maziarraissi/PINNs" target="_blank">Physics informed machine
-learning</a>. Here we can discuss
-neural networks that are trained to solve supervised learning tasks
-while respecting any given law of physics described by general
-nonlinear partial differential equations.
-</p>
-
-<p>For those interested in mathematical aspects of deep learning, this could also be included.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-generative-models">The generative models </h2>
-
-<p>This path brings us from discriminative models (like the standard application of NNs, CNNs etc) to generative models. Two projects that follow to a large extent
-the lectures. Topics for data sets will be discussed during the lab sessions.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="paths-for-projects-writing-own-codes">Paths for projects, writing own codes </h2>
-
-<p>The computational path: Here we propose a path where you develop your
-own code for a convolutional or eventually recurrent neural network
-and apply this to data selects of your own selection. The code should
-be object oriented and flexible allowing for eventual extensions by
-including different Loss/Cost functions and other
-functionalities. Feel free to select data sets from those suggested
-below here. This code can also be extended upon by adding for example
-autoencoders. You can compare your own codes with implementations
-using TensorFlow(Keras)/PyTorch or other libraries.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-application-path">The application path </h2>
-
-<p>The application path: Here you can use the most relevant method(s)
-(say convolutional neural networks for images) and apply this(these)
-to data sets relevant for your own research.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="gaussian-processes-and-bayesian-analysis">Gaussian processes and Bayesian analysis </h2>
-
-<p>The Gaussian processes/Bayesian statistics path: <a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression
-(Gaussian processes) and Bayesian
-statistics</a> are popular
-tools in the machine learning literature. The main idea behind these
-approaches is to flexibly model the relationship between a large
-number of variables and a particular outcome (dependent
-variable). This can form a second part of a project where for example
-standard Kernel regression methods are used on a specific data
-set. Alternatively, participants can opt to work on a large project
-relevant for their own research using gaussian processes and/or
-Bayesian machine Learning.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="hpc-path">HPC path </h2>
-
-<p>Another alternative is to study high-performance computing aspects in
-designing ML codes. This can also be linked with an exploration of
-mathematical aspects of deep learning methods.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="what-are-the-basic-machine-learning-ingredients">What are the basic Machine Learning ingredients? </h2>
+<h2 id="reminder-on-the-basic-machine-learning-ingredients">Reminder on  the basic Machine Learning ingredients </h2>
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
