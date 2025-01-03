@@ -17,7 +17,7 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Lectures Thursdays 1215pm-2pm, room FØ434, Department of Physics
 - Lab and exercise sessions Thursdays 215pm-4pm, , room FØ434, Department of Physics
 - We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
-- No exam, only two projects. Each projects counts 1/2 of the final grade. Aleternatively one long project.
+- No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively one long project.
 - All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
 
 ## Deep learning methods covered (tentative plan)
@@ -29,13 +29,15 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Graph neural networks
 - Transformers
 - Autoencoders and principal component analysis
+
 ### Deep learning, generative methods
 - Basics of generative models
 - Boltzmann machines and energy based methods
-- Diffusion models (tentative)
+- Diffusion models
 - Variational autoencoders (VAEe)
 - Generative Adversarial Networks (GANs)
 - Autoregressive methods (tentative)
+
 ### Physical Sciences (often just called Physics informed) informed machine learning
 - Basic set up of PINNs with discussion of projects
 
@@ -45,9 +47,9 @@ All teaching material is available from this GitHub link.
 
 
 The course can also be used as a self-study course and besides the
-lectures, many of you may wish to independently work on your own projects related to for example your thesis or research. In
-general, in addition to the lectures, we have often followed five main
-paths:
+lectures, many of you may wish to independently work on your own
+projects related to for example your thesis or research. In general,
+in addition to the lectures, we have often followed five main paths:
 
 - Projects (two in total)  and exercises that follow the lectures
 
@@ -57,7 +59,7 @@ paths:
 
 - The own data path. Some of you may have data you wish to analyze with different deep learning methods
 
-- The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
+- The Bayesian ML path is not covered by the present lecture material. It is  normally based on independent work.
 
 
 
