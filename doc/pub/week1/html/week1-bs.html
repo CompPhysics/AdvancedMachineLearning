@@ -45,6 +45,11 @@ doconce format html week1.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'deep-learning-methods-covered-tentative'),
+              ('Generative methods', 2, None, 'generative-methods'),
+              ('Both discriminative and generative',
+               2,
+               None,
+               'both-discriminative-and-generative'),
               ('"Additional topics:  Kernel regression (Gaussian processes) '
                'and Bayesian '
                'statistics":"https://jenfb.github.io/bkmr/overview.html"',
@@ -347,6 +352,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#overview-of-first-week-january-20-24-2025" style="font-size: 80%;">Overview of first week, January 20-24, 2025</a></li>
      <!-- navigation toc: --> <li><a href="#practicalities" style="font-size: 80%;">Practicalities</a></li>
      <!-- navigation toc: --> <li><a href="#deep-learning-methods-covered-tentative" style="font-size: 80%;">Deep learning methods covered, tentative</a></li>
+     <!-- navigation toc: --> <li><a href="#generative-methods" style="font-size: 80%;">Generative methods</a></li>
+     <!-- navigation toc: --> <li><a href="#both-discriminative-and-generative" style="font-size: 80%;">Both discriminative and generative</a></li>
      <!-- navigation toc: --> <li><a href="#additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html" style="font-size: 80%;">"Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html"</a></li>
      <!-- navigation toc: --> <li><a href="#project-paths-overarching-view" style="font-size: 80%;">Project paths, overarching view</a></li>
      <!-- navigation toc: --> <li><a href="#possible-paths-for-the-projects" style="font-size: 80%;">Possible paths for the projects</a></li>
@@ -486,14 +493,14 @@ MathJax.Hub.Config({
 <li> Lectures Thursdays 1215pm-2pm, room F&#216;434, Department of Physics</li>
 <li> Lab and exercise sessions Thursdays 215pm-4pm, room F&#216;434, Department of Physics</li> 
 <li> We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants</li>
-<li> No exam, only two projects. Each projects counts 1/2 of the final grade. Aleternatively, one long project which counts 100% of the final grade</li>
+<li> No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively, one long project which counts 100% of the final grade</li>
 <li> All info at the GitHub address <a href="https://github.com/CompPhysics/AdvancedMachineLearning" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning</tt></a></li>
 </ol>
 <!-- !split -->
 <h2 id="deep-learning-methods-covered-tentative" class="anchor">Deep learning methods covered, tentative </h2>
 
 <ol>
-<li> <b>Deep learning</b>
+<li> <b>Deep learning</b>, often described as discriminative methods
 <ol type="a"></li>
  <li> Feed forward neural networks and its mathematics (NNs)</li>
  <li> Convolutional neural networks (CNNs)</li>
@@ -502,6 +509,10 @@ MathJax.Hub.Config({
  <li> Transformers</li>  
  <li> Autoencoders and principal component analysis</li>
 </ol>
+</ol>
+<!-- !split -->
+<h2 id="generative-methods" class="anchor">Generative methods </h2>
+<ol>
 <li> <b>Deep learning, generative methods</b>
 <ol type="a"></li>
  <li> Basics of generative models</li>
@@ -511,7 +522,12 @@ MathJax.Hub.Config({
  <li> Generative Adversarial Networks (GANs)</li>
  <li> Autoregressive methods (tentative)</li>
 </ol>
-<li> <b>Physical Sciences (often just called Physics informed neural networks, PINNs) informed machine learning</b></li>
+</ol>
+<!-- !split -->
+<h2 id="both-discriminative-and-generative" class="anchor">Both discriminative and generative </h2>
+
+<ol>
+<li> <b>Physics informed neural networks, PINNs</b></li>
 </ol>
 <!-- !split -->
 <h2 id="additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html" class="anchor"><a href="https://jenfb.github.io/bkmr/overview.html" target="_self">Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
@@ -531,13 +547,13 @@ variable).
 <p>The course can also be used as a self-study course and besides the
 lectures, many of you may wish to independently work on your own
 projects related to for example your thesis or research. In general,
-in addition to the lectures, we have often followed five main paths:
+we have often followed five main paths for the project(s):
 </p>
 
 <ol>
 <li> The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.</li>
 <li> The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs.</li>
-<li> Implementing generative methods</li>
+<li> Implementing generative methods, starts normally with discriminative methods</li>
 <li> The own data path. Some of you may have data you wish to analyze with different deep learning methods</li>
 <li> The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.</li>
 </ol>
@@ -1929,7 +1945,7 @@ $$
 </footer>
 -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2025, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>
