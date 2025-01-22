@@ -18,8 +18,9 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Lab and exercise sessions Thursdays 215pm-4pm, , room FØ434, Department of Physics
 - We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
 - No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively one long project.
-- All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
-
+- All info at the GitHub address https://github.com/CompPhysics/AdvancedMachineLearning
+- Zoom link for lectures https://msu.zoom.us/j/99649445421 Meeting ID: 996 4944 5421
+  
 ## Deep learning methods covered (tentative plan)
 
 ### Deep learning, classics
