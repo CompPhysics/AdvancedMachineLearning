@@ -303,19 +303,14 @@ div.toc p,a {
                None,
                'defining-different-types-of-rbms-energy-based-models'),
               ('Gaussian binary', 2, None, 'gaussian-binary'),
-              ('Representing the wave function',
-               2,
-               None,
-               'representing-the-wave-function'),
-              ('Define the cost function', 2, None, 'define-the-cost-function'),
               ('Extrapolations and model interpretability',
                2,
                None,
                'extrapolations-and-model-interpretability'),
-              ('Physics based statistical learning and data analysis',
+              ('Discipline  based statistical learning and data analysis',
                2,
                None,
-               'physics-based-statistical-learning-and-data-analysis'),
+               'discipline-based-statistical-learning-and-data-analysis'),
               ("Bayes' Theorem", 2, None, 'bayes-theorem'),
               ('"Quantified limits of the nuclear '
                'landscape":"https://journals.aps.org/prc/abstract/10.1103/PhysRevC.101.044307"',
@@ -465,10 +460,9 @@ MathJax.Hub.Config({
 <p>
 <ol>
  <li> Presentation of course</li>
- <li> Discussion of possible projects and presentation of participants</li>
+ <li> Discussion of possible projects</li>
  <li> Deep learning methods, mathematics and  review of neural networks</li>
  <li> <a href="https://youtu.be/" target="_blank">Video of lecture to be posted after lecture</a></li>
- <li> Test your background knowledge (to be added)</li>
 </ol>
 </div>
 
@@ -1138,6 +1132,8 @@ function also depends on the parameters \( \boldsymbol{a} \), \( \boldsymbol{b} 
 adjusting the energy function to best fit our problem.
 </p>
 
+<p>Recently these energy functions have been replaced by Neural Networks. This will be discussed later in the course.</p>
+
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="defining-different-types-of-rbms-energy-based-models">Defining different types of RBMs (Energy based models) </h2>
 
@@ -1171,54 +1167,6 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="representing-the-wave-function">Representing the wave function </h2>
-
-<p>The wavefunction should be a probability amplitude depending on
- \( \boldsymbol{x} \). The RBM model is given by the joint distribution of
- \( \boldsymbol{x} \) and \( \boldsymbol{h} \)
-</p>
-
-$$
-        P_{\mathrm{rbm}}(\boldsymbol{x},\boldsymbol{h}) = \frac{1}{Z} \exp{-E(\boldsymbol{x},\boldsymbol{h})}.
-$$
-
-<p>To find the marginal distribution of \( \boldsymbol{x} \) we set:</p>
-
-$$
-        P_{\mathrm{rbm}}(\boldsymbol{x}) =\frac{1}{Z}\sum_{\boldsymbol{h}} \exp{-E(\boldsymbol{x}, \boldsymbol{h})}.
-$$
-
-<p>Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)</p>
-$$
-        \vert\Psi (\boldsymbol{X})\vert^2 = P_{\mathrm{rbm}}(\boldsymbol{x}).
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="define-the-cost-function">Define the cost function </h2>
-
-<p>Now we don't necessarily have training data (unless we generate it by
-using some other method). However, what we do have is the variational
-principle which allows us to obtain the ground state wave function by
-minimizing the expectation value of the energy of a trial wavefunction
-(corresponding to the untrained NQS). Similarly to the traditional
-variational Monte Carlo method then, it is the local energy we wish to
-minimize. The gradient to use for the stochastic gradient descent
-procedure is
-</p>
-
-$$
-	C_i = \frac{\partial \langle E_L \rangle}{\partial \theta_i}
-	= 2(\langle E_L \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle - \langle E_L \rangle \langle \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle ),
-$$
-
-<p>where the local energy is given by</p>
-$$
-	E_L = \frac{1}{\Psi} \hat{\boldsymbol{H}} \Psi.
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="extrapolations-and-model-interpretability">Extrapolations and model interpretability  </h2>
 
 <p>When you hear phrases like <b>predictions and estimations</b> and
@@ -1232,7 +1180,7 @@ necessarily cause \( A \).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="physics-based-statistical-learning-and-data-analysis">Physics based statistical learning and data analysis </h2>
+<h2 id="discipline-based-statistical-learning-and-data-analysis">Discipline  based statistical learning and data analysis </h2>
 
 <p>The above concepts are in some sense the difference between <b>old-fashioned</b> machine
 learning and statistics and Bayesian learning. In machine learning and prediction based
@@ -1245,7 +1193,7 @@ concerned about the underlying patterns that were learned in order
 to make these predictions.
 </p>
 
-<p>Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.</p>
+<p>A discipline (Bioscience, Chemistry, Geoscience, Math, Physics..)  based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="bayes-theorem">Bayes' Theorem </h2>

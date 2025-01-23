@@ -199,10 +199,9 @@ MathJax.Hub.Config({
 <p>
 <ol>
  <p><li> Presentation of course</li>
- <p><li> Discussion of possible projects and presentation of participants</li>
+ <p><li> Discussion of possible projects</li>
  <p><li> Deep learning methods, mathematics and  review of neural networks</li>
  <p><li> <a href="https://youtu.be/" target="_blank">Video of lecture to be posted after lecture</a></li>
- <p><li> Test your background knowledge (to be added)</li>
 </ol>
 </div>
 </section>
@@ -964,6 +963,8 @@ function also depends on the parameters \( \boldsymbol{a} \), \( \boldsymbol{b} 
 \( W \). Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 </p>
+
+<p>Recently these energy functions have been replaced by Neural Networks. This will be discussed later in the course.</p>
 </section>
 
 <section>
@@ -1003,64 +1004,6 @@ $$
 </section>
 
 <section>
-<h2 id="representing-the-wave-function">Representing the wave function </h2>
-
-<p>The wavefunction should be a probability amplitude depending on
- \( \boldsymbol{x} \). The RBM model is given by the joint distribution of
- \( \boldsymbol{x} \) and \( \boldsymbol{h} \)
-</p>
-
-<p>&nbsp;<br>
-$$
-        P_{\mathrm{rbm}}(\boldsymbol{x},\boldsymbol{h}) = \frac{1}{Z} \exp{-E(\boldsymbol{x},\boldsymbol{h})}.
-$$
-<p>&nbsp;<br>
-
-<p>To find the marginal distribution of \( \boldsymbol{x} \) we set:</p>
-
-<p>&nbsp;<br>
-$$
-        P_{\mathrm{rbm}}(\boldsymbol{x}) =\frac{1}{Z}\sum_{\boldsymbol{h}} \exp{-E(\boldsymbol{x}, \boldsymbol{h})}.
-$$
-<p>&nbsp;<br>
-
-<p>Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)</p>
-<p>&nbsp;<br>
-$$
-        \vert\Psi (\boldsymbol{X})\vert^2 = P_{\mathrm{rbm}}(\boldsymbol{x}).
-$$
-<p>&nbsp;<br>
-</section>
-
-<section>
-<h2 id="define-the-cost-function">Define the cost function </h2>
-
-<p>Now we don't necessarily have training data (unless we generate it by
-using some other method). However, what we do have is the variational
-principle which allows us to obtain the ground state wave function by
-minimizing the expectation value of the energy of a trial wavefunction
-(corresponding to the untrained NQS). Similarly to the traditional
-variational Monte Carlo method then, it is the local energy we wish to
-minimize. The gradient to use for the stochastic gradient descent
-procedure is
-</p>
-
-<p>&nbsp;<br>
-$$
-	C_i = \frac{\partial \langle E_L \rangle}{\partial \theta_i}
-	= 2(\langle E_L \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle - \langle E_L \rangle \langle \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle ),
-$$
-<p>&nbsp;<br>
-
-<p>where the local energy is given by</p>
-<p>&nbsp;<br>
-$$
-	E_L = \frac{1}{\Psi} \hat{\boldsymbol{H}} \Psi.
-$$
-<p>&nbsp;<br>
-</section>
-
-<section>
 <h2 id="extrapolations-and-model-interpretability">Extrapolations and model interpretability  </h2>
 
 <p>When you hear phrases like <b>predictions and estimations</b> and
@@ -1075,7 +1018,7 @@ necessarily cause \( A \).
 </section>
 
 <section>
-<h2 id="physics-based-statistical-learning-and-data-analysis">Physics based statistical learning and data analysis </h2>
+<h2 id="discipline-based-statistical-learning-and-data-analysis">Discipline  based statistical learning and data analysis </h2>
 
 <p>The above concepts are in some sense the difference between <b>old-fashioned</b> machine
 learning and statistics and Bayesian learning. In machine learning and prediction based
@@ -1088,7 +1031,7 @@ concerned about the underlying patterns that were learned in order
 to make these predictions.
 </p>
 
-<p>Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.</p>
+<p>A discipline (Bioscience, Chemistry, Geoscience, Math, Physics..)  based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.</p>
 </section>
 
 <section>

@@ -10,7 +10,6 @@ DATE: January 23, 2025
   o Discussion of possible projects
   o Deep learning methods, mathematics and  review of neural networks
   o "Video of lecture to be posted after lecture":"https://youtu.be/"
-  o Test your background knowledge (to be added)
 !eblock
 
 
@@ -437,11 +436,6 @@ Here we have defined the norm-1 as
 
 
 
-
-
-
-
-
 !split
 ===== Examples: Many-body physics, Quantum Monte Carlo and deep learning =====
 !bblock
@@ -604,6 +598,7 @@ problems like the Ising and Potts classes of models.
 
 
 
+
 !split
 ===== The structure of the RBM network =====
 
@@ -660,6 +655,7 @@ function also depends on the parameters $\bm{a}$, $\bm{b}$ and
 $W$. Thus, when we adjust them during the learning procedure, we are
 adjusting the energy function to best fit our problem.
 
+Recently these energy functions have been replaced by Neural Networks. This will be discussed later in the course.
 
 !split
 ===== Defining different types of RBMs (Energy based models) =====
@@ -692,60 +688,6 @@ Another varient is the RBM where the visible units are Gaussian while the hidden
 !et
 !eblock
 
-!split
-===== Representing the wave function =====
-
-The wavefunction should be a probability amplitude depending on
- $\bm{x}$. The RBM model is given by the joint distribution of
- $\bm{x}$ and $\bm{h}$
-
-!bt
-\[
-        P_{\mathrm{rbm}}(\bm{x},\bm{h}) = \frac{1}{Z} \exp{-E(\bm{x},\bm{h})}.
-\]
-!et
-
-To find the marginal distribution of $\bm{x}$ we set:
-
-!bt
-\[
-        P_{\mathrm{rbm}}(\bm{x}) =\frac{1}{Z}\sum_{\bm{h}} \exp{-E(\bm{x}, \bm{h})}.
-\]
-!et
-
-Now this is what we use to represent the wave function, calling it a neural-network quantum state (NQS)
-!bt
-\[
-        \vert\Psi (\bm{X})\vert^2 = P_{\mathrm{rbm}}(\bm{x}).
-\]
-!et
-
-!split
-===== Define the cost function =====
-
-Now we don't necessarily have training data (unless we generate it by
-using some other method). However, what we do have is the variational
-principle which allows us to obtain the ground state wave function by
-minimizing the expectation value of the energy of a trial wavefunction
-(corresponding to the untrained NQS). Similarly to the traditional
-variational Monte Carlo method then, it is the local energy we wish to
-minimize. The gradient to use for the stochastic gradient descent
-procedure is
-
-!bt
-\[
-	C_i = \frac{\partial \langle E_L \rangle}{\partial \theta_i}
-	= 2(\langle E_L \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle - \langle E_L \rangle \langle \frac{1}{\Psi}\frac{\partial \Psi}{\partial \theta_i} \rangle ),
-\]
-!et
-where the local energy is given by
-!bt
-\[
-	E_L = \frac{1}{\Psi} \hat{\bm{H}} \Psi.
-\]
-!et
-
-
 
 !split
 ===== Extrapolations and model interpretability  =====
@@ -761,7 +703,7 @@ necessarily cause $A$.
 
 
 !split
-===== Physics based statistical learning and data analysis =====
+===== Discipline  based statistical learning and data analysis =====
 
 The above concepts are in some sense the difference between _old-fashioned_ machine
 learning and statistics and Bayesian learning. In machine learning and prediction based
@@ -773,7 +715,7 @@ is the quality of the predictions or assessments, and we are less
 concerned about the underlying patterns that were learned in order
 to make these predictions.
 
-Physics based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.
+A discipline (Bioscience, Chemistry, Geoscience, Math, Physics..)  based statistical learning points however to approaches that give us both predictions and correlations as well as being able to produce error estimates and understand causations.  This leads us to the very interesting field of Bayesian statistics and Bayesian machine learning.
 
 
 
