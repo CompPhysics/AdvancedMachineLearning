@@ -19,7 +19,7 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
 - No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively one long project.
 - All info at the GitHub address https://github.com/CompPhysics/AdvancedMachineLearning
-- Zoom link for lectures https://msu.zoom.us/j/99649445421 Meeting ID: 996 4944 5421
+- Permanent Zoom link for the whole semester is https://uio.zoom.us/my/mortenhj
   
 ## Deep learning methods covered (tentative plan)
 
@@ -42,7 +42,6 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 ### Physical Sciences (often just called Physics informed) informed machine learning
 - Basic set up of PINNs with discussion of projects
 
-FYS5429 zoom link to be announced when semester starts
 
 All teaching material is available from this GitHub link.
 
