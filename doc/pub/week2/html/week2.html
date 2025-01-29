@@ -332,7 +332,11 @@ div.toc p,a {
               ('Using TensorFlow: Collect and pre-process data',
                2,
                None,
-               'using-tensorflow-collect-and-pre-process-data')]}
+               'using-tensorflow-collect-and-pre-process-data'),
+              ('And a similar code using PyTorch',
+               2,
+               None,
+               'and-a-similar-code-using-pytorch')]}
 end of tocinfo -->
 
 <body>
@@ -395,8 +399,8 @@ MathJax.Hub.Config({
 <h2 id="videos-on-neural-networks">Videos on Neural Networks </h2>
 
 <ul>
-<li> <a href="https://www.youtube.com/watch?v=CqOfi41LfDw" target="_blank">Video on Neural Networks</a></li>
-<li> <a href="https://www.youtube.com/watch?v=Ilg3gGewQ5U" target="_blank">Video on the back propagation algorithm</a></li>
+<li> Video on Neural Networks at <a href="https://www.youtube.com/watch?v=CqOfi41LfDw" target="_blank"><tt>https://www.youtube.com/watch?v=CqOfi41LfDw</tt></a></li>
+<li> Video on the back propagation algorithm at <a href="https://www.youtube.com/watch?v=Ilg3gGewQ5U" target="_blank"><tt>https://www.youtube.com/watch?v=Ilg3gGewQ5U</tt></a></li>
 </ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="mathematics-of-deep-learning">Mathematics of deep learning </h2>
@@ -2879,6 +2883,124 @@ plt<span style="color: #666666">.</span>show()
   </div>
 </div>
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="and-a-similar-code-using-pytorch">And a similar code using PyTorch </h2>
+<p>See also Rashkca et al., chapter 11, jupyter-notebook sent separately, from <a href="https://github.com/rasbt/machine-learning-book" target="_blank">GitHub</a></p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Simple NN code using PyTorch on the MNIST dataset (this time the 28 x 28 set)</span>
+<span style="color: #408080; font-style: italic"># The MNIST dataset is loaded using `torchvision.datasets`. The images are transformed to tensors and normalized.</span>
+<span style="color: #408080; font-style: italic"># A simple feedforward neural network with one hidden layer is defined using `nn.Module`.</span>
+<span style="color: #408080; font-style: italic"># The model is trained using the Adam optimizer and CrossEntropyLoss. The training loop iterates over the dataset for a specified number of epochs.</span>
+<span style="color: #408080; font-style: italic"># Note that we don&#39;t include additional hyperparameters and the learning rate is set to 0.001.  </span>
+<span style="color: #408080; font-style: italic"># After training, the model is evaluated on the test dataset to compute accuracy.</span>
+<span style="color: #408080; font-style: italic"># The trained model&#39;s weights are saved to a file for later use.</span>
+<span style="color: #408080; font-style: italic"># To do: add loops over hyperparameters and learning rates</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.optim</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">optim</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torch.utils.data</span> <span style="color: #008000; font-weight: bold">import</span> DataLoader
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torchvision.transforms</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">transforms</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torchvision.datasets</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">datasets</span>
+
+<span style="color: #408080; font-style: italic"># Hyperparameters</span>
+input_size <span style="color: #666666">=</span> <span style="color: #666666">784</span>  <span style="color: #408080; font-style: italic"># 28x28 images</span>
+hidden_size <span style="color: #666666">=</span> <span style="color: #666666">128</span>
+num_classes <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+num_epochs <span style="color: #666666">=</span> <span style="color: #666666">5</span>
+batch_size <span style="color: #666666">=</span> <span style="color: #666666">64</span>
+learning_rate <span style="color: #666666">=</span> <span style="color: #666666">0.001</span>
+
+<span style="color: #408080; font-style: italic"># Device configuration</span>
+device <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>device(<span style="color: #BA2121">&#39;cuda&#39;</span> <span style="color: #008000; font-weight: bold">if</span> torch<span style="color: #666666">.</span>cuda<span style="color: #666666">.</span>is_available() <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&#39;cpu&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># MNIST dataset</span>
+train_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transforms<span style="color: #666666">.</span>ToTensor(), download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+test_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>, transform<span style="color: #666666">=</span>transforms<span style="color: #666666">.</span>ToTensor())
+
+<span style="color: #408080; font-style: italic"># Data loader</span>
+train_loader <span style="color: #666666">=</span> DataLoader(dataset<span style="color: #666666">=</span>train_dataset, batch_size<span style="color: #666666">=</span>batch_size, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+test_loader <span style="color: #666666">=</span> DataLoader(dataset<span style="color: #666666">=</span>test_dataset, batch_size<span style="color: #666666">=</span>batch_size, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+
+<span style="color: #408080; font-style: italic"># Fully connected neural network with one hidden layer</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">NeuralNet</span>(nn<span style="color: #666666">.</span>Module):
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, input_size, hidden_size, num_classes):
+       <span style="color: #008000">super</span>(NeuralNet, <span style="color: #008000">self</span>)<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>fc1 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(input_size, hidden_size)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>relu <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>ReLU()
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>fc2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(hidden_size, num_classes)  
+
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x):
+       out <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>fc1(x)
+       out <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>relu(out)
+       out <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>fc2(out)
+       <span style="color: #008000; font-weight: bold">return</span> out
+
+model <span style="color: #666666">=</span> NeuralNet(input_size, hidden_size, num_classes)<span style="color: #666666">.</span>to(device)
+
+<span style="color: #408080; font-style: italic"># Loss and optimizer</span>
+criterion <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>CrossEntropyLoss()
+optimizer <span style="color: #666666">=</span> optim<span style="color: #666666">.</span>Adam(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=</span>learning_rate)
+
+<span style="color: #408080; font-style: italic"># Train the model</span>
+total_step <span style="color: #666666">=</span> <span style="color: #008000">len</span>(train_loader)
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(num_epochs):
+   <span style="color: #008000; font-weight: bold">for</span> i, (images, labels) <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(train_loader):  
+       <span style="color: #408080; font-style: italic"># Move tensors to the configured device</span>
+       images <span style="color: #666666">=</span> images<span style="color: #666666">.</span>reshape(<span style="color: #666666">-1</span>, <span style="color: #666666">28*28</span>)<span style="color: #666666">.</span>to(device)
+       labels <span style="color: #666666">=</span> labels<span style="color: #666666">.</span>to(device)
+
+       <span style="color: #408080; font-style: italic"># Forward pass</span>
+       outputs <span style="color: #666666">=</span> model(images)
+       loss <span style="color: #666666">=</span> criterion(outputs, labels)
+
+       <span style="color: #408080; font-style: italic"># Backward and optimize</span>
+       optimizer<span style="color: #666666">.</span>zero_grad()
+       loss<span style="color: #666666">.</span>backward()
+       optimizer<span style="color: #666666">.</span>step()
+
+       <span style="color: #008000; font-weight: bold">if</span> (i<span style="color: #666666">+1</span>) <span style="color: #666666">%</span> <span style="color: #666666">100</span> <span style="color: #666666">==</span> <span style="color: #666666">0</span>:
+           <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Epoch [</span><span style="color: #BB6688; font-weight: bold">{</span>epoch<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>num_epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">], Step [</span><span style="color: #BB6688; font-weight: bold">{</span>i<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>total_step<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">], Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>loss<span style="color: #666666">.</span>item()<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># Test the model</span>
+<span style="color: #408080; font-style: italic"># In test phase, we don&#39;t need to compute gradients (for memory efficiency)</span>
+<span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():
+   correct <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+   total <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+   <span style="color: #008000; font-weight: bold">for</span> images, labels <span style="color: #AA22FF; font-weight: bold">in</span> test_loader:
+       images <span style="color: #666666">=</span> images<span style="color: #666666">.</span>reshape(<span style="color: #666666">-1</span>, <span style="color: #666666">28*28</span>)<span style="color: #666666">.</span>to(device)
+       labels <span style="color: #666666">=</span> labels<span style="color: #666666">.</span>to(device)
+       outputs <span style="color: #666666">=</span> model(images)
+       _, predicted <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>max(outputs<span style="color: #666666">.</span>data, <span style="color: #666666">1</span>)
+       total <span style="color: #666666">+=</span> labels<span style="color: #666666">.</span>size(<span style="color: #666666">0</span>)
+       correct <span style="color: #666666">+=</span> (predicted <span style="color: #666666">==</span> labels)<span style="color: #666666">.</span>sum()<span style="color: #666666">.</span>item()
+
+   <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Accuracy of the network on the 10000 test images: </span><span style="color: #BB6688; font-weight: bold">{</span><span style="color: #666666">100</span> <span style="color: #666666">*</span> correct <span style="color: #666666">/</span> total<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.2f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">%&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># Save the model checkpoint</span>
+torch<span style="color: #666666">.</span>save(model<span style="color: #666666">.</span>state_dict(), <span style="color: #BA2121">&#39;model.ckpt&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
