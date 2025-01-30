@@ -1,0 +1,184 @@
+%%
+%% Automatically generated file from DocOnce source
+%% (https://github.com/doconce/doconce/)
+%% doconce format latex CNNandmore.do.txt --print_latex_style=trac --latex_admon=paragraph
+%%
+
+
+%-------------------- begin preamble ----------------------
+
+\documentclass[%
+oneside,                 % oneside: electronic viewing, twoside: printing
+final,                   % draft: marks overfull hboxes, figures with paths
+10pt]{article}
+
+\listfiles               %  print all files needed to compile this document
+
+\usepackage{relsize,makeidx,color,setspace,amsmath,amsfonts,amssymb}
+\usepackage[table]{xcolor}
+\usepackage{bm,ltablex,microtype}
+
+\usepackage[pdftex]{graphicx}
+
+\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{lmodern}         % Latin Modern fonts derived from Computer Modern
+
+% Hyperlinks in PDF:
+\definecolor{linkcolor}{rgb}{0,0,0.4}
+\usepackage{hyperref}
+\hypersetup{
+    breaklinks=true,
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    citecolor=black,
+    filecolor=black,
+    %filecolor=blue,
+    pdfmenubar=true,
+    pdftoolbar=true,
+    bookmarksdepth=3   % Uncomment (and tweak) for PDF bookmarks with more levels than the TOC
+    }
+%\hyperbaseurl{}   % hyperlinks are relative to this root
+
+\setcounter{tocdepth}{2}  % levels in table of contents
+
+% prevent orhpans and widows
+\clubpenalty = 10000
+\widowpenalty = 10000
+
+% --- end of standard preamble for documents ---
+
+
+% insert custom LaTeX commands...
+
+\raggedbottom
+\makeindex
+\usepackage[totoc]{idxlayout}   % for index in the toc
+\usepackage[nottoc]{tocbibind}  % for references/bibliography in the toc
+
+%-------------------- end preamble ----------------------
+
+\begin{document}
+
+% matching end for #ifdef PREAMBLE
+
+\newcommand{\exercisesection}[1]{\subsection*{#1}}
+
+
+% ------------------- main content ----------------------
+
+
+
+% ----------------- title -------------------------
+
+\thispagestyle{empty}
+
+\begin{center}
+{\LARGE\bf
+\begin{spacing}{1.25}
+Project 1 CNNs, RNNs, Autoencoders and more
+\end{spacing}
+}
+\end{center}
+
+% ----------------- author(s) -------------------------
+
+\begin{center}
+{\bf \href{{https://www.uio.no/studier/emner/matnat/fys/FYS5429/index-eng.html}}{FYS5429/9429}, Advanced machine learning and data analysis for the physical sciences, University of Oslo, Norway${}^{}$} \\ [0mm]
+\end{center}
+
+\begin{center}
+% List of all institutions:
+\end{center}
+    
+% ----------------- end author(s) -------------------------
+
+% --- begin date ---
+\begin{center}
+Spring semester 2025, deadline March 21
+\end{center}
+% --- end date ---
+
+\vspace{1cm}
+
+
+\subsection*{Discriminative methods}
+
+This project explores different discriminative methods, starting with
+standard neural networks, then moving to Comvolutional NNs (CNNs) or
+Recurrent NNs (RNNs), Autoencoders and/or Graphical NNs (GNNs).  It
+allows also for a smooth transition to generative methods like
+Boltzmann machines, VAEs, GANs and Diffusion models. These methods are
+the topic of the second project.
+
+\paragraph{Images and more.}
+A data set which many of you are familiar with is the MNIST set of
+handwritten numbers, see
+\href{{https://en.wikipedia.org/wiki/MNIST_database}}{\nolinkurl{https://en.wikipedia.org/wiki/MNIST_database}}.  Here you can
+study this data set with NNs, CNNs and eventually autoencoders or
+GNNs. For project 2 you could continue with the same data set and
+explore generative methods.  You can obviously replace this data set
+with other images, such as images from modeling of phase transitions
+in physical systems, see \href{{https://www.arxiv.org/abs/2501.05547}}{\nolinkurl{https://www.arxiv.org/abs/2501.05547}} or
+other data sets of your choice.
+
+\paragraph{Time series.}
+Another frequently occuring type of data are so-called time
+series. Here again you can start with NNs, move over to RNNs and
+autoencoders. Similarly, for project 2, you can include VAEs,
+Diffusion models or other generative methods. At the end you will have
+studied a broad set of deep learning methods, allowing you thereby to
+assess their pros and cons.
+
+Feel free to develop own codes or use libraries like TensorFlow and/or PyTorch.
+
+\subsection*{Introduction to numerical projects}
+
+Here follows a brief recipe and recommendation on how to write a report for each
+project.
+
+\begin{itemize}
+  \item Give a short description of the nature of the problem and the eventual  numerical methods you have used.
+
+  \item Describe the algorithm you have used and/or developed. Here you may find it convenient to use pseudocoding. In many cases you can describe the algorithm in the program itself.
+
+  \item Include the source code of your program. Comment your program properly.
+
+  \item If possible, try to find analytic solutions, or known limits in order to test your program when developing the code.
+
+  \item Include your results either in figure form or in a table. Remember to        label your results. All tables and figures should have relevant captions        and labels on the axes.
+
+  \item Try to evaluate the reliabilty and numerical stability/precision of your results. If possible, include a qualitative and/or quantitative discussion of the numerical stability, eventual loss of precision etc.
+
+  \item Try to give an interpretation of you results in your answers to  the problems.
+
+  \item Critique: if possible include your comments and reflections about the  exercise, whether you felt you learnt something, ideas for improvements and  other thoughts you've made when solving the exercise. We wish to keep this course at the interactive level and your comments can help us improve it.
+
+  \item Try to establish a practice where you log your work at the  computerlab. You may find such a logbook very handy at later stages in your work, especially when you don't properly remember  what a previous test version  of your program did. Here you could also record  the time spent on solving the exercise, various algorithms you may have tested or other topics which you feel worthy of mentioning.
+\end{itemize}
+
+\noindent
+\subsection*{Format for electronic delivery of report and programs}
+
+The preferred format for the report is a PDF file. You can also use DOC or postscript formats or as an ipython notebook file.  As programming language we prefer that you choose between C/C++, Fortran2008 or Python. The following prescription should be followed when preparing the report:
+
+\begin{itemize}
+  \item Send us an email in order  to hand in your projects with a link to your GitHub/Gitlab repository.
+
+  \item In your GitHub/GitLab or similar repository, please include a folder which contains selected results. These can be in the form of output from your code for a selected set of runs and input parameters.
+\end{itemize}
+
+\noindent
+Finally, 
+we encourage you to collaborate. Optimal working groups consist of 
+2-3 students. You can then hand in a common report. 
+
+
+% ------------------- end of main content ---------------
+
+\end{document}
+
