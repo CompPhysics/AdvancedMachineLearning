@@ -1,47 +1,203 @@
-TITLE: Project 1, Ordinary differential equations with Neural Networks and Recurrent Neural Networks
-AUTHOR: "FYS5429/9429":"https://www.uio.no/studier/emner/matnat/fys/FYS5429/index-eng.html", Advanced machine learning and data analysis for the physical sciences, University of Oslo, Norway
-DATE: Spring semester 2025, deadline March 21
+%%
+%% Automatically generated file from DocOnce source
+%% (https://github.com/doconce/doconce/)
+%% doconce format latex ODE.do.txt --print_latex_style=trac --latex_admon=paragraph
+%%
 
 
-===== Solving  differential equations with neural networks =====
+%-------------------- begin preamble ----------------------
+
+\documentclass[%
+oneside,                 % oneside: electronic viewing, twoside: printing
+final,                   % draft: marks overfull hboxes, figures with paths
+10pt]{article}
+
+\listfiles               %  print all files needed to compile this document
+
+\usepackage{relsize,makeidx,color,setspace,amsmath,amsfonts,amssymb}
+\usepackage[table]{xcolor}
+\usepackage{bm,ltablex,microtype}
+
+\usepackage[pdftex]{graphicx}
+
+\usepackage{fancyvrb} % packages needed for verbatim environments
+
+\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{lmodern}         % Latin Modern fonts derived from Computer Modern
+
+% Hyperlinks in PDF:
+\definecolor{linkcolor}{rgb}{0,0,0.4}
+\usepackage{hyperref}
+\hypersetup{
+    breaklinks=true,
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    citecolor=black,
+    filecolor=black,
+    %filecolor=blue,
+    pdfmenubar=true,
+    pdftoolbar=true,
+    bookmarksdepth=3   % Uncomment (and tweak) for PDF bookmarks with more levels than the TOC
+    }
+%\hyperbaseurl{}   % hyperlinks are relative to this root
+
+\setcounter{tocdepth}{2}  % levels in table of contents
+
+% prevent orhpans and widows
+\clubpenalty = 10000
+\widowpenalty = 10000
+
+% --- end of standard preamble for documents ---
+
+
+% insert custom LaTeX commands...
+
+\raggedbottom
+\makeindex
+\usepackage[totoc]{idxlayout}   % for index in the toc
+\usepackage[nottoc]{tocbibind}  % for references/bibliography in the toc
+
+%-------------------- end preamble ----------------------
+
+\begin{document}
+
+% matching end for #ifdef PREAMBLE
+
+\newcommand{\exercisesection}[1]{\subsection*{#1}}
+
+
+% ------------------- main content ----------------------
+
+
+
+% ----------------- title -------------------------
+
+\thispagestyle{empty}
+
+\begin{center}
+{\LARGE\bf
+\begin{spacing}{1.25}
+Project 1, Ordinary differential equations with Neural Networks and Recurrent Neural Networks
+\end{spacing}
+}
+\end{center}
+
+% ----------------- author(s) -------------------------
+
+\begin{center}
+{\bf \href{{https://www.uio.no/studier/emner/matnat/fys/FYS5429/index-eng.html}}{FYS5429/9429}, Advanced machine learning and data analysis for the physical sciences, University of Oslo, Norway${}^{}$} \\ [0mm]
+\end{center}
+
+\begin{center}
+% List of all institutions:
+\end{center}
+    
+% ----------------- end author(s) -------------------------
+
+% --- begin date ---
+\begin{center}
+Spring semester 2025, deadline March 21
+\end{center}
+% --- end date ---
+
+\vspace{1cm}
+
+
+\subsection*{Solving  differential equations with neural networks}
 
 Here we describe the possible differential equations we can study
 first with neural networks and thereafter with recurrent neural
 networks and/or Autoenconders.  Feel free to use own codes or TensorFlow/Keras.PyTorch or toher libraries.
 Furthermore, you can change the type of differential equations.
 
-The differential equations are given by the so-called "Lorenz attractor model":"https://encyclopediaofmath.org/index.php?title=Lorenz_attractor", and read
+The differential equations are given by the so-called \href{{https://encyclopediaofmath.org/index.php?title=Lorenz_attractor}}{Lorenz attractor model}, and read
 
-!bt
 \[
 \frac{dx}{dt}=\sigma\left(y-x\right),
 \]
-!et
 where $\sigma =10$ is a constant
-!bt
 \[
 \frac{dy}{dt}= x\left(\rho-z\right)-y,
 \]
-!et
 with $\rho=28$ and
-!bt
 \[
 \frac{dz}{dt}=xy-\beta z
 \]
-!et
 
 with $\beta=8/3$ as our final constant.
 
 The following function is a
 simple function which sets up the solution using the ordinary
-differential library which follows _NumPy_. Here we have fixed the
+differential library which follows \textbf{NumPy}. Here we have fixed the
 time sted $\Delta t=0.01$ and the final time $t_f=8$.
 
 The program sets $100$ random initial values and produces inputs and outputs for a neural network calculations.
 The inputs are given by the values of the array $\bm{x}$ (which contains $x,y,z$ as functions of time) for the time step $\bm{x}_t$.
 The other array defined by $\bm{x}_{t+1}$ contains the outputs (or targets) which we want the neural network to reproduce.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{verbatim}
 # Common imports
 import numpy as np
 from scipy.integrate import odeint
@@ -98,7 +254,9 @@ for j in range(100):
     nninput[j*(len(t)-1):(j+1)*(len(t)-1),:] = x_t[j,:-1,:]
     nnoutput[j*(len(t)-1):(j+1)*(len(t)-1),:] = x_t[j,1:,:]
 
-!ec
+
+\end{verbatim}
+
 
 The input and output variables are those we will start trying our
 network with. Your first taks is to set up a neural code (either using
@@ -120,13 +278,105 @@ to fit both the velocities and positions using much of the same recipe
 as for Lorenz attractor.  You will find it convenient to analyze one
 set of initial conditions first. The code is included here.
 
-
 This code is an example code that solves Newton's equations of motion
 with a given force and produces an output which in turn can be used to
 train a neural network
 
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{verbatim}
 # Common imports
 import numpy as np
 import pandas as pd
@@ -220,60 +470,55 @@ fig.tight_layout()
 save_fig("ForcedBlockRK4")
 plt.show()
 
-!ec
 
-
+\end{verbatim}
 
 
 The next step is to include recurrent neural networks. 
 
-
-
-
-
-===== Introduction to numerical projects =====
+\subsection*{Introduction to numerical projects}
 
 Here follows a brief recipe and recommendation on how to write a report for each
 project.
 
-  * Give a short description of the nature of the problem and the eventual  numerical methods you have used.
+\begin{itemize}
+  \item Give a short description of the nature of the problem and the eventual  numerical methods you have used.
 
-  * Describe the algorithm you have used and/or developed. Here you may find it convenient to use pseudocoding. In many cases you can describe the algorithm in the program itself.
+  \item Describe the algorithm you have used and/or developed. Here you may find it convenient to use pseudocoding. In many cases you can describe the algorithm in the program itself.
 
-  * Include the source code of your program. Comment your program properly.
+  \item Include the source code of your program. Comment your program properly.
 
-  * If possible, try to find analytic solutions, or known limits in order to test your program when developing the code.
+  \item If possible, try to find analytic solutions, or known limits in order to test your program when developing the code.
 
-  * Include your results either in figure form or in a table. Remember to        label your results. All tables and figures should have relevant captions        and labels on the axes.
+  \item Include your results either in figure form or in a table. Remember to        label your results. All tables and figures should have relevant captions        and labels on the axes.
 
-  * Try to evaluate the reliabilty and numerical stability/precision of your results. If possible, include a qualitative and/or quantitative discussion of the numerical stability, eventual loss of precision etc.
+  \item Try to evaluate the reliabilty and numerical stability/precision of your results. If possible, include a qualitative and/or quantitative discussion of the numerical stability, eventual loss of precision etc.
 
-  * Try to give an interpretation of you results in your answers to  the problems.
+  \item Try to give an interpretation of you results in your answers to  the problems.
 
-  * Critique: if possible include your comments and reflections about the  exercise, whether you felt you learnt something, ideas for improvements and  other thoughts you've made when solving the exercise. We wish to keep this course at the interactive level and your comments can help us improve it.
+  \item Critique: if possible include your comments and reflections about the  exercise, whether you felt you learnt something, ideas for improvements and  other thoughts you've made when solving the exercise. We wish to keep this course at the interactive level and your comments can help us improve it.
 
-  * Try to establish a practice where you log your work at the  computerlab. You may find such a logbook very handy at later stages in your work, especially when you don't properly remember  what a previous test version  of your program did. Here you could also record  the time spent on solving the exercise, various algorithms you may have tested or other topics which you feel worthy of mentioning.
+  \item Try to establish a practice where you log your work at the  computerlab. You may find such a logbook very handy at later stages in your work, especially when you don't properly remember  what a previous test version  of your program did. Here you could also record  the time spent on solving the exercise, various algorithms you may have tested or other topics which you feel worthy of mentioning.
+\end{itemize}
 
-
-
-
-
-
-===== Format for electronic delivery of report and programs =====
+\noindent
+\subsection*{Format for electronic delivery of report and programs}
 
 The preferred format for the report is a PDF file. You can also use DOC or postscript formats or as an ipython notebook file.  As programming language we prefer that you choose between C/C++, Fortran2008 or Python. The following prescription should be followed when preparing the report:
 
-  * Send us an email in order  to hand in your projects with a link to your GitHub/Gitlab repository.
+\begin{itemize}
+  \item Send us an email in order  to hand in your projects with a link to your GitHub/Gitlab repository.
 
-  * In your GitHub/GitLab or similar repository, please include a folder which contains selected results. These can be in the form of output from your code for a selected set of runs and input parameters.
+  \item In your GitHub/GitLab or similar repository, please include a folder which contains selected results. These can be in the form of output from your code for a selected set of runs and input parameters.
+\end{itemize}
 
-
+\noindent
 Finally, 
 we encourage you to collaborate. Optimal working groups consist of 
 2-3 students. You can then hand in a common report. 
 
 
+% ------------------- end of main content ---------------
 
-
-
+\end{document}
 
