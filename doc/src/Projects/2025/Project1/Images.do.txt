@@ -1,23 +1,24 @@
-TITLE: Getting started with project 1 
+TITLE: Project 1
 AUTHOR: "FYS5429/9429":"https://www.uio.no/studier/emner/matnat/fys/FYS5429/index-eng.html", Advanced machine learning and data analysis for the physical sciences, University of Oslo, Norway
-DATE: Spring semester 2023
+DATE: Spring semester 2025, deadline March 21
 
 
 ======= Possible paths for project 1  =======
 
 We discuss here several paths as well as data sets for the first project (or as parts of a larger project)
-
+Tentative deadline March 22. We would also like to propose that people who have formed groups present eventual projects on January 30. 
 
 ===== Paths for the projects =====
 
-o The computational path: Here we propose a path where you develop your own code for a convolutional or eventually recurrent neural network and apply this to data selects of your own selection. The code should be object oriented and flexible allowing for eventual extensions by including different Loss/Cost functions and other functionalities. Feel free to select data sets from those suggested below here. This code can also be extended upon by adding for example autoencoders. You can compare your own codes with implementations using TensorFlow(Keras)/PyTorch or other libraries.
+o The computational path: Here we propose a path where you develop your own code for a convolutional or eventually recurrent neural network and apply this to data selects of your own selection. The code should be object oriented and flexible allowing for eventual extensions by including different Loss/Cost functions and other functionalities. Feel free to select data sets from those suggested below here. This code can also be extended upon by adding for example autoencoders. You can compare your own codes with implementations using TensorFlow(Keras)/PyTorch or other libraries. An alternative is to develop a code for an RNN inclusing long-term-short-memory (LSTM). This is often the starting point for large-language models and so-called transformers. Large language models are hovever not discussed during the lectures.
 
-o The differential equation path: Here we propose a set of differential equations (ordinary and/or partial) to be solved first using neural networks (using either your own code or TensorFlow/Pytorch or similar libraries). Thereafter we plan to extend the set of methods for solving these equations to recurrent neural networks and autoencoders (AE) and/or Generalized Adversarial Networks (GANs). All these approaches can be expanded into one large project. This project can also be extended into including "Physics informed machine learning":"https://github.com/maziarraissi/PINNs". Here we can discuss neural networks that are trained to solve supervised learning tasks while respecting any given law of physics described by general nonlinear partial differential equations. 
+o The differential equation path: Here we propose a set of differential equations (ordinary and/or partial) to be solved first using neural networks (using either your own code or TensorFlow/Pytorch or similar libraries). Thereafter we plan to extend the set of methods for solving these equations to recurrent neural networks and autoencoders (AE). This project can also be extended into including "Physics informed machine learning":"https://github.com/maziarraissi/PINNs". Here we can discuss neural networks that are trained to solve supervised learning tasks while respecting any given law of physics described by general nonlinear partial differential equations. 
 
 o The application path: Here you can use the most relevant method(s) (say convolutional neural networks for images) and apply this(these) to data sets relevant for your own research.
 
 o The Gaussian processes/Bayesian statistics path: "Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" are  popular tools in the machine learning literature. The main idea behind these approaches is to flexibly model the relationship between a large number of variables and a particular outcome (dependent variable). This can form a second part of a project where for example standard Kernel regression methods are used on a specific data set. Alternatively, participants can opt to work on a large project relevant for their own research using gaussian processes and/or Bayesian machine Learning. 
 
+o Other possibilities.
 
 ===== Defining the data sets to analyze yourself =====
 
@@ -32,40 +33,11 @@ o A critical assessment of the methods with ditto perspectives and recommendatio
 
 
 
-
-
-
-
-=====  The basic structure of your project =====
-
-Here follows a set up on how to structure your report and analyze the data you have opted for.
-
-=== Part a) ===
-
-The first part deals with structuring and reading the data, much along the same lines as done in projects 1 and 2.  Explain how the data are produced and place them in a proper context.
-
-=== Part b) ===
-
-You need to include at least two central algorithms, or as an alternative explore methods from decisions tree to bagging, random forests and boosting. Explain the basics of the methods you have chosen to work with. This would be your theory part.
-
-
-=== Part c) ===
-
-Then describe your algorithm and its implementation and tests you have performed.
-
-=== Part d) ===
-
-Then presents your results and findings, link with existing literature and more.
-
-=== Part e) ===
-
-Finally, here you should present a critical assessment of the methods you have studied and link your results with the existing literature. 
-
 ===== Solving  differential equations with neural networks =====
 
 Here we describe the possible differential equations we can study
 first with neural networks and thereafter with recurrent neural
-networks and/or AE and/or GANs.
+networks and/or Autoenconders.
 
 The differential equations are given by the so-called "Lorenz attractor model":"https://encyclopediaofmath.org/index.php?title=Lorenz_attractor", and read
 
