@@ -570,30 +570,6 @@ b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta 
 
 
 !split
-===== Example to the calculation of gradient  =====
-
-Consider a simple NN in which the inputs $\bm{x}$, the weights
-$\bm{W}$, the biases $\bm{b}$ and the ouputs
-$\bm{\tilde{y}}=f(\bm{x};\bm{\Theta})$ are just scalars and that we
-have two layers only, that is the output layer is labeled with $L=2$.
-
-Our output is then (no boldfaced symbols since all quantities are scalars)
-!bt
-\[
-\tilde{y}=f(x;Theta))=\sigma_{L=2}(w_2\sigma_1(w_1x+b_1)+b_2). 
-\]
-!et
-
-For the back-propagation algorithm we will need various partial derivatives. One of these is
-!bt
-\[
-\frac{\partial f(x;\Theta)}{\partial w_1}=
-\]
-!et
-#\sigma_2(w_2\sigma_1(w_1x+b_1)+b_2)\times w_2\sigma_1(w_1x+b_1)x.
-
-
-!split
 ===== Fine-tuning neural network hyperparameters =====
 
 The flexibility of neural networks is also one of their main

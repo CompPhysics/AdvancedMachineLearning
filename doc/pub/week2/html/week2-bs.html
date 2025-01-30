@@ -148,10 +148,6 @@ doconce format html week2.do.txt --html_style=bootstrap --pygments_html_style=de
                None,
                'setting-up-the-back-propagation-algorithm-part-3'),
               ('Updating the gradients', 2, None, 'updating-the-gradients'),
-              ('Example to the calculation of gradient',
-               2,
-               None,
-               'example-to-the-calculation-of-gradient'),
               ('Fine-tuning neural network hyperparameters',
                2,
                None,
@@ -301,7 +297,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-2" style="font-size: 80%;"><b>Setting up the back propagation algorithm, part 2</b></a></li>
      <!-- navigation toc: --> <li><a href="#setting-up-the-back-propagation-algorithm-part-3" style="font-size: 80%;"><b>Setting up the Back propagation algorithm, part 3</b></a></li>
      <!-- navigation toc: --> <li><a href="#updating-the-gradients" style="font-size: 80%;"><b>Updating the gradients</b></a></li>
-     <!-- navigation toc: --> <li><a href="#example-to-the-calculation-of-gradient" style="font-size: 80%;"><b>Example to the calculation of gradient</b></a></li>
      <!-- navigation toc: --> <li><a href="#fine-tuning-neural-network-hyperparameters" style="font-size: 80%;"><b>Fine-tuning neural network hyperparameters</b></a></li>
      <!-- navigation toc: --> <li><a href="#hidden-layers" style="font-size: 80%;"><b>Hidden layers</b></a></li>
      <!-- navigation toc: --> <li><a href="#which-activation-function-should-i-use" style="font-size: 80%;"><b>Which activation function should I use?</b></a></li>
@@ -941,27 +936,6 @@ $$
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 $$
 
-
-<!-- !split -->
-<h2 id="example-to-the-calculation-of-gradient" class="anchor">Example to the calculation of gradient  </h2>
-
-<p>Consider a simple NN in which the inputs \( \boldsymbol{x} \), the weights
-\( \boldsymbol{W} \), the biases \( \boldsymbol{b} \) and the ouputs
-\( \boldsymbol{\tilde{y}}=f(\boldsymbol{x};\boldsymbol{\Theta}) \) are just scalars and that we
-have two layers only, that is the output layer is labeled with \( L=2 \).
-</p>
-
-<p>Our output is then (no boldfaced symbols since all quantities are scalars)</p>
-$$
-\tilde{y}=f(x;Theta))=\sigma_{L=2}(w_2\sigma_1(w_1x+b_1)+b_2). 
-$$
-
-<p>For the back-propagation algorithm we will need various partial derivatives. One of these is</p>
-$$
-\frac{\partial f(x;\Theta)}{\partial w_1}=
-$$
-
-<!-- \sigma_2(w_2\sigma_1(w_1x+b_1)+b_2)\times w_2\sigma_1(w_1x+b_1)x. -->
 
 <!-- !split -->
 <h2 id="fine-tuning-neural-network-hyperparameters" class="anchor">Fine-tuning neural network hyperparameters </h2>

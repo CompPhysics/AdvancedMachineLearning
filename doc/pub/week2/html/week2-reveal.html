@@ -861,32 +861,6 @@ $$
 </section>
 
 <section>
-<h2 id="example-to-the-calculation-of-gradient">Example to the calculation of gradient  </h2>
-
-<p>Consider a simple NN in which the inputs \( \boldsymbol{x} \), the weights
-\( \boldsymbol{W} \), the biases \( \boldsymbol{b} \) and the ouputs
-\( \boldsymbol{\tilde{y}}=f(\boldsymbol{x};\boldsymbol{\Theta}) \) are just scalars and that we
-have two layers only, that is the output layer is labeled with \( L=2 \).
-</p>
-
-<p>Our output is then (no boldfaced symbols since all quantities are scalars)</p>
-<p>&nbsp;<br>
-$$
-\tilde{y}=f(x;Theta))=\sigma_{L=2}(w_2\sigma_1(w_1x+b_1)+b_2). 
-$$
-<p>&nbsp;<br>
-
-<p>For the back-propagation algorithm we will need various partial derivatives. One of these is</p>
-<p>&nbsp;<br>
-$$
-\frac{\partial f(x;\Theta)}{\partial w_1}=
-$$
-<p>&nbsp;<br>
-
-<!-- \sigma_2(w_2\sigma_1(w_1x+b_1)+b_2)\times w_2\sigma_1(w_1x+b_1)x. -->
-</section>
-
-<section>
 <h2 id="fine-tuning-neural-network-hyperparameters">Fine-tuning neural network hyperparameters </h2>
 
 <p>The flexibility of neural networks is also one of their main

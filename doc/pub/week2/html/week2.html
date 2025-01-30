@@ -252,10 +252,6 @@ div.toc p,a {
                None,
                'setting-up-the-back-propagation-algorithm-part-3'),
               ('Updating the gradients', 2, None, 'updating-the-gradients'),
-              ('Example to the calculation of gradient',
-               2,
-               None,
-               'example-to-the-calculation-of-gradient'),
               ('Fine-tuning neural network hyperparameters',
                2,
                None,
@@ -946,27 +942,6 @@ $$
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 $$
 
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="example-to-the-calculation-of-gradient">Example to the calculation of gradient  </h2>
-
-<p>Consider a simple NN in which the inputs \( \boldsymbol{x} \), the weights
-\( \boldsymbol{W} \), the biases \( \boldsymbol{b} \) and the ouputs
-\( \boldsymbol{\tilde{y}}=f(\boldsymbol{x};\boldsymbol{\Theta}) \) are just scalars and that we
-have two layers only, that is the output layer is labeled with \( L=2 \).
-</p>
-
-<p>Our output is then (no boldfaced symbols since all quantities are scalars)</p>
-$$
-\tilde{y}=f(x;Theta))=\sigma_{L=2}(w_2\sigma_1(w_1x+b_1)+b_2). 
-$$
-
-<p>For the back-propagation algorithm we will need various partial derivatives. One of these is</p>
-$$
-\frac{\partial f(x;\Theta)}{\partial w_1}=
-$$
-
-<!-- \sigma_2(w_2\sigma_1(w_1x+b_1)+b_2)\times w_2\sigma_1(w_1x+b_1)x. -->
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="fine-tuning-neural-network-hyperparameters">Fine-tuning neural network hyperparameters </h2>
