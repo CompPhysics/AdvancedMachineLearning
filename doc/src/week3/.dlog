@@ -1,0 +1,36 @@
+*** error: more than one subsection in a slide (insert missing !split):
+% !split
+\subsection{Generalizing the above one-dimensional case}
+
+In order to align the above simple case with the more general convolution cases, we rename $\bm{\alpha}$, whose length is $m=3$, with $\bm{w}$.
+We will interpret $\bm{w}$ as a weight/filter function with which we want to perform the convolution with an input varibale $\bm{x}$.
+We replace thus $\bm{\beta}$ with $\bm{x}$ and $\bm{\delta}$ with $\bm{s}$ and have
+\[
+s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
+\]
+where $m=3$ in our case, the maximum length of the vector $\bm{w}$.
+Here the symbol $*$ represents the mathematical operation of convolution.
+
+\subsection{Two-dimensional Objects}
+
+We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
+We often use convolutions over more than one dimension at a time. If
+we have a two-dimensional image $X$ as input, we can have a \textbf{filter}
+defined by a two-dimensional \textbf{kernel/weight/filter} $W$. This leads to an output $Y$
+
+\[
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
+\]
+
+Convolution is a commutative process, which means we can rewrite this equation as
+\[
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
+\]
+
+Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of $m$ and $n$.
+
+Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
+\]
+
+
