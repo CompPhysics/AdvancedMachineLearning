@@ -73,6 +73,20 @@ div.toc p,a {
                None,
                'reminder-on-books-with-hands-on-material-and-codes'),
               ('Reading recommendations', 2, None, 'reading-recommendations'),
+              ('From last week: Overarching view of a neural network',
+               2,
+               None,
+               'from-last-week-overarching-view-of-a-neural-network'),
+              ('The optimization problem', 2, None, 'the-optimization-problem'),
+              ('Parameters of neural networks',
+               2,
+               None,
+               'parameters-of-neural-networks'),
+              ('Other ingredients of a neural network',
+               2,
+               None,
+               'other-ingredients-of-a-neural-network'),
+              ('Other parameters', 2, None, 'other-parameters'),
               ('From last week, overarching discussions of neural networks: '
                'Fine-tuning neural network hyperparameters',
                2,
@@ -330,6 +344,84 @@ from Goodfellow, Bengio and Courville's text <a href="https://www.deeplearningbo
 <li> Rashkca et al., chapters 11-13 for NNs and chapter 14 for CNNs, jupyter-notebook sent separately, from <a href="https://github.com/rasbt/machine-learning-book" target="_blank">GitHub</a></li>
 <li> Goodfellow et al, chapter 6 and 7 contain most of the neural network background. For CNNs see chapter 9.</li>
 </ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="from-last-week-overarching-view-of-a-neural-network">From last week: Overarching view of a neural network </h2>
+
+<p>The architecture of a neural network defines our model. This model
+aims at describing some function \( f(\boldsymbol{x} \) that is meant to describe
+some final result (outputs or target values \( bm{y} \)) given a specific input
+\( \boldsymbol{x} \). Note that here \( \boldsymbol{y} \) and \( \boldsymbol{x} \) are not limited to be
+vectors.
+</p>
+
+<p>The architecture consists of</p>
+<ol>
+<li> An input and an output layer where the input layer is defined by the inputs \( \boldsymbol{x} \). The output layer produces the model ouput \( \boldsymbol{\tilde{y}} \) which is compared with the target value \( \boldsymbol{y} \)</li>
+<li> A given number of hidden layers and neurons/nodes/units for each layer (this may vary)</li>
+<li> A given activation function \( \sigma(\boldsymbol{z}) \) with arguments \( \boldsymbol{z} \) to be defined below. The activation functions may differ from layer to layer.</li>
+<li> The last layer, normally called <b>output</b> layer has an activation function tailored to the specific problem</li>
+<li> Finally, we define a so-called cost or loss function which is used to gauge the quality of our model.</li> 
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-optimization-problem">The optimization problem </h2>
+
+<p>The cost function is a function of the unknown parameters
+\( \boldsymbol{\Theta} \) where the latter is a container for all possible
+parameters needed to define a neural network
+</p>
+
+<p>If we are dealing with a regression task a typical cost/loss function
+is the mean squared error
+</p>
+$$
+C(\boldsymbol{\Theta})=\frac{1}{n}\left\{\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)^T\left(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\theta}\right)\right\}.
+$$
+
+<p>This function represents one of many possible ways to define
+the so-called cost function. Note that here we have assumed a linear dependence in terms of the paramters \( \boldsymbol{\Theta} \). This is in general not the case.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="parameters-of-neural-networks">Parameters of neural networks </h2>
+<p>For neural networks the parameters
+\( \boldsymbol{\Theta} \) are given by the so-called weights and biases (to be
+defined below).
+</p>
+
+<p>The weights are given by matrix elements \( w_{ij}^{(l)} \) where the
+superscript indicates the layer number. The biases are typically given
+by vector elements representing each single node of a given layer,
+that is \( b_j^{(l)} \).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="other-ingredients-of-a-neural-network">Other ingredients of a neural network </h2>
+
+<p>Having defined the architecture of a neural network, the optimization
+of the cost function with respect to the parameters \( \boldsymbol{\Theta} \),
+involves the calculations of gradients and their optimization. The
+gradients represent the derivatives of a multidimensional object and
+are often approximated by various gradient methods, including
+</p>
+<ol>
+<li> various quasi-Newton methods,</li>
+<li> plain gradient descent (GD) with a constant learning rate \( \eta \),</li>
+<li> GD with momentum and other approximations to the learning rates such as</li>
+<ul>
+  <li> Adapative gradient (ADAgrad)</li>
+  <li> Root mean-square propagation (RMSprop)</li>
+  <li> Adaptive gradient with momentum (ADAM) and many other</li>
+</ul>
+<li> Stochastic gradient descent and various families of learning rate approximations</li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="other-parameters">Other parameters </h2>
+
+<p>In addition to the above, there are often additional hyperparamaters
+which are included in the setup of a neural network. These will be
+discussed below.
+</p>
+
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="from-last-week-overarching-discussions-of-neural-networks-fine-tuning-neural-network-hyperparameters">From last week, overarching discussions of neural networks: Fine-tuning neural network hyperparameters </h2>
 

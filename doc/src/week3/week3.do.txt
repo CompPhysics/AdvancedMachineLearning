@@ -49,6 +49,79 @@ o Goodfellow et al, chapter 6 and 7 contain most of the neural network backgroun
 
 
 !split
+===== From last week: Overarching view of a neural network =====
+
+The architecture of a neural network defines our model. This model
+aims at describing some function $f(\bm{x}$ that is meant to describe
+some final result (outputs or target values $bm{y}$) given a specific input
+$\bm{x}$. Note that here $\bm{y}$ and $\bm{x}$ are not limited to be
+vectors.
+
+The architecture consists of
+o An input and an output layer where the input layer is defined by the inputs $\bm{x}$. The output layer produces the model ouput $\bm{\tilde{y}}$ which is compared with the target value $\bm{y}$
+o A given number of hidden layers and neurons/nodes/units for each layer (this may vary)
+o A given activation function $\sigma(\bm{z})$ with arguments $\bm{z}$ to be defined below. The activation functions may differ from layer to layer.
+o The last layer, normally called _output_ layer has an activation function tailored to the specific problem
+o Finally, we define a so-called cost or loss function which is used to gauge the quality of our model. 
+
+
+!split
+===== The optimization problem =====
+
+The cost function is a function of the unknown parameters
+$\bm{\Theta}$ where the latter is a container for all possible
+parameters needed to define a neural network
+
+If we are dealing with a regression task a typical cost/loss function
+is the mean squared error
+!bt
+\[
+C(\bm{\Theta})=\frac{1}{n}\left\{\left(\bm{y}-\bm{X}\bm{\theta}\right)^T\left(\bm{y}-\bm{X}\bm{\theta}\right)\right\}.
+\]
+!et
+This function represents one of many possible ways to define
+the so-called cost function. Note that here we have assumed a linear dependence in terms of the paramters $\bm{\Theta}$. This is in general not the case.
+
+
+!split
+===== Parameters of neural networks =====
+For neural networks the parameters
+$\bm{\Theta}$ are given by the so-called weights and biases (to be
+defined below).
+
+The weights are given by matrix elements $w_{ij}^{(l)}$ where the
+superscript indicates the layer number. The biases are typically given
+by vector elements representing each single node of a given layer,
+that is $b_j^{(l)}$.
+
+!split
+===== Other ingredients of a neural network =====
+
+Having defined the architecture of a neural network, the optimization
+of the cost function with respect to the parameters $\bm{\Theta}$,
+involves the calculations of gradients and their optimization. The
+gradients represent the derivatives of a multidimensional object and
+are often approximated by various gradient methods, including
+o various quasi-Newton methods,
+o plain gradient descent (GD) with a constant learning rate $\eta$,
+o GD with momentum and other approximations to the learning rates such as
+  * Adapative gradient (ADAgrad)
+  * Root mean-square propagation (RMSprop)
+  * Adaptive gradient with momentum (ADAM) and many other
+o Stochastic gradient descent and various families of learning rate approximations
+
+!split
+===== Other parameters =====
+
+In addition to the above, there are often additional hyperparamaters
+which are included in the setup of a neural network. These will be
+discussed below.
+
+
+
+
+
+!split
 ===== From last week, overarching discussions of neural networks: Fine-tuning neural network hyperparameters =====
 
 The flexibility of neural networks is also one of their main
@@ -2374,6 +2447,7 @@ For any $i$, $k$ and $s$,
 ===== Pooling types ("From Raschka et al":"https://github.com/rasbt/machine-learning-book") =====
 
 FIGURE: [figslides/maxpooling.png, width=500 frac=0.67]  A deep CNN
+
 
 
 
