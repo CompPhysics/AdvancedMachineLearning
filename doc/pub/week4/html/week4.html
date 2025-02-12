@@ -250,6 +250,42 @@ div.toc p,a {
                2,
                None,
                'pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
+              ('Building convolutional neural networks in Tensorflow and Keras',
+               2,
+               None,
+               'building-convolutional-neural-networks-in-tensorflow-and-keras'),
+              ('Setting it up', 2, None, 'setting-it-up'),
+              ('The MNIST dataset again', 2, None, 'the-mnist-dataset-again'),
+              ('Strong correlations', 2, None, 'strong-correlations'),
+              ('Layers of a CNN', 2, None, 'layers-of-a-cnn'),
+              ('Systematic reduction', 2, None, 'systematic-reduction'),
+              ('Prerequisites: Collect and pre-process data',
+               2,
+               None,
+               'prerequisites-collect-and-pre-process-data'),
+              ('Importing Keras and Tensorflow',
+               2,
+               None,
+               'importing-keras-and-tensorflow'),
+              ('Running with Keras', 2, None, 'running-with-keras'),
+              ('Final part', 2, None, 'final-part'),
+              ('Final visualization', 2, None, 'final-visualization'),
+              ('The CIFAR01 data set', 2, None, 'the-cifar01-data-set'),
+              ('Verifying the data set', 2, None, 'verifying-the-data-set'),
+              ('Set up  the model', 2, None, 'set-up-the-model'),
+              ('Add Dense layers on top', 2, None, 'add-dense-layers-on-top'),
+              ('Compile and train the model',
+               2,
+               None,
+               'compile-and-train-the-model'),
+              ('Finally, evaluate the model',
+               2,
+               None,
+               'finally-evaluate-the-model'),
+              ('Building code using Pytorch',
+               2,
+               None,
+               'building-code-using-pytorch'),
               ('Building our own CNN code',
                2,
                None,
@@ -296,39 +332,7 @@ div.toc p,a {
               ('Convolution in the Fourier domain',
                3,
                None,
-               'convolution-in-the-fourier-domain'),
-              ('Building convolutional neural networks in Tensorflow and Keras',
-               2,
-               None,
-               'building-convolutional-neural-networks-in-tensorflow-and-keras'),
-              ('Setting it up', 2, None, 'setting-it-up'),
-              ('The MNIST dataset again', 2, None, 'the-mnist-dataset-again'),
-              ('Strong correlations', 2, None, 'strong-correlations'),
-              ('Layers of a CNN', 2, None, 'layers-of-a-cnn'),
-              ('Systematic reduction', 2, None, 'systematic-reduction'),
-              ('Prerequisites: Collect and pre-process data',
-               2,
-               None,
-               'prerequisites-collect-and-pre-process-data'),
-              ('Importing Keras and Tensorflow',
-               2,
-               None,
-               'importing-keras-and-tensorflow'),
-              ('Running with Keras', 2, None, 'running-with-keras'),
-              ('Final part', 2, None, 'final-part'),
-              ('Final visualization', 2, None, 'final-visualization'),
-              ('The CIFAR01 data set', 2, None, 'the-cifar01-data-set'),
-              ('Verifying the data set', 2, None, 'verifying-the-data-set'),
-              ('Set up  the model', 2, None, 'set-up-the-model'),
-              ('Add Dense layers on top', 2, None, 'add-dense-layers-on-top'),
-              ('Compile and train the model',
-               2,
-               None,
-               'compile-and-train-the-model'),
-              ('Finally, evaluate the model',
-               2,
-               None,
-               'finally-evaluate-the-model')]}
+               'convolution-in-the-fourier-domain')]}
 end of tocinfo -->
 
 <body>
@@ -1345,6 +1349,713 @@ locally by applying a non-linearity to the content of some patches.
 </center>
 <p><img src="figslides/maxpooling.png" width="500" align="bottom"></p>
 </center>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>
+
+<p>As discussed above, CNNs are neural networks built from the assumption that the inputs
+to the network are 2D images. This is important because the number of features or pixels in images
+grows very fast with the image size, and an enormous number of weights and biases are needed in order to build an accurate network.  
+</p>
+
+<p>As before, we still have our input, a hidden layer and an output. What's novel about convolutional networks
+are the <b>convolutional</b> and <b>pooling</b> layers stacked in pairs between the input and the hidden layer.
+In addition, the data is no longer represented as a 2D feature matrix, instead each input is a number of 2D
+matrices, typically 1 for each color dimension (Red, Green, Blue). 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="setting-it-up">Setting it up </h2>
+
+<p>It means that to represent the entire
+dataset of images, we require a 4D matrix or <b>tensor</b>. This tensor has the dimensions:  
+</p>
+$$  
+(n_{inputs},\, n_{pixels, width},\, n_{pixels, height},\, depth) .
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-mnist-dataset-again">The MNIST dataset again </h2>
+
+<p>The MNIST dataset consists of grayscale images with a pixel size of
+\( 28\times 28 \), meaning we require \( 28 \times 28 = 724 \) weights to each
+neuron in the first hidden layer.
+</p>
+
+<p>If we were to analyze images of size \( 128\times 128 \) we would require
+\( 128 \times 128 = 16384 \) weights to each neuron. Even worse if we were
+dealing with color images, as most images are, we have an image matrix
+of size \( 128\times 128 \) for each color dimension (Red, Green, Blue),
+meaning 3 times the number of weights \( = 49152 \) are required for every
+single neuron in the first hidden layer.
+</p>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="strong-correlations">Strong correlations </h2>
+
+<p>Images typically have strong local correlations, meaning that a small
+part of the image varies little from its neighboring regions. If for
+example we have an image of a blue car, we can roughly assume that a
+small blue part of the image is surrounded by other blue regions.
+</p>
+
+<p>Therefore, instead of connecting every single pixel to a neuron in the
+first hidden layer, as we have previously done with deep neural
+networks, we can instead connect each neuron to a small part of the
+image (in all 3 RGB depth dimensions).  The size of each small area is
+fixed, and known as a <a href="https://en.wikipedia.org/wiki/Receptive_field" target="_blank">receptive</a>.
+</p>
+
+
+<!-- !split  -->
+<h2 id="layers-of-a-cnn">Layers of a CNN </h2>
+
+<p>The layers of a convolutional neural network arrange neurons in 3D: width, height and depth.  
+The input image is typically a square matrix of depth 3. 
+</p>
+
+<p>A <b>convolution</b> is performed on the image which outputs
+a 3D volume of neurons. The weights to the input are arranged in a number of 2D matrices, known as <b>filters</b>.
+</p>
+
+<p>Each filter slides along the input image, taking the dot product
+between each small part of the image and the filter, in all depth
+dimensions. This is then passed through a non-linear function,
+typically the <b>Rectified Linear (ReLu)</b> function, which serves as the
+activation of the neurons in the first convolutional layer. This is
+further passed through a <b>pooling layer</b>, which reduces the size of the
+convolutional layer, e.g. by taking the maximum or average across some
+small regions, and this serves as input to the next convolutional
+layer.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="systematic-reduction">Systematic reduction </h2>
+
+<p>By systematically reducing the size of the input volume, through
+convolution and pooling, the network should create representations of
+small parts of the input, and then from them assemble representations
+of larger areas.  The final pooling layer is flattened to serve as
+input to a hidden layer, such that each neuron in the final pooling
+layer is connected to every single neuron in the hidden layer. This
+then serves as input to the output layer, e.g. a softmax output for
+classification.
+</p>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="prerequisites-collect-and-pre-process-data">Prerequisites: Collect and pre-process data </h2>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># import necessary packages</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn</span> <span style="color: #008000; font-weight: bold">import</span> datasets
+
+
+<span style="color: #408080; font-style: italic"># ensure the same random numbers appear every time</span>
+np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">0</span>)
+
+<span style="color: #408080; font-style: italic"># display images in notebook</span>
+<span style="color: #666666">%</span>matplotlib inline
+plt<span style="color: #666666">.</span>rcParams[<span style="color: #BA2121">&#39;figure.figsize&#39;</span>] <span style="color: #666666">=</span> (<span style="color: #666666">12</span>,<span style="color: #666666">12</span>)
+
+
+<span style="color: #408080; font-style: italic"># download MNIST dataset</span>
+digits <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>load_digits()
+
+<span style="color: #408080; font-style: italic"># define inputs and labels</span>
+inputs <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>images
+labels <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>target
+
+<span style="color: #408080; font-style: italic"># RGB images have a depth of 3</span>
+<span style="color: #408080; font-style: italic"># our images are grayscale so they should have a depth of 1</span>
+inputs <span style="color: #666666">=</span> inputs[:,:,:,np<span style="color: #666666">.</span>newaxis]
+
+<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;inputs = (n_inputs, pixel_width, pixel_height, depth) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(inputs<span style="color: #666666">.</span>shape))
+<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;labels = (n_inputs) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(labels<span style="color: #666666">.</span>shape))
+
+
+<span style="color: #408080; font-style: italic"># choose some random images to display</span>
+n_inputs <span style="color: #666666">=</span> <span style="color: #008000">len</span>(inputs)
+indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(n_inputs)
+random_indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>choice(indices, size<span style="color: #666666">=5</span>)
+
+<span style="color: #008000; font-weight: bold">for</span> i, image <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(digits<span style="color: #666666">.</span>images[random_indices]):
+    plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">1</span>, <span style="color: #666666">5</span>, i<span style="color: #666666">+1</span>)
+    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+    plt<span style="color: #666666">.</span>imshow(image, cmap<span style="color: #666666">=</span>plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>gray_r, interpolation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;nearest&#39;</span>)
+    plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;Label: </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> digits<span style="color: #666666">.</span>target[random_indices[i]])
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="importing-keras-and-tensorflow">Importing Keras and Tensorflow </h2>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Input
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Sequential      <span style="color: #408080; font-style: italic">#This allows appending layers to existing models</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Dense           <span style="color: #408080; font-style: italic">#This allows defining the characteristics of a particular layer</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> optimizers             <span style="color: #408080; font-style: italic">#This allows using whichever optimiser we want (sgd,adam,RMSprop)</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> regularizers           <span style="color: #408080; font-style: italic">#This allows using whichever regularizer we want (l1,l2,l1_l2)</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.utils</span> <span style="color: #008000; font-weight: bold">import</span> to_categorical   <span style="color: #408080; font-style: italic">#This allows using categorical cross entropy as the cost function</span>
+<span style="color: #408080; font-style: italic">#from tensorflow.keras import Conv2D</span>
+<span style="color: #408080; font-style: italic">#from tensorflow.keras import MaxPooling2D</span>
+<span style="color: #408080; font-style: italic">#from tensorflow.keras import Flatten</span>
+
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn.model_selection</span> <span style="color: #008000; font-weight: bold">import</span> train_test_split
+
+<span style="color: #408080; font-style: italic"># representation of labels</span>
+labels <span style="color: #666666">=</span> to_categorical(labels)
+
+<span style="color: #408080; font-style: italic"># split into train and test data</span>
+<span style="color: #408080; font-style: italic"># one-liner from scikit-learn library</span>
+train_size <span style="color: #666666">=</span> <span style="color: #666666">0.8</span>
+test_size <span style="color: #666666">=</span> <span style="color: #666666">1</span> <span style="color: #666666">-</span> train_size
+X_train, X_test, Y_train, Y_test <span style="color: #666666">=</span> train_test_split(inputs, labels, train_size<span style="color: #666666">=</span>train_size,
+                                                    test_size<span style="color: #666666">=</span>test_size)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split  -->
+<h2 id="running-with-keras">Running with Keras </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_convolutional_neural_network_keras</span>(input_shape, receptive_field,
+                                              n_filters, n_neurons_connected, n_categories,
+                                              eta, lmbd):
+    model <span style="color: #666666">=</span> Sequential()
+    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(n_filters, (receptive_field, receptive_field), input_shape<span style="color: #666666">=</span>input_shape, padding<span style="color: #666666">=</span><span style="color: #BA2121">&#39;same&#39;</span>,
+              activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
+    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D(pool_size<span style="color: #666666">=</span>(<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
+    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
+    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_neurons_connected, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
+    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_categories, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;softmax&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
+    
+    sgd <span style="color: #666666">=</span> optimizers<span style="color: #666666">.</span>SGD(lr<span style="color: #666666">=</span>eta)
+    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;categorical_crossentropy&#39;</span>, optimizer<span style="color: #666666">=</span>sgd, metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
+    
+    <span style="color: #008000; font-weight: bold">return</span> model
+
+epochs <span style="color: #666666">=</span> <span style="color: #666666">100</span>
+batch_size <span style="color: #666666">=</span> <span style="color: #666666">100</span>
+input_shape <span style="color: #666666">=</span> X_train<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>:<span style="color: #666666">4</span>]
+receptive_field <span style="color: #666666">=</span> <span style="color: #666666">3</span>
+n_filters <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+n_neurons_connected <span style="color: #666666">=</span> <span style="color: #666666">50</span>
+n_categories <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+
+eta_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
+lmbd_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="final-part">Final part </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">CNN_keras <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)), dtype<span style="color: #666666">=</span><span style="color: #008000">object</span>)
+        
+<span style="color: #008000; font-weight: bold">for</span> i, eta <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(eta_vals):
+    <span style="color: #008000; font-weight: bold">for</span> j, lmbd <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(lmbd_vals):
+        CNN <span style="color: #666666">=</span> create_convolutional_neural_network_keras(input_shape, receptive_field,
+                                              n_filters, n_neurons_connected, n_categories,
+                                              eta, lmbd)
+        CNN<span style="color: #666666">.</span>fit(X_train, Y_train, epochs<span style="color: #666666">=</span>epochs, batch_size<span style="color: #666666">=</span>batch_size, verbose<span style="color: #666666">=0</span>)
+        scores <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)
+        
+        CNN_keras[i][j] <span style="color: #666666">=</span> CNN
+        
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Learning rate = &quot;</span>, eta)
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Lambda = &quot;</span>, lmbd)
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Test accuracy: </span><span style="color: #BB6688; font-weight: bold">%.3f</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> scores[<span style="color: #666666">1</span>])
+        <span style="color: #008000">print</span>()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="final-visualization">Final visualization </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># visual representation of grid search</span>
+<span style="color: #408080; font-style: italic"># uses seaborn heatmap, could probably do this in matplotlib</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">seaborn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">sns</span>
+
+sns<span style="color: #666666">.</span>set()
+
+train_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
+test_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
+
+<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(eta_vals)):
+    <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(lmbd_vals)):
+        CNN <span style="color: #666666">=</span> CNN_keras[i][j]
+
+        train_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_train, Y_train)[<span style="color: #666666">1</span>]
+        test_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)[<span style="color: #666666">1</span>]
+
+        
+fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
+sns<span style="color: #666666">.</span>heatmap(train_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
+ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Training Accuracy&quot;</span>)
+ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
+ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
+plt<span style="color: #666666">.</span>show()
+
+fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
+sns<span style="color: #666666">.</span>heatmap(test_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
+ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Test Accuracy&quot;</span>)
+ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
+ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-cifar01-data-set">The CIFAR01 data set </h2>
+
+<p>The CIFAR10 dataset contains 60,000 color images in 10 classes, with
+6,000 images in each class. The dataset is divided into 50,000
+training images and 10,000 testing images. The classes are mutually
+exclusive and there is no overlap between them.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
+
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+
+<span style="color: #408080; font-style: italic"># We import the data set</span>
+(train_images, train_labels), (test_images, test_labels) <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>cifar10<span style="color: #666666">.</span>load_data()
+
+<span style="color: #408080; font-style: italic"># Normalize pixel values to be between 0 and 1 by dividing by 255. </span>
+train_images, test_images <span style="color: #666666">=</span> train_images <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>, test_images <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="verifying-the-data-set">Verifying the data set </h2>
+
+<p>To verify that the dataset looks correct, let's plot the first 25 images from the training set and display the class name below each image.</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">class_names <span style="color: #666666">=</span> [<span style="color: #BA2121">&#39;airplane&#39;</span>, <span style="color: #BA2121">&#39;automobile&#39;</span>, <span style="color: #BA2121">&#39;bird&#39;</span>, <span style="color: #BA2121">&#39;cat&#39;</span>, <span style="color: #BA2121">&#39;deer&#39;</span>,
+               <span style="color: #BA2121">&#39;dog&#39;</span>, <span style="color: #BA2121">&#39;frog&#39;</span>, <span style="color: #BA2121">&#39;horse&#39;</span>, <span style="color: #BA2121">&#39;ship&#39;</span>, <span style="color: #BA2121">&#39;truck&#39;</span>]
+plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">10</span>,<span style="color: #666666">10</span>))
+<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">25</span>):
+    plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">5</span>,<span style="color: #666666">5</span>,i<span style="color: #666666">+1</span>)
+    plt<span style="color: #666666">.</span>xticks([])
+    plt<span style="color: #666666">.</span>yticks([])
+    plt<span style="color: #666666">.</span>grid(<span style="color: #008000; font-weight: bold">False</span>)
+    plt<span style="color: #666666">.</span>imshow(train_images[i], cmap<span style="color: #666666">=</span>plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>binary)
+    <span style="color: #408080; font-style: italic"># The CIFAR labels happen to be arrays, </span>
+    <span style="color: #408080; font-style: italic"># which is why you need the extra index</span>
+    plt<span style="color: #666666">.</span>xlabel(class_names[train_labels[i][<span style="color: #666666">0</span>]])
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="set-up-the-model">Set up  the model </h2>
+
+<p>The 6 lines of code below define the convolutional base using a common pattern: a stack of Conv2D and MaxPooling2D layers.</p>
+
+<p>As input, a CNN takes tensors of shape (image_height, image_width, color_channels), ignoring the batch size. If you are new to these dimensions, color_channels refers to (R,G,B). In this example, you will configure our CNN to process inputs of shape (32, 32, 3), which is the format of CIFAR images. You can do this by passing the argument input_shape to our first layer.</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">model <span style="color: #666666">=</span> models<span style="color: #666666">.</span>Sequential()
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">32</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, input_shape<span style="color: #666666">=</span>(<span style="color: #666666">32</span>, <span style="color: #666666">32</span>, <span style="color: #666666">3</span>)))
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D((<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D((<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
+
+<span style="color: #408080; font-style: italic"># Let&#39;s display the architecture of our model so far.</span>
+
+model<span style="color: #666666">.</span>summary()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>You can see that the output of every Conv2D and MaxPooling2D layer is a 3D tensor of shape (height, width, channels). The width and height dimensions tend to shrink as you go deeper in the network. The number of output channels for each Conv2D layer is controlled by the first argument (e.g., 32 or 64). Typically, as the width and height shrink, you can afford (computationally) to add more output channels in each Conv2D layer.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="add-dense-layers-on-top">Add Dense layers on top </h2>
+
+<p>To complete our model, you will feed the last output tensor from the
+convolutional base (of shape (4, 4, 64)) into one or more Dense layers
+to perform classification. Dense layers take vectors as input (which
+are 1D), while the current output is a 3D tensor. First, you will
+flatten (or unroll) the 3D output to 1D, then add one or more Dense
+layers on top. CIFAR has 10 output classes, so you use a final Dense
+layer with 10 outputs and a softmax activation.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">64</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
+model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">10</span>))
+Here<span style="color: #BA2121">&#39;s the complete architecture of our model.</span>
+
+model<span style="color: #666666">.</span>summary()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>As you can see, our (4, 4, 64) outputs were flattened into vectors of shape (1024) before going through two Dense layers.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="compile-and-train-the-model">Compile and train the model </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">model<span style="color: #666666">.</span>compile(optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;adam&#39;</span>,
+              loss<span style="color: #666666">=</span>tf<span style="color: #666666">.</span>keras<span style="color: #666666">.</span>losses<span style="color: #666666">.</span>SparseCategoricalCrossentropy(from_logits<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>),
+              metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
+
+history <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(train_images, train_labels, epochs<span style="color: #666666">=10</span>, 
+                    validation_data<span style="color: #666666">=</span>(test_images, test_labels))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="finally-evaluate-the-model">Finally, evaluate the model </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">plt<span style="color: #666666">.</span>plot(history<span style="color: #666666">.</span>history[<span style="color: #BA2121">&#39;accuracy&#39;</span>], label<span style="color: #666666">=</span><span style="color: #BA2121">&#39;accuracy&#39;</span>)
+plt<span style="color: #666666">.</span>plot(history<span style="color: #666666">.</span>history[<span style="color: #BA2121">&#39;val_accuracy&#39;</span>], label <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;val_accuracy&#39;</span>)
+plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&#39;Epoch&#39;</span>)
+plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&#39;Accuracy&#39;</span>)
+plt<span style="color: #666666">.</span>ylim([<span style="color: #666666">0.5</span>, <span style="color: #666666">1</span>])
+plt<span style="color: #666666">.</span>legend(loc<span style="color: #666666">=</span><span style="color: #BA2121">&#39;lower right&#39;</span>)
+
+test_loss, test_acc <span style="color: #666666">=</span> model<span style="color: #666666">.</span>evaluate(test_images,  test_labels, verbose<span style="color: #666666">=2</span>)
+
+<span style="color: #008000">print</span>(test_acc)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="building-code-using-pytorch">Building code using Pytorch </h2>
+
+<p>This code loads and normalizes the MNIST dataset. Thereafter it defines  a CNN architecture with:</p>
+<ol>
+<li> Two convolutional layers</li>
+<li> Max pooling</li>
+<li> Dropout for regularization</li>
+<li> Two fully connected layers</li>
+</ol>
+<p>It uses the Adam optimizer and for cost function it employs the
+Cross-Entropy function. It trains for 10 epochs.
+You can modify the architecture (number of layers, channels, dropout
+rate) or training parameters (learning rate, batch size, epochs) to
+experiment with different configurations.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn.functional</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">F</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.optim</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">optim</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torchvision</span> <span style="color: #008000; font-weight: bold">import</span> datasets, transforms
+
+<span style="color: #408080; font-style: italic"># Set device</span>
+device <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>device(<span style="color: #BA2121">&quot;cuda&quot;</span> <span style="color: #008000; font-weight: bold">if</span> torch<span style="color: #666666">.</span>cuda<span style="color: #666666">.</span>is_available() <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&quot;cpu&quot;</span>)
+
+<span style="color: #408080; font-style: italic"># Define transforms</span>
+transform <span style="color: #666666">=</span> transforms<span style="color: #666666">.</span>Compose([
+   transforms<span style="color: #666666">.</span>ToTensor(),
+   transforms<span style="color: #666666">.</span>Normalize((<span style="color: #666666">0.1307</span>,), (<span style="color: #666666">0.3081</span>,))
+])
+
+<span style="color: #408080; font-style: italic"># Load datasets</span>
+train_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transform)
+test_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>, download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transform)
+
+<span style="color: #408080; font-style: italic"># Create data loaders</span>
+train_loader <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>DataLoader(train_dataset, batch_size<span style="color: #666666">=64</span>, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+test_loader <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>DataLoader(test_dataset, batch_size<span style="color: #666666">=64</span>, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+
+<span style="color: #408080; font-style: italic"># Define CNN model</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">CNN</span>(nn<span style="color: #666666">.</span>Module):
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+       <span style="color: #008000">super</span>(CNN, <span style="color: #008000">self</span>)<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>conv1 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Conv2d(<span style="color: #666666">1</span>, <span style="color: #666666">32</span>, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>conv2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Conv2d(<span style="color: #666666">32</span>, <span style="color: #666666">64</span>, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>pool <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>MaxPool2d(<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>fc1 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">64*7*7</span>, <span style="color: #666666">1024</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>fc2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">1024</span>, <span style="color: #666666">10</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>dropout <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Dropout(<span style="color: #666666">0.5</span>)
+
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x):
+       x <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>pool(F<span style="color: #666666">.</span>relu(<span style="color: #008000">self</span><span style="color: #666666">.</span>conv1(x)))
+       x <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>pool(F<span style="color: #666666">.</span>relu(<span style="color: #008000">self</span><span style="color: #666666">.</span>conv2(x)))
+       x <span style="color: #666666">=</span> x<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>, <span style="color: #666666">64*7*7</span>)
+       x <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>dropout(F<span style="color: #666666">.</span>relu(<span style="color: #008000">self</span><span style="color: #666666">.</span>fc1(x)))
+       x <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>fc2(x)
+       <span style="color: #008000; font-weight: bold">return</span> x
+
+<span style="color: #408080; font-style: italic"># Initialize model, loss function, and optimizer</span>
+model <span style="color: #666666">=</span> CNN()<span style="color: #666666">.</span>to(device)
+criterion <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>CrossEntropyLoss()
+optimizer <span style="color: #666666">=</span> optim<span style="color: #666666">.</span>Adam(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=0.001</span>)
+
+<span style="color: #408080; font-style: italic"># Training loop</span>
+num_epochs <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(num_epochs):
+   model<span style="color: #666666">.</span>train()
+   running_loss <span style="color: #666666">=</span> <span style="color: #666666">0.0</span>
+   <span style="color: #008000; font-weight: bold">for</span> batch_idx, (data, target) <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(train_loader):
+       data, target <span style="color: #666666">=</span> data<span style="color: #666666">.</span>to(device), target<span style="color: #666666">.</span>to(device)
+       optimizer<span style="color: #666666">.</span>zero_grad()
+       outputs <span style="color: #666666">=</span> model(data)
+       loss <span style="color: #666666">=</span> criterion(outputs, target)
+       loss<span style="color: #666666">.</span>backward()
+       optimizer<span style="color: #666666">.</span>step()
+       running_loss <span style="color: #666666">+=</span> loss<span style="color: #666666">.</span>item()
+
+   <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Epoch [</span><span style="color: #BB6688; font-weight: bold">{</span>epoch<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>num_epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">], Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>running_loss<span style="color: #666666">/</span><span style="color: #008000">len</span>(train_loader)<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># Testing the model</span>
+model<span style="color: #666666">.</span>eval()
+correct <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+total <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+<span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():
+   <span style="color: #008000; font-weight: bold">for</span> data, target <span style="color: #AA22FF; font-weight: bold">in</span> test_loader:
+       data, target <span style="color: #666666">=</span> data<span style="color: #666666">.</span>to(device), target<span style="color: #666666">.</span>to(device)
+       outputs <span style="color: #666666">=</span> model(data)
+       _, predicted <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>max(outputs<span style="color: #666666">.</span>data, <span style="color: #666666">1</span>)
+       total <span style="color: #666666">+=</span> target<span style="color: #666666">.</span>size(<span style="color: #666666">0</span>)
+       correct <span style="color: #666666">+=</span> (predicted <span style="color: #666666">==</span> target)<span style="color: #666666">.</span>sum()<span style="color: #666666">.</span>item()
+
+<span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Test Accuracy: </span><span style="color: #BB6688; font-weight: bold">{</span><span style="color: #666666">100</span> <span style="color: #666666">*</span> correct <span style="color: #666666">/</span> total<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.2f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">%&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="building-our-own-cnn-code">Building our own CNN code </h2>
@@ -4611,597 +5322,6 @@ domain, results in a minor inconvenience. Therefore, it is imperative
 to remain cognizant of this fact when utilizing FFT as the primary
 optimization technique.
 </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>
-
-<p>As discussed above, CNNs are neural networks built from the assumption that the inputs
-to the network are 2D images. This is important because the number of features or pixels in images
-grows very fast with the image size, and an enormous number of weights and biases are needed in order to build an accurate network.  
-</p>
-
-<p>As before, we still have our input, a hidden layer and an output. What's novel about convolutional networks
-are the <b>convolutional</b> and <b>pooling</b> layers stacked in pairs between the input and the hidden layer.
-In addition, the data is no longer represented as a 2D feature matrix, instead each input is a number of 2D
-matrices, typically 1 for each color dimension (Red, Green, Blue). 
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="setting-it-up">Setting it up </h2>
-
-<p>It means that to represent the entire
-dataset of images, we require a 4D matrix or <b>tensor</b>. This tensor has the dimensions:  
-</p>
-$$  
-(n_{inputs},\, n_{pixels, width},\, n_{pixels, height},\, depth) .
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-mnist-dataset-again">The MNIST dataset again </h2>
-
-<p>The MNIST dataset consists of grayscale images with a pixel size of
-\( 28\times 28 \), meaning we require \( 28 \times 28 = 724 \) weights to each
-neuron in the first hidden layer.
-</p>
-
-<p>If we were to analyze images of size \( 128\times 128 \) we would require
-\( 128 \times 128 = 16384 \) weights to each neuron. Even worse if we were
-dealing with color images, as most images are, we have an image matrix
-of size \( 128\times 128 \) for each color dimension (Red, Green, Blue),
-meaning 3 times the number of weights \( = 49152 \) are required for every
-single neuron in the first hidden layer.
-</p>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="strong-correlations">Strong correlations </h2>
-
-<p>Images typically have strong local correlations, meaning that a small
-part of the image varies little from its neighboring regions. If for
-example we have an image of a blue car, we can roughly assume that a
-small blue part of the image is surrounded by other blue regions.
-</p>
-
-<p>Therefore, instead of connecting every single pixel to a neuron in the
-first hidden layer, as we have previously done with deep neural
-networks, we can instead connect each neuron to a small part of the
-image (in all 3 RGB depth dimensions).  The size of each small area is
-fixed, and known as a <a href="https://en.wikipedia.org/wiki/Receptive_field" target="_blank">receptive</a>.
-</p>
-
-
-<!-- !split  -->
-<h2 id="layers-of-a-cnn">Layers of a CNN </h2>
-
-<p>The layers of a convolutional neural network arrange neurons in 3D: width, height and depth.  
-The input image is typically a square matrix of depth 3. 
-</p>
-
-<p>A <b>convolution</b> is performed on the image which outputs
-a 3D volume of neurons. The weights to the input are arranged in a number of 2D matrices, known as <b>filters</b>.
-</p>
-
-<p>Each filter slides along the input image, taking the dot product
-between each small part of the image and the filter, in all depth
-dimensions. This is then passed through a non-linear function,
-typically the <b>Rectified Linear (ReLu)</b> function, which serves as the
-activation of the neurons in the first convolutional layer. This is
-further passed through a <b>pooling layer</b>, which reduces the size of the
-convolutional layer, e.g. by taking the maximum or average across some
-small regions, and this serves as input to the next convolutional
-layer.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="systematic-reduction">Systematic reduction </h2>
-
-<p>By systematically reducing the size of the input volume, through
-convolution and pooling, the network should create representations of
-small parts of the input, and then from them assemble representations
-of larger areas.  The final pooling layer is flattened to serve as
-input to a hidden layer, such that each neuron in the final pooling
-layer is connected to every single neuron in the hidden layer. This
-then serves as input to the output layer, e.g. a softmax output for
-classification.
-</p>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="prerequisites-collect-and-pre-process-data">Prerequisites: Collect and pre-process data </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># import necessary packages</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn</span> <span style="color: #008000; font-weight: bold">import</span> datasets
-
-
-<span style="color: #408080; font-style: italic"># ensure the same random numbers appear every time</span>
-np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>seed(<span style="color: #666666">0</span>)
-
-<span style="color: #408080; font-style: italic"># display images in notebook</span>
-<span style="color: #666666">%</span>matplotlib inline
-plt<span style="color: #666666">.</span>rcParams[<span style="color: #BA2121">&#39;figure.figsize&#39;</span>] <span style="color: #666666">=</span> (<span style="color: #666666">12</span>,<span style="color: #666666">12</span>)
-
-
-<span style="color: #408080; font-style: italic"># download MNIST dataset</span>
-digits <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>load_digits()
-
-<span style="color: #408080; font-style: italic"># define inputs and labels</span>
-inputs <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>images
-labels <span style="color: #666666">=</span> digits<span style="color: #666666">.</span>target
-
-<span style="color: #408080; font-style: italic"># RGB images have a depth of 3</span>
-<span style="color: #408080; font-style: italic"># our images are grayscale so they should have a depth of 1</span>
-inputs <span style="color: #666666">=</span> inputs[:,:,:,np<span style="color: #666666">.</span>newaxis]
-
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;inputs = (n_inputs, pixel_width, pixel_height, depth) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(inputs<span style="color: #666666">.</span>shape))
-<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;labels = (n_inputs) = &quot;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(labels<span style="color: #666666">.</span>shape))
-
-
-<span style="color: #408080; font-style: italic"># choose some random images to display</span>
-n_inputs <span style="color: #666666">=</span> <span style="color: #008000">len</span>(inputs)
-indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(n_inputs)
-random_indices <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>choice(indices, size<span style="color: #666666">=5</span>)
-
-<span style="color: #008000; font-weight: bold">for</span> i, image <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(digits<span style="color: #666666">.</span>images[random_indices]):
-    plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">1</span>, <span style="color: #666666">5</span>, i<span style="color: #666666">+1</span>)
-    plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
-    plt<span style="color: #666666">.</span>imshow(image, cmap<span style="color: #666666">=</span>plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>gray_r, interpolation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;nearest&#39;</span>)
-    plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;Label: </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> digits<span style="color: #666666">.</span>target[random_indices[i]])
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="importing-keras-and-tensorflow">Importing Keras and Tensorflow </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Input
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Sequential      <span style="color: #408080; font-style: italic">#This allows appending layers to existing models</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Dense           <span style="color: #408080; font-style: italic">#This allows defining the characteristics of a particular layer</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> optimizers             <span style="color: #408080; font-style: italic">#This allows using whichever optimiser we want (sgd,adam,RMSprop)</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> regularizers           <span style="color: #408080; font-style: italic">#This allows using whichever regularizer we want (l1,l2,l1_l2)</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.utils</span> <span style="color: #008000; font-weight: bold">import</span> to_categorical   <span style="color: #408080; font-style: italic">#This allows using categorical cross entropy as the cost function</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import Conv2D</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import MaxPooling2D</span>
-<span style="color: #408080; font-style: italic">#from tensorflow.keras import Flatten</span>
-
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sklearn.model_selection</span> <span style="color: #008000; font-weight: bold">import</span> train_test_split
-
-<span style="color: #408080; font-style: italic"># representation of labels</span>
-labels <span style="color: #666666">=</span> to_categorical(labels)
-
-<span style="color: #408080; font-style: italic"># split into train and test data</span>
-<span style="color: #408080; font-style: italic"># one-liner from scikit-learn library</span>
-train_size <span style="color: #666666">=</span> <span style="color: #666666">0.8</span>
-test_size <span style="color: #666666">=</span> <span style="color: #666666">1</span> <span style="color: #666666">-</span> train_size
-X_train, X_test, Y_train, Y_test <span style="color: #666666">=</span> train_test_split(inputs, labels, train_size<span style="color: #666666">=</span>train_size,
-                                                    test_size<span style="color: #666666">=</span>test_size)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split  -->
-<h2 id="running-with-keras">Running with Keras </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_convolutional_neural_network_keras</span>(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd):
-    model <span style="color: #666666">=</span> Sequential()
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(n_filters, (receptive_field, receptive_field), input_shape<span style="color: #666666">=</span>input_shape, padding<span style="color: #666666">=</span><span style="color: #BA2121">&#39;same&#39;</span>,
-              activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D(pool_size<span style="color: #666666">=</span>(<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_neurons_connected, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(n_categories, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;softmax&#39;</span>, kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(lmbd)))
-    
-    sgd <span style="color: #666666">=</span> optimizers<span style="color: #666666">.</span>SGD(lr<span style="color: #666666">=</span>eta)
-    model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;categorical_crossentropy&#39;</span>, optimizer<span style="color: #666666">=</span>sgd, metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
-    
-    <span style="color: #008000; font-weight: bold">return</span> model
-
-epochs <span style="color: #666666">=</span> <span style="color: #666666">100</span>
-batch_size <span style="color: #666666">=</span> <span style="color: #666666">100</span>
-input_shape <span style="color: #666666">=</span> X_train<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>:<span style="color: #666666">4</span>]
-receptive_field <span style="color: #666666">=</span> <span style="color: #666666">3</span>
-n_filters <span style="color: #666666">=</span> <span style="color: #666666">10</span>
-n_neurons_connected <span style="color: #666666">=</span> <span style="color: #666666">50</span>
-n_categories <span style="color: #666666">=</span> <span style="color: #666666">10</span>
-
-eta_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
-lmbd_vals <span style="color: #666666">=</span> np<span style="color: #666666">.</span>logspace(<span style="color: #666666">-5</span>, <span style="color: #666666">1</span>, <span style="color: #666666">7</span>)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="final-part">Final part </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">CNN_keras <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)), dtype<span style="color: #666666">=</span><span style="color: #008000">object</span>)
-        
-<span style="color: #008000; font-weight: bold">for</span> i, eta <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(eta_vals):
-    <span style="color: #008000; font-weight: bold">for</span> j, lmbd <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(lmbd_vals):
-        CNN <span style="color: #666666">=</span> create_convolutional_neural_network_keras(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd)
-        CNN<span style="color: #666666">.</span>fit(X_train, Y_train, epochs<span style="color: #666666">=</span>epochs, batch_size<span style="color: #666666">=</span>batch_size, verbose<span style="color: #666666">=0</span>)
-        scores <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)
-        
-        CNN_keras[i][j] <span style="color: #666666">=</span> CNN
-        
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Learning rate = &quot;</span>, eta)
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Lambda = &quot;</span>, lmbd)
-        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Test accuracy: </span><span style="color: #BB6688; font-weight: bold">%.3f</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">%</span> scores[<span style="color: #666666">1</span>])
-        <span style="color: #008000">print</span>()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="final-visualization">Final visualization </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># visual representation of grid search</span>
-<span style="color: #408080; font-style: italic"># uses seaborn heatmap, could probably do this in matplotlib</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">seaborn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">sns</span>
-
-sns<span style="color: #666666">.</span>set()
-
-train_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
-test_accuracy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #008000">len</span>(eta_vals), <span style="color: #008000">len</span>(lmbd_vals)))
-
-<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(eta_vals)):
-    <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(lmbd_vals)):
-        CNN <span style="color: #666666">=</span> CNN_keras[i][j]
-
-        train_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_train, Y_train)[<span style="color: #666666">1</span>]
-        test_accuracy[i][j] <span style="color: #666666">=</span> CNN<span style="color: #666666">.</span>evaluate(X_test, Y_test)[<span style="color: #666666">1</span>]
-
-        
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
-sns<span style="color: #666666">.</span>heatmap(train_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
-ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Training Accuracy&quot;</span>)
-ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
-ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-
-fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(figsize <span style="color: #666666">=</span> (<span style="color: #666666">10</span>, <span style="color: #666666">10</span>))
-sns<span style="color: #666666">.</span>heatmap(test_accuracy, annot<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, ax<span style="color: #666666">=</span>ax, cmap<span style="color: #666666">=</span><span style="color: #BA2121">&quot;viridis&quot;</span>)
-ax<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&quot;Test Accuracy&quot;</span>)
-ax<span style="color: #666666">.</span>set_ylabel(<span style="color: #BA2121">&quot;$\eta$&quot;</span>)
-ax<span style="color: #666666">.</span>set_xlabel(<span style="color: #BA2121">&quot;$\lambda$&quot;</span>)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-cifar01-data-set">The CIFAR01 data set </h2>
-
-<p>The CIFAR10 dataset contains 60,000 color images in 10 classes, with
-6,000 images in each class. The dataset is divided into 50,000
-training images and 10,000 testing images. The classes are mutually
-exclusive and there is no overlap between them.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
-
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-
-<span style="color: #408080; font-style: italic"># We import the data set</span>
-(train_images, train_labels), (test_images, test_labels) <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>cifar10<span style="color: #666666">.</span>load_data()
-
-<span style="color: #408080; font-style: italic"># Normalize pixel values to be between 0 and 1 by dividing by 255. </span>
-train_images, test_images <span style="color: #666666">=</span> train_images <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>, test_images <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="verifying-the-data-set">Verifying the data set </h2>
-
-<p>To verify that the dataset looks correct, let's plot the first 25 images from the training set and display the class name below each image.</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">class_names <span style="color: #666666">=</span> [<span style="color: #BA2121">&#39;airplane&#39;</span>, <span style="color: #BA2121">&#39;automobile&#39;</span>, <span style="color: #BA2121">&#39;bird&#39;</span>, <span style="color: #BA2121">&#39;cat&#39;</span>, <span style="color: #BA2121">&#39;deer&#39;</span>,
-               <span style="color: #BA2121">&#39;dog&#39;</span>, <span style="color: #BA2121">&#39;frog&#39;</span>, <span style="color: #BA2121">&#39;horse&#39;</span>, <span style="color: #BA2121">&#39;ship&#39;</span>, <span style="color: #BA2121">&#39;truck&#39;</span>]
-plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">10</span>,<span style="color: #666666">10</span>))
-<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">25</span>):
-    plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">5</span>,<span style="color: #666666">5</span>,i<span style="color: #666666">+1</span>)
-    plt<span style="color: #666666">.</span>xticks([])
-    plt<span style="color: #666666">.</span>yticks([])
-    plt<span style="color: #666666">.</span>grid(<span style="color: #008000; font-weight: bold">False</span>)
-    plt<span style="color: #666666">.</span>imshow(train_images[i], cmap<span style="color: #666666">=</span>plt<span style="color: #666666">.</span>cm<span style="color: #666666">.</span>binary)
-    <span style="color: #408080; font-style: italic"># The CIFAR labels happen to be arrays, </span>
-    <span style="color: #408080; font-style: italic"># which is why you need the extra index</span>
-    plt<span style="color: #666666">.</span>xlabel(class_names[train_labels[i][<span style="color: #666666">0</span>]])
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="set-up-the-model">Set up  the model </h2>
-
-<p>The 6 lines of code below define the convolutional base using a common pattern: a stack of Conv2D and MaxPooling2D layers.</p>
-
-<p>As input, a CNN takes tensors of shape (image_height, image_width, color_channels), ignoring the batch size. If you are new to these dimensions, color_channels refers to (R,G,B). In this example, you will configure our CNN to process inputs of shape (32, 32, 3), which is the format of CIFAR images. You can do this by passing the argument input_shape to our first layer.</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">model <span style="color: #666666">=</span> models<span style="color: #666666">.</span>Sequential()
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">32</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>, input_shape<span style="color: #666666">=</span>(<span style="color: #666666">32</span>, <span style="color: #666666">32</span>, <span style="color: #666666">3</span>)))
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D((<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D((<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
-
-<span style="color: #408080; font-style: italic"># Let&#39;s display the architecture of our model so far.</span>
-
-model<span style="color: #666666">.</span>summary()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>You can see that the output of every Conv2D and MaxPooling2D layer is a 3D tensor of shape (height, width, channels). The width and height dimensions tend to shrink as you go deeper in the network. The number of output channels for each Conv2D layer is controlled by the first argument (e.g., 32 or 64). Typically, as the width and height shrink, you can afford (computationally) to add more output channels in each Conv2D layer.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="add-dense-layers-on-top">Add Dense layers on top </h2>
-
-<p>To complete our model, you will feed the last output tensor from the
-convolutional base (of shape (4, 4, 64)) into one or more Dense layers
-to perform classification. Dense layers take vectors as input (which
-are 1D), while the current output is a 3D tensor. First, you will
-flatten (or unroll) the 3D output to 1D, then add one or more Dense
-layers on top. CIFAR has 10 output classes, so you use a final Dense
-layer with 10 outputs and a softmax activation.
-</p>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">64</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
-model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">10</span>))
-Here<span style="color: #BA2121">&#39;s the complete architecture of our model.</span>
-
-model<span style="color: #666666">.</span>summary()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p>As you can see, our (4, 4, 64) outputs were flattened into vectors of shape (1024) before going through two Dense layers.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="compile-and-train-the-model">Compile and train the model </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">model<span style="color: #666666">.</span>compile(optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;adam&#39;</span>,
-              loss<span style="color: #666666">=</span>tf<span style="color: #666666">.</span>keras<span style="color: #666666">.</span>losses<span style="color: #666666">.</span>SparseCategoricalCrossentropy(from_logits<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>),
-              metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
-
-history <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(train_images, train_labels, epochs<span style="color: #666666">=10</span>, 
-                    validation_data<span style="color: #666666">=</span>(test_images, test_labels))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="finally-evaluate-the-model">Finally, evaluate the model </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;">plt<span style="color: #666666">.</span>plot(history<span style="color: #666666">.</span>history[<span style="color: #BA2121">&#39;accuracy&#39;</span>], label<span style="color: #666666">=</span><span style="color: #BA2121">&#39;accuracy&#39;</span>)
-plt<span style="color: #666666">.</span>plot(history<span style="color: #666666">.</span>history[<span style="color: #BA2121">&#39;val_accuracy&#39;</span>], label <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;val_accuracy&#39;</span>)
-plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&#39;Epoch&#39;</span>)
-plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&#39;Accuracy&#39;</span>)
-plt<span style="color: #666666">.</span>ylim([<span style="color: #666666">0.5</span>, <span style="color: #666666">1</span>])
-plt<span style="color: #666666">.</span>legend(loc<span style="color: #666666">=</span><span style="color: #BA2121">&#39;lower right&#39;</span>)
-
-test_loss, test_acc <span style="color: #666666">=</span> model<span style="color: #666666">.</span>evaluate(test_images,  test_labels, verbose<span style="color: #666666">=2</span>)
-
-<span style="color: #008000">print</span>(test_acc)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
