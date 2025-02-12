@@ -1,1 +1,49 @@
 *** doconce file not found
+*** error: more than one subsection in a slide (insert missing !split):
+% !split
+\subsection{Cross correlation}
+
+In essentially all applications one uses what is called cross correlation instead of the standard convolution described above.
+This means that multiplication is performed in the same direction and instead of the general expression we have discussed above (with infinite sums)
+\[
+y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i-k),
+\]
+we have now
+\[
+y(i) = \sum_{k=-\infty}^{k=\infty}w(k)x(i+k).
+\]
+
+Both TensorFlow and PyTorch (as well as our own code example below),
+implement the last equation, although it is normally referred to as
+convolution.  The same padding rules and stride rules discussed below
+apply to this expression as well.
+
+We leave it as an exercise for you to convince yourself that the example we have discussed till now, gives the same final expression using the last expression.
+
+\subsection{Two-dimensional objects}
+
+We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
+We often use convolutions over more than one dimension at a time. If
+we have a two-dimensional image $X$ as input, we can have a \textbf{filter}
+defined by a two-dimensional \textbf{kernel/weight/filter} $W$. This leads to an output $Y$
+
+\[
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
+\]
+
+Convolution is a commutative process, which means we can rewrite this equation as
+\[
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
+\]
+
+Normally the latter is more straightforward to implement in a machine
+larning library since there is less variation in the range of values
+of $m$ and $n$.
+
+As mentioned above, most deep learning libraries implement
+cross-correlation instead of convolution (although it is referred to as
+convolution)
+Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
+\]
+
+
