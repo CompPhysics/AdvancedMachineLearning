@@ -89,6 +89,8 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics of convolutional neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
+- Video of lecture at https://youtu.be/WsvsCe1-IP4
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary13.pdf
 
 
 ## February 17-21
