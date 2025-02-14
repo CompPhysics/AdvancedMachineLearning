@@ -8,8 +8,8 @@ doconce format html week5.do.txt --pygments_html_style=perldoc --html_style=sola
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="February 12-16: Advanced machine learning and data analysis for the physical sciences">
-<title>February 12-16: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="Advanced machine learning and data analysis for the physical sciences">
+<title>Advanced machine learning and data analysis for the physical sciences</title>
 <link href="https://cdn.rawgit.com/doconce/doconce/master/bundled/html_styles/style_solarized_box/css/solarized_light_code.css" rel="stylesheet" type="text/css" title="light"/>
 <script src="https://cdn.rawgit.com/doconce/doconce/master/bundled/html_styles/style_solarized_box/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
@@ -63,31 +63,10 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for February 12-16', 2, None, 'plans-for-february-12-16'),
+ 'sections': [('Plans for February 20', 2, None, 'plans-for-february-20'),
+              ('Reading recommendations', 2, None, 'reading-recommendations'),
+              ('TensorFlow examples', 2, None, 'tensorflow-examples'),
               ('Video lectures on CNNs', 2, None, 'video-lectures-on-cnns'),
-              ('Convolutional Neural Networks (recognizing images)',
-               2,
-               None,
-               'convolutional-neural-networks-recognizing-images'),
-              ('What is the Difference', 2, None, 'what-is-the-difference'),
-              ('Neural Networks vs CNNs', 2, None, 'neural-networks-vs-cnns'),
-              ('Why CNNS for images, sound files, medical images from CT scans '
-               'etc?',
-               2,
-               None,
-               'why-cnns-for-images-sound-files-medical-images-from-ct-scans-etc'),
-              ('Regular NNs don’t scale well to full images',
-               2,
-               None,
-               'regular-nns-don-t-scale-well-to-full-images'),
-              ('3D volumes of neurons', 2, None, '3d-volumes-of-neurons'),
-              ('More on Dimensionalities', 2, None, 'more-on-dimensionalities'),
-              ('Further remarks', 2, None, 'further-remarks'),
-              ('Layers used to build CNNs',
-               2,
-               None,
-               'layers-used-to-build-cnns'),
-              ('Transforming images', 2, None, 'transforming-images'),
               ('CNNs in brief', 2, None, 'cnns-in-brief'),
               ('A deep CNN model ("From Raschka et '
                'al":"https://github.com/rasbt/machine-learning-book")',
@@ -95,58 +74,61 @@ div.toc p,a {
                None,
                'a-deep-cnn-model-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Key Idea', 2, None, 'key-idea'),
-              ('Mathematics of CNNs', 2, None, 'mathematics-of-cnns'),
-              ('Convolution Examples: Polynomial multiplication',
+              ('How to do image compression before the era of deep learning',
                2,
                None,
-               'convolution-examples-polynomial-multiplication'),
-              ('Efficient Polynomial Multiplication',
-               2,
-               None,
-               'efficient-polynomial-multiplication'),
-              ('Further simplification', 2, None, 'further-simplification'),
-              ('A more efficient way of coding the above Convolution',
-               2,
-               None,
-               'a-more-efficient-way-of-coding-the-above-convolution'),
-              ('Fourier series and Toeplitz matrices',
-               2,
-               None,
-               'fourier-series-and-toeplitz-matrices'),
-              ('Generalizing the above one-dimensional case',
-               2,
-               None,
-               'generalizing-the-above-one-dimensional-case'),
-              ('Two-dimensional Objects', 2, None, 'two-dimensional-objects'),
-              ('CNNs in more detail', 2, None, 'cnns-in-more-detail'),
-              ('Performing a discrete convolution with padding ("From Raschka '
-               'et al":"https://github.com/rasbt/machine-learning-book")',
-               2,
-               None,
-               'performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
-              ('Performing a general discrete convolution ("From Raschka et '
+               'how-to-do-image-compression-before-the-era-of-deep-learning'),
+              ('The SVD example', 2, None, 'the-svd-example'),
+              ('Examples of CNN setups', 2, None, 'examples-of-cnn-setups'),
+              ('Summarizing: Performing a general discrete convolution ("From '
+               'Raschka et '
                'al":"https://github.com/rasbt/machine-learning-book")',
                2,
                None,
-               'performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
-              ('Set of filters', 2, None, 'set-of-filters'),
+               'summarizing-performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
               ('Pooling', 2, None, 'pooling'),
-              ('No zero padding, unit strides',
-               2,
-               None,
-               'no-zero-padding-unit-strides'),
-              ('Zero padding, unit strides',
-               2,
-               None,
-               'zero-padding-unit-strides'),
-              ('Half (same) padding', 2, None, 'half-same-padding'),
-              ('Full padding', 2, None, 'full-padding'),
               ('Pooling arithmetic', 2, None, 'pooling-arithmetic'),
               ('Pooling types ("From Raschka et '
                'al":"https://github.com/rasbt/machine-learning-book")',
                2,
                None,
                'pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book'),
+              ('Building convolutional neural networks in Tensorflow and Keras',
+               2,
+               None,
+               'building-convolutional-neural-networks-in-tensorflow-and-keras'),
+              ('Setting it up', 2, None, 'setting-it-up'),
+              ('The MNIST dataset again', 2, None, 'the-mnist-dataset-again'),
+              ('Strong correlations', 2, None, 'strong-correlations'),
+              ('Layers of a CNN', 2, None, 'layers-of-a-cnn'),
+              ('Systematic reduction', 2, None, 'systematic-reduction'),
+              ('Prerequisites: Collect and pre-process data',
+               2,
+               None,
+               'prerequisites-collect-and-pre-process-data'),
+              ('Importing Keras and Tensorflow',
+               2,
+               None,
+               'importing-keras-and-tensorflow'),
+              ('Running with Keras', 2, None, 'running-with-keras'),
+              ('Final part', 2, None, 'final-part'),
+              ('Final visualization', 2, None, 'final-visualization'),
+              ('The CIFAR01 data set', 2, None, 'the-cifar01-data-set'),
+              ('Verifying the data set', 2, None, 'verifying-the-data-set'),
+              ('Set up  the model', 2, None, 'set-up-the-model'),
+              ('Add Dense layers on top', 2, None, 'add-dense-layers-on-top'),
+              ('Compile and train the model',
+               2,
+               None,
+               'compile-and-train-the-model'),
+              ('Finally, evaluate the model',
+               2,
+               None,
+               'finally-evaluate-the-model'),
+              ('Building code using Pytorch',
+               2,
+               None,
+               'building-code-using-pytorch'),
               ('Building our own CNN code',
                2,
                None,
@@ -193,27 +175,7 @@ div.toc p,a {
               ('Convolution in the Fourier domain',
                3,
                None,
-               'convolution-in-the-fourier-domain'),
-              ('Building convolutional neural networks in Tensorflow and Keras',
-               2,
-               None,
-               'building-convolutional-neural-networks-in-tensorflow-and-keras'),
-              ('Setting it up', 2, None, 'setting-it-up'),
-              ('The MNIST dataset again', 2, None, 'the-mnist-dataset-again'),
-              ('Strong correlations', 2, None, 'strong-correlations'),
-              ('Layers of a CNN', 2, None, 'layers-of-a-cnn'),
-              ('Systematic reduction', 2, None, 'systematic-reduction'),
-              ('Prerequisites: Collect and pre-process data',
-               2,
-               None,
-               'prerequisites-collect-and-pre-process-data'),
-              ('Importing Keras and Tensorflow',
-               2,
-               None,
-               'importing-keras-and-tensorflow'),
-              ('Running with Keras', 2, None, 'running-with-keras'),
-              ('Final part', 2, None, 'final-part'),
-              ('Final visualization', 2, None, 'final-visualization')]}
+               'convolution-in-the-fourier-domain')]}
 end of tocinfo -->
 
 <body>
@@ -235,41 +197,53 @@ MathJax.Hub.Config({
 
 <!-- ------------------- main content ---------------------- -->
 <center>
-<h1>February 12-16: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
 <center>
-<b>Morten Hjorth-Jensen</b> [1, 2]
+<b>Morten Hjorth-Jensen</b> 
 </center>
-<!-- institution(s) -->
+<!-- institution -->
 <center>
-[1] <b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
-</center>
-<center>
-[2] <b>Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA</b>
+<b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
 </center>
 <br>
 <center>
-<h4>February 12-16, 2023</h4>
+<h4>February 20, 2025</h4>
 </center> <!-- date -->
 <br>
-<h2 id="plans-for-february-12-16">Plans for February 12-16  </h2>
+<h2 id="plans-for-february-20">Plans for February 20  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
-
-<ul>
-<li> Basics and mathematics of Convolutional  Neural Networks.</li>
-<li> Reading recommendations:
-<ol type="a"></li>
- <li> For neural networks we recommend Goodfellow et al chapters 6 and 7. For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications</li>
- <li> Reading suggestions for implementation of CNNs: <a href="https://github.com/rasbt/machine-learning-book/tree/main/ch14" target="_blank">Rashcka et al.'s chapter 14</a>. The jupyter-notebook for this chapter is available from Rachska's GitHub site. It is also sent separately to you all.</li>
- <li> <a href="https://youtu.be/iNNVYdFw8CI" target="_blank">Video of lecture</a></li>
- <li> <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary13.pdf" target="_blank">Whiteboard notes</a></li>
+<ol>
+<li> Summary Basics and mathematics of Convolutional  Neural Networks.
+<!-- o <a href="https://youtu.be/WsvsCe1-IP4" target="_blank">Video of lecture</a> --></li>
+<li> Link to project examples from 2024 at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/ProjectExamples" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/ProjectExamples</tt></a>
+<!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary13.pdf" target="_blank">Whiteboard notes</a> --></li>
 </ol>
-</ul>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reading-recommendations">Reading recommendations </h2>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<ol>
+<li> For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications</li>
+<li> Reading suggestions for implementation of CNNs in PyTorch: <a href="https://github.com/rasbt/machine-learning-book/tree/main/ch14" target="_blank">See Rashcka et al.'s chapter 14 and GitHub site</a>.</li>
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="tensorflow-examples">TensorFlow examples </h2>
+<p>For TensorFlow (using Keras) implementations, we recommend</p>
+<ol>
+<li> <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/02_deeplearning/02_cnn" target="_blank">David Foster Generative Learning, see chapter 2 from the GitHub link</a></li>
+<li> <a href="https://github.com/raghavbali/generative_ai_with_tensorflow" target="_blank">Joseph Babcock and Raghav Bali Generative AI with Python and their GitHub link, chapter 3</a></li>  
+</ol>
 </div>
 
 
@@ -285,219 +259,6 @@ MathJax.Hub.Config({
 </ul>
 </div>
 
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="convolutional-neural-networks-recognizing-images">Convolutional Neural Networks (recognizing images) </h2>
-
-<p>Convolutional neural networks (CNNs) were developed during the last
-decade of the previous century, with a focus on character recognition
-tasks. Nowadays, CNNs are a central element in the spectacular success
-of deep learning methods. The success in for example image
-classifications have made them a central tool for most machine
-learning practitioners.
-</p>
-
-<p>CNNs are very similar to ordinary Neural Networks.
-They are made up of neurons that have learnable weights and
-biases. Each neuron receives some inputs, performs a dot product and
-optionally follows it with a non-linearity. The whole network still
-expresses a single differentiable score function: from the raw image
-pixels on one end to class scores at the other. And they still have a
-loss function (for example Softmax) on the last (fully-connected) layer
-and all the tips/tricks we developed for learning regular Neural
-Networks still apply (back propagation, gradient descent etc etc).
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="what-is-the-difference">What is the Difference </h2>
-
-<p><b>CNN architectures make the explicit assumption that
-the inputs are images, which allows us to encode certain properties
-into the architecture. These then make the forward function more
-efficient to implement and vastly reduce the amount of parameters in
-the network.</b>
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="neural-networks-vs-cnns">Neural Networks vs CNNs </h2>
-
-<p>Neural networks are defined as <b>affine transformations</b>, that is 
-a vector is received as input and is multiplied with a matrix of so-called weights (our unknown paramters) to produce an
-output (to which a bias vector is usually added before passing the result
-through a nonlinear activation function). This is applicable to any type of input, be it an
-image, a sound clip or an unordered collection of features: whatever their
-dimensionality, their representation can always be flattened into a vector
-before the transformation.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="why-cnns-for-images-sound-files-medical-images-from-ct-scans-etc">Why CNNS for images, sound files, medical images from CT scans etc? </h2>
-
-<p>However, when we consider images, sound clips and many other similar kinds of data, these data  have an intrinsic
-structure. More formally, they share these important properties:
-</p>
-<ul>
-<li> They are stored as multi-dimensional arrays (think of the pixels of a figure) .</li>
-<li> They feature one or more axes for which ordering matters (e.g., width and height axes for an image, time axis for a sound clip).</li>
-<li> One axis, called the channel axis, is used to access different views of the data (e.g., the red, green and blue channels of a color image, or the left and right channels of a stereo audio track).</li>
-</ul>
-<p>These properties are not exploited when an affine transformation is applied; in
-fact, all the axes are treated in the same way and the topological information
-is not taken into account. Still, taking advantage of the implicit structure of
-the data may prove very handy in solving some tasks, like computer vision and
-speech recognition, and in these cases it would be best to preserve it. This is
-where discrete convolutions come into play.
-</p>
-
-<p>A discrete convolution is a linear transformation that preserves this notion of
-ordering. It is sparse (only a few input units contribute to a given output
-unit) and reuses parameters (the same weights are applied to multiple locations
-in the input).
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="regular-nns-don-t-scale-well-to-full-images">Regular NNs don&#8217;t scale well to full images </h2>
-
-<p>As an example, consider
-an image of size \( 32\times 32\times 3 \) (32 wide, 32 high, 3 color channels), so a
-single fully-connected neuron in a first hidden layer of a regular
-Neural Network would have \( 32\times 32\times 3 = 3072 \) weights. This amount still
-seems manageable, but clearly this fully-connected structure does not
-scale to larger images. For example, an image of more respectable
-size, say \( 200\times 200\times 3 \), would lead to neurons that have 
-\( 200\times 200\times 3 = 120,000 \) weights. 
-</p>
-
-<p>We could have
-several such neurons, and the parameters would add up quickly! Clearly,
-this full connectivity is wasteful and the huge number of parameters
-would quickly lead to possible overfitting.
-</p>
-
-<center>  <!-- FIGURE -->
-<hr class="figure">
-<center>
-<p class="caption">Figure 1:  A regular 3-layer Neural Network. </p>
-</center>
-<p><img src="figslides/nn.jpeg" width="500" align="bottom"></p>
-</center>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="3d-volumes-of-neurons">3D volumes of neurons </h2>
-
-<p>Convolutional Neural Networks take advantage of the fact that the
-input consists of images and they constrain the architecture in a more
-sensible way. 
-</p>
-
-<p>In particular, unlike a regular Neural Network, the
-layers of a CNN have neurons arranged in 3 dimensions: width,
-height, depth. (Note that the word depth here refers to the third
-dimension of an activation volume, not to the depth of a full Neural
-Network, which can refer to the total number of layers in a network.)
-</p>
-
-<p>To understand it better, the above example of an image 
-with an input volume of
-activations has dimensions \( 32\times 32\times 3 \) (width, height,
-depth respectively). 
-</p>
-
-<p>The neurons in a layer will
-only be connected to a small region of the layer before it, instead of
-all of the neurons in a fully-connected manner. Moreover, the final
-output layer could  for this specific image have dimensions \( 1\times 1 \times 10 \), 
-because by the
-end of the CNN architecture we will reduce the full image into a
-single vector of class scores, arranged along the depth
-dimension. 
-</p>
-
-<center>  <!-- FIGURE -->
-<hr class="figure">
-<center>
-<p class="caption">Figure 2:  A CNN arranges its neurons in three dimensions (width, height, depth), as visualized in one of the layers. Every layer of a CNN transforms the 3D input volume to a 3D output volume of neuron activations. In this example, the red input layer holds the image, so its width and height would be the dimensions of the image, and the depth would be 3 (Red, Green, Blue channels). </p>
-</center>
-<p><img src="figslides/cnn.jpeg" width="500" align="bottom"></p>
-</center>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="more-on-dimensionalities">More on Dimensionalities </h2>
-
-<p>In fields like signal processing (and imaging as well), one designs
-so-called filters. These filters are defined by the convolutions and
-are often hand-crafted. One may specify filters for smoothing, edge
-detection, frequency reshaping, and similar operations. However with
-neural networks the idea is to automatically learn the filters and use
-many of them in conjunction with non-linear operations (activation
-functions).
-</p>
-
-<p>As an example consider a neural network operating on sound sequence
-data.  Assume that we an input vector \( \boldsymbol{x} \) of length \( d=10^6 \).  We
-construct then a neural network with onle hidden layer only with
-\( 10^4 \) nodes. This means that we will have a weight matrix with
-\( 10^4\times 10^6=10^{10} \) weights to be determined, together with \( 10^4 \) biases.
-</p>
-
-<p>Assume furthermore that we have an output layer which is meant to train whether the sound sequence represents a human voice (true) or something else (false).
-It means that we have only one output node. But since this output node connects to \( 10^4 \) nodes in the hidden layer, there are in total \( 10^4 \) weights to be determined for the output layer, plus one bias. In total we have
-</p>
-
-$$
-\mathrm{NumberParameters}=10^{10}+10^4+10^4+1 \approx 10^{10},
-$$
-
-<p>that is ten billion parameters to determine. </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="further-remarks">Further remarks </h2>
-
-<p>The main principles that justify convolutions is locality of
-information and repetion of patterns within the signal. Sound samples
-of the input in adjacent spots are much more likely to affect each
-other than those that are very far away. Similarly, sounds are
-repeated in multiple times in the signal. While slightly simplistic,
-reasoning about such a sound example demonstrates this. The same
-principles then apply to images and other similar data.
-</p>
-
-<!-- !split  -->
-<h2 id="layers-used-to-build-cnns">Layers used to build CNNs </h2>
-
-<p>A simple CNN is a sequence of layers, and every layer of a CNN
-transforms one volume of activations to another through a
-differentiable function. We use three main types of layers to build
-CNN architectures: Convolutional Layer, Pooling Layer, and
-Fully-Connected Layer (exactly as seen in regular Neural Networks). We
-will stack these layers to form a full CNN architecture.
-</p>
-
-<p>A simple CNN for image classification could have the architecture:</p>
-
-<ul>
-<li> <b>INPUT</b> (\( 32\times 32 \times 3 \)) will hold the raw pixel values of the image, in this case an image of width 32, height 32, and with three color channels R,G,B.</li>
-<li> <b>CONV</b> (convolutional )layer will compute the output of neurons that are connected to local regions in the input, each computing a dot product between their weights and a small region they are connected to in the input volume. This may result in volume such as \( [32\times 32\times 12] \) if we decided to use 12 filters.</li>
-<li> <b>RELU</b> layer will apply an elementwise activation function, such as the \( max(0,x) \) thresholding at zero. This leaves the size of the volume unchanged (\( [32\times 32\times 12] \)).</li>
-<li> <b>POOL</b> (pooling) layer will perform a downsampling operation along the spatial dimensions (width, height), resulting in volume such as \( [16\times 16\times 12] \).</li>
-<li> <b>FC</b> (i.e. fully-connected) layer will compute the class scores, resulting in volume of size \( [1\times 1\times 10] \), where each of the 10 numbers correspond to a class score, such as among the 10 categories of the MNIST images we considered above . As with ordinary Neural Networks and as the name implies, each neuron in this layer will be connected to all the numbers in the previous volume.</li>
-</ul>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="transforming-images">Transforming images </h2>
-
-<p>CNNs transform the original image layer by layer from the original
-pixel values to the final class scores. 
-</p>
-
-<p>Observe that some layers contain
-parameters and other don&#8217;t. In particular, the CNN layers perform
-transformations that are a function of not only the activations in the
-input volume, but also of the parameters (the weights and biases of
-the neurons). On the other hand, the RELU/POOL layers will implement a
-fixed function. The parameters in the CONV/FC layers will be trained
-with gradient descent so that the class scores that the CNN computes
-are consistent with the labels in the training set for each image.
-</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="cnns-in-brief">CNNs in brief </h2>
@@ -517,7 +278,7 @@ are consistent with the labels in the training set for each image.
 <center>  <!-- FIGURE -->
 <hr class="figure">
 <center>
-<p class="caption">Figure 3:  A deep CNN </p>
+<p class="caption">Figure 1:  A deep CNN </p>
 </center>
 <p><img src="figslides/deepcnn.png" width="500" align="bottom"></p>
 </center>
@@ -534,331 +295,130 @@ only neighboring neurons in the input instead of connecting all with the first h
 <p>We say we perform a filtering (convolution is the mathematical operation). </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="mathematics-of-cnns">Mathematics of CNNs </h2>
+<h2 id="how-to-do-image-compression-before-the-era-of-deep-learning">How to do image compression before the era of deep learning </h2>
 
-<p>The mathematics of CNNs is based on the mathematical operation of
-<b>convolution</b>.  In mathematics (in particular in functional analysis),
-convolution is represented by mathematical operations (integration,
-summation etc) on two functions in order to produce a third function
-that expresses how the shape of one gets modified by the other.
-Convolution has a plethora of applications in a variety of
-disciplines, spanning from statistics to signal processing, computer
-vision, solutions of differential equations,linear algebra,
-engineering, and yes, machine learning.
+<p>The singular-value decomposition (SVD) algorithm has been for decades one of the standard ways of compressing images.
+The <a href="https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/chapter2.html#the-singular-value-decomposition" target="_blank">lectures on the SVD</a> give many of the essential details concerning the SVD.
 </p>
 
-<p>Mathematically, convolution is defined as follows (one-dimensional example):
-Let us define a continuous function \( y(t) \) given by
-</p>
-$$
-y(t) = \int x(a) w(t-a) da,
-$$
-
-<p>where \( x(a) \) represents a so-called input and \( w(t-a) \) is normally called the weight function or kernel.</p>
-
-<p>The above integral is written in  a more compact form as</p>
-$$
-y(t) = \left(x * w\right)(t).
-$$
-
-<p>The discretized version reads</p>
-$$
-y(t) = \sum_{a=-\infty}^{a=\infty}x(a)w(t-a).
-$$
-
-<p>Computing the inverse of the above convolution operations is known as deconvolution and the process is commutative.</p>
-
-<p>How can we use this? And what does it mean? Let us study some familiar examples first.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="convolution-examples-polynomial-multiplication">Convolution Examples: Polynomial multiplication </h2>
-
-<p>Our first example is that of a multiplication between two polynomials,
-which we will rewrite in terms of the mathematics of convolution. In
-the final stage, since the problem here is a discrete one, we will
-recast the final expression in terms of a matrix-vector
-multiplication, where the matrix is a so-called <a href="https://link.springer.com/book/10.1007/978-93-86279-04-0" target="_blank">Toeplitz matrix
-</a>.
+<p>The orthogonal vectors which are obtained from the SVD, can be used to
+project down the dimensionality of a given image. In the example here
+we gray-scale an image and downsize it.
 </p>
 
-<p>Let us look a the following polynomials to second and third order, respectively:</p>
-$$
-p(t) = \alpha_0+\alpha_1 t+\alpha_2 t^2,
-$$
-
-<p>and</p>
-$$
-s(t) = \beta_0+\beta_1 t+\beta_2 t^2+\beta_3 t^3.
-$$
-
-<p>The polynomial multiplication gives us a new polynomial of degree \( 5 \)</p>
-$$
-z(t) = \delta_0+\delta_1 t+\delta_2 t^2+\delta_3 t^3+\delta_4 t^4+\delta_5 t^5.
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="efficient-polynomial-multiplication">Efficient Polynomial Multiplication </h2>
-
-<p>Computing polynomial products can be implemented efficiently if we rewrite the more brute force multiplications using convolution.
-We note first that the new coefficients are given as
-</p>
-
-$$
-\begin{split}
-\delta_0=&\alpha_0\beta_0\\
-\delta_1=&\alpha_1\beta_0+\alpha_0\beta_1\\
-\delta_2=&\alpha_0\beta_2+\alpha_1\beta_1+\alpha_2\beta_0\\
-\delta_3=&\alpha_1\beta_2+\alpha_2\beta_1+\alpha_0\beta_3\\
-\delta_4=&\alpha_2\beta_2+\alpha_1\beta_3\\
-\delta_5=&\alpha_2\beta_3.\\
-\end{split}
-$$
-
-<p>We note that \( \alpha_i=0 \) except for \( i\in \left\{0,1,2\right\} \) and \( \beta_i=0 \) except for \( i\in\left\{0,1,2,3\right\} \).</p>
-
-<p>We can then rewrite the coefficients \( \delta_j \) using a discrete convolution as</p>
-$$
-\delta_j = \sum_{i=-\infty}^{i=\infty}\alpha_i\beta_{j-i}=(\alpha * \beta)_j,
-$$
-
-<p>or as a double sum with restriction \( l=i+j \)</p>
-$$
-\delta_l = \sum_{ij}\alpha_i\beta_{j}.
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="further-simplification">Further simplification </h2>
-
-<p>Although we may have redundant operations with some few zeros for \( \beta_i \), we can rewrite the above sum in a more compact way as </p>
-$$
-\delta_i = \sum_{k=0}^{k=m-1}\alpha_k\beta_{i-k},
-$$
-
-<p>where \( m=3 \) in our case, the maximum length of the vector \( \alpha \). Note that the vector \( \boldsymbol{\beta} \) has length \( n=4 \).</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="a-more-efficient-way-of-coding-the-above-convolution">A more efficient way of coding the above Convolution </h2>
-
-<p>Since we only have a finite number of \( \alpha \) and \( \beta \) values
-which are non-zero, we can rewrite the above convolution expressions
-as a matrix-vector multiplication
-</p>
-
-$$
-\boldsymbol{\delta}=\begin{bmatrix}\alpha_0 & 0 & 0 & 0 \\
-                            \alpha_1 & \alpha_0 & 0 & 0 \\
-			    \alpha_2 & \alpha_1 & \alpha_0 & 0 \\
-			    0 & \alpha_2 & \alpha_1 & \alpha_0 \\
-			    0 & 0 & \alpha_2 & \alpha_1 \\
-			    0 & 0 & 0 & \alpha_2
-			    \end{bmatrix}\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \beta_3\end{bmatrix}.
-$$
-
-<p>The process is commutative and we can easily see that we can rewrite the multiplication in terms of  a matrix holding \( \beta \) and a vector holding \( \alpha \).
-In this case we have
-</p>
-$$
-\boldsymbol{\delta}=\begin{bmatrix}\beta_0 & 0 & 0  \\
-                            \beta_1 & \beta_0 & 0  \\
-			    \beta_2 & \beta_1 & \beta_0  \\
-			    \beta_3 & \beta_2 & \beta_1 \\
-			    0 & \beta_3 & \beta_2 \\
-			    0 & 0 & \beta_3
-			    \end{bmatrix}\begin{bmatrix} \alpha_0 \\ \alpha_1 \\ \alpha_2\end{bmatrix}.
-$$
-
-<p>Note that the use of these matrices is for mathematical purposes only
-and not implementation purposes.  When implementing the above equation
-we do not encode (and allocate memory) the matrices explicitely.  We
-rather code the convolutions in the minimal memory footprint that they
-require.
-</p>
-
-<p>The above matrices are examples of so-called <a href="https://link.springer.com/book/10.1007/978-93-86279-04-0" target="_blank">Toeplitz
-matrices</a>. A
-Toeplitz matrix is a matrix in which each descending diagonal from
-left to right is constant. For instance the last matrix, which we
-rewrite as
-</p>
-$$
-\boldsymbol{A}=\begin{bmatrix}a_0 & 0 & 0  \\
-                            a_1 & a_0 & 0  \\
-			    a_2 & a_1 & a_0  \\
-			    a_3 & a_2 & a_1 \\
-			    0 & a_3 & a_2 \\
-			    0 & 0 & a_3
-			    \end{bmatrix},
-$$
-
-<p>with elements \( a_{ii}=a_{i+1,j+1}=a_{i-j} \) is an example of a Toeplitz
-matrix. Such a matrix does not need to be a square matrix.  Toeplitz
-matrices are also closely connected with Fourier series, because the multiplication operator by a trigonometric
-polynomial, compressed to a finite-dimensional space, can be
-represented by such a matrix. The example above shows that we can
-represent linear convolution as multiplication of a Toeplitz matrix by
-a vector.
+<p>This recipe relies on us being able to actually perform the SVD. For
+large images, and in particular with many images to reconstruct, using the SVD 
+may quickly become an overwhelming task. With the advent of efficient deep
+learning methods like CNNs and later generative methods, these methods
+have become in the last years the premier way of performing image
+analysis. In particular for classification problems with labelled images.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="fourier-series-and-toeplitz-matrices">Fourier series and Toeplitz matrices </h2>
-
-<p>This is an active and ogoing research area concerning CNNs. The following articles may be of interest</p>
-<ol>
-<li> <a href="https://www.sciencedirect.com/topics/engineering/convolution-theorem#:~:text=The%20convolution%20theorem%20(together%20with,k%20)%20G%20(%20k%20)%20." target="_blank">Read more about the convolution theorem and Fouriers series</a></li>
-<li> <a href="https://www.sciencedirect.com/science/article/pii/S1568494623006257" target="_blank">Fourier Transform Layer</a></li>
-</ol>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="generalizing-the-above-one-dimensional-case">Generalizing the above one-dimensional case </h2>
-
-<p>In order to align the above simple case with the more general convolution cases, we rename \( \boldsymbol{\alpha} \), whose length is \( m=3 \), with \( \boldsymbol{w} \).
-We will interpret \( \boldsymbol{w} \) as a weight/filter function with which we want to perform the convolution with an input varibale \( \boldsymbol{x} \).
-We replace thus \( \boldsymbol{\beta} \) with \( \boldsymbol{x} \) and \( \boldsymbol{\delta} \) with \( \boldsymbol{s} \) and have
-</p>
-$$
-s(i) \left(x*w\right)(i)= \sum_{k=0}^{k=m-1}w(k)x(i-k),
-$$
-
-<p>where \( m=3 \) in our case, the maximum length of the vector \( \boldsymbol{w} \).
-Here the symbol \( * \) represents the mathematical operation of convolution.
-</p>
-<h2 id="two-dimensional-objects">Two-dimensional Objects </h2>
-
-<p>We are now ready to start studying the discrete convolutions relevant for convolutional neural networks.
-We often use convolutions over more than one dimension at a time. If
-we have a two-dimensional image \( X \) as input, we can have a <b>filter</b>
-defined by a two-dimensional <b>kernel/weight/filter</b> \( W \). This leads to an output \( Y \)
-</p>
-
-$$
-Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(m,n)W(i-m,j-n).
-$$
-
-<p>Convolution is a commutative process, which means we can rewrite this equation as</p>
-$$
-Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n).
-$$
-
-<p>Normally the latter is more straightforward to implement in  a machine larning library since there is less variation in the range of values of \( m \) and \( n \).</p>
-
-<p>Many deep learning libraries implement cross-correlation instead of convolution (although it is referred to s convolution)</p>
-$$
-Y(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i+m,j+n)W(m,n).
-$$
+<h2 id="the-svd-example">The SVD example </h2>
 
 
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="cnns-in-more-detail">CNNs in more detail </h2>
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">matplotlib.image</span> <span style="color: #8B008B; font-weight: bold">import</span> imread
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">scipy.linalg</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">ln</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">PIL</span> <span style="color: #8B008B; font-weight: bold">import</span> Image
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">math</span> <span style="color: #8B008B; font-weight: bold">import</span> log10, sqrt 
+plt.rcParams[<span style="color: #CD5555">&#39;figure.figsize&#39;</span>] = [<span style="color: #B452CD">16</span>, <span style="color: #B452CD">8</span>]
+<span style="color: #228B22"># Import image</span>
+A = imread(os.path.join(<span style="color: #CD5555">&quot;figslides/photo1.jpg&quot;</span>))
+X = A.dot([<span style="color: #B452CD">0.299</span>, <span style="color: #B452CD">0.5870</span>, <span style="color: #B452CD">0.114</span>]) <span style="color: #228B22"># Convert RGB to grayscale</span>
+img = plt.imshow(X)
+<span style="color: #228B22"># convert to gray</span>
+img.set_cmap(<span style="color: #CD5555">&#39;gray&#39;</span>)
+plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
+plt.show()
+<span style="color: #228B22"># Call image size</span>
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;: %s&#39;</span>%<span style="color: #658b00">str</span>(X.shape))
 
-<p>Let assume we have an input matrix \( X \) of dimensionality \( 3\times 3 \)
-and a \( 2\times 2 \) filter \( W \) given by the following matrices
-</p>
 
-$$
-\boldsymbol{X}=\begin{bmatrix}x_{00} & x_{01} & x_{02}  \\
-                      x_{10} & x_{11} & x_{12}  \\
-	              x_{20} & x_{21} & x_{22} \end{bmatrix},
-$$
+<span style="color: #228B22"># split the matrix into U, S, VT</span>
+U, S, VT = np.linalg.svd(X,full_matrices=<span style="color: #8B008B; font-weight: bold">False</span>)
+S = np.diag(S)
+m = <span style="color: #B452CD">800</span> <span style="color: #228B22"># Image&#39;s width</span>
+n = <span style="color: #B452CD">1200</span> <span style="color: #228B22"># Image&#39;s height</span>
+j = <span style="color: #B452CD">0</span>
+<span style="color: #228B22"># Try compression with different k vectors (these represent projections):</span>
+<span style="color: #8B008B; font-weight: bold">for</span> k <span style="color: #8B008B">in</span> (<span style="color: #B452CD">5</span>,<span style="color: #B452CD">10</span>, <span style="color: #B452CD">20</span>, <span style="color: #B452CD">100</span>,<span style="color: #B452CD">200</span>,<span style="color: #B452CD">400</span>,<span style="color: #B452CD">500</span>):
+    <span style="color: #228B22"># Original size of the image</span>
+    originalSize = m * n 
+    <span style="color: #228B22"># Size after compressed</span>
+    compressedSize = k * (<span style="color: #B452CD">1</span> + m + n) 
+    <span style="color: #228B22"># The projection of the original image</span>
+    Xapprox = U[:,:k] @ S[<span style="color: #B452CD">0</span>:k,:k] @ VT[:k,:]
+    plt.figure(j+<span style="color: #B452CD">1</span>)
+    j += <span style="color: #B452CD">1</span>
+    img = plt.imshow(Xapprox)
+    img.set_cmap(<span style="color: #CD5555">&#39;gray&#39;</span>)
+    
+    plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
+    plt.title(<span style="color: #CD5555">&#39;k = &#39;</span> + <span style="color: #658b00">str</span>(k))
+    plt.show() 
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Original size of image:&#39;</span>)
+    <span style="color: #658b00">print</span>(originalSize)
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Compression rate as Compressed image / Original size:&#39;</span>)
+    ratio = compressedSize * <span style="color: #B452CD">1.0</span> / originalSize
+    <span style="color: #658b00">print</span>(ratio)
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Compression rate is &#39;</span> + <span style="color: #658b00">str</span>( <span style="color: #658b00">round</span>(ratio * <span style="color: #B452CD">100</span> ,<span style="color: #B452CD">2</span>)) + <span style="color: #CD5555">&#39;%&#39;</span> )  
+    <span style="color: #228B22"># Estimate MQA</span>
+    x= X.astype(<span style="color: #CD5555">&quot;float&quot;</span>)
+    y=Xapprox.astype(<span style="color: #CD5555">&quot;float&quot;</span>)
+    err = np.sum((x - y) ** <span style="color: #B452CD">2</span>)
+    err /= <span style="color: #658b00">float</span>(X.shape[<span style="color: #B452CD">0</span>] * Xapprox.shape[<span style="color: #B452CD">1</span>])
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;The mean-square deviation &#39;</span>+ <span style="color: #658b00">str</span>(<span style="color: #658b00">round</span>( err)))
+    max_pixel = <span style="color: #B452CD">255.0</span>
+    <span style="color: #228B22"># Estimate Signal Noise Ratio</span>
+    srv = <span style="color: #B452CD">20</span> * (log10(max_pixel / sqrt(err)))
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&#39;Signa to noise ratio &#39;</span>+ <span style="color: #658b00">str</span>(<span style="color: #658b00">round</span>(srv)) +<span style="color: #CD5555">&#39;dB&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<p>and </p>
-$$
-\boldsymbol{W}=\begin{bmatrix}w_{00} & w_{01} \\
-	              w_{10} & w_{11}\end{bmatrix}.
-$$
-
-<p>We introduce now the hyperparameter \( S \) <b>stride</b>. Stride represents how the filter \( W \) moves the convolution process on the matrix \( X \).
-We strongly recommend the repository on <a href="https://github.com/vdumoulin/conv_arithmetic" target="_blank">Arithmetic of deep learning by Dumoulin and Visin</a> 
-</p>
-
-<p>Here we set the stride equal to \( S=1 \), which means that, starting with the element \( x_{00} \), the filter will act on \( 2\times 2 \) submatrices each time, starting with the upper corner and moving according to the stride value column by column. </p>
-
-<p>Here we perform the operation</p>
-$$
-Y_(i,j)=(X * W)(i,j) = \sum_m\sum_n X(i-m,j-n)W(m,n),
-$$
-
-<p>and obtain</p>
-$$
-\boldsymbol{Y}=\begin{bmatrix}x_{00}w_{00}+x_{01}w_{01}+x_{10}w_{10}+x_{11}w_{11} & x_{01}w_{00}+x_{02}w_{01}+x_{11}w_{10}+x_{12}w_{11}  \\
-	              x_{10}w_{00}+x_{11}w_{01}+x_{20}w_{10}+x_{21}w_{11} & x_{11}w_{00}+x_{12}w_{01}+x_{21}w_{10}+x_{22}w_{11}\end{bmatrix}.
-$$
-
-<p>We can rewrite this operation in terms of a matrix-vector multiplication by defining a new vector where we flatten out the inputs as a vector \( \boldsymbol{X}' \) of length \( 9 \) and
-a matrix \( \boldsymbol{W}' \) with dimension \( 4\times 9 \) as
-</p>
-
-$$
-\boldsymbol{X}'=\begin{bmatrix}x_{00} \\ x_{01} \\ x_{02} \\ x_{10} \\ x_{11} \\ x_{12} \\ x_{20} \\ x_{21} \\ x_{22} \end{bmatrix},
-$$
-
-<p>and the new matrix</p>
-$$
-\boldsymbol{W}'=\begin{bmatrix} w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 & 0 \\
-                        0  & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0 & 0 & 0 \\
-			0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11} & 0  \\
-                        0 & 0 & 0 & 0 & w_{00} & w_{01} & 0 & w_{10} & w_{11}\end{bmatrix}.
-$$
-
-<p>We see easily that performing the matrix-vector multiplication \( \boldsymbol{W}'\boldsymbol{X}' \) is the same as the above convolution with stride \( S=1 \), that is</p>
-
-$$
-Y=(\boldsymbol{W}*\boldsymbol{X}),
-$$
-
-<p>is now given by \( \boldsymbol{W}'\boldsymbol{X}' \) which is a vector of length \( 4 \) instead of the originally resulting  \( 2\times 2 \) output matrix.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="performing-a-discrete-convolution-with-padding-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Performing a discrete convolution with padding (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
+<h2 id="examples-of-cnn-setups">Examples of CNN setups </h2>
 
-<center>  <!-- FIGURE -->
-<hr class="figure">
-<center>
-<p class="caption">Figure 4:  A deep CNN </p>
-</center>
-<p><img src="figslides/discreteconv.png" width="500" align="bottom"></p>
-</center>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Performing a general discrete convolution (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
-
-<center>  <!-- FIGURE -->
-<hr class="figure">
-<center>
-<p class="caption">Figure 5:  A deep CNN </p>
-</center>
-<p><img src="figslides/discreteconv1.png" width="500" align="bottom"></p>
-</center>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="set-of-filters">Set of filters </h2>
-
-<p>The collection of kernels/filters \( W \) defining a discrete convolution has a shape
-corresponding to some permutation of \( (n, m, k_1, \ldots, k_N) \), where
+<p>Let us assume we have an input volume \( V \) given by an image of dimensionality
+\( 32\times 32 \times 3 \), that is three color channels and \( 32\times 32 \) pixels.
 </p>
 
-$$
-\begin{equation*}
-\begin{split}
-    n &\equiv \text{number of output feature maps},\\
-    m &\equiv \text{number of input feature maps},\\
-    k_j &\equiv \text{kernel size along axis $j$}.
-\end{split}
-\end{equation*}
-$$
+<p>We apply a filter of dimension \( 5\times 5 \) ten times with stride \( S=1 \) and padding \( P=0 \).</p>
 
-<p>The following properties affect the output size \( o_j \) of a convolutional layer
-along axis \( j \):
+<p>The output volume is given by \( (32-5)/1+1=28 \), resulting in ten images
+of dimensionality \( 28\times 28\times 3 \).
 </p>
 
-<ol>
-<li> \( i_j \): input size along axis \( j \),</li>
-<li> \( k_j \): kernel/filter size along axis \( j \),</li>
-<li> stride (distance between two consecutive positions of the kernel/filter) along axis \( j \),</li>
-<li> zero padding (number of zeros concatenated at the beginning and at the end of an axis) along axis \( j \).</li>
-</ol>
-<p>For instance, the above examples shows a  \( 2\times 2 \) kernel/filter \( \boldsymbol{W} \)  applied to a \( 3 \times 3 \) input padded with a \( 0 \times 0 \)
-border of zeros using \( 1 \times 1 \) strides.
+<p>The total number of parameters to train for each filter is then
+\( 5\times 5\times 3+1 \), where the last parameter is the bias. This
+gives us \( 76 \) parameters for each filter, leading to a total of \( 760 \)
+parameters for the ten filters.
+</p>
+
+<p>How many parameters will a filter of dimensionality \( 3\times 3 \)
+(adding color channels) result in if we produce \( 32 \) new images? Use \( S=1 \) and \( P=0 \).
 </p>
 
 <p>Note that strides constitute a form of <b>subsampling</b>. As an alternative to
@@ -869,123 +429,29 @@ retaining only odd output elements.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="summarizing-performing-a-general-discrete-convolution-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Summarizing: Performing a general discrete convolution (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
+
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center>
+<p class="caption">Figure 2:  A deep CNN </p>
+</center>
+<p><img src="figslides/discreteconv1.png" width="500" align="bottom"></p>
+</center>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="pooling">Pooling </h2>
 
-<p>In addition to discrete convolutions themselves, {\em pooling\/} operations
+<p>In addition to discrete convolutions themselves, <b>pooling</b> operations
 make up another important building block in CNNs. Pooling operations reduce
 the size of feature maps by using some function to summarize subregions, such
 as taking the average or the maximum value.
 </p>
 
 <p>Pooling works by sliding a window across the input and feeding the content of
-the window to a {\em pooling function}. In some sense, pooling works very much
+the window to a <b>pooling function</b>. In some sense, pooling works very much
 like a discrete convolution, but replaces the linear combination described by
-the kernel with some other function. Poolin
-provides an example for average pooling, and 
-does the same for max pooling.
-</p>
-
-<p>The following properties affect the output size \( o_j \) of a pooling layer
-along axis \( j \):
-</p>
-
-<ol>
-<li> \( i_j \): input size along axis \( j \),</li>
-<li> \( k_j \): pooling window size along axis \( j \),</li>
-<li> \( s_j \): stride (distance between two consecutive positions of the pooling window) along axis \( j \).</li>
-</ol>
-<p>The analysis of the relationship between convolutional layer properties is eased
-by the fact that they don't interact across axes, i.e., the choice of kernel
-size, stride and zero padding along axis \( j \) only affects the output size of
-axis \( j \). Because of that, we will focus on the following simplified
-setting:
-</p>
-
-<ol>
-<li> 2-D discrete convolutions (\( N = 2 \)),</li>
-<li> square inputs (\( i_1 = i_2 = i \)),</li>
-<li> square kernel size (\( k_1 = k_2 = k \)),</li>
-<li> same strides along both axes (\( s_1 = s_2 = s \)),</li>
-<li> same zero padding along both axes (\( p_1 = p_2 = p \)).</li>
-</ol>
-<p>This facilitates the analysis and the visualization, but keep in mind that the
-results outlined here also generalize to the N-D and non-square cases.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="no-zero-padding-unit-strides">No zero padding, unit strides </h2>
-
-<p>The simplest case to analyze is when the kernel just slides across every
-position of the input (i.e., \( s = 1 \) and \( p = 0 \)).
-</p>
-
-<p>For any \( i \) and \( k \), and for \( s = 1 \) and \( p = 0 \),</p>
-$$
-\begin{equation*}
-    o = (i - k) + 1.
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="zero-padding-unit-strides">Zero padding, unit strides </h2>
-
-<p>To factor in zero padding (i.e., only restricting to \( s = 1 \)), let's consider
-its effect on the effective input size: padding with \( p \) zeros changes the
-effective input size from \( i \) to \( i + 2p \). In the general case, we can infer the following
-relationship
-</p>
-
-<p>For any \( i \), \( k \) and \( p \), and for \( s = 1 \),</p>
-$$
-\begin{equation*}
-    o = (i - k) + 2p + 1.
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="half-same-padding">Half (same) padding </h2>
-
-<p>Having the output size be the same as the input size (i.e., \( o = i \)) can be a
-desirable property:
-</p>
-
-<p>For any \( i \) and for \( k \) odd (\( k = 2n + 1, \quad n \in \mathbb{N} \)), \( s = 1 \) and
-\( p = \lfloor k / 2 \rfloor = n \),
-</p>
-$$
-\begin{equation*}
-\begin{split}
-    o &= i + 2 \lfloor k / 2 \rfloor - (k - 1) \\
-      &= i + 2n - 2n \\
-      &= i.
-\end{split}
-\end{equation*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="full-padding">Full padding </h2>
-
-<p>While convolving a kernel generally decreases the output size with
-respect to the input size, sometimes the opposite is required. This can be
-achieved with proper zero padding:
-</p>
-
-<p>For any \( i \) and \( k \), and for \( p = k - 1 \) and \( s = 1 \),</p>
-$$
-\begin{equation*}
-\begin{split}
-    o &= i + 2(k - 1) - (k - 1) \\
-      &= i + (k - 1).
-\end{split}
-\end{equation*}
-$$
-
-<p>This is sometimes referred to as full padding, because in this
-setting every possible partial or complete superimposition of the kernel on the
-input feature map is taken into account. 
+the kernel with some other function.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -999,28 +465,723 @@ mean or average pooling, which all share the same idea of aggregating the input
 locally by applying a non-linearity to the content of some patches.
 </p>
 
-<p>Since pooling does not involve
-zero padding, the relationship describing the general case is as follows:
-</p>
-
-<p>For any \( i \), \( k \) and \( s \),</p>
-$$
-\begin{equation*}
-    o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
-\end{equation*}
-$$
-
-
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="pooling-types-from-raschka-et-al-https-github-com-rasbt-machine-learning-book">Pooling types (<a href="https://github.com/rasbt/machine-learning-book" target="_blank">From Raschka et al</a>) </h2>
 
 <center>  <!-- FIGURE -->
 <hr class="figure">
 <center>
-<p class="caption">Figure 6:  A deep CNN </p>
+<p class="caption">Figure 3:  A deep CNN </p>
 </center>
 <p><img src="figslides/maxpooling.png" width="500" align="bottom"></p>
 </center>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>
+
+<p>As discussed above, CNNs are neural networks built from the assumption that the inputs
+to the network are 2D images. This is important because the number of features or pixels in images
+grows very fast with the image size, and an enormous number of weights and biases are needed in order to build an accurate network.  
+</p>
+
+<p>As before, we still have our input, a hidden layer and an output. What's novel about convolutional networks
+are the <b>convolutional</b> and <b>pooling</b> layers stacked in pairs between the input and the hidden layer.
+In addition, the data is no longer represented as a 2D feature matrix, instead each input is a number of 2D
+matrices, typically 1 for each color dimension (Red, Green, Blue). 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="setting-it-up">Setting it up </h2>
+
+<p>It means that to represent the entire
+dataset of images, we require a 4D matrix or <b>tensor</b>. This tensor has the dimensions:  
+</p>
+$$  
+(n_{inputs},\, n_{pixels, width},\, n_{pixels, height},\, depth) .
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-mnist-dataset-again">The MNIST dataset again </h2>
+
+<p>The MNIST dataset consists of grayscale images with a pixel size of
+\( 28\times 28 \), meaning we require \( 28 \times 28 = 724 \) weights to each
+neuron in the first hidden layer.
+</p>
+
+<p>If we were to analyze images of size \( 128\times 128 \) we would require
+\( 128 \times 128 = 16384 \) weights to each neuron. Even worse if we were
+dealing with color images, as most images are, we have an image matrix
+of size \( 128\times 128 \) for each color dimension (Red, Green, Blue),
+meaning 3 times the number of weights \( = 49152 \) are required for every
+single neuron in the first hidden layer.
+</p>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="strong-correlations">Strong correlations </h2>
+
+<p>Images typically have strong local correlations, meaning that a small
+part of the image varies little from its neighboring regions. If for
+example we have an image of a blue car, we can roughly assume that a
+small blue part of the image is surrounded by other blue regions.
+</p>
+
+<p>Therefore, instead of connecting every single pixel to a neuron in the
+first hidden layer, as we have previously done with deep neural
+networks, we can instead connect each neuron to a small part of the
+image (in all 3 RGB depth dimensions).  The size of each small area is
+fixed, and known as a <a href="https://en.wikipedia.org/wiki/Receptive_field" target="_blank">receptive</a>.
+</p>
+
+
+<!-- !split  -->
+<h2 id="layers-of-a-cnn">Layers of a CNN </h2>
+
+<p>The layers of a convolutional neural network arrange neurons in 3D: width, height and depth.  
+The input image is typically a square matrix of depth 3. 
+</p>
+
+<p>A <b>convolution</b> is performed on the image which outputs
+a 3D volume of neurons. The weights to the input are arranged in a number of 2D matrices, known as <b>filters</b>.
+</p>
+
+<p>Each filter slides along the input image, taking the dot product
+between each small part of the image and the filter, in all depth
+dimensions. This is then passed through a non-linear function,
+typically the <b>Rectified Linear (ReLu)</b> function, which serves as the
+activation of the neurons in the first convolutional layer. This is
+further passed through a <b>pooling layer</b>, which reduces the size of the
+convolutional layer, e.g. by taking the maximum or average across some
+small regions, and this serves as input to the next convolutional
+layer.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="systematic-reduction">Systematic reduction </h2>
+
+<p>By systematically reducing the size of the input volume, through
+convolution and pooling, the network should create representations of
+small parts of the input, and then from them assemble representations
+of larger areas.  The final pooling layer is flattened to serve as
+input to a hidden layer, such that each neuron in the final pooling
+layer is connected to every single neuron in the hidden layer. This
+then serves as input to the output layer, e.g. a softmax output for
+classification.
+</p>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="prerequisites-collect-and-pre-process-data">Prerequisites: Collect and pre-process data </h2>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># import necessary packages</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">sklearn</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets
+
+
+<span style="color: #228B22"># ensure the same random numbers appear every time</span>
+np.random.seed(<span style="color: #B452CD">0</span>)
+
+<span style="color: #228B22"># display images in notebook</span>
+%matplotlib inline
+plt.rcParams[<span style="color: #CD5555">&#39;figure.figsize&#39;</span>] = (<span style="color: #B452CD">12</span>,<span style="color: #B452CD">12</span>)
+
+
+<span style="color: #228B22"># download MNIST dataset</span>
+digits = datasets.load_digits()
+
+<span style="color: #228B22"># define inputs and labels</span>
+inputs = digits.images
+labels = digits.target
+
+<span style="color: #228B22"># RGB images have a depth of 3</span>
+<span style="color: #228B22"># our images are grayscale so they should have a depth of 1</span>
+inputs = inputs[:,:,:,np.newaxis]
+
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;inputs = (n_inputs, pixel_width, pixel_height, depth) = &quot;</span> + <span style="color: #658b00">str</span>(inputs.shape))
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;labels = (n_inputs) = &quot;</span> + <span style="color: #658b00">str</span>(labels.shape))
+
+
+<span style="color: #228B22"># choose some random images to display</span>
+n_inputs = <span style="color: #658b00">len</span>(inputs)
+indices = np.arange(n_inputs)
+random_indices = np.random.choice(indices, size=<span style="color: #B452CD">5</span>)
+
+<span style="color: #8B008B; font-weight: bold">for</span> i, image <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(digits.images[random_indices]):
+    plt.subplot(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">5</span>, i+<span style="color: #B452CD">1</span>)
+    plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
+    plt.imshow(image, cmap=plt.cm.gray_r, interpolation=<span style="color: #CD5555">&#39;nearest&#39;</span>)
+    plt.title(<span style="color: #CD5555">&quot;Label: %d&quot;</span> % digits.target[random_indices[i]])
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="importing-keras-and-tensorflow">Importing Keras and Tensorflow </h2>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, layers, models
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.layers</span> <span style="color: #8B008B; font-weight: bold">import</span> Input
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.models</span> <span style="color: #8B008B; font-weight: bold">import</span> Sequential      <span style="color: #228B22">#This allows appending layers to existing models</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.layers</span> <span style="color: #8B008B; font-weight: bold">import</span> Dense           <span style="color: #228B22">#This allows defining the characteristics of a particular layer</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> optimizers             <span style="color: #228B22">#This allows using whichever optimiser we want (sgd,adam,RMSprop)</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> regularizers           <span style="color: #228B22">#This allows using whichever regularizer we want (l1,l2,l1_l2)</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> to_categorical   <span style="color: #228B22">#This allows using categorical cross entropy as the cost function</span>
+<span style="color: #228B22">#from tensorflow.keras import Conv2D</span>
+<span style="color: #228B22">#from tensorflow.keras import MaxPooling2D</span>
+<span style="color: #228B22">#from tensorflow.keras import Flatten</span>
+
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">sklearn.model_selection</span> <span style="color: #8B008B; font-weight: bold">import</span> train_test_split
+
+<span style="color: #228B22"># representation of labels</span>
+labels = to_categorical(labels)
+
+<span style="color: #228B22"># split into train and test data</span>
+<span style="color: #228B22"># one-liner from scikit-learn library</span>
+train_size = <span style="color: #B452CD">0.8</span>
+test_size = <span style="color: #B452CD">1</span> - train_size
+X_train, X_test, Y_train, Y_test = train_test_split(inputs, labels, train_size=train_size,
+                                                    test_size=test_size)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split  -->
+<h2 id="running-with-keras">Running with Keras </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">create_convolutional_neural_network_keras</span>(input_shape, receptive_field,
+                                              n_filters, n_neurons_connected, n_categories,
+                                              eta, lmbd):
+    model = Sequential()
+    model.add(layers.Conv2D(n_filters, (receptive_field, receptive_field), input_shape=input_shape, padding=<span style="color: #CD5555">&#39;same&#39;</span>,
+              activation=<span style="color: #CD5555">&#39;relu&#39;</span>, kernel_regularizer=regularizers.l2(lmbd)))
+    model.add(layers.MaxPooling2D(pool_size=(<span style="color: #B452CD">2</span>, <span style="color: #B452CD">2</span>)))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(n_neurons_connected, activation=<span style="color: #CD5555">&#39;relu&#39;</span>, kernel_regularizer=regularizers.l2(lmbd)))
+    model.add(layers.Dense(n_categories, activation=<span style="color: #CD5555">&#39;softmax&#39;</span>, kernel_regularizer=regularizers.l2(lmbd)))
+    
+    sgd = optimizers.SGD(lr=eta)
+    model.compile(loss=<span style="color: #CD5555">&#39;categorical_crossentropy&#39;</span>, optimizer=sgd, metrics=[<span style="color: #CD5555">&#39;accuracy&#39;</span>])
+    
+    <span style="color: #8B008B; font-weight: bold">return</span> model
+
+epochs = <span style="color: #B452CD">100</span>
+batch_size = <span style="color: #B452CD">100</span>
+input_shape = X_train.shape[<span style="color: #B452CD">1</span>:<span style="color: #B452CD">4</span>]
+receptive_field = <span style="color: #B452CD">3</span>
+n_filters = <span style="color: #B452CD">10</span>
+n_neurons_connected = <span style="color: #B452CD">50</span>
+n_categories = <span style="color: #B452CD">10</span>
+
+eta_vals = np.logspace(-<span style="color: #B452CD">5</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">7</span>)
+lmbd_vals = np.logspace(-<span style="color: #B452CD">5</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">7</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="final-part">Final part </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">CNN_keras = np.zeros((<span style="color: #658b00">len</span>(eta_vals), <span style="color: #658b00">len</span>(lmbd_vals)), dtype=<span style="color: #658b00">object</span>)
+        
+<span style="color: #8B008B; font-weight: bold">for</span> i, eta <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(eta_vals):
+    <span style="color: #8B008B; font-weight: bold">for</span> j, lmbd <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(lmbd_vals):
+        CNN = create_convolutional_neural_network_keras(input_shape, receptive_field,
+                                              n_filters, n_neurons_connected, n_categories,
+                                              eta, lmbd)
+        CNN.fit(X_train, Y_train, epochs=epochs, batch_size=batch_size, verbose=<span style="color: #B452CD">0</span>)
+        scores = CNN.evaluate(X_test, Y_test)
+        
+        CNN_keras[i][j] = CNN
+        
+        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Learning rate = &quot;</span>, eta)
+        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Lambda = &quot;</span>, lmbd)
+        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Test accuracy: %.3f&quot;</span> % scores[<span style="color: #B452CD">1</span>])
+        <span style="color: #658b00">print</span>()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="final-visualization">Final visualization </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #228B22"># visual representation of grid search</span>
+<span style="color: #228B22"># uses seaborn heatmap, could probably do this in matplotlib</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">seaborn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">sns</span>
+
+sns.set()
+
+train_accuracy = np.zeros((<span style="color: #658b00">len</span>(eta_vals), <span style="color: #658b00">len</span>(lmbd_vals)))
+test_accuracy = np.zeros((<span style="color: #658b00">len</span>(eta_vals), <span style="color: #658b00">len</span>(lmbd_vals)))
+
+<span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">len</span>(eta_vals)):
+    <span style="color: #8B008B; font-weight: bold">for</span> j <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">len</span>(lmbd_vals)):
+        CNN = CNN_keras[i][j]
+
+        train_accuracy[i][j] = CNN.evaluate(X_train, Y_train)[<span style="color: #B452CD">1</span>]
+        test_accuracy[i][j] = CNN.evaluate(X_test, Y_test)[<span style="color: #B452CD">1</span>]
+
+        
+fig, ax = plt.subplots(figsize = (<span style="color: #B452CD">10</span>, <span style="color: #B452CD">10</span>))
+sns.heatmap(train_accuracy, annot=<span style="color: #8B008B; font-weight: bold">True</span>, ax=ax, cmap=<span style="color: #CD5555">&quot;viridis&quot;</span>)
+ax.set_title(<span style="color: #CD5555">&quot;Training Accuracy&quot;</span>)
+ax.set_ylabel(<span style="color: #CD5555">&quot;$\eta$&quot;</span>)
+ax.set_xlabel(<span style="color: #CD5555">&quot;$\lambda$&quot;</span>)
+plt.show()
+
+fig, ax = plt.subplots(figsize = (<span style="color: #B452CD">10</span>, <span style="color: #B452CD">10</span>))
+sns.heatmap(test_accuracy, annot=<span style="color: #8B008B; font-weight: bold">True</span>, ax=ax, cmap=<span style="color: #CD5555">&quot;viridis&quot;</span>)
+ax.set_title(<span style="color: #CD5555">&quot;Test Accuracy&quot;</span>)
+ax.set_ylabel(<span style="color: #CD5555">&quot;$\eta$&quot;</span>)
+ax.set_xlabel(<span style="color: #CD5555">&quot;$\lambda$&quot;</span>)
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-cifar01-data-set">The CIFAR01 data set </h2>
+
+<p>The CIFAR10 dataset contains 60,000 color images in 10 classes, with
+6,000 images in each class. The dataset is divided into 50,000
+training images and 10,000 testing images. The classes are mutually
+exclusive and there is no overlap between them.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">tensorflow</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">tf</span>
+
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, layers, models
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+
+<span style="color: #228B22"># We import the data set</span>
+(train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
+
+<span style="color: #228B22"># Normalize pixel values to be between 0 and 1 by dividing by 255. </span>
+train_images, test_images = train_images / <span style="color: #B452CD">255.0</span>, test_images / <span style="color: #B452CD">255.0</span>
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="verifying-the-data-set">Verifying the data set </h2>
+
+<p>To verify that the dataset looks correct, let's plot the first 25 images from the training set and display the class name below each image.</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">class_names = [<span style="color: #CD5555">&#39;airplane&#39;</span>, <span style="color: #CD5555">&#39;automobile&#39;</span>, <span style="color: #CD5555">&#39;bird&#39;</span>, <span style="color: #CD5555">&#39;cat&#39;</span>, <span style="color: #CD5555">&#39;deer&#39;</span>,
+               <span style="color: #CD5555">&#39;dog&#39;</span>, <span style="color: #CD5555">&#39;frog&#39;</span>, <span style="color: #CD5555">&#39;horse&#39;</span>, <span style="color: #CD5555">&#39;ship&#39;</span>, <span style="color: #CD5555">&#39;truck&#39;</span>]
+plt.figure(figsize=(<span style="color: #B452CD">10</span>,<span style="color: #B452CD">10</span>))
+<span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">25</span>):
+    plt.subplot(<span style="color: #B452CD">5</span>,<span style="color: #B452CD">5</span>,i+<span style="color: #B452CD">1</span>)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(<span style="color: #8B008B; font-weight: bold">False</span>)
+    plt.imshow(train_images[i], cmap=plt.cm.binary)
+    <span style="color: #228B22"># The CIFAR labels happen to be arrays, </span>
+    <span style="color: #228B22"># which is why you need the extra index</span>
+    plt.xlabel(class_names[train_labels[i][<span style="color: #B452CD">0</span>]])
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="set-up-the-model">Set up  the model </h2>
+
+<p>The 6 lines of code below define the convolutional base using a common pattern: a stack of Conv2D and MaxPooling2D layers.</p>
+
+<p>As input, a CNN takes tensors of shape (image_height, image_width, color_channels), ignoring the batch size. If you are new to these dimensions, color_channels refers to (R,G,B). In this example, you will configure our CNN to process inputs of shape (32, 32, 3), which is the format of CIFAR images. You can do this by passing the argument input_shape to our first layer.</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">model = models.Sequential()
+model.add(layers.Conv2D(<span style="color: #B452CD">32</span>, (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">3</span>), activation=<span style="color: #CD5555">&#39;relu&#39;</span>, input_shape=(<span style="color: #B452CD">32</span>, <span style="color: #B452CD">32</span>, <span style="color: #B452CD">3</span>)))
+model.add(layers.MaxPooling2D((<span style="color: #B452CD">2</span>, <span style="color: #B452CD">2</span>)))
+model.add(layers.Conv2D(<span style="color: #B452CD">64</span>, (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">3</span>), activation=<span style="color: #CD5555">&#39;relu&#39;</span>))
+model.add(layers.MaxPooling2D((<span style="color: #B452CD">2</span>, <span style="color: #B452CD">2</span>)))
+model.add(layers.Conv2D(<span style="color: #B452CD">64</span>, (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">3</span>), activation=<span style="color: #CD5555">&#39;relu&#39;</span>))
+
+<span style="color: #228B22"># Let&#39;s display the architecture of our model so far.</span>
+
+model.summary()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>You can see that the output of every Conv2D and MaxPooling2D layer is a 3D tensor of shape (height, width, channels). The width and height dimensions tend to shrink as you go deeper in the network. The number of output channels for each Conv2D layer is controlled by the first argument (e.g., 32 or 64). Typically, as the width and height shrink, you can afford (computationally) to add more output channels in each Conv2D layer.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="add-dense-layers-on-top">Add Dense layers on top </h2>
+
+<p>To complete our model, you will feed the last output tensor from the
+convolutional base (of shape (4, 4, 64)) into one or more Dense layers
+to perform classification. Dense layers take vectors as input (which
+are 1D), while the current output is a 3D tensor. First, you will
+flatten (or unroll) the 3D output to 1D, then add one or more Dense
+layers on top. CIFAR has 10 output classes, so you use a final Dense
+layer with 10 outputs and a softmax activation.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">model.add(layers.Flatten())
+model.add(layers.Dense(<span style="color: #B452CD">64</span>, activation=<span style="color: #CD5555">&#39;relu&#39;</span>))
+model.add(layers.Dense(<span style="color: #B452CD">10</span>))
+Here<span style="color: #CD5555">&#39;s the complete architecture of our model.</span>
+
+model.summary()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>As you can see, our (4, 4, 64) outputs were flattened into vectors of shape (1024) before going through two Dense layers.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="compile-and-train-the-model">Compile and train the model </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">model.compile(optimizer=<span style="color: #CD5555">&#39;adam&#39;</span>,
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span style="color: #8B008B; font-weight: bold">True</span>),
+              metrics=[<span style="color: #CD5555">&#39;accuracy&#39;</span>])
+
+history = model.fit(train_images, train_labels, epochs=<span style="color: #B452CD">10</span>, 
+                    validation_data=(test_images, test_labels))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="finally-evaluate-the-model">Finally, evaluate the model </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;">plt.plot(history.history[<span style="color: #CD5555">&#39;accuracy&#39;</span>], label=<span style="color: #CD5555">&#39;accuracy&#39;</span>)
+plt.plot(history.history[<span style="color: #CD5555">&#39;val_accuracy&#39;</span>], label = <span style="color: #CD5555">&#39;val_accuracy&#39;</span>)
+plt.xlabel(<span style="color: #CD5555">&#39;Epoch&#39;</span>)
+plt.ylabel(<span style="color: #CD5555">&#39;Accuracy&#39;</span>)
+plt.ylim([<span style="color: #B452CD">0.5</span>, <span style="color: #B452CD">1</span>])
+plt.legend(loc=<span style="color: #CD5555">&#39;lower right&#39;</span>)
+
+test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=<span style="color: #B452CD">2</span>)
+
+<span style="color: #658b00">print</span>(test_acc)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="building-code-using-pytorch">Building code using Pytorch </h2>
+
+<p>This code loads and normalizes the MNIST dataset. Thereafter it defines  a CNN architecture with:</p>
+<ol>
+<li> Two convolutional layers</li>
+<li> Max pooling</li>
+<li> Dropout for regularization</li>
+<li> Two fully connected layers</li>
+</ol>
+<p>It uses the Adam optimizer and for cost function it employs the
+Cross-Entropy function. It trains for 10 epochs.
+You can modify the architecture (number of layers, channels, dropout
+rate) or training parameters (learning rate, batch size, epochs) to
+experiment with different configurations.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, transforms
+
+<span style="color: #228B22"># Set device</span>
+device = torch.device(<span style="color: #CD5555">&quot;cuda&quot;</span> <span style="color: #8B008B; font-weight: bold">if</span> torch.cuda.is_available() <span style="color: #8B008B; font-weight: bold">else</span> <span style="color: #CD5555">&quot;cpu&quot;</span>)
+
+<span style="color: #228B22"># Define transforms</span>
+transform = transforms.Compose([
+   transforms.ToTensor(),
+   transforms.Normalize((<span style="color: #B452CD">0.1307</span>,), (<span style="color: #B452CD">0.3081</span>,))
+])
+
+<span style="color: #228B22"># Load datasets</span>
+train_dataset = datasets.MNIST(root=<span style="color: #CD5555">&#39;./data&#39;</span>, train=<span style="color: #8B008B; font-weight: bold">True</span>, download=<span style="color: #8B008B; font-weight: bold">True</span>, transform=transform)
+test_dataset = datasets.MNIST(root=<span style="color: #CD5555">&#39;./data&#39;</span>, train=<span style="color: #8B008B; font-weight: bold">False</span>, download=<span style="color: #8B008B; font-weight: bold">True</span>, transform=transform)
+
+<span style="color: #228B22"># Create data loaders</span>
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=<span style="color: #B452CD">64</span>, shuffle=<span style="color: #8B008B; font-weight: bold">True</span>)
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=<span style="color: #B452CD">64</span>, shuffle=<span style="color: #8B008B; font-weight: bold">False</span>)
+
+<span style="color: #228B22"># Define CNN model</span>
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">CNN</span>(nn.Module):
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>):
+       <span style="color: #658b00">super</span>(CNN, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
+       <span style="color: #658b00">self</span>.conv1 = nn.Conv2d(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">32</span>, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
+       <span style="color: #658b00">self</span>.conv2 = nn.Conv2d(<span style="color: #B452CD">32</span>, <span style="color: #B452CD">64</span>, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
+       <span style="color: #658b00">self</span>.pool = nn.MaxPool2d(<span style="color: #B452CD">2</span>, <span style="color: #B452CD">2</span>)
+       <span style="color: #658b00">self</span>.fc1 = nn.Linear(<span style="color: #B452CD">64</span>*<span style="color: #B452CD">7</span>*<span style="color: #B452CD">7</span>, <span style="color: #B452CD">1024</span>)
+       <span style="color: #658b00">self</span>.fc2 = nn.Linear(<span style="color: #B452CD">1024</span>, <span style="color: #B452CD">10</span>)
+       <span style="color: #658b00">self</span>.dropout = nn.Dropout(<span style="color: #B452CD">0.5</span>)
+
+   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x):
+       x = <span style="color: #658b00">self</span>.pool(F.relu(<span style="color: #658b00">self</span>.conv1(x)))
+       x = <span style="color: #658b00">self</span>.pool(F.relu(<span style="color: #658b00">self</span>.conv2(x)))
+       x = x.view(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">64</span>*<span style="color: #B452CD">7</span>*<span style="color: #B452CD">7</span>)
+       x = <span style="color: #658b00">self</span>.dropout(F.relu(<span style="color: #658b00">self</span>.fc1(x)))
+       x = <span style="color: #658b00">self</span>.fc2(x)
+       <span style="color: #8B008B; font-weight: bold">return</span> x
+
+<span style="color: #228B22"># Initialize model, loss function, and optimizer</span>
+model = CNN().to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=<span style="color: #B452CD">0.001</span>)
+
+<span style="color: #228B22"># Training loop</span>
+num_epochs = <span style="color: #B452CD">10</span>
+<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(num_epochs):
+   model.train()
+   running_loss = <span style="color: #B452CD">0.0</span>
+   <span style="color: #8B008B; font-weight: bold">for</span> batch_idx, (data, target) <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(train_loader):
+       data, target = data.to(device), target.to(device)
+       optimizer.zero_grad()
+       outputs = model(data)
+       loss = criterion(outputs, target)
+       loss.backward()
+       optimizer.step()
+       running_loss += loss.item()
+
+   <span style="color: #658b00">print</span>(<span style="color: #CD5555">f&#39;Epoch [{</span>epoch+<span style="color: #B452CD">1</span><span style="color: #CD5555">}/{</span>num_epochs<span style="color: #CD5555">}], Loss: {</span>running_loss/<span style="color: #658b00">len</span>(train_loader)<span style="color: #CD5555">:.4f}&#39;</span>)
+
+<span style="color: #228B22"># Testing the model</span>
+model.eval()
+correct = <span style="color: #B452CD">0</span>
+total = <span style="color: #B452CD">0</span>
+<span style="color: #8B008B; font-weight: bold">with</span> torch.no_grad():
+   <span style="color: #8B008B; font-weight: bold">for</span> data, target <span style="color: #8B008B">in</span> test_loader:
+       data, target = data.to(device), target.to(device)
+       outputs = model(data)
+       _, predicted = torch.max(outputs.data, <span style="color: #B452CD">1</span>)
+       total += target.size(<span style="color: #B452CD">0</span>)
+       correct += (predicted == target).sum().item()
+
+<span style="color: #658b00">print</span>(<span style="color: #CD5555">f&#39;Test Accuracy: {</span><span style="color: #B452CD">100</span> * correct / total<span style="color: #CD5555">:.2f}%&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="building-our-own-cnn-code">Building our own CNN code </h2>
@@ -1030,6 +1191,8 @@ implemented with NumPy. We will present the code, showcase how to use
 the codebase and fit a CNN that yields a 99% accuracy on the 28x28
 MNIST dataset within reasonable time.
 </p>
+
+<b>The codes here were developed by Eric Reber and Gregor Kajda during spring 2023.</b>
 
 <p>The CNN is compatible with all schedulers, cost functions and
 activation functions discussed in constructing our neural network
@@ -1521,28 +1684,28 @@ $$
 (f \ast g)(t):=\int_{-\infty}^{\infty} f(\tau) g(t-\tau) d \tau.
 $$
 
-<p>Here, f and g are the two functions on which we want to perform an
+<p>Here, \( f \) and \( g \) are the two functions on which we want to perform an
 operation. The outcome of the convolution operation is represented by
-\( (f \ast g) \), and it is derived by sliding the function g over f and
+\( (f \ast g) \), and it is derived by sliding the function \( g \) over \( f \) and
 computing the integral of their product at each position. If both
 functions are continuous, convolution takes the form shown
-above. However, if we discretize both f and g, the convolution
-operation will take the form of a sum between the elements of f and g:
+above. However, if we discretize both \( f \) and \( g \), the convolution
+operation will take the form of a sum between the elements of \( f \) and \( g \):
 </p>
 $$
-(f \ast g)[n]=\sum_{m=0}^{n-1} f[m] g[n-m].
+(f \ast g)[n]=\sum_{m=0}^{n-1} f(m) g(n-m).
 $$
 
 <p>The key idea we utilize to extract the information contained in an
-image is to slide an \( m \times n \) matrix <em>g</em> over an \( m \times n \)
-matrix <em>f</em>. In our case, <em>f</em> represents the image, while <em>g</em>
+image is to slide an \( m \times n \) matrix \( g \) over an \( m \times n \)
+matrix \( f \). In our case, \( f \) represents the image, while \( g \)
 represents the kernel, oftentimes called a filter. However, since our
 convolution will be a two-dimensional variant, we need to extend our
 mathematical formula with an additional summation:
 </p>
 
 $$
-(f \ast g)[i, j]\sum_{m=0}^{M-1}\sum_{n=0}^{N-1} f[m,n] g[i-m, j-n].
+(f \ast g)(i, j)\sum_{m=0}^{M-1}\sum_{n=0}^{N-1} f(m,n) g(i-m, j-n).
 $$
 
 <p>It is imperative to note that the size of the kernel g is
@@ -1554,7 +1717,7 @@ appropriate kernels for specific tasks.
 </p>
 
 <p>To give you an example of how 2D convolution works in practice,
-suppose we have an image <em>f</em> of dimension \( 6 \times 6 \)
+suppose we have an image \( f \) of dimension \( 6 \times 6 \)
 </p>
 
 $$
@@ -1568,7 +1731,7 @@ f = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-<p>and a \( 3 \times 3 \) kernel <em>g</em> called a low-pass filter. Note that the
+<p>and a \( 3 \times 3 \) kernel \( g \) called a low-pass filter. Note that the
 kernel is usually rotated by 180 degrees during convolution, however
 this has no effect on this kernel.
 </p>
@@ -1583,9 +1746,9 @@ g = \frac{1}{9}
 $$
 
 <p>In order to filter the image, we have to extract a \( 3 \times 3 \)
-element from the upper left corner of <em>f</em>, and perform element-wise
+element from the upper left corner of \( f \), and perform element-wise
 multiplication of the extracted image pixels with the elements of the
-kernel <em>g</em>:
+kernel \( g \):
 </p>
 
 $$
@@ -1606,21 +1769,21 @@ $$
 \frac{9}{9} & \frac{5}{9} & \frac{9}{9} \\
 \frac{1}{9} & \frac{5}{9} & \frac{9}{9} \\
 \end {bmatrix}
-= \textbf{A}
+= \boldsymbol{A}
 $$
 
-<p>Then, following the multiplication, we summarize all the elements of the resulting matrix A:</p>
+<p>Then, following the multiplication, we summarize all the elements of the resulting matrix \( \boldsymbol{A} \):</p>
 
 $$
-(f \ast g)[0, 0]= \sum_{i=0}^{2} \sum_{j=0}^{2} a_{i,j} = 5
+(f \ast g)(0, 0)= \sum_{i=0}^{2} \sum_{j=0}^{2} a_{i,j} = 5,
 $$
 
-<p>Which corresponds to the first element of the filtered image \( (f \ast g) \).</p>
+<p>which corresponds to the first element of the filtered image \( (f \ast g) \).</p>
 
-<p>Here we use a stride of 1, a parameter denoted <em>s</em> which describes how
-many indexes we move the kernel <em>g</em> to the right before repeating the
+<p>Here we use a stride of \( S=1 \), a parameter denoted \( S \) which describes how
+many indexes we move the kernel \( g \) to the right before repeating the
 calculations above for the next \( 3 \times 3 \) element of the image
-<em>f</em>. It is usually presumed that *s*=1, however, larger values for <em>s</em>
+\( f \). It is usually presumed that \( S=1 \), however, larger values for \( S \)
 can be used to reduce the dimentionality of the filtered image such
 that the convolution operation is more computationally efficient. In
 the context of a convolutional neural network, this will become very
@@ -1639,18 +1802,23 @@ $$
 \end{bmatrix}
 $$
 
-<p>The result is markedly smaller in shape than the original image. This occurs when using convolution without first padding the image with additional columns and rows, allowing us to keep the original image shape after sliding the kernel over the image.
-How many rows and columns we wish to pad the image with depends strictly on the shape of the kernel, as we wish to pad the image with <em>r</em> additional rows and <em>c</em> additional columns.
+<p>The result is markedly smaller in shape than the original image. This
+occurs when using convolution without first padding the image with
+additional columns and rows, allowing us to keep the original image
+shape after sliding the kernel over the image.  How many rows and
+columns we wish to pad the image with depends strictly on the shape of
+the kernel, as we wish to pad the image with \( r \) additional rows and
+\( c \) additional columns.
 </p>
 
 $$
-r =\lfloor \frac{kernel\ height}{2} \rfloor \cdot 2 \\
-c =\lfloor \frac{kernel\ width}{2} \rfloor \cdot 2
+r =\lfloor \frac{\mathrm{kernel height}}{2} \rfloor \cdot 2 \\
+c =\lfloor \frac{\mathrm{kernel width}}{2} \rfloor \cdot 2
 $$
 
-<p>Note the notation \( \lfloor \frac{kernel width}{2} \rfloor \) means that
+<p>Note the notation \( \lfloor \frac{\mathrm{kernel width}}{2} \rfloor \) means that
 we floor the result of the division, meaning we round down to a whole
-number in case \( \frac{kernel width}{2} \) results in a floating point
+number in case \( \frac{\mathrm{kernel width}}{2} \) results in a floating point
 number.
 </p>
 
@@ -1676,11 +1844,13 @@ $$
 0 & 8 & 1 & 6 & 4 & 2 & 2 & 0 \\
 0 & 1 & 0 & 5 & 7 & 8 & 2 & 0 \\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-\]
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
-<p>Below we have provided code that demonstrates padding and convolution. As you will see when we run the code, the size of the image will remain unchanged when using padding.&nbsp;</p>
+<p>Below we have provided code that demonstrates padding and
+convolution. As you will see when we run the code, the size of the
+image will remain unchanged when using padding.~
+</p>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
@@ -1775,9 +1945,10 @@ $$
   </div>
 </div>
 
-<p>Fun fact: When filtering images, you will see that convolution involves rotating the kernel by 180 degrees. 
-However, this is not the case when applying convolution in a CNN, where the same operation not rotated by 180 degrees is called 
-cross-correlation.
+<p>Fun fact: When filtering images, you will see that convolution
+involves rotating the kernel by 180 degrees.  However, this is not the
+case when applying convolution in a CNN, where the same operation that is not
+rotated by 180 degrees is called cross-correlation, which is normally implemented in most libraries.
 </p>
 
 
@@ -1837,7 +2008,7 @@ feed forward neural network.
     <div class="inner_cell">
       <div class="input_area">
         <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;"><span style="color: #228B22"># Now an example using a real image and first a gaussian low-pass filter and then a sobel filter</span>
+  <pre style="line-height: 125%;"><span style="color: #228B22"># Now an example using a real image and first a gaussian low-pass filter and then a Sobel filter</span>
 <span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
 <span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">imageio.v3</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">imageio</span>
 <span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
@@ -3864,7 +4035,7 @@ cnn.add_OutputLayer(<span style="color: #B452CD">10</span>, softmax)
 <li> The output layer, with softmax as its activation function and 10 nodes. We use 10 nodes because we will be using a dataset with 10 classes.</li>
 </ol>
 <p>Now, before we can train the model, we need to load in our data. We
-will use the MNIST dataset and use 10000 \( 28 \times  28 images \).
+will use the MNIST dataset and use 10000 \( 28 \times  28 \) images.
 </p>
 
 
@@ -4278,366 +4449,9 @@ to remain cognizant of this fact when utilizing FFT as the primary
 optimization technique.
 </p>
 
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="building-convolutional-neural-networks-in-tensorflow-and-keras">Building convolutional neural networks in Tensorflow and Keras </h2>
-
-<p>As discussed above, CNNs are neural networks built from the assumption that the inputs
-to the network are 2D images. This is important because the number of features or pixels in images
-grows very fast with the image size, and an enormous number of weights and biases are needed in order to build an accurate network.  
-</p>
-
-<p>As before, we still have our input, a hidden layer and an output. What's novel about convolutional networks
-are the <b>convolutional</b> and <b>pooling</b> layers stacked in pairs between the input and the hidden layer.
-In addition, the data is no longer represented as a 2D feature matrix, instead each input is a number of 2D
-matrices, typically 1 for each color dimension (Red, Green, Blue). 
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="setting-it-up">Setting it up </h2>
-
-<p>It means that to represent the entire
-dataset of images, we require a 4D matrix or <b>tensor</b>. This tensor has the dimensions:  
-</p>
-$$  
-(n_{inputs},\, n_{pixels, width},\, n_{pixels, height},\, depth) .
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-mnist-dataset-again">The MNIST dataset again </h2>
-
-<p>The MNIST dataset consists of grayscale images with a pixel size of
-\( 28\times 28 \), meaning we require \( 28 \times 28 = 724 \) weights to each
-neuron in the first hidden layer.
-</p>
-
-<p>If we were to analyze images of size \( 128\times 128 \) we would require
-\( 128 \times 128 = 16384 \) weights to each neuron. Even worse if we were
-dealing with color images, as most images are, we have an image matrix
-of size \( 128\times 128 \) for each color dimension (Red, Green, Blue),
-meaning 3 times the number of weights \( = 49152 \) are required for every
-single neuron in the first hidden layer.
-</p>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="strong-correlations">Strong correlations </h2>
-
-<p>Images typically have strong local correlations, meaning that a small
-part of the image varies little from its neighboring regions. If for
-example we have an image of a blue car, we can roughly assume that a
-small blue part of the image is surrounded by other blue regions.
-</p>
-
-<p>Therefore, instead of connecting every single pixel to a neuron in the
-first hidden layer, as we have previously done with deep neural
-networks, we can instead connect each neuron to a small part of the
-image (in all 3 RGB depth dimensions).  The size of each small area is
-fixed, and known as a <a href="https://en.wikipedia.org/wiki/Receptive_field" target="_blank">receptive</a>.
-</p>
-
-
-<!-- !split  -->
-<h2 id="layers-of-a-cnn">Layers of a CNN </h2>
-
-<p>The layers of a convolutional neural network arrange neurons in 3D: width, height and depth.  
-The input image is typically a square matrix of depth 3. 
-</p>
-
-<p>A <b>convolution</b> is performed on the image which outputs
-a 3D volume of neurons. The weights to the input are arranged in a number of 2D matrices, known as <b>filters</b>.
-</p>
-
-<p>Each filter slides along the input image, taking the dot product
-between each small part of the image and the filter, in all depth
-dimensions. This is then passed through a non-linear function,
-typically the <b>Rectified Linear (ReLu)</b> function, which serves as the
-activation of the neurons in the first convolutional layer. This is
-further passed through a <b>pooling layer</b>, which reduces the size of the
-convolutional layer, e.g. by taking the maximum or average across some
-small regions, and this serves as input to the next convolutional
-layer.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="systematic-reduction">Systematic reduction </h2>
-
-<p>By systematically reducing the size of the input volume, through
-convolution and pooling, the network should create representations of
-small parts of the input, and then from them assemble representations
-of larger areas.  The final pooling layer is flattened to serve as
-input to a hidden layer, such that each neuron in the final pooling
-layer is connected to every single neuron in the hidden layer. This
-then serves as input to the output layer, e.g. a softmax output for
-classification.
-</p>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="prerequisites-collect-and-pre-process-data">Prerequisites: Collect and pre-process data </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;"><span style="color: #228B22"># import necessary packages</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">sklearn</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets
-
-
-<span style="color: #228B22"># ensure the same random numbers appear every time</span>
-np.random.seed(<span style="color: #B452CD">0</span>)
-
-<span style="color: #228B22"># display images in notebook</span>
-%matplotlib inline
-plt.rcParams[<span style="color: #CD5555">&#39;figure.figsize&#39;</span>] = (<span style="color: #B452CD">12</span>,<span style="color: #B452CD">12</span>)
-
-
-<span style="color: #228B22"># download MNIST dataset</span>
-digits = datasets.load_digits()
-
-<span style="color: #228B22"># define inputs and labels</span>
-inputs = digits.images
-labels = digits.target
-
-<span style="color: #228B22"># RGB images have a depth of 3</span>
-<span style="color: #228B22"># our images are grayscale so they should have a depth of 1</span>
-inputs = inputs[:,:,:,np.newaxis]
-
-<span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;inputs = (n_inputs, pixel_width, pixel_height, depth) = &quot;</span> + <span style="color: #658b00">str</span>(inputs.shape))
-<span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;labels = (n_inputs) = &quot;</span> + <span style="color: #658b00">str</span>(labels.shape))
-
-
-<span style="color: #228B22"># choose some random images to display</span>
-n_inputs = <span style="color: #658b00">len</span>(inputs)
-indices = np.arange(n_inputs)
-random_indices = np.random.choice(indices, size=<span style="color: #B452CD">5</span>)
-
-<span style="color: #8B008B; font-weight: bold">for</span> i, image <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(digits.images[random_indices]):
-    plt.subplot(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">5</span>, i+<span style="color: #B452CD">1</span>)
-    plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
-    plt.imshow(image, cmap=plt.cm.gray_r, interpolation=<span style="color: #CD5555">&#39;nearest&#39;</span>)
-    plt.title(<span style="color: #CD5555">&quot;Label: %d&quot;</span> % digits.target[random_indices[i]])
-plt.show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="importing-keras-and-tensorflow">Importing Keras and Tensorflow </h2>
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.layers</span> <span style="color: #8B008B; font-weight: bold">import</span> Input
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.models</span> <span style="color: #8B008B; font-weight: bold">import</span> Sequential      <span style="color: #228B22">#This allows appending layers to existing models</span>
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.layers</span> <span style="color: #8B008B; font-weight: bold">import</span> Dense           <span style="color: #228B22">#This allows defining the characteristics of a particular layer</span>
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> optimizers             <span style="color: #228B22">#This allows using whichever optimiser we want (sgd,adam,RMSprop)</span>
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> regularizers           <span style="color: #228B22">#This allows using whichever regularizer we want (l1,l2,l1_l2)</span>
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> to_categorical   <span style="color: #228B22">#This allows using categorical cross entropy as the cost function</span>
-<span style="color: #228B22">#from tensorflow.keras import Conv2D</span>
-<span style="color: #228B22">#from tensorflow.keras import MaxPooling2D</span>
-<span style="color: #228B22">#from tensorflow.keras import Flatten</span>
-
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">sklearn.model_selection</span> <span style="color: #8B008B; font-weight: bold">import</span> train_test_split
-
-<span style="color: #228B22"># representation of labels</span>
-labels = to_categorical(labels)
-
-<span style="color: #228B22"># split into train and test data</span>
-<span style="color: #228B22"># one-liner from scikit-learn library</span>
-train_size = <span style="color: #B452CD">0.8</span>
-test_size = <span style="color: #B452CD">1</span> - train_size
-X_train, X_test, Y_train, Y_test = train_test_split(inputs, labels, train_size=train_size,
-                                                    test_size=test_size)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split  -->
-<h2 id="running-with-keras">Running with Keras </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">create_convolutional_neural_network_keras</span>(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd):
-    model = Sequential()
-    model.add(layers.Conv2D(n_filters, (receptive_field, receptive_field), input_shape=input_shape, padding=<span style="color: #CD5555">&#39;same&#39;</span>,
-              activation=<span style="color: #CD5555">&#39;relu&#39;</span>, kernel_regularizer=regularizers.l2(lmbd)))
-    model.add(layers.MaxPooling2D(pool_size=(<span style="color: #B452CD">2</span>, <span style="color: #B452CD">2</span>)))
-    model.add(layers.Flatten())
-    model.add(layers.Dense(n_neurons_connected, activation=<span style="color: #CD5555">&#39;relu&#39;</span>, kernel_regularizer=regularizers.l2(lmbd)))
-    model.add(layers.Dense(n_categories, activation=<span style="color: #CD5555">&#39;softmax&#39;</span>, kernel_regularizer=regularizers.l2(lmbd)))
-    
-    sgd = optimizers.SGD(lr=eta)
-    model.compile(loss=<span style="color: #CD5555">&#39;categorical_crossentropy&#39;</span>, optimizer=sgd, metrics=[<span style="color: #CD5555">&#39;accuracy&#39;</span>])
-    
-    <span style="color: #8B008B; font-weight: bold">return</span> model
-
-epochs = <span style="color: #B452CD">100</span>
-batch_size = <span style="color: #B452CD">100</span>
-input_shape = X_train.shape[<span style="color: #B452CD">1</span>:<span style="color: #B452CD">4</span>]
-receptive_field = <span style="color: #B452CD">3</span>
-n_filters = <span style="color: #B452CD">10</span>
-n_neurons_connected = <span style="color: #B452CD">50</span>
-n_categories = <span style="color: #B452CD">10</span>
-
-eta_vals = np.logspace(-<span style="color: #B452CD">5</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">7</span>)
-lmbd_vals = np.logspace(-<span style="color: #B452CD">5</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">7</span>)
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="final-part">Final part </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;">CNN_keras = np.zeros((<span style="color: #658b00">len</span>(eta_vals), <span style="color: #658b00">len</span>(lmbd_vals)), dtype=<span style="color: #658b00">object</span>)
-        
-<span style="color: #8B008B; font-weight: bold">for</span> i, eta <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(eta_vals):
-    <span style="color: #8B008B; font-weight: bold">for</span> j, lmbd <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(lmbd_vals):
-        CNN = create_convolutional_neural_network_keras(input_shape, receptive_field,
-                                              n_filters, n_neurons_connected, n_categories,
-                                              eta, lmbd)
-        CNN.fit(X_train, Y_train, epochs=epochs, batch_size=batch_size, verbose=<span style="color: #B452CD">0</span>)
-        scores = CNN.evaluate(X_test, Y_test)
-        
-        CNN_keras[i][j] = CNN
-        
-        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Learning rate = &quot;</span>, eta)
-        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Lambda = &quot;</span>, lmbd)
-        <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Test accuracy: %.3f&quot;</span> % scores[<span style="color: #B452CD">1</span>])
-        <span style="color: #658b00">print</span>()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="final-visualization">Final visualization </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;"><span style="color: #228B22"># visual representation of grid search</span>
-<span style="color: #228B22"># uses seaborn heatmap, could probably do this in matplotlib</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">seaborn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">sns</span>
-
-sns.set()
-
-train_accuracy = np.zeros((<span style="color: #658b00">len</span>(eta_vals), <span style="color: #658b00">len</span>(lmbd_vals)))
-test_accuracy = np.zeros((<span style="color: #658b00">len</span>(eta_vals), <span style="color: #658b00">len</span>(lmbd_vals)))
-
-<span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">len</span>(eta_vals)):
-    <span style="color: #8B008B; font-weight: bold">for</span> j <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">len</span>(lmbd_vals)):
-        CNN = CNN_keras[i][j]
-
-        train_accuracy[i][j] = CNN.evaluate(X_train, Y_train)[<span style="color: #B452CD">1</span>]
-        test_accuracy[i][j] = CNN.evaluate(X_test, Y_test)[<span style="color: #B452CD">1</span>]
-
-        
-fig, ax = plt.subplots(figsize = (<span style="color: #B452CD">10</span>, <span style="color: #B452CD">10</span>))
-sns.heatmap(train_accuracy, annot=<span style="color: #8B008B; font-weight: bold">True</span>, ax=ax, cmap=<span style="color: #CD5555">&quot;viridis&quot;</span>)
-ax.set_title(<span style="color: #CD5555">&quot;Training Accuracy&quot;</span>)
-ax.set_ylabel(<span style="color: #CD5555">&quot;$\eta$&quot;</span>)
-ax.set_xlabel(<span style="color: #CD5555">&quot;$\lambda$&quot;</span>)
-plt.show()
-
-fig, ax = plt.subplots(figsize = (<span style="color: #B452CD">10</span>, <span style="color: #B452CD">10</span>))
-sns.heatmap(test_accuracy, annot=<span style="color: #8B008B; font-weight: bold">True</span>, ax=ax, cmap=<span style="color: #CD5555">&quot;viridis&quot;</span>)
-ax.set_title(<span style="color: #CD5555">&quot;Test Accuracy&quot;</span>)
-ax.set_ylabel(<span style="color: #CD5555">&quot;$\eta$&quot;</span>)
-ax.set_xlabel(<span style="color: #CD5555">&quot;$\lambda$&quot;</span>)
-plt.show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2025, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>
