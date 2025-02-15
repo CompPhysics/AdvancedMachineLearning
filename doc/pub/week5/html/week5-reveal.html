@@ -190,9 +190,10 @@ MathJax.Hub.Config({
 <b></b>
 <p>
 <ol>
-<p><li> Summary Basics and mathematics of Convolutional  Neural Networks.
-<!-- o <a href="https://youtu.be/WsvsCe1-IP4" target="_blank">Video of lecture</a> --></li>
+<p><li> Implementing Convolutional  Neural Networks (CNNs), own codes, TensorFlow+Keras and PyTorch examples</li>
+<p><li> Start discussion of Recurrent Neural Networks (RNNs).</li>
 <p><li> Link to project examples from 2024 at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/ProjectExamples" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/ProjectExamples</tt></a>
+<!-- o "Video of lecture":"" -->
 <!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary13.pdf" target="_blank">Whiteboard notes</a> --></li>
 </ol>
 </div>
@@ -212,7 +213,9 @@ MathJax.Hub.Config({
 <p>
 <ol>
 <p><li> For CNNs, see Goodfellow et al chapter 9. See also chapter 11 and 12 on practicalities and applications</li>
+<p><li> For RNNs, see Goodfellow et al chapter 10.</li>
 <p><li> Reading suggestions for implementation of CNNs in PyTorch: <a href="https://github.com/rasbt/machine-learning-book/tree/main/ch14" target="_blank">See Rashcka et al.'s chapter 14 and GitHub site</a>.</li>
+<p><li> Reading suggestions for implementation of RNNs in PyTorch: <a href="https://github.com/rasbt/machine-learning-book/tree/main/ch15" target="_blank">See Rashcka et al.'s chapter 15 and GitHub site</a>.</li>
 </ol>
 </section>
 
@@ -220,22 +223,9 @@ MathJax.Hub.Config({
 <h2 id="tensorflow-examples">TensorFlow examples </h2>
 <p>For TensorFlow (using Keras) implementations, we recommend</p>
 <ol>
-<p><li> <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/02_deeplearning/02_cnn" target="_blank">David Foster Generative Learning, see chapter 2 from the GitHub link</a></li>
+<p><li> <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/02_deeplearning/02_cnn" target="_blank">David Foster Generative Learning, see chapters 2 and 3 from the GitHub link</a></li>
 <p><li> <a href="https://github.com/raghavbali/generative_ai_with_tensorflow" target="_blank">Joseph Babcock and Raghav Bali Generative AI with Python and their GitHub link, chapter 3</a></li>  
 </ol>
-</div>
-</section>
-
-<section>
-<h2 id="video-lectures-on-cnns">Video lectures on CNNs </h2>
-<div class="alert alert-block alert-block alert-text-normal">
-<b>Excellent lectures on CNNs and Neural Networks</b>
-<p>
-<ul>
-<p><li> <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">Video on Deep Learning</a></li>
-<p><li> <a href="https://www.youtube.com/watch?v=iaSUYvmCekI&ab_channel=AlexanderAmini" target="_blank">Video  on Convolutional Neural Networks from MIT</a></li>
-<p><li> <a href="https://www.youtube.com/watch?v=bNb2fEVKeEo&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=6&ab_channel=StanfordUniversitySchoolofEngineering" target="_blank">Video on CNNs from Stanford</a></li>
-</ul>
 </div>
 </section>
 
@@ -4466,6 +4456,433 @@ domain, results in a minor inconvenience. Therefore, it is imperative
 to remain cognizant of this fact when utilizing FFT as the primary
 optimization technique.
 </p>
+</section>
+
+<section>
+<h2 id="from-nns-and-cnns-to-recurrent-neural-networks-rnns">From NNs and CNNs to recurrent neural networks (RNNs) </h2>
+
+<p>There are limitation of NNs, one of which being that FFNNs are not
+designed to handle sequential data (data for which the order matters)
+effectively because they lack the capabilities of storing information
+about previous inputs; each input is being treated indepen-
+dently. This is a limitation when dealing with sequential data where
+past information can be vital to correctly process current and future
+inputs. 
+</p>
+</section>
+
+<section>
+<h2 id="feedback-connections">Feedback connections </h2>
+
+<p>In contrast to NNs, recurrent networks introduce feedback
+connections, meaning the information is allowed to be carried to
+subsequent nodes across different time steps. These cyclic or feedback
+connections have the objective of providing the network with some kind
+of memory, making RNNs particularly suited for time- series data,
+natural language processing, speech recognition, and several other
+problems for which the order of the data is crucial.  The RNN
+architectures vary greatly in how they manage information flow and
+memory in the network.
+</p>
+</section>
+
+<section>
+<h2 id="vanishing-gradients">Vanishing gradients </h2>
+
+<p>Different architectures often aim at improving
+some sub-optimal characteristics of the network. The simplest form of
+recurrent network, commonly called simple or vanilla RNN, for example,
+is known to suffer from the problem of vanishing gradients. This
+problem arises due to the nature of backpropagation in time. Gradients
+of the cost/loss function may get exponentially small (or large) if
+there are many layers in the network, which is the case of RNN when
+the sequence gets long.
+</p>
+</section>
+
+<section>
+<h2 id="recurrent-neural-networks-rnns-overarching-view">Recurrent neural networks (RNNs): Overarching view </h2>
+
+<p>Till now our focus has been, including convolutional neural networks
+as well, on feedforward neural networks. The output or the activations
+flow only in one direction, from the input layer to the output layer.
+</p>
+
+<p>A recurrent neural network (RNN) looks very much like a feedforward
+neural network, except that it also has connections pointing
+backward. 
+</p>
+
+<p>RNNs are used to analyze time series data such as stock prices, and
+tell you when to buy or sell. In autonomous driving systems, they can
+anticipate car trajectories and help avoid accidents. More generally,
+they can work on sequences of arbitrary lengths, rather than on
+fixed-sized inputs like all the nets we have discussed so far. For
+example, they can take sentences, documents, or audio samples as
+input, making them extremely useful for natural language processing
+systems such as automatic translation and speech-to-text.
+</p>
+</section>
+
+<section>
+<h2 id="sequential-data-only">Sequential data only? </h2>
+
+<p>An important issue is that in many deep learning methods we assume
+that the input and output data can be treated as independent and
+identically distributed, normally abbreviated to <b>iid</b>.
+This means that the data we use can be seen as mutually independent.
+</p>
+
+<p>This is however not the case for most data sets used in RNNs since we
+are dealing with sequences of data with strong inter-dependencies.
+This applies in particular to time series, which are sequential by
+contruction.
+</p>
+</section>
+
+<section>
+<h2 id="differential-equations">Differential equations </h2>
+
+<p>As an example, the solutions of ordinary differential equations can be
+represented as a time series, similarly, how stock prices evolve as
+function of time is another example of a typical time series, or voice
+records and many other examples.
+</p>
+
+<p>Not all sequential data may however have a time stamp, texts being a
+typical example thereof, or DNA sequences.
+</p>
+
+<p>The main focus here is on data that can be structured either as time
+series or as ordered series of data.  We will not focus on for example
+natural language processing or similar data sets.
+</p>
+</section>
+
+<section>
+<h2 id="a-simple-example">A simple example </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #228B22"># Start importing packages</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">pandas</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">pd</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">tensorflow</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">tf</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, layers, models
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.layers</span> <span style="color: #8B008B; font-weight: bold">import</span> Input
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.models</span> <span style="color: #8B008B; font-weight: bold">import</span> Model, Sequential 
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.layers</span> <span style="color: #8B008B; font-weight: bold">import</span> Dense, SimpleRNN, LSTM, GRU
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> optimizers     
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras</span> <span style="color: #8B008B; font-weight: bold">import</span> regularizers           
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">tensorflow.keras.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> to_categorical 
+
+
+
+<span style="color: #228B22"># convert into dataset matrix</span>
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">convertToMatrix</span>(data, step):
+ X, Y =[], []
+ <span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">len</span>(data)-step):
+  d=i+step  
+  X.append(data[i:d,])
+  Y.append(data[d,])
+ <span style="color: #8B008B; font-weight: bold">return</span> np.array(X), np.array(Y)
+
+step = <span style="color: #B452CD">4</span>
+N = <span style="color: #B452CD">1000</span>    
+Tp = <span style="color: #B452CD">800</span>    
+
+t=np.arange(<span style="color: #B452CD">0</span>,N)
+x=np.sin(<span style="color: #B452CD">0.02</span>*t)+<span style="color: #B452CD">2</span>*np.random.rand(N)
+df = pd.DataFrame(x)
+df.head()
+
+values=df.values
+train,test = values[<span style="color: #B452CD">0</span>:Tp,:], values[Tp:N,:]
+
+<span style="color: #228B22"># add step elements into train and test</span>
+test = np.append(test,np.repeat(test[-<span style="color: #B452CD">1</span>,],step))
+train = np.append(train,np.repeat(train[-<span style="color: #B452CD">1</span>,],step))
+ 
+trainX,trainY =convertToMatrix(train,step)
+testX,testY =convertToMatrix(test,step)
+trainX = np.reshape(trainX, (trainX.shape[<span style="color: #B452CD">0</span>], <span style="color: #B452CD">1</span>, trainX.shape[<span style="color: #B452CD">1</span>]))
+testX = np.reshape(testX, (testX.shape[<span style="color: #B452CD">0</span>], <span style="color: #B452CD">1</span>, testX.shape[<span style="color: #B452CD">1</span>]))
+
+model = Sequential()
+model.add(SimpleRNN(units=<span style="color: #B452CD">32</span>, input_shape=(<span style="color: #B452CD">1</span>,step), activation=<span style="color: #CD5555">&quot;relu&quot;</span>))
+model.add(Dense(<span style="color: #B452CD">8</span>, activation=<span style="color: #CD5555">&quot;relu&quot;</span>)) 
+model.add(Dense(<span style="color: #B452CD">1</span>))
+model.compile(loss=<span style="color: #CD5555">&#39;mean_squared_error&#39;</span>, optimizer=<span style="color: #CD5555">&#39;rmsprop&#39;</span>)
+model.summary()
+
+model.fit(trainX,trainY, epochs=<span style="color: #B452CD">100</span>, batch_size=<span style="color: #B452CD">16</span>, verbose=<span style="color: #B452CD">2</span>)
+trainPredict = model.predict(trainX)
+testPredict= model.predict(testX)
+predicted=np.concatenate((trainPredict,testPredict),axis=<span style="color: #B452CD">0</span>)
+
+trainScore = model.evaluate(trainX, trainY, verbose=<span style="color: #B452CD">0</span>)
+<span style="color: #658b00">print</span>(trainScore)
+plt.plot(df)
+plt.plot(predicted)
+plt.show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="rnns">RNNs </h2>
+
+<p>RNNs are very powerful, because they
+combine two properties:
+</p>
+<ol>
+<p><li> Distributed hidden state that allows them to store a lot of information about the past efficiently.</li>
+<p><li> Non-linear dynamics that allows them to update their hidden state in complicated ways.</li>
+</ol>
+<p>
+<p>With enough neurons and time, RNNs
+can compute anything that can be
+computed by your computer.
+</p>
+</section>
+
+<section>
+<h2 id="what-kinds-of-behaviour-can-rnns-exhibit">What kinds of behaviour can RNNs exhibit? </h2>
+
+<ol>
+<p><li> They can oscillate.</li> 
+<p><li> They can settle to point attractors.</li>
+<p><li> They can behave chaotically.</li>
+<p><li> RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.</li>
+</ol>
+<p>
+<p>But the extensive computational needs  of RNNs makes them very hard to train.</p>
+</section>
+
+<section>
+<h2 id="basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html">Basic layout,  <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a> </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="solving-differential-equations-with-rnns">Solving differential equations with RNNs </h2>
+
+<p>To gain some intuition on how we can use RNNs for time series, let us
+tailor the representation of the solution of a differential equation
+as a time series.
+</p>
+
+<p>Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)</p>
+
+<p>&nbsp;<br>
+$$
+\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
+$$
+<p>&nbsp;<br>
+
+<p>where \( \eta \) is a constant used in scaling time into a dimensionless variable and \( F(t) \) is an external force acting on the system.
+The constant \( \eta \) is a so-called damping.
+</p>
+</section>
+
+<section>
+<h2 id="two-first-order-differential-equations">Two first-order differential equations </h2>
+
+<p>In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
+with the velocity
+</p>
+<p>&nbsp;<br>
+$$
+v(t)=\frac{dx}{dt},
+$$
+<p>&nbsp;<br>
+
+<p>and the acceleration</p>
+<p>&nbsp;<br>
+$$
+\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
+$$
+<p>&nbsp;<br>
+
+<p>With the initial conditions \( v_0=v(t_0) \) and \( x_0=x(t_0) \) defined, we can integrate these equations and find their respective solutions.</p>
+</section>
+
+<section>
+<h2 id="velocity-only">Velocity only </h2>
+
+<p>Let us focus on the velocity only. Discretizing and using the simplest
+possible approximation for the derivative, we have Euler's forward
+method for the updated velocity at a time step \( i+1 \) given by
+</p>
+<p>&nbsp;<br>
+$$
+v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
+$$
+<p>&nbsp;<br>
+
+<p>Defining a function</p>
+<p>&nbsp;<br>
+$$
+h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
+$$
+<p>&nbsp;<br>
+
+<p>we have</p>
+<p>&nbsp;<br>
+$$
+v_{i+1}=h_i(x_i,v_i,F_i).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="linking-with-rnns">Linking with RNNs </h2>
+
+<p>The equation</p>
+<p>&nbsp;<br>
+$$
+v_{i+1}=h_i(x_i,v_i,F_i).
+$$
+<p>&nbsp;<br>
+
+<p>can be used to train a feed-forward neural network with inputs \( v_i \) and outputs \( v_{i+1} \) at a time \( t_i \). But we can think of this also as a recurrent neural network
+with inputs \( v_i \), \( x_i \) and \( F_i \) at each time step \( t_i \), and producing an output \( v_{i+1} \).
+</p>
+
+<p>Noting that </p>
+<p>&nbsp;<br>
+$$
+v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
+$$
+<p>&nbsp;<br>
+
+<p>we have</p>
+<p>&nbsp;<br>
+$$
+v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
+$$
+<p>&nbsp;<br>
+
+<p>and we can rewrite</p>
+<p>&nbsp;<br>
+$$
+v_{i+1}=h_i(x_i,h_{i-1},F_i).
+$$
+<p>&nbsp;<br>
+</section>
+
+<section>
+<h2 id="minor-rewrite">Minor rewrite </h2>
+
+<p>We can thus set up a recurring series which depends on the inputs \( x_i \) and \( F_i \) and the previous values \( h_{i-1} \).
+We assume now that the inputs at each step (or time \( t_i \)) is given by \( x_i \) only and we denote the outputs for \( \tilde{y}_i \) instead of \( v_{i_1} \), we have then the compact equation for our outputs at each step \( t_i \)
+</p>
+<p>&nbsp;<br>
+$$
+y_{i}=h_i(x_i,h_{i-1}).
+$$
+<p>&nbsp;<br>
+
+<p>We can think of this as an element in a recurrent network where our
+network (our model) produces an output \( y_i \) which is then compared
+with a target value through a given cost/loss function that we
+optimize. The target values at a given step \( t_i \) could be the results
+of a measurement or simply the analytical results of a differential
+equation.
+</p>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail">RNNs in more detail  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail-part-2">RNNs in more detail, part 2  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN3.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail-part-3">RNNs in more detail, part 3  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail-part-4">RNNs in more detail, part 4  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail-part-5">RNNs in more detail, part 5  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN6.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail-part-6">RNNs in more detail, part 6  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN7.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+</section>
+
+<section>
+<h2 id="rnns-in-more-detail-part-7">RNNs in more detail, part 7  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN8.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
 </section>
 
 
