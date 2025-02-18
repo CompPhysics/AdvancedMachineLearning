@@ -162,7 +162,14 @@ doconce format html week5.do.txt --html_style=bootstrap --pygments_html_style=de
                'recurrent-neural-networks-rnns-overarching-view'),
               ('Sequential data only?', 2, None, 'sequential-data-only'),
               ('Differential equations', 2, None, 'differential-equations'),
-              ('A simple example', 2, None, 'a-simple-example'),
+              ('A simple regression example using TensorFlow with Keras',
+               2,
+               None,
+               'a-simple-regression-example-using-tensorflow-with-keras'),
+              ('Corresponding example using PyTorch',
+               2,
+               None,
+               'corresponding-example-using-pytorch'),
               ('RNNs', 2, None, 'rnns'),
               ('What kinds of behaviour can RNNs exhibit?',
                2,
@@ -302,7 +309,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;"><b>Recurrent neural networks (RNNs): Overarching view</b></a></li>
      <!-- navigation toc: --> <li><a href="#sequential-data-only" style="font-size: 80%;"><b>Sequential data only?</b></a></li>
      <!-- navigation toc: --> <li><a href="#differential-equations" style="font-size: 80%;"><b>Differential equations</b></a></li>
-     <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;"><b>A simple example</b></a></li>
+     <!-- navigation toc: --> <li><a href="#a-simple-regression-example-using-tensorflow-with-keras" style="font-size: 80%;"><b>A simple regression example using TensorFlow with Keras</b></a></li>
+     <!-- navigation toc: --> <li><a href="#corresponding-example-using-pytorch" style="font-size: 80%;"><b>Corresponding example using PyTorch</b></a></li>
      <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;"><b>RNNs</b></a></li>
      <!-- navigation toc: --> <li><a href="#what-kinds-of-behaviour-can-rnns-exhibit" style="font-size: 80%;"><b>What kinds of behaviour can RNNs exhibit?</b></a></li>
      <!-- navigation toc: --> <li><a href="#basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html" style="font-size: 80%;"><b>Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"</b></a></li>
@@ -4592,7 +4600,7 @@ natural language processing or similar data sets.
 </p>
 
 <!-- !split -->
-<h2 id="a-simple-example" class="anchor">A simple example </h2>
+<h2 id="a-simple-regression-example-using-tensorflow-with-keras" class="anchor">A simple regression example using TensorFlow with Keras </h2>
 
 
 <!-- code=python (!bc pycod) typeset with pygments style "default" -->
@@ -4657,6 +4665,172 @@ trainScore <span style="color: #666666">=</span> model<span style="color: #66666
 <span style="color: #008000">print</span>(trainScore)
 plt<span style="color: #666666">.</span>plot(df)
 plt<span style="color: #666666">.</span>plot(predicted)
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split -->
+<h2 id="corresponding-example-using-pytorch" class="anchor">Corresponding example using PyTorch </h2>
+
+<p>The structure of the code here is as follows</p>
+<ol>
+<li> Generate a sine function  and splits it into training and validation sets</li>
+<li> Create a custom data set for sequence generation</li>
+<li> Define an RNN model with one RNN layer and a final plain linear layer</li>
+<li> Train the model using the mean-squared error as cost function and the Adam optimizer</li>
+<li> Generate predictions using recursive forecasting</li>
+<li> Plot the results and training/validation loss curves</li>
+</ol>
+<p>The model takes sequences of 20 previous values to predict the next
+value of the sine function. The recursive prediction uses the model's own
+predictions to generate future values, showing how well it maintains
+the sine wave pattern over time.
+</p>
+
+<p>The final plots show the the predicted values vs. the actual sine wave for the validation period
+and the training and validation cost function curves to monitor for overfitting.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+
+<span style="color: #408080; font-style: italic"># Generate synthetic sine wave data</span>
+t <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>linspace(<span style="color: #666666">0</span>, <span style="color: #666666">4*</span>np<span style="color: #666666">.</span>pi, <span style="color: #666666">1000</span>)
+data <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>sin(t)
+
+<span style="color: #408080; font-style: italic"># Split data into training and validation</span>
+train_data <span style="color: #666666">=</span> data[:<span style="color: #666666">800</span>]
+val_data <span style="color: #666666">=</span> data[<span style="color: #666666">800</span>:]
+
+<span style="color: #408080; font-style: italic"># Hyperparameters</span>
+seq_len <span style="color: #666666">=</span> <span style="color: #666666">20</span>
+batch_size <span style="color: #666666">=</span> <span style="color: #666666">32</span>
+hidden_size <span style="color: #666666">=</span> <span style="color: #666666">64</span>
+num_epochs <span style="color: #666666">=</span> <span style="color: #666666">100</span>
+learning_rate <span style="color: #666666">=</span> <span style="color: #666666">0.001</span>
+
+<span style="color: #408080; font-style: italic"># Create dataset and dataloaders</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">SineDataset</span>(torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>Dataset):
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, data, seq_len):
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>data <span style="color: #666666">=</span> data
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>seq_len <span style="color: #666666">=</span> seq_len
+
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__len__</span>(<span style="color: #008000">self</span>):
+       <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">len</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>data) <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>seq_len
+
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__getitem__</span>(<span style="color: #008000">self</span>, idx):
+       x <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>data[idx:idx<span style="color: #666666">+</span><span style="color: #008000">self</span><span style="color: #666666">.</span>seq_len]
+       y <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>data[idx<span style="color: #666666">+</span><span style="color: #008000">self</span><span style="color: #666666">.</span>seq_len]
+       <span style="color: #008000; font-weight: bold">return</span> x<span style="color: #666666">.</span>unsqueeze(<span style="color: #666666">-1</span>), y  <span style="color: #408080; font-style: italic"># Add feature dimension</span>
+
+train_dataset <span style="color: #666666">=</span> SineDataset(train_data, seq_len)
+val_dataset <span style="color: #666666">=</span> SineDataset(val_data, seq_len)
+
+train_loader <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>DataLoader(train_dataset, batch_size<span style="color: #666666">=</span>batch_size, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+val_loader <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>DataLoader(val_dataset, batch_size<span style="color: #666666">=</span>batch_size, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+
+<span style="color: #408080; font-style: italic"># Define RNN model</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">RNNModel</span>(nn<span style="color: #666666">.</span>Module):
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, input_size, hidden_size, output_size):
+       <span style="color: #008000">super</span>(RNNModel, <span style="color: #008000">self</span>)<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>rnn <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>RNN(input_size, hidden_size, batch_first<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>fc <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(hidden_size, output_size)
+
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x):
+       out, _ <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>rnn(x)  <span style="color: #408080; font-style: italic"># out: (batch_size, seq_len, hidden_size)</span>
+       out <span style="color: #666666">=</span> out[:, <span style="color: #666666">-1</span>, :]   <span style="color: #408080; font-style: italic"># Take last time step output</span>
+       out <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>fc(out)
+       <span style="color: #008000; font-weight: bold">return</span> out
+
+model <span style="color: #666666">=</span> RNNModel(input_size<span style="color: #666666">=1</span>, hidden_size<span style="color: #666666">=</span>hidden_size, output_size<span style="color: #666666">=1</span>)
+criterion <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>MSELoss()
+optimizer <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>optim<span style="color: #666666">.</span>Adam(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=</span>learning_rate)
+
+<span style="color: #408080; font-style: italic"># Training loop</span>
+train_losses <span style="color: #666666">=</span> []
+val_losses <span style="color: #666666">=</span> []
+
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(num_epochs):
+   model<span style="color: #666666">.</span>train()
+   epoch_train_loss <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+   <span style="color: #008000; font-weight: bold">for</span> x_batch, y_batch <span style="color: #AA22FF; font-weight: bold">in</span> train_loader:
+       optimizer<span style="color: #666666">.</span>zero_grad()
+       y_pred <span style="color: #666666">=</span> model(x_batch)
+       loss <span style="color: #666666">=</span> criterion(y_pred, y_batch<span style="color: #666666">.</span>unsqueeze(<span style="color: #666666">-1</span>))
+       loss<span style="color: #666666">.</span>backward()
+       optimizer<span style="color: #666666">.</span>step()
+       epoch_train_loss <span style="color: #666666">+=</span> loss<span style="color: #666666">.</span>item()
+
+   <span style="color: #408080; font-style: italic"># Validation</span>
+   model<span style="color: #666666">.</span>eval()
+   epoch_val_loss <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+   <span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():
+       <span style="color: #008000; font-weight: bold">for</span> x_val, y_val <span style="color: #AA22FF; font-weight: bold">in</span> val_loader:
+           y_pred_val <span style="color: #666666">=</span> model(x_val)
+           val_loss <span style="color: #666666">=</span> criterion(y_pred_val, y_val<span style="color: #666666">.</span>unsqueeze(<span style="color: #666666">-1</span>))
+           epoch_val_loss <span style="color: #666666">+=</span> val_loss<span style="color: #666666">.</span>item()
+
+   <span style="color: #408080; font-style: italic"># Calculate average losses</span>
+   train_loss <span style="color: #666666">=</span> epoch_train_loss <span style="color: #666666">/</span> <span style="color: #008000">len</span>(train_loader)
+   val_loss <span style="color: #666666">=</span> epoch_val_loss <span style="color: #666666">/</span> <span style="color: #008000">len</span>(val_loader)
+   train_losses<span style="color: #666666">.</span>append(train_loss)
+   val_losses<span style="color: #666666">.</span>append(val_loss)
+
+   <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Epoch </span><span style="color: #BB6688; font-weight: bold">{</span>epoch<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>num_epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">, Train Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>train_loss<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">, Val Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>val_loss<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># Generate predictions</span>
+model<span style="color: #666666">.</span>eval()
+initial_sequence <span style="color: #666666">=</span> train_data[<span style="color: #666666">-</span>seq_len:]<span style="color: #666666">.</span>reshape(<span style="color: #666666">1</span>, seq_len, <span style="color: #666666">1</span>)
+predictions <span style="color: #666666">=</span> []
+current_sequence <span style="color: #666666">=</span> initial_sequence<span style="color: #666666">.</span>clone()
+
+<span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():
+   <span style="color: #008000; font-weight: bold">for</span> _ <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(val_data)):
+       pred <span style="color: #666666">=</span> model(current_sequence)
+       predictions<span style="color: #666666">.</span>append(pred<span style="color: #666666">.</span>item())
+       <span style="color: #408080; font-style: italic"># Update sequence by removing first element and adding new prediction</span>
+       current_sequence <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>cat([current_sequence[:, <span style="color: #666666">1</span>:, :], pred<span style="color: #666666">.</span>unsqueeze(<span style="color: #666666">1</span>)], dim<span style="color: #666666">=1</span>)
+
+<span style="color: #408080; font-style: italic"># Plot results</span>
+plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">12</span>, <span style="color: #666666">6</span>))
+plt<span style="color: #666666">.</span>plot(t[<span style="color: #666666">800</span>:]<span style="color: #666666">.</span>numpy(), val_data<span style="color: #666666">.</span>numpy(), label<span style="color: #666666">=</span><span style="color: #BA2121">&#39;True values&#39;</span>)
+plt<span style="color: #666666">.</span>plot(t[<span style="color: #666666">800</span>:]<span style="color: #666666">.</span>numpy(), predictions, label<span style="color: #666666">=</span><span style="color: #BA2121">&#39;Predictions&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&#39;Sine Wave Prediction&#39;</span>)
+plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&#39;Time&#39;</span>)
+plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&#39;Value&#39;</span>)
+plt<span style="color: #666666">.</span>legend()
+plt<span style="color: #666666">.</span>show()
+
+<span style="color: #408080; font-style: italic"># Plot training and validation loss</span>
+plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">10</span>, <span style="color: #666666">5</span>))
+plt<span style="color: #666666">.</span>plot(train_losses, label<span style="color: #666666">=</span><span style="color: #BA2121">&#39;Training Loss&#39;</span>)
+plt<span style="color: #666666">.</span>plot(val_losses, label<span style="color: #666666">=</span><span style="color: #BA2121">&#39;Validation Loss&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #BA2121">&#39;Training and Validation Loss&#39;</span>)
+plt<span style="color: #666666">.</span>xlabel(<span style="color: #BA2121">&#39;Epoch&#39;</span>)
+plt<span style="color: #666666">.</span>ylabel(<span style="color: #BA2121">&#39;Loss&#39;</span>)
+plt<span style="color: #666666">.</span>legend()
 plt<span style="color: #666666">.</span>show()
 </pre>
 </div>
