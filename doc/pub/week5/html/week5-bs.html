@@ -5315,10 +5315,7 @@ The parameters are trained through the so-called back-propagation through time (
 <ol>
 <li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
 <li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
-<li> Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.</li>
-<ul>
-  <li> ESNs only need to learn the hidden-output connections.</li>
-</ul>
+<li> Echo State Networks (ESN): Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input. ESNs only need to learn the hidden-output connections.</li>
 <li> Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum</li>
 </ol>
 <!-- ------------------- end of main content --------------- -->
