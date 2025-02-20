@@ -316,11 +316,11 @@ from tensorflow.keras.utils import to_categorical   #This allows using categoric
 
 The 6 lines of code below define the convolutional base using a common pattern: a stack of Conv2D and MaxPooling2D layers.
 
-As input, a CNN takes tensors of shape (image_height, image_width,
-color_channels), ignoring the batch size. If you are new to these
-dimensions, color_channels refers to (R,G,B). In this example, you
+As input, a CNN takes tensors of shape (image$\_$height, image$\_$width,
+color$\_$channels), ignoring the batch size. If you are new to these
+dimensions, color$\_$channels refers to (R,G,B). In this example, you
 will configure the CNN to process inputs of shape (32, 32, 3) as an
-example. You can do this by passing the argument input_shape to our
+example. You can do this by passing the argument input$\_$shape to our
 first layer.
 
 !bc pycod
@@ -680,10 +680,10 @@ o Some final remarks
 The code below shows object oriented implementations of the Constant,
 Momentum, Adagrad, AdagradMomentum, RMS prop and Adam schedulers. All
 of the classes belong to the shared abstract Scheduler class, and
-share the update_change() and reset() methods allowing for any of the
+share the update$\_$change() and reset() methods allowing for any of the
 schedulers to be seamlessly used during the training stage, as will
 later be shown in the fit() method of the neural
-network. Update_change() only has one parameter, the gradient
+network. The function Update$\_$change() only has one parameter, the gradient
 ($\delta^{l}_{j}a^{l-1}_k$), and returns the change which will be
 subtracted from the weights. The reset() function takes no parameters,
 and resets the desired variables. For Constant and Momentum, reset
@@ -3090,8 +3090,8 @@ cnn = CNN(cost_func=CostCrossEntropy, scheduler=adam_scheduler, seed=2023)
 !ec
 
 Now that we have our CNN object, we can begin to add layers to it!
-Many of the add_layer functions have default values, for example
-add_Convolution2DLayer() has a default v_stride and h_stride of
+Many of the add$\_$layer functions have default values, for example
+add$\_$Convolution2DLayer() has a default v$\_$stride and h$\_$stride of
 1. However, these can of course be set to any value you please. Note
 that the input channels of a subsequent convolutional layer must equal
 the previous convolutional layer's feature maps.
@@ -3191,11 +3191,11 @@ Considering we only trained the model for 100 epochs without any tuning of the h
 The codebase allows for great flexibility in CNN
 architectures. Pooling layers can be added before, inbetween or after
 convolutional layers, but due to the great optimizations made within
-Convolution2DLayerOPT, we recommend using the v_stride and h_stride
-parameters in add_Convolution2DLayer() to reduce the dimentionality of
+Convolution2DLayerOPT, we recommend using the v$\_$stride and h$\_$stride
+parameters in add$\_$Convolution2DLayer() to reduce the dimentionality of
 the problem as the pooling layer is slow in comparison. To use the
 unoptimized version of Convolution2DLayer, simply pass optimized=False
-as an argument in add_Convolution2DLayer().
+as an argument in add$\_$Convolution2DLayer().
 
 If one wishes to perform binary classification using the CNN, simply
 use the cost function 'CostLogReg' when initializing the CNN and use 1
