@@ -98,6 +98,7 @@ in addition to the lectures, we have often followed five main paths:
 - Recurrent neural networks (RNNs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
+- Video of lecture at https://youtu.be/DhuQ1H9RwfQ
 
 ## February 24-28
 - Mathematics of recurrent neural networks
