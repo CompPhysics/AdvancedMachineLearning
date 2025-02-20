@@ -216,7 +216,55 @@ doconce format html week5.do.txt --html_style=bootstrap --pygments_html_style=de
               ('RNNs in more detail, part 7',
                2,
                None,
-               'rnns-in-more-detail-part-7')]}
+               'rnns-in-more-detail-part-7'),
+              ('Backpropagation through time',
+               2,
+               None,
+               'backpropagation-through-time'),
+              ('The backward pass is linear',
+               2,
+               None,
+               'the-backward-pass-is-linear'),
+              ('The problem of exploding or vanishing gradients',
+               2,
+               None,
+               'the-problem-of-exploding-or-vanishing-gradients'),
+              ('Mathematical setup', 2, None, 'mathematical-setup'),
+              ('Back propagation in time through figures, part 1',
+               2,
+               None,
+               'back-propagation-in-time-through-figures-part-1'),
+              ('Back propagation in time, part 2',
+               2,
+               None,
+               'back-propagation-in-time-part-2'),
+              ('Back propagation in time, part 3',
+               2,
+               None,
+               'back-propagation-in-time-part-3'),
+              ('Back propagation in time, part 4',
+               2,
+               None,
+               'back-propagation-in-time-part-4'),
+              ('Back propagation in time in equations',
+               2,
+               None,
+               'back-propagation-in-time-in-equations'),
+              ('Chain rule again', 2, None, 'chain-rule-again'),
+              ('Gradients of loss functions',
+               2,
+               None,
+               'gradients-of-loss-functions'),
+              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
+              ('Summary of a  typical RNN',
+               2,
+               None,
+               'summary-of-a-typical-rnn'),
+              ('Four effective ways to learn an RNN and preparing for next '
+               'week',
+               2,
+               None,
+               'four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week')]}
 end of tocinfo -->
 
 <body>
@@ -326,6 +374,20 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-5" style="font-size: 80%;"><b>RNNs in more detail, part 5</b></a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-6" style="font-size: 80%;"><b>RNNs in more detail, part 6</b></a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-7" style="font-size: 80%;"><b>RNNs in more detail, part 7</b></a></li>
+     <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;"><b>Backpropagation through time</b></a></li>
+     <!-- navigation toc: --> <li><a href="#the-backward-pass-is-linear" style="font-size: 80%;"><b>The backward pass is linear</b></a></li>
+     <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;"><b>The problem of exploding or vanishing gradients</b></a></li>
+     <!-- navigation toc: --> <li><a href="#mathematical-setup" style="font-size: 80%;"><b>Mathematical setup</b></a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-through-figures-part-1" style="font-size: 80%;"><b>Back propagation in time through figures, part 1</b></a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-2" style="font-size: 80%;"><b>Back propagation in time, part 2</b></a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-3" style="font-size: 80%;"><b>Back propagation in time, part 3</b></a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-4" style="font-size: 80%;"><b>Back propagation in time, part 4</b></a></li>
+     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-in-equations" style="font-size: 80%;"><b>Back propagation in time in equations</b></a></li>
+     <!-- navigation toc: --> <li><a href="#chain-rule-again" style="font-size: 80%;"><b>Chain rule again</b></a></li>
+     <!-- navigation toc: --> <li><a href="#gradients-of-loss-functions" style="font-size: 80%;"><b>Gradients of loss functions</b></a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;"><b>Summary of RNNs</b></a></li>
+     <!-- navigation toc: --> <li><a href="#summary-of-a-typical-rnn" style="font-size: 80%;"><b>Summary of a  typical RNN</b></a></li>
+     <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" style="font-size: 80%;"><b>Four effective ways to learn an RNN and preparing for next week</b></a></li>
 
         </ul>
       </li>
@@ -5049,6 +5111,191 @@ equation.
 </center>
 <br/><br/>
 
+<!-- !split -->
+<h2 id="backpropagation-through-time" class="anchor">Backpropagation through time </h2>
+
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>We can think of the recurrent net as a layered, feed-forward
+net with shared weights and then train the feed-forward net
+with weight constraints.
+</p>
+</div>
+</div>
+
+
+<p>We can also think of this training algorithm in the time domain:</p>
+<ol>
+<li> The forward pass builds up a stack of the activities of all the units at each time step.</li>
+<li> The backward pass peels activities off the stack to compute the error derivatives at each time step.</li>
+<li> After the backward pass we add together the derivatives at all the different times for each weight.</li> 
+</ol>
+<!-- !split -->
+<h2 id="the-backward-pass-is-linear" class="anchor">The backward pass is linear </h2>
+
+<ol>
+<li> There is a big difference between the forward and backward passes.</li>
+<li> In the forward pass we use squashing functions (like the logistic) to prevent the activity vectors from exploding.</li>
+<li> The backward pass, is completely linear. If you double the error derivatives at the final layer, all the error derivatives will double.</li>
+</ol>
+<p>The forward pass determines the slope of the linear function used for
+backpropagating through each neuron
+</p>
+
+<!-- !split  -->
+<h2 id="the-problem-of-exploding-or-vanishing-gradients" class="anchor">The problem of exploding or vanishing gradients </h2>
+<ul>
+<li> What happens to the magnitude of the gradients as we backpropagate through many layers?
+<ol type="a"></li>
+ <li> If the weights are small, the gradients shrink exponentially.</li>
+ <li> If the weights are big the gradients grow exponentially.</li>
+</ol>
+<li> Typical feed-forward neural nets can cope with these exponential effects because they only have a few hidden layers.</li>
+<li> In an RNN trained on long sequences (e.g. 100 time steps) the gradients can easily explode or vanish.
+<ol type="a"></li>
+ <li> We can avoid this by initializing the weights very carefully.</li>
+</ol>
+<li> Even with good initial weights, its very hard to detect that the current target output depends on an input from many time-steps ago.</li>
+</ul>
+<p>RNNs have difficulty dealing with long-range dependencies. </p>
+
+<!-- !split -->
+<h2 id="mathematical-setup" class="anchor">Mathematical setup </h2>
+
+<p>The expression for the simplest Recurrent network resembles that of a
+regular feed-forward neural network, but now with
+the concept of temporal dependencies
+</p>
+
+$$
+\begin{align*}
+    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
+    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
+    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
+    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="back-propagation-in-time-through-figures-part-1" class="anchor">Back propagation in time through figures, part 1   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="back-propagation-in-time-part-2" class="anchor">Back propagation in time, part 2   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN10.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="back-propagation-in-time-part-3" class="anchor">Back propagation in time, part 3   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN11.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="back-propagation-in-time-part-4" class="anchor">Back propagation in time, part 4   </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="back-propagation-in-time-in-equations" class="anchor">Back propagation in time in equations </h2>
+
+<p>To derive the expression of the gradients of \( \mathcal{L} \) for
+the RNN, we need to start recursively from the nodes closer to the
+output layer in the temporal unrolling scheme - such as \( \mathbf{y} \)
+and \( \mathbf{h} \) at final time \( t = \tau \),
+</p>
+
+$$
+\begin{align*}
+    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial y_{i}^{(t)}}, \notag\\
+    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="chain-rule-again" class="anchor">Chain rule again </h2>
+<p>For the following hidden nodes, we have to iterate through time, so by the chain rule, </p>
+
+$$
+\begin{align*}
+    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="gradients-of-loss-functions" class="anchor">Gradients of loss functions </h2>
+<p>Similarly, the gradients of \( \mathcal{L} \) with respect to the weights and biases follow,</p>
+
+$$
+\begin{align*}
+    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
+    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
+    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
+    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
+    \label{eq:rnn_gradients3}
+\end{align*}
+$$
+
+
+<!-- !split -->
+<h2 id="summary-of-rnns" class="anchor">Summary of RNNs </h2>
+
+<p>Recurrent neural networks (RNNs) have in general no probabilistic component
+in a model. With a given fixed input and target from data, the RNNs learn the intermediate
+association between various layers.
+The inputs, outputs, and internal representation (hidden states) are all
+real-valued vectors.
+</p>
+
+<p>In a  traditional NN, it is assumed that every input is
+independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
+</p>
+
+<!-- !split -->
+<h2 id="summary-of-a-typical-rnn" class="anchor">Summary of a  typical RNN </h2>
+
+<ol>
+<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
+<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
+<li> The output from the hidden layer produces \( \tilde{y}_t=\sigma_y(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
+<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
+</ol>
+<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
+The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
+</p>
+
+<!-- !split -->
+<h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" class="anchor">Four effective ways to learn an RNN and preparing for next week </h2>
+<ol>
+<li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
+<li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
+<li> Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.</li>
+<ul>
+  <li> ESNs only need to learn the hidden-output connections.</li>
+</ul>
+<li> Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum</li>
+</ol>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->
