@@ -207,6 +207,8 @@ div.toc p,a {
                2,
                None,
                'building-code-using-pytorch'),
+              ('What is dropout?', 2, None, 'what-is-dropout'),
+              ('Key benefits of Dropout:', 3, None, 'key-benefits-of-dropout'),
               ('Building our own CNN code',
                2,
                None,
@@ -812,9 +814,7 @@ model<span style="color: #666666">.</span>add(layers<span style="color: #666666"
 model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
 model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>MaxPooling2D((<span style="color: #666666">2</span>, <span style="color: #666666">2</span>)))
 model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Conv2D(<span style="color: #666666">64</span>, (<span style="color: #666666">3</span>, <span style="color: #666666">3</span>), activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
-
 <span style="color: #408080; font-style: italic"># Here we  display the architecture of our model so far.</span>
-
 model<span style="color: #666666">.</span>summary()
 </pre>
 </div>
@@ -855,7 +855,7 @@ layer with 10 outputs and a softmax activation.
   <pre style="line-height: 125%;">model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Flatten())
 model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">64</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>))
 model<span style="color: #666666">.</span>add(layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">10</span>))
-Here<span style="color: #BA2121">&#39;s the complete architecture of our model.</span>
+<span style="color: #408080; font-style: italic"># Now we list  the complete architecture of our model.</span>
 model<span style="color: #666666">.</span>summary()
 </pre>
 </div>
@@ -1008,7 +1008,7 @@ X_train, X_test, Y_train, Y_test <span style="color: #666666">=</span> train_tes
     model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;categorical_crossentropy&#39;</span>, optimizer<span style="color: #666666">=</span>sgd, metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
     
     <span style="color: #008000; font-weight: bold">return</span> model
-
+<span style="color: #408080; font-style: italic">#model.summary()</span>
 epochs <span style="color: #666666">=</span> <span style="color: #666666">100</span>
 batch_size <span style="color: #666666">=</span> <span style="color: #666666">100</span>
 input_shape <span style="color: #666666">=</span> X_train<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>:<span style="color: #666666">4</span>]
@@ -1285,6 +1285,29 @@ total <span style="color: #666666">=</span> <span style="color: #666666">0</span
 </div>
 
 
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="what-is-dropout">What is dropout? </h2>
+
+<p>Dropout is a regularization technique used to prevent overfitting in
+neural networks. During training, a randomly selected fraction
+(typically 20-50$\%$) of neurons in each layer are temporarily
+deactivated (dropped out). This compels the network to distribute
+feature representation across multiple neurons instead of relying on a
+small subset.
+</p>
+<h3 id="key-benefits-of-dropout">Key benefits of Dropout: </h3>
+
+<ol>
+<li> Random Neuron Deactivation: Neurons are randomly ignored during each forward pass.</li>
+<li> Overfitting Reduction: Encourages the learning of more robust data representations by preventing reliance on specific neurons.</li>
+<li> Improved Robustness: At test time, all neurons are active, with weights scaled down to account for the training phase dropout rate.</li>
+</ol>
+<p>Dropout is commonly applied after fully connected layers in CNNs, but can also be used after convolutional layers.</p>
+
+<ol>
+<li> Application after convolutional layers: While less frequent, dropout can be applied between convolutional and pooling layers. The inherent regularization provided by shared weights and pooling in convolutional layers already mitigates overfitting.</li>
+<li> Application after fully connected Layers: Dropout is typically applied to fully connected layers due to the increased risk of overfitting caused by the large number of parameters.</li>
+</ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="building-our-own-cnn-code">Building our own CNN code </h2>
 

@@ -330,9 +330,7 @@ model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Conv2D(64, (3, 3), activation='relu'))
 model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-
 # Here we  display the architecture of our model so far.
-
 model.summary()
 !ec
 You can see that the output of every Conv2D and MaxPooling2D layer is a 3D tensor of shape (height, width, channels). The width and height dimensions tend to shrink as you go deeper in the network. The number of output channels for each Conv2D layer is controlled by the first argument (e.g., 32 or 64). Typically, as the width and height shrink, you can afford (computationally) to add more output channels in each Conv2D layer.
@@ -355,7 +353,7 @@ layer with 10 outputs and a softmax activation.
 model.add(layers.Flatten())
 model.add(layers.Dense(64, activation='relu'))
 model.add(layers.Dense(10))
-Here's the complete architecture of our model.
+# Now we list  the complete architecture of our model.
 model.summary()
 !ec
 As you can see, our (4, 4, 64) outputs were flattened into vectors of shape (1024) before going through two Dense layers.
@@ -452,7 +450,7 @@ def create_convolutional_neural_network_keras(input_shape, receptive_field,
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
     
     return model
-
+#model.summary()
 epochs = 100
 batch_size = 100
 input_shape = X_train.shape[1:4]
@@ -637,6 +635,27 @@ with torch.no_grad():
 
 print(f'Test Accuracy: {100 * correct / total:.2f}%')
 !ec
+
+!split
+===== What is dropout? =====
+
+Dropout is a regularization technique used to prevent overfitting in
+neural networks. During training, a randomly selected fraction
+(typically 20-50$\%$) of neurons in each layer are temporarily
+deactivated (dropped out). This compels the network to distribute
+feature representation across multiple neurons instead of relying on a
+small subset.
+
+=== Key benefits of Dropout: ===
+
+o Random Neuron Deactivation: Neurons are randomly ignored during each forward pass.
+o Overfitting Reduction: Encourages the learning of more robust data representations by preventing reliance on specific neurons.
+o Improved Robustness: At test time, all neurons are active, with weights scaled down to account for the training phase dropout rate.
+
+Dropout is commonly applied after fully connected layers in CNNs, but can also be used after convolutional layers.
+
+o Application after convolutional layers: While less frequent, dropout can be applied between convolutional and pooling layers. The inherent regularization provided by shared weights and pooling in convolutional layers already mitigates overfitting.
+o Application after fully connected Layers: Dropout is typically applied to fully connected layers due to the increased risk of overfitting caused by the large number of parameters.
 
 
 !split

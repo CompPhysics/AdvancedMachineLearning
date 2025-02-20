@@ -613,9 +613,7 @@ model.add(layers.MaxPooling2D((<span style="color: #B452CD">2</span>, <span styl
 model.add(layers.Conv2D(<span style="color: #B452CD">64</span>, (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">3</span>), activation=<span style="color: #CD5555">&#39;relu&#39;</span>))
 model.add(layers.MaxPooling2D((<span style="color: #B452CD">2</span>, <span style="color: #B452CD">2</span>)))
 model.add(layers.Conv2D(<span style="color: #B452CD">64</span>, (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">3</span>), activation=<span style="color: #CD5555">&#39;relu&#39;</span>))
-
 <span style="color: #228B22"># Here we  display the architecture of our model so far.</span>
-
 model.summary()
 </pre>
 </div>
@@ -657,7 +655,7 @@ layer with 10 outputs and a softmax activation.
   <pre style="font-size: 80%; line-height: 125%;">model.add(layers.Flatten())
 model.add(layers.Dense(<span style="color: #B452CD">64</span>, activation=<span style="color: #CD5555">&#39;relu&#39;</span>))
 model.add(layers.Dense(<span style="color: #B452CD">10</span>))
-Here<span style="color: #CD5555">&#39;s the complete architecture of our model.</span>
+<span style="color: #228B22"># Now we list  the complete architecture of our model.</span>
 model.summary()
 </pre>
 </div>
@@ -811,7 +809,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(inputs, labels, train_size=t
     model.compile(loss=<span style="color: #CD5555">&#39;categorical_crossentropy&#39;</span>, optimizer=sgd, metrics=[<span style="color: #CD5555">&#39;accuracy&#39;</span>])
     
     <span style="color: #8B008B; font-weight: bold">return</span> model
-
+<span style="color: #228B22">#model.summary()</span>
 epochs = <span style="color: #B452CD">100</span>
 batch_size = <span style="color: #B452CD">100</span>
 input_shape = X_train.shape[<span style="color: #B452CD">1</span>:<span style="color: #B452CD">4</span>]
@@ -1087,6 +1085,32 @@ total = <span style="color: #B452CD">0</span>
     </div>
   </div>
 </div>
+</section>
+
+<section>
+<h2 id="what-is-dropout">What is dropout? </h2>
+
+<p>Dropout is a regularization technique used to prevent overfitting in
+neural networks. During training, a randomly selected fraction
+(typically 20-50$\%$) of neurons in each layer are temporarily
+deactivated (dropped out). This compels the network to distribute
+feature representation across multiple neurons instead of relying on a
+small subset.
+</p>
+<h3 id="key-benefits-of-dropout">Key benefits of Dropout: </h3>
+
+<ol>
+<p><li> Random Neuron Deactivation: Neurons are randomly ignored during each forward pass.</li>
+<p><li> Overfitting Reduction: Encourages the learning of more robust data representations by preventing reliance on specific neurons.</li>
+<p><li> Improved Robustness: At test time, all neurons are active, with weights scaled down to account for the training phase dropout rate.</li>
+</ol>
+<p>
+<p>Dropout is commonly applied after fully connected layers in CNNs, but can also be used after convolutional layers.</p>
+
+<ol>
+<p><li> Application after convolutional layers: While less frequent, dropout can be applied between convolutional and pooling layers. The inherent regularization provided by shared weights and pooling in convolutional layers already mitigates overfitting.</li>
+<p><li> Application after fully connected Layers: Dropout is typically applied to fully connected layers due to the increased risk of overfitting caused by the large number of parameters.</li>
+</ol>
 </section>
 
 <section>
