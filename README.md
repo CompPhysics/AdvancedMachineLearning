@@ -104,6 +104,8 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics of recurrent neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and 10 and Raschka et al chapters 14 and 15
+- Video of lecture at https://youtu.be/OCJi2Kgw8Rw
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary27.pdf
 
 ## March 3-7
 - Recurrent neural networks and codes
