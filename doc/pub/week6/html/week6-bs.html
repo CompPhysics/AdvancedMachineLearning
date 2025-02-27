@@ -46,6 +46,8 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'from-nns-and-cnns-to-recurrent-neural-networks-rnns'),
+              ('What is a recurrent NN?', 2, None, 'what-is-a-recurrent-nn'),
+              ('Why RNNs?', 2, None, 'why-rnns'),
               ('Feedback connections', 2, None, 'feedback-connections'),
               ('Vanishing gradients', 2, None, 'vanishing-gradients'),
               ('Recurrent neural networks (RNNs): Overarching view',
@@ -152,6 +154,10 @@ doconce format html week6.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'summary-of-a-typical-rnn'),
+              ('The mathematics of RNNs, the basic architecture',
+               2,
+               None,
+               'the-mathematics-of-rnns-the-basic-architecture'),
               ('Four effective ways to learn an RNN and preparing for next '
                'week',
                2,
@@ -195,6 +201,8 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#reading-recommendations" style="font-size: 80%;">Reading recommendations</a></li>
      <!-- navigation toc: --> <li><a href="#tensorflow-examples" style="font-size: 80%;">TensorFlow examples</a></li>
      <!-- navigation toc: --> <li><a href="#from-nns-and-cnns-to-recurrent-neural-networks-rnns" style="font-size: 80%;">From NNs and CNNs to recurrent neural networks (RNNs)</a></li>
+     <!-- navigation toc: --> <li><a href="#what-is-a-recurrent-nn" style="font-size: 80%;">What is a recurrent NN?</a></li>
+     <!-- navigation toc: --> <li><a href="#why-rnns" style="font-size: 80%;">Why RNNs?</a></li>
      <!-- navigation toc: --> <li><a href="#feedback-connections" style="font-size: 80%;">Feedback connections</a></li>
      <!-- navigation toc: --> <li><a href="#vanishing-gradients" style="font-size: 80%;">Vanishing gradients</a></li>
      <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;">Recurrent neural networks (RNNs): Overarching view</a></li>
@@ -230,6 +238,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#gradients-of-loss-functions" style="font-size: 80%;">Gradients of loss functions</a></li>
      <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
      <!-- navigation toc: --> <li><a href="#summary-of-a-typical-rnn" style="font-size: 80%;">Summary of a  typical RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#the-mathematics-of-rnns-the-basic-architecture" style="font-size: 80%;">The mathematics of RNNs, the basic architecture</a></li>
      <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" style="font-size: 80%;">Four effective ways to learn an RNN and preparing for next week</a></li>
 
         </ul>
@@ -310,6 +319,40 @@ about previous inputs; each input is being treated indepen-
 dently. This is a limitation when dealing with sequential data where
 past information can be vital to correctly process current and future
 inputs. 
+</p>
+
+<!-- !split -->
+<h2 id="what-is-a-recurrent-nn" class="anchor">What is a recurrent NN? </h2>
+
+<p>A recurrent neural network (RNN), as opposed to a regular fully
+connected neural network (FCNN) or just neural network (NN), has
+layers that are connected to themselves.
+</p>
+
+<p>In an FCNN there are no connections between nodes in a single
+layer. For instance, \( (h_1^1 \) is not connected to \( (h_2^1 \). In
+addition, the input and output are always of a fixed length.
+</p>
+
+<p>In an RNN, however, this is no longer the case. Nodes in the hidden
+layers are connected to themselves.
+</p>
+
+<!-- !split -->
+<h2 id="why-rnns" class="anchor">Why RNNs? </h2>
+
+<p>Recurrent neural networks work very well when working with
+sequential data, that is data where the order matters. In a regular
+fully connected network, the order of input doesn't really matter.
+</p>
+
+<p>Another property of  RNNs is that they can handle variable input
+and output. Consider again the simplified breast cancer dataset. If you
+have trained a regular FCNN on the dataset with the two features, it
+makes no sense to suddenly add a third feature. The network would not
+know what to do with it, and would reject such inputs with three
+features (or any other number of features that isn't two, for that
+matter).
 </p>
 
 <!-- !split -->
@@ -1018,6 +1061,9 @@ independent of each other.  But with sequential data, the input at a given stage
 <p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
 The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
 </p>
+
+<!-- !split -->
+<h2 id="the-mathematics-of-rnns-the-basic-architecture" class="anchor">The mathematics of RNNs, the basic architecture  </h2>
 
 <!-- !split -->
 <h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" class="anchor">Four effective ways to learn an RNN and preparing for next week </h2>

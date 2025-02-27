@@ -73,6 +73,8 @@ div.toc p,a {
                2,
                None,
                'from-nns-and-cnns-to-recurrent-neural-networks-rnns'),
+              ('What is a recurrent NN?', 2, None, 'what-is-a-recurrent-nn'),
+              ('Why RNNs?', 2, None, 'why-rnns'),
               ('Feedback connections', 2, None, 'feedback-connections'),
               ('Vanishing gradients', 2, None, 'vanishing-gradients'),
               ('Recurrent neural networks (RNNs): Overarching view',
@@ -179,6 +181,10 @@ div.toc p,a {
                2,
                None,
                'summary-of-a-typical-rnn'),
+              ('The mathematics of RNNs, the basic architecture',
+               2,
+               None,
+               'the-mathematics-of-rnns-the-basic-architecture'),
               ('Four effective ways to learn an RNN and preparing for next '
                'week',
                2,
@@ -267,6 +273,40 @@ about previous inputs; each input is being treated indepen-
 dently. This is a limitation when dealing with sequential data where
 past information can be vital to correctly process current and future
 inputs. 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="what-is-a-recurrent-nn">What is a recurrent NN? </h2>
+
+<p>A recurrent neural network (RNN), as opposed to a regular fully
+connected neural network (FCNN) or just neural network (NN), has
+layers that are connected to themselves.
+</p>
+
+<p>In an FCNN there are no connections between nodes in a single
+layer. For instance, \( (h_1^1 \) is not connected to \( (h_2^1 \). In
+addition, the input and output are always of a fixed length.
+</p>
+
+<p>In an RNN, however, this is no longer the case. Nodes in the hidden
+layers are connected to themselves.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="why-rnns">Why RNNs? </h2>
+
+<p>Recurrent neural networks work very well when working with
+sequential data, that is data where the order matters. In a regular
+fully connected network, the order of input doesn't really matter.
+</p>
+
+<p>Another property of  RNNs is that they can handle variable input
+and output. Consider again the simplified breast cancer dataset. If you
+have trained a regular FCNN on the dataset with the two features, it
+makes no sense to suddenly add a third feature. The network would not
+know what to do with it, and would reject such inputs with three
+features (or any other number of features that isn't two, for that
+matter).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -974,6 +1014,9 @@ independent of each other.  But with sequential data, the input at a given stage
 <p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
 The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
 </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-mathematics-of-rnns-the-basic-architecture">The mathematics of RNNs, the basic architecture  </h2>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week">Four effective ways to learn an RNN and preparing for next week </h2>
