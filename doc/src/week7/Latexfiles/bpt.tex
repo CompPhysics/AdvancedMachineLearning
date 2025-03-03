@@ -1,0 +1,90 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{physics}
+
+\begin{document}
+
+\section*{Backpropagation Through Time (BPTT) for Recurrent Neural Networks}
+
+Backpropagation Through Time (BPTT) is an extension of the backpropagation algorithm used to train Recurrent Neural Networks (RNNs). Unlike feedforward neural networks, RNNs have connections that form cycles, allowing them to maintain a "memory" of previous inputs. This makes BPTT more complex because the gradients must be propagated not only through layers but also through time steps.
+
+\subsection*{RNN Structure}
+
+Consider an RNN with the following structure:
+\begin{itemize}
+   \item Input at time step \( t \): \( \mathbf{x}_t \)
+   \item Hidden state at time step \( t \): \( \mathbf{h}_t \)
+   \item Output at time step \( t \): \( \mathbf{y}_t \)
+   \item Weight matrices: \( \mathbf{W}_h \) (hidden-to-hidden), \( \mathbf{W}_x \) (input-to-hidden), \( \mathbf{W}_y \) (hidden-to-output)
+   \item Bias vectors: \( \mathbf{b}_h \) (hidden), \( \mathbf{b}_y \) (output)
+\end{itemize}
+
+The hidden state and output are computed as:
+\[
+\mathbf{h}_t = \sigma(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b}_h),
+\]
+\[
+\mathbf{y}_t = \mathbf{W}_y \mathbf{h}_t + \mathbf{b}_y,
+\]
+where \( \sigma(\cdot) \) is the activation function (e.g., tanh or ReLU).
+
+\subsection*{Loss Function}
+
+The loss function \( L \) measures the difference between the predicted output \( \mathbf{y}_t \) and the true output \( \mathbf{\hat{y}}_t \) over all time steps \( t = 1 \) to \( T \):
+\[
+L = \sum_{t=1}^T L_t(\mathbf{y}_t, \mathbf{\hat{y}}_t),
+\]
+where \( L_t \) is the loss at time step \( t \) (e.g., mean squared error or cross-entropy).
+
+\subsection*{Backpropagation Through Time (BPTT)}
+
+The goal of BPTT is to compute the gradients of the loss \( L \) with respect to the parameters \( \mathbf{W}_h \), \( \mathbf{W}_x \), \( \mathbf{W}_y \), \( \mathbf{b}_h \), and \( \mathbf{b}_y \). These gradients are used to update the parameters via gradient descent.
+
+\subsubsection*{Gradient of the Loss with Respect to \( \mathbf{W}_y \) and \( \mathbf{b}_y \)}
+
+The gradients of \( L \) with respect to \( \mathbf{W}_y \) and \( \mathbf{b}_y \) are straightforward since \( \mathbf{y}_t \) depends directly on these parameters:
+\[
+\frac{\partial L}{\partial \mathbf{W}_y} = \sum_{t=1}^T \frac{\partial L_t}{\partial \mathbf{y}_t} \frac{\partial \mathbf{y}_t}{\partial \mathbf{W}_y},
+\]
+\[
+\frac{\partial L}{\partial \mathbf{b}_y} = \sum_{t=1}^T \frac{\partial L_t}{\partial \mathbf{y}_t} \frac{\partial \mathbf{y}_t}{\partial \mathbf{b}_y}.
+\]
+Here, \( \frac{\partial \mathbf{y}_t}{\partial \mathbf{W}_y} = \mathbf{h}_t^\top \) and \( \frac{\partial \mathbf{y}_t}{\partial \mathbf{b}_y} = \mathbf{I} \).
+
+\subsubsection*{Gradient of the Loss with Respect to \( \mathbf{W}_h \), \( \mathbf{W}_x \), and \( \mathbf{b}_h \)}
+
+The gradients with respect to \( \mathbf{W}_h \), \( \mathbf{W}_x \), and \( \mathbf{b}_h \) are more complex because the hidden state \( \mathbf{h}_t \) depends on previous hidden states. We use the chain rule to propagate the error backward through time.
+
+Let \( \mathbf{\delta}_t = \frac{\partial L}{\partial \mathbf{h}_t} \) be the error at time step \( t \). The error at time step \( t \) depends on the error at time step \( t+1 \) and the current output error:
+\[
+\mathbf{\delta}_t = \frac{\partial L_t}{\partial \mathbf{h}_t} + \mathbf{W}_h^\top (\mathbf{\delta}_{t+1} \odot \sigma'(\mathbf{h}_{t+1})),
+\]
+where \( \odot \) denotes element-wise multiplication and \( \sigma'(\cdot) \) is the derivative of the activation function.
+
+The gradients with respect to \( \mathbf{W}_h \), \( \mathbf{W}_x \), and \( \mathbf{b}_h \) are then computed as:
+\[
+\frac{\partial L}{\partial \mathbf{W}_h} = \sum_{t=1}^T \mathbf{\delta}_t \mathbf{h}_{t-1}^\top,
+\]
+\[
+\frac{\partial L}{\partial \mathbf{W}_x} = \sum_{t=1}^T \mathbf{\delta}_t \mathbf{x}_t^\top,
+\]
+\[
+\frac{\partial L}{\partial \mathbf{b}_h} = \sum_{t=1}^T \mathbf{\delta}_t.
+\]
+
+\subsubsection*{Summary of BPTT}
+
+The BPTT algorithm can be summarized as follows:
+\begin{enumerate}
+   \item Forward pass: Compute the hidden states \( \mathbf{h}_t \) and outputs \( \mathbf{y}_t \) for all time steps.
+   \item Backward pass: Compute the errors \( \mathbf{\delta}_t \) starting from the last time step and propagate them backward through time.
+   \item Compute the gradients with respect to all parameters using the errors \( \mathbf{\delta}_t \).
+   \item Update the parameters using gradient descent.
+\end{enumerate}
+
+\subsection*{Challenges of BPTT}
+
+BPTT can suffer from the vanishing or exploding gradient problem, especially when dealing with long sequences. Techniques such as gradient clipping, using Long Short-Term Memory (LSTM) networks, or Gated Recurrent Units (GRUs) are often employed to mitigate these issues.
+
+\end{document}
