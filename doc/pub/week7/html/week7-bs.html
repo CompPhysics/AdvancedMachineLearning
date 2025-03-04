@@ -8,8 +8,8 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="February 26-March 1: Advanced machine learning and data analysis for the physical sciences">
-<title>February 26-March 1: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="Advanced machine learning and data analysis for the physical sciences">
+<title>Advanced machine learning and data analysis for the physical sciences</title>
 <!-- Bootstrap style: bootstrap -->
 <!-- doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=default --html_admon=bootstrap_panel --html_output=week7-bs --no_mako -->
 <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -36,45 +36,18 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the week February 26-March 1',
+ 'sections': [('Plans for the week of March 3-7',
                2,
                None,
-               'plans-for-the-week-february-26-march-1'),
-              ('From FFNNs and CNNs to recurrent neural networks (RNNs)',
-               2,
-               None,
-               'from-ffnns-and-cnns-to-recurrent-neural-networks-rnns'),
-              ('Feedback connections', 2, None, 'feedback-connections'),
-              ('Vanishing gradients', 2, None, 'vanishing-gradients'),
-              ('Recurrent neural networks (RNNs): Overarching view',
-               2,
-               None,
-               'recurrent-neural-networks-rnns-overarching-view'),
-              ('Sequential data only?', 2, None, 'sequential-data-only'),
-              ('Differential equations', 2, None, 'differential-equations'),
-              ('A simple example', 2, None, 'a-simple-example'),
-              ('RNNs', 2, None, 'rnns'),
-              ('What kinds of behaviour can RNNs exhibit?',
-               2,
-               None,
-               'what-kinds-of-behaviour-can-rnns-exhibit'),
+               'plans-for-the-week-of-march-3-7'),
+              ('What is a recurrent NN?', 2, None, 'what-is-a-recurrent-nn'),
+              ('Why RNNs?', 2, None, 'why-rnns'),
               ('Basic layout,  "Figures from Sebastian Rashcka et al, Machine '
                'learning with Sickit-Learn and '
                'PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"',
                2,
                None,
                'basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html'),
-              ('Solving differential equations with RNNs',
-               2,
-               None,
-               'solving-differential-equations-with-rnns'),
-              ('Two first-order differential equations',
-               2,
-               None,
-               'two-first-order-differential-equations'),
-              ('Velocity only', 2, None, 'velocity-only'),
-              ('Linking with RNNs', 2, None, 'linking-with-rnns'),
-              ('Minor rewrite', 2, None, 'minor-rewrite'),
               ('RNNs in more detail', 2, None, 'rnns-in-more-detail'),
               ('RNNs in more detail, part 2',
                2,
@@ -112,37 +85,10 @@ doconce format html week7.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'the-problem-of-exploding-or-vanishing-gradients'),
-              ('Mathematical setup', 2, None, 'mathematical-setup'),
-              ('Back propagation in time through figures, part 1',
+              ('The mathematics of RNNs, the basic architecture',
                2,
                None,
-               'back-propagation-in-time-through-figures-part-1'),
-              ('Back propagation in time, part 2',
-               2,
-               None,
-               'back-propagation-in-time-part-2'),
-              ('Back propagation in time, part 3',
-               2,
-               None,
-               'back-propagation-in-time-part-3'),
-              ('Back propagation in time, part 4',
-               2,
-               None,
-               'back-propagation-in-time-part-4'),
-              ('Back propagation in time in equations',
-               2,
-               None,
-               'back-propagation-in-time-in-equations'),
-              ('Chain rule again', 2, None, 'chain-rule-again'),
-              ('Gradients of loss functions',
-               2,
-               None,
-               'gradients-of-loss-functions'),
-              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
-              ('Summary of a  typical RNN',
-               2,
-               None,
-               'summary-of-a-typical-rnn'),
+               'the-mathematics-of-rnns-the-basic-architecture'),
               ('Four effective ways to learn an RNN and preparing for next '
                'week',
                2,
@@ -179,29 +125,17 @@ MathJax.Hub.Config({
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="week7-bs.html">February 26-March 1: Advanced machine learning and data analysis for the physical sciences</a>
+    <a class="navbar-brand" href="week7-bs.html">Advanced machine learning and data analysis for the physical sciences</a>
   </div>
   <div class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
-     <!-- navigation toc: --> <li><a href="#plans-for-the-week-february-26-march-1" style="font-size: 80%;">Plans for the week February 26-March 1</a></li>
-     <!-- navigation toc: --> <li><a href="#from-ffnns-and-cnns-to-recurrent-neural-networks-rnns" style="font-size: 80%;">From FFNNs and CNNs to recurrent neural networks (RNNs)</a></li>
-     <!-- navigation toc: --> <li><a href="#feedback-connections" style="font-size: 80%;">Feedback connections</a></li>
-     <!-- navigation toc: --> <li><a href="#vanishing-gradients" style="font-size: 80%;">Vanishing gradients</a></li>
-     <!-- navigation toc: --> <li><a href="#recurrent-neural-networks-rnns-overarching-view" style="font-size: 80%;">Recurrent neural networks (RNNs): Overarching view</a></li>
-     <!-- navigation toc: --> <li><a href="#sequential-data-only" style="font-size: 80%;">Sequential data only?</a></li>
-     <!-- navigation toc: --> <li><a href="#differential-equations" style="font-size: 80%;">Differential equations</a></li>
-     <!-- navigation toc: --> <li><a href="#a-simple-example" style="font-size: 80%;">A simple example</a></li>
-     <!-- navigation toc: --> <li><a href="#rnns" style="font-size: 80%;">RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#what-kinds-of-behaviour-can-rnns-exhibit" style="font-size: 80%;">What kinds of behaviour can RNNs exhibit?</a></li>
+     <!-- navigation toc: --> <li><a href="#plans-for-the-week-of-march-3-7" style="font-size: 80%;">Plans for the week of March 3-7</a></li>
+     <!-- navigation toc: --> <li><a href="#what-is-a-recurrent-nn" style="font-size: 80%;">What is a recurrent NN?</a></li>
+     <!-- navigation toc: --> <li><a href="#why-rnns" style="font-size: 80%;">Why RNNs?</a></li>
      <!-- navigation toc: --> <li><a href="#basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html" style="font-size: 80%;">Basic layout,  "Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"</a></li>
-     <!-- navigation toc: --> <li><a href="#solving-differential-equations-with-rnns" style="font-size: 80%;">Solving differential equations with RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#two-first-order-differential-equations" style="font-size: 80%;">Two first-order differential equations</a></li>
-     <!-- navigation toc: --> <li><a href="#velocity-only" style="font-size: 80%;">Velocity only</a></li>
-     <!-- navigation toc: --> <li><a href="#linking-with-rnns" style="font-size: 80%;">Linking with RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#minor-rewrite" style="font-size: 80%;">Minor rewrite</a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail" style="font-size: 80%;">RNNs in more detail</a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-2" style="font-size: 80%;">RNNs in more detail, part 2</a></li>
      <!-- navigation toc: --> <li><a href="#rnns-in-more-detail-part-3" style="font-size: 80%;">RNNs in more detail, part 3</a></li>
@@ -212,16 +146,7 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#backpropagation-through-time" style="font-size: 80%;">Backpropagation through time</a></li>
      <!-- navigation toc: --> <li><a href="#the-backward-pass-is-linear" style="font-size: 80%;">The backward pass is linear</a></li>
      <!-- navigation toc: --> <li><a href="#the-problem-of-exploding-or-vanishing-gradients" style="font-size: 80%;">The problem of exploding or vanishing gradients</a></li>
-     <!-- navigation toc: --> <li><a href="#mathematical-setup" style="font-size: 80%;">Mathematical setup</a></li>
-     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-through-figures-part-1" style="font-size: 80%;">Back propagation in time through figures, part 1</a></li>
-     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-2" style="font-size: 80%;">Back propagation in time, part 2</a></li>
-     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-3" style="font-size: 80%;">Back propagation in time, part 3</a></li>
-     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-part-4" style="font-size: 80%;">Back propagation in time, part 4</a></li>
-     <!-- navigation toc: --> <li><a href="#back-propagation-in-time-in-equations" style="font-size: 80%;">Back propagation in time in equations</a></li>
-     <!-- navigation toc: --> <li><a href="#chain-rule-again" style="font-size: 80%;">Chain rule again</a></li>
-     <!-- navigation toc: --> <li><a href="#gradients-of-loss-functions" style="font-size: 80%;">Gradients of loss functions</a></li>
-     <!-- navigation toc: --> <li><a href="#summary-of-rnns" style="font-size: 80%;">Summary of RNNs</a></li>
-     <!-- navigation toc: --> <li><a href="#summary-of-a-typical-rnn" style="font-size: 80%;">Summary of a  typical RNN</a></li>
+     <!-- navigation toc: --> <li><a href="#the-mathematics-of-rnns-the-basic-architecture" style="font-size: 80%;">The mathematics of RNNs, the basic architecture</a></li>
      <!-- navigation toc: --> <li><a href="#four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" style="font-size: 80%;">Four effective ways to learn an RNN and preparing for next week</a></li>
      <!-- navigation toc: --> <li><a href="#long-short-term-memory-lstm" style="font-size: 80%;">Long Short Term Memory (LSTM)</a></li>
 
@@ -236,23 +161,20 @@ MathJax.Hub.Config({
 <!-- ------------------- main content ---------------------- -->
 <div class="jumbotron">
 <center>
-<h1>February 26-March 1: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
 <center>
-<b>Morten Hjorth-Jensen</b> [1, 2]
+<b>Morten Hjorth-Jensen</b> 
 </center>
-<!-- institution(s) -->
+<!-- institution -->
 <center>
-[1] <b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
-</center>
-<center>
-[2] <b>Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA</b>
+<b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
 </center>
 <br>
 <center>
-<h4>February 26-March 1, 2024</h4>
+<h4>March 6</h4>
 </center> <!-- date -->
 <br>
 
@@ -260,16 +182,17 @@ MathJax.Hub.Config({
 </div> <!-- end jumbotron -->
 
 <!-- !split -->
-<h2 id="plans-for-the-week-february-26-march-1" class="anchor">Plans for the week February 26-March 1  </h2>
+<h2 id="plans-for-the-week-of-march-3-7" class="anchor">Plans for the week of March 3-7  </h2>
 
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 <ol>
-<li> Finalizing discussion of Convolutional  Neural Networks (CNNs)</li>
-<li> Discussion of recurrent neural networks (RNNs)</li>
-<li> <a href="https://youtu.be/VkQGq84ml_0" target="_self">Video of lecture</a></li>
-<li> <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf" target="_self">Whiteboard notes</a></li>
+<li> Reminder on basics of recurrent neural networks (RNNs)</li>
+<li> Mathematics of RNNs</li>
+<li> Writing our own codes for RNNs
+<!-- o <a href="https://youtu.be/VkQGq84ml_0" target="_self">Video of lecture</a> -->
+<!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesFebruary27.pdf" target="_self">Whiteboard notes</a> --></li>
 <li> Reading recommendations:
 <ol type="a"></li>
  <li> Goodfellow, Bengio and Courville's chapter 10 from <a href="https://www.deeplearningbook.org/" target="_self">Deep Learning</a></li>
@@ -281,216 +204,41 @@ MathJax.Hub.Config({
 </div>
 
 
-<p>The last two books have codes for RNNs in PyTorch and TensorFlow/Keras. Next week we will study the solution of differential equations.</p>
+<p>The last two books have codes for RNNs in PyTorch and TensorFlow/Keras.</p>
 
 <!-- !split -->
-<h2 id="from-ffnns-and-cnns-to-recurrent-neural-networks-rnns" class="anchor">From FFNNs and CNNs to recurrent neural networks (RNNs) </h2>
+<h2 id="what-is-a-recurrent-nn" class="anchor">What is a recurrent NN? </h2>
 
-<p>There are limitation of FFNNs, one of which being that FFNNs are not
-designed to handle sequential data (data for which the order matters)
-effectively because they lack the capabilities of storing information
-about previous inputs; each input is being treated indepen-
-dently. This is a limitation when dealing with sequential data where
-past information can be vital to correctly process current and future
-inputs. 
+<p>A recurrent neural network (RNN), as opposed to a regular fully
+connected neural network (FCNN) or just neural network (NN), has
+layers that are connected to themselves.
 </p>
 
-<!-- !split -->
-<h2 id="feedback-connections" class="anchor">Feedback connections </h2>
+<p>In an FCNN there are no connections between nodes in a single
+layer. For instance, \( (h_1^1 \) is not connected to \( (h_2^1 \). In
+addition, the input and output are always of a fixed length.
+</p>
 
-<p>In contrast to FFNNs, recurrent networks introduce feedback
-connections, meaning the information is allowed to be carried to
-subsequent nodes across different time steps. These cyclic or feedback
-connections have the objective of providing the network with some kind
-of memory, making RNNs particularly suited for time- series data,
-natural language processing, speech recognition, and several other
-problems for which the order of the data is crucial.  The RNN
-architectures vary greatly in how they manage information flow and
-memory in the network.
+<p>In an RNN, however, this is no longer the case. Nodes in the hidden
+layers are connected to themselves.
 </p>
 
 <!-- !split -->
-<h2 id="vanishing-gradients" class="anchor">Vanishing gradients </h2>
+<h2 id="why-rnns" class="anchor">Why RNNs? </h2>
 
-<p>Different architectures often aim at improving
-some sub-optimal characteristics of the network. The simplest form of
-recurrent network, commonly called simple or vanilla RNN, for example,
-is known to suffer from the problem of vanishing gradients. This
-problem arises due to the nature of backpropagation in time. Gradients
-of the cost/loss function may get exponentially small (or large) if
-there are many layers in the network, which is the case of RNN when
-the sequence gets long.
+<p>Recurrent neural networks work very well when working with
+sequential data, that is data where the order matters. In a regular
+fully connected network, the order of input doesn't really matter.
 </p>
 
-<!-- !split -->
-<h2 id="recurrent-neural-networks-rnns-overarching-view" class="anchor">Recurrent neural networks (RNNs): Overarching view </h2>
-
-<p>Till now our focus has been, including convolutional neural networks
-as well, on feedforward neural networks. The output or the activations
-flow only in one direction, from the input layer to the output layer.
+<p>Another property of  RNNs is that they can handle variable input
+and output. Consider again the simplified breast cancer dataset. If you
+have trained a regular FCNN on the dataset with the two features, it
+makes no sense to suddenly add a third feature. The network would not
+know what to do with it, and would reject such inputs with three
+features (or any other number of features that isn't two, for that
+matter).
 </p>
-
-<p>A recurrent neural network (RNN) looks very much like a feedforward
-neural network, except that it also has connections pointing
-backward. 
-</p>
-
-<p>RNNs are used to analyze time series data such as stock prices, and
-tell you when to buy or sell. In autonomous driving systems, they can
-anticipate car trajectories and help avoid accidents. More generally,
-they can work on sequences of arbitrary lengths, rather than on
-fixed-sized inputs like all the nets we have discussed so far. For
-example, they can take sentences, documents, or audio samples as
-input, making them extremely useful for natural language processing
-systems such as automatic translation and speech-to-text.
-</p>
-
-<!-- !split -->
-<h2 id="sequential-data-only" class="anchor">Sequential data only? </h2>
-
-<p>An important issue is that in many deep learning methods we assume
-that the input and output data can be treated as independent and
-identically distributed, normally abbreviated to <b>iid</b>.
-This means that the data we use can be seen as mutually independent.
-</p>
-
-<p>This is however not the case for most data sets used in RNNs since we
-are dealing with sequences of data with strong inter-dependencies.
-This applies in particular to time series, which are sequential by
-contruction.
-</p>
-
-<!-- !split -->
-<h2 id="differential-equations" class="anchor">Differential equations </h2>
-
-<p>As an example, the solutions of ordinary differential equations can be
-represented as a time series, similarly, how stock prices evolve as
-function of time is another example of a typical time series, or voice
-records and many other examples.
-</p>
-
-<p>Not all sequential data may however have a time stamp, texts being a
-typical example thereof, or DNA sequences.
-</p>
-
-<p>The main focus here is on data that can be structured either as time
-series or as ordered series of data.  We will not focus on for example
-natural language processing or similar data sets.
-</p>
-
-<!-- !split -->
-<h2 id="a-simple-example" class="anchor">A simple example </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "default" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Start importing packages</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">pandas</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">pd</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
-<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> datasets, layers, models
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Input
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Model, Sequential 
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> Dense, SimpleRNN, LSTM, GRU
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> optimizers     
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> regularizers           
-<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.utils</span> <span style="color: #008000; font-weight: bold">import</span> to_categorical 
-
-
-
-<span style="color: #408080; font-style: italic"># convert into dataset matrix</span>
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">convertToMatrix</span>(data, step):
- X, Y <span style="color: #666666">=</span>[], []
- <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(data)<span style="color: #666666">-</span>step):
-  d<span style="color: #666666">=</span>i<span style="color: #666666">+</span>step  
-  X<span style="color: #666666">.</span>append(data[i:d,])
-  Y<span style="color: #666666">.</span>append(data[d,])
- <span style="color: #008000; font-weight: bold">return</span> np<span style="color: #666666">.</span>array(X), np<span style="color: #666666">.</span>array(Y)
-
-step <span style="color: #666666">=</span> <span style="color: #666666">4</span>
-N <span style="color: #666666">=</span> <span style="color: #666666">1000</span>    
-Tp <span style="color: #666666">=</span> <span style="color: #666666">800</span>    
-
-t<span style="color: #666666">=</span>np<span style="color: #666666">.</span>arange(<span style="color: #666666">0</span>,N)
-x<span style="color: #666666">=</span>np<span style="color: #666666">.</span>sin(<span style="color: #666666">0.02*</span>t)<span style="color: #666666">+2*</span>np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>rand(N)
-df <span style="color: #666666">=</span> pd<span style="color: #666666">.</span>DataFrame(x)
-df<span style="color: #666666">.</span>head()
-
-values<span style="color: #666666">=</span>df<span style="color: #666666">.</span>values
-train,test <span style="color: #666666">=</span> values[<span style="color: #666666">0</span>:Tp,:], values[Tp:N,:]
-
-<span style="color: #408080; font-style: italic"># add step elements into train and test</span>
-test <span style="color: #666666">=</span> np<span style="color: #666666">.</span>append(test,np<span style="color: #666666">.</span>repeat(test[<span style="color: #666666">-1</span>,],step))
-train <span style="color: #666666">=</span> np<span style="color: #666666">.</span>append(train,np<span style="color: #666666">.</span>repeat(train[<span style="color: #666666">-1</span>,],step))
- 
-trainX,trainY <span style="color: #666666">=</span>convertToMatrix(train,step)
-testX,testY <span style="color: #666666">=</span>convertToMatrix(test,step)
-trainX <span style="color: #666666">=</span> np<span style="color: #666666">.</span>reshape(trainX, (trainX<span style="color: #666666">.</span>shape[<span style="color: #666666">0</span>], <span style="color: #666666">1</span>, trainX<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>]))
-testX <span style="color: #666666">=</span> np<span style="color: #666666">.</span>reshape(testX, (testX<span style="color: #666666">.</span>shape[<span style="color: #666666">0</span>], <span style="color: #666666">1</span>, testX<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>]))
-
-model <span style="color: #666666">=</span> Sequential()
-model<span style="color: #666666">.</span>add(SimpleRNN(units<span style="color: #666666">=32</span>, input_shape<span style="color: #666666">=</span>(<span style="color: #666666">1</span>,step), activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>))
-model<span style="color: #666666">.</span>add(Dense(<span style="color: #666666">8</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>)) 
-model<span style="color: #666666">.</span>add(Dense(<span style="color: #666666">1</span>))
-model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;mean_squared_error&#39;</span>, optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;rmsprop&#39;</span>)
-model<span style="color: #666666">.</span>summary()
-
-model<span style="color: #666666">.</span>fit(trainX,trainY, epochs<span style="color: #666666">=100</span>, batch_size<span style="color: #666666">=16</span>, verbose<span style="color: #666666">=2</span>)
-trainPredict <span style="color: #666666">=</span> model<span style="color: #666666">.</span>predict(trainX)
-testPredict<span style="color: #666666">=</span> model<span style="color: #666666">.</span>predict(testX)
-predicted<span style="color: #666666">=</span>np<span style="color: #666666">.</span>concatenate((trainPredict,testPredict),axis<span style="color: #666666">=0</span>)
-
-trainScore <span style="color: #666666">=</span> model<span style="color: #666666">.</span>evaluate(trainX, trainY, verbose<span style="color: #666666">=0</span>)
-<span style="color: #008000">print</span>(trainScore)
-plt<span style="color: #666666">.</span>plot(df)
-plt<span style="color: #666666">.</span>plot(predicted)
-plt<span style="color: #666666">.</span>show()
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split -->
-<h2 id="rnns" class="anchor">RNNs </h2>
-
-<p>RNNs are very powerful, because they
-combine two properties:
-</p>
-<ol>
-<li> Distributed hidden state that allows them to store a lot of information about the past efficiently.</li>
-<li> Non-linear dynamics that allows them to update their hidden state in complicated ways.</li>
-</ol>
-<p>With enough neurons and time, RNNs
-can compute anything that can be
-computed by your computer.
-</p>
-
-<!-- !split -->
-<h2 id="what-kinds-of-behaviour-can-rnns-exhibit" class="anchor">What kinds of behaviour can RNNs exhibit? </h2>
-
-<ol>
-<li> They can oscillate.</li> 
-<li> They can settle to point attractors.</li>
-<li> They can behave chaotically.</li>
-<li> RNNs could potentially learn to implement lots of small programs that each capture a nugget of knowledge and run in parallel, interacting to produce very complicated effects.</li>
-</ol>
-<p>But the extensive computational needs  of RNNs makes them very hard to train.</p>
 
 <!-- !split -->
 <h2 id="basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html" class="anchor">Basic layout,  <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_self">Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a> </h2>
@@ -500,109 +248,6 @@ computed by your computer.
 <p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
-
-<!-- !split -->
-<h2 id="solving-differential-equations-with-rnns" class="anchor">Solving differential equations with RNNs </h2>
-
-<p>To gain some intuition on how we can use RNNs for time series, let us
-tailor the representation of the solution of a differential equation
-as a time series.
-</p>
-
-<p>Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)</p>
-
-$$
-\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
-$$
-
-<p>where \( \eta \) is a constant used in scaling time into a dimensionless variable and \( F(t) \) is an external force acting on the system.
-The constant \( \eta \) is a so-called damping.
-</p>
-
-<!-- !split -->
-<h2 id="two-first-order-differential-equations" class="anchor">Two first-order differential equations </h2>
-
-<p>In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
-with the velocity
-</p>
-$$
-v(t)=\frac{dx}{dt},
-$$
-
-<p>and the acceleration</p>
-$$
-\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
-$$
-
-<p>With the initial conditions \( v_0=v(t_0) \) and \( x_0=x(t_0) \) defined, we can integrate these equations and find their respective solutions.</p>
-
-<!-- !split -->
-<h2 id="velocity-only" class="anchor">Velocity only </h2>
-
-<p>Let us focus on the velocity only. Discretizing and using the simplest
-possible approximation for the derivative, we have Euler's forward
-method for the updated velocity at a time step \( i+1 \) given by
-</p>
-$$
-v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
-$$
-
-<p>Defining a function</p>
-$$
-h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
-$$
-
-<p>we have</p>
-$$
-v_{i+1}=h_i(x_i,v_i,F_i).
-$$
-
-
-<!-- !split -->
-<h2 id="linking-with-rnns" class="anchor">Linking with RNNs </h2>
-
-<p>The equation</p>
-$$
-v_{i+1}=h_i(x_i,v_i,F_i).
-$$
-
-<p>can be used to train a feed-forward neural network with inputs \( v_i \) and outputs \( v_{i+1} \) at a time \( t_i \). But we can think of this also as a recurrent neural network
-with inputs \( v_i \), \( x_i \) and \( F_i \) at each time step \( t_i \), and producing an output \( v_{i+1} \).
-</p>
-
-<p>Noting that </p>
-$$
-v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
-$$
-
-<p>we have</p>
-$$
-v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
-$$
-
-<p>and we can rewrite</p>
-$$
-v_{i+1}=h_i(x_i,h_{i-1},F_i).
-$$
-
-
-<!-- !split -->
-<h2 id="minor-rewrite" class="anchor">Minor rewrite </h2>
-
-<p>We can thus set up a recurring series which depends on the inputs \( x_i \) and \( F_i \) and the previous values \( h_{i-1} \).
-We assume now that the inputs at each step (or time \( t_i \)) is given by \( x_i \) only and we denote the outputs for \( \tilde{y}_i \) instead of \( v_{i_1} \), we have then the compact equation for our outputs at each step \( t_i \)
-</p>
-$$
-y_{i}=h_i(x_i,h_{i-1}).
-$$
-
-<p>We can think of this as an element in a recurrent network where our
-network (our model) produces an output \( y_i \) which is then compared
-with a target value through a given cost/loss function that we
-optimize. The target values at a given step \( t_i \) could be the results
-of a measurement or simply the analytical results of a differential
-equation.
-</p>
 
 <!-- !split -->
 <h2 id="rnns-in-more-detail" class="anchor">RNNs in more detail  </h2>
@@ -717,139 +362,16 @@ backpropagating through each neuron
 <p>RNNs have difficulty dealing with long-range dependencies. </p>
 
 <!-- !split -->
-<h2 id="mathematical-setup" class="anchor">Mathematical setup </h2>
+<h2 id="the-mathematics-of-rnns-the-basic-architecture" class="anchor">The mathematics of RNNs, the basic architecture  </h2>
 
-<p>The expression for the simplest Recurrent network resembles that of a
-regular feed-forward neural network, but now with
-the concept of temporal dependencies
-</p>
-
-$$
-\begin{align*}
-    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
-    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
-    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
-    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
-\end{align*}
-$$
-
-
-<!-- !split -->
-<h2 id="back-propagation-in-time-through-figures-part-1" class="anchor">Back propagation in time through figures, part 1   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split -->
-<h2 id="back-propagation-in-time-part-2" class="anchor">Back propagation in time, part 2   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN10.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split -->
-<h2 id="back-propagation-in-time-part-3" class="anchor">Back propagation in time, part 3   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN11.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split -->
-<h2 id="back-propagation-in-time-part-4" class="anchor">Back propagation in time, part 4   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split -->
-<h2 id="back-propagation-in-time-in-equations" class="anchor">Back propagation in time in equations </h2>
-
-<p>To derive the expression of the gradients of \( \mathcal{L} \) for
-the RNN, we need to start recursively from the nodes closer to the
-output layer in the temporal unrolling scheme - such as \( \mathbf{y} \)
-and \( \mathbf{h} \) at final time \( t = \tau \),
-</p>
-
-$$
-\begin{align*}
-    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial y_{i}^{(t)}}, \notag\\
-    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
-\end{align*}
-$$
-
-
-<!-- !split -->
-<h2 id="chain-rule-again" class="anchor">Chain rule again </h2>
-<p>For the following hidden nodes, we have to iterate through time, so by the chain rule, </p>
-
-$$
-\begin{align*}
-    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
-\end{align*}
-$$
-
-
-<!-- !split -->
-<h2 id="gradients-of-loss-functions" class="anchor">Gradients of loss functions </h2>
-<p>Similarly, the gradients of \( \mathcal{L} \) with respect to the weights and biases follow,</p>
-
-$$
-\begin{align*}
-    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
-    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
-    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
-    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
-    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
-    \label{eq:rnn_gradients3}
-\end{align*}
-$$
-
-
-<!-- !split -->
-<h2 id="summary-of-rnns" class="anchor">Summary of RNNs </h2>
-
-<p>Recurrent neural networks (RNNs) have in general no probabilistic component
-in a model. With a given fixed input and target from data, the RNNs learn the intermediate
-association between various layers.
-The inputs, outputs, and internal representation (hidden states) are all
-real-valued vectors.
-</p>
-
-<p>In a  traditional NN, it is assumed that every input is
-independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
-</p>
-
-<!-- !split -->
-<h2 id="summary-of-a-typical-rnn" class="anchor">Summary of a  typical RNN </h2>
-
-<ol>
-<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
-<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
-<li> The output from the hidden layer produces \( \tilde{y}_t=\sigma_y(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
-<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
-</ol>
-<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
-The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
-</p>
+<p>See notebook at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/rnnmath.ipynb" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/rnnmath.ipynb</tt></a></p>
 
 <!-- !split -->
 <h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week" class="anchor">Four effective ways to learn an RNN and preparing for next week </h2>
 <ol>
 <li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
 <li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
-<li> Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.</li>
-<ul>
-  <li> ESNs only need to learn the hidden-output connections.</li>
-</ul>
+<li> Echo State Networks (ESN): Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input. ESNs only need to learn the hidden-output connections.</li>
 <li> Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum</li>
 </ol>
 <!-- !split -->
@@ -878,7 +400,7 @@ The parameters are trained through the so-called back-propagation through time (
 </footer>
 -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2025, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>
