@@ -108,15 +108,15 @@ in addition to the lectures, we have often followed five main paths:
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesFebruary27.pdf
 
 ## March 3-7
-- Recurrent neural networks and codes
-- Long-Short-Term memory and applications to differential equations
-- Graph neural network (GNN)s
+- Recurrent neural networks, mathematics  and codes
+- Applications to differential equations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15 and 18
-
+- Video of lecture at https://youtu.be/MeYh5rGIRBM
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch6.pdf
 
 ## March 10-14
-- GNNs
+- Long short term memory and RNNs
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
