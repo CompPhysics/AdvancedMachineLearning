@@ -8,8 +8,8 @@ doconce format html week8.do.txt --pygments_html_style=default --html_style=bloo
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="DocOnce: https://github.com/doconce/doconce/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="March 4-8: Advanced machine learning and data analysis for the physical sciences">
-<title>March 4-8: Advanced machine learning and data analysis for the physical sciences</title>
+<meta name="description" content="Advanced machine learning and data analysis for the physical sciences">
+<title>Advanced machine learning and data analysis for the physical sciences</title>
 <style type="text/css">
 /* bloodish style */
 body {
@@ -140,102 +140,18 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the week March 4-8',
+ 'sections': [('Plans for the week March 10-14',
                2,
                None,
-               'plans-for-the-week-march-4-8'),
-              ('Reading recommendations', 2, None, 'reading-recommendations'),
-              ('RNNs', 2, None, 'rnns'),
-              ('Basic layout,  "Figures from Sebastian Rashcka et al, Machine '
-               'learning with Sickit-Learn and '
-               'PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"',
+               'plans-for-the-week-march-10-14'),
+              ('Reading recommendations:  RNNs',
                2,
                None,
-               'basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html'),
-              ('Solving differential equations with RNNs',
+               'reading-recommendations-rnns'),
+              ('Reading recommendations: Autoencoders (AE)',
                2,
                None,
-               'solving-differential-equations-with-rnns'),
-              ('Two first-order differential equations',
-               2,
-               None,
-               'two-first-order-differential-equations'),
-              ('Velocity only', 2, None, 'velocity-only'),
-              ('Linking with RNNs', 2, None, 'linking-with-rnns'),
-              ('Minor rewrite', 2, None, 'minor-rewrite'),
-              ('RNNs in more detail', 2, None, 'rnns-in-more-detail'),
-              ('RNNs in more detail, part 2',
-               2,
-               None,
-               'rnns-in-more-detail-part-2'),
-              ('RNNs in more detail, part 3',
-               2,
-               None,
-               'rnns-in-more-detail-part-3'),
-              ('RNNs in more detail, part 4',
-               2,
-               None,
-               'rnns-in-more-detail-part-4'),
-              ('RNNs in more detail, part 5',
-               2,
-               None,
-               'rnns-in-more-detail-part-5'),
-              ('RNNs in more detail, part 6',
-               2,
-               None,
-               'rnns-in-more-detail-part-6'),
-              ('RNNs in more detail, part 7',
-               2,
-               None,
-               'rnns-in-more-detail-part-7'),
-              ('Backpropagation through time',
-               2,
-               None,
-               'backpropagation-through-time'),
-              ('The backward pass is linear',
-               2,
-               None,
-               'the-backward-pass-is-linear'),
-              ('The problem of exploding or vanishing gradients',
-               2,
-               None,
-               'the-problem-of-exploding-or-vanishing-gradients'),
-              ('Mathematical setup', 2, None, 'mathematical-setup'),
-              ('Back propagation in time through figures, part 1',
-               2,
-               None,
-               'back-propagation-in-time-through-figures-part-1'),
-              ('Back propagation in time, part 2',
-               2,
-               None,
-               'back-propagation-in-time-part-2'),
-              ('Back propagation in time, part 3',
-               2,
-               None,
-               'back-propagation-in-time-part-3'),
-              ('Back propagation in time, part 4',
-               2,
-               None,
-               'back-propagation-in-time-part-4'),
-              ('Back propagation in time in equations',
-               2,
-               None,
-               'back-propagation-in-time-in-equations'),
-              ('Chain rule again', 2, None, 'chain-rule-again'),
-              ('Gradients of loss functions',
-               2,
-               None,
-               'gradients-of-loss-functions'),
-              ('Summary of RNNs', 2, None, 'summary-of-rnns'),
-              ('Summary of a  typical RNN',
-               2,
-               None,
-               'summary-of-a-typical-rnn'),
-              ('Four effective ways to learn an RNN and preparing for next '
-               'week',
-               2,
-               None,
-               'four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week'),
+               'reading-recommendations-autoencoders-ae'),
               ('Gating mechanism: Long Short Term Memory (LSTM)',
                2,
                None,
@@ -251,7 +167,10 @@ div.toc p,a {
               ('Input gate', 2, None, 'input-gate'),
               ('Forget and input', 2, None, 'forget-and-input'),
               ('Output gate', 2, None, 'output-gate'),
-              ('Differential equations', 2, None, 'differential-equations'),
+              ('Example: Solving Differential equations',
+               2,
+               None,
+               'example-solving-differential-equations'),
               ('Lorenz attractor', 2, None, 'lorenz-attractor'),
               ('Generating data', 2, None, 'generating-data'),
               ('Training and testing', 2, None, 'training-and-testing'),
@@ -272,7 +191,79 @@ div.toc p,a {
               ('Adding more information to the loss function',
                2,
                None,
-               'adding-more-information-to-the-loss-function')]}
+               'adding-more-information-to-the-loss-function'),
+              ('Autoencoders: Overarching view',
+               2,
+               None,
+               'autoencoders-overarching-view'),
+              ('Powerful detectors', 2, None, 'powerful-detectors'),
+              ('First introduction of AEs',
+               2,
+               None,
+               'first-introduction-of-aes'),
+              ('Autoencoder structure', 2, None, 'autoencoder-structure'),
+              ('Schematic image of an Autoencoder',
+               2,
+               None,
+               'schematic-image-of-an-autoencoder'),
+              ('More on the structure', 2, None, 'more-on-the-structure'),
+              ('Decoder part', 2, None, 'decoder-part'),
+              ('Typical AEs', 2, None, 'typical-aes'),
+              ('Feed Forward Autoencoder', 2, None, 'feed-forward-autoencoder'),
+              ('Mirroring', 2, None, 'mirroring'),
+              ('Output of middle layer', 2, None, 'output-of-middle-layer'),
+              ('Activation Function of the Output Layer',
+               2,
+               None,
+               'activation-function-of-the-output-layer'),
+              ('ReLU', 2, None, 'relu'),
+              ('Sigmoid', 2, None, 'sigmoid'),
+              ('Cost/Loss Function', 2, None, 'cost-loss-function'),
+              ('Binary Cross-Entropy', 2, None, 'binary-cross-entropy'),
+              ('Reconstruction Error', 2, None, 'reconstruction-error'),
+              ('Dimensionality reduction and links with Principal component '
+               'analysis',
+               2,
+               None,
+               'dimensionality-reduction-and-links-with-principal-component-analysis'),
+              ('Linear functions', 2, None, 'linear-functions'),
+              ('AE mean-squared error', 2, None, 'ae-mean-squared-error'),
+              ('Dimensionality reduction', 2, None, 'dimensionality-reduction'),
+              ('What is the Principal Component Analysis (PCA)?',
+               2,
+               None,
+               'what-is-the-principal-component-analysis-pca'),
+              ('Basic ideas of the PCA', 2, None, 'basic-ideas-of-the-pca'),
+              ('Ingredients of the PCA', 2, None, 'ingredients-of-the-pca'),
+              ('Introducing the Covariance and Correlation functions',
+               2,
+               None,
+               'introducing-the-covariance-and-correlation-functions'),
+              ('Covariance matrix', 2, None, 'covariance-matrix'),
+              ('More on the covariance', 2, None, 'more-on-the-covariance'),
+              ('Reminding ourselves about Linear Regression',
+               2,
+               None,
+               'reminding-ourselves-about-linear-regression'),
+              ('Rewriting the matrix $\\boldsymbol{X}$',
+               2,
+               None,
+               'rewriting-the-matrix-boldsymbol-x'),
+              ('Simple Example', 2, None, 'simple-example'),
+              ('The Correlation Matrix', 2, None, 'the-correlation-matrix'),
+              ('Numpy Functionality', 2, None, 'numpy-functionality'),
+              ('Correlation Matrix again', 2, None, 'correlation-matrix-again'),
+              ('Using Pandas', 2, None, 'using-pandas'),
+              ('Links with the Design Matrix',
+               2,
+               None,
+               'links-with-the-design-matrix'),
+              ('Computing the Expectation Values',
+               2,
+               None,
+               'computing-the-expectation-values'),
+              ('Towards the PCA theorem', 2, None, 'towards-the-pca-theorem'),
+              ('More details', 2, None, 'more-details')]}
 end of tocinfo -->
 
 <body>
@@ -294,41 +285,41 @@ MathJax.Hub.Config({
 
 <!-- ------------------- main content ---------------------- -->
 <center>
-<h1>March 4-8: Advanced machine learning and data analysis for the physical sciences</h1>
+<h1>Advanced machine learning and data analysis for the physical sciences</h1>
 </center>  <!-- document title -->
 
 <!-- author(s): Morten Hjorth-Jensen -->
 <center>
-<b>Morten Hjorth-Jensen</b> [1, 2]
+<b>Morten Hjorth-Jensen</b> 
 </center>
-<!-- institution(s) -->
+<!-- institution -->
 <center>
-[1] <b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
-</center>
-<center>
-[2] <b>Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA</b>
+<b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
 </center>
 <br>
 <center>
-<h4>March 5, 2024</h4>
+<h4>March 13, 2025</h4>
 </center> <!-- date -->
 <br>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="plans-for-the-week-march-4-8">Plans for the week March 4-8  </h2>
+<h2 id="plans-for-the-week-march-10-14">Plans for the week March 10-14  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
 <ol>
 <li> RNNs and discussion of Long-Short-Term memory</li>
-<li> Discussion of specific examples relevant for project 1, <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Projects/2023/ProjectExamples/RNNs.pdf" target="_blank">see project from last year by Daniel and Keran</a></li>
+<li> Example of application of RNNs to differential equations</li>
+<li> Start discussion of Autoencoders (AEs)</li>
+<li> Links between Principal Component Analysis (PCA) and AE
+<!-- o Discussion of specific examples relevant for project 1, <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Projects/2023/ProjectExamples/RNNs.pdf" target="_blank">see project from last year by Daniel and Keran</a> --></li>
 </ol>
 </div>
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="reading-recommendations">Reading recommendations </h2>
+<h2 id="reading-recommendations-rnns">Reading recommendations:  RNNs </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
@@ -342,382 +333,24 @@ MathJax.Hub.Config({
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns">RNNs </h2>
-
-<p>Recurrent neural networks (RNNs) have in general no probabilistic component
-in a model. With a given fixed input and target from data, the RNNs learn the intermediate
-association between various layers.
-The inputs, outputs, and internal representation (hidden states) are all
-real-valued vectors.
-</p>
-
-<p>In a  traditional NN, it is assumed that every input is
-independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout-figures-from-sebastian-rashcka-et-al-machine-learning-with-sickit-learn-and-pytorch-https-sebastianraschka-com-blog-2022-ml-pytorch-book-html">Basic layout,  <a href="https://sebastianraschka.com/blog/2022/ml-pytorch-book.html" target="_blank">Figures from Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch</a> </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN1.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<!-- ===== Basic layout  ===== -->
-<!-- FIGURE: [figslides/rnnsetup.pdf, width=900 frac=1.2] -->
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="solving-differential-equations-with-rnns">Solving differential equations with RNNs </h2>
-
-<p>To gain some intuition on how we can use RNNs for time series, let us
-tailor the representation of the solution of a differential equation
-as a time series.
-</p>
-
-<p>Consider the famous differential equation (Newton's equation of motion for damped harmonic oscillations, scaled in terms of dimensionless time)</p>
-
-$$
-\frac{d^2x}{dt^2}+\eta\frac{dx}{dt}+x(t)=F(t),
-$$
-
-<p>where \( \eta \) is a constant used in scaling time into a dimensionless variable and \( F(t) \) is an external force acting on the system.
-The constant \( \eta \) is a so-called damping.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="two-first-order-differential-equations">Two first-order differential equations </h2>
-
-<p>In solving the above second-order equation, it is common to rewrite it in terms of two coupled first-order equations
-with the velocity
-</p>
-$$
-v(t)=\frac{dx}{dt},
-$$
-
-<p>and the acceleration</p>
-$$
-\frac{dv}{dt}=F(t)-\eta v(t)-x(t).
-$$
-
-<p>With the initial conditions \( v_0=v(t_0) \) and \( x_0=x(t_0) \) defined, we can integrate these equations and find their respective solutions.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="velocity-only">Velocity only </h2>
-
-<p>Let us focus on the velocity only. Discretizing and using the simplest
-possible approximation for the derivative, we have Euler's forward
-method for the updated velocity at a time step \( i+1 \) given by
-</p>
-$$
-v_{i+1}=v_i+\Delta t \frac{dv}{dt}_{\vert_{v=v_i}}=v_i+\Delta t\left(F_i-\eta v_i-x_i\right).
-$$
-
-<p>Defining a function</p>
-$$
-h_i(x_i,v_i,F_i)=v_i+\Delta t\left(F_i-\eta v_i-x_i\right),
-$$
-
-<p>we have</p>
-$$
-v_{i+1}=h_i(x_i,v_i,F_i).
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="linking-with-rnns">Linking with RNNs </h2>
-
-<p>The equation</p>
-$$
-v_{i+1}=h_i(x_i,v_i,F_i).
-$$
-
-<p>can be used to train a feed-forward neural network with inputs \( v_i \) and outputs \( v_{i+1} \) at a time \( t_i \). But we can think of this also as a recurrent neural network
-with inputs \( v_i \), \( x_i \) and \( F_i \) at each time step \( t_i \), and producing an output \( v_{i+1} \).
-</p>
-
-<p>Noting that </p>
-$$
-v_{i}=v_{i-1}+\Delta t\left(F_{i-1}-\eta v_{i-1}-x_{i-1}\right)=h_{i-1}.
-$$
-
-<p>we have</p>
-$$
-v_{i}=h_{i-1}(x_{i-1},v_{i-1},F_{i-1}),
-$$
-
-<p>and we can rewrite</p>
-$$
-v_{i+1}=h_i(x_i,h_{i-1},F_i).
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="minor-rewrite">Minor rewrite </h2>
-
-<p>We can thus set up a recurring series which depends on the inputs \( x_i \) and \( F_i \) and the previous values \( h_{i-1} \).
-We assume now that the inputs at each step (or time \( t_i \)) is given by \( x_i \) only and we denote the outputs for \( \tilde{y}_i \) instead of \( v_{i_1} \), we have then the compact equation for our outputs at each step \( t_i \)
-</p>
-$$
-y_{i}=h_i(x_i,h_{i-1}).
-$$
-
-<p>We can think of this as an element in a recurrent network where our
-network (our model) produces an output \( y_i \) which is then compared
-with a target value through a given cost/loss function that we
-optimize. The target values at a given step \( t_i \) could be the results
-of a measurement or simply the analytical results of a differential
-equation.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail">RNNs in more detail  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN2.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail-part-2">RNNs in more detail, part 2  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN3.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail-part-3">RNNs in more detail, part 3  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN4.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail-part-4">RNNs in more detail, part 4  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN5.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail-part-5">RNNs in more detail, part 5  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN6.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail-part-6">RNNs in more detail, part 6  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN7.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rnns-in-more-detail-part-7">RNNs in more detail, part 7  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN8.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="backpropagation-through-time">Backpropagation through time </h2>
+<h2 id="reading-recommendations-autoencoders-ae">Reading recommendations: Autoencoders (AE) </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b></b>
 <p>
-<p>We can think of the recurrent net as a layered, feed-forward
-net with shared weights and then train the feed-forward net
-with weight constraints.
-</p>
+<ol>
+<li> Goodfellow et al chapter 14.</li>
+<li> Rashcka et al. Their chapter 17 contains a brief introduction only.</li>
+<li> <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_blank">Deep Learning Tutorial on AEs from Stanford University</a></li>
+<li> <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_blank">Building AEs in Keras</a></li>
+<li> <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_blank">Introduction to AEs in TensorFlow</a></li>
+<li> <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_blank">Grosse, University of Toronto, Lecture on AEs</a></li>
+<li> <a href="https://arxiv.org/abs/2003.05991" target="_blank">Bank et al on AEs</a></li>  
+<li> Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)</li>
+</ol>
 </div>
 
 
-<p>We can also think of this training algorithm in the time domain:</p>
-<ol>
-<li> The forward pass builds up a stack of the activities of all the units at each time step.</li>
-<li> The backward pass peels activities off the stack to compute the error derivatives at each time step.</li>
-<li> After the backward pass we add together the derivatives at all the different times for each weight.</li> 
-</ol>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-backward-pass-is-linear">The backward pass is linear </h2>
-
-<ol>
-<li> There is a big difference between the forward and backward passes.</li>
-<li> In the forward pass we use squashing functions (like the logistic) to prevent the activity vectors from exploding.</li>
-<li> The backward pass, is completely linear. If you double the error derivatives at the final layer, all the error derivatives will double.</li>
-</ol>
-<p>The forward pass determines the slope of the linear function used for
-backpropagating through each neuron
-</p>
-
-<!-- !split  -->
-<h2 id="the-problem-of-exploding-or-vanishing-gradients">The problem of exploding or vanishing gradients </h2>
-<ul>
-<li> What happens to the magnitude of the gradients as we backpropagate through many layers?
-<ol type="a"></li>
- <li> If the weights are small, the gradients shrink exponentially.</li>
- <li> If the weights are big the gradients grow exponentially.</li>
-</ol>
-<li> Typical feed-forward neural nets can cope with these exponential effects because they only have a few hidden layers.</li>
-<li> In an RNN trained on long sequences (e.g. 100 time steps) the gradients can easily explode or vanish.
-<ol type="a"></li>
- <li> We can avoid this by initializing the weights very carefully.</li>
-</ol>
-<li> Even with good initial weights, its very hard to detect that the current target output depends on an input from many time-steps ago.</li>
-</ul>
-<p>RNNs have difficulty dealing with long-range dependencies. </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="mathematical-setup">Mathematical setup </h2>
-
-<p>The expression for the simplest Recurrent network resembles that of a
-regular feed-forward neural network, but now with
-the concept of temporal dependencies
-</p>
-
-$$
-\begin{align*}
-    \mathbf{a}^{(t)} & = U * \mathbf{x}^{(t)} + W * \mathbf{h}^{(t-1)} + \mathbf{b}, \notag \\
-    \mathbf{h}^{(t)} &= \sigma_h(\mathbf{a}^{(t)}), \notag\\
-    \mathbf{y}^{(t)} &= V * \mathbf{h}^{(t)} + \mathbf{c}, \notag\\
-    \mathbf{\hat{y}}^{(t)} &= \sigma_y(\mathbf{y}^{(t)}).
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-propagation-in-time-through-figures-part-1">Back propagation in time through figures, part 1   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN9.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-propagation-in-time-part-2">Back propagation in time, part 2   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN10.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-propagation-in-time-part-3">Back propagation in time, part 3   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN11.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-propagation-in-time-part-4">Back propagation in time, part 4   </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/RNN12.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-propagation-in-time-in-equations">Back propagation in time in equations </h2>
-
-<p>To derive the expression of the gradients of \( \mathcal{L} \) for
-the RNN, we need to start recursively from the nodes closer to the
-output layer in the temporal unrolling scheme - such as \( \mathbf{y} \)
-and \( \mathbf{h} \) at final time \( t = \tau \),
-</p>
-
-$$
-\begin{align*}
-    (\nabla_{ \mathbf{y}^{(t)}} \mathcal{L})_{i} &= \frac{\partial \mathcal{L}}{\partial L^{(t)}}\frac{\partial L^{(t)}}{\partial y_{i}^{(t)}}, \notag\\
-    \nabla_{\mathbf{h}^{(\tau)}} \mathcal{L} &= \mathbf{V}^\mathsf{T}\nabla_{ \mathbf{y}^{(\tau)}} \mathcal{L}.
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="chain-rule-again">Chain rule again </h2>
-<p>For the following hidden nodes, we have to iterate through time, so by the chain rule, </p>
-
-$$
-\begin{align*}
-    \nabla_{\mathbf{h}^{(t)}} \mathcal{L} &= \left(\frac{\partial\mathbf{h}^{(t+1)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{\mathbf{h}^{(t+1)}}\mathcal{L} + \left(\frac{\partial\mathbf{y}^{(t)}}{\partial\mathbf{h}^{(t)}}\right)^\mathsf{T}\nabla_{ \mathbf{y}^{(t)}} \mathcal{L}.
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="gradients-of-loss-functions">Gradients of loss functions </h2>
-<p>Similarly, the gradients of \( \mathcal{L} \) with respect to the weights and biases follow,</p>
-
-$$
-\begin{align*}
-    \nabla_{\mathbf{c}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{y}^{(t)}}{\partial \mathbf{c}}\right)^\mathsf{T} \nabla_{\mathbf{y}^{(t)}} \mathcal{L} \notag\\
-    \nabla_{\mathbf{b}} \mathcal{L} &=\sum_{t}\left(\frac{\partial \mathbf{h}^{(t)}}{\partial \mathbf{b}}\right)^\mathsf{T}        \nabla_{\mathbf{h}^{(t)}} \mathcal{L} \notag\\
-    \nabla_{\mathbf{V}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial y_i^{(t)} }\right)\nabla_{\mathbf{V}^{(t)}}y_i^{(t)} \notag\\
-    \nabla_{\mathbf{W}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{w}^{(t)}} h_i^{(t)} \notag\\
-    \nabla_{\mathbf{U}} \mathcal{L} &=\sum_{t}\sum_{i}\left(\frac{\partial \mathcal{L}}{\partial h_i^{(t)}}\right)\nabla_{\mathbf{U}^{(t)}}h_i^{(t)}.
-    \label{eq:rnn_gradients3}
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="summary-of-rnns">Summary of RNNs </h2>
-
-<p>Recurrent neural networks (RNNs) have in general no probabilistic component
-in a model. With a given fixed input and target from data, the RNNs learn the intermediate
-association between various layers.
-The inputs, outputs, and internal representation (hidden states) are all
-real-valued vectors.
-</p>
-
-<p>In a  traditional NN, it is assumed that every input is
-independent of each other.  But with sequential data, the input at a given stage \( t \) depends on the input from the previous stage \( t-1 \)
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="summary-of-a-typical-rnn">Summary of a  typical RNN </h2>
-
-<ol>
-<li> Weight matrices \( U \), \( W \) and \( V \) that connect the input layer at a stage \( t \) with the hidden layer \( h_t \), the previous hidden layer \( h_{t-1} \) with \( h_t \) and the hidden layer \( h_t \) connecting with the output layer at the same stage and producing an output \( \tilde{y}_t \), respectively.</li>
-<li> The output from the hidden layer \( h_t \) is oftem modulated by a \( \tanh{} \) function \( h_t=\sigma_h(x_t,h_{t-1})=\tanh{(Ux_t+Wh_{t-1}+b)} \) with \( b \) a bias value</li>
-<li> The output from the hidden layer produces \( \tilde{y}_t=\sigma_y(Vh_t+c) \) where \( c \) is a new bias parameter.</li>
-<li> The output from the training at a given stage is in turn compared with the observation \( y_t \) thorugh a chosen cost function.</li>
-</ol>
-<p>The function \( g \) can any of the standard activation functions, that is a Sigmoid, a Softmax, a ReLU and other.
-The parameters are trained through the so-called back-propagation through time (BPTT) algorithm.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="four-effective-ways-to-learn-an-rnn-and-preparing-for-next-week">Four effective ways to learn an RNN and preparing for next week </h2>
-<ol>
-<li> Long Short Term Memory Make the RNN out of little modules that are designed to remember values for a long time.</li>
-<li> Hessian Free Optimization: Deal with the vanishing gradients problem by using a fancy optimizer that can detect directions with a tiny gradient but even smaller curvature.</li>
-<li> Echo State Networks: Initialize the input a hidden and hidden-hidden and output-hidden connections very carefully so that the hidden state has a huge reservoir of weakly coupled oscillators which can be selectively driven by the input.</li>
-<ul>
-  <li> ESNs only need to learn the hidden-output connections.</li>
-</ul>
-<li> Good initialization with momentum Initialize like in Echo State Networks, but then learn all of the connections using momentum</li>
-</ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="gating-mechanism-long-short-term-memory-lstm">Gating mechanism: Long Short Term Memory (LSTM) </h2>
 
@@ -864,9 +497,7 @@ $$
 <p>where \( \mathbf{W_o,U_o} \) are the weights of the output gate and \( \mathbf{b_o} \) is the bias of the output gate.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="differential-equations">Differential equations </h2>
-
-<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Projects/2023/ProjectExamples/RNNs.pdf" target="_blank">The examples here are taken from the project of Keran Chen and Daniel Haas Beccatini Lima from 2023.</a>
+<h2 id="example-solving-differential-equations">Example: Solving Differential equations </h2>
 
 <p>The dynamics of a stable spiral evolve in such a way that the system's
 trajectory converges to a fixed point while spiraling inward. These
@@ -905,7 +536,7 @@ $$
 \end{align*}
 $$
 
-<p>For this problem, \( {x,y,z} \) are the variables that determine the state
+<p>For this problem, \( (x,y,z) \) are the variables that determine the state
 of the system in the space while \( \sigma, \rho \) and \( \beta \) are,
 similarly to the constants \( a,b,c,d \) of the stable spiral, parameters
 that influence largely how the system evolves. 
@@ -1033,11 +664,763 @@ $$
 
 <p>Here, the weights \( w_{MSE} \) and \( w_{PI} \) explicitly mediate how much
 influence the specific parts of the total loss function should
-contribute. See the above project link for more details.
+contribute. 
 </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="autoencoders-overarching-view">Autoencoders: Overarching view </h2>
+
+<p>Autoencoders are artificial neural networks capable of learning
+efficient representations of the input data (these representations are called codings)  without
+any supervision (i.e., the training set is unlabeled). These codings
+typically have a much lower dimensionality than the input data, making
+autoencoders useful for dimensionality reduction. 
+</p>
+
+<p>Autoencoders learn to encode the
+input data into a lower-dimensional representation, and then decode it
+back to the original data. The goal of autoencoders is to minimize the
+reconstruction error, which measures how well the output matches the
+input. Autoencoders can be seen as a way of learning the latent
+features or hidden structure of the data, and they can be used for
+data compression, denoising, anomaly detection, and generative
+modeling.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="powerful-detectors">Powerful detectors </h2>
+
+<p>More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+</p>
+
+<p>Lastly, they are capable of randomly generating new data that looks
+very similar to the training data; this is called a generative
+model. For example, you could train an autoencoder on pictures of
+faces, and it would then be able to generate new faces.  Surprisingly,
+autoencoders work by simply learning to copy their inputs to their
+outputs. This may sound like a trivial task, but we will see that
+constraining the network in various ways can make it rather
+difficult. For example, you can limit the size of the internal
+representation, or you can add noise to the inputs and train the
+network to recover the original inputs. These constraints prevent the
+autoencoder from trivially copying the inputs directly to the outputs,
+which forces it to learn efficient ways of representing the data. In
+short, the codings are byproducts of the autoencoder&#8217;s attempt to
+learn the identity function under some constraints.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="first-introduction-of-aes">First introduction of AEs </h2>
+
+<p>Autoencoders were first introduced by Rumelhart, Hinton, and Williams
+in 1986 with the goal of learning to reconstruct the input
+observations with the lowest error possible.
+</p>
+
+<p>Why would one want to learn to reconstruct the input observations? If
+you have problems imagining what that means, think of having a dataset
+made of images. An autoencoder would be an algorithm that can give as
+output an image that is as similar as possible to the input one. You
+may be confused, as there is no apparent reason of doing so. To better
+understand why autoencoders are useful we need a more informative
+(although not yet unambiguous) definition.
+</p>
+
+<div class="alert alert-block alert-block alert-text-normal">
+<b></b>
+<p>
+<p>An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications (<a href="https://arxiv.org/abs/2003.05991" target="_blank">see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders</a>) by learning to reconstruct a set of input observations well enough.</p>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="autoencoder-structure">Autoencoder structure </h2>
+
+<p>Autoencoders are neural networks where the outputs are its own
+inputs. They are split into an <b>encoder part</b>
+which maps the input \( \boldsymbol{x} \) via a function \( f(\boldsymbol{x},\boldsymbol{W}) \) (this
+is the encoder part) to a <b>so-called code part</b> (or intermediate part)
+with the result \( \boldsymbol{h} \)
+</p>
+
+$$
+\boldsymbol{h} = f(\boldsymbol{x},\boldsymbol{W})),
+$$
+
+<p>where \( \boldsymbol{W} \) are the weights to be determined.  The <b>decoder</b> parts maps, via its own parameters (weights given by the matrix \( \boldsymbol{V} \) and its own biases) to 
+the final ouput
+</p>
+$$
+\tilde{\boldsymbol{x}} = g(\boldsymbol{h},\boldsymbol{V})).
+$$
+
+<p>The goal is to minimize the construction error.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="schematic-image-of-an-autoencoder">Schematic image of an Autoencoder </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/ae1.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-on-the-structure">More on the structure </h2>
+
+<p>In most typical architectures, the encoder and the decoder are neural networks
+since they can be easily trained with existing software libraries such as TensorFlow or PyTorch with back propagation.
+</p>
+
+<p>In general, the encoder can be written as a function \( g \) that will depend on some parameters</p>
+$$
+\mathbf{h}_{i} = g(\mathbf{x}_{i}),
+$$
+
+<p>where \( \mathbf{h}_{i}\in\mathbb{R}^{q} \)  (the latent feature representation) is the output of the encoder block where we evaluate
+it using the input \( \mathbf{x}_{i} \).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="decoder-part">Decoder part </h2>
+
+<p>Note that we have \( g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{q} \)
+The decoder and the output of the network \( \tilde{\mathbf{x}}_{i} \) can be written then as a second generic function
+of the latent features
+</p>
+$$
+\tilde{\mathbf{x}}_{i} = f\left(\mathbf{h}_{i}\right) = f\left(g\left(\mathbf{x}_{i}\right)\right),
+$$
+
+<p>where \( \tilde{\mathbf{x}}_{i}\mathbf{\in }\mathbb{R}^{n} \).</p>
+
+<p>Training an autoencoder simply means finding the functions \( g(\cdot) \) and \( f(\cdot) \)
+that satisfy
+</p>
+$$
+\textrm{arg}\min_{f,g}< \left[\Delta (\mathbf{x}_{i}, f(g\left(\mathbf{x}_{i}\right))\right]>.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="typical-aes">Typical AEs </h2>
+
+<p>The standard setup is done via a standard feed forward neural network (FFNN), or what is called a Feed Forward Autoencoder.</p>
+
+<p>A typical FFNN architecture has an odd number of layers and is symmetrical with respect to the middle layer.</p>
+
+<p>Typically, the first layer has a number of neurons \( n_{1} = n \) which equals the size of the input observation \( \mathbf{x}_{\mathbf{i}} \).</p>
+
+<p>As we move toward the center of the network, the number of neurons in each layer drops in some measure.
+The middle layer usually has the smallest number of neurons.
+The fact that the number of neurons in this layer is smaller than the size of the input, is often called the <b>bottleneck</b>.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="feed-forward-autoencoder">Feed Forward Autoencoder </h2>
+
+<br/><br/>
+<center>
+<p><img src="figures/ae2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="mirroring">Mirroring </h2>
+
+<p>In almost all practical applications,
+the layers after the middle one are a mirrored version of the layers before the middle one.
+For example, an autoencoder with three layers could have the following numbers of neurons:
+</p>
+
+<p>\( n_{1} = 10 \), \( n_{2} = 5 \) and then \( n_{3} = n_{1} = 10 \) where the input dimension is equal to ten.</p>
+
+<p>All the layers up to and including the middle one, make what is called the encoder, and all the layers from and including
+the middle one (up to the output) make what is called the decoder.
+</p>
+
+<p>If the FFNN training is successful, the result will
+be a good approximation of the input \( \tilde{\mathbf{x}}_{i}\approx\mathbf{x}_{i} \).
+</p>
+
+<p>What is essential to notice is that the decoder can reconstruct the
+input by using only a much smaller number of features than the input
+observations initially have.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="output-of-middle-layer">Output of middle layer </h2>
+
+<p>The output of the middle layer
+\( \mathbf{h}_{\mathbf{i}} \) are also called a <b>learned representation</b> of the input observation \( \mathbf{x}_{i} \).
+</p>
+
+<p>The encoder can reduce the number of dimensions of the input
+observation and create a learned representation
+\( \mathbf{h}_{\mathbf{i}}\mathbf{) } \) of the input that has a smaller
+dimension \( q < n \).
+</p>
+
+<p>This learned representation is enough for the decoder to reconstruct
+the input accurately (if the autoencoder training was successful as
+intended).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="activation-function-of-the-output-layer">Activation Function of the Output Layer </h2>
+
+<p>In autoencoders based on neural networks, the output layer's
+activation function plays a particularly important role.  The most
+used functions are ReLU and Sigmoid. 
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="relu">ReLU </h2>
+
+<p>The  ReLU activation function can assume all values in the range \( \left[0,\infty\right] \). As a remainder, its formula is</p>
+$$
+\textrm{ReLU}\left(x\right) = \max\left(0,x\right).
+$$
+
+<p>This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
+If the input \( \mathbf{x}_{i} \) can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called <b>Leaky ReLu</b> or just modified ReLU.
+</p>
+
+<p>The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="sigmoid">Sigmoid </h2>
+
+<p>The sigmoid function \( \sigma \) can assume all values in the range \( [0,1] \),</p>
+$$
+\sigma\left(x\right) =\frac{1}{1+e^{-x}}.
+$$
+
+<p>This activation function can only be used if the input observations
+\( \mathbf{x}_{i} \) are all in the range \( [0,1] \)  or if you have
+normalized them to be in that range. Consider as an example the MNIST
+dataset. Each value of the input observation \( \mathbf{x}_{i} \) (one
+image) is the gray values of the pixels that can assume any value from
+0 to 255. Normalizing the data by dividing the pixel values by 255
+would make each observation (each image) have only pixel values
+between 0 and 1. In this case, the sigmoid would be a good choice for
+the output layer's activation function.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="cost-loss-function">Cost/Loss Function </h2>
+
+<p>If an autoencoder is trying to solve a regression problem, the most
+common choice as a loss function is the Mean Square Error
+</p>
+
+$$
+L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="binary-cross-entropy">Binary Cross-Entropy </h2>
+
+<p>If the activation function of the output layer of the AE is a sigmoid
+function, thus limiting neuron outputs to be between 0 and 1, and the
+input features are normalized to be between 0 and 1 we can use as loss
+function the binary cross-entropy. This cots/loss function is
+typically used in classification problems, but it works well for
+autoencoders. The formula for it is
+</p>
+
+$$
+L_{\textrm{CE}} = -\frac{1}{n}\sum_{i = 1}^{n}\sum_{j = 1}^{p}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})].
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reconstruction-error">Reconstruction Error </h2>
+
+<p>The reconstruction error (RE) is a metric that gives you an indication of how good (or bad) the autoencoder was able to reconstruct
+the input observation \( \mathbf{x}_{i} \). The most typical RE used is the MSE
+</p>
+
+$$
+\textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="dimensionality-reduction-and-links-with-principal-component-analysis">Dimensionality reduction and links with Principal component analysis </h2>
+
+<p>The hope is that the training of the autoencoder can unravel some
+useful properties of the function \( f \). They are often trained with
+only single-layer neural networks (although deep networks can improve
+the training) and are essentially given by feed forward neural
+networks.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="linear-functions">Linear functions </h2>
+
+<p>If the function \( f \) and \( g \) are given by a linear dependence on the
+weight matrices \( \boldsymbol{W} \) and \( \boldsymbol{V} \), we can show that for a
+regression case, by miminizing the mean squared error between \( \boldsymbol{x} \)
+and \( \tilde{\boldsymbol{x}} \), the autoencoder learns the same subspace as the
+standard principal component analysis (PCA).
+</p>
+
+<p>In order to see this, we define then</p>
+$$
+\boldsymbol{h} = f(\boldsymbol{x},\boldsymbol{W}))=\boldsymbol{W}\boldsymbol{x},
+$$
+
+<p>and</p>
+$$
+\tilde{\boldsymbol{x}} = g(\boldsymbol{h},\boldsymbol{V}))=\boldsymbol{V}\boldsymbol{h}=\boldsymbol{V}\boldsymbol{W}\boldsymbol{x}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="ae-mean-squared-error">AE mean-squared error </h2>
+
+<p>With the above linear dependence we can in turn define our
+optimization problem in terms of the optimization of the mean-squared
+error, that is we wish to optimize
+</p>
+
+$$
+\min_{\boldsymbol{W},\boldsymbol{V}\in {\mathbb{R}}}\frac{1}{n}\sum_{i=0}^{n-1}\left(x_i-\tilde{x}_i\right)^2=\frac{1}{n}\vert\vert \boldsymbol{x}-\boldsymbol{V}\boldsymbol{W}\boldsymbol{x}\vert\vert_2^2,
+$$
+
+<p>where we have used the definition of  a norm-2 vector, that is</p>
+$$
+\vert\vert \boldsymbol{x}\vert\vert_2 = \sqrt{\sum_i x_i^2}. 
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="dimensionality-reduction">Dimensionality reduction </h2>
+
+<p>This is equivalent to our functions learning the same subspace as
+the PCA method. This means that we can interpret AEs as a
+dimensionality reduction method.  To see this, we need to remind
+ourselves about the PCA method.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="what-is-the-principal-component-analysis-pca">What is the Principal Component Analysis (PCA)? </h2>
+
+<p>PCA is a linear transformation that finds the directions of maximum
+variance in the data, and projects the data onto a lower-dimensional
+space. These directions are called principal components, and they are
+orthogonal to each other. PCA can be seen as a way of compressing the
+data by discarding the components that have low variance and retain
+the most important ones. PCA can be applied to both supervised and
+unsupervised learning problems, and it is often used for data
+visualization, feature extraction, and noise reduction.
+</p>
+
+<p>A linear autoencoder can be shown to be equal to the PCA.
+In this lectures we will try to expose these ideas.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="basic-ideas-of-the-pca">Basic ideas of the PCA </h2>
+
+<p>The principal component analysis deals with the problem of fitting a
+low-dimensional affine subspace \( S \) of dimension \( d \) much smaller than
+the total dimension \( D \) of the problem at hand (our data
+set). Mathematically it can be formulated as a statistical problem or
+a geometric problem.  In our discussion of the theorem for the
+classical PCA, we will stay with a statistical approach. 
+Historically, the PCA was first formulated in a statistical setting in order to estimate the principal component of a multivariate random variable.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="ingredients-of-the-pca">Ingredients of the PCA </h2>
+
+<p>We have a data set defined by a design/feature matrix \( \boldsymbol{X} \) (see below for its definition) </p>
+<ol>
+<li> Each data point is determined by \( p \) extrinsic (measurement) variables</li>
+<li> We may want to ask the following question: Are there fewer intrinsic variables (say \( d < < p \)) that still approximately describe the data?</li>
+<li> If so, these intrinsic variables may tell us something important and finding these intrinsic variables is what dimension reduction methods do.</li> 
+</ol>
+<p>A good read is for example <a href="https://www.springer.com/gp/book/9780387878102" target="_blank">Vidal, Ma and Sastry</a>.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="introducing-the-covariance-and-correlation-functions">Introducing the Covariance and Correlation functions  </h2>
+
+<p>Before we discuss the PCA theorem, we need to remind ourselves about
+the definition of the covariance and the correlation function. These are quantities 
+</p>
+
+<p>Suppose we have defined two vectors
+\( \hat{x} \) and \( \hat{y} \) with \( n \) elements each. The covariance matrix \( \boldsymbol{C} \) is defined as 
+</p>
+$$
+\boldsymbol{C}[\boldsymbol{x},\boldsymbol{y}] = \begin{bmatrix} \mathrm{cov}[\boldsymbol{x},\boldsymbol{x}] & \mathrm{cov}[\boldsymbol{x},\boldsymbol{y}] \\
+                              \mathrm{cov}[\boldsymbol{y},\boldsymbol{x}] & \mathrm{cov}[\boldsymbol{y},\boldsymbol{y}] \\
+             \end{bmatrix},
+$$
+
+<p>where for example</p>
+$$
+\mathrm{cov}[\boldsymbol{x},\boldsymbol{y}] =\frac{1}{n} \sum_{i=0}^{n-1}(x_i- \overline{x})(y_i- \overline{y}).
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="covariance-matrix">Covariance matrix </h2>
+
+<p>With this definition and recalling that the variance is defined as</p>
+$$
+\mathrm{var}[\boldsymbol{x}]=\frac{1}{n} \sum_{i=0}^{n-1}(x_i- \overline{x})^2,
+$$
+
+<p>we can rewrite the covariance matrix as </p>
+$$
+\boldsymbol{C}[\boldsymbol{x},\boldsymbol{y}] = \begin{bmatrix} \mathrm{var}[\boldsymbol{x}] & \mathrm{cov}[\boldsymbol{x},\boldsymbol{y}] \\
+                              \mathrm{cov}[\boldsymbol{x},\boldsymbol{y}] & \mathrm{var}[\boldsymbol{y}] \\
+             \end{bmatrix}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-on-the-covariance">More on the covariance </h2>
+<p>The covariance takes values between zero and infinity and may thus
+lead to problems with loss of numerical precision for particularly
+large values. It is common to scale the covariance matrix by
+introducing instead the correlation matrix defined via the so-called
+correlation function
+</p>
+
+$$
+\mathrm{corr}[\boldsymbol{x},\boldsymbol{y}]=\frac{\mathrm{cov}[\boldsymbol{x},\boldsymbol{y}]}{\sqrt{\mathrm{var}[\boldsymbol{x}] \mathrm{var}[\boldsymbol{y}]}}.
+$$
+
+<p>The correlation function is then given by values \( \mathrm{corr}[\boldsymbol{x},\boldsymbol{y}]
+\in [-1,1] \). This avoids eventual problems with too large values. We
+can then define the correlation matrix for the two vectors \( \boldsymbol{x} \)
+and \( \boldsymbol{y} \) as
+</p>
+
+$$
+\boldsymbol{K}[\boldsymbol{x},\boldsymbol{y}] = \begin{bmatrix} 1 & \mathrm{corr}[\boldsymbol{x},\boldsymbol{y}] \\
+                              \mathrm{corr}[\boldsymbol{y},\boldsymbol{x}] & 1 \\
+             \end{bmatrix},
+$$
+
+<p>In the above example this is the function we constructed using <b>pandas</b>.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="reminding-ourselves-about-linear-regression">Reminding ourselves about Linear Regression </h2>
+<p>In our derivation of the various regression algorithms like <b>Ordinary Least Squares</b> or <b>Ridge regression</b>
+we defined the design/feature matrix \( \boldsymbol{X} \) as
+</p>
+
+$$
+\boldsymbol{X}=\begin{bmatrix}
+x_{0,0} & x_{0,1} & x_{0,2}& \dots & \dots x_{0,p-1}\\
+x_{1,0} & x_{1,1} & x_{1,2}& \dots & \dots x_{1,p-1}\\
+x_{2,0} & x_{2,1} & x_{2,2}& \dots & \dots x_{2,p-1}\\
+\dots & \dots & \dots & \dots \dots & \dots \\
+x_{n-2,0} & x_{n-2,1} & x_{n-2,2}& \dots & \dots x_{n-2,p-1}\\
+x_{n-1,0} & x_{n-1,1} & x_{n-1,2}& \dots & \dots x_{n-1,p-1}\\
+\end{bmatrix},
+$$
+
+<p>with \( \boldsymbol{X}\in {\mathbb{R}}^{n\times p} \), with the predictors/features \( p \)  refering to the column numbers and the
+entries \( n \) being the row elements.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="rewriting-the-matrix-boldsymbol-x">Rewriting the matrix \( \boldsymbol{X} \) </h2>
+
+<p>We can rewrite the design/feature matrix in terms of its column vectors as</p>
+$$
+\boldsymbol{X}=\begin{bmatrix} \boldsymbol{x}_0 & \boldsymbol{x}_1 & \boldsymbol{x}_2 & \dots & \dots & \boldsymbol{x}_{p-1}\end{bmatrix},
+$$
+
+<p>with a given vector</p>
+$$
+\boldsymbol{x}_i^T = \begin{bmatrix}x_{0,i} & x_{1,i} & x_{2,i}& \dots & \dots x_{n-1,i}\end{bmatrix}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="simple-example">Simple Example </h2>
+
+<p>With these definitions, we can now rewrite our \( 2\times 2 \)
+correlation/covariance matrix in terms of a moe general design/feature
+matrix \( \boldsymbol{X}\in {\mathbb{R}}^{n\times p} \). This leads to a \( p\times p \)
+covariance matrix for the vectors \( \boldsymbol{x}_i \) with \( i=0,1,\dots,p-1 \)
+</p>
+
+$$
+\boldsymbol{C}[\boldsymbol{x}] = \begin{bmatrix}
+\mathrm{var}[\boldsymbol{x}_0] & \mathrm{cov}[\boldsymbol{x}_0,\boldsymbol{x}_1]  & \mathrm{cov}[\boldsymbol{x}_0,\boldsymbol{x}_2] & \dots & \dots & \mathrm{cov}[\boldsymbol{x}_0,\boldsymbol{x}_{p-1}]\\
+\mathrm{cov}[\boldsymbol{x}_1,\boldsymbol{x}_0] & \mathrm{var}[\boldsymbol{x}_1]  & \mathrm{cov}[\boldsymbol{x}_1,\boldsymbol{x}_2] & \dots & \dots & \mathrm{cov}[\boldsymbol{x}_1,\boldsymbol{x}_{p-1}]\\
+\mathrm{cov}[\boldsymbol{x}_2,\boldsymbol{x}_0]   & \mathrm{cov}[\boldsymbol{x}_2,\boldsymbol{x}_1] & \mathrm{var}[\boldsymbol{x}_2] & \dots & \dots & \mathrm{cov}[\boldsymbol{x}_2,\boldsymbol{x}_{p-1}]\\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+\mathrm{cov}[\boldsymbol{x}_{p-1},\boldsymbol{x}_0]   & \mathrm{cov}[\boldsymbol{x}_{p-1},\boldsymbol{x}_1] & \mathrm{cov}[\boldsymbol{x}_{p-1},\boldsymbol{x}_{2}]  & \dots & \dots  & \mathrm{var}[\boldsymbol{x}_{p-1}]\\
+\end{bmatrix}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="the-correlation-matrix">The Correlation Matrix </h2>
+
+<p>The correlation matrix</p>
+$$
+\boldsymbol{K}[\boldsymbol{x}] = \begin{bmatrix}
+1 & \mathrm{corr}[\boldsymbol{x}_0,\boldsymbol{x}_1]  & \mathrm{corr}[\boldsymbol{x}_0,\boldsymbol{x}_2] & \dots & \dots & \mathrm{corr}[\boldsymbol{x}_0,\boldsymbol{x}_{p-1}]\\
+\mathrm{corr}[\boldsymbol{x}_1,\boldsymbol{x}_0] & 1  & \mathrm{corr}[\boldsymbol{x}_1,\boldsymbol{x}_2] & \dots & \dots & \mathrm{corr}[\boldsymbol{x}_1,\boldsymbol{x}_{p-1}]\\
+\mathrm{corr}[\boldsymbol{x}_2,\boldsymbol{x}_0]   & \mathrm{corr}[\boldsymbol{x}_2,\boldsymbol{x}_1] & 1 & \dots & \dots & \mathrm{corr}[\boldsymbol{x}_2,\boldsymbol{x}_{p-1}]\\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+\mathrm{corr}[\boldsymbol{x}_{p-1},\boldsymbol{x}_0]   & \mathrm{corr}[\boldsymbol{x}_{p-1},\boldsymbol{x}_1] & \mathrm{corr}[\boldsymbol{x}_{p-1},\boldsymbol{x}_{2}]  & \dots & \dots  & 1\\
+\end{bmatrix}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="numpy-functionality">Numpy Functionality </h2>
+
+<p>The Numpy function <b>np.cov</b> calculates the covariance elements using
+the factor \( 1/(n-1) \) instead of \( 1/n \) since it assumes we do not have
+the exact mean values.  The following simple function uses the
+<b>np.vstack</b> function which takes each vector of dimension \( 1\times n \)
+and produces a \( 2\times n \) matrix \( \boldsymbol{W} \)
+</p>
+
+$$
+\boldsymbol{W}^T = \begin{bmatrix} x_0 & y_0 \\
+                          x_1 & y_1 \\
+                          x_2 & y_2\\
+                          \dots & \dots \\
+                          x_{n-2} & y_{n-2}\\
+                          x_{n-1} & y_{n-1} & 
+             \end{bmatrix},
+$$
+
+<p>which in turn is converted into into the \( 2\times 2 \) covariance matrix
+\( \boldsymbol{C} \) via the Numpy function <b>np.cov()</b>. We note that we can also calculate
+the mean value of each set of samples \( \boldsymbol{x} \) etc using the Numpy
+function <b>np.mean(x)</b>. We can also extract the eigenvalues of the
+covariance matrix through the <b>np.linalg.eig()</b> function.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Importing various packages</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+n <span style="color: #666666">=</span> <span style="color: #666666">100</span>
+x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>normal(size<span style="color: #666666">=</span>n)
+<span style="color: #008000">print</span>(np<span style="color: #666666">.</span>mean(x))
+y <span style="color: #666666">=</span> <span style="color: #666666">4+3*</span>x<span style="color: #666666">+</span>np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>normal(size<span style="color: #666666">=</span>n)
+<span style="color: #008000">print</span>(np<span style="color: #666666">.</span>mean(y))
+W <span style="color: #666666">=</span> np<span style="color: #666666">.</span>vstack((x, y))
+C <span style="color: #666666">=</span> np<span style="color: #666666">.</span>cov(W)
+<span style="color: #008000">print</span>(C)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="correlation-matrix-again">Correlation Matrix again  </h2>
+
+<p>The previous example can be converted into the correlation matrix by
+simply scaling the matrix elements with the variances.  We should also
+subtract the mean values for each column. This leads to the following
+code which sets up the correlations matrix for the previous example in
+a more brute force way. Here we scale the mean values for each column of the design matrix, calculate the relevant mean values and variances and then finally set up the \( 2\times 2 \) correlation matrix (since we have only two vectors). 
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+n <span style="color: #666666">=</span> <span style="color: #666666">100</span>
+<span style="color: #408080; font-style: italic"># define two vectors                                                                                           </span>
+x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>random(size<span style="color: #666666">=</span>n)
+y <span style="color: #666666">=</span> <span style="color: #666666">4+3*</span>x<span style="color: #666666">+</span>np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>normal(size<span style="color: #666666">=</span>n)
+<span style="color: #408080; font-style: italic">#scaling the x and y vectors                                                                                   </span>
+x <span style="color: #666666">=</span> x <span style="color: #666666">-</span> np<span style="color: #666666">.</span>mean(x)
+y <span style="color: #666666">=</span> y <span style="color: #666666">-</span> np<span style="color: #666666">.</span>mean(y)
+variance_x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum(x<span style="color: #AA22FF">@x</span>)<span style="color: #666666">/</span>n
+variance_y <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum(y<span style="color: #AA22FF">@y</span>)<span style="color: #666666">/</span>n
+<span style="color: #008000">print</span>(variance_x)
+<span style="color: #008000">print</span>(variance_y)
+cov_xy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum(x<span style="color: #AA22FF">@y</span>)<span style="color: #666666">/</span>n
+cov_xx <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum(x<span style="color: #AA22FF">@x</span>)<span style="color: #666666">/</span>n
+cov_yy <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum(y<span style="color: #AA22FF">@y</span>)<span style="color: #666666">/</span>n
+C <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #666666">2</span>,<span style="color: #666666">2</span>))
+C[<span style="color: #666666">0</span>,<span style="color: #666666">0</span>]<span style="color: #666666">=</span> cov_xx<span style="color: #666666">/</span>variance_x
+C[<span style="color: #666666">1</span>,<span style="color: #666666">1</span>]<span style="color: #666666">=</span> cov_yy<span style="color: #666666">/</span>variance_y
+C[<span style="color: #666666">0</span>,<span style="color: #666666">1</span>]<span style="color: #666666">=</span> cov_xy<span style="color: #666666">/</span>np<span style="color: #666666">.</span>sqrt(variance_y<span style="color: #666666">*</span>variance_x)
+C[<span style="color: #666666">1</span>,<span style="color: #666666">0</span>]<span style="color: #666666">=</span> C[<span style="color: #666666">0</span>,<span style="color: #666666">1</span>]
+<span style="color: #008000">print</span>(C)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>We see that the matrix elements along the diagonal are one as they
+should be and that the matrix is symmetric. Furthermore, diagonalizing
+this matrix we easily see that it is a positive definite matrix.
+</p>
+
+<p>The above procedure with <b>numpy</b> can be made more compact if we use <b>pandas</b>.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="using-pandas">Using Pandas </h2>
+
+<p>We whow here how we can set up the correlation matrix using <b>pandas</b>, as done in this simple code</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">pandas</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">pd</span>
+n <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>normal(size<span style="color: #666666">=</span>n)
+x <span style="color: #666666">=</span> x <span style="color: #666666">-</span> np<span style="color: #666666">.</span>mean(x)
+y <span style="color: #666666">=</span> <span style="color: #666666">4+3*</span>x<span style="color: #666666">+</span>np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>normal(size<span style="color: #666666">=</span>n)
+y <span style="color: #666666">=</span> y <span style="color: #666666">-</span> np<span style="color: #666666">.</span>mean(y)
+X <span style="color: #666666">=</span> (np<span style="color: #666666">.</span>vstack((x, y)))<span style="color: #666666">.</span>T
+<span style="color: #008000">print</span>(X)
+Xpd <span style="color: #666666">=</span> pd<span style="color: #666666">.</span>DataFrame(X)
+<span style="color: #008000">print</span>(Xpd)
+correlation_matrix <span style="color: #666666">=</span> Xpd<span style="color: #666666">.</span>corr()
+<span style="color: #008000">print</span>(correlation_matrix)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="links-with-the-design-matrix">Links with the Design Matrix </h2>
+
+<p>We can rewrite the covariance matrix in a more compact form in terms of the design/feature matrix \( \boldsymbol{X} \) as </p>
+$$
+\boldsymbol{C}[\boldsymbol{x}] = \frac{1}{n}\boldsymbol{X}^T\boldsymbol{X}= \mathbb{E}[\boldsymbol{X}^T\boldsymbol{X}].
+$$
+
+<p>To see this let us simply look at a design matrix \( \boldsymbol{X}\in {\mathbb{R}}^{2\times 2} \)</p>
+$$
+\boldsymbol{X}=\begin{bmatrix}
+x_{00} & x_{01}\\
+x_{10} & x_{11}\\
+\end{bmatrix}=\begin{bmatrix}
+\boldsymbol{x}_{0} & \boldsymbol{x}_{1}\\
+\end{bmatrix}.
+$$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="computing-the-expectation-values">Computing the Expectation Values </h2>
+
+<p>If we then compute the expectation value</p>
+$$
+\mathbb{E}[\boldsymbol{X}^T\boldsymbol{X}] = \frac{1}{n}\boldsymbol{X}^T\boldsymbol{X}=\begin{bmatrix}
+x_{00}^2+x_{01}^2 & x_{00}x_{10}+x_{01}x_{11}\\
+x_{10}x_{00}+x_{11}x_{01} & x_{10}^2+x_{11}^2\\
+\end{bmatrix},
+$$
+
+<p>which is just </p>
+$$
+\boldsymbol{C}[\boldsymbol{x}_0,\boldsymbol{x}_1] = \boldsymbol{C}[\boldsymbol{x}]=\begin{bmatrix} \mathrm{var}[\boldsymbol{x}_0] & \mathrm{cov}[\boldsymbol{x}_0,\boldsymbol{x}_1] \\
+                              \mathrm{cov}[\boldsymbol{x}_1,\boldsymbol{x}_0] & \mathrm{var}[\boldsymbol{x}_1] \\
+             \end{bmatrix},
+$$
+
+<p>where we wrote $$\boldsymbol{C}[\boldsymbol{x}_0,\boldsymbol{x}_1] = \boldsymbol{C}[\boldsymbol{x}]$$ to indicate that this the covariance of the vectors \( \boldsymbol{x} \) of the design/feature matrix \( \boldsymbol{X} \).</p>
+
+<p>It is easy to generalize this to a matrix \( \boldsymbol{X}\in {\mathbb{R}}^{n\times p} \).</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="towards-the-pca-theorem">Towards the PCA theorem </h2>
+
+<p>We have that the covariance matrix (the correlation matrix involves a simple rescaling) is given as</p>
+$$
+\boldsymbol{C}[\boldsymbol{x}] = \frac{1}{n}\boldsymbol{X}^T\boldsymbol{X}= \mathbb{E}[\boldsymbol{X}^T\boldsymbol{X}].
+$$
+
+<p>Let us now assume that we can perform a series of orthogonal transformations where we employ some orthogonal matrices \( \boldsymbol{S} \).
+These matrices are defined as \( \boldsymbol{S}\in {\mathbb{R}}^{p\times p} \) and obey the orthogonality requirements \( \boldsymbol{S}\boldsymbol{S}^T=\boldsymbol{S}^T\boldsymbol{S}=\boldsymbol{I} \). The matrix can be written out in terms of the column vectors \( \boldsymbol{s}_i \) as \( \boldsymbol{S}=[\boldsymbol{s}_0,\boldsymbol{s}_1,\dots,\boldsymbol{s}_{p-1}] \) and \( \boldsymbol{s}_i \in {\mathbb{R}}^{p} \).
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="more-details">More details </h2>
+
+<p>Assume also that there is a transformation \( \boldsymbol{S}^T\boldsymbol{C}[\boldsymbol{x}]\boldsymbol{S}=\boldsymbol{C}[\boldsymbol{y}] \) such that the new matrix \( \boldsymbol{C}[\boldsymbol{y}] \) is diagonal with elements \( [\lambda_0,\lambda_1,\lambda_2,\dots,\lambda_{p-1}] \).  </p>
+
+<p>That is we have</p>
+$$
+\boldsymbol{C}[\boldsymbol{y}] = \mathbb{E}[\boldsymbol{S}^T\boldsymbol{X}^T\boldsymbol{X}T\boldsymbol{S}]=\boldsymbol{S}^T\boldsymbol{C}[\boldsymbol{x}]\boldsymbol{S},
+$$
+
+<p>since the matrix \( \boldsymbol{S} \) is not a data dependent matrix.   Multiplying with \( \boldsymbol{S} \) from the left we have</p>
+$$
+\boldsymbol{S}\boldsymbol{C}[\boldsymbol{y}] = \boldsymbol{C}[\boldsymbol{x}]\boldsymbol{S},
+$$
+
+<p>and since \( \boldsymbol{C}[\boldsymbol{y}] \) is diagonal we have for a given eigenvalue \( i \) of the covariance matrix that</p>
+
+$$
+\boldsymbol{S}_i\lambda_i = \boldsymbol{C}[\boldsymbol{x}]\boldsymbol{S}_i.
+$$
+
+
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2025, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>
