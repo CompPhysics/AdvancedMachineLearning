@@ -40,10 +40,10 @@ doconce format html week8.do.txt --html_style=bootstrap --pygments_html_style=de
                2,
                None,
                'plans-for-the-week-march-10-14'),
-              ('Reading recommendations:  RNNs',
+              ('Reading recommendations:  RNNs and LSTMs',
                2,
                None,
-               'reading-recommendations-rnns'),
+               'reading-recommendations-rnns-and-lstms'),
               ('Reading recommendations: Autoencoders (AE)',
                2,
                None,
@@ -195,7 +195,7 @@ MathJax.Hub.Config({
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
         <ul class="dropdown-menu">
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-march-10-14" style="font-size: 80%;">Plans for the week March 10-14</a></li>
-     <!-- navigation toc: --> <li><a href="#reading-recommendations-rnns" style="font-size: 80%;">Reading recommendations:  RNNs</a></li>
+     <!-- navigation toc: --> <li><a href="#reading-recommendations-rnns-and-lstms" style="font-size: 80%;">Reading recommendations:  RNNs and LSTMs</a></li>
      <!-- navigation toc: --> <li><a href="#reading-recommendations-autoencoders-ae" style="font-size: 80%;">Reading recommendations: Autoencoders (AE)</a></li>
      <!-- navigation toc: --> <li><a href="#gating-mechanism-long-short-term-memory-lstm" style="font-size: 80%;">Gating mechanism: Long Short Term Memory (LSTM)</a></li>
      <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">Implementing a memory cell in a neural network</a></li>
@@ -304,15 +304,16 @@ MathJax.Hub.Config({
 
 
 <!-- !split -->
-<h2 id="reading-recommendations-rnns" class="anchor">Reading recommendations:  RNNs </h2>
+<h2 id="reading-recommendations-rnns-and-lstms" class="anchor">Reading recommendations:  RNNs and LSTMs </h2>
 
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 <ol>
-<li> For RNNs see Goodfellow et al chapter 10.</li>
+<li> For RNNs see Goodfellow et al chapter 10, see <a href="https://www.deeplearningbook.org/contents/rnn.html" target="_self"><tt>https://www.deeplearningbook.org/contents/rnn.html</tt></a></li>
 <li> Reading suggestions for implementation of RNNs in PyTorch: Rashcka et al's text, chapter 15</li>
-<li> Reading suggestions for implementation of RNNs in TensorFlow: <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/Textbooks/TensorflowML.pdf" target="_self">Aurelien Geron's chapter 14</a>.</li> 
+<li> RNN video at URL":https://youtu.be/PCgrgHgy26c?feature=shared"</li>
+<li> New xLSTM, see Beck et al <a href="https://arxiv.org/abs/2405.04517" target="_self"><tt>https://arxiv.org/abs/2405.04517</tt></a>. Exponential gating and modified memory structures boost xLSTM capabilities to perform favorably when compared to state-of-the-art Transformers and State Space Models, both in performance and scaling.</li>
 </ol>
 </div>
 </div>
@@ -325,13 +326,13 @@ MathJax.Hub.Config({
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 <ol>
-<li> Goodfellow et al chapter 14.</li>
+<li> Goodfellow et al chapter 14, see <a href="https://www.deeplearningbook.org/contents/autoencoders.html" target="_self"><tt>https://www.deeplearningbook.org/contents/autoencoders.html</tt></a></li>
 <li> Rashcka et al. Their chapter 17 contains a brief introduction only.</li>
-<li> <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_self">Deep Learning Tutorial on AEs from Stanford University</a></li>
-<li> <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_self">Building AEs in Keras</a></li>
-<li> <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_self">Introduction to AEs in TensorFlow</a></li>
-<li> <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_self">Grosse, University of Toronto, Lecture on AEs</a></li>
-<li> <a href="https://arxiv.org/abs/2003.05991" target="_self">Bank et al on AEs</a></li>  
+<li> Deep Learning Tutorial on AEs from Stanford University at <a href="http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/" target="_self"><tt>http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/</tt></a></li>
+<li> Building AEs in Keras at <a href="https://blog.keras.io/building-autoencoders-in-keras.html" target="_self"><tt>https://blog.keras.io/building-autoencoders-in-keras.html</tt></a></li>
+<li> Introduction to AEs in TensorFlow at <a href="https://www.tensorflow.org/tutorials/generative/autoencoder" target="_self"><tt>https://www.tensorflow.org/tutorials/generative/autoencoder</tt></a></li>
+<li> Grosse, University of Toronto, Lecture on AEs at <a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf" target="_self"><tt>http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf</tt></a></li>
+<li> Bank et al on AEs at <a href="https://arxiv.org/abs/2003.05991" target="_self"><tt>https://arxiv.org/abs/2003.05991</tt></a></li>  
 <li> Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)</li>
 </ol>
 </div>
