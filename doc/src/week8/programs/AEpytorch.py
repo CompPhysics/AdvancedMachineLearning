@@ -1,0 +1,96 @@
+### Autoencoder Implementation in PyTorch
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+
+# Hyperparameters
+batch_size = 128
+learning_rate = 0.001
+num_epochs = 10
+
+# Transform to normalize the data
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))
+])
+
+# Load MNIST dataset
+train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
+train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+
+# Define the Autoencoder Model
+class Autoencoder(nn.Module):
+    def __init__(self):
+        super(Autoencoder, self).__init__()
+        # Encoder layers
+        self.encoder = nn.Sequential(
+            nn.Linear(28 * 28, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 64),
+            nn.ReLU(True)
+        )
+        # Decoder layers
+        self.decoder = nn.Sequential(
+            nn.Linear(64, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 28 * 28),
+            nn.Tanh()   # Use Tanh since we normalized input between -1 and 1.
+        )
+
+    def forward(self, x):
+        x = x.view(-1, 28 * 28)  # Flatten the image tensor into vectors.
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded.view(-1, 1, 28, 28)   # Reshape back to original image dimensions.
+
+# Initialize model, loss function and optimizer
+model = Autoencoder()
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
+# Training Loop
+for epoch in range(num_epochs):
+    for data in train_loader:
+        img, _ = data
+        
+        # Forward pass 
+        output = model(img)
+        
+        # Compute loss 
+        loss = criterion(output, img)
+        
+        # Backward pass and optimization 
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+# Visualize some results after training
+with torch.no_grad():
+    sample_data = next(iter(train_loader))[0]
+    reconstructed_data = model(sample_data)
+
+plt.figure(figsize=(9,4))
+for i in range(8):
+    ax = plt.subplot(2,8,i+1)
+    plt.imshow(sample_data[i][0], cmap='gray')
+    ax.axis('off')
+
+    ax = plt.subplot(2,8,i+9)
+    plt.imshow(reconstructed_data[i][0], cmap='gray')
+    ax.axis('off')
+
+plt.show()
+'''
+### Explanation:
+
+- **Data Loading**: The MNIST dataset is loaded with normalization applied.
+- **Model Definition**: An `Autoencoder` class defines both encoder and decoder networks.
+- **Training Loop**: The network is trained over several epochs using Mean Squared Error (MSE) as the loss function.
+- **Visualization**: After training completes, it visualizes original images alongside their reconstructions.
+'''
