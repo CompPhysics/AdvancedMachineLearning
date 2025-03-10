@@ -1,0 +1,62 @@
+### PCA Implementation in PyTorch
+import torch
+import torchvision.transforms as transforms
+from torchvision import datasets
+import matplotlib.pyplot as plt
+
+# Load MNIST dataset
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Lambda(lambda x: x.view(-1))  # Flatten images to vectors
+])
+
+train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=len(train_dataset), shuffle=False)
+
+# Get all training data
+data_iter = iter(train_loader)
+images, _ = next(data_iter)
+
+# Convert images to float32 and normalize them
+X = images.float()
+X_mean = X.mean(dim=0)
+X_centered = X - X_mean  # Centering the data
+
+# Compute covariance matrix
+cov_matrix = torch.mm(X_centered.T, X_centered) / (X.shape[0] - 1)
+
+# Eigen decomposition of the covariance matrix
+eigenvalues, eigenvectors = torch.eig(cov_matrix, eigenvectors=True)
+
+# Sort eigenvalues and corresponding eigenvectors in descending order
+sorted_indices = torch.argsort(eigenvalues[:, 0], descending=True)
+eigenvalues_sorted = eigenvalues[sorted_indices]
+eigenvectors_sorted = eigenvectors[:, sorted_indices]
+
+# Select top k components (for example k=2 for 2D projection)
+k = 2  
+W_k = eigenvectors_sorted[:, :k]
+
+# Project the centered data onto the new subspace
+Z_k = torch.mm(X_centered, W_k)
+
+# Visualize the first two principal components
+plt.figure(figsize=(8, 6))
+plt.scatter(Z_k[:, 0].numpy(), Z_k[:, 1].numpy(), alpha=0.5)
+plt.title('PCA Projection of MNIST Dataset')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.grid(True)
+plt.show()
+
+'''
+### Explanation:
+
+- **Data Loading**: The MNIST dataset is loaded and each image is flattened into a vector.
+- **Centering Data**: The mean of the dataset is computed and subtracted from each sample to center it around zero.
+- **Covariance Matrix**: The covariance matrix is calculated based on the centered data.
+- **Eigen Decomposition**: Eigenvalues and eigenvectors are computed from the covariance matrix.
+- **Sorting Components**: Eigenvalues and their corresponding eigenvectors are sorted in descending order.
+- **Projection**: The original data is projected onto a lower-dimensional space defined by the top `k` principal components.
+- **Visualization**: A scatter plot visualizes how samples project onto these two principal components.
+'''
