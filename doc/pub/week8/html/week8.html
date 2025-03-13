@@ -162,20 +162,31 @@ div.toc p,a {
                'implementing-a-memory-cell-in-a-neural-network'),
               ('LSTM details', 2, None, 'lstm-details'),
               ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('Basic layout', 2, None, 'basic-layout'),
-              ('More LSTM details', 2, None, 'more-lstm-details'),
+              ('LSTM details', 2, None, 'lstm-details'),
+              ('Comparing with a standard  RNN',
+               2,
+               None,
+               'comparing-with-a-standard-rnn'),
+              ('LSTM details I', 2, None, 'lstm-details-i'),
+              ('LSTM details II', 2, None, 'lstm-details-ii'),
+              ('LSTM details III', 2, None, 'lstm-details-iii'),
+              ('Forget gate', 2, None, 'forget-gate'),
               ('The forget gate', 2, None, 'the-forget-gate'),
+              ('Basic layout', 2, None, 'basic-layout'),
               ('Input gate', 2, None, 'input-gate'),
+              ('Short summary', 2, None, 'short-summary'),
               ('Forget and input', 2, None, 'forget-and-input'),
+              ('Basic layout', 2, None, 'basic-layout'),
               ('Output gate', 2, None, 'output-gate'),
+              ('Summary of LSTM', 2, None, 'summary-of-lstm'),
+              ('LSTM implementation using TensorFlow',
+               2,
+               None,
+               'lstm-implementation-using-tensorflow'),
+              ('And the corresponding one with PyTorch',
+               2,
+               None,
+               'and-the-corresponding-one-with-pytorch'),
               ('Autoencoders: Overarching view',
                2,
                None,
@@ -205,6 +216,14 @@ div.toc p,a {
               ('Cost/Loss Function', 2, None, 'cost-loss-function'),
               ('Binary Cross-Entropy', 2, None, 'binary-cross-entropy'),
               ('Reconstruction Error', 2, None, 'reconstruction-error'),
+              ('Implementation using TensorFlow',
+               2,
+               None,
+               'implementation-using-tensorflow'),
+              ('Implementation using PyTorch',
+               2,
+               None,
+               'implementation-using-pytorch'),
               ('Dimensionality reduction and links with Principal component '
                'analysis',
                2,
@@ -395,93 +414,12 @@ the short-term memory.
 
 <br/><br/>
 <center>
-<p><img src="figslides/lstm.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
 <p><img src="figslides/LSTM1.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM2.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM3.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM4.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM5.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM6.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM7.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM8.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="basic-layout">Basic layout </h2>
-
-<br/><br/>
-<center>
-<p><img src="figslides/LSTM9.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="more-lstm-details">More LSTM details </h2>
+<h2 id="lstm-details">LSTM details </h2>
 
 <p>The first stage is called the forget gate, where we combine the input
 at (say, time \( t \)), and the hidden cell state input at \( t-1 \), passing
@@ -497,14 +435,68 @@ $$
 <p>where \( W \) and \( U \) are the weights respectively.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="comparing-with-a-standard-rnn">Comparing with a standard  RNN  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="lstm-details-i">LSTM details I </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM3.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="lstm-details-ii">LSTM details II  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM4.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="lstm-details-iii">LSTM details III  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM5.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="forget-gate">Forget gate  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM6.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="the-forget-gate">The forget gate </h2>
 
-<p>This is called the forget gate since the Sigmoid activation function's
+<p>The naming forget gate stems from the fact that  the Sigmoid activation function's
 outputs are very close to \( 0 \) if the argument for the function is very
 negative, and \( 1 \) if the argument is very positive. Hence we can
 control the amount of information we want to take from the long-term
 memory.
 </p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="basic-layout">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM7.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="input-gate">Input gate </h2>
@@ -531,6 +523,15 @@ $$
 <p>again the \( W \) and \( U \) are the weights.</p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="short-summary">Short summary  </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM8.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="forget-and-input">Forget and input </h2>
 
 <p>The forget gate and the input gate together also update the cell state with the following equation, </p>
@@ -539,6 +540,15 @@ $$
 $$
 
 <p>where \( f^{(t)} \) and \( i^{(t)} \) are the outputs of the forget gate and the input gate, respectively.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="basic-layout">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM9.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="output-gate">Output gate </h2>
@@ -562,6 +572,269 @@ $$
 $$
 
 <p>where \( \mathbf{W_o,U_o} \) are the weights of the output gate and \( \mathbf{b_o} \) is the bias of the output gate.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="summary-of-lstm">Summary of LSTM </h2>
+
+<p>LSTMs provide a basic approach for modeling long-range dependencies in sequences.
+If you wish to read more, see <b>An Empirical Exploration of Recurrent Network Architectures</b>, authored
+by Rafal Jozefowicz <em>et al.,</em>  Proceedings of ICML, 2342-2350, 2015).
+</p>
+
+<p>An important recent development are so-called noting is a more recent
+method named <b>gated recurrent unit (GRU)</b>, se for example the article
+by Junyoung Chung <em>et al.,</em>, at URL:"https://arxiv.org/abs/1412.3555.
+This article is an excellent read if you are interested in learning
+more about these modern RNN architectures
+</p>
+
+<p>The GRUs have a simpler
+architecture than LSTMs. This leads to computationally more efficient methods, while their
+performance in some tasks, such as polyphonic music modeling, is comparable to LSTMs.
+</p>
+
+<p>And recently Beck <em>et al.,</em> see <a href="https://arxiv.org/abs/2405.04517" target="_blank"><tt>https://arxiv.org/abs/2405.04517</tt></a>, have demonstrated that exponential gating and modified memory structures boost xLSTM capabilities to perform favorably when compared to state-of-the-art Transformers and State Space Models, both in performance and scaling.</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="lstm-implementation-using-tensorflow">LSTM implementation using TensorFlow </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">Key points:</span>
+<span style="color: #BA2121; font-style: italic">1. The input images (28x28 pixels) are treated as sequences of 28 timesteps with 28 features each</span>
+<span style="color: #BA2121; font-style: italic">2. The LSTM layer processes this sequential data</span>
+<span style="color: #BA2121; font-style: italic">3. A final dense layer with softmax activation handles the classification</span>
+<span style="color: #BA2121; font-style: italic">4. Typical accuracy ranges between 95-98% (lower than CNNs but reasonable for demonstration)</span>
+
+<span style="color: #BA2121; font-style: italic">Note: LSTMs are not typically used for image classification (CNNs are more efficient), but this demonstrates how to adapt them for such tasks. Training might take longer compared to CNN architectures.</span>
+
+<span style="color: #BA2121; font-style: italic">To improve performance, you could:</span>
+<span style="color: #BA2121; font-style: italic">1. Add more LSTM layers</span>
+<span style="color: #BA2121; font-style: italic">2. Use Bidirectional LSTMs</span>
+<span style="color: #BA2121; font-style: italic">3. Increase the number of units</span>
+<span style="color: #BA2121; font-style: italic">4. Add dropout for regularization</span>
+<span style="color: #BA2121; font-style: italic">5. Use learning rate scheduling</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.models</span> <span style="color: #008000; font-weight: bold">import</span> Sequential
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.layers</span> <span style="color: #008000; font-weight: bold">import</span> LSTM, Dense
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.utils</span> <span style="color: #008000; font-weight: bold">import</span> to_categorical
+
+<span style="color: #408080; font-style: italic"># Load and preprocess data</span>
+(x_train, y_train), (x_test, y_test) <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>mnist<span style="color: #666666">.</span>load_data()
+
+<span style="color: #408080; font-style: italic"># Normalize pixel values to [0, 1]</span>
+x_train <span style="color: #666666">=</span> x_train<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&#39;float32&#39;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>
+x_test <span style="color: #666666">=</span> x_test<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&#39;float32&#39;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>
+
+<span style="color: #408080; font-style: italic"># Reshape data for LSTM (samples, timesteps, features)</span>
+<span style="color: #408080; font-style: italic"># MNIST images are 28x28, so we treat each image as 28 timesteps of 28 features</span>
+x_train <span style="color: #666666">=</span> x_train<span style="color: #666666">.</span>reshape((<span style="color: #666666">-1</span>, <span style="color: #666666">28</span>, <span style="color: #666666">28</span>))
+x_test <span style="color: #666666">=</span> x_test<span style="color: #666666">.</span>reshape((<span style="color: #666666">-1</span>, <span style="color: #666666">28</span>, <span style="color: #666666">28</span>))
+
+<span style="color: #408080; font-style: italic"># Convert labels to one-hot encoding</span>
+y_train <span style="color: #666666">=</span> to_categorical(y_train, <span style="color: #666666">10</span>)
+y_test <span style="color: #666666">=</span> to_categorical(y_test, <span style="color: #666666">10</span>)
+
+<span style="color: #408080; font-style: italic"># Build LSTM model</span>
+model <span style="color: #666666">=</span> Sequential()
+model<span style="color: #666666">.</span>add(LSTM(<span style="color: #666666">128</span>, input_shape<span style="color: #666666">=</span>(<span style="color: #666666">28</span>, <span style="color: #666666">28</span>)))  <span style="color: #408080; font-style: italic"># 128 LSTM units</span>
+model<span style="color: #666666">.</span>add(Dense(<span style="color: #666666">10</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;softmax&#39;</span>))
+
+<span style="color: #408080; font-style: italic"># Compile the model</span>
+model<span style="color: #666666">.</span>compile(loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;categorical_crossentropy&#39;</span>,
+             optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;adam&#39;</span>,
+             metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;accuracy&#39;</span>])
+
+<span style="color: #408080; font-style: italic"># Display model summary</span>
+model<span style="color: #666666">.</span>summary()
+
+<span style="color: #408080; font-style: italic"># Train the model</span>
+history <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(x_train, y_train,
+                   batch_size<span style="color: #666666">=64</span>,
+                   epochs<span style="color: #666666">=10</span>,
+                   validation_split<span style="color: #666666">=0.2</span>)
+
+<span style="color: #408080; font-style: italic"># Evaluate on test data</span>
+test_loss, test_acc <span style="color: #666666">=</span> model<span style="color: #666666">.</span>evaluate(x_test, y_test, verbose<span style="color: #666666">=2</span>)
+<span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">Test accuracy: </span><span style="color: #BB6688; font-weight: bold">{</span>test_acc<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="and-the-corresponding-one-with-pytorch">And the corresponding one with PyTorch </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">Key components:</span>
+<span style="color: #BA2121; font-style: italic">1. **Data Handling**: Uses PyTorch DataLoader with MNIST dataset</span>
+<span style="color: #BA2121; font-style: italic">2. **LSTM Architecture**:</span>
+<span style="color: #BA2121; font-style: italic">  - Input sequence of 28 timesteps (image rows)</span>
+<span style="color: #BA2121; font-style: italic">  - 128 hidden units in LSTM layer</span>
+<span style="color: #BA2121; font-style: italic">  - Fully connected layer for classification</span>
+<span style="color: #BA2121; font-style: italic">3. **Training**:</span>
+<span style="color: #BA2121; font-style: italic">  - Cross-entropy loss</span>
+<span style="color: #BA2121; font-style: italic">  - Adam optimizer</span>
+<span style="color: #BA2121; font-style: italic">  - Automatic GPU utilization if available</span>
+
+<span style="color: #BA2121; font-style: italic">This implementation typically achieves **97-98% accuracy** after 10 epochs. The main differences from the TensorFlow/Keras version:</span>
+<span style="color: #BA2121; font-style: italic">- Explicit device management (CPU/GPU)</span>
+<span style="color: #BA2121; font-style: italic">- Manual training loop</span>
+<span style="color: #BA2121; font-style: italic">- Different data loading pipeline</span>
+<span style="color: #BA2121; font-style: italic">- More explicit tensor reshaping</span>
+
+<span style="color: #BA2121; font-style: italic">To improve performance, you could:</span>
+<span style="color: #BA2121; font-style: italic">1. Add dropout regularization</span>
+<span style="color: #BA2121; font-style: italic">2. Use bidirectional LSTM</span>
+<span style="color: #BA2121; font-style: italic">3. Implement learning rate scheduling</span>
+<span style="color: #BA2121; font-style: italic">4. Add batch normalization</span>
+<span style="color: #BA2121; font-style: italic">5. Increase model capacity (more layers/units)</span>
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.optim</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">optim</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torchvision</span> <span style="color: #008000; font-weight: bold">import</span> datasets, transforms
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torch.utils.data</span> <span style="color: #008000; font-weight: bold">import</span> DataLoader
+
+<span style="color: #408080; font-style: italic"># Hyperparameters</span>
+input_size <span style="color: #666666">=</span> <span style="color: #666666">28</span>     <span style="color: #408080; font-style: italic"># Number of features (pixels per row)</span>
+hidden_size <span style="color: #666666">=</span> <span style="color: #666666">128</span>   <span style="color: #408080; font-style: italic"># LSTM hidden state size</span>
+num_classes <span style="color: #666666">=</span> <span style="color: #666666">10</span>    <span style="color: #408080; font-style: italic"># Digits 0-9</span>
+num_epochs <span style="color: #666666">=</span> <span style="color: #666666">10</span>     <span style="color: #408080; font-style: italic"># Training iterations</span>
+batch_size <span style="color: #666666">=</span> <span style="color: #666666">64</span>     <span style="color: #408080; font-style: italic"># Batch size</span>
+learning_rate <span style="color: #666666">=</span> <span style="color: #666666">0.001</span>
+
+<span style="color: #408080; font-style: italic"># Device configuration</span>
+device <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>device(<span style="color: #BA2121">&#39;cuda&#39;</span> <span style="color: #008000; font-weight: bold">if</span> torch<span style="color: #666666">.</span>cuda<span style="color: #666666">.</span>is_available() <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&#39;cpu&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># MNIST dataset</span>
+transform <span style="color: #666666">=</span> transforms<span style="color: #666666">.</span>Compose([
+   transforms<span style="color: #666666">.</span>ToTensor(),
+   transforms<span style="color: #666666">.</span>Normalize((<span style="color: #666666">0.1307</span>,), (<span style="color: #666666">0.3081</span>,))  <span style="color: #408080; font-style: italic"># MNIST mean and std</span>
+])
+
+train_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>,
+                              train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,
+                              transform<span style="color: #666666">=</span>transform,
+                              download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+
+test_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>,
+                             train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>,
+                             transform<span style="color: #666666">=</span>transform)
+
+train_loader <span style="color: #666666">=</span> DataLoader(dataset<span style="color: #666666">=</span>train_dataset,
+                         batch_size<span style="color: #666666">=</span>batch_size,
+                         shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+
+test_loader <span style="color: #666666">=</span> DataLoader(dataset<span style="color: #666666">=</span>test_dataset,
+                        batch_size<span style="color: #666666">=</span>batch_size,
+                        shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+
+<span style="color: #408080; font-style: italic"># LSTM model</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">LSTMModel</span>(nn<span style="color: #666666">.</span>Module):
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, input_size, hidden_size, num_classes):
+       <span style="color: #008000">super</span>(LSTMModel, <span style="color: #008000">self</span>)<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>hidden_size <span style="color: #666666">=</span> hidden_size
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>lstm <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>LSTM(input_size, hidden_size, batch_first<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+       <span style="color: #008000">self</span><span style="color: #666666">.</span>fc <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(hidden_size, num_classes)
+
+   <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x):
+       <span style="color: #408080; font-style: italic"># Reshape input to (batch_size, sequence_length, input_size)</span>
+       x <span style="color: #666666">=</span> x<span style="color: #666666">.</span>reshape(<span style="color: #666666">-1</span>, <span style="color: #666666">28</span>, <span style="color: #666666">28</span>)
+
+       <span style="color: #408080; font-style: italic"># Forward propagate LSTM</span>
+       out, _ <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>lstm(x)  <span style="color: #408080; font-style: italic"># out: (batch_size, seq_length, hidden_size)</span>
+
+       <span style="color: #408080; font-style: italic"># Decode the hidden state of the last time step</span>
+       out <span style="color: #666666">=</span> out[:, <span style="color: #666666">-1</span>, :]
+       out <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>fc(out)
+       <span style="color: #008000; font-weight: bold">return</span> out
+
+<span style="color: #408080; font-style: italic"># Initialize model</span>
+model <span style="color: #666666">=</span> LSTMModel(input_size, hidden_size, num_classes)<span style="color: #666666">.</span>to(device)
+
+<span style="color: #408080; font-style: italic"># Loss and optimizer</span>
+criterion <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>CrossEntropyLoss()
+optimizer <span style="color: #666666">=</span> optim<span style="color: #666666">.</span>Adam(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=</span>learning_rate)
+
+<span style="color: #408080; font-style: italic"># Training loop</span>
+total_step <span style="color: #666666">=</span> <span style="color: #008000">len</span>(train_loader)
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(num_epochs):
+   model<span style="color: #666666">.</span>train()
+   <span style="color: #008000; font-weight: bold">for</span> i, (images, labels) <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(train_loader):
+       images <span style="color: #666666">=</span> images<span style="color: #666666">.</span>to(device)
+       labels <span style="color: #666666">=</span> labels<span style="color: #666666">.</span>to(device)
+
+       <span style="color: #408080; font-style: italic"># Forward pass</span>
+       outputs <span style="color: #666666">=</span> model(images)
+       loss <span style="color: #666666">=</span> criterion(outputs, labels)
+
+       <span style="color: #408080; font-style: italic"># Backward and optimize</span>
+       optimizer<span style="color: #666666">.</span>zero_grad()
+       loss<span style="color: #666666">.</span>backward()
+       optimizer<span style="color: #666666">.</span>step()
+
+       <span style="color: #008000; font-weight: bold">if</span> (i<span style="color: #666666">+1</span>) <span style="color: #666666">%</span> <span style="color: #666666">100</span> <span style="color: #666666">==</span> <span style="color: #666666">0</span>:
+           <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Epoch [</span><span style="color: #BB6688; font-weight: bold">{</span>epoch<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>num_epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">], Step [</span><span style="color: #BB6688; font-weight: bold">{</span>i<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>total_step<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">], Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>loss<span style="color: #666666">.</span>item()<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
+
+   <span style="color: #408080; font-style: italic"># Test the model</span>
+   model<span style="color: #666666">.</span>eval()
+   <span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():
+       correct <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+       total <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+       <span style="color: #008000; font-weight: bold">for</span> images, labels <span style="color: #AA22FF; font-weight: bold">in</span> test_loader:
+           images <span style="color: #666666">=</span> images<span style="color: #666666">.</span>to(device)
+           labels <span style="color: #666666">=</span> labels<span style="color: #666666">.</span>to(device)
+           outputs <span style="color: #666666">=</span> model(images)
+           _, predicted <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>max(outputs<span style="color: #666666">.</span>data, <span style="color: #666666">1</span>)
+           total <span style="color: #666666">+=</span> labels<span style="color: #666666">.</span>size(<span style="color: #666666">0</span>)
+           correct <span style="color: #666666">+=</span> (predicted <span style="color: #666666">==</span> labels)<span style="color: #666666">.</span>sum()<span style="color: #666666">.</span>item()
+
+       <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Test Accuracy: </span><span style="color: #BB6688; font-weight: bold">{</span><span style="color: #666666">100</span> <span style="color: #666666">*</span> correct <span style="color: #666666">/</span> total<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.2f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">%&#39;</span>)
+
+<span style="color: #008000">print</span>(<span style="color: #BA2121">&#39;Training finished.&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="autoencoders-overarching-view">Autoencoders: Overarching view </h2>
@@ -842,6 +1115,217 @@ the input observation \( \mathbf{x}_{i} \). The most typical RE used is the MSE
 $$
 \textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 $$
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="implementation-using-tensorflow">Implementation using TensorFlow </h2>
+
+<p>The code here has the following structure</p>
+<ol>
+<li> Data Loading: The MNIST dataset is loaded and normalized to a range of \( [0, 1] \). Each image is reshaped into a flat vector.</li>
+<li> Model Definition: An autoencoder architecture is defined with an encoder that compresses the input and a decoder that reconstructs it back to its original form.</li>
+<li> Training: The model is trained using binary crossentropy as the loss function over several epochs.</li>
+<li> Visualization: After training completes, it visualizes original images alongside their reconstructions.</li>
+</ol>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic">### Autoencoder Implementation in TensorFlow/Keras</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">import</span> keras
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> layers
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras.datasets</span> <span style="color: #008000; font-weight: bold">import</span> mnist
+
+<span style="color: #408080; font-style: italic"># Load MNIST dataset</span>
+(x_train, _), (x_test, _) <span style="color: #666666">=</span> mnist<span style="color: #666666">.</span>load_data()
+
+<span style="color: #408080; font-style: italic"># Normalize the images to [0, 1] range and reshape them to (num_samples, 28*28)</span>
+x_train <span style="color: #666666">=</span> x_train<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&#39;float32&#39;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255.</span>
+x_test <span style="color: #666666">=</span> x_test<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&#39;float32&#39;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255.</span>
+x_train <span style="color: #666666">=</span> x_train<span style="color: #666666">.</span>reshape((<span style="color: #008000">len</span>(x_train), <span style="color: #666666">-1</span>))
+x_test <span style="color: #666666">=</span> x_test<span style="color: #666666">.</span>reshape((<span style="color: #008000">len</span>(x_test), <span style="color: #666666">-1</span>))
+
+<span style="color: #408080; font-style: italic"># Define the Autoencoder Model</span>
+input_dim <span style="color: #666666">=</span> x_train<span style="color: #666666">.</span>shape[<span style="color: #666666">1</span>]
+encoding_dim <span style="color: #666666">=</span> <span style="color: #666666">64</span>  <span style="color: #408080; font-style: italic"># Dimension of the encoding layer</span>
+
+<span style="color: #408080; font-style: italic"># Encoder</span>
+input_img <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Input(shape<span style="color: #666666">=</span>(input_dim,))
+encoded <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">256</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>)(input_img)
+encoded <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(encoding_dim, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>)(encoded)
+
+<span style="color: #408080; font-style: italic"># Decoder</span>
+decoded <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">256</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;relu&#39;</span>)(encoded)
+decoded <span style="color: #666666">=</span> layers<span style="color: #666666">.</span>Dense(input_dim, activation<span style="color: #666666">=</span><span style="color: #BA2121">&#39;sigmoid&#39;</span>)(decoded)  <span style="color: #408080; font-style: italic"># Use sigmoid since we normalized input between 0 and 1.</span>
+
+<span style="color: #408080; font-style: italic"># Autoencoder Model</span>
+autoencoder <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>Model(input_img, decoded)
+
+<span style="color: #408080; font-style: italic"># Compile the model</span>
+autoencoder<span style="color: #666666">.</span>compile(optimizer<span style="color: #666666">=</span><span style="color: #BA2121">&#39;adam&#39;</span>, loss<span style="color: #666666">=</span><span style="color: #BA2121">&#39;binary_crossentropy&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># Train the model</span>
+autoencoder<span style="color: #666666">.</span>fit(x_train, x_train,
+                epochs<span style="color: #666666">=10</span>,
+                batch_size<span style="color: #666666">=128</span>,
+                shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>,
+                validation_data<span style="color: #666666">=</span>(x_test, x_test))
+
+<span style="color: #408080; font-style: italic"># Visualize some results after training</span>
+decoded_imgs <span style="color: #666666">=</span> autoencoder<span style="color: #666666">.</span>predict(x_test)
+
+n <span style="color: #666666">=</span> <span style="color: #666666">8</span>  <span style="color: #408080; font-style: italic"># Number of digits to display</span>
+plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">9</span>,<span style="color: #666666">4</span>))
+<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(n):
+    <span style="color: #408080; font-style: italic"># Display original images on top row </span>
+    ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">2</span>,n,i<span style="color: #666666">+1</span>)
+    plt<span style="color: #666666">.</span>imshow(x_test[i]<span style="color: #666666">.</span>reshape(<span style="color: #666666">28</span>, <span style="color: #666666">28</span>), cmap<span style="color: #666666">=</span><span style="color: #BA2121">&#39;gray&#39;</span>)
+    ax<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+
+    <span style="color: #408080; font-style: italic"># Display reconstructed images on bottom row </span>
+    ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">2</span>,n,i<span style="color: #666666">+</span>n<span style="color: #666666">+1</span>)
+    plt<span style="color: #666666">.</span>imshow(decoded_imgs[i]<span style="color: #666666">.</span>reshape(<span style="color: #666666">28</span>, <span style="color: #666666">28</span>), cmap<span style="color: #666666">=</span><span style="color: #BA2121">&#39;gray&#39;</span>)
+    ax<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="implementation-using-pytorch">Implementation using PyTorch </h2>
+
+<p>The code here as the same structure as the previous one which uses TensorFlow.</p>
+<ol>
+<li> Data Loading: The MNIST dataset is loaded with normalization applied.</li>
+<li> Model Definition: An <em>Autoencoder</em> class defines both encoder and decoder networks.</li>
+<li> Training part: The network is trained over several epochs using Mean Squared Error (MSE) as the loss function.</li>
+<li> Visualization: After training completes, it visualizes original images alongside their reconstructions.</li>
+</ol>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.optim</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">optim</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torchvision</span> <span style="color: #008000; font-weight: bold">import</span> datasets, transforms
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torch.utils.data</span> <span style="color: #008000; font-weight: bold">import</span> DataLoader
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+
+<span style="color: #408080; font-style: italic"># Hyperparameters</span>
+batch_size <span style="color: #666666">=</span> <span style="color: #666666">128</span>
+learning_rate <span style="color: #666666">=</span> <span style="color: #666666">0.001</span>
+num_epochs <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+
+<span style="color: #408080; font-style: italic"># Transform to normalize the data</span>
+transform <span style="color: #666666">=</span> transforms<span style="color: #666666">.</span>Compose([
+    transforms<span style="color: #666666">.</span>ToTensor(),
+    transforms<span style="color: #666666">.</span>Normalize((<span style="color: #666666">0.5</span>,), (<span style="color: #666666">0.5</span>,))
+])
+
+<span style="color: #408080; font-style: italic"># Load MNIST dataset</span>
+train_dataset <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transform, download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+train_loader <span style="color: #666666">=</span> DataLoader(dataset<span style="color: #666666">=</span>train_dataset, batch_size<span style="color: #666666">=</span>batch_size, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+
+<span style="color: #408080; font-style: italic"># Define the Autoencoder Model</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Autoencoder</span>(nn<span style="color: #666666">.</span>Module):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">super</span>(Autoencoder, <span style="color: #008000">self</span>)<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+        <span style="color: #408080; font-style: italic"># Encoder layers</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>encoder <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Sequential(
+            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">28</span> <span style="color: #666666">*</span> <span style="color: #666666">28</span>, <span style="color: #666666">256</span>),
+            nn<span style="color: #666666">.</span>ReLU(<span style="color: #008000; font-weight: bold">True</span>),
+            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">256</span>, <span style="color: #666666">64</span>),
+            nn<span style="color: #666666">.</span>ReLU(<span style="color: #008000; font-weight: bold">True</span>)
+        )
+        <span style="color: #408080; font-style: italic"># Decoder layers</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>decoder <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Sequential(
+            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">64</span>, <span style="color: #666666">256</span>),
+            nn<span style="color: #666666">.</span>ReLU(<span style="color: #008000; font-weight: bold">True</span>),
+            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">256</span>, <span style="color: #666666">28</span> <span style="color: #666666">*</span> <span style="color: #666666">28</span>),
+            nn<span style="color: #666666">.</span>Tanh()   <span style="color: #408080; font-style: italic"># Use Tanh since we normalized input between -1 and 1.</span>
+        )
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x):
+        x <span style="color: #666666">=</span> x<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>, <span style="color: #666666">28</span> <span style="color: #666666">*</span> <span style="color: #666666">28</span>)  <span style="color: #408080; font-style: italic"># Flatten the image tensor into vectors.</span>
+        encoded <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>encoder(x)
+        decoded <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>decoder(encoded)
+        <span style="color: #008000; font-weight: bold">return</span> decoded<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>, <span style="color: #666666">1</span>, <span style="color: #666666">28</span>, <span style="color: #666666">28</span>)   <span style="color: #408080; font-style: italic"># Reshape back to original image dimensions.</span>
+
+<span style="color: #408080; font-style: italic"># Initialize model, loss function and optimizer</span>
+model <span style="color: #666666">=</span> Autoencoder()
+criterion <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>MSELoss()
+optimizer <span style="color: #666666">=</span> optim<span style="color: #666666">.</span>Adam(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=</span>learning_rate)
+
+<span style="color: #408080; font-style: italic"># Training Loop</span>
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(num_epochs):
+    <span style="color: #008000; font-weight: bold">for</span> data <span style="color: #AA22FF; font-weight: bold">in</span> train_loader:
+        img, _ <span style="color: #666666">=</span> data
+        
+        <span style="color: #408080; font-style: italic"># Forward pass </span>
+        output <span style="color: #666666">=</span> model(img)
+        
+        <span style="color: #408080; font-style: italic"># Compute loss </span>
+        loss <span style="color: #666666">=</span> criterion(output, img)
+        
+        <span style="color: #408080; font-style: italic"># Backward pass and optimization </span>
+        optimizer<span style="color: #666666">.</span>zero_grad()
+        loss<span style="color: #666666">.</span>backward()
+        optimizer<span style="color: #666666">.</span>step()
+
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">f&#39;Epoch [</span><span style="color: #BB6688; font-weight: bold">{</span>epoch <span style="color: #666666">+</span> <span style="color: #666666">1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>num_epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">], Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>loss<span style="color: #666666">.</span>item()<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>)
+
+<span style="color: #408080; font-style: italic"># Visualize some results after training</span>
+<span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():
+    sample_data <span style="color: #666666">=</span> <span style="color: #008000">next</span>(<span style="color: #008000">iter</span>(train_loader))[<span style="color: #666666">0</span>]
+    reconstructed_data <span style="color: #666666">=</span> model(sample_data)
+
+plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">9</span>,<span style="color: #666666">4</span>))
+<span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">8</span>):
+    ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">2</span>,<span style="color: #666666">8</span>,i<span style="color: #666666">+1</span>)
+    plt<span style="color: #666666">.</span>imshow(sample_data[i][<span style="color: #666666">0</span>], cmap<span style="color: #666666">=</span><span style="color: #BA2121">&#39;gray&#39;</span>)
+    ax<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+
+    ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplot(<span style="color: #666666">2</span>,<span style="color: #666666">8</span>,i<span style="color: #666666">+9</span>)
+    plt<span style="color: #666666">.</span>imshow(reconstructed_data[i][<span style="color: #666666">0</span>], cmap<span style="color: #666666">=</span><span style="color: #BA2121">&#39;gray&#39;</span>)
+    ax<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
