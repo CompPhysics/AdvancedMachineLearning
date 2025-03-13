@@ -120,6 +120,9 @@ in addition to the lectures, we have often followed five main paths:
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
+- Video	of lecture at https://youtu.be/CvXcwXk5JRc
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch13.pdf
+
 
 ## March 17-21: Autoencoders
 - Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
