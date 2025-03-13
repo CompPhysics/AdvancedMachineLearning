@@ -46,7 +46,7 @@ o Baldi and Hornik, Neural networks and principal component analysis: Learning f
 !split
 ===== Gating mechanism: Long Short Term Memory (LSTM) =====
 
-Besides a simple recurrent neural network layer, as discussed above, there are two other
+Besides a simple recurrent neural network layer, as discussed during the last two weeks, there are two other
 commonly used types of recurrent neural network layers: Long Short
 Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
 introduction to these layers see URL:"https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b"
@@ -64,6 +64,7 @@ o Information gets into the cell whenever its “write” gate is on.
 o The information stays in the cell so long as its _keep_ gate is on.
 o Information can be read from the cell by turning on its _read_ gate. 
 
+The LSTM were first introduced to overcome the vanishing gradient problem.
 
 !split
 ===== Implementing a memory cell in a neural network =====
@@ -94,6 +95,59 @@ the short-term memory.
 ===== Basic layout =====
 
 FIGURE: [figslides/lstm.pdf, width=700 frac=1.2]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM1.png, width=700 frac=1.0]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM2.png, width=700 frac=1.0]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM3.png, width=700 frac=1.0]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM4.png, width=700 frac=1.0]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM5.png, width=700 frac=1.0]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM6.png, width=700 frac=1.0]
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM7.png, width=700 frac=1.0]
+
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM8.png, width=700 frac=1.0]
+
+!split
+===== Basic layout =====
+
+FIGURE: [figslides/LSTM9.png, width=700 frac=1.0]
+
 
 !split
 ===== More LSTM details =====

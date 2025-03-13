@@ -58,6 +58,15 @@ doconce format html week8.do.txt --html_style=bootstrap --pygments_html_style=de
                'implementing-a-memory-cell-in-a-neural-network'),
               ('LSTM details', 2, None, 'lstm-details'),
               ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
+              ('Basic layout', 2, None, 'basic-layout'),
               ('More LSTM details', 2, None, 'more-lstm-details'),
               ('The forget gate', 2, None, 'the-forget-gate'),
               ('Input gate', 2, None, 'input-gate'),
@@ -175,6 +184,15 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#gating-mechanism-long-short-term-memory-lstm" style="font-size: 80%;">Gating mechanism: Long Short Term Memory (LSTM)</a></li>
      <!-- navigation toc: --> <li><a href="#implementing-a-memory-cell-in-a-neural-network" style="font-size: 80%;">Implementing a memory cell in a neural network</a></li>
      <!-- navigation toc: --> <li><a href="#lstm-details" style="font-size: 80%;">LSTM details</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
+     <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
      <!-- navigation toc: --> <li><a href="#basic-layout" style="font-size: 80%;">Basic layout</a></li>
      <!-- navigation toc: --> <li><a href="#more-lstm-details" style="font-size: 80%;">More LSTM details</a></li>
      <!-- navigation toc: --> <li><a href="#the-forget-gate" style="font-size: 80%;">The forget gate</a></li>
@@ -306,7 +324,7 @@ MathJax.Hub.Config({
 <!-- !split -->
 <h2 id="gating-mechanism-long-short-term-memory-lstm" class="anchor">Gating mechanism: Long Short Term Memory (LSTM) </h2>
 
-<p>Besides a simple recurrent neural network layer, as discussed above, there are two other
+<p>Besides a simple recurrent neural network layer, as discussed during the last two weeks, there are two other
 commonly used types of recurrent neural network layers: Long Short
 Term Memory (LSTM) and Gated Recurrent Unit (GRU).  For a short
 introduction to these layers see <a href="https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b" target="_self"><tt>https://medium.com/mindboard/lstm-vs-gru-experimental-comparison-955820c21e8b</tt></a>
@@ -328,6 +346,8 @@ with the memory cells.
 <li> The information stays in the cell so long as its <b>keep</b> gate is on.</li>
 <li> Information can be read from the cell by turning on its <b>read</b> gate.</li> 
 </ol>
+<p>The LSTM were first introduced to overcome the vanishing gradient problem.</p>
+
 <!-- !split -->
 <h2 id="implementing-a-memory-cell-in-a-neural-network" class="anchor">Implementing a memory cell in a neural network </h2>
 
@@ -362,6 +382,87 @@ the short-term memory.
 <br/><br/>
 <center>
 <p><img src="figslides/lstm.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM1.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM2.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM3.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM4.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM5.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM6.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM7.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM8.png" width="700" align="bottom"></p>
+</center>
+<br/><br/>
+
+<!-- !split -->
+<h2 id="basic-layout" class="anchor">Basic layout </h2>
+
+<br/><br/>
+<center>
+<p><img src="figslides/LSTM9.png" width="700" align="bottom"></p>
 </center>
 <br/><br/>
 
