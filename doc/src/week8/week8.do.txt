@@ -106,13 +106,13 @@ at (say, time $t$), and the hidden cell state input at $t-1$, passing
 it through the Sigmoid activation function and then performing an
 element-wise multiplication, denoted by $\odot$.
 
-It follows 
+Mathematically we have (see also figure below)
 !bt
 \[
-\mathbf{f}^{(t)} = \sigma(W_f\mathbf{x}^{(t)} + U_f\mathbf{h}^{(t-1)} + \mathbf{b}_f)
+\mathbf{f}^{(t)} = \sigma(W_{fx}\mathbf{x}^{(t)} + W_{fh}\mathbf{h}^{(t-1)} + \mathbf{b}_f)
 \]
 !et
-where $W$ and $U$ are the weights respectively.
+where the $W$s are the weights to be trained.
 
 
 
@@ -157,6 +157,12 @@ outputs are very close to $0$ if the argument for the function is very
 negative, and $1$ if the argument is very positive. Hence we can
 control the amount of information we want to take from the long-term
 memory.
+!bt
+\[
+\mathbf{f}^{(t)} = \sigma(W_{fx}\mathbf{x}^{(t)} + W_{fh}\mathbf{h}^{(t-1)} + \mathbf{b}_f)
+\]
+!et
+where the $W$s are the weights to be trained.
 
 
 !split
@@ -178,16 +184,16 @@ as $\oplus$.
 We have
 !bt
 \[
-\mathbf{i}^{(t)} = \sigma_g(W_i\mathbf{x}^{(t)} + U_i\mathbf{h}^{(t-1)} + \mathbf{b}_i),
+\mathbf{i}^{(t)} = \sigma_g(W_{ix}\mathbf{x}^{(t)} + W_{ih}\mathbf{h}^{(t-1)} + \mathbf{b}_i),
 \]
 !et
 and
 !bt
 \[
-\mathbf{\tilde{c}}^{(t)} = \tanh(W_c\mathbf{x}^{(t)} + U_c\mathbf{h}^{(t-1)} + \mathbf{b}_c),
+\mathbf{g}^{(t)} = \tanh(W_{gx}\mathbf{x}^{(t)} + W_{gh}\mathbf{h}^{(t-1)} + \mathbf{b}_g),
 \]
 !et
-again the $W$ and $U$ are the weights.
+again the $W$s are the weights to train.
 
 
 
@@ -204,7 +210,7 @@ FIGURE: [figslides/LSTM8.png, width=700 frac=1.0]
 The forget gate and the input gate together also update the cell state with the following equation, 
 !bt
 \[
-\mathbf{c}^{(t)} = \mathbf{f}^{(t)} \otimes \mathbf{c}^{(t-1)} + \mathbf{i}^{(t)} \otimes \mathbf{\tilde{c}}^{(t)},
+\mathbf{c}^{(t)} = \mathbf{f}^{(t)} \otimes \mathbf{c}^{(t-1)} + \mathbf{i}^{(t)} \otimes \mathbf{g}^{(t)},
 \]
 !et
 where $f^{(t)}$ and $i^{(t)}$ are the outputs of the forget gate and the input gate, respectively.

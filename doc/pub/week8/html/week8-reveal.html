@@ -321,14 +321,14 @@ it through the Sigmoid activation function and then performing an
 element-wise multiplication, denoted by \( \odot \).
 </p>
 
-<p>It follows </p>
+<p>Mathematically we have (see also figure below)</p>
 <p>&nbsp;<br>
 $$
-\mathbf{f}^{(t)} = \sigma(W_f\mathbf{x}^{(t)} + U_f\mathbf{h}^{(t-1)} + \mathbf{b}_f)
+\mathbf{f}^{(t)} = \sigma(W_{fx}\mathbf{x}^{(t)} + W_{fh}\mathbf{h}^{(t-1)} + \mathbf{b}_f)
 $$
 <p>&nbsp;<br>
 
-<p>where \( W \) and \( U \) are the weights respectively.</p>
+<p>where the $W$s are the weights to be trained.</p>
 </section>
 
 <section>
@@ -390,6 +390,13 @@ negative, and \( 1 \) if the argument is very positive. Hence we can
 control the amount of information we want to take from the long-term
 memory.
 </p>
+<p>&nbsp;<br>
+$$
+\mathbf{f}^{(t)} = \sigma(W_{fx}\mathbf{x}^{(t)} + W_{fh}\mathbf{h}^{(t-1)} + \mathbf{b}_f)
+$$
+<p>&nbsp;<br>
+
+<p>where the $W$s are the weights to be trained.</p>
 </section>
 
 <section>
@@ -417,18 +424,18 @@ as \( \oplus \).
 <p>We have</p>
 <p>&nbsp;<br>
 $$
-\mathbf{i}^{(t)} = \sigma_g(W_i\mathbf{x}^{(t)} + U_i\mathbf{h}^{(t-1)} + \mathbf{b}_i),
+\mathbf{i}^{(t)} = \sigma_g(W_{ix}\mathbf{x}^{(t)} + W_{ih}\mathbf{h}^{(t-1)} + \mathbf{b}_i),
 $$
 <p>&nbsp;<br>
 
 <p>and</p>
 <p>&nbsp;<br>
 $$
-\mathbf{\tilde{c}}^{(t)} = \tanh(W_c\mathbf{x}^{(t)} + U_c\mathbf{h}^{(t-1)} + \mathbf{b}_c),
+\mathbf{g}^{(t)} = \tanh(W_{gx}\mathbf{x}^{(t)} + W_{gh}\mathbf{h}^{(t-1)} + \mathbf{b}_g),
 $$
 <p>&nbsp;<br>
 
-<p>again the \( W \) and \( U \) are the weights.</p>
+<p>again the $W$s are the weights to train.</p>
 </section>
 
 <section>
@@ -447,7 +454,7 @@ $$
 <p>The forget gate and the input gate together also update the cell state with the following equation, </p>
 <p>&nbsp;<br>
 $$
-\mathbf{c}^{(t)} = \mathbf{f}^{(t)} \otimes \mathbf{c}^{(t-1)} + \mathbf{i}^{(t)} \otimes \mathbf{\tilde{c}}^{(t)},
+\mathbf{c}^{(t)} = \mathbf{f}^{(t)} \otimes \mathbf{c}^{(t-1)} + \mathbf{i}^{(t)} \otimes \mathbf{g}^{(t)},
 $$
 <p>&nbsp;<br>
 
