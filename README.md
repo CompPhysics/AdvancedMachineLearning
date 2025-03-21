@@ -126,8 +126,9 @@ in addition to the lectures, we have often followed five main paths:
 
 ## March 17-21: Autoencoders
 - Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb  
-- Reading recommendation: Goodfellow et al chapter 14
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb- Reading recommendation: Goodfellow et al chapter 14
+- Video of Lecture at https://youtu.be/5Blyxyvfc9U
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch20.pdf
 
 
 ## March 24-28: Generative models
