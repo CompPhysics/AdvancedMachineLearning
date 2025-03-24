@@ -106,57 +106,103 @@ doconce format html week10.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'maximum-likelihood-estimation-mle'),
-              ('Probability distributions and normalization constants',
+              ('Essential elements of generative models',
                2,
                None,
-               'probability-distributions-and-normalization-constants'),
-              ('Markov Chain Monte Carlo', 2, None, 'markov-chain-monte-carlo'),
-              ('Boltzmann Machines', 2, None, 'boltzmann-machines'),
-              ('The network', 2, None, 'the-network'),
-              ('Joint distribution', 2, None, 'joint-distribution'),
-              ('Network Elements, the energy function',
+               'essential-elements-of-generative-models'),
+              ('Energy models', 2, None, 'energy-models'),
+              ('Probability model', 2, None, 'probability-model'),
+              ('Marginal and conditional probabilities',
                2,
                None,
-               'network-elements-the-energy-function'),
-              ('Defining different types of RBMs',
+               'marginal-and-conditional-probabilities'),
+              ('Change of notation', 2, None, 'change-of-notation'),
+              ('Optimization problem', 2, None, 'optimization-problem'),
+              ('Further simplifications', 2, None, 'further-simplifications'),
+              ('Optimizing the logarithm instead',
                2,
                None,
-               'defining-different-types-of-rbms'),
-              ('Cost function', 2, None, 'cost-function'),
-              ('Optimization / Training', 2, None, 'optimization-training'),
-              ('Kullback-Leibler relative entropy',
+               'optimizing-the-logarithm-instead'),
+              ('Expression for the gradients',
                2,
                None,
-               'kullback-leibler-relative-entropy'),
-              ('Setting up for gradient descent calculations',
+               'expression-for-the-gradients'),
+              ('The derivative of the partition function',
                2,
                None,
-               'setting-up-for-gradient-descent-calculations'),
-              ('Mathematical details', 2, None, 'mathematical-details'),
-              ('Marginal Probability Density Functions',
+               'the-derivative-of-the-partition-function'),
+              ('Explicit expression for the derivative',
                2,
                None,
-               'marginal-probability-density-functions'),
-              ('Conditional Probability Density Functions',
+               'explicit-expression-for-the-derivative'),
+              ('Final expression', 2, None, 'final-expression'),
+              ('Introducing the energy model',
                2,
                None,
-               'conditional-probability-density-functions'),
-              ('Gaussian-Binary Restricted Boltzmann Machines',
+               'introducing-the-energy-model'),
+              ('More compact notation', 2, None, 'more-compact-notation'),
+              ('Anticipating results to be derived',
                2,
                None,
-               'gaussian-binary-restricted-boltzmann-machines'),
-              ('Joint Probability Density Function',
+               'anticipating-results-to-be-derived'),
+              ('Reminder on Markov Chain Monte Carlo',
                2,
                None,
-               'joint-probability-density-function'),
-              ('Marginal Probability Density Functions',
+               'reminder-on-markov-chain-monte-carlo'),
+              ('Brownian motion and Markov processes',
                2,
                None,
-               'marginal-probability-density-functions'),
-              ('Conditional Probability Density Functions',
+               'brownian-motion-and-markov-processes'),
+              ('Brownian motion and Markov processes, Ergodicity and Detailed '
+               'balance',
                2,
                None,
-               'conditional-probability-density-functions')]}
+               'brownian-motion-and-markov-processes-ergodicity-and-detailed-balance'),
+              ('Brownian motion and Markov processes, jargon',
+               2,
+               None,
+               'brownian-motion-and-markov-processes-jargon'),
+              ('Brownian motion and Markov processes, sequence of ingredients',
+               2,
+               None,
+               'brownian-motion-and-markov-processes-sequence-of-ingredients'),
+              ('Markov processes', 2, None, 'markov-processes'),
+              ('Markov processes', 2, None, 'markov-processes'),
+              ('Markov processes, the probabilities',
+               2,
+               None,
+               'markov-processes-the-probabilities'),
+              ('Markov processes', 2, None, 'markov-processes'),
+              ('What do the results mean?',
+               2,
+               None,
+               'what-do-the-results-mean'),
+              ('Understanding the basics', 2, None, 'understanding-the-basics'),
+              ('Basics of the Metropolis Algorithm',
+               2,
+               None,
+               'basics-of-the-metropolis-algorithm'),
+              ('The basic of the Metropolis Algorithm',
+               2,
+               None,
+               'the-basic-of-the-metropolis-algorithm'),
+              ('More on the Metropolis', 2, None, 'more-on-the-metropolis'),
+              ('Metropolis algorithm, setting it up',
+               2,
+               None,
+               'metropolis-algorithm-setting-it-up'),
+              ('Metropolis continues', 2, None, 'metropolis-continues'),
+              ('Detailed Balance', 2, None, 'detailed-balance'),
+              ('More on Detailed Balance', 2, None, 'more-on-detailed-balance'),
+              ('Gibbs sampling', 2, None, 'gibbs-sampling'),
+              ('Understanding Gibbs samoling',
+               2,
+               None,
+               'understanding-gibbs-samoling'),
+              ('Conditional probabilities',
+               2,
+               None,
+               'conditional-probabilities')]}
 end of tocinfo -->
 
 <body>
@@ -213,24 +259,42 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#example-of-usage-of-bayes-theorem" style="font-size: 80%;">Example of Usage of Bayes' theorem</a></li>
      <!-- navigation toc: --> <li><a href="#doing-it-correctly" style="font-size: 80%;">Doing it correctly</a></li>
      <!-- navigation toc: --> <li><a href="#maximum-likelihood-estimation-mle" style="font-size: 80%;">Maximum Likelihood Estimation (MLE)</a></li>
-     <!-- navigation toc: --> <li><a href="#probability-distributions-and-normalization-constants" style="font-size: 80%;">Probability distributions and normalization constants</a></li>
-     <!-- navigation toc: --> <li><a href="#markov-chain-monte-carlo" style="font-size: 80%;">Markov Chain Monte Carlo</a></li>
-     <!-- navigation toc: --> <li><a href="#boltzmann-machines" style="font-size: 80%;">Boltzmann Machines</a></li>
-     <!-- navigation toc: --> <li><a href="#the-network" style="font-size: 80%;">The network</a></li>
-     <!-- navigation toc: --> <li><a href="#joint-distribution" style="font-size: 80%;">Joint distribution</a></li>
-     <!-- navigation toc: --> <li><a href="#network-elements-the-energy-function" style="font-size: 80%;">Network Elements, the energy function</a></li>
-     <!-- navigation toc: --> <li><a href="#defining-different-types-of-rbms" style="font-size: 80%;">Defining different types of RBMs</a></li>
-     <!-- navigation toc: --> <li><a href="#cost-function" style="font-size: 80%;">Cost function</a></li>
-     <!-- navigation toc: --> <li><a href="#optimization-training" style="font-size: 80%;">Optimization / Training</a></li>
-     <!-- navigation toc: --> <li><a href="#kullback-leibler-relative-entropy" style="font-size: 80%;">Kullback-Leibler relative entropy</a></li>
-     <!-- navigation toc: --> <li><a href="#setting-up-for-gradient-descent-calculations" style="font-size: 80%;">Setting up for gradient descent calculations</a></li>
-     <!-- navigation toc: --> <li><a href="#mathematical-details" style="font-size: 80%;">Mathematical details</a></li>
-     <!-- navigation toc: --> <li><a href="#marginal-probability-density-functions" style="font-size: 80%;">Marginal Probability Density Functions</a></li>
-     <!-- navigation toc: --> <li><a href="#conditional-probability-density-functions" style="font-size: 80%;">Conditional Probability Density Functions</a></li>
-     <!-- navigation toc: --> <li><a href="#gaussian-binary-restricted-boltzmann-machines" style="font-size: 80%;">Gaussian-Binary Restricted Boltzmann Machines</a></li>
-     <!-- navigation toc: --> <li><a href="#joint-probability-density-function" style="font-size: 80%;">Joint Probability Density Function</a></li>
-     <!-- navigation toc: --> <li><a href="#marginal-probability-density-functions" style="font-size: 80%;">Marginal Probability Density Functions</a></li>
-     <!-- navigation toc: --> <li><a href="#conditional-probability-density-functions" style="font-size: 80%;">Conditional Probability Density Functions</a></li>
+     <!-- navigation toc: --> <li><a href="#essential-elements-of-generative-models" style="font-size: 80%;">Essential elements of generative models</a></li>
+     <!-- navigation toc: --> <li><a href="#energy-models" style="font-size: 80%;">Energy models</a></li>
+     <!-- navigation toc: --> <li><a href="#probability-model" style="font-size: 80%;">Probability model</a></li>
+     <!-- navigation toc: --> <li><a href="#marginal-and-conditional-probabilities" style="font-size: 80%;">Marginal and conditional probabilities</a></li>
+     <!-- navigation toc: --> <li><a href="#change-of-notation" style="font-size: 80%;">Change of notation</a></li>
+     <!-- navigation toc: --> <li><a href="#optimization-problem" style="font-size: 80%;">Optimization problem</a></li>
+     <!-- navigation toc: --> <li><a href="#further-simplifications" style="font-size: 80%;">Further simplifications</a></li>
+     <!-- navigation toc: --> <li><a href="#optimizing-the-logarithm-instead" style="font-size: 80%;">Optimizing the logarithm instead</a></li>
+     <!-- navigation toc: --> <li><a href="#expression-for-the-gradients" style="font-size: 80%;">Expression for the gradients</a></li>
+     <!-- navigation toc: --> <li><a href="#the-derivative-of-the-partition-function" style="font-size: 80%;">The derivative of the partition function</a></li>
+     <!-- navigation toc: --> <li><a href="#explicit-expression-for-the-derivative" style="font-size: 80%;">Explicit expression for the derivative</a></li>
+     <!-- navigation toc: --> <li><a href="#final-expression" style="font-size: 80%;">Final expression</a></li>
+     <!-- navigation toc: --> <li><a href="#introducing-the-energy-model" style="font-size: 80%;">Introducing the energy model</a></li>
+     <!-- navigation toc: --> <li><a href="#more-compact-notation" style="font-size: 80%;">More compact notation</a></li>
+     <!-- navigation toc: --> <li><a href="#anticipating-results-to-be-derived" style="font-size: 80%;">Anticipating results to be derived</a></li>
+     <!-- navigation toc: --> <li><a href="#reminder-on-markov-chain-monte-carlo" style="font-size: 80%;">Reminder on Markov Chain Monte Carlo</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes" style="font-size: 80%;">Brownian motion and Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes-ergodicity-and-detailed-balance" style="font-size: 80%;">Brownian motion and Markov processes, Ergodicity and Detailed balance</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes-jargon" style="font-size: 80%;">Brownian motion and Markov processes, jargon</a></li>
+     <!-- navigation toc: --> <li><a href="#brownian-motion-and-markov-processes-sequence-of-ingredients" style="font-size: 80%;">Brownian motion and Markov processes, sequence of ingredients</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes" style="font-size: 80%;">Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes" style="font-size: 80%;">Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes-the-probabilities" style="font-size: 80%;">Markov processes, the probabilities</a></li>
+     <!-- navigation toc: --> <li><a href="#markov-processes" style="font-size: 80%;">Markov processes</a></li>
+     <!-- navigation toc: --> <li><a href="#what-do-the-results-mean" style="font-size: 80%;">What do the results mean?</a></li>
+     <!-- navigation toc: --> <li><a href="#understanding-the-basics" style="font-size: 80%;">Understanding the basics</a></li>
+     <!-- navigation toc: --> <li><a href="#basics-of-the-metropolis-algorithm" style="font-size: 80%;">Basics of the Metropolis Algorithm</a></li>
+     <!-- navigation toc: --> <li><a href="#the-basic-of-the-metropolis-algorithm" style="font-size: 80%;">The basic of the Metropolis Algorithm</a></li>
+     <!-- navigation toc: --> <li><a href="#more-on-the-metropolis" style="font-size: 80%;">More on the Metropolis</a></li>
+     <!-- navigation toc: --> <li><a href="#metropolis-algorithm-setting-it-up" style="font-size: 80%;">Metropolis algorithm, setting it up</a></li>
+     <!-- navigation toc: --> <li><a href="#metropolis-continues" style="font-size: 80%;">Metropolis continues</a></li>
+     <!-- navigation toc: --> <li><a href="#detailed-balance" style="font-size: 80%;">Detailed Balance</a></li>
+     <!-- navigation toc: --> <li><a href="#more-on-detailed-balance" style="font-size: 80%;">More on Detailed Balance</a></li>
+     <!-- navigation toc: --> <li><a href="#gibbs-sampling" style="font-size: 80%;">Gibbs sampling</a></li>
+     <!-- navigation toc: --> <li><a href="#understanding-gibbs-samoling" style="font-size: 80%;">Understanding Gibbs samoling</a></li>
+     <!-- navigation toc: --> <li><a href="#conditional-probabilities" style="font-size: 80%;">Conditional probabilities</a></li>
 
         </ul>
       </li>
@@ -273,7 +337,7 @@ MathJax.Hub.Config({
 <li> Finalizing discussion on autoencoders and implementing Autoencoders with TensorFlow/Keras and PyTorch</li>
 <li> Overview of generative models</li>
 <li> Probability distributions and Markov Chain Monte Carlo simulations</li>
-<li> Boltzmann machines and energy models</li>
+<li> If we get time, we end the lecture  with Boltzmann machines and energy models</li>
 <li> Reading recommendation: Goodfellow et al chapters 16 and 18.1 and 18.2. Chapter 17 gives a background to Monte Carlo Markov Chains.
 <!-- o <a href="https://youtu.be/8s0QC1MvdYg" target="_self">Video of lecture</a> -->
 <!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesMarch19.pdf" target="_self">Whiteboard notes</a> --></li>
@@ -1486,853 +1550,994 @@ is equivalent to the maximization/minimization of the function itself.
 </p>
 
 <!-- !split -->
-<h2 id="probability-distributions-and-normalization-constants" class="anchor">Probability distributions and normalization constants </h2>
+<h2 id="essential-elements-of-generative-models" class="anchor">Essential elements of generative models </h2>
 
-<p>See whiteboard notes</p>
+<p>The aim of generative methods is to train a probability distribution \( p \). The methods we will focus on are:</p>
+<ol>
+<li> Energy based models, with the family of Boltzmann distributions as a typical example</li>
+<li> Variational autoencoders, based on our discussions on autoencoders</li>
+<li> Generative adversarial networks (GANs) and</li>
+<li> Diffusion models</li>
+</ol>
+<!-- !split -->
+<h2 id="energy-models" class="anchor">Energy models </h2>
+
+<p>We define a domain \( \boldsymbol{X} \) of stochastic variables \( \boldsymbol{X}= \{x_0,x_1, \dots , x_{n-1}\} \) with a pertinent probability distribution</p>
+$$
+p(\boldsymbol{X})=\prod_{x_i\in \boldsymbol{X}}p(x_i),
+$$
+
+<p>where we have assumed that the random varaibles \( x_i \) are all independent and identically distributed (iid).</p>
+
+<p>We will now assume that we can defined this function in terms of optimization parameters \( \boldsymbol{\Theta} \), which could be the biases and weights of deep network, and a set of hidden variables we also assume to be random variables which also are iid. The domain of these variables is
+\( \boldsymbol{H}= \{h_0,h_1, \dots , h_{m-1}\} \).
+</p>
 
 <!-- !split -->
-<h2 id="markov-chain-monte-carlo" class="anchor">Markov Chain Monte Carlo </h2>
+<h2 id="probability-model" class="anchor">Probability model </h2>
 
-<p>See whiteboard notes</p>
+<p>We define a probability</p>
+$$
+p(x_i,h_j;\boldsymbol{\Theta}) = \frac{f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>where \( f(x_i,h_j;\boldsymbol{\Theta}) \) is a function which we assume is larger or
+equal than zero and obeys all properties required for a probability
+distribution and \( Z(\boldsymbol{\Theta}) \) is a normalization constant. Inspired by
+statistical mechanics, we call it often for the partition function.
+It is defined as (assuming that we have discrete probability distributions)
+</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}).
+$$
+
 
 <!-- !split -->
-<h2 id="boltzmann-machines" class="anchor">Boltzmann Machines </h2>
+<h2 id="marginal-and-conditional-probabilities" class="anchor">Marginal and conditional probabilities </h2>
 
-<p>Why use a generative model rather than the more well known discriminative deep neural networks (DNN)? </p>
+<p>We can in turn define the marginal probabilities</p>
+$$
+p(x_i;\boldsymbol{\Theta}) = \frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>and </p>
+$$
+p(h_i;\boldsymbol{\Theta}) = \frac{\sum_{x_i\in \boldsymbol{X}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}.
+$$
+
+
+<!-- !split -->
+<h2 id="change-of-notation" class="anchor">Change of notation </h2>
+
+<p><b>Note the change to a vector notation</b>. A variable like \( \boldsymbol{x} \)
+represents now a specific <b>configuration</b>. We can generate an infinity
+of such configurations. The final partition function is then the sum
+over all such possible configurations, that is
+</p>
+
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+
+<p>changes to</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{\boldsymbol{x}}\sum_{\boldsymbol{h}} f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}).
+$$
+
+<p>If we have a binary set of variable \( x_i \) and \( h_j \) and \( M \) values of \( x_i \) and \( N \) values of \( h_j \) we have in total \( 2^M \) and \( 2^N \) possible \( \boldsymbol{x} \) and \( \boldsymbol{h} \) configurations, respectively.</p>
+
+<p>We see that even for the modest binary case, we can easily approach a
+number of configuration which is not possible to deal with.
+</p>
+
+<!-- !split -->
+<h2 id="optimization-problem" class="anchor">Optimization problem </h2>
+
+<p>At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is </p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta})=\prod_{x_i\in \boldsymbol{X}}\left(\frac{\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})}\right),
+$$
+
+<p>which we rewrite as</p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}\left(\sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta})\right).
+$$
+
+
+<!-- !split -->
+<h2 id="further-simplifications" class="anchor">Further simplifications </h2>
+
+<p>We simplify further by rewriting it as</p>
+$$
+p(\boldsymbol{X};\boldsymbol{\Theta})=\frac{1}{Z(\boldsymbol{\Theta})}\prod_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}),
+$$
+
+<p>where we used \( p(x_i;\boldsymbol{\Theta}) = \sum_{h_j\in \boldsymbol{H}}f(x_i,h_j;\boldsymbol{\Theta}) \).
+The optimization problem is then
+</p>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\boldsymbol{X};\boldsymbol{\Theta}).
+$$
+
+
+<!-- !split -->
+<h2 id="optimizing-the-logarithm-instead" class="anchor">Optimizing the logarithm instead </h2>
+
+<p>Computing the derivatives with respect to the parameters \( \boldsymbol{\Theta} \) is
+easier (and equivalent) with taking the logarithm of the
+probability. We will thus optimize
+</p>
+$$
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\boldsymbol{\boldsymbol{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\boldsymbol{X};\boldsymbol{\Theta})},
+$$
+
+<p>which leads to</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=0.
+$$
+
+
+<!-- !split -->
+<h2 id="expression-for-the-gradients" class="anchor">Expression for the gradients </h2>
+<p>This leads to the following equation</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{p(\boldsymbol{X};\boldsymbol{\Theta})}=\nabla_{\boldsymbol{\Theta}}\left(\sum_{x_i\in \boldsymbol{X}}\log{f(x_i;\boldsymbol{\Theta})}\right)-\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=0.
+$$
+
+<p>The first term is called the positive phase and we assume that we have a model for the function \( f \) from which we can sample values. Below we will develop an explicit model for this.
+The second term is called the negative phase and is the one which leads to more difficulties.
+</p>
+
+<!-- !split -->
+<h2 id="the-derivative-of-the-partition-function" class="anchor">The derivative of the partition function </h2>
+
+<p>The partition function, defined above as</p>
+$$
+Z(\boldsymbol{\Theta})=\sum_{x_i\in \boldsymbol{X}}\sum_{h_j\in \boldsymbol{H}} f(x_i,h_j;\boldsymbol{\Theta}),
+$$
+
+<p>is in general the most problematic term. In principle both \( x \) and \( h \) can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).</p>
+
+<!-- !split -->
+<h2 id="explicit-expression-for-the-derivative" class="anchor">Explicit expression for the derivative </h2>
+<p>We can rewrite</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}}Z(\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>which reads in more detail</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{\nabla_{\boldsymbol{\Theta}} \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta})   }{Z(\boldsymbol{\Theta})}.
+$$
+
+<p>We can rewrite the function \( f \) (we have assumed that is larger or
+equal than zero) as \( f=\exp{\log{f}} \). We can then reqrite the last
+equation as
+</p>
+
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}} \nabla_{\boldsymbol{\Theta}}\exp{\log{f(x_i;\boldsymbol{\Theta})}}   }{Z(\boldsymbol{\Theta})}.
+$$
+
+
+<!-- !split -->
+<h2 id="final-expression" class="anchor">Final expression </h2>
+
+<p>Taking the derivative gives us</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\frac{ \sum_{x_i\in \boldsymbol{X}}f(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})}   }{Z(\boldsymbol{\Theta})}, 
+$$
+
+<p>which is the expectation value of \( \log{f} \)</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\sum_{x_i\in \boldsymbol{X}}p(x_i;\boldsymbol{\Theta}) \nabla_{\boldsymbol{\Theta}}\log{f(x_i;\boldsymbol{\Theta})},
+$$
+
+<p>that is</p>
+$$
+\nabla_{\boldsymbol{\Theta}}\log{Z(\boldsymbol{\Theta})}=\mathbb{E}(\log{f(x_i;\boldsymbol{\Theta})}).
+$$
+
+<p>This quantity is evaluated using Monte Carlo sampling, with Gibbs
+sampling as the standard sampling rule.  Before we discuss the
+explicit algorithms, we need to remind ourselves about Markov chains
+and sampling rules like the Metropolis-Hastings algorithm and Gibbs
+sampling.
+</p>
+
+<!-- !split -->
+<h2 id="introducing-the-energy-model" class="anchor">Introducing the energy model </h2>
+
+<p>As we will see below, a typical Boltzmann machines employs a probability distribution</p>
+$$
+p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>where \( f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) \) is given by a so-called energy model. If we assume that the random variables \( x_i \) and \( h_j \) take binary values only, for example \( x_i,h_j=\{0,1\} \), we have a so-called binary-binary model where</p>
+$$
+f(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta})=-E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta}) = \sum_{x_i\in \boldsymbol{X}} x_i a_i+\sum_{h_j\in \boldsymbol{H}} b_j h_j + \sum_{x_i\in \boldsymbol{X},h_j\in\boldsymbol{H}} x_i w_{ij} h_j,
+$$
+
+<p>where the set of parameters are given by the biases and weights \( \boldsymbol{\Theta}=\{\boldsymbol{a},\boldsymbol{b},\boldsymbol{W}\} \).
+<b>Note the vector notation</b> instead of \( x_i \) and \( h_j \) for \( f \). The vectors \( \boldsymbol{x} \) and \( \boldsymbol{h} \) represent a specific instance of stochastic variables \( x_i \) and \( h_j \). These arrangements of \( \boldsymbol{x} \) and \( \boldsymbol{h} \) lead to a specific energy configuration.
+</p>
+
+<!-- !split -->
+<h2 id="more-compact-notation" class="anchor">More compact notation </h2>
+
+<p>With the above definition we can write the probability as</p>
+$$
+p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}) = \frac{\exp{(\boldsymbol{a}^T\boldsymbol{x}+\boldsymbol{b}^T\boldsymbol{h}+\boldsymbol{x}^T\boldsymbol{W}\boldsymbol{h})}}{Z(\boldsymbol{\Theta})},
+$$
+
+<p>where the biases \( \boldsymbol{a} \) and \( \boldsymbol{h} \) and the weights defined by the matrix \( \boldsymbol{W} \) are the parameters we need to optimize.</p>
+
+<!-- !split -->
+<h2 id="anticipating-results-to-be-derived" class="anchor">Anticipating results to be derived </h2>
+
+<p>Since the binary-binary energy model is linear in the parameters \( a_i \), \( b_j \) and
+\( w_{ij} \), it is easy to see that the derivatives with respect to the
+various optimization parameters yield expressions used in the
+evaluation of gradients like
+</p>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial w_{ij}}=-x_ih_j,
+$$
+
+<p>and</p>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial a_i}=-x_i,
+$$
+
+<p>and</p>
+$$
+\frac{\partial E(\boldsymbol{x}, \boldsymbol{h};\boldsymbol{\Theta})}{\partial b_j}=-h_j.
+$$
+
+
+<!-- !split -->
+<h2 id="reminder-on-markov-chain-monte-carlo" class="anchor">Reminder on Markov Chain Monte Carlo </h2>
 
 <ul>
-<li> Discriminitave methods have several limitations: They are mainly supervised learning methods, thus requiring labeled data. And there are tasks they cannot accomplish, like drawing new examples from an unknown probability distribution.</li>
-<li> A generative model can learn to represent and sample from a probability distribution. The core idea is to learn a parametric model of the probability distribution from which the training data was drawn. As an example
-<ol type="a"></li>
- <li> A model for images could learn to draw new examples of cats and dogs, given a training dataset of images of cats and dogs.</li>
- <li> Generate a sample of an ordered or disordered Ising model phase, having been given samples of such phases.</li>
- <li> Model the trial function for Monte Carlo calculations</li>
-</ol>
-<li> Both use gradient-descent based learning procedures for minimizing cost functions</li>
-<li> Energy based models don't use backpropagation and automatic differentiation for computing gradients, instead turning to Markov Chain Monte Carlo methods.</li>
-<li> DNNs often have several hidden layers. A restricted Boltzmann machine has only one hidden layer, however several RBMs can be stacked to make up Deep Belief Networks, of which they constitute the building blocks.</li>
+<li> We want to study a physical system which evolves towards equilibrium, from given  initial conditions.</li>
+<li> We start with a PDF \( w(x_0,t_0) \)  and we want to understand how the system evolves with time.</li>
+<li> We want to reach a situation where after a given number of time steps we obtain a steady state. This means that the system reaches its most likely state (equilibrium situation)</li>
+<li> Our PDF is normally a multidimensional object whose normalization constant is impossible to find.</li>
+<li> Analytical calculations from \( w(x,t) \) are not possible.</li>
+<li> To sample directly from from \( w(x,t) \) is not possible/difficult.</li>
+<li> The transition probability \( W \) is also not  known.</li>
+<li> How can we establish that we have reached a steady state?   Sounds impossible!</li>
 </ul>
-<p>History: The RBM was developed by amongst others Geoffrey Hinton, called by some the "Godfather of Deep Learning", working with the University of Toronto and Google.</p>
+<b>Use Markov chain Monte Carlo</b>
 
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>A BM is what we would call an undirected probabilistic graphical model
-with stochastic continuous or discrete units.
-</p>
-</div>
-</div>
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>It is interpreted as a stochastic recurrent neural network where the
-state of each unit(neurons/nodes) depends on the units it is connected
-to. The weights in the network represent thus the strength of the
-interaction between various units/nodes.
-</p>
-</div>
-</div>
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>It turns into a Hopfield network if we choose deterministic rather
-than stochastic units. In contrast to a Hopfield network, a BM is a
-so-called generative model. It allows us to generate new samples from
-the learned distribution.
-</p>
-</div>
-</div>
-
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>A standard BM network is divided into a set of observable and visible units \( \hat{x} \) and a set of unknown hidden units/nodes \( \hat{h} \).</p>
-</div>
-</div>
-
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>Additionally there can be bias nodes for the hidden and visible layers. These biases are normally set to \( 1 \).</p>
-</div>
-</div>
-
-
-<div class="panel panel-default">
-<div class="panel-body">
-<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-<p>BMs are stackable, meaning they cwe can train a BM which serves as input to another BM. We can construct deep networks for learning complex PDFs. The layers can be trained one after another, a feature which makes them popular in deep learning</p>
-</div>
-</div>
-
-
-<p>However, they are often hard to train. This leads to the introduction of so-called restricted BMs, or RBMS.
-Here we take away all lateral connections between nodes in the visible layer as well as connections between nodes in the hidden layer. The network is illustrated in the figure below.
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes" class="anchor">Brownian motion and Markov processes </h2>
+<p>A Markov process is a random walk with a selected probability for making a
+move. The new move is independent of the previous history of the system.
 </p>
 
-<br/><br/>
-<center>
-<p><img src="figures/RBM.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
+<p>The Markov process is used repeatedly in Monte Carlo simulations in order to generate
+new random states.
+</p>
 
+<p>The reason for choosing a Markov process is that when it is run for a
+long enough time starting with a random state, we will eventually reach the most likely state of the system.
+</p>
+
+<p>In thermodynamics, this means that after a certain number of Markov processes
+we reach an equilibrium distribution.
+</p>
+
+<p>This mimicks the way a real system reaches
+its most likely state at a given temperature of the surroundings.
+</p>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes-ergodicity-and-detailed-balance" class="anchor">Brownian motion and Markov processes, Ergodicity and Detailed balance </h2>
+
+<p>To reach this distribution, the Markov process needs to obey two important conditions, that of
+<b>ergodicity</b> and <b>detailed balance</b>. These conditions impose then constraints on our algorithms
+for accepting or rejecting new random states.
+</p>
+
+<p>The Metropolis algorithm discussed here
+abides to both these constraints.
+</p>
+
+<p>The Metropolis algorithm is widely used in Monte Carlo
+simulations and the understanding of it rests within
+the interpretation of random walks and Markov processes.
+</p>
+
+<p>For a proof the ergodic theorem see <a href="https://www.pnas.org/doi/10.1073/pnas.17.2.656" target="_self"><tt>https://www.pnas.org/doi/10.1073/pnas.17.2.656</tt></a>.</p>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes-jargon" class="anchor">Brownian motion and Markov processes, jargon </h2>
+
+<p>In a random walk one defines a mathematical entity called a <b>walker</b>, 
+whose  attributes
+completely define the state of the system in question. 
+</p>
+
+<p>The state of the system  can refer to any physical quantities,
+from the vibrational state of a molecule specified by a set of quantum numbers, 
+to the brands of coffee in your favourite supermarket.
+</p>
+
+<p>The walker moves in an appropriate state space by a combination of 
+deterministic and random displacements from its previous
+position.
+</p>
+
+<p>This sequence of steps forms a <b>chain</b>.</p>
+
+<!-- !split  -->
+<h2 id="brownian-motion-and-markov-processes-sequence-of-ingredients" class="anchor">Brownian motion and Markov processes, sequence of ingredients </h2>
+
+<ul>
+<li> We want to study a physical system which evolves towards equilibrium, from given  initial conditions.</li>
+<li> Markov chains are intimately linked with the physical process of diffusion.</li> 
+<li> From a Markov chain we can then derive the conditions for detailed balance and ergodicity. These are the conditions needed for obtaining a steady state.</li>
+<li> The widely used algorithm for doing this is the so-called Metropolis algorithm, in its refined form the Metropolis-Hastings algorithm.</li>
+</ul>
 <!-- !split -->
-<h2 id="the-network" class="anchor">The network </h2>
-
-<b>The network layers</b>:
-<ol>
- <li> A function \( \mathbf{x} \) that represents the visible layer, a vector of \( M \) elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.</li>
- <li> The function \( \mathbf{h} \) represents the hidden, or latent, layer. A vector of \( N \) elements (nodes). Also called "feature detectors".</li>
-</ol>
-<p>The goal of the hidden layer is to increase the model's expressive
-power. We encode complex interactions between visible variables by
-introducing additional, hidden variables that interact with visible
-degrees of freedom in a simple manner, yet still reproduce the complex
-correlations between visible degrees in the data once marginalized
-over (integrated out).
+<h2 id="markov-processes" class="anchor">Markov processes </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>A Markov process allows in principle for a microscopic description of Brownian motion.
+As with the random walk studied in the previous section, we consider a particle 
+which moves along the  \( x \)-axis in the form of a series of jumps with step length 
+\( \Delta x = l \). Time and space are discretized and the subsequent moves are
+statistically independent, i.e., the new move depends only on the previous step
+and not on the results from earlier trials. 
+We start at a position \( x=jl=j\Delta x \) and move to 
+a new position \( x =i\Delta x \) during a step \( \Delta t=\epsilon \), where 
+\( i\ge  0 \) and \( j\ge 0 \) are integers. 
+The original probability distribution function (PDF) of the particles is given by  
+\( p_i(t=0) \) where \( i \) refers to a specific position on the grid in 
 </p>
+</div>
+</div>
 
-<b>The network parameters, to be optimized/learned</b>:
-<ol>
- <li> \( \mathbf{a} \) represents the visible bias, a vector of same length as \( \mathbf{x} \).</li>
- <li> \( \mathbf{b} \) represents the hidden bias, a vector of same lenght as \( \mathbf{h} \).</li>
- <li> \( W \) represents the interaction weights, a matrix of size \( M\times N \).</li>
-</ol>
-<!-- !split -->
-<h2 id="joint-distribution" class="anchor">Joint distribution </h2>
-<p>The restricted Boltzmann machine is described by a Boltzmann distribution</p>
-$$
-\begin{align}
-	P_{rbm}(\mathbf{x},\mathbf{h}) = \frac{1}{Z} e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})},
-\label{_auto1}
-\end{align}
-$$
-
-<p>where \( Z \) is the normalization constant or partition function, defined as </p>
-$$
-\begin{align}
-	Z = \int \int e^{-\frac{1}{T_0}E(\mathbf{x},\mathbf{h})} d\mathbf{x} d\mathbf{h}.
-\label{_auto2}
-\end{align}
-$$
-
-<p>It is common to ignore \( T_0 \) by setting it to one. </p>
-
-<!-- !split -->
-<h2 id="network-elements-the-energy-function" class="anchor">Network Elements, the energy function  </h2>
-
-<p>The function \( E(\mathbf{x},\mathbf{h}) \) gives the <b>energy</b> of a
-configuration (pair of vectors) \( (\mathbf{x}, \mathbf{h}) \). The lower
-the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters \( \mathbf{a} \), \( \mathbf{b} \) and
-\( W \). Thus, when we adjust them during the learning procedure, we are
-adjusting the energy function to best fit our problem.
+<p>The function \( p_i(t=0) \) is now the discretized version of \( p(x,t) \).
+We can regard the discretized PDF as a vector.
 </p>
 
 <!-- !split -->
-<h2 id="defining-different-types-of-rbms" class="anchor">Defining different types of RBMs </h2>
-
-<p>There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function \( E(\mathbf{x},\mathbf{h}) \). The connection between the nodes in the two layers is given by the weights \( w_{ij} \). </p>
-
+<h2 id="markov-processes" class="anchor">Markov processes </h2>
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
-
-<p>RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:</p>
+<p>For the Markov process we have a transition probability from a position
+\( x=jl \) to a position \( x=il \) given by
+</p>
 $$
-\begin{align}
-	E(\mathbf{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
-\label{_auto3}
-\end{align}
+\begin{equation*}
+   W_{ij}(\epsilon)=W(il-jl,\epsilon)=\left\{\begin{array}{cc}\frac{1}{2} & |i-j| = 1\\
+             0 & \mathrm{else} \end{array} \right. ,
+\end{equation*}
 $$
 
-<p>where the binary values taken on by the nodes are most commonly 0 and 1.</p>
+<p>where \( W_{ij} \) is normally called 
+the transition probability and we can represent it, see below,
+as a matrix. 
+<b>Here we have specialized to a case where the transition probability is known</b>.
+</p>
+
+<p>Our new PDF \( p_i(t=\epsilon) \) is now related to the PDF at
+\( t=0 \) through the relation
+</p>
+
+$$
+\begin{equation*} 
+   p_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)p_j(t=0).
+\end{equation*}
+$$
+
+<p>This equation represents the discretized time-development of an original 
+PDF with equal probability of jumping left or right.
+</p>
 </div>
 </div>
 
+
+<!-- !split -->
+<h2 id="markov-processes-the-probabilities" class="anchor">Markov processes, the probabilities </h2>
 <div class="panel panel-default">
 <div class="panel-body">
 <!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
 
-<p>Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:</p>
-$$
-\begin{align}
-	E(\mathbf{x}, \mathbf{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
-\label{_auto4}
-\end{align}
-$$
-</div>
-</div>
-
-
-<ol>
-<li> RBMs are Useful when we model continuous data (i.e., we wish \( \mathbf{x} \) to be continuous)</li>
-<li> Requires a smaller learning rate, since there's no upper bound to the value a component might take in the reconstruction</li>
-</ol>
-<p>Other types of units include:</p>
-<ol>
-<li> Softmax and multinomial units</li>
-<li> Gaussian visible and hidden units</li>
-<li> Binomial units</li>
-<li> Rectified linear units</li>
-</ol>
-<!-- !split -->
-<h2 id="cost-function" class="anchor">Cost function </h2>
-
-<p>When working with a training dataset, the most common training approach is maximizing the log-likelihood of the training data. The log likelihood characterizes the log-probability of generating the observed data using our generative model. Using this method our cost function is chosen as the negative log-likelihood. The learning then consists of trying to find parameters that maximize the probability of the dataset, and is known as Maximum Likelihood Estimation (MLE).
-Denoting the parameters as \( \boldsymbol{\theta} = a_1,...,a_M,b_1,...,b_N,w_{11},...,w_{MN} \), the log-likelihood is given by
-</p>
-$$
-\begin{align}
-	\mathcal{L}(\{ \theta_i \}) &= \langle \text{log} P_\theta(\boldsymbol{x}) \rangle_{data} 
-\label{_auto5}\\
-	&= - \langle E(\boldsymbol{x}; \{ \theta_i\}) \rangle_{data} - \text{log} Z(\{ \theta_i\}),
-\label{_auto6}
-\end{align}
-$$
-
-<p>where we used that the normalization constant does not depend on the data, \( \langle \text{log} Z(\{ \theta_i\}) \rangle = \text{log} Z(\{ \theta_i\}) \)
-Our cost function is the negative log-likelihood, \( \mathcal{C}(\{ \theta_i \}) = - \mathcal{L}(\{ \theta_i \}) \)
-</p>
-
-<!-- !split -->
-<h2 id="optimization-training" class="anchor">Optimization / Training </h2>
-
-<p>The training procedure of choice often is Stochastic Gradient Descent (SGD). It consists of a series of iterations where we update the parameters according to the equation</p>
-$$
-\begin{align}
-	\boldsymbol{\theta}_{k+1} = \boldsymbol{\theta}_k - \eta \nabla \mathcal{C} (\boldsymbol{\theta}_k)
-\label{_auto7}
-\end{align}
-$$
-
-<p>at each \( k \)-th iteration. There are a range of variants of the algorithm which aim at making the learning rate \( \eta \) more adaptive so the method might be more efficient while remaining stable.</p>
-
-<p>We now need the gradient of the cost function in order to minimize it. We find that</p>
-$$
-\begin{align}
-	\frac{\partial \mathcal{C}(\{ \theta_i\})}{\partial \theta_i}
-	&= \langle \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i} \rangle_{data}
-	+ \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i} 
-\label{_auto8}\\
-	&= \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model},
-\label{_auto9}
-\end{align}
-$$
-
-<p>where in order to simplify notation we defined the "operator"</p>
-$$
-\begin{align}
-	O_i(\boldsymbol{x}) = \frac{\partial E(\boldsymbol{x}; \theta_i)}{\partial \theta_i}, 
-\label{_auto10}
-\end{align}
-$$
-
-<p>and used the statistical mechanics relationship between expectation values and the log-partition function:</p>
-$$
-\begin{align}
-	\langle O_i(\boldsymbol{x}) \rangle_{model} = \text{Tr} P_\theta(\boldsymbol{x})O_i(\boldsymbol{x}) = - \frac{\partial \text{log} Z(\{ \theta_i\})}{\partial \theta_i}.
-\label{_auto11}
-\end{align}
-$$
-
-<p>The data-dependent term in the gradient is known as the positive phase
-of the gradient, while the model-dependent term is known as the
-negative phase of the gradient. The aim of the training is to lower
-the energy of configurations that are near observed data points
-(increasing their probability), and raising the energy of
-configurations that are far from observed data points (decreasing
-their probability).
-</p>
-
-<p>The gradient of the negative log-likelihood cost function of a Binary-Binary RBM is then</p>
-$$
-\begin{align}
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial w_{ij}} =& \langle x_i h_j \rangle_{data} - \langle x_i h_j \rangle_{model} 
-\label{_auto12}\\
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial a_{ij}} =& \langle x_i \rangle_{data} - \langle x_i \rangle_{model} 
-\label{_auto13}\\
-	\frac{\partial \mathcal{C} (w_{ij}, a_i, b_j)}{\partial b_{ij}} =& \langle h_i \rangle_{data} - \langle h_i \rangle_{model}. 
-\label{_auto14}\\
-\label{_auto15}
-\end{align}
-$$
-
-<p>To get the expectation values with respect to the <em>data</em>, we set the visible units to each of the observed samples in the training data, then update the hidden units according to the conditional probability found before. We then average over all samples in the training data to calculate expectation values with respect to the data. </p>
-
-<!-- !split -->
-<h2 id="kullback-leibler-relative-entropy" class="anchor">Kullback-Leibler relative entropy </h2>
-
-<p>When the goal of the training is to approximate a probability
-distribution, as it is in generative modeling, another relevant
-measure is the <b>Kullback-Leibler divergence</b>, also known as the
-relative entropy or Shannon entropy. It is a non-symmetric measure of the
-dissimilarity between two probability density functions \( p \) and
-\( q \). If \( p \) is the unkown probability which we approximate with \( q \),
-we can measure the difference by
-</p>
-$$
-\begin{align}
-	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\boldsymbol{x}) \log \frac{p(\boldsymbol{x})}{q(\boldsymbol{x})}  d\boldsymbol{x}.
-\label{_auto16}
-\end{align}
-$$
-
-<p>Thus, the Kullback-Leibler divergence between the distribution of the
-training data \( f(\boldsymbol{x}) \) and the model distribution \( p(\boldsymbol{x}|
-\boldsymbol{\theta}) \) is
+<p>Since both \( \boldsymbol{W} \) and \( \boldsymbol{p} \) represent probabilities, they have to be normalized, i.e., we require
+that at each time step we have
 </p>
 
 $$
-\begin{align}
-	\text{KL} (f(\boldsymbol{x})|| p(\boldsymbol{x}| \boldsymbol{\theta})) =& \int_{-\infty}^{\infty}
-	f (\boldsymbol{x}) \log \frac{f(\boldsymbol{x})}{p(\boldsymbol{x}| \boldsymbol{\theta})} d\boldsymbol{x} 
-\label{_auto17}\\
-	=& \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log f(\boldsymbol{x}) d\boldsymbol{x} - \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log
-	p(\boldsymbol{x}| \boldsymbol{\theta}) d\boldsymbol{x} 
-\label{_auto18}\\
-	%=& \mathbb{E}_{f(\boldsymbol{x})} (\log f(\boldsymbol{x})) - \mathbb{E}_{f(\boldsymbol{x})} (\log p(\boldsymbol{x}| \boldsymbol{\theta}))
-	=& \langle \log f(\boldsymbol{x}) \rangle_{f(\boldsymbol{x})} - \langle \log p(\boldsymbol{x}| \boldsymbol{\theta}) \rangle_{f(\boldsymbol{x})} 
-\label{_auto19}\\
-	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \langle E(\boldsymbol{x}) \rangle_{data} + \log Z 
-\label{_auto20}\\
-	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \mathcal{C}_{LL} .
-\label{_auto21}
-\end{align}
-$$
-
-<p>The first term is constant with respect to \( \boldsymbol{\theta} \) since \( f(\boldsymbol{x}) \) is independent of \( \boldsymbol{\theta} \). Thus the Kullback-Leibler Divergence is minimal when the second term is minimal. The second term is the log-likelihood cost function, hence minimizing the Kullback-Leibler divergence is equivalent to maximizing the log-likelihood.</p>
-
-<p>To further understand generative models it is useful to study the
-gradient of the cost function which is needed in order to minimize it
-using methods like stochastic gradient descent. 
-</p>
-
-<p>The partition function is the generating function of
-expectation values, in particular there are mathematical relationships
-between expectation values and the log-partition function. In this
-case we have
-</p>
-$$
-\begin{align}
-	\langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model}
-	= \int p(\boldsymbol{x}| \boldsymbol{\theta}) \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} d\boldsymbol{x} 
-	= -\frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} .
-\label{_auto22}
-\end{align}
-$$
-
-<p>Here \( \langle \cdot \rangle_{model} \) is the expectation value over the model probability distribution \( p(\boldsymbol{x}| \boldsymbol{\theta}) \).</p>
-
-<!-- !split -->
-<h2 id="setting-up-for-gradient-descent-calculations" class="anchor">Setting up for gradient descent calculations </h2>
-
-<p>Using the previous relationship we can express the gradient of the cost function as</p>
-
-$$
-\begin{align}
-	\frac{\partial \mathcal{C}_{LL}}{\partial \theta_i}
-	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} + \frac{\partial \log Z(\theta_i)}{ \partial  \theta_i} 
-\label{_auto23}\\
-	=& \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{data} - \langle \frac{ \partial E(\boldsymbol{x}; \theta_i) } { \partial \theta_i} \rangle_{model} 
-\label{_auto24}\\
-	%=& \langle O_i(\boldsymbol{x}) \rangle_{data} - \langle O_i(\boldsymbol{x}) \rangle_{model}
-\label{_auto25}
-\end{align}
-$$
-
-<p>This expression shows that the gradient of the log-likelihood cost
-function is a <b>difference of moments</b>, with one calculated from
-the data and one calculated from the model. The data-dependent term is
-called the <b>positive phase</b> and the model-dependent term is
-called the <b>negative phase</b> of the gradient. We see now that
-minimizing the cost function results in lowering the energy of
-configurations \( \boldsymbol{x} \) near points in the training data and
-increasing the energy of configurations not observed in the training
-data. That means we increase the model's probability of configurations
-similar to those in the training data.
-</p>
-
-<p>The gradient of the cost function also demonstrates why gradients of
-unsupervised, generative models must be computed differently from for
-those of for example FNNs. While the data-dependent expectation value
-is easily calculated based on the samples \( \boldsymbol{x}_i \) in the training
-data, we must sample from the model in order to generate samples from
-which to caclulate the model-dependent term. We sample from the model
-by using MCMC-based methods. We can not sample from the model directly
-because the partition function \( Z \) is generally intractable.
-</p>
-
-<p>As in supervised machine learning problems, the goal is also here to
-perform well on <b>unseen</b> data, that is to have good
-generalization from the training data. The distribution \( f(x) \) we
-approximate is not the <b>true</b> distribution we wish to estimate,
-it is limited to the training data. Hence, in unsupervised training as
-well it is important to prevent overfitting to the training data. Thus
-it is common to add regularizers to the cost function in the same
-manner as we discussed for say linear regression.
-</p>
-
-<!-- !split -->
-<h2 id="mathematical-details" class="anchor">Mathematical details </h2>
-
-<p>Because we are restricted to potential functions which are positive it
-is convenient to express them as exponentials, so that
-</p>
-
-$$
-\begin{align}
-	\phi_C (\boldsymbol{x}_C) = e^{-E_C(\boldsymbol{x}_C)}
-\label{_auto26}
-\end{align}
-$$
-
-<p>where \( E(\boldsymbol{x}_C) \) is called an <em>energy function</em>, and the
-exponential representation is the <em>Boltzmann distribution</em>. The
-joint distribution is defined as the product of potentials.
-</p>
-
-<p>The joint distribution of the random variables is then</p>
-
-$$
-\begin{align}
-	p(\boldsymbol{x}) =& \frac{1}{Z} \prod_C \phi_C (\boldsymbol{x}_C) \nonumber \\
-	=& \frac{1}{Z} \prod_C e^{-E_C(\boldsymbol{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-\sum_C E_C(\boldsymbol{x}_C)} \nonumber \\
-	=& \frac{1}{Z} e^{-E(\boldsymbol{x})}.
-\label{_auto27}
-\end{align} 
-$$
-
-$$
-\begin{align}
-	p_{BM}(\boldsymbol{x}, \boldsymbol{h}) = \frac{1}{Z_{BM}} e^{-\frac{1}{T}E_{BM}(\boldsymbol{x}, \boldsymbol{h})} ,
-\label{_auto28}
-\end{align}
-$$
-
-<p>with the partition function </p>
-$$
-\begin{align}
-	Z_{BM} = \int \int e^{-\frac{1}{T} E_{BM}(\tilde{\boldsymbol{x}}, \tilde{\boldsymbol{h}})} d\tilde{\boldsymbol{x}} d\tilde{\boldsymbol{h}} .
-\label{_auto29}
-\end{align}
-$$
-
-<p>\( T \) is a physics-inspired parameter named temperature and will be assumed to be 1 unless otherwise stated. The energy function of the Boltzmann machine determines the interactions between the nodes and is defined  </p>
-
-$$
-\begin{align}
-	E_{BM}(\boldsymbol{x}, \boldsymbol{h}) =& - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j) \nonumber \\
-	&- \sum_{i, m=i+1, k}^{M, M, K} \alpha_i^k (x_i) v_{im}^k \alpha_m^k (x_m)
-	- \sum_{j,n=j+1,l}^{N,N,L} \beta_j^l (h_j) u_{jn}^l \beta_n^l (h_n).
-\label{_auto30}
-\end{align}
-$$
-
-<p>Here \( \alpha_i^k (x_i) \) and \( \beta_j^l (h_j) \) are one-dimensional
-transfer functions or mappings from the given input value to the
-desired feature value. They can be arbitrary functions of the input
-variables and are independent of the parameterization (parameters
-referring to weight and biases), meaning they are not affected by
-training of the model. The indices \( k \) and \( l \) indicate that there can
-be multiple transfer functions per variable.  Furthermore, \( a_i^k \) and
-\( b_j^l \) are the visible and hidden bias. \( w_{ij}^{kl} \) are weights of
-the \textbf{inter-layer} connection terms which connect visible and
-hidden units. $ v_{im}^k$ and \( u_{jn}^l \) are weights of the
-\textbf{intra-layer} connection terms which connect the visible units
-to each other and the hidden units to each other, respectively.
-</p>
-
-<p>We remove the intra-layer connections by setting \( v_{im} \) and \( u_{jn} \)
-to zero. The expression for the energy of the RBM is then
-</p>
-
-$$
-\begin{align}
-	E_{RBM}(\boldsymbol{x}, \boldsymbol{h}) = - \sum_{i, k}^{M, K} a_i^k \alpha_i^k (x_i)
-	- \sum_{j, l}^{N, L} b_j^l \beta_j^l (h_j) 
-	- \sum_{i,j,k,l}^{M,N,K,L} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j). 
-\label{_auto31}
-\end{align}
-$$
-
-<p>resulting in </p>
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{x}) =& \int P_{RBM} (\boldsymbol{x}, \tilde{\boldsymbol{h}})  d \tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\boldsymbol{x}, \tilde{\boldsymbol{h}}) } d\tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} \int e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} 
-	d\tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\int \prod_j^N e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) 
-	+ \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)} d\tilde{\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\biggl( \int e^{\sum_l b_1^l \beta_1^l (\tilde{h}_1) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i1}^{kl} \beta_1^l (\tilde{h}_1)} d \tilde{h}_1 \nonumber \\
-	& \times \int e^{\sum_l b_2^l \beta_2^l (\tilde{h}_2) + \sum_{i,k,l} \alpha_i^k (x_i) w_{i2}^{kl} \beta_2^l (\tilde{h}_2)} d \tilde{h}_2 \nonumber \\
-	& \times ... \nonumber \\
-	& \times \int e^{\sum_l b_N^l \beta_N^l (\tilde{h}_N) + \sum_{i,k,l} \alpha_i^k (x_i) w_{iN}^{kl} \beta_N^l (\tilde{h}_N)} d \tilde{h}_N \biggr) \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j
-\label{_auto32}
-\end{align}
-$$
-
-<p>Similarly</p>
-
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{h}) =& \frac{1}{Z_{RBM}} \int e^{-E_{RBM} (\tilde{\boldsymbol{x}}, \boldsymbol{h})} d\tilde{\boldsymbol{x}} \nonumber \\
-	=& \frac{1}{Z_{RBM}} e^{\sum_{j, l} b_j^l \beta_j^l (h_j)}
-	\prod_i^M \int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i
-\label{_auto33}
-\end{align}
-$$
-
-<p>Using Bayes theorem</p>
-
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{h}|\boldsymbol{x}) =& \frac{P_{RBM} (\boldsymbol{x}, \boldsymbol{h})}{P_{RBM} (\boldsymbol{x})} \nonumber \\
-	=& \frac{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)
-	+ \sum_{j, l} b_j^l \beta_j^l (h_j) 
-	+ \sum_{i,j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\frac{1}{Z_{RBM}} e^{\sum_{i, k} a_i^k \alpha_i^k (x_i)}
-	\prod_j^N \int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j} \nonumber \\
-	=& \prod_j^N \frac{e^{\sum_l b_j^l \beta_j^l (h_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)} }
-	{\int e^{\sum_l b_j^l \beta_j^l (\tilde{h}_j) + \sum_{i,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (\tilde{h}_j)}  d\tilde{h}_j}
-\label{_auto34}
-\end{align}
-$$
-
-<p>Similarly</p>
-
-$$
-\begin{align}
-	P_{RBM} (\boldsymbol{x}|\boldsymbol{h}) =&  \frac{P_{RBM} (\boldsymbol{x}, \boldsymbol{h})}{P_{RBM} (\boldsymbol{h})} \nonumber \\
-	=& \prod_i^M \frac{e^{\sum_k a_i^k \alpha_i^k (x_i)
-	+ \sum_{j,k,l} \alpha_i^k (x_i) w_{ij}^{kl} \beta_j^l (h_j)}}
-	{\int e^{\sum_k a_i^k \alpha_i^k (\tilde{x}_i)
-	+ \sum_{j,k,l} \alpha_i^k (\tilde{x}_i) w_{ij}^{kl} \beta_j^l (h_j)} d\tilde{x}_i}
-\label{_auto35}
-\end{align}
-$$
-
-<p>The original RBM had binary visible and hidden nodes. They were
-showned to be universal approximators of discrete distributions.
-It was also shown that adding hidden units yields
-strictly improved modelling power. The common choice of binary values
-are 0 and 1. However, in some physics applications, -1 and 1 might be
-a more natural choice. We will here use 0 and 1.
-</p>
-
-$$
-\begin{align}
-	E_{BB}(\boldsymbol{x}, \mathbf{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j.
-\label{_auto36}
-\end{align}
-$$
-
-
-$$
-\begin{align}
-	p_{BB}(\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{BB}} e^{\sum_i^M a_i x_i + \sum_j^N b_j h_j + \sum_{ij}^{M,N} x_i w_{ij} h_j} 
-\label{_auto37}\\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}}
-\label{_auto38}
-\end{align}
-$$
-
-<p>with the partition function</p>
-
-$$
-\begin{align}
-	Z_{BB} = \sum_{\boldsymbol{x}, \boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} .
-\label{_auto39}
-\end{align}
-$$
-<h2 id="marginal-probability-density-functions" class="anchor">Marginal Probability Density Functions </h2>
-
-<p>In order to find the probability of any configuration of the visible units we derive the marginal probability density function.</p>
-
-$$
-\begin{align}
-	p_{BB} (\boldsymbol{x}) =& \sum_{\boldsymbol{h}} p_{BB} (\boldsymbol{x}, \boldsymbol{h}) 
-\label{_auto40}\\
-	=& \frac{1}{Z_{BB}} \sum_{\boldsymbol{h}} e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} e^{\sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \sum_{\boldsymbol{h}} \prod_j^N e^{ (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \bigg ( \sum_{h_1} e^{(b_1 + \boldsymbol{x}^T \boldsymbol{w}_{\ast 1})h_1}
-	\times \sum_{h_2} e^{(b_2 + \boldsymbol{x}^T \boldsymbol{w}_{\ast 2})h_2} \times \nonumber \\
-	& ... \times \sum_{h_2} e^{(b_N + \boldsymbol{x}^T \boldsymbol{w}_{\ast N})h_N} \bigg ) \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N \sum_{h_j} e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}) h_j} \nonumber \\
-	=& \frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}) .
-\label{_auto41}
-\end{align}
-$$
-
-<p>A similar derivation yields the marginal probability of the hidden units</p>
-
-$$
-\begin{align}
-	p_{BB} (\boldsymbol{h}) = \frac{1}{Z_{BB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M (1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}) .
-\label{_auto42}
-\end{align}
-$$
-
-
-<!-- !split -->
-<h2 id="conditional-probability-density-functions" class="anchor">Conditional Probability Density Functions </h2>
-
-<p>We derive the probability of the hidden units given the visible units using Bayes' rule</p>
-
-$$
-\begin{align}
-	p_{BB} (\boldsymbol{h}|\boldsymbol{x}) =& \frac{p_{BB} (\boldsymbol{x}, \boldsymbol{h})}{p_{BB} (\boldsymbol{x})} \nonumber \\
-	=& \frac{ \frac{1}{Z_{BB}}  e^{\boldsymbol{x}^T \boldsymbol{a} + \boldsymbol{b}^T \boldsymbol{h} + \boldsymbol{x}^T \boldsymbol{W} \boldsymbol{h}} }
-	        {\frac{1}{Z_{BB}} e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}})} \nonumber \\
-	=& \frac{  e^{\boldsymbol{x}^T \boldsymbol{a}} e^{ \sum_j^N (b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j} }
-	        { e^{\boldsymbol{x}^T \boldsymbol{a}} \prod_j^N (1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}})} \nonumber \\
-	=& \prod_j^N \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
-	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} \nonumber \\
-	=& \prod_j^N p_{BB} (h_j| \boldsymbol{x}) .
-\label{_auto43}
-\end{align}
-$$
-
-<p>From this we find the probability of a hidden unit being "on" or "off":</p>
-
-$$
-\begin{align}
-	p_{BB} (h_j=1 | \boldsymbol{x}) =&   \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} ) h_j}  }
-	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto44}\\
-	=&  \frac{ e^{(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j} )}  }
-	{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto45}\\
-	=&  \frac{ 1 }{1 + e^{-(b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j})} } ,
-\label{_auto46}
-\end{align}
+\begin{equation*} 
+   \sum_i p_i(t) = 1, 
+\end{equation*}
 $$
 
 <p>and</p>
 
 $$
-\begin{align}
-	p_{BB} (h_j=0 | \boldsymbol{x}) =\frac{ 1 }{1 + e^{b_j + \boldsymbol{x}^T \boldsymbol{w}_{\ast j}} } .
-\label{_auto47}
-\end{align}
+\begin{equation*} 
+   \sum_j W(j\rightarrow i) = 1,
+\end{equation*}
 $$
 
-<p>Similarly we have that the conditional probability of the visible units given the hidden are</p>
-
-$$
-\begin{align}
-	p_{BB} (\boldsymbol{x}|\boldsymbol{h}) =& \prod_i^M \frac{ e^{ (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) x_i} }{ 1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}} } 
-\label{_auto48}\\
-	&= \prod_i^M p_{BB} (x_i | \boldsymbol{h}) .
-\label{_auto49}
-\end{align}
-$$
-
-
-$$
-\begin{align}
-	p_{BB} (x_i=1 | \boldsymbol{h}) =& \frac{1}{1 + e^{-(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} )}} 
-\label{_auto50}\\
-	p_{BB} (x_i=0 | \boldsymbol{h}) =& \frac{1}{1 + e^{a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} }} .
-\label{_auto51}
-\end{align}
-$$
+<p>which applies for all \( j \)-values.
+The further constraints are
+\( 0 \le W_{ij} \le 1 \)  and  \( 0 \le p_{j} \le 1 \).
+Note that the probability for remaining at the same place is in general 
+not necessarily equal zero. 
+</p>
+</div>
+</div>
 
 
 <!-- !split -->
-<h2 id="gaussian-binary-restricted-boltzmann-machines" class="anchor">Gaussian-Binary Restricted Boltzmann Machines </h2>
-
-<p>Inserting into the expression for \( E_{RBM}(\boldsymbol{x},\boldsymbol{h}) \) in equation  results in the energy</p>
-
-$$
-\begin{align}
-	E_{GB}(\boldsymbol{x}, \boldsymbol{h}) =& \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
-	- \sum_j^N b_j h_j 
-	-\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2} \nonumber \\
-	=& \vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 - \boldsymbol{b}^T \boldsymbol{h} 
-	- (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h} . 
-\label{_auto52}
-\end{align}
-$$
-
-
-<!-- !split -->
-<h2 id="joint-probability-density-function" class="anchor">Joint Probability Density Function </h2>
-
-$$
-\begin{align}
-	p_{GB} (\boldsymbol{x}, \boldsymbol{h}) =& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
-	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{- \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2}
-	+ \sum_j^N b_j h_j 
-	+\sum_{ij}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}} \nonumber \\
-	=& \frac{1}{Z_{GB}} \prod_{ij}^{M,N} e^{-\frac{(x_i - a_i)^2}{2\sigma_i^2}
-	+ b_j h_j 
-	+\frac{x_i w_{ij} h_j}{\sigma_i^2}} ,
-\label{_auto53}
-\end{align}
-$$
-
-<p>with the partition function given by</p>
-
-$$
-\begin{align}
-	Z_{GB} =& \int \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
-	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} d\tilde{\boldsymbol{x}} .
-\label{_auto54}
-\end{align}
-$$
-
-
-<!-- !split -->
-<h2 id="marginal-probability-density-functions" class="anchor">Marginal Probability Density Functions </h2>
-
-<p>We proceed to find the marginal probability densitites of the
-Gaussian-binary RBM. We first marginalize over the binary hidden units
-to find \( p_{GB} (\boldsymbol{x}) \)
+<h2 id="markov-processes" class="anchor">Markov processes </h2>
+<div class="panel panel-default">
+<div class="panel-body">
+<!-- subsequent paragraphs come in larger fonts, so start with a paragraph -->
+<p>The time development of our initial PDF can now be represented through the action of
+the transition probability matrix applied \( n \) times. At a 
+time  \( t_n=n\epsilon \) our initial distribution has developed into
 </p>
 
 $$
-\begin{align}
-	p_{GB} (\boldsymbol{x}) =& \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} p_{GB} (\boldsymbol{x}, \tilde{\boldsymbol{h}}) \nonumber \\
-	=& \frac{1}{Z_{GB}} \sum_{\tilde{\boldsymbol{h}}}^{\tilde{\boldsymbol{H}}} 
-	e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \tilde{\boldsymbol{h}} 
-	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\tilde{\boldsymbol{h}}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
-	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) .
-\label{_auto55}
-\end{align}
+\begin{equation*}
+   p_i(t_n) = \sum_jW_{ij}(t_n)p_j(0),
+\end{equation*}
 $$
 
-<p>We next marginalize over the visible units. This is the first time we
-marginalize over continuous values. We rewrite the exponential factor
-dependent on \( \boldsymbol{x} \) as a Gaussian function before we integrate in
-the last step.
+<p>and defining</p>
+
+$$
+\begin{equation*}
+   W(il-jl,n\epsilon)=(W^n(\epsilon))_{ij}
+\end{equation*}
+$$
+
+<p>we obtain</p>
+
+$$
+\begin{equation*}
+   p_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}p_j(0),
+\end{equation*}
+$$
+
+<p>or in matrix-vector form</p>
+$$
+\begin{equation} \label{eq:wfinal}
+   \boldsymbol{p}(n\epsilon) = \boldsymbol{W}^n(\epsilon)\boldsymbol{p}(0).
+\end{equation}
+$$
+</div>
+</div>
+
+
+<!-- !split -->
+<h2 id="what-do-the-results-mean" class="anchor">What do the results mean? </h2>
+
+<p>We have after \( t \)-steps</p>
+
+$$
+\begin{equation*}
+   \boldsymbol{p}(t) = \boldsymbol{W}^t\boldsymbol{p}(0),
+\end{equation*}
+$$
+
+<p>with \( \boldsymbol{p}(0) \) the distribution at \( t=0 \) and \( \boldsymbol{W} \) representing the 
+transition probability matrix. 
+</p>
+
+<!-- !split -->
+<h2 id="understanding-the-basics" class="anchor">Understanding the basics </h2>
+
+<p>We can always expand \( \boldsymbol{w}(0) \) in terms of the right eigenvectors 
+\( \boldsymbol{v} \) of \( \boldsymbol{W} \) as
 </p>
 
 $$
-\begin{align}
-	p_{GB} (\boldsymbol{h}) =& \int p_{GB} (\tilde{\boldsymbol{x}}, \boldsymbol{h}) d\tilde{\boldsymbol{x}} \nonumber \\
-	=& \frac{1}{Z_{GB}} \int e^{-\vert\vert\frac{\tilde{\boldsymbol{x}} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
-	+ (\frac{\tilde{\boldsymbol{x}}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}} d\tilde{\boldsymbol{x}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h} } \int \prod_i^M
-	e^{- \frac{(\tilde{x}_i - a_i)^2}{2\sigma_i^2} + \frac{\tilde{x}_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}{\sigma_i^2} } d\tilde{\boldsymbol{x}} \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h} }
-	\biggl( \int e^{- \frac{(\tilde{x}_1 - a_1)^2}{2\sigma_1^2} + \frac{\tilde{x}_1 \boldsymbol{w}_{1\ast}^T \boldsymbol{h}}{\sigma_1^2} } d\tilde{x}_1 \nonumber \\
-	& \times \int e^{- \frac{(\tilde{x}_2 - a_2)^2}{2\sigma_2^2} + \frac{\tilde{x}_2 \boldsymbol{w}_{2\ast}^T \boldsymbol{h}}{\sigma_2^2} } d\tilde{x}_2 \nonumber \\
-	& \times ... \nonumber \\
-	&\times \int e^{- \frac{(\tilde{x}_M - a_M)^2}{2\sigma_M^2} + \frac{\tilde{x}_M \boldsymbol{w}_{M\ast}^T \boldsymbol{h}}{\sigma_M^2} } d\tilde{x}_M \biggr) \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	\int e^{- \frac{(\tilde{x}_i - a_i)^2 - 2\tilde{x}_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	\int e^{- \frac{\tilde{x}_i^2 - 2\tilde{x}_i(a_i + \tilde{x}_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) + a_i^2}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	\int e^{- \frac{\tilde{x}_i^2 - 2\tilde{x}_i(a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}) + (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 - (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 + a_i^2}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	\int e^{- \frac{(\tilde{x}_i - (a_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}))^2 - a_i^2 -2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} - (\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 + a_i^2}{2\sigma_i^2} } d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}}
-	\int e^{- \frac{(\tilde{x}_i - a_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}}
-	d\tilde{x}_i \nonumber \\
-	=& \frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	\sqrt{2\pi \sigma_i^2}
-	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}} .
-\label{_auto56}
-\end{align}
+\begin{equation*}
+    \boldsymbol{p}(0)  = \sum_i\alpha_i\boldsymbol{v}_i,
+\end{equation*}
+$$
+
+<p>resulting in</p>
+
+$$
+\begin{equation*}
+\boldsymbol{p}(t) = \boldsymbol{W}^t\boldsymbol{p}(0)=\boldsymbol{W}^t\sum_i\alpha_i\boldsymbol{v}_i=
+\sum_i\lambda_i^t\alpha_i\boldsymbol{v}_i,
+\end{equation*}
+$$
+
+<p>with \( \lambda_i \) the \( i^{\mathrm{th}} \) eigenvalue corresponding to  
+the eigenvector \( \boldsymbol{v}_i \). 
+</p>
+
+<p>If we assume that \( \lambda_0 \) is the largest eigenvector we see that in the limit \( t\rightarrow \infty \),
+\( \boldsymbol{p}(t) \) becomes proportional to the corresponding eigenvector 
+\( \boldsymbol{v}_0 \). This is our steady state or final distribution. 
+</p>
+
+<!-- !split -->
+<h2 id="basics-of-the-metropolis-algorithm" class="anchor">Basics of the Metropolis Algorithm </h2>
+
+<p>The Metropolis
+algorithm is a method to sample a normalized probability
+distribution by a stochastic process. We define \( p_i^{(n)} \) to
+be the probability for finding the system in the state \( i \) at step \( n \).
+</p>
+
+<p>In the simulations, our assumption is that we have a model for \( p_i^{(n)} \), but we do not know \( W \).
+We will hence model \( W \) in terms of a likelihood for making transition \( T \) and a likelihood for accepting a transition.
+That is
+</p>
+$$
+W_{i\rightarrow j}=A_{i\rightarrow j}T_{i\rightarrow j}
 $$
 
 
 <!-- !split -->
-<h2 id="conditional-probability-density-functions" class="anchor">Conditional Probability Density Functions </h2>
+<h2 id="the-basic-of-the-metropolis-algorithm" class="anchor">The basic of the Metropolis Algorithm </h2>
 
-<p>We finish by deriving the conditional probabilities.</p>
-$$
-\begin{align}
-	p_{GB} (\boldsymbol{h}| \boldsymbol{x}) =& \frac{p_{GB} (\boldsymbol{x}, \boldsymbol{h})}{p_{GB} (\boldsymbol{x})} \nonumber \\
-	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
-	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}}}
-	{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2}
-	\prod_j^N (1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}} ) }
-	\nonumber \\
-	=& \prod_j^N \frac{e^{(b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j})h_j } }
-	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
-	=& \prod_j^N p_{GB} (h_j|\boldsymbol{x}).
-\label{_auto57}
-\end{align}
-$$
-
-<p>The conditional probability of a binary hidden unit \( h_j \) being on or off again takes the form of a sigmoid function</p>
-
-$$
-\begin{align}
-	p_{GB} (h_j =1 | \boldsymbol{x}) =& \frac{e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j} } }
-	{1 + e^{b_j + (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} \nonumber \\
-	=& \frac{1}{1 + e^{-b_j - (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} 
-\label{_auto58}\\
-	p_{GB} (h_j =0 | \boldsymbol{x}) =&
-	\frac{1}{1 + e^{b_j +(\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{w}_{\ast j}}} .
-\label{_auto59}
-\end{align}
-$$
-
-<p>The conditional probability of the continuous \( \boldsymbol{x} \) now has another form, however.</p>
-
-$$
-\begin{align}
-	p_{GB} (\boldsymbol{x}|\boldsymbol{h})
-	=& \frac{p_{GB} (\boldsymbol{x}, \boldsymbol{h})}{p_{GB} (\boldsymbol{h})} \nonumber \\
-	=& \frac{\frac{1}{Z_{GB}} e^{-\vert\vert\frac{\boldsymbol{x} -\boldsymbol{a}}{2\boldsymbol{\sigma}}\vert\vert^2 + \boldsymbol{b}^T \boldsymbol{h} 
-	+ (\frac{\boldsymbol{x}}{\boldsymbol{\sigma}^2})^T \boldsymbol{W}\boldsymbol{h}}}
-	{\frac{1}{Z_{GB}} e^{\boldsymbol{b}^T \boldsymbol{h}} \prod_i^M
-	\sqrt{2\pi \sigma_i^2}
-	e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}}}
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	\frac{e^{- \frac{(x_i - a_i)^2}{2\sigma_i^2} + \frac{x_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h}}{2\sigma_i^2} }}
-	{e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}}}
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	\frac{e^{-\frac{x_i^2 - 2a_i x_i + a_i^2 - 2x_i \boldsymbol{w}_{i\ast}^T\boldsymbol{h} }{2\sigma_i^2} } }
-	{e^{\frac{2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2 }{2\sigma_i^2}}}
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	e^{- \frac{x_i^2 - 2a_i x_i + a_i^2 - 2x_i \boldsymbol{w}_{i\ast}^T\boldsymbol{h}
-	+ 2a_i \boldsymbol{w}_{i\ast}^T \boldsymbol{h} +(\boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}
-	{2\sigma_i^2} }
-	\nonumber \\
-	=& \prod_i^M \frac{1}{\sqrt{2\pi \sigma_i^2}}
-	e^{ - \frac{(x_i - b_i - \boldsymbol{w}_{i\ast}^T \boldsymbol{h})^2}{2\sigma_i^2}} \nonumber \\
-	=& \prod_i^M \mathcal{N}
-	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) 
-\label{_auto60}\\
-	\Rightarrow p_{GB} (x_i|\boldsymbol{h}) =& \mathcal{N}
-	(x_i | b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h}, \sigma_i^2) .
-\label{_auto61}
-\end{align}
-$$
-
-<p>The form of these conditional probabilities explains the name
-"Gaussian" and the form of the Gaussian-binary energy function. We see
-that the conditional probability of \( x_i \) given \( \boldsymbol{h} \) is a normal
-distribution with mean \( b_i + \boldsymbol{w}_{i\ast}^T \boldsymbol{h} \) and variance
-\( \sigma_i^2 \).
+<ul>
+<li> Sample a possible new state \( j \) with some probability \( T_{i\rightarrow j} \).</li>
+<li> Accept the new state \( j \) with probability \( A_{i \rightarrow j} \) and use it as the next sample.</li>
+<li> With probability \( 1-A_{i\rightarrow j} \) the move is rejected and the original state \( i \) is used again as a sample.</li>
+</ul>
+<p>We wish to derive the required properties of \( T \) and \( A \) such that
+\( p_i^{(n\rightarrow \infty)} \rightarrow p_i \) so that starting
+from any distribution, the method converges to the correct distribution.
+Note that the description here is for a discrete probability distribution.
+Replacing probabilities \( p_i \) with expressions like \( p(x_i)dx_i \) will
+take all of these over to the corresponding continuum expressions.
 </p>
+
+<!-- !split -->
+<h2 id="more-on-the-metropolis" class="anchor">More on the Metropolis </h2>
+
+<p>The dynamical equation for \( p_i^{(n)} \) can be written directly from
+the description above. The probability of being in the state \( i \) at step \( n \)
+is given by the probability of being in any state \( j \) at the previous step,
+and making an accepted transition to \( i \) added to the probability of
+being in the state \( i \), making a transition to any state \( j \) and
+rejecting the move:
+</p>
+$$
+\begin{equation}
+\label{eq:eq1}
+p^{(n)}_i = \sum_j \left [
+p^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
++p^{(n-1)}_iT_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
+\right ] \,.
+\end{equation}
+$$
+
+
+<!-- !split -->
+<h2 id="metropolis-algorithm-setting-it-up" class="anchor">Metropolis algorithm, setting it up </h2>
+<p>Since the probability of making some transition must be 1,
+\( \sum_j T_{i\rightarrow j} = 1 \), and Eq. \eqref{eq:eq1} becomes
+</p>
+
+$$
+\begin{equation}
+p^{(n)}_i = p^{(n-1)}_i +
+ \sum_j \left [
+p^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
+-p^{(n-1)}_iT_{i\rightarrow j}A_{i\rightarrow j}
+\right ] \,.
+\label{_auto1}
+\end{equation}
+$$
+
+
+<!-- !split -->
+<h2 id="metropolis-continues" class="anchor">Metropolis continues </h2>
+
+<p>For large \( n \) we require that \( p^{(n\rightarrow \infty)}_i = p_i \),
+the desired probability distribution. Taking this limit, gives the
+balance requirement
+</p>
+
+$$
+\begin{equation}
+\sum_j \left [p_jT_{j\rightarrow i} A_{j\rightarrow i}-p_iT_{i\rightarrow j}A_{i\rightarrow j}
+\right ] = 0,
+\label{_auto2}
+\end{equation}
+$$
+
+
+<!-- !split -->
+<h2 id="detailed-balance" class="anchor">Detailed Balance </h2>
+
+<p>The balance requirement is very weak. Typically the much stronger detailed
+balance requirement is enforced, that is rather than the sum being
+set to zero, we set each term separately to zero and use this
+to determine the acceptance probabilities. Rearranging, the result is
+</p>
+
+$$
+\begin{equation}
+\frac{ A_{j\rightarrow i}}{A_{i\rightarrow j}}
+= \frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}} \,.
+\label{_auto3}
+\end{equation}
+$$
+
+<p>This is the <a href="https://cims.nyu.edu/~holmes/teaching/asa19/handout_Lecture3_2019.pdf" target="_self">detailed balance requirement</a></p>
+
+<!-- !split -->
+<h2 id="more-on-detailed-balance" class="anchor">More on Detailed Balance </h2>
+
+<p>The Metropolis choice is to maximize the \( A \) values, that is</p>
+
+$$
+\begin{equation}
+A_{j \rightarrow i} = \min \left ( 1,
+\frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}}\right ).
+\label{_auto4}
+\end{equation}
+$$
+
+<p>Other choices are possible, but they all correspond to multiplying
+\( A_{i\rightarrow j} \) and \( A_{j\rightarrow i} \) by the same constant
+smaller than unity. The penalty function method uses just such
+a factor to compensate for \( p_i \) that are evaluated stochastically
+and are therefore noisy.
+</p>
+
+<p>Having chosen the acceptance probabilities, we have guaranteed that
+if the  \( p_i^{(n)} \) has equilibrated, that is if it is equal to \( p_i \),
+it will remain equilibrated.
+</p>
+
+<!-- !split -->
+<h2 id="gibbs-sampling" class="anchor">Gibbs sampling </h2>
+
+<p>An efficient way if performing the sampling is through the use of
+Gibbs sampling. The latter uses the conditional probability instead of
+the full probability as done in the Metropolis algorithm.
+</p>
+
+<p>Gibbs sampling is useful for sampling from high-dimensional
+distributions where single-variable conditional distributions are
+known.
+</p>
+
+<p>For example, say it is too expensive to sample from \( p(x_0, x_1, x_2,
+..., x_d) \). With Gibbs sampling, we initialize all variables to
+arbitrary values. Then while taking each sample, we also iterate
+through the dimensions and replace its value with a sample from the
+univariate conditional distribution. For example we can update \( x_1 \)
+using \( p(x_1 \mid x_0, x_2, ..., x_d) \), which is easy to sample over
+because it is  only one dimension.
+</p>
+
+<!-- !split -->
+<h2 id="understanding-gibbs-samoling" class="anchor">Understanding Gibbs samoling </h2>
+
+<p>This part is best seen with the jupyter-notebook.
+These notes have been adapted from <a href="https://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/" target="_self"><tt>https://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/</tt></a>
+</p>
+
+<p>To illustrate Gibbs
+sampling we will sample several points and compare them with those
+generated from a known distribution, in our case the well-known
+two-dimensional Gaussian defined as
+</p>
+
+$$
+p(a, b) = \mathcal N\left(\left[\begin{array}{c} a \\ b \end{array}\right]; \left[\begin{array}{c}\mu_a \\ \mu_b\end{array}\right], \left[\begin{array}{cc}\sigma_a & cov(a, b) \\ cov(a, b) & \sigma_b\end{array}\right]\right) = \mathcal N\left(\left[\begin{array}{c}a \\ b\end{array}\right]; \left[\begin{array}{c}0 \\ 0\end{array}\right], \left[\begin{array}{cc}1 & 0.5 \\ 0.5 & 1\end{array}\right]\right).
+$$
+
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #408080; font-style: italic"># two dimensions</span>
+D <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+
+<span style="color: #408080; font-style: italic"># set up the means (standard normal distribution</span>
+a_mu <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+b_mu <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+<span style="color: #408080; font-style: italic"># and the variances and covariances</span>
+a_sigma <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+b_sigma <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+a_b_cov <span style="color: #666666">=</span> <span style="color: #666666">0.5</span>
+
+joint_cov <span style="color: #666666">=</span> np<span style="color: #666666">.</span>vstack(((a_sigma, a_b_cov), (a_b_cov, b_sigma)))
+joint_mu <span style="color: #666666">=</span> np<span style="color: #666666">.</span>vstack((a_mu, b_mu))
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Here we have used \( \epsilon \sim \mathcal N(0, 1) \) which allows us to sample from \( \mathcal{N}(\mu, \sigma^2) \) by using \( \sigma\epsilon + \mu \).
+In the case of multivariate Gaussians, we use the Cholesky decomposition of the covariance matrix
+and then use it and the mean to adjust numbers generated using <code>np.random.randn</code>.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">N <span style="color: #666666">=</span> <span style="color: #666666">10000</span>
+L <span style="color: #666666">=</span> np<span style="color: #666666">.</span>linalg<span style="color: #666666">.</span>cholesky(joint_cov)
+samples_from_true_distribution <span style="color: #666666">=</span>  L <span style="color: #666666">@</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(D, N) <span style="color: #666666">+</span> joint_mu
+plt<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples_from_true_distribution, <span style="color: #BA2121">&#39;.&#39;</span>, alpha<span style="color: #666666">=0.1</span>)
+plt<span style="color: #666666">.</span>axis([<span style="color: #666666">-4</span>, <span style="color: #666666">4</span>, <span style="color: #666666">-4</span>, <span style="color: #666666">4</span>])
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split -->
+<h2 id="conditional-probabilities" class="anchor">Conditional probabilities </h2>
+
+<p>Gibbs sampling requires conditional distributions for each variable. </p>
+
+<p>In the case of Gaussians, there is  a closed-form for the conditional. With a <a href="http://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/notes/w7c_gaussian_processes.html" target="_self">multivariate Gaussian</a> we have</p>
+$$
+p(\textbf{f}, \textbf{g}) = 
+\mathcal N\left(
+\left[\begin{array}{c} \textbf{f} \\ \textbf{g} \end{array}\right];
+\left[\begin{array}{c}\textbf{a} \\ \textbf{b}\end{array}\right], 
+\left[\begin{array}{cc}A & C^{\top} \\ C & B\end{array}\right]
+\right),
+$$
+
+<p>with the conditional probability</p>
+$$
+p(\textbf{f} \mid \textbf{g}) = \mathcal N(\textbf{f}; \textbf{a} + CB^{-1}(\textbf{g} - \textbf{b}), A - CB^{-1}C^{\top}).
+$$
+
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">get_conditional_dist</span>(joint_mu, joint_cov, var_index):
+    <span style="color: #BA2121; font-style: italic">&#39;&#39;&#39;Returns the conditional distribution given the joint distribution and which variable</span>
+<span style="color: #BA2121; font-style: italic">    the conditional probability should use.</span>
+<span style="color: #BA2121; font-style: italic">    Right now this only works for 2-variable joint distributions.</span>
+<span style="color: #BA2121; font-style: italic">    </span>
+<span style="color: #BA2121; font-style: italic">      joint_mu: joint distribution&#39;s mu</span>
+<span style="color: #BA2121; font-style: italic">      joint_cov: joint distribution&#39;s covariance</span>
+<span style="color: #BA2121; font-style: italic">      var_index: index of the variable in the joint distribution. Everything else will be </span>
+<span style="color: #BA2121; font-style: italic">        conditioned on. For example, if the joint distribution p(a, b, c) has mu [mu_a, mu_b, mu_c],</span>
+<span style="color: #BA2121; font-style: italic">        to get p(c | a, b), use var_index = 2.</span>
+<span style="color: #BA2121; font-style: italic">      </span>
+<span style="color: #BA2121; font-style: italic">    returns:</span>
+<span style="color: #BA2121; font-style: italic">      a function that can sample from the univariate conditional distribution</span>
+<span style="color: #BA2121; font-style: italic">    &#39;&#39;&#39;</span>
+    <span style="color: #008000; font-weight: bold">assert</span> joint_mu<span style="color: #666666">.</span>shape[<span style="color: #666666">0</span>] <span style="color: #666666">==</span> <span style="color: #666666">2</span>, <span style="color: #BA2121">&#39;Sorry, this function only works for 2-dimensional joint distributions right now&#39;</span>
+    a <span style="color: #666666">=</span> joint_mu[var_index]
+    b <span style="color: #666666">=</span> joint_mu[<span style="color: #666666">~</span>var_index]
+    
+    A <span style="color: #666666">=</span> joint_cov[var_index, var_index]
+    B <span style="color: #666666">=</span> joint_cov[<span style="color: #666666">~</span>var_index, <span style="color: #666666">~</span>var_index]
+    C <span style="color: #666666">=</span> joint_cov[var_index, <span style="color: #666666">~</span>var_index]
+    
+    <span style="color: #408080; font-style: italic"># we&#39;re dealing with one dimension so</span>
+    B_inv <span style="color: #666666">=</span> <span style="color: #666666">1/</span>B
+    
+    <span style="color: #408080; font-style: italic"># Return a function that can sample given a value of g</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">dist</span>(g):
+        <span style="color: #408080; font-style: italic"># a + C*B^{-1}(g - b)</span>
+        mu <span style="color: #666666">=</span> a <span style="color: #666666">+</span> C <span style="color: #666666">*</span> B_inv <span style="color: #666666">*</span> (g <span style="color: #666666">-</span> b)
+        <span style="color: #408080; font-style: italic"># A - C * B^{-1} * C^T</span>
+        cov <span style="color: #666666">=</span> A <span style="color: #666666">-</span> B_inv <span style="color: #666666">*</span> C <span style="color: #666666">*</span> C
+        <span style="color: #008000; font-weight: bold">return</span> np<span style="color: #666666">.</span>sqrt(cov) <span style="color: #666666">*</span> np<span style="color: #666666">.</span>random<span style="color: #666666">.</span>randn(<span style="color: #666666">1</span>) <span style="color: #666666">+</span> mu
+    
+    <span style="color: #008000; font-weight: bold">return</span> dist
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>With this we can set up the conditionals for this problem</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #408080; font-style: italic"># Set up the conditional probability distribution for each dimension</span>
+<span style="color: #408080; font-style: italic"># For example, I can sample p(a | b) using sample_for_dim[0].</span>
+
+univariate_conditionals <span style="color: #666666">=</span> [
+    get_conditional_dist(joint_mu, joint_cov, d)
+    <span style="color: #008000; font-weight: bold">for</span> d <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(D)
+]
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The \( gibbs\_sample \) function here only needs the univariate conditionals and how many samples to take.</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">gibbs_sample</span>(univariate_conditionals, sample_count):
+    <span style="color: #BA2121; font-style: italic">&#39;&#39;&#39;Does Gibbs sampling given the distribution&#39;s univariate conditionals.</span>
+<span style="color: #BA2121; font-style: italic">    </span>
+<span style="color: #BA2121; font-style: italic">    Returns a D x N matrix</span>
+<span style="color: #BA2121; font-style: italic">    &#39;&#39;&#39;</span>
+    D <span style="color: #666666">=</span> <span style="color: #008000">len</span>(univariate_conditionals)
+    <span style="color: #008000; font-weight: bold">assert</span> D <span style="color: #666666">==</span> <span style="color: #666666">2</span>, <span style="color: #BA2121">&quot;Sorry, this only supports 2 dimensions right now&quot;</span>
+    
+    <span style="color: #408080; font-style: italic"># initializes an empty matrix for the samples</span>
+    samples <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((D, sample_count))
+
+    <span style="color: #408080; font-style: italic"># initialize the first sample to some arbitrary value</span>
+    samples[:, <span style="color: #666666">0</span>] <span style="color: #666666">=</span> [<span style="color: #666666">3</span>, <span style="color: #666666">-3</span>]
+    
+    <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">1</span>, sample_count):
+        <span style="color: #408080; font-style: italic"># first set this sample equal to the previous sample</span>
+        samples[:, i] <span style="color: #666666">=</span> samples[:, i <span style="color: #666666">-</span> <span style="color: #666666">1</span>]
+        
+        <span style="color: #408080; font-style: italic"># now update the dimension whose turn it is using the conditional distribution</span>
+        <span style="color: #408080; font-style: italic"># pass in all dimension from the previous sample except this dimension</span>
+        d <span style="color: #666666">=</span> i <span style="color: #666666">%</span> D
+        samples[d, i] <span style="color: #666666">=</span> univariate_conditionals[d](samples[<span style="color: #666666">~</span>d, i <span style="color: #666666">-</span> <span style="color: #666666">1</span>])
+                 
+    <span style="color: #008000; font-weight: bold">return</span> samples
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>One thing to keep in mind about Gibbs sampling is that it only updates
+one dimension at a time. This means that samples from around the same
+time are correlated with each other. We have drawn the line connecting
+sequential samples to show this.
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">samples <span style="color: #666666">=</span> gibbs_sample(univariate_conditionals, sample_count<span style="color: #666666">=100</span>)
+fig, ax <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots()
+
+ax<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples_from_true_distribution, <span style="color: #BA2121">&#39;.&#39;</span>, alpha<span style="color: #666666">=0.1</span>)
+ax<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples, <span style="color: #BA2121">&#39;k&#39;</span>)
+ax<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples, <span style="color: #BA2121">&#39;.r&#39;</span>)
+ax<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;square&#39;</span>)
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Finally we sample a bunch of points and see how they compare to those
+from the original distribution. It looks the same! What's cool is that
+the one using Gibbs sampling only used samples from the univariate
+conditionals!
+</p>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">samples <span style="color: #666666">=</span> gibbs_sample(univariate_conditionals, sample_count<span style="color: #666666">=</span>N)
+fig, axs <span style="color: #666666">=</span> plt<span style="color: #666666">.</span>subplots(<span style="color: #666666">1</span>, <span style="color: #666666">3</span>, figsize<span style="color: #666666">=</span>(<span style="color: #666666">12</span>, <span style="color: #666666">4</span>), sharex<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, sharey<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+<span style="color: #408080; font-style: italic"># set all the axes</span>
+axs[<span style="color: #666666">0</span>]<span style="color: #666666">.</span>axis([<span style="color: #666666">-4</span>, <span style="color: #666666">4</span>, <span style="color: #666666">-4</span>, <span style="color: #666666">4</span>])
+axs[<span style="color: #666666">0</span>]<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples_from_true_distribution, <span style="color: #BA2121">&#39;.&#39;</span>, alpha<span style="color: #666666">=0.1</span>)
+axs[<span style="color: #666666">0</span>]<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&#39;original p(a, b)&#39;</span>)
+axs[<span style="color: #666666">1</span>]<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples, <span style="color: #BA2121">&#39;k&#39;</span>, alpha<span style="color: #666666">=0.8</span>)
+axs[<span style="color: #666666">1</span>]<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&#39;gibbs sampling path&#39;</span>)
+axs[<span style="color: #666666">2</span>]<span style="color: #666666">.</span>plot(<span style="color: #666666">*</span>samples, <span style="color: #BA2121">&#39;.g&#39;</span>, alpha<span style="color: #666666">=0.1</span>)
+axs[<span style="color: #666666">2</span>]<span style="color: #666666">.</span>set_title(<span style="color: #BA2121">&#39;gibbs samples&#39;</span>)
+plt<span style="color: #666666">.</span>show()
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
