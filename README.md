@@ -137,6 +137,9 @@ in addition to the lectures, we have often followed five main paths:
 - Boltzmann machines
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters 16-18
+- Video of lecture at https://youtu.be/ez9SrGOTOjA
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Handw\
+rittenNotes/2025/NotesMarch27.pdf
 
 ## March 31-April 4: Deep generative models, Boltzmann machines
 - Restricted Boltzmann machines
