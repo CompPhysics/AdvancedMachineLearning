@@ -206,33 +206,6 @@ div.toc p,a {
                None,
                'are-vaes-just-modified-autoencoders'),
               ('Training VAEs', 2, None, 'training-vaes'),
-              ('Kullback-Leibler relative entropy',
-               2,
-               None,
-               'kullback-leibler-relative-entropy'),
-              ('Kullback-Leibler divergence and RBMs',
-               2,
-               None,
-               'kullback-leibler-divergence-and-rbms'),
-              ('Maximizing log-likelihood',
-               2,
-               None,
-               'maximizing-log-likelihood'),
-              ('Back to VAEs', 2, None, 'back-to-vaes'),
-              ('Using the KL divergence', 2, None, 'using-the-kl-divergence'),
-              ('Kullback-Leibler again', 2, None, 'kullback-leibler-again'),
-              ('And applying Bayes rule', 2, None, 'and-applying-bayes-rule'),
-              ('Rearranging', 2, None, 'rearranging'),
-              ('Inferring the probability',
-               2,
-               None,
-               'inferring-the-probability'),
-              ('Central equation of VAEs', 2, None, 'central-equation-of-vaes'),
-              ('Setting up SGD', 2, None, 'setting-up-sgd'),
-              ('More on the SGD', 2, None, 'more-on-the-sgd'),
-              ('Simplification', 2, None, 'simplification'),
-              ('Terms to compute', 2, None, 'terms-to-compute'),
-              ('Computing the gradients', 2, None, 'computing-the-gradients'),
               ('Motivation from Kingma and Welling, An Introduction to '
                'Variational Autoencoders, '
                'URL:"https://arxiv.org/abs/1906.02691"',
@@ -594,7 +567,7 @@ $$
 and the prior \( p(\boldsymbol{h}) \), we can rewrite the above equation as
 </p>
 $$
-p(\boldsymbol{x};\boldsymbol{\Theta}) = \sum_{\boldsymbol{h}}p(\boldsymbol{x}\vert\boldsymbol{h};\boldsymbol{\Theta})p(\boldsymbol{h},
+p(\boldsymbol{x};\boldsymbol{\Theta}) = \sum_{\boldsymbol{h}}p(\boldsymbol{x}\vert\boldsymbol{h};\boldsymbol{\Theta})p(\boldsymbol{h}),
 $$
 
 <p>which allows us to make the dependence of \( \boldsymbol{x} \) on \( \boldsymbol{h} \)
@@ -636,7 +609,7 @@ other optimization technique) to increase \( p(\boldsymbol{x};\boldsymbol{\Theta
 making \( f(\boldsymbol{h};\boldsymbol{\Theta}) \) approach \( \boldsymbol{x} \) for some \( \boldsymbol{h} \),
 gradually making the training data more likely under the generative
 model. The important property is simply that the marginal probability
-can be computed, and it is continuous in \( \boldsymbol{\Theta} \)..
+can be computed, and it is continuous in \( \boldsymbol{\Theta} \).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -665,261 +638,6 @@ that VAEs must deal with: how to define the latent variables \( \boldsymbol{h} \
 that is decide what information they represent, and how to deal with
 the integral over \( \boldsymbol{h} \).  VAEs give a definite answer to both.
 </p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="kullback-leibler-relative-entropy">Kullback-Leibler relative entropy  </h2>
-
-<p>When the goal of the training is to approximate a probability
-distribution, as it is in generative modeling, another relevant
-measure is the <b>Kullback-Leibler divergence</b>, also known as the
-relative entropy or Shannon entropy. It is a non-symmetric measure of the
-dissimilarity between two probability density functions \( p \) and
-\( q \). If \( p \) is the unkown probability which we approximate with \( q \),
-we can measure the difference by
-</p>
-$$
-\begin{align*}
-	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\boldsymbol{x}) \log \frac{p(\boldsymbol{x})}{q(\boldsymbol{x})}  d\boldsymbol{x}.
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="kullback-leibler-divergence-and-rbms">Kullback-Leibler divergence and RBMs </h2>
-
-<p>Thus, the Kullback-Leibler divergence between the distribution of the
-training data \( f(\boldsymbol{x}) \) and the model marginal distribution \( p(\boldsymbol{x};\boldsymbol{\Theta}) \) from an RBM is
-</p>
-
-$$
-\begin{align*}
-	\text{KL} (f(\boldsymbol{x})|| p(\boldsymbol{x}| \boldsymbol{\Theta})) =& \int_{-\infty}^{\infty}
-	f (\boldsymbol{x}) \log \frac{f(\boldsymbol{x})}{p(\boldsymbol{x}; \boldsymbol{\Theta})} d\boldsymbol{x} \\
-	=& \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log f(\boldsymbol{x}) d\boldsymbol{x} - \int_{-\infty}^{\infty} f(\boldsymbol{x}) \log
-	p(\boldsymbol{x};\boldsymbol{\Theta}) d\boldsymbol{x} \\
-	%=& \mathbb{E}_{f(\boldsymbol{x})} (\log f(\boldsymbol{x})) - \mathbb{E}_{f(\boldsymbol{x})} (\log p(\boldsymbol{x}; \boldsymbol{\Theta}))
-	=& \langle \log f(\boldsymbol{x}) \rangle_{f(\boldsymbol{x})} - \langle \log p(\boldsymbol{x};\boldsymbol{\Theta}) \rangle_{f(\boldsymbol{x})} \\
-	=& \langle \log f(\boldsymbol{x}) \rangle_{data} + \langle E(\boldsymbol{x}) \rangle_{data} + \log Z.
-\end{align*}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="maximizing-log-likelihood">Maximizing log-likelihood </h2>
-
-<p>The first term is constant with respect to \( \boldsymbol{\Theta} \) since
-\( f(\boldsymbol{x}) \) is independent of \( \boldsymbol{\Theta} \). Thus the Kullback-Leibler
-divergence is minimal when the second term is minimal. The second term
-is the log-likelihood cost function, hence minimizing the
-Kullback-Leibler divergence is equivalent to maximizing the
-log-likelihood. 
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="back-to-vaes">Back to VAEs </h2>
-
-<p>We want to train the marginal probability with some latent variables \( \boldsymbol{h} \)</p>
-$$
-p(\boldsymbol{x};\boldsymbol{\Theta}) = \int d\boldsymbol{h}p(\boldsymbol{x},\boldsymbol{h};\boldsymbol{\Theta}),
-$$
-
-<p>for the continuous version (see previous slides for the discrete variant).</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="using-the-kl-divergence">Using the KL divergence </h2>
-
-<p>In practice, for most \( \boldsymbol{h} \), \( p(\boldsymbol{x}\vert \boldsymbol{h}; \boldsymbol{\Theta}) \)
-will be nearly zero, and hence contribute almost nothing to our
-estimate of \( p(\boldsymbol{x}) \).
-</p>
-
-<p>The key idea behind the variational autoencoder is to attempt to
-sample values of \( \boldsymbol{h} \) that are likely to have produced \( \boldsymbol{x} \),
-and compute \( p(\boldsymbol{x}) \) just from those.
-</p>
-
-<p>This means that we need a new function \( Q(\boldsymbol{h}|\boldsymbol{x}) \) which can
-take a value of \( \boldsymbol{x} \) and give us a distribution over \( \boldsymbol{h} \)
-values that are likely to produce \( \boldsymbol{x} \).  Hopefully the space of
-\( \boldsymbol{h} \) values that are likely under \( Q \) will be much smaller than
-the space of all \( \boldsymbol{h} \)'s that are likely under the prior
-\( p(\boldsymbol{h}) \).  This lets us, for example, compute \( E_{\boldsymbol{h}\sim
-Q}p(\boldsymbol{x}\vert \boldsymbol{h}) \) relatively easily. Note that we drop
-\( \boldsymbol{\Theta} \) from here and for notational simplicity.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="kullback-leibler-again">Kullback-Leibler again </h2>
-
-<p>However, if \( \boldsymbol{h} \) is sampled from an arbitrary distribution with
-PDF \( Q(\boldsymbol{h}) \), which is not \( \mathcal{N}(0,I) \), then how does that
-help us optimize \( p(\boldsymbol{x}) \)?
-</p>
-
-<p>The first thing we need to do is relate
-\( E_{\boldsymbol{h}\sim Q}P(\boldsymbol{x}\vert \boldsymbol{h}) \) and \( p(\boldsymbol{x}) \).  We will see where \( Q \) comes from later.
-</p>
-
-<p>The relationship between \( E_{\boldsymbol{h}\sim Q}p(\boldsymbol{x}\vert \boldsymbol{h}) \) and \( p(\boldsymbol{x}) \) is one of the cornerstones of variational Bayesian methods.
-We begin with the definition of Kullback-Leibler divergence (KL divergence or \( \mathcal{D} \)) between \( p(\boldsymbol{h}\vert \boldsymbol{x}) \) and \( Q(\boldsymbol{h}) \), for some arbitrary \( Q \) (which may or may not depend on \( \boldsymbol{x} \)):
-</p>
-$$
-    \mathcal{D}\left[Q(\boldsymbol{h})\|p(\boldsymbol{h}|\boldsymbol{x})\right]=E_{\boldsymbol{h}\sim Q}\left[\log Q(\boldsymbol{h}) - \log p(\boldsymbol{h}|\boldsymbol{x}) \right].
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="and-applying-bayes-rule">And applying Bayes rule </h2>
-
-<p>We can get both \( p(\boldsymbol{x}) \) and \( p(\boldsymbol{x}\vert \boldsymbol{h}) \) into this equation by applying Bayes rule to \( p(\boldsymbol{h}|\boldsymbol{x}) \)</p>
-$$
-    \mathcal{D}\left[Q(\boldsymbol{h})\|p(\boldsymbol{h}\vert \boldsymbol{x})\right]=E_{\boldsymbol{h}\sim Q}\left[\log Q(\boldsymbol{h}) - \log p(\boldsymbol{x}|\boldsymbol{h}) - \log p(\boldsymbol{h}) \right] + \log p(\boldsymbol{x}).
-$$
-
-<p>Here, \( \log p(\boldsymbol{x}) \) comes out of the expectation because it does not depend on \( \boldsymbol{h} \).
-Negating both sides, rearranging, and contracting part of \( E_{\boldsymbol{h}\sim Q} \) into a KL-divergence terms yields:
-</p>
-$$
-\log p(\boldsymbol{x}) - \mathcal{D}\left[Q(\boldsymbol{h})\|p(\boldsymbol{h}\vert \boldsymbol{x})\right]=E_{\boldsymbol{h}\sim Q}\left[\log p(\boldsymbol{x}\vert\boldsymbol{h})  \right] - \mathcal{D}\left[Q(\boldsymbol{h})\|P(\boldsymbol{h})\right].
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rearranging">Rearranging </h2>
-
-<p>Using Bayes rule we obtain</p>
-$$
-E_{\boldsymbol{h}\sim Q}\left[\log p(y_i|\boldsymbol{h},x_i)\right]=E_{\boldsymbol{h}\sim Q}\left[\log p(\boldsymbol{h}|y_i,x_i) - \log p(\boldsymbol{h}|x_i) + \log p(y_i|x_i) \right]
-$$
-
-<p>Rearranging the terms and subtracting \( E_{\boldsymbol{h}\sim Q}\log Q(\boldsymbol{h}) \) from both sides gives</p>
-$$
-\begin{array}{c}
-\log P(y_i|x_i) - E_{\boldsymbol{h}\sim Q}\left[\log Q(\boldsymbol{h})-\log p(\boldsymbol{h}|x_i,y_i)\right]=\hspace{10em}\\
-\hspace{10em}E_{\boldsymbol{h}\sim Q}\left[\log p(y_i|\boldsymbol{h},x_i)+\log p(\boldsymbol{h}|x_i)-\log Q(\boldsymbol{h})\right]
-\end{array}
-$$
-
-<p>Note that \( \boldsymbol{x} \) is fixed, and \( Q \) can be \textit{any} distribution, not
-just a distribution which does a good job mapping \( \boldsymbol{x} \) to the \( \boldsymbol{h} \)'s
-that can produce \( X \).
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="inferring-the-probability">Inferring the probability </h2>
-
-<p>Since we are interested in inferring \( p(\boldsymbol{x}) \), it makes sense to
-construct a \( Q \) which \textit{does} depend on \( \boldsymbol{x} \), and in particular,
-one which makes \( \mathcal{D}\left[Q(\boldsymbol{h})\|p(\boldsymbol{h}|\boldsymbol{x})\right] \) small
-</p>
-$$
-\log p(\boldsymbol{x}) - \mathcal{D}\left[Q(\boldsymbol{h}|\boldsymbol{x})\|p(\boldsymbol{h}|\boldsymbol{x})\right]=E_{\boldsymbol{h}\sim Q}\left[\log p(\boldsymbol{x}|\boldsymbol{h})  \right] - \mathcal{D}\left[Q(\boldsymbol{h}|\boldsymbol{x})\|p(\boldsymbol{h})\right].
-$$
-
-<p>Hence, during training, it makes sense to choose a \( Q \) which will make
-\( E_{\boldsymbol{h}\sim Q}[\log Q(\boldsymbol{h})- \) $\log p(\boldsymbol{h}|x_i,y_i)]$ (a
-\( \mathcal{D} \)-divergence) small, such that the right hand side is a
-close approximation to \( \log p(y_i|y_i) \).
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="central-equation-of-vaes">Central equation of VAEs </h2>
-
-<p>This equation serves as the core of the variational autoencoder, and
-it is worth spending some time thinking about what it means.
-</p>
-
-<ol>
-<li> The left hand side has the quantity we want to maximize, namely \( \log p(\boldsymbol{x}) \) plus an error term.</li>
-<li> The right hand side is something we can optimize via stochastic gradient descent given the right choice of \( Q \).</li>
-</ol>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="setting-up-sgd">Setting up SGD </h2>
-<p>So how can we perform stochastic gradient descent?</p>
-
-<p>First we need to be a bit more specific about the form that \( Q(\boldsymbol{h}|\boldsymbol{x}) \)
-will take.  The usual choice is to say that
-\( Q(\boldsymbol{h}|\boldsymbol{x})=\mathcal{N}(\boldsymbol{h}|\mu(\boldsymbol{x};\vartheta),\Sigma(;\vartheta)) \), where
-\( \mu \) and \( \Sigma \) are arbitrary deterministic functions with
-parameters \( \vartheta \) that can be learned from data (we will omit
-\( \vartheta \) in later equations).  In practice, \( \mu \) and \( \Sigma \) are
-again implemented via neural networks, and \( \Sigma \) is constrained to
-be a diagonal matrix.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="more-on-the-sgd">More on the SGD </h2>
-
-<p>The name variational &quot;autoencoder&quot; comes from
-the fact that \( \mu \) and \( \Sigma \) are &quot;encoding&quot; \( \boldsymbol{x} \) into the latent
-space \( \boldsymbol{h} \).  The advantages of this choice are computational, as they
-make it clear how to compute the right hand side.  The last
-term---\( \mathcal{D}\left[Q(\boldsymbol{h}|\boldsymbol{x})\|p(\boldsymbol{h})\right] \)---is now a KL-divergence
-between two multivariate Gaussian distributions, which can be computed
-in closed form as:
-</p>
-$$
-\begin{array}{c}
- \mathcal{D}[\mathcal{N}(\mu_0,\Sigma_0) \| \mathcal{N}(\mu_1,\Sigma_1)] = \hspace{20em}\\
-  \hspace{5em}\frac{ 1 }{ 2 } \left( \mathrm{tr} \left( \Sigma_1^{-1} \Sigma_0 \right) + \left( \mu_1 - \mu_0\right)^\top \Sigma_1^{-1} ( \mu_1 - \mu_0 ) - k + \log \left( \frac{ \det \Sigma_1 }{ \det \Sigma_0  } \right)  \right)
-\end{array}
-$$
-
-<p>where \( k \) is the dimensionality of the distribution.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="simplification">Simplification </h2>
-<p>In our case, this simplifies to:</p>
-$$
-\begin{array}{c}
- \mathcal{D}[\mathcal{N}(\mu(X),\Sigma(X)) \| \mathcal{N}(0,I)] = \hspace{20em}\\
-\hspace{6em}\frac{ 1 }{ 2 } \left( \mathrm{tr} \left( \Sigma(X) \right) + \left( \mu(X)\right)^\top ( \mu(X) ) - k - \log\det\left(  \Sigma(X)  \right)  \right).
-\end{array}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="terms-to-compute">Terms to compute </h2>
-
-<p>The first term on the right hand side is a bit more tricky.
-We could use sampling to estimate \( E_{z\sim Q}\left[\log P(X|z)  \right] \), but getting a good estimate would require passing many samples of \( z \) through \( f \), which would be expensive.
-Hence, as is standard in stochastic gradient descent, we take one sample of \( z \) and treat \( \log P(X|z) \) for that \( z \) as an approximation of \( E_{z\sim Q}\left[\log P(X|z)  \right] \).
-After all, we are already doing stochastic gradient descent over different values of \( X \) sampled from a dataset \( D \).
-The full equation we want to optimize is:
-</p>
-
-$$
-\begin{array}{c}
-    E_{X\sim D}\left[\log P(X) - \mathcal{D}\left[Q(z|X)\|P(z|X)\right]\right]=\hspace{16em}\\
-\hspace{10em}E_{X\sim D}\left[E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z|X)\|P(z)\right]\right].
-\end{array}
-$$
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="computing-the-gradients">Computing the gradients </h2>
-
-<p>If we take the gradient of this equation, the gradient symbol can be moved into the expectations.
-Therefore, we can sample a single value of \( X \) and a single value of \( z \) from the distribution \( Q(z|X) \), and compute the gradient of:
-</p>
-$$
-\begin{equation}
- \log P(X|z)-\mathcal{D}\left[Q(z|X)\|P(z)\right].
-\label{_auto1}
-\end{equation}
-$$
-
-<p>We can then average the gradient of this function over arbitrarily many samples of \( X \) and \( z \), and the result converges to the gradient.</p>
-
-<p>There is, however, a significant problem
-\( E_{z\sim Q}\left[\log P(X|z)  \right] \) depends not just on the parameters of \( P \), but also on the parameters of \( Q \).
-</p>
-
-<p>In order to make VAEs work, it is essential to drive \( Q \) to produce codes for \( X \) that \( P \) can reliably decode.  </p>
-$$
- E_{X\sim D}\left[E_{\epsilon\sim\mathcal{N}(0,I)}[\log P(X|z=\mu(X)+\Sigma^{1/2}(X)*\epsilon)]-\mathcal{D}\left[Q(z|X)\|P(z)\right]\right].
-$$
-
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="motivation-from-kingma-and-welling-an-introduction-to-variational-autoencoders-url-https-arxiv-org-abs-1906-02691">Motivation from Kingma and Welling, An Introduction to Variational Autoencoders, <a href="https://arxiv.org/abs/1906.02691" target="_blank"><tt>https://arxiv.org/abs/1906.02691</tt></a> </h2>
@@ -1128,7 +846,7 @@ Therefore, we can sample a single value of \( X \) and a single value of \( z \)
 $$
 \begin{equation}
  \log P(X|z)-\mathcal{D}\left[Q(z|X)\|P(z)\right].
-\label{_auto2}
+\label{_auto1}
 \end{equation}
 $$
 
