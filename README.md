@@ -152,7 +152,7 @@ rittenNotes/2025/NotesMarch27.pdf
 ## April 7-11: Deep generative models
 - Implementation of Boltzmann machines using TensorFlow and Pytorch
 - Energy-based models and Langevin sampling
-- Generative Adversarial Networks (GANs)
+- Start discussions of Vvariational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
 
@@ -160,28 +160,25 @@ rittenNotes/2025/NotesMarch27.pdf
 
 ## April 21-25: Deep generative models
 
-- Generative Adversarial Networks (GANs)
 - Variational autoencoders
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
 
-## April 28 - May 2:  May 1 is a public holiday, no lectures: 
-
+## April 28 - May 2:  May 1 is a public holiday, no lecture: 
 
 ## May 5-9: Deep generative models
-- Variational Autoencoders
 - Diffusion models
 - Reading recommendation: An Introduction to Variational Autoencoders, by Kingma and Welling, see https://arxiv.org/abs/1906.02691 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
 
 ## May 12-16: Deep generative models
-- Summarizing discussion of VAEs
 - Diffusion models
-- Summary of course and discussion of projects
+- GANs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 
-## May 19-23:  Only and discussion of projects
+## May 19-23:  Discussion of projects and possibly math of reinforcement learning
+
 
 ## Recommended textbooks:
 
