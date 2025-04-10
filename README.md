@@ -150,11 +150,12 @@ rittenNotes/2025/NotesMarch27.pdf
 
 
 ## April 7-11: Deep generative models
-- Implementation of Boltzmann machines using TensorFlow and Pytorch
-- Energy-based models and Langevin sampling
-- Start discussions of Vvariational Autoencoders
+- Reminder from previous week on Energy-based models and Langevin sampling
+- Variational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
+- Video of lecture at https://youtu.be/Mm9Xasy8qNw
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril10.pdf
 
 ## April 14-18: Public holiday, no lectures
 
