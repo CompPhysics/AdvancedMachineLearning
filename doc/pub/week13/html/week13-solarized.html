@@ -63,42 +63,15 @@ div.toc p,a {
 
 <!-- tocinfo
 {'highest level': 2,
- 'sections': [('Plans for the week April 15-19, 2024',
+ 'sections': [('Plans for the week April 21-25, 2025',
                2,
                None,
-               'plans-for-the-week-april-15-19-2024'),
+               'plans-for-the-week-april-21-25-2025'),
               ('Readings', 2, None, 'readings'),
-              ('Reminder from last week and layout of lecture this week',
-               2,
-               None,
-               'reminder-from-last-week-and-layout-of-lecture-this-week'),
-              ('Code for RBMs using PyTorch for a binary-binary RBM',
-               2,
-               None,
-               'code-for-rbms-using-pytorch-for-a-binary-binary-rbm'),
-              ('RBM using TensorFlow and Keras',
-               2,
-               None,
-               'rbm-using-tensorflow-and-keras'),
-              ('Codes for Energy-based models',
-               2,
-               None,
-               'codes-for-energy-based-models'),
-              ('Langevin sampling', 2, None, 'langevin-sampling'),
-              ('More on the SGLD', 2, None, 'more-on-the-sgld'),
-              ('Code example of Langevin Sampling',
-               2,
-               None,
-               'code-example-of-langevin-sampling'),
               ('Theory of Variational Autoencoders',
                2,
                None,
                'theory-of-variational-autoencoders'),
-              ('The Autoencoder again', 2, None, 'the-autoencoder-again'),
-              ('Schematic image of an Autoencoder',
-               2,
-               None,
-               'schematic-image-of-an-autoencoder'),
               ('Mathematics of Variational Autoencoders',
                2,
                None,
@@ -167,33 +140,29 @@ MathJax.Hub.Config({
 
 <!-- author(s): Morten Hjorth-Jensen -->
 <center>
-<b>Morten Hjorth-Jensen</b> [1, 2]
+<b>Morten Hjorth-Jensen</b> 
 </center>
-<!-- institution(s) -->
+<!-- institution -->
 <center>
-[1] <b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
-</center>
-<center>
-[2] <b>Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA</b>
+<b>Department of Physics and Center for Computing in Science Education, University of Oslo, Norway</b>
 </center>
 <br>
 <center>
-<h4>April 16, 2024</h4>
+<h4>April 24, 2025</h4>
 </center> <!-- date -->
 <br>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="plans-for-the-week-april-15-19-2024">Plans for the week April 15-19, 2024  </h2>
+<h2 id="plans-for-the-week-april-21-25-2025">Plans for the week April 21-25, 2025  </h2>
 
 <div class="alert alert-block alert-block alert-text-normal">
 <b>Deep generative models</b>
 <p>
 <ol>
-<li> Finalizing discussion of Boltzmann machines, implementations using TensorFlow and Pytorch</li>
-<li> Discussion of other energy-based models and Langevin sampling</li>
-<li> Variational Autoencoders (VAE), mathematics</li>
-<li> <a href="https://youtu.be/rw-NBN293o4" target="_blank">Video of lecture</a></li>
-<li> <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf" target="_blank">Whiteboard notes</a></li>
+<li> Variational Autoencoders (VAE), mathematics, basic mathematics</li>
+<li> Writing our own codes for VAEs
+<!-- o <a href="https://youtu.be/rw-NBN293o4" target="_blank">Video of lecture</a> -->
+<!-- o <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf" target="_blank">Whiteboard notes</a> --></li>
 </ol>
 </div>
 
@@ -204,9 +173,7 @@ MathJax.Hub.Config({
 <b></b>
 <p>
 <ol>
-<li> Reading recommendation: Goodfellow et al, for VAEs see sections 20.10-20.11</li>
-<li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
-<li> See Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></li>
+<li> Add VAE material</li>
 </ol>
 </div>
 
@@ -215,245 +182,7 @@ MathJax.Hub.Config({
 <!-- code for VAEs applied to MNIST and CIFAR perhaps -->
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="reminder-from-last-week-and-layout-of-lecture-this-week">Reminder from last week and layout of lecture this week </h2>
-
-<ol>
-<li> We will present first a reminder from last week, see for example the jupyter-notebook at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb</tt></a></li>
-<li> We will then discuss codes as well as other energy-based models and Langevin sampling instead of Gibbs or Metropolis sampling.</li>
-<li> Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks</li>
-</ol>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="code-for-rbms-using-pytorch-for-a-binary-binary-rbm">Code for RBMs using PyTorch for a binary-binary RBM </h2>
-
-
-<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
-<div class="cell border-box-sizing code_cell rendered">
-  <div class="input">
-    <div class="inner_cell">
-      <div class="input_area">
-        <div class="highlight" style="background: #eeeedd">
-  <pre style="line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">numpy</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">np</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.utils.data</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.optim</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">optim</span>
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch.autograd</span> <span style="color: #8B008B; font-weight: bold">import</span> Variable
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, transforms
-<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision.utils</span> <span style="color: #8B008B; font-weight: bold">import</span> make_grid , save_image
-<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
-
-
-batch_size = <span style="color: #B452CD">64</span>
-train_loader = torch.utils.data.DataLoader(
-datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
-    train=<span style="color: #8B008B; font-weight: bold">True</span>,
-    download = <span style="color: #8B008B; font-weight: bold">True</span>,
-    transform = transforms.Compose(
-        [transforms.ToTensor()])
-     ),
-     batch_size=batch_size
-)
-
-test_loader = torch.utils.data.DataLoader(
-datasets.MNIST(<span style="color: #CD5555">&#39;./data&#39;</span>,
-    train=<span style="color: #8B008B; font-weight: bold">False</span>,
-    transform=transforms.Compose(
-    [transforms.ToTensor()])
-    ),
-    batch_size=batch_size)
-
-
-<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">RBM</span>(nn.Module):
-   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>,
-               n_vis=<span style="color: #B452CD">784</span>,
-               n_hin=<span style="color: #B452CD">500</span>,
-               k=<span style="color: #B452CD">5</span>):
-        <span style="color: #658b00">super</span>(RBM, <span style="color: #658b00">self</span>).<span style="color: #008b45">__init__</span>()
-        <span style="color: #658b00">self</span>.W = nn.Parameter(torch.randn(n_hin,n_vis)*<span style="color: #B452CD">1e-2</span>)
-        <span style="color: #658b00">self</span>.v_bias = nn.Parameter(torch.zeros(n_vis))
-        <span style="color: #658b00">self</span>.h_bias = nn.Parameter(torch.zeros(n_hin))
-        <span style="color: #658b00">self</span>.k = k
-    
-   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">sample_from_p</span>(<span style="color: #658b00">self</span>,p):
-       <span style="color: #8B008B; font-weight: bold">return</span> F.relu(torch.sign(p - Variable(torch.rand(p.size()))))
-    
-   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">v_to_h</span>(<span style="color: #658b00">self</span>,v):
-        p_h = F.sigmoid(F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias))
-        sample_h = <span style="color: #658b00">self</span>.sample_from_p(p_h)
-        <span style="color: #8B008B; font-weight: bold">return</span> p_h,sample_h
-    
-   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">h_to_v</span>(<span style="color: #658b00">self</span>,h):
-        p_v = F.sigmoid(F.linear(h,<span style="color: #658b00">self</span>.W.t(),<span style="color: #658b00">self</span>.v_bias))
-        sample_v = <span style="color: #658b00">self</span>.sample_from_p(p_v)
-        <span style="color: #8B008B; font-weight: bold">return</span> p_v,sample_v
-        
-   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>,v):
-        pre_h1,h1 = <span style="color: #658b00">self</span>.v_to_h(v)
-        
-        h_ = h1
-        <span style="color: #8B008B; font-weight: bold">for</span> _ <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #658b00">self</span>.k):
-            pre_v_,v_ = <span style="color: #658b00">self</span>.h_to_v(h_)
-            pre_h_,h_ = <span style="color: #658b00">self</span>.v_to_h(v_)
-        
-        <span style="color: #8B008B; font-weight: bold">return</span> v,v_
-    
-   <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">free_energy</span>(<span style="color: #658b00">self</span>,v):
-        vbias_term = v.mv(<span style="color: #658b00">self</span>.v_bias)
-        wx_b = F.linear(v,<span style="color: #658b00">self</span>.W,<span style="color: #658b00">self</span>.h_bias)
-        hidden_term = wx_b.exp().add(<span style="color: #B452CD">1</span>).log().sum(<span style="color: #B452CD">1</span>)
-        <span style="color: #8B008B; font-weight: bold">return</span> (-hidden_term - vbias_term).mean()
-
-
-
-
-rbm = RBM(k=<span style="color: #B452CD">1</span>)
-train_op = optim.SGD(rbm.parameters(),<span style="color: #B452CD">0.1</span>)
-
-<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(<span style="color: #B452CD">10</span>):
-    loss_ = []
-    <span style="color: #8B008B; font-weight: bold">for</span> _, (data,target) <span style="color: #8B008B">in</span> <span style="color: #658b00">enumerate</span>(train_loader):
-        data = Variable(data.view(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">784</span>))
-        sample_data = data.bernoulli()
-        
-        v,v1 = rbm(sample_data)
-        loss = rbm.free_energy(v) - rbm.free_energy(v1)
-        loss_.append(loss.data)
-        train_op.zero_grad()
-        loss.backward()
-        train_op.step()
-
-    <span style="color: #658b00">print</span>(<span style="color: #CD5555">&quot;Training loss for {} epoch: {}&quot;</span>.format(epoch, np.mean(loss_)))
-
-
-<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">show_adn_save</span>(file_name,img):
-    npimg = np.transpose(img.numpy(),(<span style="color: #B452CD">1</span>,<span style="color: #B452CD">2</span>,<span style="color: #B452CD">0</span>))
-    f = <span style="color: #CD5555">&quot;./%s.png&quot;</span> % file_name
-    plt.imshow(npimg)
-    plt.imsave(f,npimg)
-
-show_adn_save(<span style="color: #CD5555">&quot;real&quot;</span>,make_grid(v.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
-show_adn_save(<span style="color: #CD5555">&quot;generate&quot;</span>,make_grid(v1.view(<span style="color: #B452CD">32</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">28</span>,<span style="color: #B452CD">28</span>).data))
-</pre>
-</div>
-      </div>
-    </div>
-  </div>
-  <div class="output_wrapper">
-    <div class="output">
-      <div class="output_area">
-        <div class="output_subarea output_stream output_stdout output_text">          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="rbm-using-tensorflow-and-keras">RBM using TensorFlow and Keras </h2>
-
-<ol>
-<li> To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see <a href="https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py" target="_blank"><tt>https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py</tt></a></li>
-</ol>
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="codes-for-energy-based-models">Codes for Energy-based models </h2>
-
-<p>See discussions in Foster, chapter 7 on energy-based models at <a href="https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm" target="_blank"><tt>https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm</tt></a></p>
-
-<p>That notebook is based on a recent article by Du and Mordatch, <b>Implicit generation and modeling with energy-based models</b>, see <a href="https://arxiv.org/pdf/1903.08689.pdf." target="_blank"><tt>https://arxiv.org/pdf/1903.08689.pdf.</tt></a></p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="langevin-sampling">Langevin sampling </h2>
-
-<p>Also called Stochastic gradient Langevin dynamics (SGLD), is sampling
-technique composed of characteristics from Stochastic gradient descent
-(SGD) and Langevin dynamics, a mathematical extension of the Langevin
-equation.  The SGLD is an iterative
-optimization algorithm which uses minibatching to create a stochastic
-gradient estimator, as used in SGD to optimize a differentiable
-objective function.
-</p>
-
-<p>Unlike traditional SGD, SGLD can be used for
-Bayesian learning as a sampling method. SGLD may be viewed as Langevin
-dynamics applied to posterior distributions, but the key difference is
-that the likelihood gradient terms are minibatched, like in SGD. SGLD,
-like Langevin dynamics, produces samples from a posterior distribution
-of parameters based on available data.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="more-on-the-sgld">More on the SGLD </h2>
-
-<p>The SGLD uses the probability \( p(\theta) \) (note that we limit
-ourselves to just a variable \( \theta \)) and updates the <b>log</b> of this
-probability by initializing it through some random prior distribution,
-normally just a uniform distribution which takes values between
-\( \theta\in [-1,1] \),
-</p>
-
-<p>The update is given by</p>
-$$
-\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+\sqrt{\eta}w_i,
-$$
-
-<p>where \( w_i\sim N(0,1) \) are normally distributed with mean zero and
-variance one and \( i=0,1,\dots,k \), with \( k \) the final number of
-iterations.  The parameter \( \eta \) is the learning rate. The term
-\( \sqrt{\eta}w_i \) introduces <b>noise</b> in the equation.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="code-example-of-langevin-sampling">Code example of Langevin Sampling </h2>
-
-<p>In our calculations the gradient is calculated using the model we have
-for the probability distribution. For an energy-based model this gives
-us a derivative which involves the so-called positive and negative
-phases discussed last week.
-</p>
-
-<p>Read more about Langevin sampling at for example
-<a href="https://www.lyndonduong.com/sgmcmc/" target="_blank"><tt>https://www.lyndonduong.com/sgmcmc/</tt></a>. This site contains a nice
-example of a PyTorch code which implements Langevin sampling.
-</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="theory-of-variational-autoencoders">Theory of Variational Autoencoders </h2>
-
-<p>Let us remind ourself about what an autoencoder is, see the jupyter-notebook at <a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb</tt></a>.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-autoencoder-again">The Autoencoder again </h2>
-
-<p>Autoencoders are neural networks where the outputs are its own
-inputs. They are split into an <b>encoder part</b>
-which maps the input \( \boldsymbol{x} \) via a function \( f(\boldsymbol{x},\boldsymbol{W}) \) (this
-is the encoder part) to a <b>so-called code part</b> (or intermediate part)
-with the result \( \boldsymbol{h} \)
-</p>
-
-$$
-\boldsymbol{h} = f(\boldsymbol{x},\boldsymbol{W})),
-$$
-
-<p>where \( \boldsymbol{W} \) are the weights to be determined.  The <b>decoder</b> parts maps, via its own parameters (weights given by the matrix \( \boldsymbol{V} \) and its own biases) to 
-the final ouput
-</p>
-$$
-\tilde{\boldsymbol{x}} = g(\boldsymbol{h},\boldsymbol{V})).
-$$
-
-<p>The goal is to minimize the construction error, often done by optimizing the means squared error.</p>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="schematic-image-of-an-autoencoder">Schematic image of an Autoencoder </h2>
-
-<br/><br/>
-<center>
-<p><img src="figures/ae1.png" width="700" align="bottom"></p>
-</center>
-<br/><br/>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="mathematics-of-variational-autoencoders">Mathematics of Variational Autoencoders </h2>
@@ -806,7 +535,7 @@ $$
 
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
-<!-- copyright --> &copy; 1999-2024, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
+<!-- copyright --> &copy; 1999-2025, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
 </center>
 </body>
 </html>

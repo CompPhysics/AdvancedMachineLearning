@@ -1,246 +1,29 @@
 TITLE: Advanced machine learning and data analysis for the physical sciences
-AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway & Department of Physics and Astronomy and Facility for Rare Isotope Beams, Michigan State University, East Lansing, Michigan, USA
-DATE: April 16, 2024
+AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway
+DATE: April 24, 2025
 
 
 !split
-===== Plans for the week April 15-19, 2024  =====
+===== Plans for the week April 21-25, 2025  =====
 
 !bblock  Deep generative models
-o Finalizing discussion of Boltzmann machines, implementations using TensorFlow and Pytorch
-o Discussion of other energy-based models and Langevin sampling
-o Variational Autoencoders (VAE), mathematics
-o "Video of lecture":"https://youtu.be/rw-NBN293o4"
-o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf"
+o Variational Autoencoders (VAE), mathematics, basic mathematics
+o Writing our own codes for VAEs
+#o "Video of lecture":"https://youtu.be/rw-NBN293o4"
+#o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf"
 !eblock
 
 !split
 ===== Readings =====
 !bblock 
-o Reading recommendation: Goodfellow et al, for VAEs see sections 20.10-20.11
-o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
-o See Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
+o Add VAE material
 !eblock
 
 #todo: add about Langevin sampling, see https://www.lyndonduong.com/sgmcmc/
 # code for VAEs applied to MNIST and CIFAR perhaps
 
 !split
-===== Reminder from last week and layout of lecture this week =====
-
-o We will present first a reminder from last week, see for example the jupyter-notebook at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb"
-o We will then discuss codes as well as other energy-based models and Langevin sampling instead of Gibbs or Metropolis sampling.
-o Thereafter we start our discussions of Variational autoencoders and Generalized adversarial networks
-
-!split
-===== Code for RBMs using PyTorch for a binary-binary RBM =====
-
-!bc pycod
-import numpy as np
-import torch
-import torch.utils.data
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.autograd import Variable
-from torchvision import datasets, transforms
-from torchvision.utils import make_grid , save_image
-import matplotlib.pyplot as plt
-
-
-batch_size = 64
-train_loader = torch.utils.data.DataLoader(
-datasets.MNIST('./data',
-    train=True,
-    download = True,
-    transform = transforms.Compose(
-        [transforms.ToTensor()])
-     ),
-     batch_size=batch_size
-)
-
-test_loader = torch.utils.data.DataLoader(
-datasets.MNIST('./data',
-    train=False,
-    transform=transforms.Compose(
-    [transforms.ToTensor()])
-    ),
-    batch_size=batch_size)
-
-
-class RBM(nn.Module):
-   def __init__(self,
-               n_vis=784,
-               n_hin=500,
-               k=5):
-        super(RBM, self).__init__()
-        self.W = nn.Parameter(torch.randn(n_hin,n_vis)*1e-2)
-        self.v_bias = nn.Parameter(torch.zeros(n_vis))
-        self.h_bias = nn.Parameter(torch.zeros(n_hin))
-        self.k = k
-    
-   def sample_from_p(self,p):
-       return F.relu(torch.sign(p - Variable(torch.rand(p.size()))))
-    
-   def v_to_h(self,v):
-        p_h = F.sigmoid(F.linear(v,self.W,self.h_bias))
-        sample_h = self.sample_from_p(p_h)
-        return p_h,sample_h
-    
-   def h_to_v(self,h):
-        p_v = F.sigmoid(F.linear(h,self.W.t(),self.v_bias))
-        sample_v = self.sample_from_p(p_v)
-        return p_v,sample_v
-        
-   def forward(self,v):
-        pre_h1,h1 = self.v_to_h(v)
-        
-        h_ = h1
-        for _ in range(self.k):
-            pre_v_,v_ = self.h_to_v(h_)
-            pre_h_,h_ = self.v_to_h(v_)
-        
-        return v,v_
-    
-   def free_energy(self,v):
-        vbias_term = v.mv(self.v_bias)
-        wx_b = F.linear(v,self.W,self.h_bias)
-        hidden_term = wx_b.exp().add(1).log().sum(1)
-        return (-hidden_term - vbias_term).mean()
-
-
-
-
-rbm = RBM(k=1)
-train_op = optim.SGD(rbm.parameters(),0.1)
-
-for epoch in range(10):
-    loss_ = []
-    for _, (data,target) in enumerate(train_loader):
-        data = Variable(data.view(-1,784))
-        sample_data = data.bernoulli()
-        
-        v,v1 = rbm(sample_data)
-        loss = rbm.free_energy(v) - rbm.free_energy(v1)
-        loss_.append(loss.data)
-        train_op.zero_grad()
-        loss.backward()
-        train_op.step()
-
-    print("Training loss for {} epoch: {}".format(epoch, np.mean(loss_)))
-
-
-def show_adn_save(file_name,img):
-    npimg = np.transpose(img.numpy(),(1,2,0))
-    f = "./%s.png" % file_name
-    plt.imshow(npimg)
-    plt.imsave(f,npimg)
-
-show_adn_save("real",make_grid(v.view(32,1,28,28).data))
-show_adn_save("generate",make_grid(v1.view(32,1,28,28).data))
-
-!ec
-
-!split
-===== RBM using TensorFlow and Keras =====
-
-
-o To create Boltzmann machine using Keras, see Babcock and Bali chapter 4, see URL:"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2/blob/master/Chapter_4/models/rbm.py"
-
-
-
-!split
-===== Codes for Energy-based models =====
-
-See discussions in Foster, chapter 7 on energy-based models at URL:"https://github.com/davidADSP/Generative_Deep_Learning_2nd_Edition/tree/main/notebooks/07_ebm/01_ebm"
-
-That notebook is based on a recent article by Du and Mordatch, _Implicit generation and modeling with energy-based models_, see URL:"https://arxiv.org/pdf/1903.08689.pdf."
-
-!split
-===== Langevin sampling =====
-
-Also called Stochastic gradient Langevin dynamics (SGLD), is sampling
-technique composed of characteristics from Stochastic gradient descent
-(SGD) and Langevin dynamics, a mathematical extension of the Langevin
-equation.  The SGLD is an iterative
-optimization algorithm which uses minibatching to create a stochastic
-gradient estimator, as used in SGD to optimize a differentiable
-objective function.
-
-Unlike traditional SGD, SGLD can be used for
-Bayesian learning as a sampling method. SGLD may be viewed as Langevin
-dynamics applied to posterior distributions, but the key difference is
-that the likelihood gradient terms are minibatched, like in SGD. SGLD,
-like Langevin dynamics, produces samples from a posterior distribution
-of parameters based on available data.
-
-!split
-===== More on the SGLD =====
-
-The SGLD uses the probability $p(\theta)$ (note that we limit
-ourselves to just a variable $\theta$) and updates the _log_ of this
-probability by initializing it through some random prior distribution,
-normally just a uniform distribution which takes values between
-$\theta\in [-1,1]$,
-
-The update is given by
-!bt
-\[
-\theta_{i+1}=\theta_{i}+\eta \nabla_{\theta} \log{p(\theta_{i})}+\sqrt{\eta}w_i,
-\]
-!et
-where $w_i\sim N(0,1)$ are normally distributed with mean zero and
-variance one and $i=0,1,\dots,k$, with $k$ the final number of
-iterations.  The parameter $\eta$ is the learning rate. The term
-$\sqrt{\eta}w_i$ introduces _noise_ in the equation.
-
-!split
-===== Code example of Langevin Sampling =====
-
-In our calculations the gradient is calculated using the model we have
-for the probability distribution. For an energy-based model this gives
-us a derivative which involves the so-called positive and negative
-phases discussed last week.
-
-Read more about Langevin sampling at for example
-URL:"https://www.lyndonduong.com/sgmcmc/". This site contains a nice
-example of a PyTorch code which implements Langevin sampling.
-
-!split
 ===== Theory of Variational Autoencoders =====
-
-Let us remind ourself about what an autoencoder is, see the jupyter-notebook at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb".
-
-
-!split
-===== The Autoencoder again =====
-
-
-Autoencoders are neural networks where the outputs are its own
-inputs. They are split into an _encoder part_
-which maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this
-is the encoder part) to a _so-called code part_ (or intermediate part)
-with the result $\bm{h}$
-
-!bt
-\[
-\bm{h} = f(\bm{x},\bm{W})),
-\]
-!et
-where $\bm{W}$ are the weights to be determined.  The _decoder_ parts maps, via its own parameters (weights given by the matrix $\bm{V}$ and its own biases) to 
-the final ouput
-!bt
-\[
-\tilde{\bm{x}} = g(\bm{h},\bm{V})).
-\]
-!et
-
-The goal is to minimize the construction error, often done by optimizing the means squared error.
-
-!split
-===== Schematic image of an Autoencoder =====
-
-FIGURE: [figures/ae1.png, width=700 frac=1.0]
 
 
 !split
