@@ -7,282 +7,529 @@ DATE: April 24, 2025
 ===== Plans for the week April 21-25, 2025  =====
 
 !bblock  Deep generative models
-o Variational Autoencoders (VAE), mathematics, basic mathematics
-o Writing our own codes for VAEs
-o Start discussion of Diffusion models (if we get time)
+o Discussion of project 2
+o Variational Autoencoders (VAE), Mathematics and codes, continuation from last week
+o Reading recommendation:
+  o Goodfellow et al chapter 20.10-20-14
+  o Calvin Luo URL:"https://calvinyluo.com/2022/08/26/diffusion-tutorial.html"
+  o An Introduction to Variational Autoencoders, by Kingma and Welling, see URL:"https://arxiv.org/abs/1906.02691"
 #o "Video of lecture":"https://youtu.be/rw-NBN293o4"
 #o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2024/NotesApril16.pdf"
 !eblock
 
-!split
-===== Readings =====
-!bblock 
-o Add VAE material to read about
-!eblock
 
 #todo: add about Langevin sampling, see https://www.lyndonduong.com/sgmcmc/
 # code for VAEs applied to MNIST and CIFAR perhaps
 
-!split
-===== Theory of Variational Autoencoders =====
 
 
 !split
-===== Mathematics of Variational Autoencoders =====
+===== Summary of Variational Autoencoders (VAEs) =====
 
-We have defined earlier a probability (marginal) distribution with hidden variables $\bm{h}$ and parameters $\bm{\Theta}$ as
+In our short summary of VAes, we will also remind you about the
+mathematics of Boltzmann machines and the Kullback-Leibler divergence,
+leading to various  ways to optimize the probability
+distributions, namely what is called 
+* Contrastive optimization
+
+!split
+===== Boltzmann machines and energy-based models and contrastive optimization =====
+
+!split
+===== Energy models =====
+
+For Boltzmann machines  we defined a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_1, \dots , x_{n-1}\}$ with a pertinent probability distribution
 !bt
 \[
-p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
+p(\bm{X})=\prod_{x_i\in \bm{X}}p(x_i),
 \]
 !et
-for continuous variables $\bm{h}$ and
+where we have assumed that the random varaibles $x_i$ are all independent and identically distributed (iid).
+
+!split
+===== Probability model =====
+
+We defined a probability
 !bt
 \[
-p(\bm{x};\bm{\Theta}) = \sum_{\bm{h}}p(\bm{x},\bm{h};\bm{\Theta}),
+p(x_i,h_j;\bm{\Theta}) = \frac{f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})},
 \]
 !et
-for discrete stochastic events $\bm{h}$. The variables $\bm{h}$ are normally called the _latent variables_ in the theory of autoencoders. We will also call then for that here.
-
-!split
-===== Using the conditional probability =====
-
-Using the the definition of the conditional probabilities $p(\bm{x}\vert\bm{h};\bm{\Theta})$, $p(\bm{h}\vert\bm{x};\bm{\Theta})$ and 
-and the prior $p(\bm{h})$, we can rewrite the above equation as
+where $f(x_i,h_j;\bm{\Theta})$ is a function which we assume is larger or
+equal than zero and obeys all properties required for a probability
+distribution and $Z(\bm{\Theta})$ is a normalization constant. Inspired by
+statistical mechanics, we call it often for the partition function.
+It is defined as (assuming that we have discrete probability distributions)
 !bt
 \[
-p(\bm{x};\bm{\Theta}) = \sum_{\bm{h}}p(\bm{x}\vert\bm{h};\bm{\Theta})p(\bm{h},
+Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}).
 \]
 !et
 
-which allows us to make the dependence of $\bm{x}$ on $\bm{h}$
-explicit by using the law of total probability. The intuition behind
-this approach for finding the marginal probability for $\bm{x}$ is to
-optimize the above equations with respect to the parameters
-$\bm{\Theta}$.  This is done normally by maximizing the probability,
-the so-called maximum-likelihood approach discussed earlier.
-
 !split
-===== VAEs versus autoencoders =====
+===== Marginal and conditional probabilities =====
 
-This trained probability is assumed to be able to produce similar
-samples as the input.  In VAEs it is then common to compare via for
-example the mean-squared error or the cross-entropy the predicted
-values with the input values.  Compared with autoencoders, we are now
-producing a probability instead of a functions which mimicks the
-input.
-
-In VAEs, the choice of this output distribution is often Gaussian,
-meaning that the conditional probability is
+We can in turn define the marginal probabilities
 !bt
 \[
-p(\bm{x}\vert\bm{h};\bm{\Theta})=N(\bm{x}\vert f(\bm{h};\bm{\Theta}), \sigma^2\times \bm{I}),
+p(x_i;\bm{\Theta}) = \frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})},
 \]
 !et
-with mean value given by the function $f(\bm{h};\bm{\Theta})$ and a
-diagonal covariance matrix multiplied by a parameter $\sigma^2$ which
-is treated as a hyperparameter.
-
-!split
-===== Gradient descent =====
-
-By having a Gaussian distribution, we can use gradient descent (or any
-other optimization technique) to increase $p(\bm{x};\bm{\Theta})$ by
-making $f(\bm{h};\bm{\Theta})$ approach $\bm{x}$ for some $\bm{h}$,
-gradually making the training data more likely under the generative
-model. The important property is simply that the marginal probability
-can be computed, and it is continuous in $\bm{\Theta}$..
-
-!split
-===== Are VAEs just modified autoencoders? =====
-
-The mathematical basis of VAEs actually has relatively little to do
-with classical autoencoders, for example the sparse autoencoders or
-denoising autoencoders discussed earlier.
-
-VAEs approximately maximize the probability equation discussed
-above. They are called autoencoders only because the final training
-objective that derives from this setup does have an encoder and a
-decoder, and resembles a traditional autoencoder. Unlike sparse
-autoencoders, there are generally no tuning parameters analogous to
-the sparsity penalties. And unlike sparse and denoising autoencoders,
-we can sample directly from $p(\bm{x})$ without performing Markov
-Chain Monte Carlo.
+and 
+!bt
+\[
+p(h_i;\bm{\Theta}) = \frac{\sum_{x_i\in \bm{X}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}.
+\]
+!et
 
 
 !split
-===== Training VAEs =====
+===== Partition function  =====
 
-To solve the integral or sum for $p(\bm{x})$, there are two problems
-that VAEs must deal with: how to define the latent variables $\bm{h}$,
-that is decide what information they represent, and how to deal with
-the integral over $\bm{h}$.  VAEs give a definite answer to both.
+_Note the change to a vector notation_. A variable like $\bm{x}$
+represents now a specific _configuration_. We can generate an infinity
+of such configurations. The final partition function is then the sum
+over all such possible configurations, that is
+
+!bt
+\[
+Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}),
+\]
+!et
+changes to
+!bt
+\[
+Z(\bm{\Theta})=\sum_{\bm{x}}\sum_{\bm{h}} f(\bm{x},\bm{h};\bm{\Theta}).
+\]
+!et
+If we have a binary set of variable $x_i$ and $h_j$ and $M$ values of $x_i$ and $N$ values of $h_j$ we have in total $2^M$ and $2^N$ possible $\bm{x}$ and $\bm{h}$ configurations, respectively.
+
+We see that even for the modest binary case, we can easily approach a
+number of configuration which is not possible to deal with.
+
+!split
+===== Optimization problem =====
+
+At the end, we are not interested in the probabilities of the hidden variables. The probability we thus want to optimize is 
+!bt
+\[
+p(\bm{X};\bm{\Theta})=\prod_{x_i\in \bm{X}}p(x_i;\bm{\Theta})=\prod_{x_i\in \bm{X}}\left(\frac{\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})}{Z(\bm{\Theta})}\right),
+\]
+!et
+which we rewrite as
+!bt
+\[
+p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}\left(\sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})\right).
+\]
+!et
+
+!split
+===== Further simplifications =====
+
+We simplify further by rewriting it as
+!bt
+\[
+p(\bm{X};\bm{\Theta})=\frac{1}{Z(\bm{\Theta})}\prod_{x_i\in \bm{X}}f(x_i;\bm{\Theta}),
+\]
+!et
+where we used $p(x_i;\bm{\Theta}) = \sum_{h_j\in \bm{H}}f(x_i,h_j;\bm{\Theta})$.
+The optimization problem is then
+!bt
+\[
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\bm{\bm{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}p(\bm{X};\bm{\Theta}).
+\]
+!et
+
+!split
+===== Optimizing the logarithm instead =====
+
+Computing the derivatives with respect to the parameters $\bm{\Theta}$ is
+easier (and equivalent) with taking the logarithm of the
+probability. We will thus optimize
+!bt
+\[
+{\displaystyle \mathrm{arg} \hspace{0.1cm}\max_{\bm{\bm{\Theta}}\in {\mathbb{R}}^{p}}} \hspace{0.1cm}\log{p(\bm{X};\bm{\Theta})},
+\]
+!et
+which leads to
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=0.
+\]
+!et
+
+!split
+===== Expression for the gradients =====
+
+This leads to the following equation
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{p(\bm{X};\bm{\Theta})}=\nabla_{\bm{\Theta}}\left(\sum_{x_i\in \bm{X}}\log{f(x_i;\bm{\Theta})}\right)-\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=0.
+\]
+!et
+
+The first term is called the positive phase and we assume that we have a model for the function $f$ from which we can sample values. Below we will develop an explicit model for this.
+The second term is called the negative phase and is the one which leads to more difficulties.
+
+!split
+===== Contrastive optimization =====
+The evaluation of these two terms leads to what in the literature is called contrastive optimization.
+
+If we optimize the negative _log_ of the PDF, the aboves phases simply change sign.
+
+For a further discussion of energy-based models, see the notes by Philip Lippe at URL:"https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial8/Deep_Energy_Models.html"
+
+
+!split
+===== The derivative of the partition function =====
+
+The partition function, defined above as
+!bt
+\[
+Z(\bm{\Theta})=\sum_{x_i\in \bm{X}}\sum_{h_j\in \bm{H}} f(x_i,h_j;\bm{\Theta}),
+\]
+!et
+is in general the most problematic term. In principle both $x$ and $h$ can span large degrees of freedom, if not even infinitely many ones, and computing the partition function itself is often not desirable or even feasible. The above derivative of the partition function can however be written in terms of an expectation value which is in turn evaluated  using Monte Carlo sampling and the theory of Markov chains, popularly shortened to MCMC (or just MC$^2$).
+
+!split
+===== Explicit expression for the derivative =====
+We can rewrite
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{\nabla_{\bm{\Theta}}Z(\bm{\Theta})}{Z(\bm{\Theta})},
+\]
+!et
+which reads in more detail
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{\nabla_{\bm{\Theta}} \sum_{x_i\in \bm{X}}f(x_i;\bm{\Theta})   }{Z(\bm{\Theta})}.
+\]
+!et
+
+We can rewrite the function $f$ (we have assumed that is larger or
+equal than zero) as $f=\exp{\log{f}}$. We can then reqrite the last
+equation as
+
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{ \sum_{x_i\in \bm{X}} \nabla_{\bm{\Theta}}\exp{\log{f(x_i;\bm{\Theta})}}   }{Z(\bm{\Theta})}.
+\]
+!et
+
+!split
+===== Final expression =====
+
+Taking the derivative gives us
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\frac{ \sum_{x_i\in \bm{X}}f(x_i;\bm{\Theta}) \nabla_{\bm{\Theta}}\log{f(x_i;\bm{\Theta})}   }{Z(\bm{\Theta})}, 
+\]
+!et
+which is the expectation value of $\log{f}$
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\sum_{x_i\in \bm{X}}p(x_i;\bm{\Theta}) \nabla_{\bm{\Theta}}\log{f(x_i;\bm{\Theta})},
+\]
+!et
+that is
+!bt
+\[
+\nabla_{\bm{\Theta}}\log{Z(\bm{\Theta})}=\mathbb{E}(\log{f(x_i;\bm{\Theta})}).
+\]
+!et
+
+This quantity is evaluated using Monte Carlo sampling, with Gibbs
+sampling as the standard sampling rule.  
+
+
+!split
+===== Kullback-Leibler divergence =====
+
+Before we continue, we need to remind ourselves about the
+Kullback-Leibler divergence introduced earlier. This will also allow
+us to introduce another measure used in connection with the training
+of Generative Adversarial Networks, the so-called Jensen-Shannon divergence..
+These metrics are useful for quantifying the similarity between two probability distributions.
+
+The Kullback–Leibler (KL) divergence, labeled $D_{KL}$,   measures how one probability distribution $p$ diverges from a second expected probability distribution $q$,
+that is
+!bt
+\[
+D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx.
+\]
+!et
+
+The KL-divegrnece $D_{KL}$ achieves the minimum zero when $p(x) == q(x)$ everywhere.
+
+Note that the KL divergence is asymmetric. In cases where $p(x)$ is
+close to zero, but $q(x)$ is significantly non-zero, the $q$'s effect
+is disregarded. It could cause buggy results when we just want to
+measure the similarity between two equally important distributions.
+
+!split
+===== Jensen-Shannon divergence =====
+
+The Jensen–Shannon (JS) divergence is another measure of similarity between
+two probability distributions, bounded by $[0, 1]$. The JS-divergence is
+symmetric and more smooth than the KL-divergence.
+It is defined as
+!bt
+\[
+D_{JS}(p \| q) = \frac{1}{2} D_{KL}(p \| \frac{p + q}{2}) + \frac{1}{2} D_{KL}(q \| \frac{p + q}{2})
+\]
+!et
+
+Many practitioners believe that one reason behind GANs' big success is
+switching the loss function from asymmetric KL-divergence in
+traditional maximum-likelihood approach to symmetric JS-divergence.
+
+
+!split
+=====  Generative model,  basic overview (Borrowed from Rashcka et al) =====
+
+FIGURE: [figures/figure1.png, width=900 frac=1.0]
+
+
+!split
+===== Reminder on VAEs =====
+
+Mathematically, we can imagine the latent variables and the data we
+observe as modeled by a joint distribution $p(\bm{x}, \bm{h};\bm{\Theta})$.  Recall one
+approach of generative modeling, termed likelihood-based, is to
+learn a model to maximize the likelihood $p(\bm{x};\bm{\Theta})$ of all observed
+$\bm{x}$.  There are two ways we can manipulate this joint distribution
+to recover the likelihood of purely our observed data $p(\bm{x};\bm{\Theta})$; we can
+explicitly marginalize
+out the latent variable $\bm{h}$
+!bt
+\begin{equation*}
+p(\bm{x}) = \int p(\bm{x}, \bm{h})d\bm{h}
+\end{equation*}
+!et
+or, we could also appeal to the chain rule of probability
+!bt
+\begin{equation*}
+p(\bm{x}) = \frac{p(\bm{x}, \bm{h})}{p(\bm{h}|\bm{x})}
+\end{equation*}
+!et
+We suppress here the dependence	on the optimization parameters $\bm{\Theta}$.
+
+!split
+===== Evidence Lower Bound =====
+Directly computing and maximizing the likelihood $p(\bm{x})$ is
+difficult because it either involves integrating out all latent
+variables $\bm{h}$, which is intractable for
+complex models, or it involves having access to a ground truth latent
+encoder $p(\bm{h}|\bm{x})$.
+
+Using the last  two equations, we can derive a term called the Evidence Lower Bound (ELBO), which as its name suggests, is a lower
+  bound of the evidence.  The evidence is quantified in this case as
+the log likelihood of the observed data.  Then, maximizing the ELBO
+becomes a proxy objective with which to optimize a latent variable
+model; in the best case, when the ELBO is powerfully parameterized and
+perfectly optimized, it becomes exactly equivalent to the evidence.
 
 
 
 !split
-===== Kullback-Leibler relative entropy (notation to be updated) =====
+===== ELBO equations =====
+Formally, the equation of the ELBO is
+!bt
+\begin{equation*}
+\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]
+\end{equation*}
+!et
+To make the relationship with the evidence explicit, we can mathematically write:
+!bt
+\begin{equation*}
+\log p(\bm{x}) \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]
+\end{equation*}
+!et
 
-When the goal of the training is to approximate a probability
-distribution, as it is in generative modeling, another relevant
-measure is the _Kullback-Leibler divergence_, also known as the
-relative entropy or Shannon entropy. It is a non-symmetric measure of the
-dissimilarity between two probability density functions $p$ and
-$q$. If $p$ is the unkown probability which we approximate with $q$,
-we can measure the difference by
+!split
+===== Introducing the encoder function =====
+
+Here, $q_{\bm{\phi}}(\bm{h}|\bm{x})$ is a flexible approximate
+variational distribution with parameters $\bm{\phi}$ that we seek to
+optimize.  Intuitively, it can be thought of as a parameterizable
+model that is learned to estimate the true distribution over latent
+variables for given observations $\bm{x}$; in other words, it seeks to
+approximate true posterior $p(\bm{h}|\bm{x})$.  As we saw last week when we
+explored Variational Autoencoders, as we increase the lower bound
+by tuning the parameters $\bm{\phi}$ to maximize the ELBO, we gain
+access to components that can be used to model the true data
+distribution and sample from it, thus learning a generative model.
+
+!split
+===== The derivation from last week =====
+
+To better understand the relationship between the evidence and the ELBO, let us remind ourselves about the derivations from our previous lecture, this time using
+
 !bt
 \begin{align*}
-	\text{KL}(p||q) = \int_{-\infty}^{\infty} p (\bm{x}) \log \frac{p(\bm{x})}{q(\bm{x})}  d\bm{x}.
+\log p(\bm{x}) & = \log p(\bm{x}) \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h} && \text{(Multiply by $1 = \int q_{\bm{\phi}}(\bm{h}|\bm{x})d\bm{h}$)}\\
+          & = \int q_{\bm{\phi}}(\bm{h}|\bm{x})(\log p(\bm{x}))d\bm{h} && \text{(Bring evidence into integral)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p(\bm{x})\right] && \text{(Definition of Expectation)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{p(\bm{h}|\bm{x})}\right]&& \\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})q_{\bm{\phi}}(\bm{h}|\bm{x})}{p(\bm{h}|\bm{x})q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]&& \text{(Multiply by $1 = \frac{q_{\bm{\phi}}(\bm{h}|\bm{x})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}$)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{q_{\bm{\phi}}(\bm{h}|\bm{x})}{p(\bm{h}|\bm{x})}\right] && \text{(Split the Expectation)}\\
+          & = \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right] +
+	  D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}|\bm{x}))  && \text{(Definition of KL Divergence)}\\
+          & \geq \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]  && \text{(KL Divergence always $\geq 0$)}
 \end{align*}
 !et
 
 !split
-===== Kullback-Leibler divergence and RBMs =====
+===== Analysis =====
 
-Thus, the Kullback-Leibler divergence between the distribution of the
-training data $f(\bm{x})$ and the model marginal distribution $p(\bm{x};\bm{\Theta})$ from an RBM is
+From this derivation, we clearly observe from the last equation
+that the evidence is equal to the ELBO plus the KL Divergence between
+the approximate posterior $q_{\bm{\phi}}(\bm{h}|\bm{x})$ and the true
+posterior $p(\bm{h}|\bm{x})$.  Understanding this term is the
+key to understanding not only the relationship between the ELBO and
+the evidence, but also the reason why optimizing the ELBO is an
+appropriate objective at all.
+
+!split
+===== The VAE =====
+
+
+In the default formulation of the VAE by Kingma and Welling (2015), we directly maximize the ELBO.  This
+approach is \textit{variational}, because we optimize for the best
+$q_{\bm{\phi}}(\bm{h}|\bm{x})$ amongst a family of potential posterior
+distributions parameterized by $\bm{\phi}$.  It is called an
+\textit{autoencoder} because it is reminiscent of a traditional
+autoencoder model, where input data is trained to predict itself after
+undergoing an intermediate bottlenecking representation step.
+
+!split
+===== Dissecting the equations =====
+To make
+this connection explicit, let us dissect the ELBO term further:
 
 !bt
 \begin{align*}
-	\text{KL} (f(\bm{x})|| p(\bm{x}| \bm{\Theta})) =& \int_{-\infty}^{\infty}
-	f (\bm{x}) \log \frac{f(\bm{x})}{p(\bm{x}; \bm{\Theta})} d\bm{x} \\
-	=& \int_{-\infty}^{\infty} f(\bm{x}) \log f(\bm{x}) d\bm{x} - \int_{-\infty}^{\infty} f(\bm{x}) \log
-	p(\bm{x};\bm{\Theta}) d\bm{x} \\
-	%=& \mathbb{E}_{f(\bm{x})} (\log f(\bm{x})) - \mathbb{E}_{f(\bm{x})} (\log p(\bm{x}; \bm{\Theta}))
-	=& \langle \log f(\bm{x}) \rangle_{f(\bm{x})} - \langle \log p(\bm{x};\bm{\Theta}) \rangle_{f(\bm{x})} \\
-	=& \langle \log f(\bm{x}) \rangle_{data} + \langle E(\bm{x}) \rangle_{data} + \log Z.
+{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{x}, \bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}
+&= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p_{\bm{\theta}}(\bm{x}|\bm{h})p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Chain Rule of Probability)}}\\
+&= {\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] + \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log\frac{p(\bm{h})}{q_{\bm{\phi}}(\bm{h}|\bm{x})}\right]}         && {\text{(Split the Expectation)}}\\
+&= \underbrace{{\mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right]}}_\text{reconstruction term} - \underbrace{{D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})}\vert\vert{p(\bm{h}))}}_\text{prior matching term} && {\text{(Definition of KL Divergence)}}
+\end{align*}
+!et
+
+
+!split
+===== Bottlenecking distribution =====
+
+In this case, we learn an intermediate bottlenecking distribution
+$q_{\bm{\phi}}(\bm{h}|\bm{x})$ that can be treated as
+an \textit{encoder}; it transforms inputs into a distribution over
+possible latents.  Simultaneously, we learn a deterministic function
+$p_{\bm{\theta}}(\bm{x}|\bm{h})$ to convert a given latent vector
+$\bm{h}$ into an observation $\bm{x}$, which can be interpreted as
+a \textit{decoder}.
+
+!split
+===== Decoder and encoder =====
+The two terms in the last equation each have intuitive descriptions: the first
+term measures the reconstruction likelihood of the decoder from our
+variational distribution; this ensures that the learned distribution
+is modeling effective latents that the original data can be
+regenerated from.  The second term measures how similar the learned
+variational distribution is to a prior belief held over latent
+variables.  Minimizing this term encourages the encoder to actually
+learn a distribution rather than collapse into a Dirac delta function.
+Maximizing the ELBO is thus equivalent to maximizing its first term
+and minimizing its second term.
+
+!split
+===== Defining feature of VAEs =====
+
+A defining feature of the VAE is how the ELBO is optimized jointly over parameters $\bm{\phi}$ and $\bm{\theta}$.  The encoder of the VAE is commonly chosen to model a multivariate Gaussian with diagonal covariance, and the prior is often selected to be a standard multivariate Gaussian: 
+!bt
+\begin{align*}
+    q_{\bm{\phi}}(\bm{h}|\bm{x}) &= N(\bm{h}; \bm{\mu}_{\bm{\phi}}(\bm{x}), \bm{\sigma}_{\bm{\phi}}^2(\bm{x})\textbf{I})\\
+    p(\bm{h}) &= N(\bm{h}; \bm{0}, \textbf{I})
 \end{align*}
 !et
 
 !split
-===== Maximizing log-likelihood =====
+===== Analytical evaluation =====
 
-The first term is constant with respect to $\bm{\Theta}$ since
-$f(\bm{x})$ is independent of $\bm{\Theta}$. Thus the Kullback-Leibler
-divergence is minimal when the second term is minimal. The second term
-is the log-likelihood cost function, hence minimizing the
-Kullback-Leibler divergence is equivalent to maximizing the
-log-likelihood. 
+Then, the KL divergence term of the ELBO can be computed analytically, and the reconstruction term can be approximated using a Monte Carlo estimate.  Our objective can then be rewritten as:
+!bt
+\begin{align*}
+  \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \mathbb{E}_{q_{\bm{\phi}}(\bm{h}|\bm{x})}\left[\log p_{\bm{\theta}}(\bm{x}|\bm{h})\right] - D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h})) \approx \mathrm{argmax}_{\bm{\phi}, \bm{\theta}} \sum_{l=1}^{L}\log p_{\bm{\theta}}(\bm{x}|\bm{h}^{(l)}) - D_{KL}(q_{\bm{\phi}}(\bm{h}|\bm{x})\vert\vert p(\bm{h}))
+\end{align*}
+!et
+where latents $\{\bm{h}^{(l)}\}_{l=1}^L$ are sampled from $q_{\bm{\phi}}(\bm{h}|\bm{x})$, for every observation $\bm{x}$ in the dataset.
 
 
 !split
-===== Back to VAEs =====
+===== Reparameterization trick =====
 
-We want to train the marginal probability with some latent variables $\bm{h}$
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for the continuous version (see previous slides for the discrete variant).
-
+However, a problem arises in this default setup: each $\bm{h}^{(l)}$
+that our loss is computed on is generated by a stochastic sampling
+procedure, which is generally non-differentiable.  Fortunately, this
+can be addressed via the \textit{reparameterization trick} when
+$q_{\bm{\phi}}(\bm{h}|\bm{x})$ is designed to model certain
+distributions, including the multivariate Gaussian.
 
 !split
-===== Using the KL divergence =====
+===== Actual implementation =====
 
-In practice, for most $\bm{h}$, $p(\bm{x}\vert \bm{h}; \bm{\Theta})$
-will be nearly zero, and hence contribute almost nothing to our
-estimate of $p(\bm{x})$.
+The reparameterization trick rewrites a random variable as a
+deterministic function of a noise variable; this allows for the
+optimization of the non-stochastic terms through gradient descent.
+For example, samples from a normal distribution
+$x \sim N(x;\mu, \sigma^2)$ with arbitrary mean $\mu$ and
+variance $\sigma^2$ can be rewritten as
 
-The key idea behind the variational autoencoder is to attempt to
-sample values of $\bm{h}$ that are likely to have produced $\bm{x}$,
-and compute $p(\bm{x})$ just from those.
-
-This means that we need a new function $Q(\bm{h}|\bm{x})$ which can
-take a value of $\bm{x}$ and give us a distribution over $\bm{h}$
-values that are likely to produce $\bm{x}$.  Hopefully the space of
-$\bm{h}$ values that are likely under $Q$ will be much smaller than
-the space of all $\bm{h}$'s that are likely under the prior
-$p(\bm{h})$.  This lets us, for example, compute $E_{\bm{h}\sim
-Q}p(\bm{x}\vert \bm{h})$ relatively easily. Note that we drop
-$\bm{\Theta}$ from here and for notational simplicity.
-
-
-!split
-===== Kullback-Leibler again =====
-
-However, if $\bm{h}$ is sampled from an arbitrary distribution with
-PDF $Q(\bm{h})$, which is not $\mathcal{N}(0,I)$, then how does that
-help us optimize $p(\bm{x})$?
-
-The first thing we need to do is relate
-$E_{\bm{h}\sim Q}P(\bm{x}\vert \bm{h})$ and $p(\bm{x})$.  We will see where $Q$ comes from later.
-
-The relationship between $E_{\bm{h}\sim Q}p(\bm{x}\vert \bm{h})$ and $p(\bm{x})$ is one of the cornerstones of variational Bayesian methods.
-We begin with the definition of Kullback-Leibler divergence (KL divergence or $\mathcal{D}$) between $p(\bm{h}\vert \bm{x})$ and $Q(\bm{h})$, for some arbitrary $Q$ (which may or may not depend on $\bm{x}$):
 !bt
-\[
-    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{h}|\bm{x}) \right].
-\]
+\begin{align*}
+    x &= \mu + \sigma\epsilon \quad \text{with } \epsilon \sim N(\epsilon; 0, \bm{I})
+\end{align*}
 !et
 
 !split
-===== And applying Bayes rule =====
-
-We can get both $p(\bm{x})$ and $p(\bm{x}\vert \bm{h})$ into this equation by applying Bayes rule to $p(\bm{h}|\bm{x})$
-!bt
-\[
-    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{x}|\bm{h}) - \log p(\bm{h}) \right] + \log p(\bm{x}).
-\]
-!et
-
-Here, $\log p(\bm{x})$ comes out of the expectation because it does not depend on $\bm{h}$.
-Negating both sides, rearranging, and contracting part of $E_{\bm{h}\sim Q}$ into a KL-divergence terms yields:
-!bt
-\[
-\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}\vert\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h})\|P(\bm{h})\right].
-\]
-!et
+===== Interpretation =====
+An arbitrary Gaussian distributions can be interpreted as
+standard Gaussians (of which $\epsilon$ is a sample) that have their
+mean shifted from zero to the target mean $\mu$ by addition, and their
+variance stretched by the target variance $\sigma^2$.  Therefore, by
+the reparameterization trick, sampling from an arbitrary Gaussian
+distribution can be performed by sampling from a standard Gaussian,
+scaling the result by the target standard deviation, and shifting it
+by the target mean.
 
 !split
-===== Rearranging =====
+===== Deterministic function  =====
 
-Using Bayes rule we obtain
+In a VAE, each $\bm{h}$ is thus computed as a deterministic function of input $\bm{x}$ and auxiliary noise variable $\bm{\epsilon}$:
 !bt
-\[
-E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{h}|y_i,x_i) - \log p(\bm{h}|x_i) + \log p(y_i|x_i) \right]
-\]
+\begin{align*}
+    \bm{h} &= \bm{\mu}_{\bm{\phi}}(\bm{x}) + \bm{\sigma}_{\bm{\phi}}(\bm{x})\odot\bm{\epsilon} \quad \text{with } \bm{\epsilon} \sim N(\bm{\epsilon};\bm{0}, \textbf{I})
+\end{align*}
 !et
 
-Rearranging the terms and subtracting $E_{\bm{h}\sim Q}\log Q(\bm{h})$ from both sides gives
-!bt
-\[
-\begin{array}{c}
-\log P(y_i|x_i) - E_{\bm{h}\sim Q}\left[\log Q(\bm{h})-\log p(\bm{h}|x_i,y_i)\right]=\hspace{10em}\\
-\hspace{10em}E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)+\log p(\bm{h}|x_i)-\log Q(\bm{h})\right]
-\end{array}
-\]
-!et
-Note that $\bm{x}$ is fixed, and $Q$ can be \textit{any} distribution, not
-just a distribution which does a good job mapping $\bm{x}$ to the $\bm{h}$'s
-that can produce $X$.
-
+where $\odot$ represents an element-wise product.  Under this
+reparameterized version of $\bm{h}$, gradients can then be computed
+with respect to $\bm{\phi}$ as desired, to optimize
+$\bm{\mu}_{\bm{\phi}}$ and $\bm{\sigma}_{\bm{\phi}}$.  The VAE
+therefore utilizes the reparameterization trick and Monte Carlo
+estimates to optimize the ELBO jointly over $\bm{\phi}$ and
+$\bm{\theta}$.
 
 !split
-===== Inferring the probability =====
+===== After training =====
 
-Since we are interested in inferring $p(\bm{x})$, it makes sense to
-construct a $Q$ which \textit{does} depend on $\bm{x}$, and in particular,
-one which makes $\mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]$ small
-!bt
-\[
-\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}|\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h})\right].
-\]
-!et
-
-Hence, during training, it makes sense to choose a $Q$ which will make
-$E_{\bm{h}\sim Q}[\log Q(\bm{h})-$ $\log p(\bm{h}|x_i,y_i)]$ (a
-$\mathcal{D}$-divergence) small, such that the right hand side is a
-close approximation to $\log p(y_i|y_i)$.
-
-!split
-===== Central equation of VAEs =====
-
-This equation serves as the core of the variational autoencoder, and
-it is worth spending some time thinking about what it means.
-
-o The left hand side has the quantity we want to maximize, namely $\log p(\bm{x})$ plus an error term.
-o The right hand side is something we can optimize via stochastic gradient descent given the right choice of $Q$.
+After training a VAE, generating new data can be performed by sampling
+directly from the latent space $p(\bm{h})$ and then running it through
+the decoder.  Variational Autoencoders are particularly interesting
+when the dimensionality of $\bm{h}$ is less than that of input
+$\bm{x}$, as we might then be learning compact, useful
+representations.  Furthermore, when a semantically meaningful latent
+space is learned, latent vectors can be edited before being passed to
+the decoder to more precisely control the data generated.
 
 
 !split
@@ -376,233 +623,382 @@ In order to make VAEs work, it is essential to drive $Q$ to produce codes for $X
 
 
 
-
 !split
-===== Motivation from Kingma and Welling, An Introduction to Variational Autoencoders, URL:"https://arxiv.org/abs/1906.02691" =====
+===== Code examples using Keras =====
+
+Code taken from  URL:"https://keras.io/examples/generative/vae/"
+!bc pycod
+"""
+Title: Variational AutoEncoder
+Author: [fchollet](https://twitter.com/fchollet)
+Date created: 2020/05/03
+Last modified: 2023/11/22
+Description: Convolutional Variational AutoEncoder (VAE) trained on MNIST digits.
+Accelerator: GPU
+"""
+
+"""
+## Setup
+"""
+
+import os
+
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
+import numpy as np
+import tensorflow as tf
+import keras
+from keras import layers
+
+"""
+## Create a sampling layer
+"""
 
 
-*There are many reasons why generative modeling is attractive. First,
-we can express physical laws and constraints into the generative
-process while details that we don’t know or care about, i.e. nuisance
-variables, are treated as noise. The resulting models are usually
-highly intuitive and interpretable and by testing them against
-observations we can confirm or reject our theories about how the world
-works.  Another reason for trying to understand the generative process
-of data is that it naturally expresses causal relations of the
-world. Causal relations have the great advantage that they generalize
-much better to new situations than mere correlations. For instance,
-once we understand the generative process of an earthquake, we can use
-that knowledge both in California and in Chile.*
+class Sampling(layers.Layer):
+    """Uses (z_mean, z_log_var) to sample z, the vector encoding a digit."""
+
+    def call(self, inputs):
+        z_mean, z_log_var = inputs
+        batch = tf.shape(z_mean)[0]
+        dim = tf.shape(z_mean)[1]
+        epsilon = tf.random.normal(shape=(batch, dim))
+        return z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
 
-!split
-===== Mathematics of  VAEs =====
+"""
+## Build the encoder
+"""
 
-We want to train the marginal probability with some latent varrables $\bm{h}$
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for the continuous version (see previous slides for the discrete variant).
+latent_dim = 2
 
+encoder_inputs = keras.Input(shape=(28, 28, 1))
+x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
+x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Flatten()(x)
+x = layers.Dense(16, activation="relu")(x)
+z_mean = layers.Dense(latent_dim, name="z_mean")(x)
+z_log_var = layers.Dense(latent_dim, name="z_log_var")(x)
+z = Sampling()([z_mean, z_log_var])
+encoder = keras.Model(encoder_inputs, [z_mean, z_log_var, z], name="encoder")
+encoder.summary()
 
-!split
-===== Using the KL divergence =====
+"""
+## Build the decoder
+"""
 
-In practice, for most $\bm{h}$, $p(\bm{x}\vert \bm{h}; \bm{\Theta})$
-will be nearly zero, and hence contributes almost nothing to our
-estimate of $p(\bm{x})$.
+latent_inputs = keras.Input(shape=(latent_dim,))
+x = layers.Dense(7 * 7 * 64, activation="relu")(latent_inputs)
+x = layers.Reshape((7, 7, 64))(x)
+x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
+decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
+decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
+decoder.summary()
 
-The key idea behind the variational autoencoder is to attempt to
-sample values of $\bm{h}$ that are likely to have produced $\bm{x}$,
-and compute $p(\bm{x})$ just from those.
-
-This means that we need a new function $Q(\bm{h}|\bm{x})$ which can
-take a value of $\bm{x}$ and give us a distribution over $\bm{h}$
-values that are likely to produce $\bm{x}$.  Hopefully the space of
-$\bm{h}$ values that are likely under $Q$ will be much smaller than
-the space of all $\bm{h}$'s that are likely under the prior
-$p(\bm{h})$.  This lets us, for example, compute $E_{\bm{h}\sim
-Q}p(\bm{x}\vert \bm{h})$ relatively easily. Note that we drop
-$\bm{\Theta}$ from here and for notational simplicity.
-
-
-!split
-===== Kullback-Leibler again =====
-
-However, if $\bm{h}$ is sampled from an arbitrary distribution with
-PDF $Q(\bm{h})$, which is not $\mathcal{N}(0,I)$, then how does that
-help us optimize $p(\bm{x})$?
-
-The first thing we need to do is relate
-$E_{\bm{h}\sim Q}P(\bm{x}\vert \bm{h})$ and $p(\bm{x})$.  We will see where $Q$ comes from later.
-
-The relationship between $E_{\bm{h}\sim Q}p(\bm{x}\vert \bm{h})$ and $p(\bm{x})$ is one of the cornerstones of variational Bayesian methods.
-We begin with the definition of Kullback-Leibler divergence (KL divergence or $\mathcal{D}$) between $p(\bm{h}\vert \bm{x})$ and $Q(\bm{h})$, for some arbitrary $Q$ (which may or may not depend on $\bm{x}$):
-!bt
-\[
-    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{h}|\bm{x}) \right].
-\]
-!et
-
-!split
-===== And applying Bayes rule =====
-
-We can get both $p(\bm{x})$ and $p(\bm{x}\vert \bm{h})$ into this equation by applying Bayes rule to $p(\bm{h}|\bm{x})$
-!bt
-\[
-    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{x}|\bm{h}) - \log p(\bm{h}) \right] + \log p(\bm{x}).
-\]
-!et
-
-Here, $\log p(\bm{x})$ comes out of the expectation because it does not depend on $\bm{h}$.
-Negating both sides, rearranging, and contracting part of $E_{\bm{h}\sim Q}$ into a KL-divergence terms yields:
-!bt
-\[
-\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}\vert\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h})\|P(\bm{h})\right].
-\]
-!et
-
-!split
-===== Rearranging =====
-
-Using Bayes rule we obtain
-!bt
-\[
-E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{h}|y_i,x_i) - \log p(\bm{h}|x_i) + \log p(y_i|x_i) \right]
-\]
-!et
-
-Rearranging the terms and subtracting $E_{\bm{h}\sim Q}\log Q(\bm{h})$ from both sides gives
-!bt
-\[
-\begin{array}{c}
-\log P(y_i|x_i) - E_{\bm{h}\sim Q}\left[\log Q(\bm{h})-\log p(\bm{h}|x_i,y_i)\right]=\hspace{10em}\\
-\hspace{10em}E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)+\log p(\bm{h}|x_i)-\log Q(\bm{h})\right]
-\end{array}
-\]
-!et
-Note that $\bm{x}$ is fixed, and $Q$ can be \textit{any} distribution, not
-just a distribution which does a good job mapping $\bm{x}$ to the $\bm{h}$'s
-that can produce $X$.
+"""
+## Define the VAE as a `Model` with a custom `train_step`
+"""
 
 
-!split
-===== Inferring the probability =====
+class VAE(keras.Model):
+    def __init__(self, encoder, decoder, **kwargs):
+        super().__init__(**kwargs)
+        self.encoder = encoder
+        self.decoder = decoder
+        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+        self.reconstruction_loss_tracker = keras.metrics.Mean(
+            name="reconstruction_loss"
+        )
+        self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
 
-Since we are interested in inferring $p(\bm{x})$, it makes sense to
-construct a $Q$ which \textit{does} depend on $\bm{x}$, and in particular,
-one which makes $\mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]$ small
-!bt
-\[
-\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}|\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h})\right].
-\]
-!et
+    @property
+    def metrics(self):
+        return [
+            self.total_loss_tracker,
+            self.reconstruction_loss_tracker,
+            self.kl_loss_tracker,
+        ]
 
-Hence, during training, it makes sense to choose a $Q$ which will make
-$E_{\bm{h}\sim Q}[\log Q(\bm{h})-$ $\log p(\bm{h}|x_i,y_i)]$ (a
-$\mathcal{D}$-divergence) small, such that the right hand side is a
-close approximation to $\log p(y_i|y_i)$.
-
-!split
-===== Central equation of VAEs =====
-
-This equation serves as the core of the variational autoencoder, and
-it is worth spending some time thinking about what it means.
-
-o The left hand side has the quantity we want to maximize, namely $\log p(\bm{x})$ plus an error term.
-o The right hand side is something we can optimize via stochastic gradient descent given the right choice of $Q$.
-
-
-!split
-===== Setting up SGD =====
-So how can we perform stochastic gradient descent?
-
-First we need to be a bit more specific about the form that $Q(\bm{h}|\bm{x})$
-will take.  The usual choice is to say that
-$Q(\bm{h}|\bm{x})=\mathcal{N}(\bm{h}|\mu(\bm{x};\vartheta),\Sigma(;\vartheta))$, where
-$\mu$ and $\Sigma$ are arbitrary deterministic functions with
-parameters $\vartheta$ that can be learned from data (we will omit
-$\vartheta$ in later equations).  In practice, $\mu$ and $\Sigma$ are
-again implemented via neural networks, and $\Sigma$ is constrained to
-be a diagonal matrix.
-
-
-!split
-===== More on the SGD =====
-
-The name variational ``autoencoder'' comes from
-the fact that $\mu$ and $\Sigma$ are ``encoding'' $\bm{x}$ into the latent
-space $\bm{h}$.  The advantages of this choice are computational, as they
-make it clear how to compute the right hand side.  The last
-term---$\mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h})\right]$---is now a KL-divergence
-between two multivariate Gaussian distributions, which can be computed
-in closed form as:
-!bt
-\[
-\begin{array}{c}
- \mathcal{D}[\mathcal{N}(\mu_0,\Sigma_0) \| \mathcal{N}(\mu_1,\Sigma_1)] = \hspace{20em}\\
-  \hspace{5em}\frac{ 1 }{ 2 } \left( \mathrm{tr} \left( \Sigma_1^{-1} \Sigma_0 \right) + \left( \mu_1 - \mu_0\right)^\top \Sigma_1^{-1} ( \mu_1 - \mu_0 ) - k + \log \left( \frac{ \det \Sigma_1 }{ \det \Sigma_0  } \right)  \right)
-\end{array}
-\]
-!et
-where $k$ is the dimensionality of the distribution.
-
-!split
-===== Simplification =====
-In our case, this simplifies to:
-!bt
-\[
-\begin{array}{c}
- \mathcal{D}[\mathcal{N}(\mu(X),\Sigma(X)) \| \mathcal{N}(0,I)] = \hspace{20em}\\
-\hspace{6em}\frac{ 1 }{ 2 } \left( \mathrm{tr} \left( \Sigma(X) \right) + \left( \mu(X)\right)^\top ( \mu(X) ) - k - \log\det\left(  \Sigma(X)  \right)  \right).
-\end{array}
-\]
-!et
+    def train_step(self, data):
+        with tf.GradientTape() as tape:
+            z_mean, z_log_var, z = self.encoder(data)
+            reconstruction = self.decoder(z)
+            reconstruction_loss = tf.reduce_mean(
+                tf.reduce_sum(
+                    keras.losses.binary_crossentropy(data, reconstruction),
+                    axis=(1, 2),
+                )
+            )
+            kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+            kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
+            total_loss = reconstruction_loss + kl_loss
+        grads = tape.gradient(total_loss, self.trainable_weights)
+        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+        self.total_loss_tracker.update_state(total_loss)
+        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+        self.kl_loss_tracker.update_state(kl_loss)
+        return {
+            "loss": self.total_loss_tracker.result(),
+            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+            "kl_loss": self.kl_loss_tracker.result(),
+        }
 
 
-!split
-===== Terms to compute =====
+"""
+## Train the VAE
+"""
 
-The first term on the right hand side is a bit more tricky.
-We could use sampling to estimate $E_{z\sim Q}\left[\log P(X|z)  \right]$, but getting a good estimate would require passing many samples of $z$ through $f$, which would be expensive.
-Hence, as is standard in stochastic gradient descent, we take one sample of $z$ and treat $\log P(X|z)$ for that $z$ as an approximation of $E_{z\sim Q}\left[\log P(X|z)  \right]$.
-After all, we are already doing stochastic gradient descent over different values of $X$ sampled from a dataset $D$.
-The full equation we want to optimize is:
+(x_train, _), (x_test, _) = keras.datasets.mnist.load_data()
+mnist_digits = np.concatenate([x_train, x_test], axis=0)
+mnist_digits = np.expand_dims(mnist_digits, -1).astype("float32") / 255
 
-!bt
-\[
-\begin{array}{c}
-    E_{X\sim D}\left[\log P(X) - \mathcal{D}\left[Q(z|X)\|P(z|X)\right]\right]=\hspace{16em}\\
-\hspace{10em}E_{X\sim D}\left[E_{z\sim Q}\left[\log P(X|z)  \right] - \mathcal{D}\left[Q(z|X)\|P(z)\right]\right].
-\end{array}
-\]
-!et
+vae = VAE(encoder, decoder)
+vae.compile(optimizer=keras.optimizers.Adam())
+vae.fit(mnist_digits, epochs=30, batch_size=128)
+
+"""
+## Display a grid of sampled digits
+"""
+
+import matplotlib.pyplot as plt
+
+
+def plot_latent_space(vae, n=30, figsize=15):
+    # display a n*n 2D manifold of digits
+    digit_size = 28
+    scale = 1.0
+    figure = np.zeros((digit_size * n, digit_size * n))
+    # linearly spaced coordinates corresponding to the 2D plot
+    # of digit classes in the latent space
+    grid_x = np.linspace(-scale, scale, n)
+    grid_y = np.linspace(-scale, scale, n)[::-1]
+
+    for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_sample = np.array([[xi, yi]])
+            x_decoded = vae.decoder.predict(z_sample, verbose=0)
+            digit = x_decoded[0].reshape(digit_size, digit_size)
+            figure[
+                i * digit_size : (i + 1) * digit_size,
+                j * digit_size : (j + 1) * digit_size,
+            ] = digit
+
+    plt.figure(figsize=(figsize, figsize))
+    start_range = digit_size // 2
+    end_range = n * digit_size + start_range
+    pixel_range = np.arange(start_range, end_range, digit_size)
+    sample_range_x = np.round(grid_x, 1)
+    sample_range_y = np.round(grid_y, 1)
+    plt.xticks(pixel_range, sample_range_x)
+    plt.yticks(pixel_range, sample_range_y)
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+    plt.imshow(figure, cmap="Greys_r")
+    plt.show()
+
+
+plot_latent_space(vae)
+
+"""
+## Display how the latent space clusters different digit classes
+"""
+
+
+def plot_label_clusters(vae, data, labels):
+    # display a 2D plot of the digit classes in the latent space
+    z_mean, _, _ = vae.encoder.predict(data, verbose=0)
+    plt.figure(figsize=(12, 10))
+    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
+    plt.colorbar()
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+    plt.show()
+
+
+(x_train, y_train), _ = keras.datasets.mnist.load_data()
+x_train = np.expand_dims(x_train, -1).astype("float32") / 255
+
+plot_label_clusters(vae, x_train, y_train)
+
+!ec
 
 
 !split
-===== Computing the gradients =====
+===== Code in PyTorch for VAEs =====
 
-If we take the gradient of this equation, the gradient symbol can be moved into the expectations.
-Therefore, we can sample a single value of $X$ and a single value of $z$ from the distribution $Q(z|X)$, and compute the gradient of:
-!bt
-\begin{equation}
- \log P(X|z)-\mathcal{D}\left[Q(z|X)\|P(z)\right].
-\end{equation}
-!et
+!bc pycod
+import torch
+from torch.autograd import Variable
+import numpy as np
+import torch.nn.functional as F
+import torchvision
+from torchvision import transforms
+import torch.optim as optim
+from torch import nn
+import matplotlib.pyplot as plt
+from torch import distributions
 
-We can then average the gradient of this function over arbitrarily many samples of $X$ and $z$, and the result converges to the gradient.
+class Encoder(torch.nn.Module):
+    def __init__(self, D_in, H, latent_size):
+        super(Encoder, self).__init__()
+        self.linear1 = torch.nn.Linear(D_in, H)
+        self.linear2 = torch.nn.Linear(H, H)
+        self.enc_mu = torch.nn.Linear(H, latent_size)
+        self.enc_log_sigma = torch.nn.Linear(H, latent_size)
 
-There is, however, a significant problem
-$E_{z\sim Q}\left[\log P(X|z)  \right]$ depends not just on the parameters of $P$, but also on the parameters of $Q$.
+    def forward(self, x):
+        x = F.relu(self.linear1(x))
+        x = F.relu(self.linear2(x))
+        mu = self.enc_mu(x)
+        log_sigma = self.enc_log_sigma(x)
+        sigma = torch.exp(log_sigma)
+        return torch.distributions.Normal(loc=mu, scale=sigma)
 
-In order to make VAEs work, it is essential to drive $Q$ to produce codes for $X$ that $P$ can reliably decode.  
-!bt
-\[
- E_{X\sim D}\left[E_{\epsilon\sim\mathcal{N}(0,I)}[\log P(X|z=\mu(X)+\Sigma^{1/2}(X)*\epsilon)]-\mathcal{D}\left[Q(z|X)\|P(z)\right]\right].
-\]
-!et
+
+class Decoder(torch.nn.Module):
+    def __init__(self, D_in, H, D_out):
+        super(Decoder, self).__init__()
+        self.linear1 = torch.nn.Linear(D_in, H)
+        self.linear2 = torch.nn.Linear(H, D_out)
+        
+
+    def forward(self, x):
+        x = F.relu(self.linear1(x))
+        mu = torch.tanh(self.linear2(x))
+        return torch.distributions.Normal(mu, torch.ones_like(mu))
+
+class VAE(torch.nn.Module):
+    def __init__(self, encoder, decoder):
+        super(VAE, self).__init__()
+        self.encoder = encoder
+        self.decoder = decoder
+
+    def forward(self, state):
+        q_z = self.encoder(state)
+        z = q_z.rsample()
+        return self.decoder(z), q_z
+
+
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     # Normalize the images to be -0.5, 0.5
+     transforms.Normalize(0.5, 1)]
+    )
+mnist = torchvision.datasets.MNIST('./', download=True, transform=transform)
+
+input_dim = 28 * 28
+batch_size = 128
+num_epochs = 100
+learning_rate = 0.001
+hidden_size = 512
+latent_size = 8
+
+if torch.cuda.is_available():
+    device = torch.device('cuda')
+else:
+    device = torch.device('cpu')
+
+dataloader = torch.utils.data.DataLoader(
+    mnist, batch_size=batch_size,
+    shuffle=True, 
+    pin_memory=torch.cuda.is_available())
+
+print('Number of samples: ', len(mnist))
+
+encoder = Encoder(input_dim, hidden_size, latent_size)
+decoder = Decoder(latent_size, hidden_size, input_dim)
+
+vae = VAE(encoder, decoder).to(device)
+
+optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
+for epoch in range(num_epochs):
+    for data in dataloader:
+        inputs, _ = data
+        inputs = inputs.view(-1, input_dim).to(device)
+        optimizer.zero_grad()
+        p_x, q_z = vae(inputs)
+        log_likelihood = p_x.log_prob(inputs).sum(-1).mean()
+        kl = torch.distributions.kl_divergence(
+            q_z, 
+            torch.distributions.Normal(0, 1.)
+        ).sum(-1).mean()
+        loss = -(log_likelihood - kl)
+        loss.backward()
+        optimizer.step()
+        l = loss.item()
+    print(epoch, l, log_likelihood.item(), kl.item())
+
+!ec
+
+
+
+
+!split
+===== Diffusion models, basics =====
+
+Diffusion models are inspired by non-equilibrium thermodynamics. They
+define a Markov chain of diffusion steps to slowly add random noise to
+data and then learn to reverse the diffusion process to construct
+desired data samples from the noise. Unlike VAE or flow models,
+diffusion models are learned with a fixed procedure and the latent
+variable has high dimensionality (same as the original data).
+
+
+!split
+=====  Problems with probabilistic models =====
+
+Historically, probabilistic models suffer from a tradeoff between two
+conflicting objectives: \textit{tractability} and
+\textit{flexibility}. Models that are \textit{tractable} can be
+analytically evaluated and easily fit to data (e.g. a Gaussian or
+Laplace). However, these models are unable to aptly describe structure
+in rich datasets. On the other hand, models that are \textit{flexible}
+can be molded to fit structure in arbitrary data. For example, we can
+define models in terms of any (non-negative) function $\phi(\bm{x})$
+yielding the flexible distribution $p\left(\bm{x}\right) =
+\frac{\phi\left(\bm{x} \right)}{Z}$, where $Z$ is a normalization
+constant. However, computing this normalization constant is generally
+intractable. Evaluating, training, or drawing samples from such
+flexible models typically requires a very expensive Monte Carlo
+process.
+
+!split
+===== Diffusion models =====
+Diffusion models have several interesting features
+* extreme flexibility in model structure,
+* exact sampling,
+* easy multiplication with other distributions, e.g. in order to compute a posterior, and
+* the model log likelihood, and the probability of individual states, to be cheaply evaluated.
+
+!split
+===== Original idea =====
+
+In the original formulation, one uses a Markov chain to gradually
+convert one distribution into another, an idea used in non-equilibrium
+statistical physics and sequential Monte Carlo. Diffusion models build
+a generative Markov chain which converts a simple known distribution
+(e.g. a Gaussian) into a target (data) distribution using a diffusion
+process. Rather than use this Markov chain to approximately evaluate a
+model which has been otherwise defined, one can  explicitly define the
+probabilistic model as the endpoint of the Markov chain. Since each
+step in the diffusion chain has an analytically evaluable probability,
+the full chain can also be analytically evaluated.
+
+!split
+===== Diffusion learning =====
+
+Learning in this framework involves estimating small perturbations to
+a diffusion process. Estimating small, analytically tractable,
+perturbations is more tractable than explicitly describing the full
+distribution with a single, non-analytically-normalizable, potential
+function.  Furthermore, since a diffusion process exists for any
+smooth target distribution, this method can capture data distributions
+of arbitrary form.
+
+
+
+
 
 
 
@@ -1249,8 +1645,5 @@ For more details and implementaions, see Calvin Luo at URL:"https://arxiv.org/ab
 
 
 #FIGURE: [figures/figure4.png, width=800 frac=1.0]
-
-
-
 
 
