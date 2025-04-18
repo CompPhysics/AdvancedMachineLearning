@@ -49,7 +49,6 @@ doconce format html week13.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'boltzmann-machines-and-energy-based-models-and-contrastive-optimization'),
-              ('Energy models', 2, None, 'energy-models'),
               ('Probability model', 2, None, 'probability-model'),
               ('Marginal and conditional probabilities',
                2,
@@ -236,7 +235,6 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#plans-for-the-week-april-21-25-2025" style="font-size: 80%;">Plans for the week April 21-25, 2025</a></li>
      <!-- navigation toc: --> <li><a href="#summary-of-variational-autoencoders-vaes" style="font-size: 80%;">Summary of Variational Autoencoders (VAEs)</a></li>
      <!-- navigation toc: --> <li><a href="#boltzmann-machines-and-energy-based-models-and-contrastive-optimization" style="font-size: 80%;">Boltzmann machines and energy-based models and contrastive optimization</a></li>
-     <!-- navigation toc: --> <li><a href="#energy-models" style="font-size: 80%;">Energy models</a></li>
      <!-- navigation toc: --> <li><a href="#probability-model" style="font-size: 80%;">Probability model</a></li>
      <!-- navigation toc: --> <li><a href="#marginal-and-conditional-probabilities" style="font-size: 80%;">Marginal and conditional probabilities</a></li>
      <!-- navigation toc: --> <li><a href="#partition-function" style="font-size: 80%;">Partition function</a></li>
@@ -363,12 +361,12 @@ MathJax.Hub.Config({
 
 
 <!-- todo: add about Langevin sampling, see <a href="https://www.lyndonduong.com/sgmcmc/" target="_self"><tt>https://www.lyndonduong.com/sgmcmc/</tt></a> -->
-<!-- code for VAEs applied to MNIST and CIFAR perhaps -->
+<!-- code for VAEs applied to MNIST -->
 
 <!-- !split -->
 <h2 id="summary-of-variational-autoencoders-vaes" class="anchor">Summary of Variational Autoencoders (VAEs) </h2>
 
-<p>In our short summary of VAes, we will also remind you about the
+<p>In our summary of VAes from last time, we will also remind you about the
 mathematics of Boltzmann machines and the Kullback-Leibler divergence,
 leading to various  ways to optimize the probability
 distributions, namely what is called 
@@ -378,9 +376,6 @@ distributions, namely what is called
 </ul>
 <!-- !split -->
 <h2 id="boltzmann-machines-and-energy-based-models-and-contrastive-optimization" class="anchor">Boltzmann machines and energy-based models and contrastive optimization </h2>
-
-<!-- !split -->
-<h2 id="energy-models" class="anchor">Energy models </h2>
 
 <p>For Boltzmann machines  we defined a domain \( \boldsymbol{X} \) of stochastic variables \( \boldsymbol{X}= \{x_0,x_1, \dots , x_{n-1}\} \) with a pertinent probability distribution</p>
 $$
