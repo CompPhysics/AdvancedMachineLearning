@@ -826,105 +826,123 @@ plot_label_clusters(vae, x_train, y_train)
 
 !bc pycod
 import torch
-from torch.autograd import Variable
-import numpy as np
-import torch.nn.functional as F
-import torchvision
-from torchvision import transforms
+import torch.nn as nn
 import torch.optim as optim
-from torch import nn
+import torch.nn.functional as F
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-from torch import distributions
+import numpy as np
 
-class Encoder(torch.nn.Module):
-    def __init__(self, D_in, H, latent_size):
-        super(Encoder, self).__init__()
-        self.linear1 = torch.nn.Linear(D_in, H)
-        self.linear2 = torch.nn.Linear(H, H)
-        self.enc_mu = torch.nn.Linear(H, latent_size)
-        self.enc_log_sigma = torch.nn.Linear(H, latent_size)
+# Define the VAE
+class VAE(nn.Module):
+   def __init__(self, input_dim=784, hidden_dim=400, latent_dim=2):
+       super(VAE, self).__init__()
+       self.fc1 = nn.Linear(input_dim, hidden_dim)
+       self.fc_mu = nn.Linear(hidden_dim, latent_dim)
+       self.fc_logvar = nn.Linear(hidden_dim, latent_dim)
+       self.fc3 = nn.Linear(latent_dim, hidden_dim)
+       self.fc4 = nn.Linear(hidden_dim, input_dim)
 
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = F.relu(self.linear2(x))
-        mu = self.enc_mu(x)
-        log_sigma = self.enc_log_sigma(x)
-        sigma = torch.exp(log_sigma)
-        return torch.distributions.Normal(loc=mu, scale=sigma)
+   def encode(self, x):
+       h1 = F.relu(self.fc1(x))
+       return self.fc_mu(h1), self.fc_logvar(h1)
 
+   def reparameterize(self, mu, logvar):
+       std = torch.exp(0.5 * logvar)
+       eps = torch.randn_like(std)
+       return mu + eps * std
 
-class Decoder(torch.nn.Module):
-    def __init__(self, D_in, H, D_out):
-        super(Decoder, self).__init__()
-        self.linear1 = torch.nn.Linear(D_in, H)
-        self.linear2 = torch.nn.Linear(H, D_out)
-        
+   def decode(self, z):
+       h3 = F.relu(self.fc3(z))
+       return torch.sigmoid(self.fc4(h3))
 
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        mu = torch.tanh(self.linear2(x))
-        return torch.distributions.Normal(mu, torch.ones_like(mu))
+   def forward(self, x):
+       mu, logvar = self.encode(x.view(-1, 784))
+       z = self.reparameterize(mu, logvar)
+       return self.decode(z), mu, logvar
 
-class VAE(torch.nn.Module):
-    def __init__(self, encoder, decoder):
-        super(VAE, self).__init__()
-        self.encoder = encoder
-        self.decoder = decoder
+# Loss function
+def loss_function(recon_x, x, mu, logvar):
+   BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
+   KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+   return BCE + KLD
 
-    def forward(self, state):
-        q_z = self.encoder(state)
-        z = q_z.rsample()
-        return self.decoder(z), q_z
+# Prepare data
+transform = transforms.ToTensor()
+train_dataset = datasets.MNIST('./data', train=True, download=True, transform=transform)
+test_dataset = datasets.MNIST('./data', train=False, download=True, transform=transform)
+train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
 
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = VAE().to(device)
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     # Normalize the images to be -0.5, 0.5
-     transforms.Normalize(0.5, 1)]
-    )
-mnist = torchvision.datasets.MNIST('./', download=True, transform=transform)
+# Training function
+def train(epoch):
+   model.train()
+   train_loss = 0
+   for batch_idx, (data, _) in enumerate(train_loader):
+       data = data.to(device)
+       optimizer.zero_grad()
+       recon_batch, mu, logvar = model(data)
+       loss = loss_function(recon_batch, data, mu, logvar)
+       loss.backward()
+       train_loss += loss.item()
+       optimizer.step()
+   print(f"Epoch {epoch}: Avg Loss: {train_loss / len(train_loader.dataset):.4f}")
 
-input_dim = 28 * 28
-batch_size = 128
-num_epochs = 100
-learning_rate = 0.001
-hidden_size = 512
-latent_size = 8
+# Run training
+for epoch in range(1, 11):
+   train(epoch)
 
-if torch.cuda.is_available():
-    device = torch.device('cuda')
-else:
-    device = torch.device('cpu')
+# Reconstruction Visualization
+model.eval()
+with torch.no_grad():
+   data, _ = next(iter(test_loader))
+   data = data.to(device)
+   recon_batch, _, _ = model(data)
 
-dataloader = torch.utils.data.DataLoader(
-    mnist, batch_size=batch_size,
-    shuffle=True, 
-    pin_memory=torch.cuda.is_available())
+   n = 8
+   comparison = torch.cat([data[:n], recon_batch.view(-1, 1, 28, 28)[:n]])
+   comparison = comparison.cpu()
 
-print('Number of samples: ', len(mnist))
+   plt.figure(figsize=(12, 3))
+   for i in range(n):
+       plt.subplot(2, n, i + 1)
+       plt.imshow(comparison[i][0], cmap='gray')
+       plt.axis('off')
+       plt.subplot(2, n, i + 1 + n)
+       plt.imshow(comparison[i + n][0], cmap='gray')
+       plt.axis('off')
+   plt.suptitle("Top: Original | Bottom: Reconstructed")
+   plt.show()
 
-encoder = Encoder(input_dim, hidden_size, latent_size)
-decoder = Decoder(latent_size, hidden_size, input_dim)
+# Latent Space Visualization
+model.eval()
+z_list = []
+label_list = []
 
-vae = VAE(encoder, decoder).to(device)
+with torch.no_grad():
+   for data, labels in test_loader:
+       data = data.to(device)
+       mu, _ = model.encode(data.view(-1, 784))
+       z_list.append(mu.cpu())
+       label_list.append(labels)
 
-optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
-for epoch in range(num_epochs):
-    for data in dataloader:
-        inputs, _ = data
-        inputs = inputs.view(-1, input_dim).to(device)
-        optimizer.zero_grad()
-        p_x, q_z = vae(inputs)
-        log_likelihood = p_x.log_prob(inputs).sum(-1).mean()
-        kl = torch.distributions.kl_divergence(
-            q_z, 
-            torch.distributions.Normal(0, 1.)
-        ).sum(-1).mean()
-        loss = -(log_likelihood - kl)
-        loss.backward()
-        optimizer.step()
-        l = loss.item()
-    print(epoch, l, log_likelihood.item(), kl.item())
+z = torch.cat(z_list).numpy()
+labels = torch.cat(label_list).numpy()
+
+plt.figure(figsize=(8, 6))
+scatter = plt.scatter(z[:, 0], z[:, 1], c=labels, cmap='tab10', alpha=0.7, s=10)
+plt.colorbar(scatter, ticks=range(10))
+plt.title("2D Latent Space of MNIST")
+plt.xlabel("z[0]")
+plt.ylabel("z[1]")
+plt.grid(True)
+plt.show()
 
 !ec
 
@@ -997,315 +1015,6 @@ of arbitrary form.
 
 
 
-
-
-!split
-===== Code examples using Keras =====
-
-Code taken from  URL:"https://keras.io/examples/generative/vae/"
-!bc pycod
-"""
-Title: Variational AutoEncoder
-Author: [fchollet](https://twitter.com/fchollet)
-Date created: 2020/05/03
-Last modified: 2023/11/22
-Description: Convolutional Variational AutoEncoder (VAE) trained on MNIST digits.
-Accelerator: GPU
-"""
-
-"""
-## Setup
-"""
-
-import os
-
-os.environ["KERAS_BACKEND"] = "tensorflow"
-
-import numpy as np
-import tensorflow as tf
-import keras
-from keras import layers
-
-"""
-## Create a sampling layer
-"""
-
-
-class Sampling(layers.Layer):
-    """Uses (z_mean, z_log_var) to sample z, the vector encoding a digit."""
-
-    def call(self, inputs):
-        z_mean, z_log_var = inputs
-        batch = tf.shape(z_mean)[0]
-        dim = tf.shape(z_mean)[1]
-        epsilon = tf.random.normal(shape=(batch, dim))
-        return z_mean + tf.exp(0.5 * z_log_var) * epsilon
-
-
-"""
-## Build the encoder
-"""
-
-latent_dim = 2
-
-encoder_inputs = keras.Input(shape=(28, 28, 1))
-x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
-x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
-x = layers.Flatten()(x)
-x = layers.Dense(16, activation="relu")(x)
-z_mean = layers.Dense(latent_dim, name="z_mean")(x)
-z_log_var = layers.Dense(latent_dim, name="z_log_var")(x)
-z = Sampling()([z_mean, z_log_var])
-encoder = keras.Model(encoder_inputs, [z_mean, z_log_var, z], name="encoder")
-encoder.summary()
-
-"""
-## Build the decoder
-"""
-
-latent_inputs = keras.Input(shape=(latent_dim,))
-x = layers.Dense(7 * 7 * 64, activation="relu")(latent_inputs)
-x = layers.Reshape((7, 7, 64))(x)
-x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
-x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
-decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
-decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
-decoder.summary()
-
-"""
-## Define the VAE as a `Model` with a custom `train_step`
-"""
-
-
-class VAE(keras.Model):
-    def __init__(self, encoder, decoder, **kwargs):
-        super().__init__(**kwargs)
-        self.encoder = encoder
-        self.decoder = decoder
-        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
-        self.reconstruction_loss_tracker = keras.metrics.Mean(
-            name="reconstruction_loss"
-        )
-        self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
-
-    @property
-    def metrics(self):
-        return [
-            self.total_loss_tracker,
-            self.reconstruction_loss_tracker,
-            self.kl_loss_tracker,
-        ]
-
-    def train_step(self, data):
-        with tf.GradientTape() as tape:
-            z_mean, z_log_var, z = self.encoder(data)
-            reconstruction = self.decoder(z)
-            reconstruction_loss = tf.reduce_mean(
-                tf.reduce_sum(
-                    keras.losses.binary_crossentropy(data, reconstruction),
-                    axis=(1, 2),
-                )
-            )
-            kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
-            kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
-            total_loss = reconstruction_loss + kl_loss
-        grads = tape.gradient(total_loss, self.trainable_weights)
-        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
-        self.total_loss_tracker.update_state(total_loss)
-        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
-        self.kl_loss_tracker.update_state(kl_loss)
-        return {
-            "loss": self.total_loss_tracker.result(),
-            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
-            "kl_loss": self.kl_loss_tracker.result(),
-        }
-
-
-"""
-## Train the VAE
-"""
-
-(x_train, _), (x_test, _) = keras.datasets.mnist.load_data()
-mnist_digits = np.concatenate([x_train, x_test], axis=0)
-mnist_digits = np.expand_dims(mnist_digits, -1).astype("float32") / 255
-
-vae = VAE(encoder, decoder)
-vae.compile(optimizer=keras.optimizers.Adam())
-vae.fit(mnist_digits, epochs=30, batch_size=128)
-
-"""
-## Display a grid of sampled digits
-"""
-
-import matplotlib.pyplot as plt
-
-
-def plot_latent_space(vae, n=30, figsize=15):
-    # display a n*n 2D manifold of digits
-    digit_size = 28
-    scale = 1.0
-    figure = np.zeros((digit_size * n, digit_size * n))
-    # linearly spaced coordinates corresponding to the 2D plot
-    # of digit classes in the latent space
-    grid_x = np.linspace(-scale, scale, n)
-    grid_y = np.linspace(-scale, scale, n)[::-1]
-
-    for i, yi in enumerate(grid_y):
-        for j, xi in enumerate(grid_x):
-            z_sample = np.array([[xi, yi]])
-            x_decoded = vae.decoder.predict(z_sample, verbose=0)
-            digit = x_decoded[0].reshape(digit_size, digit_size)
-            figure[
-                i * digit_size : (i + 1) * digit_size,
-                j * digit_size : (j + 1) * digit_size,
-            ] = digit
-
-    plt.figure(figsize=(figsize, figsize))
-    start_range = digit_size // 2
-    end_range = n * digit_size + start_range
-    pixel_range = np.arange(start_range, end_range, digit_size)
-    sample_range_x = np.round(grid_x, 1)
-    sample_range_y = np.round(grid_y, 1)
-    plt.xticks(pixel_range, sample_range_x)
-    plt.yticks(pixel_range, sample_range_y)
-    plt.xlabel("z[0]")
-    plt.ylabel("z[1]")
-    plt.imshow(figure, cmap="Greys_r")
-    plt.show()
-
-
-plot_latent_space(vae)
-
-"""
-## Display how the latent space clusters different digit classes
-"""
-
-
-def plot_label_clusters(vae, data, labels):
-    # display a 2D plot of the digit classes in the latent space
-    z_mean, _, _ = vae.encoder.predict(data, verbose=0)
-    plt.figure(figsize=(12, 10))
-    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
-    plt.colorbar()
-    plt.xlabel("z[0]")
-    plt.ylabel("z[1]")
-    plt.show()
-
-
-(x_train, y_train), _ = keras.datasets.mnist.load_data()
-x_train = np.expand_dims(x_train, -1).astype("float32") / 255
-
-plot_label_clusters(vae, x_train, y_train)
-
-!ec
-
-
-!split
-===== Code in PyTorch for VAEs =====
-
-!bc pycod
-import torch
-from torch.autograd import Variable
-import numpy as np
-import torch.nn.functional as F
-import torchvision
-from torchvision import transforms
-import torch.optim as optim
-from torch import nn
-import matplotlib.pyplot as plt
-from torch import distributions
-
-class Encoder(torch.nn.Module):
-    def __init__(self, D_in, H, latent_size):
-        super(Encoder, self).__init__()
-        self.linear1 = torch.nn.Linear(D_in, H)
-        self.linear2 = torch.nn.Linear(H, H)
-        self.enc_mu = torch.nn.Linear(H, latent_size)
-        self.enc_log_sigma = torch.nn.Linear(H, latent_size)
-
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = F.relu(self.linear2(x))
-        mu = self.enc_mu(x)
-        log_sigma = self.enc_log_sigma(x)
-        sigma = torch.exp(log_sigma)
-        return torch.distributions.Normal(loc=mu, scale=sigma)
-
-
-class Decoder(torch.nn.Module):
-    def __init__(self, D_in, H, D_out):
-        super(Decoder, self).__init__()
-        self.linear1 = torch.nn.Linear(D_in, H)
-        self.linear2 = torch.nn.Linear(H, D_out)
-        
-
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        mu = torch.tanh(self.linear2(x))
-        return torch.distributions.Normal(mu, torch.ones_like(mu))
-
-class VAE(torch.nn.Module):
-    def __init__(self, encoder, decoder):
-        super(VAE, self).__init__()
-        self.encoder = encoder
-        self.decoder = decoder
-
-    def forward(self, state):
-        q_z = self.encoder(state)
-        z = q_z.rsample()
-        return self.decoder(z), q_z
-
-
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     # Normalize the images to be -0.5, 0.5
-     transforms.Normalize(0.5, 1)]
-    )
-mnist = torchvision.datasets.MNIST('./', download=True, transform=transform)
-
-input_dim = 28 * 28
-batch_size = 128
-num_epochs = 100
-learning_rate = 0.001
-hidden_size = 512
-latent_size = 8
-
-if torch.cuda.is_available():
-    device = torch.device('cuda')
-else:
-    device = torch.device('cpu')
-
-dataloader = torch.utils.data.DataLoader(
-    mnist, batch_size=batch_size,
-    shuffle=True, 
-    pin_memory=torch.cuda.is_available())
-
-print('Number of samples: ', len(mnist))
-
-encoder = Encoder(input_dim, hidden_size, latent_size)
-decoder = Decoder(latent_size, hidden_size, input_dim)
-
-vae = VAE(encoder, decoder).to(device)
-
-optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
-for epoch in range(num_epochs):
-    for data in dataloader:
-        inputs, _ = data
-        inputs = inputs.view(-1, input_dim).to(device)
-        optimizer.zero_grad()
-        p_x, q_z = vae(inputs)
-        log_likelihood = p_x.log_prob(inputs).sum(-1).mean()
-        kl = torch.distributions.kl_divergence(
-            q_z, 
-            torch.distributions.Normal(0, 1.)
-        ).sum(-1).mean()
-        loss = -(log_likelihood - kl)
-        loss.backward()
-        optimizer.step()
-        l = loss.item()
-    print(epoch, l, log_likelihood.item(), kl.item())
-
-!ec
 
 
 
@@ -1377,7 +1086,7 @@ of arbitrary form.
 
 Let us go back our discussions of the variational autoencoders from
 last week, see
-URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb". As
+URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb". As
 a first attempt at understanding diffusion models, we can think of
 these as stacked VAEs, or better, recursive VAEs.
 
@@ -1390,8 +1099,8 @@ _Note_: Many of the derivations and figures here are inspired and borrowed from 
 !split
 ===== Chains of VAEs =====
 
-Markovian
-VAEs represent a  generative process where we use  Markov chain to build a hierarchy of VAEs.
+Markovian VAEs represent a generative process where we use Markov
+chain to build a hierarchy of VAEs.
 
 Each transition down the hierarchy is Markovian, where we decode each
 latent set of variables $\bm{h}_t$ in terms of the previous latent variable $\bm{h}_{t-1}$.
