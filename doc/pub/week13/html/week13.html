@@ -567,7 +567,7 @@ $$
 D_{KL}(p \| q) = \int_x p(x) \log \frac{p(x)}{q(x)} dx.
 $$
 
-<p>The KL-divegrnece \( D_{KL} \) achieves the minimum zero when \( p(x) == q(x) \) everywhere.</p>
+<p>The KL-divergence \( D_{KL} \) achieves the minimum zero when \( p(x) == q(x) \) everywhere.</p>
 
 <p>Note that the KL divergence is asymmetric. In cases where \( p(x) \) is
 close to zero, but \( q(x) \) is significantly non-zero, the \( q \)'s effect
@@ -587,7 +587,7 @@ $$
 D_{JS}(p \| q) = \frac{1}{2} D_{KL}(p \| \frac{p + q}{2}) + \frac{1}{2} D_{KL}(q \| \frac{p + q}{2})
 $$
 
-<p>Many practitioners believe that one reason behind GANs' big success is
+<p>Many practitioners believe that one reason behind GANs' big success (to be discussed later) is
 switching the loss function from asymmetric KL-divergence in
 traditional maximum-likelihood approach to symmetric JS-divergence.
 </p>
