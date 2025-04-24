@@ -150,10 +150,6 @@ doconce format html week13.do.txt --html_style=bootstrap --pygments_html_style=d
                2,
                None,
                'diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970'),
-              ('Equation for the Markovian hierarchical VAE',
-               2,
-               None,
-               'equation-for-the-markovian-hierarchical-vae'),
               ('Variational Diffusion Models',
                2,
                None,
@@ -166,10 +162,6 @@ doconce format html week13.do.txt --html_style=bootstrap --pygments_html_style=d
               ('Encoder transitions', 2, None, 'encoder-transitions'),
               ('Third assumption', 2, None, 'third-assumption'),
               ('Noisification', 2, None, 'noisification'),
-              ('Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"',
-               2,
-               None,
-               'diffusion-models-from-url-https-arxiv-org-abs-2208-11970'),
               ('Gaussian modeling', 2, None, 'gaussian-modeling'),
               ('Optimizing the variational diffusion model',
                2,
@@ -270,14 +262,12 @@ MathJax.Hub.Config({
      <!-- navigation toc: --> <li><a href="#mathematical-representation" style="font-size: 80%;">Mathematical representation</a></li>
      <!-- navigation toc: --> <li><a href="#back-to-the-marginal-probability" style="font-size: 80%;">Back to the marginal probability</a></li>
      <!-- navigation toc: --> <li><a href="#diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970" style="font-size: 80%;">Diffusion models for hierarchical VAE, from URL:"https://arxiv.org/abs/2208.11970"</a></li>
-     <!-- navigation toc: --> <li><a href="#equation-for-the-markovian-hierarchical-vae" style="font-size: 80%;">Equation for the Markovian hierarchical VAE</a></li>
      <!-- navigation toc: --> <li><a href="#variational-diffusion-models" style="font-size: 80%;">Variational Diffusion Models</a></li>
      <!-- navigation toc: --> <li><a href="#second-assumption" style="font-size: 80%;">Second assumption</a></li>
      <!-- navigation toc: --> <li><a href="#parameterizing-gaussian-encoder" style="font-size: 80%;">Parameterizing Gaussian encoder</a></li>
      <!-- navigation toc: --> <li><a href="#encoder-transitions" style="font-size: 80%;">Encoder transitions</a></li>
      <!-- navigation toc: --> <li><a href="#third-assumption" style="font-size: 80%;">Third assumption</a></li>
      <!-- navigation toc: --> <li><a href="#noisification" style="font-size: 80%;">Noisification</a></li>
-     <!-- navigation toc: --> <li><a href="#diffusion-models-from-url-https-arxiv-org-abs-2208-11970" style="font-size: 80%;">Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"</a></li>
      <!-- navigation toc: --> <li><a href="#gaussian-modeling" style="font-size: 80%;">Gaussian modeling</a></li>
      <!-- navigation toc: --> <li><a href="#optimizing-the-variational-diffusion-model" style="font-size: 80%;">Optimizing the variational diffusion model</a></li>
      <!-- navigation toc: --> <li><a href="#continues" style="font-size: 80%;">Continues</a></li>
@@ -1373,9 +1363,10 @@ of arbitrary form.
 <h2 id="mathematics-of-diffusion-models" class="anchor">Mathematics of diffusion models </h2>
 
 <p>Let us go back our discussions of the variational autoencoders from
-last week, see
-<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb" target="_self"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb</tt></a>. As
-a first attempt at understanding diffusion models, we can think of
+last week and above.
+</p>
+
+<p>As a first attempt at understanding diffusion models, we can think of
 these as stacked VAEs, or better, recursive VAEs.
 </p>
 
@@ -1437,15 +1428,6 @@ latents.  The generative process is modeled as a Markov chain, where
 each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
 \( \boldsymbol{h}_{t+1} \). Here \( \boldsymbol{z} \) is our latent variable \( \boldsymbol{h} \).
 </p>
-
-<br/><br/>
-<center>
-<p><img src="figures/figure1.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split -->
-<h2 id="equation-for-the-markovian-hierarchical-vae" class="anchor">Equation for the Markovian hierarchical VAE </h2>
 
 <p>We obtain then</p>
 $$
@@ -1554,15 +1536,6 @@ identical to pure Gaussian noise.  See figure on next slide.
 </p>
 
 <!-- !split -->
-<h2 id="diffusion-models-from-url-https-arxiv-org-abs-2208-11970" class="anchor">Diffusion models, from <a href="https://arxiv.org/abs/2208.11970" target="_self"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figures/figure2.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split -->
 <h2 id="gaussian-modeling" class="anchor">Gaussian modeling </h2>
 
 <p>Note that our encoder distributions \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \) are no
@@ -1655,8 +1628,13 @@ value may have high variance for large \( T \) values.
 
 <p>For more details and implementaions, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_self"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
 
-<!-- FIGURE: [figures/figure4.png, width=800 frac=1.0] -->
-
+<p>The plans for the rest of the semester are</p>
+<ol>
+<li> May 1: public holiday</li>
+<li> May 8: More on diffusion models and introduction to GANs. Project work</li>
+<li> May 15: GANS and summary of course. Project work. This could also be the last lecture</li>
+<li> May 22: Alternatively, we could discuss briefly reinforcement learning and do a summary of the course. Project work.</li>
+</ol>
 <!-- ------------------- end of main content --------------- -->
 </div>  <!-- end container -->
 <!-- include javascript, jQuery *first* -->

@@ -254,10 +254,6 @@ div.toc p,a {
                2,
                None,
                'diffusion-models-for-hierarchical-vae-from-url-https-arxiv-org-abs-2208-11970'),
-              ('Equation for the Markovian hierarchical VAE',
-               2,
-               None,
-               'equation-for-the-markovian-hierarchical-vae'),
               ('Variational Diffusion Models',
                2,
                None,
@@ -270,10 +266,6 @@ div.toc p,a {
               ('Encoder transitions', 2, None, 'encoder-transitions'),
               ('Third assumption', 2, None, 'third-assumption'),
               ('Noisification', 2, None, 'noisification'),
-              ('Diffusion models, from URL:"https://arxiv.org/abs/2208.11970"',
-               2,
-               None,
-               'diffusion-models-from-url-https-arxiv-org-abs-2208-11970'),
               ('Gaussian modeling', 2, None, 'gaussian-modeling'),
               ('Optimizing the variational diffusion model',
                2,
@@ -1381,9 +1373,10 @@ of arbitrary form.
 <h2 id="mathematics-of-diffusion-models">Mathematics of diffusion models </h2>
 
 <p>Let us go back our discussions of the variational autoencoders from
-last week, see
-<a href="https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb" target="_blank"><tt>https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb</tt></a>. As
-a first attempt at understanding diffusion models, we can think of
+last week and above.
+</p>
+
+<p>As a first attempt at understanding diffusion models, we can think of
 these as stacked VAEs, or better, recursive VAEs.
 </p>
 
@@ -1445,15 +1438,6 @@ latents.  The generative process is modeled as a Markov chain, where
 each latent \( \boldsymbol{h}_t \) is generated only from the previous latent
 \( \boldsymbol{h}_{t+1} \). Here \( \boldsymbol{z} \) is our latent variable \( \boldsymbol{h} \).
 </p>
-
-<br/><br/>
-<center>
-<p><img src="figures/figure1.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="equation-for-the-markovian-hierarchical-vae">Equation for the Markovian hierarchical VAE </h2>
 
 <p>We obtain then</p>
 $$
@@ -1560,15 +1544,6 @@ identical to pure Gaussian noise.  See figure on next slide.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="diffusion-models-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
-
-<br/><br/>
-<center>
-<p><img src="figures/figure2.png" width="800" align="bottom"></p>
-</center>
-<br/><br/>
-
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="gaussian-modeling">Gaussian modeling </h2>
 
 <p>Note that our encoder distributions \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \) are no
@@ -1661,8 +1636,13 @@ value may have high variance for large \( T \) values.
 
 <p>For more details and implementaions, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
 
-<!-- FIGURE: [figures/figure4.png, width=800 frac=1.0] -->
-
+<p>The plans for the rest of the semester are</p>
+<ol>
+<li> May 1: public holiday</li>
+<li> May 8: More on diffusion models and introduction to GANs. Project work</li>
+<li> May 15: GANS and summary of course. Project work. This could also be the last lecture</li>
+<li> May 22: Alternatively, we could discuss briefly reinforcement learning and do a summary of the course. Project work.</li>
+</ol>
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
 <!-- copyright --> &copy; 1999-2025, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license
