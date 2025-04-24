@@ -165,6 +165,8 @@ rittenNotes/2025/NotesMarch27.pdf
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
+- Video of lecture at https://youtu.be/t5zb7RhBUwA
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril24.pdf
 
 ## April 28 - May 2:  May 1 is a public holiday, no lecture: 
 
