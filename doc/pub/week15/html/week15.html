@@ -205,6 +205,32 @@ div.toc p,a {
                None,
                'diffusion-models-part-2-from-url-https-arxiv-org-abs-2208-11970'),
               ('Optimization cost', 2, None, 'optimization-cost'),
+              ('PyTorch implementation of a Denoising Diffusion Probabilistic '
+               'Model (DDPM) trained on the MNIST dataset',
+               2,
+               None,
+               'pytorch-implementation-of-a-denoising-diffusion-probabilistic-model-ddpm-trained-on-the-mnist-dataset'),
+              ('Problem with diffusion models',
+               2,
+               None,
+               'problem-with-diffusion-models'),
+              ('Imports and Utilities', 2, None, 'imports-and-utilities'),
+              ('Hyperparameters and schedules',
+               2,
+               None,
+               'hyperparameters-and-schedules'),
+              ('Data Loading', 2, None, 'data-loading'),
+              ('Model definition', 2, None, 'model-definition'),
+              ('Forward Diffusion $q(x_t\\vert x_0)$',
+               2,
+               None,
+               'forward-diffusion-q-x-t-vert-x-0'),
+              ('Cost/Loss function', 2, None, 'cost-loss-function'),
+              ('Training loop', 2, None, 'training-loop'),
+              ('Sampling (Reverse Diffusion)',
+               2,
+               None,
+               'sampling-reverse-diffusion'),
               ('More details', 2, None, 'more-details')]}
 end of tocinfo -->
 
@@ -615,9 +641,364 @@ value may have high variance for large \( T \) values.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="pytorch-implementation-of-a-denoising-diffusion-probabilistic-model-ddpm-trained-on-the-mnist-dataset">PyTorch implementation of a Denoising Diffusion Probabilistic Model (DDPM) trained on the MNIST dataset </h2>
+
+<p>The code covers:</p>
+<ol>
+<li> Model definition (a simple U-Net-style convolutional network)</li>
+<li> Forward diffusion (adding noise over \( T \) timesteps)</li>
+<li> Reverse denoising process</li>
+<li> Training loop</li>
+<li> Sampling from the trained model</li>
+</ol>
+<p>This example is adapted from several open-source tutorials and
+implementations, demonstrating how to build a diffusion model from
+scratch in under 200 lines of PyTorch.
+I have borrowed extensively from 
+</p>
+<ol>
+<li> Jackson-Kang&#8217;s PyTorch diffusion tutorial, see <a href="https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial" target="_blank"><tt>https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial</tt></a>  and</li>
+<li> awjuliani&#8217;s PyTorch DDPM implementation, see <a href="https://github.com/awjuliani/pytorch-diffusion" target="_blank"><tt>https://github.com/awjuliani/pytorch-diffusion</tt></a></li>  
+</ol>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="problem-with-diffusion-models">Problem with diffusion models </h2>
+
+<p>Diffusion models gradually corrupt data by adding Gaussian noise over
+a sequence of timesteps and then learn to reverse this noising process
+with a neural network.
+</p>
+
+<p>The corruption schedule is typically linear or cosine in variance.</p>
+
+<p>During training, the network is optimized to predict the original
+noise added at each timestep, using a mean-squared error loss.
+</p>
+
+<p>At inference, one starts from random noise and iteratively applies the
+learned denoising steps to generate new samples.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="imports-and-utilities">Imports and Utilities </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn.functional</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">F</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torchvision</span> <span style="color: #008000; font-weight: bold">import</span> datasets, transforms
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">torch.utils.data</span> <span style="color: #008000; font-weight: bold">import</span> DataLoader
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">math</span>
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="hyperparameters-and-schedules">Hyperparameters and schedules </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">device <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;cuda&#39;</span> <span style="color: #008000; font-weight: bold">if</span> torch<span style="color: #666666">.</span>cuda<span style="color: #666666">.</span>is_available() <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&#39;cpu&#39;</span>
+
+<span style="color: #408080; font-style: italic"># Training settings</span>
+batch_size <span style="color: #666666">=</span> <span style="color: #666666">128</span>
+epochs     <span style="color: #666666">=</span> <span style="color: #666666">5</span>
+lr         <span style="color: #666666">=</span> <span style="color: #666666">2e-4</span>
+img_size   <span style="color: #666666">=</span> <span style="color: #666666">28</span>
+channels   <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+
+<span style="color: #408080; font-style: italic"># Diffusion hyperparameters</span>
+T <span style="color: #666666">=</span> <span style="color: #666666">300</span>  <span style="color: #408080; font-style: italic"># number of diffusion steps  [oai_citation:5‡Medium](https://papers-100-lines.medium.com/diffusion-models-from-scratch-mnist-data-tutorial-in-100-lines-of-pytorch-code-a609e1558cee?utm_source=chatgpt.com)</span>
+beta_start, beta_end <span style="color: #666666">=</span> <span style="color: #666666">1e-4</span>, <span style="color: #666666">0.02</span>
+betas <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>linspace(beta_start, beta_end, T, device<span style="color: #666666">=</span>device)  <span style="color: #408080; font-style: italic"># linear schedule  [oai_citation:6‡Medium](https://medium.com/data-science/diffusion-model-from-scratch-in-pytorch-ddpm-9d9760528946?utm_source=chatgpt.com)</span>
+alphas <span style="color: #666666">=</span> <span style="color: #666666">1.</span> <span style="color: #666666">-</span> betas
+alphas_cumprod <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>cumprod(alphas, dim<span style="color: #666666">=0</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="data-loading">Data Loading </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">transform <span style="color: #666666">=</span> transforms<span style="color: #666666">.</span>Compose([
+    transforms<span style="color: #666666">.</span>ToTensor(),
+    transforms<span style="color: #666666">.</span>Normalize((<span style="color: #666666">0.5</span>,), (<span style="color: #666666">0.5</span>,)),
+])
+
+train_ds <span style="color: #666666">=</span> datasets<span style="color: #666666">.</span>MNIST(<span style="color: #BA2121">&#39;.&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transform)
+train_loader <span style="color: #666666">=</span> DataLoader(train_ds, batch_size<span style="color: #666666">=</span>batch_size, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="model-definition">Model definition </h2>
+
+<p>We present a  lightweight U-Net inspired model for noise prediction:</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">SimpleUNet</span>(nn<span style="color: #666666">.</span>Module):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, c):
+        <span style="color: #008000">super</span>()<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>enc1 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Conv2d(c, <span style="color: #666666">64</span>, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>enc2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Conv2d(<span style="color: #666666">64</span>, <span style="color: #666666">128</span>, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>dec1 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>ConvTranspose2d(<span style="color: #666666">128</span>, <span style="color: #666666">64</span>, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>dec2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>ConvTranspose2d(<span style="color: #666666">64</span>, c, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>act  <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>ReLU()
+        <span style="color: #408080; font-style: italic"># timestep embedding to condition on t</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>time_mlp <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Sequential(
+            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">1</span>, <span style="color: #666666">64</span>),
+            nn<span style="color: #666666">.</span>ReLU(),
+            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">64</span>, <span style="color: #666666">64</span>),
+        )
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x, t):
+        <span style="color: #408080; font-style: italic"># x: [B, C, H, W], t: [B]</span>
+        h <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>act(<span style="color: #008000">self</span><span style="color: #666666">.</span>enc1(x))                       <span style="color: #408080; font-style: italic">#  [oai_citation:7‡GitHub](https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial?utm_source=chatgpt.com)</span>
+        h <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>act(<span style="color: #008000">self</span><span style="color: #666666">.</span>enc2(h))
+        <span style="color: #408080; font-style: italic"># add time embedding</span>
+        t <span style="color: #666666">=</span> t<span style="color: #666666">.</span>unsqueeze(<span style="color: #666666">-1</span>)                             
+        temb <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>time_mlp(t)                          <span style="color: #408080; font-style: italic">#  [oai_citation:8‡GitHub](https://github.com/tonyduan/diffusion?utm_source=chatgpt.com)</span>
+        temb <span style="color: #666666">=</span> temb<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>, <span style="color: #666666">64</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>)
+        h <span style="color: #666666">=</span> h <span style="color: #666666">+</span> temb
+        h <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>act(<span style="color: #008000">self</span><span style="color: #666666">.</span>dec1(h))
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>dec2(h)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="forward-diffusion-q-x-t-vert-x-0">Forward Diffusion \( q(x_t\vert x_0) \) </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">q_sample</span>(x0, t, noise<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Add noise to x0 at timestep t.&quot;&quot;&quot;</span>
+    <span style="color: #008000; font-weight: bold">if</span> noise <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span>:
+        noise <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>randn_like(x0)
+    sqrt_acp <span style="color: #666666">=</span> alphas_cumprod[t]<span style="color: #666666">**0.5</span>
+    sqrt_1macp <span style="color: #666666">=</span> (<span style="color: #666666">1</span> <span style="color: #666666">-</span> alphas_cumprod[t])<span style="color: #666666">**0.5</span>
+    <span style="color: #008000; font-weight: bold">return</span> sqrt_acp<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>)<span style="color: #666666">*</span>x0 <span style="color: #666666">+</span> sqrt_1macp<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>)<span style="color: #666666">*</span>noise
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="cost-loss-function">Cost/Loss function </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">diffusion_loss</span>(model, x0):
+    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Compute MSE between predicted noise and true noise.&quot;&quot;&quot;</span>
+    B <span style="color: #666666">=</span> x0<span style="color: #666666">.</span>size(<span style="color: #666666">0</span>)
+    t <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>randint(<span style="color: #666666">0</span>, T, (B,), device<span style="color: #666666">=</span>device)<span style="color: #666666">.</span>long()
+    noise <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>randn_like(x0)
+    x_noisy <span style="color: #666666">=</span> q_sample(x0, t, noise)
+    pred_noise <span style="color: #666666">=</span> model(x_noisy, t<span style="color: #666666">.</span>float()<span style="color: #666666">/</span>T)
+    <span style="color: #008000; font-weight: bold">return</span> F<span style="color: #666666">.</span>mse_loss(pred_noise, noise)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="training-loop">Training loop </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;">model <span style="color: #666666">=</span> SimpleUNet(channels)<span style="color: #666666">.</span>to(device)
+opt   <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>optim<span style="color: #666666">.</span>Adam(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=</span>lr)
+
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(epochs):
+    total_loss <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+    <span style="color: #008000; font-weight: bold">for</span> x, _ <span style="color: #AA22FF; font-weight: bold">in</span> train_loader:
+        x <span style="color: #666666">=</span> x<span style="color: #666666">.</span>to(device)
+        loss <span style="color: #666666">=</span> diffusion_loss(model, x)
+        opt<span style="color: #666666">.</span>zero_grad()
+        loss<span style="color: #666666">.</span>backward()
+        opt<span style="color: #666666">.</span>step()
+        total_loss <span style="color: #666666">+=</span> loss<span style="color: #666666">.</span>item()
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">f&quot;Epoch </span><span style="color: #BB6688; font-weight: bold">{</span>epoch<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">, Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>total_loss<span style="color: #666666">/</span><span style="color: #008000">len</span>(train_loader)<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&quot;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="sampling-reverse-diffusion">Sampling (Reverse Diffusion) </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #AA22FF">@torch</span><span style="color: #666666">.</span>no_grad()
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">p_sample_loop</span>(model, shape):
+    x <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>randn(shape, device<span style="color: #666666">=</span>device)
+    <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">reversed</span>(<span style="color: #008000">range</span>(T)):
+        t <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>full((shape[<span style="color: #666666">0</span>],), i, device<span style="color: #666666">=</span>device)<span style="color: #666666">.</span>float()<span style="color: #666666">/</span>T
+        eps_pred <span style="color: #666666">=</span> model(x, t)
+        beta_t <span style="color: #666666">=</span> betas[i]
+        alpha_t <span style="color: #666666">=</span> alphas[i]
+        acp_t   <span style="color: #666666">=</span> alphas_cumprod[i]
+        coef1 <span style="color: #666666">=</span> <span style="color: #666666">1</span> <span style="color: #666666">/</span> alpha_t<span style="color: #666666">.</span>sqrt()
+        coef2 <span style="color: #666666">=</span> beta_t <span style="color: #666666">/</span> ( (<span style="color: #666666">1</span> <span style="color: #666666">-</span> acp_t)<span style="color: #666666">.</span>sqrt() )
+        x <span style="color: #666666">=</span> coef1<span style="color: #666666">*</span>(x <span style="color: #666666">-</span> coef2<span style="color: #666666">*</span>eps_pred)
+        <span style="color: #008000; font-weight: bold">if</span> i <span style="color: #666666">&gt;</span> <span style="color: #666666">0</span>:
+            z <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>randn_like(x)
+            sigma <span style="color: #666666">=</span> beta_t<span style="color: #666666">.</span>sqrt()
+            x <span style="color: #666666">=</span> x <span style="color: #666666">+</span> sigma<span style="color: #666666">*</span>z
+    <span style="color: #008000; font-weight: bold">return</span> x
+
+<span style="color: #408080; font-style: italic"># Generate samples</span>
+samples <span style="color: #666666">=</span> p_sample_loop(model, (<span style="color: #666666">16</span>, channels, img_size, img_size))
+samples <span style="color: #666666">=</span> samples<span style="color: #666666">.</span>clamp(<span style="color: #666666">-1</span>,<span style="color: #666666">1</span>)<span style="color: #666666">.</span>cpu()
+grid <span style="color: #666666">=</span> torchvision<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>make_grid(samples, nrow<span style="color: #666666">=4</span>, normalize<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+plt<span style="color: #666666">.</span>figure(figsize<span style="color: #666666">=</span>(<span style="color: #666666">5</span>,<span style="color: #666666">5</span>))
+plt<span style="color: #666666">.</span>imshow(grid<span style="color: #666666">.</span>permute(<span style="color: #666666">1</span>,<span style="color: #666666">2</span>,<span style="color: #666666">0</span>))
+plt<span style="color: #666666">.</span>axis(<span style="color: #BA2121">&#39;off&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="more-details">More details </h2>
 
-<p>For more details and implementaions, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
+<p>For more details and implementations, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
 
 <!-- FIGURE: [figures/figure4.png, width=800 frac=1.0] -->
 

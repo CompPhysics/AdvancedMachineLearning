@@ -597,9 +597,368 @@ value may have high variance for large \( T \) values.
 </section>
 
 <section>
+<h2 id="pytorch-implementation-of-a-denoising-diffusion-probabilistic-model-ddpm-trained-on-the-mnist-dataset">PyTorch implementation of a Denoising Diffusion Probabilistic Model (DDPM) trained on the MNIST dataset </h2>
+
+<p>The code covers:</p>
+<ol>
+<p><li> Model definition (a simple U-Net-style convolutional network)</li>
+<p><li> Forward diffusion (adding noise over \( T \) timesteps)</li>
+<p><li> Reverse denoising process</li>
+<p><li> Training loop</li>
+<p><li> Sampling from the trained model</li>
+</ol>
+<p>
+<p>This example is adapted from several open-source tutorials and
+implementations, demonstrating how to build a diffusion model from
+scratch in under 200 lines of PyTorch.
+I have borrowed extensively from 
+</p>
+<ol>
+<p><li> Jackson-Kang&#8217;s PyTorch diffusion tutorial, see <a href="https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial" target="_blank"><tt>https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial</tt></a>  and</li>
+<p><li> awjuliani&#8217;s PyTorch DDPM implementation, see <a href="https://github.com/awjuliani/pytorch-diffusion" target="_blank"><tt>https://github.com/awjuliani/pytorch-diffusion</tt></a></li>  
+</ol>
+</section>
+
+<section>
+<h2 id="problem-with-diffusion-models">Problem with diffusion models </h2>
+
+<p>Diffusion models gradually corrupt data by adding Gaussian noise over
+a sequence of timesteps and then learn to reverse this noising process
+with a neural network.
+</p>
+
+<p>The corruption schedule is typically linear or cosine in variance.</p>
+
+<p>During training, the network is optimized to predict the original
+noise added at each timestep, using a mean-squared error loss.
+</p>
+
+<p>At inference, one starts from random noise and iteratively applies the
+learned denoising steps to generate new samples.
+</p>
+</section>
+
+<section>
+<h2 id="imports-and-utilities">Imports and Utilities </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">nn</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">torch.nn.functional</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">F</span>
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torchvision</span> <span style="color: #8B008B; font-weight: bold">import</span> datasets, transforms
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">torch.utils.data</span> <span style="color: #8B008B; font-weight: bold">import</span> DataLoader
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">matplotlib.pyplot</span> <span style="color: #8B008B; font-weight: bold">as</span> <span style="color: #008b45; text-decoration: underline">plt</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">math</span>
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="hyperparameters-and-schedules">Hyperparameters and schedules </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;">device = <span style="color: #CD5555">&#39;cuda&#39;</span> <span style="color: #8B008B; font-weight: bold">if</span> torch.cuda.is_available() <span style="color: #8B008B; font-weight: bold">else</span> <span style="color: #CD5555">&#39;cpu&#39;</span>
+
+<span style="color: #228B22"># Training settings</span>
+batch_size = <span style="color: #B452CD">128</span>
+epochs     = <span style="color: #B452CD">5</span>
+lr         = <span style="color: #B452CD">2e-4</span>
+img_size   = <span style="color: #B452CD">28</span>
+channels   = <span style="color: #B452CD">1</span>
+
+<span style="color: #228B22"># Diffusion hyperparameters</span>
+T = <span style="color: #B452CD">300</span>  <span style="color: #228B22"># number of diffusion steps  [oai_citation:5‡Medium](https://papers-100-lines.medium.com/diffusion-models-from-scratch-mnist-data-tutorial-in-100-lines-of-pytorch-code-a609e1558cee?utm_source=chatgpt.com)</span>
+beta_start, beta_end = <span style="color: #B452CD">1e-4</span>, <span style="color: #B452CD">0.02</span>
+betas = torch.linspace(beta_start, beta_end, T, device=device)  <span style="color: #228B22"># linear schedule  [oai_citation:6‡Medium](https://medium.com/data-science/diffusion-model-from-scratch-in-pytorch-ddpm-9d9760528946?utm_source=chatgpt.com)</span>
+alphas = <span style="color: #B452CD">1.</span> - betas
+alphas_cumprod = torch.cumprod(alphas, dim=<span style="color: #B452CD">0</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="data-loading">Data Loading </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;">transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((<span style="color: #B452CD">0.5</span>,), (<span style="color: #B452CD">0.5</span>,)),
+])
+
+train_ds = datasets.MNIST(<span style="color: #CD5555">&#39;.&#39;</span>, train=<span style="color: #8B008B; font-weight: bold">True</span>, download=<span style="color: #8B008B; font-weight: bold">True</span>, transform=transform)
+train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=<span style="color: #8B008B; font-weight: bold">True</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="model-definition">Model definition </h2>
+
+<p>We present a  lightweight U-Net inspired model for noise prediction:</p>
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">SimpleUNet</span>(nn.Module):
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">__init__</span>(<span style="color: #658b00">self</span>, c):
+        <span style="color: #658b00">super</span>().<span style="color: #008b45">__init__</span>()
+        <span style="color: #658b00">self</span>.enc1 = nn.Conv2d(c, <span style="color: #B452CD">64</span>, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
+        <span style="color: #658b00">self</span>.enc2 = nn.Conv2d(<span style="color: #B452CD">64</span>, <span style="color: #B452CD">128</span>, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
+        <span style="color: #658b00">self</span>.dec1 = nn.ConvTranspose2d(<span style="color: #B452CD">128</span>, <span style="color: #B452CD">64</span>, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
+        <span style="color: #658b00">self</span>.dec2 = nn.ConvTranspose2d(<span style="color: #B452CD">64</span>, c, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
+        <span style="color: #658b00">self</span>.act  = nn.ReLU()
+        <span style="color: #228B22"># timestep embedding to condition on t</span>
+        <span style="color: #658b00">self</span>.time_mlp = nn.Sequential(
+            nn.Linear(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">64</span>),
+            nn.ReLU(),
+            nn.Linear(<span style="color: #B452CD">64</span>, <span style="color: #B452CD">64</span>),
+        )
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x, t):
+        <span style="color: #228B22"># x: [B, C, H, W], t: [B]</span>
+        h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.enc1(x))                       <span style="color: #228B22">#  [oai_citation:7‡GitHub](https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial?utm_source=chatgpt.com)</span>
+        h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.enc2(h))
+        <span style="color: #228B22"># add time embedding</span>
+        t = t.unsqueeze(-<span style="color: #B452CD">1</span>)                             
+        temb = <span style="color: #658b00">self</span>.time_mlp(t)                          <span style="color: #228B22">#  [oai_citation:8‡GitHub](https://github.com/tonyduan/diffusion?utm_source=chatgpt.com)</span>
+        temb = temb.view(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">64</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">1</span>)
+        h = h + temb
+        h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.dec1(h))
+        <span style="color: #8B008B; font-weight: bold">return</span> <span style="color: #658b00">self</span>.dec2(h)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="forward-diffusion-q-x-t-vert-x-0">Forward Diffusion \( q(x_t\vert x_0) \) </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">q_sample</span>(x0, t, noise=<span style="color: #8B008B; font-weight: bold">None</span>):
+    <span style="color: #CD5555">&quot;&quot;&quot;Add noise to x0 at timestep t.&quot;&quot;&quot;</span>
+    <span style="color: #8B008B; font-weight: bold">if</span> noise <span style="color: #8B008B">is</span> <span style="color: #8B008B; font-weight: bold">None</span>:
+        noise = torch.randn_like(x0)
+    sqrt_acp = alphas_cumprod[t]**<span style="color: #B452CD">0.5</span>
+    sqrt_1macp = (<span style="color: #B452CD">1</span> - alphas_cumprod[t])**<span style="color: #B452CD">0.5</span>
+    <span style="color: #8B008B; font-weight: bold">return</span> sqrt_acp.view(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>)*x0 + sqrt_1macp.view(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>)*noise
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="cost-loss-function">Cost/Loss function </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">diffusion_loss</span>(model, x0):
+    <span style="color: #CD5555">&quot;&quot;&quot;Compute MSE between predicted noise and true noise.&quot;&quot;&quot;</span>
+    B = x0.size(<span style="color: #B452CD">0</span>)
+    t = torch.randint(<span style="color: #B452CD">0</span>, T, (B,), device=device).long()
+    noise = torch.randn_like(x0)
+    x_noisy = q_sample(x0, t, noise)
+    pred_noise = model(x_noisy, t.float()/T)
+    <span style="color: #8B008B; font-weight: bold">return</span> F.mse_loss(pred_noise, noise)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="training-loop">Training loop </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;">model = SimpleUNet(channels).to(device)
+opt   = torch.optim.Adam(model.parameters(), lr=lr)
+
+<span style="color: #8B008B; font-weight: bold">for</span> epoch <span style="color: #8B008B">in</span> <span style="color: #658b00">range</span>(epochs):
+    total_loss = <span style="color: #B452CD">0</span>
+    <span style="color: #8B008B; font-weight: bold">for</span> x, _ <span style="color: #8B008B">in</span> train_loader:
+        x = x.to(device)
+        loss = diffusion_loss(model, x)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        total_loss += loss.item()
+    <span style="color: #658b00">print</span>(<span style="color: #CD5555">f&quot;Epoch {</span>epoch+<span style="color: #B452CD">1</span><span style="color: #CD5555">}/{</span>epochs<span style="color: #CD5555">}, Loss: {</span>total_loss/<span style="color: #658b00">len</span>(train_loader)<span style="color: #CD5555">:.4f}&quot;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="sampling-reverse-diffusion">Sampling (Reverse Diffusion) </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "perldoc" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #eeeedd">
+  <pre style="font-size: 80%; line-height: 125%;"><span style="color: #707a7c">@torch</span>.no_grad()
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">p_sample_loop</span>(model, shape):
+    x = torch.randn(shape, device=device)
+    <span style="color: #8B008B; font-weight: bold">for</span> i <span style="color: #8B008B">in</span> <span style="color: #658b00">reversed</span>(<span style="color: #658b00">range</span>(T)):
+        t = torch.full((shape[<span style="color: #B452CD">0</span>],), i, device=device).float()/T
+        eps_pred = model(x, t)
+        beta_t = betas[i]
+        alpha_t = alphas[i]
+        acp_t   = alphas_cumprod[i]
+        coef1 = <span style="color: #B452CD">1</span> / alpha_t.sqrt()
+        coef2 = beta_t / ( (<span style="color: #B452CD">1</span> - acp_t).sqrt() )
+        x = coef1*(x - coef2*eps_pred)
+        <span style="color: #8B008B; font-weight: bold">if</span> i &gt; <span style="color: #B452CD">0</span>:
+            z = torch.randn_like(x)
+            sigma = beta_t.sqrt()
+            x = x + sigma*z
+    <span style="color: #8B008B; font-weight: bold">return</span> x
+
+<span style="color: #228B22"># Generate samples</span>
+samples = p_sample_loop(model, (<span style="color: #B452CD">16</span>, channels, img_size, img_size))
+samples = samples.clamp(-<span style="color: #B452CD">1</span>,<span style="color: #B452CD">1</span>).cpu()
+grid = torchvision.utils.make_grid(samples, nrow=<span style="color: #B452CD">4</span>, normalize=<span style="color: #8B008B; font-weight: bold">True</span>)
+plt.figure(figsize=(<span style="color: #B452CD">5</span>,<span style="color: #B452CD">5</span>))
+plt.imshow(grid.permute(<span style="color: #B452CD">1</span>,<span style="color: #B452CD">2</span>,<span style="color: #B452CD">0</span>))
+plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
 <h2 id="more-details">More details </h2>
 
-<p>For more details and implementaions, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
+<p>For more details and implementations, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
 
 <!-- FIGURE: [figures/figure4.png, width=800 frac=1.0] -->
 </section>
