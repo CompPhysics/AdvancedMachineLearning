@@ -1,0 +1,124 @@
+TITLE: Advanced machine learning and data analysis for the physical sciences
+AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway
+DATE: May 8, 2025
+
+!split
+===== Imports and Utilities =====
+
+!bc pycod
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+import math
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# Training settings
+batch_size = 128
+epochs     = 5
+lr         = 2e-4
+img_size   = 28
+channels   = 1
+
+# Diffusion hyperparameters
+T = 300  # number of diffusion steps  [oai_citation:5‡Medium](https://papers-100-lines.medium.com/diffusion-models-from-scratch-mnist-data-tutorial-in-100-lines-of-pytorch-code-a609e1558cee?utm_source=chatgpt.com)
+beta_start, beta_end = 1e-4, 0.02
+betas = torch.linspace(beta_start, beta_end, T, device=device)  # linear schedule  [oai_citation:6‡Medium](https://medium.com/data-science/diffusion-model-from-scratch-in-pytorch-ddpm-9d9760528946?utm_source=chatgpt.com)
+alphas = 1. - betas
+alphas_cumprod = torch.cumprod(alphas, dim=0)
+
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,)),
+])
+
+train_ds = datasets.MNIST('.', train=True, download=True, transform=transform)
+train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+
+class SimpleUNet(nn.Module):
+    def __init__(self, c):
+        super().__init__()
+        self.enc1 = nn.Conv2d(c, 64, 3, padding=1)
+        self.enc2 = nn.Conv2d(64, 128, 3, padding=1)
+        self.dec1 = nn.ConvTranspose2d(128, 64, 3, padding=1)
+        self.dec2 = nn.ConvTranspose2d(64, c, 3, padding=1)
+        self.act  = nn.ReLU()
+        # timestep embedding to condition on t
+        self.time_mlp = nn.Sequential(
+            nn.Linear(1, 128), # Changed from 64 to 128
+            nn.ReLU(),
+            nn.Linear(128, 128), # Changed from 64 to 128
+        )
+
+    def forward(self, x, t):
+        # x: [B, C, H, W], t: [B]
+        h = self.act(self.enc1(x))
+        h = self.act(self.enc2(h))
+        # add time embedding
+        t = t.unsqueeze(-1)                             
+        temb = self.time_mlp(t)
+        temb = temb.view(-1, 128, 1, 1) # Changed from 64 to 128
+        h = h + temb
+        h = self.act(self.dec1(h))
+        return self.dec2(h)
+	
+def q_sample(x0, t, noise=None):
+    """Add noise to x0 at timestep t."""
+    if noise is None:
+        noise = torch.randn_like(x0)
+    sqrt_acp = alphas_cumprod[t]**0.5
+    sqrt_1macp = (1 - alphas_cumprod[t])**0.5
+    return sqrt_acp.view(-1,1,1,1)*x0 + sqrt_1macp.view(-1,1,1,1)*noise
+
+def diffusion_loss(model, x0):
+    """Compute MSE between predicted noise and true noise."""
+    B = x0.size(0)
+    t = torch.randint(0, T, (B,), device=device).long()
+    noise = torch.randn_like(x0)
+    x_noisy = q_sample(x0, t, noise)
+    pred_noise = model(x_noisy, t.float()/T)
+    return F.mse_loss(pred_noise, noise)
+
+model = SimpleUNet(channels).to(device)
+opt   = torch.optim.Adam(model.parameters(), lr=lr)
+
+for epoch in range(epochs):
+    total_loss = 0
+    for x, _ in train_loader:
+        x = x.to(device)
+        loss = diffusion_loss(model, x)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        total_loss += loss.item()
+    print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(train_loader):.4f}")
+
+@torch.no_grad()
+def p_sample_loop(model, shape):
+    x = torch.randn(shape, device=device)
+    for i in reversed(range(T)):
+        t = torch.full((shape[0],), i, device=device).float()/T
+        eps_pred = model(x, t)
+        beta_t = betas[i]
+        alpha_t = alphas[i]
+        acp_t   = alphas_cumprod[i]
+        coef1 = 1 / alpha_t.sqrt()
+        coef2 = beta_t / ( (1 - acp_t).sqrt() )
+        x = coef1*(x - coef2*eps_pred)
+        if i > 0:
+            z = torch.randn_like(x)
+            sigma = beta_t.sqrt()
+            x = x + sigma*z
+    return x
+
+# Generate samples
+samples = p_sample_loop(model, (16, channels, img_size, img_size))
+samples = samples.clamp(-1,1).cpu()
+grid = torchvision.utils.make_grid(samples, nrow=4, normalize=True)
+plt.figure(figsize=(5,5))
+plt.imshow(grid.permute(1,2,0))
+plt.axis('off')
+!ec

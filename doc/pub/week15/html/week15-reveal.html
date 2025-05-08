@@ -914,19 +914,19 @@ train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=<span style="
         <span style="color: #658b00">self</span>.act  = nn.ReLU()
         <span style="color: #228B22"># timestep embedding to condition on t</span>
         <span style="color: #658b00">self</span>.time_mlp = nn.Sequential(
-            nn.Linear(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">64</span>),
+            nn.Linear(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">128</span>), <span style="color: #228B22"># Changed from 64 to 128</span>
             nn.ReLU(),
-            nn.Linear(<span style="color: #B452CD">64</span>, <span style="color: #B452CD">64</span>),
+            nn.Linear(<span style="color: #B452CD">128</span>, <span style="color: #B452CD">128</span>), <span style="color: #228B22"># Changed from 64 to 128</span>
         )
 
     <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x, t):
         <span style="color: #228B22"># x: [B, C, H, W], t: [B]</span>
-        h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.enc1(x))                       <span style="color: #228B22">#  [oai_citation:7‡GitHub](https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial?utm_source=chatgpt.com)</span>
+        h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.enc1(x))
         h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.enc2(h))
         <span style="color: #228B22"># add time embedding</span>
         t = t.unsqueeze(-<span style="color: #B452CD">1</span>)                             
-        temb = <span style="color: #658b00">self</span>.time_mlp(t)                          <span style="color: #228B22">#  [oai_citation:8‡GitHub](https://github.com/tonyduan/diffusion?utm_source=chatgpt.com)</span>
-        temb = temb.view(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">64</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">1</span>)
+        temb = <span style="color: #658b00">self</span>.time_mlp(t)
+        temb = temb.view(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">128</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">1</span>) <span style="color: #228B22"># Changed from 64 to 128</span>
         h = h + temb
         h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.dec1(h))
         <span style="color: #8B008B; font-weight: bold">return</span> <span style="color: #658b00">self</span>.dec2(h)
@@ -1104,11 +1104,19 @@ plt.axis(<span style="color: #CD5555">&#39;off&#39;</span>)
 </section>
 
 <section>
-<h2 id="more-details">More details </h2>
+<h2 id="more-details-and-plans-for-next-week">More details and plans for next week </h2>
 
 <p>For more details and implementations, see Calvin Luo at <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a></p>
-
-<!-- FIGURE: [figures/figure4.png, width=800 frac=1.0] -->
+<div class="alert alert-block alert-block alert-text-normal">
+<b>Plans for next week</b>
+<p>
+<ol>
+<p><li> Finalizing discussion of diffusion models</li>
+<p><li> Presenting generalized adversarial networks (GANs)</li>
+<p><li> Possible summary of works</li>
+<p><li> Discussion of project 2</li>
+</ol>
+</div>
 </section>
 
 

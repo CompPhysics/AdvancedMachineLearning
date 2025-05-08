@@ -573,19 +573,19 @@ class SimpleUNet(nn.Module):
         self.act  = nn.ReLU()
         # timestep embedding to condition on t
         self.time_mlp = nn.Sequential(
-            nn.Linear(1, 64),
+            nn.Linear(1, 128), # Changed from 64 to 128
             nn.ReLU(),
-            nn.Linear(64, 64),
+            nn.Linear(128, 128), # Changed from 64 to 128
         )
 
     def forward(self, x, t):
         # x: [B, C, H, W], t: [B]
-        h = self.act(self.enc1(x))                       #  [oai_citation:7‡GitHub](https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial?utm_source=chatgpt.com)
+        h = self.act(self.enc1(x))
         h = self.act(self.enc2(h))
         # add time embedding
         t = t.unsqueeze(-1)                             
-        temb = self.time_mlp(t)                          #  [oai_citation:8‡GitHub](https://github.com/tonyduan/diffusion?utm_source=chatgpt.com)
-        temb = temb.view(-1, 64, 1, 1)
+        temb = self.time_mlp(t)
+        temb = temb.view(-1, 128, 1, 1) # Changed from 64 to 128
         h = h + temb
         h = self.act(self.dec1(h))
         return self.dec2(h)
@@ -674,15 +674,19 @@ plt.axis('off')
 
 
 !split
-===== More details =====
+===== More details and plans for next week =====
 
 For more details and implementations, see Calvin Luo at URL:"https://arxiv.org/abs/2208.11970"
+!bblock Plans for next week
+o Finalizing discussion of diffusion models
+o Presenting generalized adversarial networks (GANs)
+o Possible summary of works
+o Discussion of project 2
+!eblock
 
 
 
-#FIGURE: [figures/figure4.png, width=800 frac=1.0]
 
 
 
-
-
+	
