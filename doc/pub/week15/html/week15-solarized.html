@@ -294,15 +294,20 @@ vehicles, and personalized AI assistants.
 <h2 id="problems-with-probabilistic-models">Problems with probabilistic models </h2>
 
 <p>Historically, probabilistic models suffer from a tradeoff between two
-conflicting objectives: \textit{tractability} and
-\textit{flexibility}. Models that are \textit{tractable} can be
+conflicting objectives: <em>tractability</em> and
+<em>flexibility</em>. Models that are <em>tractable</em> can be
 analytically evaluated and easily fit to data (e.g. a Gaussian or
 Laplace). However, these models are unable to aptly describe structure
-in rich datasets. On the other hand, models that are \textit{flexible}
+in rich datasets. On the other hand, models that are <em>flexible</em>
 can be molded to fit structure in arbitrary data. For example, we can
 define models in terms of any (non-negative) function \( \phi(\boldsymbol{x}) \)
-yielding the flexible distribution \( p\left(\boldsymbol{x}\right) =
-\frac{\phi\left(\boldsymbol{x} \right)}{Z} \), where \( Z \) is a normalization
+yielding the flexible distribution
+</p>
+$$
+p\left(\boldsymbol{x}\right) =\frac{\phi\left(\boldsymbol{x} \right)}{Z},
+$$
+
+<p>where \( Z \) is a normalization
 constant. However, computing this normalization constant is generally
 intractable. Evaluating, training, or drawing samples from such
 flexible models typically requires a very expensive Monte Carlo
@@ -621,7 +626,7 @@ $$
 <h2 id="the-last-term">The last term </h2>
 
 <ul>
-<li> \( \mathbb{E}_{q(\boldsymbol{x}_{t-1}, \boldsymbol{x}_{t+1}|\boldsymbol{x}_0)}\left[D_{KL}(q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})\vert\vert p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1}))\right] \) is a \textit{consistency term}; it endeavors to make the distribution at \( \boldsymbol{x}_t \) consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train \( p_{\theta}(\boldsymbol{x}_t|\boldsymbol{x}_{t+1}) \) to match the Gaussian distribution \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \).</li>
+<li> \( \mathbb{E}_{q(\boldsymbol{x}_{t-1}, \boldsymbol{x}_{t+1}|\boldsymbol{x}_0)}\left[D_{KL}(q(\boldsymbol{x}_{t}|\boldsymbol{x}_{t-1})\vert\vert p_{\boldsymbol{\theta}}(\boldsymbol{x}_{t}|\boldsymbol{x}_{t+1}))\right] \) is a <em>consistency term</em>; it attempts to make the distribution at \( \boldsymbol{x}_t \) consistent, from both forward and backward processes.  That is, a denoising step from a noisier image should match the corresponding noising step from a cleaner image, for every intermediate timestep; this is reflected mathematically by the KL Divergence.  This term is minimized when we train \( p_{\theta}(\boldsymbol{x}_t|\boldsymbol{x}_{t+1}) \) to match the Gaussian distribution \( q(\boldsymbol{x}_t|\boldsymbol{x}_{t-1}) \).</li>
 </ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="diffusion-models-part-2-from-url-https-arxiv-org-abs-2208-11970">Diffusion models, part 2, from <a href="https://arxiv.org/abs/2208.11970" target="_blank"><tt>https://arxiv.org/abs/2208.11970</tt></a>  </h2>
