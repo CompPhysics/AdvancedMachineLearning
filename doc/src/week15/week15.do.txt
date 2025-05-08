@@ -576,11 +576,7 @@ class SimpleUNet(nn.Module):
         self.dec2 = nn.ConvTranspose2d(64, c, 3, padding=1)
         self.act  = nn.ReLU()
         # timestep embedding to condition on t
-        self.time_mlp = nn.Sequential(
-            nn.Linear(1, 128), # Changed from 64 to 128
-            nn.ReLU(),
-            nn.Linear(128, 128), # Changed from 64 to 128
-        )
+        self.time_mlp = nn.Sequential(nn.Linear(1, 128), nn.ReLU(),nn.Linear(128, 128))
 
     def forward(self, x, t):
         # x: [B, C, H, W], t: [B]
@@ -589,7 +585,7 @@ class SimpleUNet(nn.Module):
         # add time embedding
         t = t.unsqueeze(-1)                             
         temb = self.time_mlp(t)
-        temb = temb.view(-1, 128, 1, 1) # Changed from 64 to 128
+        temb = temb.view(-1, 128, 1, 1)
         h = h + temb
         h = self.act(self.dec1(h))
         return self.dec2(h)

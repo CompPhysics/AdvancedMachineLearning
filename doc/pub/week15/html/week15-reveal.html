@@ -919,11 +919,7 @@ train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=<span style="
         <span style="color: #658b00">self</span>.dec2 = nn.ConvTranspose2d(<span style="color: #B452CD">64</span>, c, <span style="color: #B452CD">3</span>, padding=<span style="color: #B452CD">1</span>)
         <span style="color: #658b00">self</span>.act  = nn.ReLU()
         <span style="color: #228B22"># timestep embedding to condition on t</span>
-        <span style="color: #658b00">self</span>.time_mlp = nn.Sequential(
-            nn.Linear(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">128</span>), <span style="color: #228B22"># Changed from 64 to 128</span>
-            nn.ReLU(),
-            nn.Linear(<span style="color: #B452CD">128</span>, <span style="color: #B452CD">128</span>), <span style="color: #228B22"># Changed from 64 to 128</span>
-        )
+        <span style="color: #658b00">self</span>.time_mlp = nn.Sequential(nn.Linear(<span style="color: #B452CD">1</span>, <span style="color: #B452CD">128</span>), nn.ReLU(),nn.Linear(<span style="color: #B452CD">128</span>, <span style="color: #B452CD">128</span>))
 
     <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">forward</span>(<span style="color: #658b00">self</span>, x, t):
         <span style="color: #228B22"># x: [B, C, H, W], t: [B]</span>
@@ -932,7 +928,7 @@ train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=<span style="
         <span style="color: #228B22"># add time embedding</span>
         t = t.unsqueeze(-<span style="color: #B452CD">1</span>)                             
         temb = <span style="color: #658b00">self</span>.time_mlp(t)
-        temb = temb.view(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">128</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">1</span>) <span style="color: #228B22"># Changed from 64 to 128</span>
+        temb = temb.view(-<span style="color: #B452CD">1</span>, <span style="color: #B452CD">128</span>, <span style="color: #B452CD">1</span>, <span style="color: #B452CD">1</span>)
         h = h + temb
         h = <span style="color: #658b00">self</span>.act(<span style="color: #658b00">self</span>.dec1(h))
         <span style="color: #8B008B; font-weight: bold">return</span> <span style="color: #658b00">self</span>.dec2(h)

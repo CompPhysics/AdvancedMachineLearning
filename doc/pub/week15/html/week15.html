@@ -975,11 +975,7 @@ train_loader <span style="color: #666666">=</span> DataLoader(train_ds, batch_si
         <span style="color: #008000">self</span><span style="color: #666666">.</span>dec2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>ConvTranspose2d(<span style="color: #666666">64</span>, c, <span style="color: #666666">3</span>, padding<span style="color: #666666">=1</span>)
         <span style="color: #008000">self</span><span style="color: #666666">.</span>act  <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>ReLU()
         <span style="color: #408080; font-style: italic"># timestep embedding to condition on t</span>
-        <span style="color: #008000">self</span><span style="color: #666666">.</span>time_mlp <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Sequential(
-            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">1</span>, <span style="color: #666666">128</span>), <span style="color: #408080; font-style: italic"># Changed from 64 to 128</span>
-            nn<span style="color: #666666">.</span>ReLU(),
-            nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">128</span>, <span style="color: #666666">128</span>), <span style="color: #408080; font-style: italic"># Changed from 64 to 128</span>
-        )
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>time_mlp <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Sequential(nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">1</span>, <span style="color: #666666">128</span>), nn<span style="color: #666666">.</span>ReLU(),nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">128</span>, <span style="color: #666666">128</span>))
 
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x, t):
         <span style="color: #408080; font-style: italic"># x: [B, C, H, W], t: [B]</span>
@@ -988,7 +984,7 @@ train_loader <span style="color: #666666">=</span> DataLoader(train_ds, batch_si
         <span style="color: #408080; font-style: italic"># add time embedding</span>
         t <span style="color: #666666">=</span> t<span style="color: #666666">.</span>unsqueeze(<span style="color: #666666">-1</span>)                             
         temb <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>time_mlp(t)
-        temb <span style="color: #666666">=</span> temb<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>, <span style="color: #666666">128</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>) <span style="color: #408080; font-style: italic"># Changed from 64 to 128</span>
+        temb <span style="color: #666666">=</span> temb<span style="color: #666666">.</span>view(<span style="color: #666666">-1</span>, <span style="color: #666666">128</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>)
         h <span style="color: #666666">=</span> h <span style="color: #666666">+</span> temb
         h <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>act(<span style="color: #008000">self</span><span style="color: #666666">.</span>dec1(h))
         <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>dec2(h)
