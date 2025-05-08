@@ -172,8 +172,10 @@ rittenNotes/2025/NotesMarch27.pdf
 
 ## May 5-9: Deep generative models
 - Diffusion models
-- Reading recommendation: An Introduction to Variational Autoencoders, by Kingma and Welling, see https://arxiv.org/abs/1906.02691 
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
+- Video	of lecture at https://youtu.be/ibJ8HksRzv4
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay8.pdf
+
 
 ## May 12-16: Deep generative models
 - Diffusion models
