@@ -17,6 +17,7 @@ o Mathematics of diffusion models and selected examples
 o A central paper is the one by Sohl-Dickstein et al, Deep Unsupervised Learning using Nonequilibrium Thermodynamics, URL:"https://arxiv.org/abs/1503.03585"
 o Calvin Luo at URL:"https://arxiv.org/abs/2208.11970"
 o See also Diederik P. Kingma, Tim Salimans, Ben Poole, Jonathan Ho, Variational Diffusion Models, URL:"https://arxiv.org/abs/2107.00630"
+o See also David Foster *Generative Deep Learning*, chapter 8 on diffusion models.
 !eblock
 
 
@@ -33,6 +34,38 @@ desired data samples from the noise. Unlike VAE or flow models,
 diffusion models are learned with a fixed procedure and the latent
 variable has high dimensionality (same as the original data).
 
+
+!split
+===== Why diffusion models? =====
+
+Diffusion models are prominent in generating high-quality images,
+video, sound, etc. They are named for their similarity to the natural
+diffusion process in physics, which describes how molecules move from
+high-concentration to low-concentration areas. In the context of
+machine learning, diffusion models generate new data by reversing a
+diffusion process, that is information loss due to noise
+intervention. The main idea here is to add random noise to data and
+then undo the process to get the original data distribution from the
+noisy data.
+
+The famous DALL-E 2, Midjourney, and open-source Stable Diffusion that
+create realistic images based on the user's text input are all
+examples of diffusion models.
+
+!split
+===== What are diffusion models? =====
+
+
+Diffusion models are advanced machine learning algorithms that
+uniquely generate high-quality data by progressively adding noise to a
+dataset and then learning to reverse this process. This innovative
+approach enables them to create remarkably accurate and detailed
+outputs, from lifelike images to coherent text sequences. Central to
+their function is the concept of gradually degrading data quality,
+only to reconstruct it to its original form or transform it into
+something new. This technique enhances the fidelity of generated data
+and offers new possibilities in areas like medical imaging, autonomous
+vehicles, and personalized AI assistants.
 
 !split
 =====  Problems with probabilistic models =====
@@ -84,6 +117,31 @@ distribution with a single, non-analytically-normalizable, potential
 function.  Furthermore, since a diffusion process exists for any
 smooth target distribution, this method can capture data distributions
 of arbitrary form.
+
+!split
+===== How diffusion models work =====
+
+Diffusion models work in a dual-phase mechanism: They first train a
+neural network to introduce noise into the dataset(a staple in the
+forward diffusion process) and then methodically reverse this
+process. 
+
+!split
+===== Data preprocessing =====
+
+Before the diffusion process begins, data needs to be appropriately
+formatted for model training. This process involves data cleaning to
+remove outliers, data normalization to scale features consistently,
+and data augmentation to increase dataset diversity, especially in the
+case of image data. Standardization is also applied to achieve normal
+data distribution, which is important for handling noisy image
+data. Different data types, such as text or images, may require
+specific preprocessing steps, like addressing class-imbalance
+issues. Well-executed data processing ensures high-quality training
+data and contributes to the model's ability to learn meaningful
+patterns and generate high-quality images (or other data types) during
+inference.
+
 
 
 !split
@@ -344,6 +402,73 @@ Carlo estimate could potentially be higher than a term that is
 estimated using only one random variable per timestep.  As it is
 computed by summing up $T-1$ consistency terms, the final estimated
 value may have high variance for large $T$ values.
+
+
+
+!split
+===== Image quality =====
+
+An advantage of diffusion models over for example VAEs (and also GANs
+to be discussed next time) is the ease of training with simple and
+efficient loss functions and their ability to generate highly
+realistic images. They excel at closely matching the distribution of
+real images, outperforming GANs in this aspect. This proficiency is
+due to the distinct mechanisms in diffusion models, allowing for more
+precise replication of real-world imagery.
+
+!split
+===== Training stability =====
+
+Regarding training stability, generative diffusion models have an edge
+over GANs. GANs often struggle with *mode collapse*, which is  a limitation
+where they produce a limited output variety. Diffusion models
+effectively avoid this issue through their gradual data smoothing
+process, leading to a more diverse range of generated images.
+
+!split
+===== Input types =====
+
+It is also important to mention that diffusion models handle various
+input types. They perform diverse generative tasks like text-to-image
+synthesis, layout-to-image generation, inpainting, and
+super-resolution tasks.
+
+!split
+===== Denoising diffusion probabilistic models (DDPMs) =====
+
+Denoising diffusion probabilistic models (DDPMs) are a specific type
+of diffusion model that focuses on probabilistically removing noise
+from data. During training, they learn how noise is added to data over
+time and how to reverse this process to recover the original
+data. This involves using probabilities to make educated guesses about
+what the data looked like before noise was added. This approach is
+essential for the model's capability to accurately reconstruct data,
+ensuring the outputs aren’t just noise-free but also closely resemble
+the original data.
+
+
+
+!split
+===== Techniques for speeding up diffusion models =====
+
+Generating a sample from DDPM using the reverse diffusion process is
+quite slow because it involves many steps, possibly up to a
+thousand. For instance, according to Song et al. (2020), it takes
+about 20 hours to generate 50,000 small images with a DDPM, while a
+GAN can create the same amount in less than a minute using an Nvidia
+2080 Ti GPU.
+
+There is an alternative method called Denoising Diffusion Implicit
+Model (DDIM) that stands out for its efficiency and quality. Unlike
+traditional models, DDIM needs fewer steps to create clear images from
+noisy data.
+
+!split
+===== Applications of diffusion models =====
+
+There are very diverse applications of diffusion models, one of the most exciting being digital art creation.
+The document at URL:"https://www.superannotate.com/blog/diffusion-models#:~:text=A%20primary%20advantage%20of%20diffusion,to%20generate%20highly%20realistic%20images" gives many nice examples of applications.
+.
 
 !split
 ===== PyTorch implementation of a Denoising Diffusion Probabilistic Model (DDPM) trained on the MNIST dataset =====
