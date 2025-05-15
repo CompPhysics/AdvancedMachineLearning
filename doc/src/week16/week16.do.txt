@@ -86,224 +86,6 @@ interesting zero-sum game between two models motivates both to improve
 their functionalities.
 
 !split
-===== Setup of the GAN =====
-
-We define a probability $p_{\bm{h}}$ which is used by the
-generator. Usually it is given by a uniform distribution over the
-input $\bm{h}$. Thereafter we define the distribution of the
-generator which we want to train, $p_{g}$ This is the generator's
-distribution over the data $\bm{x}$. Finally, we have the distribution
-$p_{r}$ over the real sample $\bm{x}$
-
-!split
-===== Optimization part =====
-
-On one hand, we want to make sure the discriminator $D$'s decisions
-over real data are accurate by maximizing $\mathbb{E}_{\bm{x} \sim
-p_{r}(\bm{x})} [\log D(\bm{x})]$. Meanwhile, given a fake sample $G(\bm{h}), \bm{h} \sim
-p_{\bm{h}}(\bm{h})$, the discriminator is expected to output a probability,
-$D(G(\bm{h}))$, close to zero by maximizing $\mathbb{E}_{\bm{h} \sim p_{\bm{h}}(\bm{h})}
-[\log (1 - D(G(\bm{h})))]$.
-
-On the other hand, the generator is trained to increase the chances of
-$D$ producing a high probability for a fake example, thus to minimize
-$\mathbb{E}_{\bm{h} \sim p_{\bm{h}}(\bm{h})} [\log (1 - D(G(\bm{h})))]$.
-
-!split
-===== Minimax game =====
-
-When combining both aspects together, $D$ and $G$ are playing a _minimax game_ in which we should optimize the following loss function:
-
-!bt
-\[
-\begin{aligned}
-\min_G \max_D L(D, G) 
-& = \mathbb{E}_{\bm{x} \sim p_{r}(\bm{x})} [\log D(\bm{x})] + \mathbb{E}_{\bm{h} \sim p_{\bm{h}}(\bm{h})} [\log(1 - D(G(\bm{h})))] \\
-& = \mathbb{E}_{\bm{x} \sim p_{r}(\bm{x})} [\log D(\bm{x})] + \mathbb{E}_{\bm{x} \sim p_g(\bm{x})} [\log(1 - D(\bm{x})]
-\end{aligned}
-\]
-!et
-where $\mathbb{E}_{\bm{x} \sim p_{r}(\bm{x})} [\log D(\bm{x})]$ has no impact on $G$ during gradient descent updates.
-
-!split
-===== Optimal value for $D$ =====
-
-Now we have a well-defined loss function. Let's first examine what is the best value for $D$.
-
-!bt
-\[
-L(G, D) = \int_{\bm{x}} \bigg( p_{r}(\bm{x}) \log(D(\bm{x})) + p_g (\bm{x}) \log(1 - D(\bm{x})) \bigg) d\bm{x}
-\]
-!et
-
-!split
-===== Best value of $D$ =====
-Since we are interested in what is the best value of $D(\bm{x})$ to maximize $L(G, D)$, let us label 
-
-!bt
-\[
-\tilde{\bm{x}} = D(\bm{x}), 
-A=p_{r}(\bm{x}), 
-B=p_g(\bm{x})
-\]
-!et
-
-!split
-=====  Integral evaluation =====
-
-The integral (we can safely ignore the integral because $\bm{x}$ is sampled over all the possible values) is:
-
-!bt
-\begin{align*}
-f(\tilde{\bm{x}}) 
-& = A \log{\tilde{\bm{x}}} + B \log{(1-\tilde{\bm{x}})} \\
-\frac{d f(\tilde{\bm{x}})}{d \tilde{\bm{x}}} & = A \frac{1}{\tilde{\bm{x}}} - B\frac{1}{1 - \tilde{\bm{x}}} \\
-& = \frac{A - (A + B)\tilde{\bm{x}}} {\tilde{\bm{x}} (1 - \tilde{\bm{x}})}. \\
-\end{align*}
-!et
-
-
-!split
-===== Best values =====
-
-If we set
-
-!bt
-\[
-\frac{d f(\tilde{\bm{x}})}{d \tilde{\bm{x}}} = 0,
-\]
-!et
-
-we get
-the best value of the discriminator:
-
-!bt
-\[
-D^*(\bm{x}) = \tilde{\bm{x}}^* =\frac{A}{A + B} = \frac{p_{r}(\bm{x})}{p_{r}(\bm{x}) + p_g(\bm{x})}
-\in [0, 1].
-\]
-!et
-
-Once the generator is trained to its optimal, $p_g$ gets
-very close to $p_{r}$. When $p_g = p_{r}$, $D^*(\bm{x})$ becomes
-$1/2$. We will observe this when running the code from last week (see jupyter-notebook from week 15).
-
-
-!split
-===== At their optimal values =====
-
-When both $G$ and $D$ are at their optimal values, we have $p_g = p_{r}$ and $D^*(\bm{x}) = 1/2$, the loss function becomes
-
-!bt
-\begin{align*}
-L(G, D^*) 
-&= \int_{\bm{x}} \bigg( p_{r}(\bm{x}) \log(D^*(\bm{x})) + p_g (\bm{x}) \log(1 - D^*(\bm{x})) \bigg) d\bm{x} \\
-&= \log \frac{1}{2} \int_{\bm{h}} p_{r}(\bm{x}) d\bm{x} + \log \frac{1}{2} \int_{\bm{x}} p_g(\bm{x}) d\bm{x} \\
-&= -2\log2
-\end{align*}
-!et
-
-!split
-===== What does the Loss Function Represent? =====
-
-The JS divergence between $p_{r}$ and $p_g$ can be computed as:
-
-!bt
-\begin{align*}
-D_{JS}(p_{r} \| p_g) 
-=& \frac{1}{2} D_{KL}(p_{r} || \frac{p_{r} + p_g}{2}) + \frac{1}{2} D_{KL}(p_{g} || \frac{p_{r} + p_g}{2}) \\
-=& \frac{1}{2} \bigg( \log2 + \int_x p_{r}(\bm{x}) \log \frac{p_{r}(\bm{x})}{p_{r} + p_g(\bm{x})} d\bm{x} \bigg) + \\& \frac{1}{2} \bigg( \log2 + \int_x p_g(\bm{x}) \log \frac{p_g(\bm{x})}{p_{r} + p_g(\bm{x})} d\bm{x} \bigg) \\
-=& \frac{1}{2} \bigg( \log4 + L(G, D^*) \bigg)
-\end{align*}
-!et
-
-!split
-===== What does the loss function quantify? =====
-
-We have 
-
-!bt
-\[
-L(G, D^*) = 2D_{JS}(p_{r} \| p_g) - 2\log2.
-\]
-!et
-
-The loss function of GANs quantifies the similarity between
-the generative data distribution $p_g$ and the real sample
-distribution $p_{r}$ by the so-called JS divergence when the discriminator is
-optimal. The best $G^*$ that replicates the real data distribution
-leads to the minimum $L(G^*, D^*) = -2\log2$.
-
-
-
-!split
-===== Problems with GANs =====
-
-Although GANs have achieved  great success in the generation of realistic images, the training is not easy; The process is known to be slow and unstable.
-
-!bblock Hard to reach equilibrium.
-Two models are trained simultaneously to an equilibrium to a
-two-player non-cooperative game. However, each model updates its cost
-independently with no respect to another player in the game. Updating
-the gradient of both models concurrently cannot guarantee a
-convergence.
-!eblock
-
-!split
-===== Vanishing Gradient  =====
-
-When the discriminator is perfect, we are guaranteed with
-$D(\bm{x}) = 1, \forall \bm{x} \in p_r$ and $D(\bm{x}) = 0, \forall \bm{x} \in p_g$.
-
-Then, the
-loss function $L$ falls to zero and we end up with no gradient to
-update the loss during learning iterations. One can encouter situations where 
-the discriminator gets better and the gradient vanishes fast.
-
-As a result, training GANs may face the following problems 
-o If the discriminator behaves badly, the generator does not have accurate feedback and the loss function cannot represent the real data
-o If the discriminator does a great job, the gradient of the loss function drops down to close to zero and the learning can become slow
-
-
-!split
-===== Improved GANs =====
-
-One of the solutions to improved GANs training, is the introduction of
-what is called the Wasserstein diatance, which is a way to compute the
-difference/distance between two probability distribitions. For those
-interested in reading more, we recommend for example chapter 17 of
-Rashcka's et al textbook,
-Machine Learning with PyTorch and Scikit-Learn, chapter 17, see URL:"https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17"
-
-
-For a definition of the Wasserstein distance, see for example URL:"https://arxiv.org/pdf/2103.01678"
-
-
-!split
-===== What is a GAN? =====
-
-A GAN is a deep neural network which consists of two networks, a
-so-called generator network and a discriminating network, or just
-discriminator. Through several iterations of generation and
-discrimination, the idea is that these networks will train each other,
-while also trying to outsmart each other.
-
-In its simplest version, the two networks could be two standard neural networks with a given number of hidden of hidden layers and parameters to train.
-
-!split
-===== Labeling the networks =====
-
-For a GAN we have: 
-o a discriminator $D$ estimates the probability of a given sample coming from the real dataset. It works as a critic and is optimized to tell the fake samples from the realo ones. We say a  discriminator tries to distinguish between real data and those generated by the abovementioned generator.
-o a generator $G$ outputs synthetic samples given a noise variable input $z$ ($z$ brings in potential output diversity). It is trained to capture the real data distribution in order to generate samples that can be as real as possible, or in other words, can trick the discriminator to offer a high probability.
-
-At the end of the training, the generator can be used to generate for
-example new images. In this sense we have trained a model which can
-produce new samples. We say that we have implicitely defined a
-probability.
-
-
-!split
 ===== More on Generative Adversarial Networks =====
 
 Generative adversarial networks  have shown great results in
@@ -314,25 +96,6 @@ making each other stronger at the same time. However, it is rather
 challenging to train a GANs model, 
 training instability or failure to converge.
 
-
-
-
-
-
-
-!split
-===== What is a generator network? =====
-
-A generator network is often a deep network which uses existing data
-to generate new data (from for example simulations of physical
-systems, imagesm video, audio and more) from randomly generated
-inputs, the so-called latent space. Training the network allows us to
-generate say new data, images etc. As an example a generator network
-could for example be a Boltzmann machine as discussed earlier. This
-machine is trained to produce for example a quantum mechanical
-probability distribution.
-
-It can be a simple neural network with an input layer and an output layer and a given number of hidden layers.
 
 
 
@@ -350,26 +113,33 @@ o High-resolution image generation
 o Completing missing parts of images and much more
 
 
-!split
-=====  Discriminator versus generator  (Borrowed from Rashcka et al) =====
 
-FIGURE: [figures/figure2.png, width=900 frac=1.0]
+
+!split
+===== Setup of the GAN =====
+
+We define a probability $p_{\bm{h}}$ which is used by the
+generator. Usually it is given by a uniform distribution over the
+input $\bm{h}$. Thereafter we define the distribution of the
+generator which we want to train, $p_{g}$ This is the generator's
+distribution over the data $\bm{x}$. Finally, we have the distribution
+$p_{r}$ over the real sample $\bm{x}$
+
 
 
 
 !split
 ===== Generative Adversarial Networks =====
 
-_Generative Adversarial Networks_ are a type of unsupervised machine learning
-algorithm proposed by Goodfellow et. al, see URL:"https://arxiv.org/pdf/1406.2661.pdf"
-in 2014 (Read the paper first it's only 6 pages). The simplest formulation of
+
+The simplest formulation of
 the model is based on a game theoretic approach, *zero sum game*, where we pit
 two neural networks against one another. We define two rival networks, one
-generator $g$, and one discriminator $d$. The generator directly produces
+generator $G$, and one discriminator $D$. The generator directly produces
 samples
 !bt
 \[
-    x = g(z; \theta^{(g)}).
+    x = G(z; \theta^{(g)}).
 \]
 !et
 
@@ -379,13 +149,13 @@ samples
 
 The discriminator attempts to distinguish between samples drawn from the
 training data and samples drawn from the generator. In other words, it tries to
-tell the difference between the fake data produced by $g$ and the actual data
+tell the difference between the fake data produced by $G$ and the actual data
 samples we want to do prediction on. The discriminator outputs a probability
 value given by
 
 !bt
 \[
-    d(x; \theta^{(d)}).
+    D(x; \theta^{(d)}).
 \]
 !et
 
@@ -445,7 +215,7 @@ This progression in the training poses a problem for the convergence
 
 !bt
 \[
-    g^* = \underset{g}{\mathrm{argmin}}\hspace{2pt}
+    G^* = \underset{g}{\mathrm{argmin}}\hspace{2pt}
           \underset{d}{\mathrm{max}}v(\theta^{(g)}, \theta^{(d)}),
 \]
 !et
@@ -456,9 +226,9 @@ This progression in the training poses a problem for the convergence
 The default choice for $v$ is
 !bt
 \[
-    v(\theta^{(g)}, \theta^{(d)}) = \mathbb{E}_{x\sim p_\mathrm{data}}\log d(x)
+    v(\theta^{(g)}, \theta^{(d)}) = \mathbb{E}_{x\sim p_\mathrm{data}}\log D(x)
                                   + \mathbb{E}_{x\sim p_\mathrm{model}}
-                                  \log (1 - d(x)).
+                                  \log (1 - D(x)).
 \]
 !et
 
@@ -480,11 +250,6 @@ general not the case and it is possible to get situations where the training
 process never converges because the generator and discriminator chase one
 another around in the parameter space indefinitely.
 
-
-!split
-=====  Steps in building a GAN  (Borrowed from Rashcka et al) =====
-
-FIGURE: [figures/figure3.png, width=900 frac=1.0]
 
 
 !split
@@ -620,12 +385,59 @@ L(G, D^*) = 2D_{JS}(p_{r} \| p_g) - 2\log2.
 \]
 !et
 
-Essentially the loss function of GAN quantifies the similarity between
+Essentially the loss function of a GAN quantifies the similarity between
 the generative data distribution $p_g$ and the real sample
 distribution $p_{r}$ by JS divergence when the discriminator is
 optimal. The best $G^*$ that replicates the real data distribution
 leads to the minimum $L(G^*, D^*) = -2\log2$ which is aligned with
 equations above.
+
+
+!split
+===== Problems with GANs =====
+
+Although GANs have achieved  great success in the generation of realistic images, the training is not easy; The process is known to be slow and unstable.
+
+!bblock Hard to reach equilibrium.
+Two models are trained simultaneously to an equilibrium to a
+two-player non-cooperative game. However, each model updates its cost
+independently with no respect to another player in the game. Updating
+the gradient of both models concurrently cannot guarantee a
+convergence.
+!eblock
+
+!split
+===== Vanishing Gradient  =====
+
+When the discriminator is perfect, we are guaranteed with
+$D(\bm{x}) = 1, \forall \bm{x} \in p_r$ and $D(\bm{x}) = 0, \forall \bm{x} \in p_g$.
+
+Then, the
+loss function $L$ falls to zero and we end up with no gradient to
+update the loss during learning iterations. One can encouter situations where 
+the discriminator gets better and the gradient vanishes fast.
+
+As a result, training GANs may face the following problems 
+o If the discriminator behaves badly, the generator does not have accurate feedback and the loss function cannot represent the real data
+o If the discriminator does a great job, the gradient of the loss function drops down to close to zero and the learning can become slow
+
+
+!split
+===== Improved GANs =====
+
+One of the solutions to improved GANs training, is the introduction of
+what is called the Wasserstein diatance, which is a way to compute the
+difference/distance between two probability distribitions. For those
+interested in reading more, we recommend for example chapter 17 of
+Rashcka's et al textbook,
+Machine Learning with PyTorch and Scikit-Learn, chapter 17, see URL:"https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17"
+
+
+For a definition of the Wasserstein distance, see for example URL:"https://arxiv.org/pdf/2103.01678"
+
+
+
+
 
 
 
@@ -642,10 +454,6 @@ closely the code developed by Raschka et al from chapter 17 of their
 textbook, see URL:"https://github.com/rasbt/python-machine-learning-book-3rd-edition/tree/master/ch17" for codes.
 
 
-!split
-=====  Implementing the networks   (Borrowed from Rashcka et al) =====
-
-FIGURE: [figures/figure4.png, width=900 frac=1.0]
 
 !split
 ===== Code elements =====
