@@ -180,10 +180,13 @@ rittenNotes/2025/NotesMarch27.pdf
 ## May 12-16: Deep generative models
 - Diffusion models
 - GANs
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week16.ipynb  
+- Video of lecture at https://youtu.be/-RppFI0QX7k
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMay15.pdf
 
 ## May 19-23:  Discussion of projects and summary of course
-
+- Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week17.ipynb  
+- Lab only
 
 ## Recommended textbooks:
 
