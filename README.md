@@ -27,9 +27,8 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Feed forward neural networks and its mathematics (NNs)
 - Convolutional neural networks (CNNs)
 - Recurrent neural networks (RNNs)
-- Graph neural networks
-- Transformers
 - Autoencoders and principal component analysis
+- Transformers (tentative)
 
 ### Deep learning, generative methods
 - Basics of generative models
@@ -37,6 +36,7 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Diffusion models
 - Variational autoencoders (VAEe)
 - Generative Adversarial Networks (GANs)
+- Normalizing flows (tentative)
 - Autoregressive methods (tentative)
 
 ### Physical Sciences (often just called Physics informed) informed machine learning
