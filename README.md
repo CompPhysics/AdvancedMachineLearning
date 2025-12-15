@@ -39,6 +39,10 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Normalizing flows (tentative)
 - Autoregressive methods (tentative)
 
+
+### Reinforcement Learning
+- Basics of reinforcement learning
+
 ### Physical Sciences (often just called Physics informed) informed machine learning
 - Basic set up of PINNs with discussion of projects
 
