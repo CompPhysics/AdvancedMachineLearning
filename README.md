@@ -8,16 +8,17 @@ learning algorithms, starting with the mathematics of neural networks
 autoencoders, transformers, graph neural networks and other dimensionality reduction methods to finally
 discuss generative methods. These will include Boltzmann machines,
 variational autoencoders, generalized adversarial networks, diffusion methods and other.
+Reinforcement learning is another topic which can be covered if there is enough interest.
 
 ![alt text](https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/images/image001.jpg?raw=true)
 
 
 ## Practicalities
 
-- Lectures Thursdays 1215pm-2pm, room FØ434, Department of Physics
-- Lab and exercise sessions Thursdays 215pm-4pm, , room FØ434, Department of Physics
+- Lectures Thursdays 1015am-12pm, room FØ434, Department of Physics
+- Lab and exercise sessions Thursdays 1215pm-2pm, , room FØ434, Department of Physics
 - We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
-- No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively one long project.
+- No exam, only two projects. Each projects counts 50% of the final grade. Alternatively one long project which counts 100% of the final grade.
 - All info at the GitHub address https://github.com/CompPhysics/AdvancedMachineLearning
 - Permanent Zoom link for the whole semester is https://uio.zoom.us/my/mortenhj
   
@@ -28,16 +29,16 @@ variational autoencoders, generalized adversarial networks, diffusion methods an
 - Convolutional neural networks (CNNs)
 - Recurrent neural networks (RNNs)
 - Autoencoders and principal component analysis
-- Transformers (tentative)
+- Transformers (tentative, if interest)
 
 ### Deep learning, generative methods
 - Basics of generative models
 - Boltzmann machines and energy based methods
 - Diffusion models
 - Variational autoencoders (VAEe)
+- Autoregressive methods
 - Generative Adversarial Networks (GANs)
-- Normalizing flows (tentative)
-- Autoregressive methods (tentative)
+- Normalizing flows (tentative, if interest)
 
 
 ### Reinforcement Learning
@@ -193,3 +194,4 @@ o David Foster, Generative Deep Learning, https://www.oreilly.com/library/view/g
 
 o Babcock and Gavras, Generative AI with Python and TensorFlow, https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2
 
+o Sutton and Barto, An Introduction to Reinforcement Learning, https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf
