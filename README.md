@@ -73,11 +73,13 @@ in addition to the lectures, we have often followed five main paths:
 - Presentation of course and overview
 - Discussion of possible projects
 - Deep learning, neural networks, basic equations
+- Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka chapter 11
 - Video of lecture at https://youtu.be/
 
 ##  January 26-30
+
 - Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
