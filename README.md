@@ -48,7 +48,7 @@ Reinforcement learning is another topic which can be covered if there is enough 
 - Basic set up of PINNs with discussion of projects
 
 
-All teaching material is available from this GitHub link.
+All teaching material is available from the present GitHub link.
 
 
 The course can also be used as a self-study course and besides the
@@ -76,7 +76,7 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka chapter 11
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 ##  January 26-30
 
@@ -96,22 +96,20 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics of convolutional neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
-- Video of lecture at https://youtu.be/
-
-
+- Video of lecture to be added
 
 ## February 16-20
 - Mathematics of  CNNs and discussion of codes
 - Recurrent neural networks (RNNs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 ## February 23-27
 - Mathematics of recurrent neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and 10 and Raschka et al chapters 14 and 15
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 
 ## March 2-6
@@ -119,20 +117,20 @@ in addition to the lectures, we have often followed five main paths:
 - Applications to differential equations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15 and 18
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 ## March 9-13
 - Long short term memory and RNNs
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
-- Video	of lecture at https://youtu.be/
+- Video	of lecture to be added
 
 
 ## March 16-20: Autoencoders
 - Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb- Reading recommendation: Goodfellow et al chapter 14
-- Video of Lecture at https://youtu.be/
+- Video of Lecture to be added
 
 
 ## March 23-27: Generative models
@@ -141,7 +139,7 @@ in addition to the lectures, we have often followed five main paths:
 - Boltzmann machines
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters 16-18
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 ## March 30- April 3: Public holiday, no lectures
 
@@ -158,7 +156,7 @@ in addition to the lectures, we have often followed five main paths:
 - Variational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 ## April 20-24: Deep generative models
 
@@ -166,24 +164,27 @@ in addition to the lectures, we have often followed five main paths:
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 
 ## April 27 - May 1:   Deep generative models
 - Diffusion models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
-- Video	of lecture at https://youtu.be/
+- Video	of lecture to be added
 
 
 ## May 4-8: Deep generative models
 - Diffusion models
 - GANs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
-- Video of lecture at https://youtu.be/
+- Video of lecture to be added
 
 
 ## May 11-15:  Discussion of projects and summary of course
 - Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
+
+## May 18-22:  Discussion of projects
+
 
 
 ## Recommended textbooks:
