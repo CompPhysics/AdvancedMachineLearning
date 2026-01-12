@@ -76,14 +76,14 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka chapter 11
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 ##  January 26-30
 
 - Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
-- Link to video of lecture  at https://youtu.be/
+- Link to video of lecture to be added 
 
 
 
@@ -96,20 +96,20 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics of convolutional neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week4/ipynb/week4.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 ## February 16-20
 - Mathematics of  CNNs and discussion of codes
 - Recurrent neural networks (RNNs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 ## February 23-27
 - Mathematics of recurrent neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and 10 and Raschka et al chapters 14 and 15
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 
 ## March 2-6
@@ -117,7 +117,7 @@ in addition to the lectures, we have often followed five main paths:
 - Applications to differential equations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15 and 18
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 ## March 9-13
 - Long short term memory and RNNs
@@ -139,7 +139,7 @@ in addition to the lectures, we have often followed five main paths:
 - Boltzmann machines
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters 16-18
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 ## March 30- April 3: Public holiday, no lectures
 
@@ -156,7 +156,7 @@ in addition to the lectures, we have often followed five main paths:
 - Variational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 ## April 20-24: Deep generative models
 
@@ -164,7 +164,7 @@ in addition to the lectures, we have often followed five main paths:
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 
 ## April 27 - May 1:   Deep generative models
@@ -177,7 +177,7 @@ in addition to the lectures, we have often followed five main paths:
 - Diffusion models
 - GANs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
-- Video of lecture to be added
+- Video of lecture and whiteboard notes to be added
 
 
 ## May 11-15:  Discussion of projects and summary of course
