@@ -42,7 +42,7 @@ Reinforcement learning is another topic which can be covered if there is enough 
 
 
 ### Reinforcement Learning
-- Basics of reinforcement learning
+- Basics of reinforcement learning (more to be added)
 
 ### Physical Sciences (often just called Physics informed) informed machine learning
 - Basic set up of PINNs with discussion of projects
