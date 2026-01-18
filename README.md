@@ -47,6 +47,9 @@ Reinforcement learning is another topic which can be covered if there is enough 
 ### Physical Sciences (often just called Physics informed) informed machine learning
 - Basic set up of PINNs with discussion of projects
 
+### AI agents for Science
+- A topic of great interest but which we will not cover. However, these lectures are excellent, see https://agents4science.github.io/Class/Assets/Lecture_1_web.pdf
+
 
 All teaching material is available from the present GitHub link.
 
