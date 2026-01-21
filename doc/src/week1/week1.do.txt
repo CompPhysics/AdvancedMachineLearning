@@ -11,7 +11,7 @@ DATE: January 22, 2026
 * Deep learning methods, mathematics and  review of neural networks
 #  o "Video of lecture at URL:"https://youtu.be/SY57dC46L9o"
 * Recommended reading first three weeks: Raschka et al chapters 11-12 and Goodfellow et al chapters 6-8
-*  Permanent Zoom link for the whole semester is URL:"https://uio.zoom.us/my/mortenhj"
+* Permanent Zoom link for the whole semester is URL:"https://uio.zoom.us/my/mortenhj"
 !eblock
 
 
@@ -27,7 +27,7 @@ DATE: January 22, 2026
 !split
 =====  Deep learning methods covered, tentative =====
 
-* _Deep learning_, often described as discriminative methods
+* _Deep learning, often described as discriminative methods_
   o Feed forward neural networks and its mathematics (NNs)
   o Convolutional neural networks (CNNs)
   o Recurrent neural networks (RNNs)
@@ -63,7 +63,7 @@ and research paths of the participants.
 ===== AI agents for Science =====
 
 This is a topic we won't be able to cover, but for those interested, these series of lectures are excellent, see
-o URL:"https://agents4science.github.io/Class/curriculum.html"
+* URL:"https://agents4science.github.io/Class/curriculum.html"
 
 !split
 ===== "Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics":"https://jenfb.github.io/bkmr/overview.html" =====
@@ -112,15 +112,19 @@ The lectures during the first part of the semester deal with deep learning metho
 * Recurrent neural networks (RNNs)
 * Autoencoders (AEs)
 
+!split
+===== PINNs =====
+
 Based on these topics we can define one project with deadline March 20
 or a one semester-long project with final deadline June 1 that focuses
-on
+on _Physics Informed neural networks_ (PINNs) with a focus on partial differential equations (PDEs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected PDEs using NNs. These can be expanded to include studies of RNNs and/or Autoencoders. In the lectures we will use selected PDEs to illustrate how we can use neural networks to solve differential equations.
 
-* Physics Informed neural network path (PINNs) with a focus on partial differential equations (PDEs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected PDEs using NNs. These can be expanded to include studies of RNNs and/or Autoencoders. In the lectures we will use selected PDEs to illustrate how we can use neural networks to solve differential equations.
+!split
+===== Coding =====
 
 For coding, we leave it to you to decide if you wish to write your own
 code or use deep learning libraries like PyTorch, Tensorflow/Keras, or
-other.
+other. Feel free to make project groups and collaborate. Size of optimal groups are 2-3 participants.
 
 !split
 ===== Classification projects =====
@@ -238,7 +242,7 @@ the PDE data with classification problems.
 
 
 !split
-===== Own data =====
+===== Own data and/or own hobby horses =====
 
 You can obviously used the methods we discuss during the lectures to
 analyze your own data, be these from your thesis work or a research
@@ -247,21 +251,25 @@ Here you can use the most relevant method(s)
 (say convolutional neural networks for images) and apply this(these)
 to data sets relevant for your own research.
 
+_Feel free to propose other project themes._
+
+
+
 
 !split
-===== Gaussian processes and Bayesian analysis =====
+===== First homework for next week =====
 
-The Gaussian processes/Bayesian statistics path: "Kernel regression
-(Gaussian processes) and Bayesian
-statistics":"https://jenfb.github.io/bkmr/overview.html" are popular
-tools in the machine learning literature. The main idea behind these
-approaches is to flexibly model the relationship between a large
-number of variables and a particular outcome (dependent
-variable). This can form a second part of a project where for example
-standard Kernel regression methods are used on a specific data
-set. Alternatively, participants can opt to work on a large project
-relevant for their own research using gaussian processes and/or
-Bayesian machine Learning.
+Next week we will hold our first lab session. Please take some time
+beforehand to identify the topic you find most interesting.
+
+If possible, prepare a short proposal in the form of 3–5 slides
+outlining your idea. You will have the opportunity to briefly present
+this proposal during the lab session.
+
+This will also serve as an excellent opportunity to find potential
+project partners.
+
+
 
 
 
@@ -705,7 +713,7 @@ These integrals are evaluted using MC intergration (with all its possible error 
 
 
 !split
-===== Why Feed Forward Neural Networks (FFNN)?  =====
+===== Why Feed Forward Neural Networks (FFNN)? Classical approximation theorem  =====
 
 According to the *Universal approximation theorem*, a feed-forward
 neural network with just a single hidden layer containing a finite
@@ -713,8 +721,52 @@ number of neurons can approximate a continuous multidimensional
 function to arbitrary accuracy, assuming the activation function for
 the hidden layer is a _non-constant, bounded and
 monotonically-increasing continuous function_.
+This statement is essentially a correct summary of the classical
+Universal Approximation Theorem as first proven by Cybenko
+(1989) based on activation functions like the _sigmoid_ or _tanh_ functions.
 
 
+
+
+!split
+===== Digression,  more updated variant =====
+
+However, the formulation in the statement, while basically technically
+correct, omits some details and is not the most general form of the
+theorem. A more precise phrasing is: for any continuous function $f$
+on a compact domain in $\mathbb{R}^n$ and any error $\varepsilon>0$, there
+exists a feedforward network with one hidden layer (finite number of
+neurons) and a suitable activation $\sigma$ (non-constant, bounded,
+continuous, monotonic) such that the network’s output uniformly
+approximates $f$ within error $\varepsilon$ .
+
+!split
+===== Getting verbose =====
+
+The classical theorem’s conditions on the
+activation function (namely _non-constant, bounded, and
+monotonically-increasing continuous_) are sufficient but not
+necessary. Cybenko chose a sigmoidal activation in his proof, and
+Hornik et al. (1989) independently showed a similar result for
+so-called _squashing_ functions (which are likewise bounded and
+monotonic). These conditions were convenient for those proofs, often
+using the Stone–Weierstrass theorem or functional analysis
+techniques.
+
+!split
+===== Updates =====
+
+Later research clarified that the essential
+requirement is that the activation function be non-polynomial. In
+1991, Hornik showed that it is not a special property of sigmoids per
+se, but the general two-layer network architecture that confers
+universality, in fact, a wide range of activation functions can lead
+to universal approximation.
+
+A famous result by Leshno,
+Lin, Pinkus, and Schocken (1993) proved that a feedforward network is
+a universal approximator if and only if the activation function is not
+a polynomial (on any interval).
 
 
 !split
@@ -807,7 +859,7 @@ o Complex  variable $\mathbb{C}$
 !split
 ===== Vectors =====
 
-We start by defining a vector $\bm{x}$  with $n$ components, with $x_0$ as our first element, as
+We define a vector $\bm{x}$  with $n$ components, with $x_0$ as our first element, as
 
 !bt
 \[
@@ -914,7 +966,7 @@ o Finally we define a so-called cost or loss function which is used to gauge the
 
 
 !split
-===== The optimzation problem =====
+===== The optimization problem =====
 
 The cost function is a function of the unknown parameters
 $\bm{\Theta}$ where the latter is a container for all possible
@@ -1293,4 +1345,161 @@ b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta 
 !et
 
 
+
+!split
+===== Homework for next week =====
+
+Below, we provide code examples for the well-known MNIST dataset
+implemented in both PyTorch and TensorFlow, illustrating the
+construction and training of a feed-forward neural network.
+
+For next week’s homework, you are expected to revisit your own neural
+network implementations. You may, if you wish, use the provided
+PyTorch or TensorFlow examples as a reference or starting point.
+
+At URL:"https://github.com/CompPhysics/MachineLearning/blob/master/doc/pub/week43/ipynb/week43.ipynb" you will also find an example on how you can develop your own code from scratch.
+The PyTorch and TensorFlow/Keras examples are taken from this jupyter-notebook.
+
+
+
+
+!split
+===== Using Pytorch with the full MNIST data set =====
+
+!bc pycod
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision
+import torchvision.transforms as transforms
+
+# Device configuration: use GPU if available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# MNIST dataset (downloads if not already present)
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))  # normalize to mean=0.5, std=0.5 (approx. [-1,1] pixel range)
+])
+train_dataset = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=transform)
+test_dataset  = torchvision.datasets.MNIST(root='./data', train=False, download=True, transform=transform)
+
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)
+test_loader  = torch.utils.data.DataLoader(test_dataset, batch_size=64, shuffle=False)
+
+
+class NeuralNet(nn.Module):
+    def __init__(self):
+        super(NeuralNet, self).__init__()
+        self.fc1 = nn.Linear(28*28, 100)   # first hidden layer (784 -> 100)
+        self.fc2 = nn.Linear(100, 100)    # second hidden layer (100 -> 100)
+        self.fc3 = nn.Linear(100, 10)     # output layer (100 -> 10 classes)
+    def forward(self, x):
+        x = x.view(x.size(0), -1)         # flatten images into vectors of size 784
+        x = torch.relu(self.fc1(x))       # hidden layer 1 + ReLU activation
+        x = torch.relu(self.fc2(x))       # hidden layer 2 + ReLU activation
+        x = self.fc3(x)                   # output layer (logits for 10 classes)
+        return x
+
+model = NeuralNet().to(device)
+
+
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=1e-4)
+
+num_epochs = 10
+for epoch in range(num_epochs):
+    model.train()  # set model to training mode
+    running_loss = 0.0
+    for images, labels in train_loader:
+        # Move data to device (GPU if available, else CPU)
+        images, labels = images.to(device), labels.to(device)
+
+        optimizer.zero_grad()            # reset gradients to zero
+        outputs = model(images)          # forward pass: compute predictions
+        loss = criterion(outputs, labels)  # compute cross-entropy loss
+        loss.backward()                 # backpropagate to compute gradients
+        optimizer.step()                # update weights using SGD step 
+
+        running_loss += loss.item()
+    # Compute average loss over all batches in this epoch
+    avg_loss = running_loss / len(train_loader)
+    print(f"Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
+
+#Evaluation on the Test Set
+
+
+
+model.eval()  # set model to evaluation mode 
+correct = 0
+total = 0
+with torch.no_grad():  # disable gradient calculation for evaluation 
+    for images, labels in test_loader:
+        images, labels = images.to(device), labels.to(device)
+        outputs = model(images)
+        _, predicted = torch.max(outputs, dim=1)  # class with highest score
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+accuracy = 100 * correct / total
+print(f"Test Accuracy: {accuracy:.2f}%")
+
+!ec
+
+
+!split
+===== And a similar example using Tensorflow with Keras =====
+
+!bc pycod
+
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers, regularizers
+
+# Check for GPU (TensorFlow will use it automatically if available)
+gpus = tf.config.list_physical_devices('GPU')
+print(f"GPUs available: {gpus}")
+
+# 1) Load and preprocess MNIST
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+# Normalize to [0, 1]
+x_train = (x_train.astype("float32") / 255.0)
+x_test  = (x_test.astype("float32") / 255.0)
+
+# 2) Build the model: 784 -> 100 -> 100 -> 10
+l2_reg = 1e-4  # L2 regularization strength
+
+model = keras.Sequential([
+    layers.Input(shape=(28, 28)),
+    layers.Flatten(),
+    layers.Dense(100, activation="relu",
+                 kernel_regularizer=regularizers.l2(l2_reg)),
+    layers.Dense(100, activation="relu",
+                 kernel_regularizer=regularizers.l2(l2_reg)),
+    layers.Dense(10, activation="softmax")  # output probabilities for 10 classes
+])
+
+# 3) Compile with SGD + weight decay via L2 regularizers
+model.compile(
+    optimizer=keras.optimizers.SGD(learning_rate=0.01),
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"],
+)
+
+model.summary()
+
+# 4) Train
+history = model.fit(
+    x_train, y_train,
+    epochs=10,
+    batch_size=64,
+    validation_split=0.1,  # optional: monitor validation during training
+    verbose=1
+)
+
+# 5) Evaluate on test set
+test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
+print(f"Test accuracy: {test_acc:.4f}, Test loss: {test_loss:.4f}")
+
+!ec
 

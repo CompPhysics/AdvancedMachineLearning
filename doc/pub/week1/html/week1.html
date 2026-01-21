@@ -171,6 +171,8 @@ div.toc p,a {
                None,
                'project-paths-overarching-view'),
               ('Project options', 2, None, 'project-options'),
+              ('PINNs', 2, None, 'pinns'),
+              ('Coding', 2, None, 'coding'),
               ('Classification projects', 2, None, 'classification-projects'),
               ('Mathematics of deep learning',
                2,
@@ -194,11 +196,14 @@ div.toc p,a {
                None,
                'reinforcement-learning-pde-part'),
               ('New ML methods', 2, None, 'new-ml-methods'),
-              ('Own data', 2, None, 'own-data'),
-              ('Gaussian processes and Bayesian analysis',
+              ('Own data and/or own hobby horses',
                2,
                None,
-               'gaussian-processes-and-bayesian-analysis'),
+               'own-data-and-or-own-hobby-horses'),
+              ('First homework for next week',
+               2,
+               None,
+               'first-homework-for-next-week'),
               ('More on projects and final grade',
                2,
                None,
@@ -298,10 +303,17 @@ div.toc p,a {
                2,
                None,
                'derivatives-of-the-local-energy'),
-              ('Why Feed Forward Neural Networks (FFNN)?',
+              ('Why Feed Forward Neural Networks (FFNN)? Classical '
+               'approximation theorem',
                2,
                None,
-               'why-feed-forward-neural-networks-ffnn'),
+               'why-feed-forward-neural-networks-ffnn-classical-approximation-theorem'),
+              ('Digression,  more updated variant',
+               2,
+               None,
+               'digression-more-updated-variant'),
+              ('Getting verbose', 2, None, 'getting-verbose'),
+              ('Updates', 2, None, 'updates'),
               ('The electron gas in three dimensions with $N=14$ electrons '
                '(Wigner-Seitz radius $r_s=2$ a.u.), "Gabriel Pescia, Jane Kim '
                'et al. '
@@ -337,7 +349,7 @@ div.toc p,a {
                2,
                None,
                'overarching-view-of-a-neural-network'),
-              ('The optimzation problem', 2, None, 'the-optimzation-problem'),
+              ('The optimization problem', 2, None, 'the-optimization-problem'),
               ('Other ingredients of a neural network',
                2,
                None,
@@ -394,7 +406,16 @@ div.toc p,a {
                2,
                None,
                'setting-up-the-back-propagation-algorithm-part-3'),
-              ('Updating the gradients', 2, None, 'updating-the-gradients')]}
+              ('Updating the gradients', 2, None, 'updating-the-gradients'),
+              ('Homework for next week', 2, None, 'homework-for-next-week'),
+              ('Using Pytorch with the full MNIST data set',
+               2,
+               None,
+               'using-pytorch-with-the-full-mnist-data-set'),
+              ('And a similar example using Tensorflow with Keras',
+               2,
+               None,
+               'and-a-similar-example-using-tensorflow-with-keras')]}
 end of tocinfo -->
 
 <body>
@@ -445,9 +466,7 @@ MathJax.Hub.Config({
 <li> Deep learning methods, mathematics and  review of neural networks
 <!-- o "Video of lecture at <a href="https://youtu.be/SY57dC46L9o" target="_blank"><tt>https://youtu.be/SY57dC46L9o</tt></a> --></li>
 <li> Recommended reading first three weeks: Raschka et al chapters 11-12 and Goodfellow et al chapters 6-8</li>
-<ul>
- <li> Permanent Zoom link for the whole semester is <a href="https://uio.zoom.us/my/mortenhj" target="_blank"><tt>https://uio.zoom.us/my/mortenhj</tt></a></li>
-</ul>
+<li> Permanent Zoom link for the whole semester is <a href="https://uio.zoom.us/my/mortenhj" target="_blank"><tt>https://uio.zoom.us/my/mortenhj</tt></a></li>
 </ul>
 </div>
 
@@ -466,7 +485,7 @@ MathJax.Hub.Config({
 <h2 id="deep-learning-methods-covered-tentative">Deep learning methods covered, tentative </h2>
 
 <ul>
-<li> <b>Deep learning</b>, often described as discriminative methods
+<li> <b>Deep learning, often described as discriminative methods</b>
 <ol type="a"></li>
  <li> Feed forward neural networks and its mathematics (NNs)</li>
  <li> Convolutional neural networks (CNNs)</li>
@@ -508,9 +527,9 @@ and research paths of the participants.
 <h2 id="ai-agents-for-science">AI agents for Science </h2>
 
 <p>This is a topic we won't be able to cover, but for those interested, these series of lectures are excellent, see</p>
-<ol>
+<ul>
 <li> <a href="https://agents4science.github.io/Class/curriculum.html" target="_blank"><tt>https://agents4science.github.io/Class/curriculum.html</tt></a></li>
-</ol>
+</ul>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="additional-topics-kernel-regression-gaussian-processes-and-bayesian-statistics-https-jenfb-github-io-bkmr-overview-html"><a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Additional topics:  Kernel regression (Gaussian processes) and Bayesian statistics</a> </h2>
 
@@ -561,17 +580,20 @@ how they link with the lectures.
 <li> Recurrent neural networks (RNNs)</li>
 <li> Autoencoders (AEs)</li>
 </ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="pinns">PINNs </h2>
+
 <p>Based on these topics we can define one project with deadline March 20
 or a one semester-long project with final deadline June 1 that focuses
-on
+on <b>Physics Informed neural networks</b> (PINNs) with a focus on partial differential equations (PDEs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected PDEs using NNs. These can be expanded to include studies of RNNs and/or Autoencoders. In the lectures we will use selected PDEs to illustrate how we can use neural networks to solve differential equations.
 </p>
 
-<ul>
-<li> Physics Informed neural network path (PINNs) with a focus on partial differential equations (PDEs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected PDEs using NNs. These can be expanded to include studies of RNNs and/or Autoencoders. In the lectures we will use selected PDEs to illustrate how we can use neural networks to solve differential equations.</li>
-</ul>
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="coding">Coding </h2>
+
 <p>For coding, we leave it to you to decide if you wish to write your own
 code or use deep learning libraries like PyTorch, Tensorflow/Keras, or
-other.
+other. Feel free to make project groups and collaborate. Size of optimal groups are 2-3 participants.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -693,7 +715,7 @@ the PDE data with classification problems.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="own-data">Own data </h2>
+<h2 id="own-data-and-or-own-hobby-horses">Own data and/or own hobby horses </h2>
 
 <p>You can obviously used the methods we discuss during the lectures to
 analyze your own data, be these from your thesis work or a research
@@ -703,20 +725,22 @@ Here you can use the most relevant method(s)
 to data sets relevant for your own research.
 </p>
 
-<!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="gaussian-processes-and-bayesian-analysis">Gaussian processes and Bayesian analysis </h2>
+<b>Feel free to propose other project themes.</b>
 
-<p>The Gaussian processes/Bayesian statistics path: <a href="https://jenfb.github.io/bkmr/overview.html" target="_blank">Kernel regression
-(Gaussian processes) and Bayesian
-statistics</a> are popular
-tools in the machine learning literature. The main idea behind these
-approaches is to flexibly model the relationship between a large
-number of variables and a particular outcome (dependent
-variable). This can form a second part of a project where for example
-standard Kernel regression methods are used on a specific data
-set. Alternatively, participants can opt to work on a large project
-relevant for their own research using gaussian processes and/or
-Bayesian machine Learning.
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="first-homework-for-next-week">First homework for next week </h2>
+
+<p>Next week we will hold our first lab session. Please take some time
+beforehand to identify the topic you find most interesting.
+</p>
+
+<p>If possible, prepare a short proposal in the form of 3&#8211;5 slides
+outlining your idea. You will have the opportunity to briefly present
+this proposal during the lab session.
+</p>
+
+<p>This will also serve as an excellent opportunity to find potential
+project partners.
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -1157,7 +1181,7 @@ $$
 
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="why-feed-forward-neural-networks-ffnn">Why Feed Forward Neural Networks (FFNN)?  </h2>
+<h2 id="why-feed-forward-neural-networks-ffnn-classical-approximation-theorem">Why Feed Forward Neural Networks (FFNN)? Classical approximation theorem  </h2>
 
 <p>According to the <em>Universal approximation theorem</em>, a feed-forward
 neural network with just a single hidden layer containing a finite
@@ -1165,6 +1189,53 @@ number of neurons can approximate a continuous multidimensional
 function to arbitrary accuracy, assuming the activation function for
 the hidden layer is a <b>non-constant, bounded and
 monotonically-increasing continuous function</b>.
+This statement is essentially a correct summary of the classical
+Universal Approximation Theorem as first proven by Cybenko
+(1989) based on activation functions like the <b>sigmoid</b> or <b>tanh</b> functions.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="digression-more-updated-variant">Digression,  more updated variant </h2>
+
+<p>However, the formulation in the statement, while basically technically
+correct, omits some details and is not the most general form of the
+theorem. A more precise phrasing is: for any continuous function \( f \)
+on a compact domain in \( \mathbb{R}^n \) and any error \( \varepsilon>0 \), there
+exists a feedforward network with one hidden layer (finite number of
+neurons) and a suitable activation \( \sigma \) (non-constant, bounded,
+continuous, monotonic) such that the network&#8217;s output uniformly
+approximates \( f \) within error \( \varepsilon \) .
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="getting-verbose">Getting verbose </h2>
+
+<p>The classical theorem&#8217;s conditions on the
+activation function (namely <b>non-constant, bounded, and
+monotonically-increasing continuous</b>) are sufficient but not
+necessary. Cybenko chose a sigmoidal activation in his proof, and
+Hornik et al. (1989) independently showed a similar result for
+so-called <b>squashing</b> functions (which are likewise bounded and
+monotonic). These conditions were convenient for those proofs, often
+using the Stone&#8211;Weierstrass theorem or functional analysis
+techniques.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="updates">Updates </h2>
+
+<p>Later research clarified that the essential
+requirement is that the activation function be non-polynomial. In
+1991, Hornik showed that it is not a special property of sigmoids per
+se, but the general two-layer network architecture that confers
+universality, in fact, a wide range of activation functions can lead
+to universal approximation.
+</p>
+
+<p>A famous result by Leshno,
+Lin, Pinkus, and Schocken (1993) proved that a feedforward network is
+a universal approximator if and only if the activation function is not
+a polynomial (on any interval).
 </p>
 
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
@@ -1255,7 +1326,7 @@ given by lower case letter letters and matrices and higher-order tensors given b
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
 <h2 id="vectors">Vectors </h2>
 
-<p>We start by defining a vector \( \boldsymbol{x} \)  with \( n \) components, with \( x_0 \) as our first element, as</p>
+<p>We define a vector \( \boldsymbol{x} \)  with \( n \) components, with \( x_0 \) as our first element, as</p>
 
 $$
 \boldsymbol{x} = \begin{bmatrix} x_0\\ x_1 \\ x_2 \\ \dots \\ \dots \\ x_{n-1} \end{bmatrix}.
@@ -1355,7 +1426,7 @@ vectors.
 <li> Finally we define a so-called cost or loss function which is used to gauge the quality of our model.</li> 
 </ol>
 <!-- !split --><br><br><br><br><br><br><br><br><br><br>
-<h2 id="the-optimzation-problem">The optimzation problem </h2>
+<h2 id="the-optimization-problem">The optimization problem </h2>
 
 <p>The cost function is a function of the unknown parameters
 \( \boldsymbol{\Theta} \) where the latter is a container for all possible
@@ -1713,6 +1784,198 @@ $$
 b_j^l \leftarrow b_j^l-\eta \frac{\partial {\cal C}}{\partial b_j^l}=b_j^l-\eta \delta_j^l,
 $$
 
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="homework-for-next-week">Homework for next week </h2>
+
+<p>Below, we provide code examples for the well-known MNIST dataset
+implemented in both PyTorch and TensorFlow, illustrating the
+construction and training of a feed-forward neural network.
+</p>
+
+<p>For next week&#8217;s homework, you are expected to revisit your own neural
+network implementations. You may, if you wish, use the provided
+PyTorch or TensorFlow examples as a reference or starting point.
+</p>
+
+<p>At <a href="https://github.com/CompPhysics/MachineLearning/blob/master/doc/pub/week43/ipynb/week43.ipynb" target="_blank"><tt>https://github.com/CompPhysics/MachineLearning/blob/master/doc/pub/week43/ipynb/week43.ipynb</tt></a> you will also find an example on how you can develop your own code from scratch.
+The PyTorch and TensorFlow/Keras examples are taken from this jupyter-notebook.
+</p>
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="using-pytorch-with-the-full-mnist-data-set">Using Pytorch with the full MNIST data set </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.nn</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">nn</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torch.optim</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">optim</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torchvision</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">torchvision.transforms</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">transforms</span>
+
+<span style="color: #408080; font-style: italic"># Device configuration: use GPU if available</span>
+device <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>device(<span style="color: #BA2121">&quot;cuda&quot;</span> <span style="color: #008000; font-weight: bold">if</span> torch<span style="color: #666666">.</span>cuda<span style="color: #666666">.</span>is_available() <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&quot;cpu&quot;</span>)
+
+<span style="color: #408080; font-style: italic"># MNIST dataset (downloads if not already present)</span>
+transform <span style="color: #666666">=</span> transforms<span style="color: #666666">.</span>Compose([
+    transforms<span style="color: #666666">.</span>ToTensor(),
+    transforms<span style="color: #666666">.</span>Normalize((<span style="color: #666666">0.5</span>,), (<span style="color: #666666">0.5</span>,))  <span style="color: #408080; font-style: italic"># normalize to mean=0.5, std=0.5 (approx. [-1,1] pixel range)</span>
+])
+train_dataset <span style="color: #666666">=</span> torchvision<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transform)
+test_dataset  <span style="color: #666666">=</span> torchvision<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>MNIST(root<span style="color: #666666">=</span><span style="color: #BA2121">&#39;./data&#39;</span>, train<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>, download<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>, transform<span style="color: #666666">=</span>transform)
+
+train_loader <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>DataLoader(train_dataset, batch_size<span style="color: #666666">=64</span>, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+test_loader  <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>utils<span style="color: #666666">.</span>data<span style="color: #666666">.</span>DataLoader(test_dataset, batch_size<span style="color: #666666">=64</span>, shuffle<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">NeuralNet</span>(nn<span style="color: #666666">.</span>Module):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">super</span>(NeuralNet, <span style="color: #008000">self</span>)<span style="color: #666666">.</span><span style="color: #0000FF">__init__</span>()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>fc1 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">28*28</span>, <span style="color: #666666">100</span>)   <span style="color: #408080; font-style: italic"># first hidden layer (784 -&gt; 100)</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>fc2 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">100</span>, <span style="color: #666666">100</span>)    <span style="color: #408080; font-style: italic"># second hidden layer (100 -&gt; 100)</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>fc3 <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>Linear(<span style="color: #666666">100</span>, <span style="color: #666666">10</span>)     <span style="color: #408080; font-style: italic"># output layer (100 -&gt; 10 classes)</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">forward</span>(<span style="color: #008000">self</span>, x):
+        x <span style="color: #666666">=</span> x<span style="color: #666666">.</span>view(x<span style="color: #666666">.</span>size(<span style="color: #666666">0</span>), <span style="color: #666666">-1</span>)         <span style="color: #408080; font-style: italic"># flatten images into vectors of size 784</span>
+        x <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>relu(<span style="color: #008000">self</span><span style="color: #666666">.</span>fc1(x))       <span style="color: #408080; font-style: italic"># hidden layer 1 + ReLU activation</span>
+        x <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>relu(<span style="color: #008000">self</span><span style="color: #666666">.</span>fc2(x))       <span style="color: #408080; font-style: italic"># hidden layer 2 + ReLU activation</span>
+        x <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>fc3(x)                   <span style="color: #408080; font-style: italic"># output layer (logits for 10 classes)</span>
+        <span style="color: #008000; font-weight: bold">return</span> x
+
+model <span style="color: #666666">=</span> NeuralNet()<span style="color: #666666">.</span>to(device)
+
+
+criterion <span style="color: #666666">=</span> nn<span style="color: #666666">.</span>CrossEntropyLoss()
+optimizer <span style="color: #666666">=</span> optim<span style="color: #666666">.</span>SGD(model<span style="color: #666666">.</span>parameters(), lr<span style="color: #666666">=0.01</span>, weight_decay<span style="color: #666666">=1e-4</span>)
+
+num_epochs <span style="color: #666666">=</span> <span style="color: #666666">10</span>
+<span style="color: #008000; font-weight: bold">for</span> epoch <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(num_epochs):
+    model<span style="color: #666666">.</span>train()  <span style="color: #408080; font-style: italic"># set model to training mode</span>
+    running_loss <span style="color: #666666">=</span> <span style="color: #666666">0.0</span>
+    <span style="color: #008000; font-weight: bold">for</span> images, labels <span style="color: #AA22FF; font-weight: bold">in</span> train_loader:
+        <span style="color: #408080; font-style: italic"># Move data to device (GPU if available, else CPU)</span>
+        images, labels <span style="color: #666666">=</span> images<span style="color: #666666">.</span>to(device), labels<span style="color: #666666">.</span>to(device)
+
+        optimizer<span style="color: #666666">.</span>zero_grad()            <span style="color: #408080; font-style: italic"># reset gradients to zero</span>
+        outputs <span style="color: #666666">=</span> model(images)          <span style="color: #408080; font-style: italic"># forward pass: compute predictions</span>
+        loss <span style="color: #666666">=</span> criterion(outputs, labels)  <span style="color: #408080; font-style: italic"># compute cross-entropy loss</span>
+        loss<span style="color: #666666">.</span>backward()                 <span style="color: #408080; font-style: italic"># backpropagate to compute gradients</span>
+        optimizer<span style="color: #666666">.</span>step()                <span style="color: #408080; font-style: italic"># update weights using SGD step </span>
+
+        running_loss <span style="color: #666666">+=</span> loss<span style="color: #666666">.</span>item()
+    <span style="color: #408080; font-style: italic"># Compute average loss over all batches in this epoch</span>
+    avg_loss <span style="color: #666666">=</span> running_loss <span style="color: #666666">/</span> <span style="color: #008000">len</span>(train_loader)
+    <span style="color: #008000">print</span>(<span style="color: #BA2121">f&quot;Epoch </span><span style="color: #BB6688; font-weight: bold">{</span>epoch<span style="color: #666666">+1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">/</span><span style="color: #BB6688; font-weight: bold">{</span>num_epochs<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">, Loss: </span><span style="color: #BB6688; font-weight: bold">{</span>avg_loss<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&quot;</span>)
+
+<span style="color: #408080; font-style: italic">#Evaluation on the Test Set</span>
+
+
+
+model<span style="color: #666666">.</span>eval()  <span style="color: #408080; font-style: italic"># set model to evaluation mode </span>
+correct <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+total <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+<span style="color: #008000; font-weight: bold">with</span> torch<span style="color: #666666">.</span>no_grad():  <span style="color: #408080; font-style: italic"># disable gradient calculation for evaluation </span>
+    <span style="color: #008000; font-weight: bold">for</span> images, labels <span style="color: #AA22FF; font-weight: bold">in</span> test_loader:
+        images, labels <span style="color: #666666">=</span> images<span style="color: #666666">.</span>to(device), labels<span style="color: #666666">.</span>to(device)
+        outputs <span style="color: #666666">=</span> model(images)
+        _, predicted <span style="color: #666666">=</span> torch<span style="color: #666666">.</span>max(outputs, dim<span style="color: #666666">=1</span>)  <span style="color: #408080; font-style: italic"># class with highest score</span>
+        total <span style="color: #666666">+=</span> labels<span style="color: #666666">.</span>size(<span style="color: #666666">0</span>)
+        correct <span style="color: #666666">+=</span> (predicted <span style="color: #666666">==</span> labels)<span style="color: #666666">.</span>sum()<span style="color: #666666">.</span>item()
+
+accuracy <span style="color: #666666">=</span> <span style="color: #666666">100</span> <span style="color: #666666">*</span> correct <span style="color: #666666">/</span> total
+<span style="color: #008000">print</span>(<span style="color: #BA2121">f&quot;Test Accuracy: </span><span style="color: #BB6688; font-weight: bold">{</span>accuracy<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.2f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">%&quot;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- !split --><br><br><br><br><br><br><br><br><br><br>
+<h2 id="and-a-similar-example-using-tensorflow-with-keras">And a similar example using Tensorflow with Keras </h2>
+
+
+<!-- code=python (!bc pycod) typeset with pygments style "default" -->
+<div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="inner_cell">
+      <div class="input_area">
+        <div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%;"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tf</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow</span> <span style="color: #008000; font-weight: bold">import</span> keras
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">tensorflow.keras</span> <span style="color: #008000; font-weight: bold">import</span> layers, regularizers
+
+<span style="color: #408080; font-style: italic"># Check for GPU (TensorFlow will use it automatically if available)</span>
+gpus <span style="color: #666666">=</span> tf<span style="color: #666666">.</span>config<span style="color: #666666">.</span>list_physical_devices(<span style="color: #BA2121">&#39;GPU&#39;</span>)
+<span style="color: #008000">print</span>(<span style="color: #BA2121">f&quot;GPUs available: </span><span style="color: #BB6688; font-weight: bold">{</span>gpus<span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&quot;</span>)
+
+<span style="color: #408080; font-style: italic"># 1) Load and preprocess MNIST</span>
+(x_train, y_train), (x_test, y_test) <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>datasets<span style="color: #666666">.</span>mnist<span style="color: #666666">.</span>load_data()
+<span style="color: #408080; font-style: italic"># Normalize to [0, 1]</span>
+x_train <span style="color: #666666">=</span> (x_train<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&quot;float32&quot;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>)
+x_test  <span style="color: #666666">=</span> (x_test<span style="color: #666666">.</span>astype(<span style="color: #BA2121">&quot;float32&quot;</span>) <span style="color: #666666">/</span> <span style="color: #666666">255.0</span>)
+
+<span style="color: #408080; font-style: italic"># 2) Build the model: 784 -&gt; 100 -&gt; 100 -&gt; 10</span>
+l2_reg <span style="color: #666666">=</span> <span style="color: #666666">1e-4</span>  <span style="color: #408080; font-style: italic"># L2 regularization strength</span>
+
+model <span style="color: #666666">=</span> keras<span style="color: #666666">.</span>Sequential([
+    layers<span style="color: #666666">.</span>Input(shape<span style="color: #666666">=</span>(<span style="color: #666666">28</span>, <span style="color: #666666">28</span>)),
+    layers<span style="color: #666666">.</span>Flatten(),
+    layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>,
+                 kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(l2_reg)),
+    layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">100</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;relu&quot;</span>,
+                 kernel_regularizer<span style="color: #666666">=</span>regularizers<span style="color: #666666">.</span>l2(l2_reg)),
+    layers<span style="color: #666666">.</span>Dense(<span style="color: #666666">10</span>, activation<span style="color: #666666">=</span><span style="color: #BA2121">&quot;softmax&quot;</span>)  <span style="color: #408080; font-style: italic"># output probabilities for 10 classes</span>
+])
+
+<span style="color: #408080; font-style: italic"># 3) Compile with SGD + weight decay via L2 regularizers</span>
+model<span style="color: #666666">.</span>compile(
+    optimizer<span style="color: #666666">=</span>keras<span style="color: #666666">.</span>optimizers<span style="color: #666666">.</span>SGD(learning_rate<span style="color: #666666">=0.01</span>),
+    loss<span style="color: #666666">=</span><span style="color: #BA2121">&quot;sparse_categorical_crossentropy&quot;</span>,
+    metrics<span style="color: #666666">=</span>[<span style="color: #BA2121">&quot;accuracy&quot;</span>],
+)
+
+model<span style="color: #666666">.</span>summary()
+
+<span style="color: #408080; font-style: italic"># 4) Train</span>
+history <span style="color: #666666">=</span> model<span style="color: #666666">.</span>fit(
+    x_train, y_train,
+    epochs<span style="color: #666666">=10</span>,
+    batch_size<span style="color: #666666">=64</span>,
+    validation_split<span style="color: #666666">=0.1</span>,  <span style="color: #408080; font-style: italic"># optional: monitor validation during training</span>
+    verbose<span style="color: #666666">=1</span>
+)
+
+<span style="color: #408080; font-style: italic"># 5) Evaluate on test set</span>
+test_loss, test_acc <span style="color: #666666">=</span> model<span style="color: #666666">.</span>evaluate(x_test, y_test, verbose<span style="color: #666666">=0</span>)
+<span style="color: #008000">print</span>(<span style="color: #BA2121">f&quot;Test accuracy: </span><span style="color: #BB6688; font-weight: bold">{</span>test_acc<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">, Test loss: </span><span style="color: #BB6688; font-weight: bold">{</span>test_loss<span style="color: #BB6688; font-weight: bold">:</span><span style="color: #BA2121">.4f</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&quot;</span>)
+</pre>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="output_subarea output_stream output_stdout output_text">          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ------------------- end of main content --------------- -->
 <center style="font-size:80%">
