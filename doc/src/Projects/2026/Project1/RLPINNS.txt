@@ -1,0 +1,148 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{graphicx}
+
+\geometry{margin=1in}
+
+\title{\textbf{Reinforcement Learning, Generative Models, and PINNs:\\
+Neural Networks as PDE Solvers}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Project Overview}
+
+Physics-Informed Neural Networks (PINNs) have emerged as a powerful
+framework for solving partial differential equations (PDEs) by
+embedding physical laws directly into neural network training. At the
+same time, modern reinforcement learning (RL) and generative models
+are increasingly understood as numerical methods for solving PDEs
+arising in optimal control, stochastic dynamics, and probabilistic
+inference.
+
+The goal of this project is to develop a unified mathematical
+perspective in which reinforcement learning, generative modeling, and
+PINNs are viewed as closely related approaches to solving
+PDE-constrained optimization problems. Neural networks are treated as
+continuous function approximators, trained by minimizing residuals of
+governing equations such as the Hamilton--Jacobi--Bellman equation and
+the Fokker--Planck equation.
+
+
+
+\section{PINNs as Variational PDE Solvers}
+
+Consider a general PDE of the form
+\begin{equation}
+\mathcal{N}[u](x,t) = 0, \quad (x,t) \in \Omega,
+\end{equation}
+with appropriate initial and boundary conditions.
+
+In PINNs, the solution $u(x,t)$ is approximated by a neural network $u_\theta(x,t)$, and training is performed by minimizing a physics-informed loss
+\begin{equation}
+\mathcal{L}_{\text{PINN}}(\theta) =
+\| \mathcal{N}[u_\theta] \|^2_{L^2(\Omega)}
++ \| u_\theta - u_{\text{BC}} \|^2
++ \| u_\theta - u_{\text{IC}} \|^2.
+\end{equation}
+
+This framework provides the mathematical foundation for interpreting neural networks as nonlinear trial spaces in Galerkin- or collocation-type PDE solvers.
+
+\subsection*{Derivation Task 1}
+Show that minimizing the PINN loss corresponds to a weak or residual-based formulation of the PDE, and compare it to classical Galerkin methods.
+
+\section{Reinforcement Learning and the HJB Equation}
+
+In continuous-state and continuous-time reinforcement learning, the value function satisfies the Hamilton--Jacobi--Bellman (HJB) equation
+\begin{equation}
+\partial_t V + \min_u \left\{ \ell(x,u) + \nabla V \cdot f(x,u) \right\}
++ \frac{1}{2}\mathrm{Tr}\!\left(\sigma\sigma^T \nabla^2 V\right) = 0.
+\end{equation}
+
+In this project, the value function is approximated by a neural network $V_\theta(x,t)$, and training is performed by minimizing the PDE residual:
+\begin{equation}
+\mathcal{L}_{\text{HJB}}(\theta) =
+\| \partial_t V_\theta + \mathcal{H}(x,\nabla V_\theta,\nabla^2 V_\theta) \|^2.
+\end{equation}
+
+From this perspective, deep reinforcement learning becomes a PINN-based solver for nonlinear backward PDEs.
+
+\subsection*{Derivation Task 2}
+Derive the HJB equation from the dynamic programming principle and explain how value-based reinforcement learning can be interpreted as a residual minimization problem.
+
+\section{Generative Models and Forward PDEs}
+
+Generative models aim to learn probability densities governed by stochastic dynamics. Consider the stochastic differential equation
+\begin{equation}
+dX_t = b(X_t,t)\,dt + \sqrt{2\beta^{-1}}\,dW_t,
+\end{equation}
+whose probability density $\rho(x,t)$ evolves according to the Fokker--Planck equation
+\begin{equation}
+\partial_t \rho = -\nabla \cdot (b\rho) + \beta^{-1}\Delta \rho.
+\end{equation}
+
+In PINN-based generative modeling, a neural network $\rho_\theta(x,t)$ or score function $s_\theta(x,t) = \nabla \log \rho_\theta(x,t)$ is trained to satisfy this PDE.
+
+\subsection*{Derivation Task 3}
+Derive the Fokker--Planck equation from the underlying SDE and formulate a PINN loss for learning $\rho(x,t)$.
+
+\section{Diffusion Models as PINNs}
+
+Diffusion and score-based models learn the reverse-time dynamics associated with the Fokker--Planck equation:
+\begin{equation}
+dX_t = \left[b(X_t,t) - 2\beta^{-1}\nabla \log \rho(x,t)\right]dt + \sqrt{2\beta^{-1}}\,dW_t.
+\end{equation}
+
+This reverse-time PDE is closely related to optimal control problems and entropy-regularized RL.
+
+\subsection*{Derivation Task 4}
+Show that the score-matching objective used in diffusion models corresponds to minimizing a residual of the backward Kolmogorov equation.
+
+\section{Unifying Control and Inference via PINNs}
+
+A central theme of the project is the unification:
+\begin{center}
+\begin{tabular}{l l}
+\textbf{Reinforcement Learning} & \textbf{Generative Learning} \\
+\hline
+HJB equation & Fokker--Planck equation \\
+Backward PDE & Forward PDE \\
+Value function & Log-density / score \\
+Optimal control & Probabilistic inference \\
+\end{tabular}
+\end{center}
+
+Both problems can be solved using PINNs by enforcing PDE constraints directly in the loss function.
+
+\subsection*{Derivation Task 5}
+Demonstrate how a logarithmic transformation of the value function leads to a density-based formulation, and relate this to entropy-regularized control.
+
+\section{Computational Experiments}
+
+Students will:
+\begin{itemize}
+  \item Implement a PINN for a low-dimensional HJB equation,
+  \item Implement a PINN for the corresponding Fokker--Planck equation,
+  \item Compare PINN-based solutions with reinforcement learning and diffusion-model approaches.
+\end{itemize}
+
+Emphasis is placed on convergence, stability, and approximation quality.
+
+\section*{Expected Outcomes}
+
+By completing this project, students will:
+\begin{itemize}
+  \item Understand PINNs as a unifying framework for learning PDE solutions,
+  \item Interpret reinforcement learning and generative models through PDE theory,
+  \item Connect control, inference, and physics-informed learning,
+  \item Gain tools applicable to scientific machine learning, optimal control, and computational physics.
+\end{itemize}
+
+\end{document}
+

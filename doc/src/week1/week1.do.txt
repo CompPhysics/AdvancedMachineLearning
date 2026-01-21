@@ -40,7 +40,7 @@ DATE: January 22, 2026
 * _Deep learning, generative methods_
   o Basics of generative models
   o Boltzmann machines and energy based methods
-  o Diffusion models (tentative)
+  o Diffusion models
   o Variational autoencoders (VAEe)
   o Generative Adversarial Networks (GANs)
   o Autoregressive methods (tentative)
@@ -112,11 +112,15 @@ The lectures during the first part of the semester deal with deep learning metho
 * Recurrent neural networks (RNNs)
 * Autoencoders (AEs)
 
-Based on these topics we can define one project with deadline March 20 or a one semester-long project with final deadline June 1 that focuses on
+Based on these topics we can define one project with deadline March 20
+or a one semester-long project with final deadline June 1 that focuses
+on
 
 * Physics Informed neural network path (PINNs) with a focus on partial differential equations (PDEs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected PDEs using NNs. These can be expanded to include studies of RNNs and/or Autoencoders. In the lectures we will use selected PDEs to illustrate how we can use neural networks to solve differential equations.
 
-For coding, we leave it to you to decide if you wish to write your own code or use deep learning libraries like PyTorch, Tensorflow/Keras, or other. 
+For coding, we leave it to you to decide if you wish to write your own
+code or use deep learning libraries like PyTorch, Tensorflow/Keras, or
+other.
 
 !split
 ===== Classification projects =====
@@ -144,58 +148,105 @@ illustrating that every practical behavior of a neural network
 
 
 !split
-===== Write your own CNN or RNN (or even a light LLM) from scratch =====
-
-Here we propose a path where you develop your
-own code for a convolutional or eventually recurrent neural network
-and apply this to data selects of your own selection. The code should
-be object oriented and flexible allowing for eventual extensions by
-including different Loss/Cost functions and other
-functionalities. Feel free to select data sets from those suggested
-below here. This code can also be extended upon by adding for example
-autoencoders. You can compare your own codes with implementations
-using TensorFlow(Keras)/PyTorch or other libraries.
-
-
-!split
 ===== High-performance computing path =====
 
-The goal of this project is to study *feed-forward neural networks* as
-mathematical objects and numerical algorithms, with particular
-emphasis on how their structure interacts with GPU architectures. The
-project combines theoretical analysis (linear algebra, calculus,
-optimization, and numerical stability) with practical implementation
-and performance modeling on CPUs and GPUs.
+The previous project could be extended by adding an explicit
+high-performance computing element.  The goal of this project could be
+to study *feed-forward neural networks* as mathematical objects and
+numerical algorithms, with particular emphasis on how their structure
+interacts with GPU architectures. The project combines theoretical
+analysis (linear algebra, calculus, optimization, and numerical
+stability) with practical implementation and performance modeling on
+CPUs and GPUs.
 
-
-o Implementing generative methods, starts normally with discriminative methods
-
-o The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
 
 
 !split
-===== More on projects and final grade =====
+===== Write your own CNN or RNN (or even a light LLM) from scratch =====
 
-o Two projects which count $50\%$ each for the final grade
-o Or alternatively one project which counts $100\%$ of the final grade.
-o Deadline first project March 20
-o Deadline second project June 1
-o If you opt for one project only, we need a temporary report (1-2 pages) of what has been done by March 20.
-
-
-!split
-===== The generative models =====
-
-This path brings us from discriminative models (like the standard application of NNs, CNNs etc) to generative models. Two projects that follow to a large extent
-the lectures. Topics for data sets will be discussed.
+Here we propose a path where you develop your own code for a
+convolutional or eventually recurrent neural network and apply this to
+data of your own selection. The code should be object oriented and
+flexible allowing for eventual extensions by including different
+Loss/Cost functions and other functionalities. Feel free to select
+data sets from those suggested by us or use your own data.  This code
+can also be extended upon by adding for example autoencoders. You can
+compare your own codes with implementations using
+TensorFlow(Keras)/PyTorch or other libraries.
 
 
 !split
-===== The application path/own data =====
+===== Projects which link with the second part of the lectures =====
+In the second part of the lectures, we will focus on generative methods, with an emphasis on
+* Boltzmann machines and energy based methods
+* Diffusion models
+* Variational autoencoders (VAEe)
+* Generative Adversarial Networks (GANs)
+* Autoregressive methods (tentative)
 
-The application path: Here you can use the most relevant method(s)
+
+!split
+===== Generative modeling =====
+
+This proposal can be aligned with the classification project that
+includes CNNs and AEs.  Deep learning methods can broadly be divided
+into discriminative models, which learn decision boundaries for
+labeled data, and generative models, which learn probability
+distributions over data. CNNs dominate in classification tasks, while
+generative models such as VAEs, Boltzmann machines, and diffusion
+models provide probabilistic descriptions of data and enable
+synthesis, uncertainty quantification, and representation learning.
+
+The goal of this project is to develop a unified mathematical and
+computational understanding of these model classes. Here one can 
+analyze classification and generative learning as optimization
+problems over high-dimensional function spaces, emphasizing
+probabilistic modeling, variational principles, and numerical
+optimization.
+
+
+!split
+===== Reinforcement learning, PDE part =====
+
+Reinforcement learning (RL) and modern generative models are
+increasingly understood through the lens of partial differential
+equations (PDEs), stochastic processes, and variational
+principles. Reinforcement learning is closely related to optimal
+control and Hamilton--Jacobi--Bellman (HJB) equations, while
+generative models such as diffusion models are
+connected to Fokker--Planck equations, stochastic differential
+equations (SDEs), and gradient flows in probability space.
+
+The goal of this project is to develop a unified mathematical
+understanding of reinforcement learning and generative learning as
+PDE-driven optimization problems. Here one can analyze value
+functions, policies, and probability densities as solutions to PDEs,
+and compare how control and inference emerge from related mathematical
+structures.
+
+!split
+===== New ML methods =====
+
+A recently developed machine method, dubbed Parametric Matrix Model
+(PMM), has been successfully adapted to the parametrization of
+differential equations, eigenvalue problems and classification
+problems. See the article at URL:"https://www.nature.com/articles/s41467-025-61362-4" for more details.
+
+Here one could compare this method to the PINNs project and the
+application to the solution of PDEs. Alternatively, one can replace
+the PDE data with classification problems.
+
+
+!split
+===== Own data =====
+
+You can obviously used the methods we discuss during the lectures to
+analyze your own data, be these from your thesis work or a research
+problem you are interested in.
+Here you can use the most relevant method(s)
 (say convolutional neural networks for images) and apply this(these)
 to data sets relevant for your own research.
+
 
 !split
 ===== Gaussian processes and Bayesian analysis =====
@@ -212,18 +263,17 @@ set. Alternatively, participants can opt to work on a large project
 relevant for their own research using gaussian processes and/or
 Bayesian machine Learning.
 
+
+
 !split
-===== HPC path =====
+===== More on projects and final grade =====
 
-Another alternative is to study high-performance computing aspects in
-designing ML codes. This can also be linked with an exploration of
-mathematical aspects of deep learning methods.
-
-
-
-
-
-
+o Two projects which count $50\%$ each for the final grade
+o Or alternatively one project which counts $100\%$ of the final grade.
+o Deadline first project March 20
+o Deadline second project June 1
+o If you opt for one project only, we need a temporary report (1-2 pages) of what has been done by March 20.
+At the link URL:"https://github.com/CompPhysics/AdvancedMachineLearning/tree/main/doc/Projects/ProjectExamples", you will find examples of previous projects.
 
 
 
@@ -666,15 +716,6 @@ monotonically-increasing continuous function_.
 
 
 
-!split
-===== "Dilute neutron star matter from neural-network quantum states by Fore et al, Physical Review Research 5, 033062 (2023)":"https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.5.033062" at density $\rho=0.04$ fm$^{-3}$ =====
-
-!bblock
-FIGURE: [figures/nmatter.png, width=700 frac=0.9]
-!eblock
-
-
-
 
 !split
 ===== The electron gas in three dimensions with $N=14$ electrons (Wigner-Seitz radius $r_s=2$ a.u.), "Gabriel Pescia, Jane Kim et al. arXiv.2305.07240,":"https://doi.org/10.48550/arXiv.2305.07240" =====
@@ -685,117 +726,6 @@ FIGURE: [figures/elgasnew.png, width=700 frac=0.9]
 
 
 
-
-!split
-===== Generative models: Why Boltzmann machines? =====
-
-What is known as restricted Boltzmann Machines (RMB) have received a
-lot of attention lately.  One of the major reasons is that they can be
-stacked layer-wise to build deep neural networks that capture
-complicated statistics.
-
-The original RBMs had just one visible layer and a hidden layer, but
-recently so-called Gaussian-binary RBMs have gained quite some
-popularity in imaging since they are capable of modeling continuous
-data that are common to natural images.
-
-Furthermore, they have been used to solve complicated quantum
-mechanical many-particle problems or classical statistical physics
-problems like the Ising and Potts classes of models.
-
-
-
-
-
-
-!split
-===== The structure of the RBM network =====
-
-FIGURE: [figures/RBM.pdf, width=800 frac=1.0]
-
-
-
-!split
-===== The network =====
-
-_The network layers_:
-  o A function $\bm{x}$ that represents the visible layer, a vector of $M$ elements (nodes). This layer represents both what the RBM might be given as training input, and what we want it to be able to reconstruct. This might for example be the pixels of an image, the spin values of the Ising model, or coefficients representing speech.
-  o The function $\bm{h}$ represents the hidden, or latent, layer. A vector of $N$ elements (nodes). Also called "feature detectors".
-
-!split
-===== Goals =====
-
-The goal of the hidden layer is to increase the model's expressive
-power. We encode complex interactions between visible variables by
-introducing additional, hidden variables that interact with visible
-degrees of freedom in a simple manner, yet still reproduce the complex
-correlations between visible degrees in the data once marginalized
-over (integrated out).
-
-_The network parameters, to be optimized/learned_:
-  o $\bm{a}$ represents the visible bias, a vector of same length as $\bm{x}$.
-  o $\bm{b}$ represents the hidden bias, a vector of same lenght as $\bm{h}$.
-  o $W$ represents the interaction weights, a matrix of size $M\times N$.
-
-
-!split
-===== Joint distribution =====
-The restricted Boltzmann machine is described by a Bolztmann distribution
-!bt
-\[
-	P_{\mathrm{rbm}}(\bm{x},\bm{h}) = \frac{1}{Z} \exp{-E(\bm{x},\bm{h})},
-\]
-!et
-where $Z$ is the normalization constant or partition function, defined as 
-!bt
-\[
-	Z = \int \int \exp{-E(\bm{x},\bm{h})} d\bm{x} d\bm{h}.
-\]
-!et
-Note the absence of the inverse temperature in these equations.
-
-!split
-===== Network Elements, the energy function  =====
-
-The function $E(\bm{x},\bm{h})$ gives the _energy_ of a
-configuration (pair of vectors) $(\bm{x}, \bm{h})$. The lower
-the energy of a configuration, the higher the probability of it. This
-function also depends on the parameters $\bm{a}$, $\bm{b}$ and
-$W$. Thus, when we adjust them during the learning procedure, we are
-adjusting the energy function to best fit our problem.
-
-Recently these energy functions have been replaced by Neural Networks. This will be discussed later in the course.
-
-!split
-===== Defining different types of RBMs (Energy based models) =====
-
-There are different variants of RBMs, and the differences lie in the types of visible and hidden units we choose as well as in the implementation of the energy function $E(\bm{x},\bm{h})$. The connection between the nodes in the two layers is given by the weights $w_{ij}$. 
-
-!bblock Binary-Binary RBM:
-
-RBMs were first developed using binary units in both the visible and hidden layer. The corresponding energy function is defined as follows:
-!bt
-\[
-	E(\bm{x}, \bm{h}) = - \sum_i^M x_i a_i- \sum_j^N b_j h_j - \sum_{i,j}^{M,N} x_i w_{ij} h_j,
-\]
-!et
-where the binary values taken on by the nodes are most commonly 0 and 1.
-!eblock
-
-
-!split
-===== Gaussian binary =====
-
-
-!bblock Gaussian-Binary RBM:
-
-Another varient is the RBM where the visible units are Gaussian while the hidden units remain binary:
-!bt
-\[
-	E(\bm{x}, \bm{h}) = \sum_i^M \frac{(x_i - a_i)^2}{2\sigma_i^2} - \sum_j^N b_j h_j - \sum_{i,j}^{M,N} \frac{x_i w_{ij} h_j}{\sigma_i^2}. 
-\]
-!et
-!eblock
 
 
 !split
@@ -847,13 +777,6 @@ necessarily normalized and is normally called the likelihood function.
 The function $p(X)$ on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.
 
 
-
-!split
-===== "Quantified limits of the nuclear landscape":"https://journals.aps.org/prc/abstract/10.1103/PhysRevC.101.044307" =====
-
-Predictions made with eleven global mass model and Bayesian model averaging
-
-FIGURE: [figures/landscape.jpg, width=800 frac=1.0]
 
 
 !split
@@ -956,149 +879,6 @@ or in terms of its column vectors $\bm{a}_i$ as
 \]
 !et
 We can think of a matrix as a diagram of in general $n$ rowns and $m$ columns. In the example here we have a square matrix.
-
-!split
-===== The inverse of a matrix  =====
-!bblock
-The inverse of a square matrix (if it exists) is defined by
-
-!bt
-\[
-\bm{A}^{-1} \cdot \bm{A} = I,
-\]
-!et
-where $\bm{I}$ is the unit matrix.
-!eblock
-
-!split
-===== Basic Matrix Features =====
-
-!bblock Matrix Properties Reminder
-
-|----------------------------------------------------------------------|
-|       Relations      |       Name      | matrix elements             |
-|----------------------------------------------------------------------|
-| $A = A^{T}$         | symmetric       | $a_{ij} = a_{ji}$            |
-| $A = \left (A^{T} \right )^{-1}$ | real orthogonal | $\sum_k a_{ik} a_{jk} = \sum_k a_{ki} a_{kj} = \delta_{ij}$ |
-| $A = A^{ * }$          | real matrix     | $a_{ij} = a_{ij}^{ * }$       |
-| $A = A^{\dagger}$     |  hermitian      | $a_{ij} = a_{ji}^{ * }$       |
-| $A = \left (A^{\dagger} \right )^{-1}$ | unitary | $\sum_k a_{ik} a_{jk}^{ * } = \sum_k a_{ki}^{ * } a_{kj} = \delta_{ij}$ |
-|----------------------------------------------------------------------|
-
-!eblock
-
-!split
-===== Some famous Matrices =====
-
-  * Diagonal if $a_{ij}=0$ for $i\ne j$
-  * Upper triangular if $a_{ij}=0$ for $i > j$
-  * Lower triangular if $a_{ij}=0$ for $i < j$
-  * Upper Hessenberg if $a_{ij}=0$ for $i > j+1$
-  * Lower Hessenberg if $a_{ij}=0$ for $i < j+1$
-  * Tridiagonal if $a_{ij}=0$ for $|i -j| > 1$
-  * Lower banded with bandwidth $p$: $a_{ij}=0$ for $i > j+p$
-  * Upper banded with bandwidth $p$: $a_{ij}=0$ for $i < j+p$
-  * Banded, block upper triangular, block lower triangular....
-
-!split
-===== Matrix Features =====
-
-!bblock Some Equivalent Statements
-For an $n\times n$ matrix  $\bm{A}$ the following properties are all equivalent
-
-  * If the inverse of $\bm{A}$ exists, $\bm{A}$ is nonsingular.
-  * The equation $\bm{Ax}=0$ implies $\bm{x}=0$.
-  * The rows of $\bm{A}$ form a basis of $R^N$.
-  * The columns of $\bm{A}$ form a basis of $R^N$.
-  * $\bm{A}$ is a product of elementary matrices.
-  * $0$ is not an eigenvalue of $\bm{A}$.
-!eblock
-
-!split
-===== Important Mathematical Operations =====
-
-The basic matrix operations that we will deal with are addition and subtraction
-
-!bt
-\[
-\bm{A}= \bm{B}\pm\bm{C}  \Longrightarrow a_{ij} = b_{ij}\pm c_{ij},
-\]
-!et
-and scalar-matrix multiplication
-
-!bt
-\[
-\bm{A}= \gamma\bm{B}  \Longrightarrow a_{ij} = \gamma b_{ij}.
-\]
-!et
-
-
-!split
-===== Vector-matrix and Matrix-matrix multiplication =====
-
-We have also vector-matrix multiplications 
-!bt
-\[
-\bm{y}=\bm{Ax}   \Longrightarrow y_{i} = \sum_{j=1}^{n} a_{ij}x_j,
-\]
-!et
-and matrix-matrix multiplications
-
-!bt
-\[
-\bm{A}=\bm{BC}   \Longrightarrow a_{ij} = \sum_{k=1}^{n} b_{ik}c_{kj},
-\]
-!et
-and transpositions of a matrix
-
-!bt
-\[
-\bm{A}=\bm{B}^T   \Longrightarrow a_{ij} = b_{ji}.
-\]
-!et
-
-!split
-===== Important Mathematical Operations =====
-
-Similarly, important vector operations that we will deal with are addition and subtraction
-
-!bt
-\[
-\bm{x}= \bm{y}\pm\bm{z}  \Longrightarrow x_{i} = y_{i}\pm z_{i},
-\]
-!et
-scalar-vector multiplication
-
-!bt
-\[
-\bm{x}= \gamma\bm{y}  \Longrightarrow x_{i} = \gamma y_{i},
-\]
-!et
-
-
-!split
-===== Other important mathematical operations =====
-and vector-vector multiplication (called Hadamard multiplication)
-!bt
-\[
-\bm{x}=\bm{yz}   \Longrightarrow x_{i} = y_{i}z_i.
-\]
-!et
-Finally, as already metnioned, the inner or so-called dot product  resulting in a constant
-
-!bt
-\[
-x=\bm{y}^T\bm{z}   \Longrightarrow x = \sum_{j=1}^{n} y_{j}z_{j},
-\]
-!et
-and the outer product, which yields a matrix,
-
-!bt
-\[
-\bm{A}=  \bm{y}\bm{z}^T \Longrightarrow  a_{ij} = y_{i}z_{j},
-\]
-!et
-
 
 
 !split
