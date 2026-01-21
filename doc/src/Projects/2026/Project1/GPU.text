@@ -1,0 +1,137 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{graphicx}
+
+\geometry{margin=1in}
+
+\title{\textbf{Mathematical and Computational Foundations of\\
+GPU-Accelerated Feed-Forward Neural Networks}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Project Overview}
+
+Modern deep learning relies fundamentally on massively parallel
+hardware, most notably graphics processing units (GPUs). While neural
+networks are often introduced from an algorithmic or
+application-driven perspective, they can also be viewed as large-scale
+numerical optimization problems whose efficiency and feasibility
+depend critically on hardware-aware implementations.
+
+The goal of this project is to study \emph{feed-forward neural
+networks} as mathematical objects and numerical algorithms, with
+particular emphasis on how their structure interacts with GPU
+architectures. The project combines theoretical analysis (linear
+algebra, calculus, optimization, and numerical stability) with
+practical implementation and performance modeling on CPUs and GPUs.
+
+
+\section{Mathematical Formulation of Feed-Forward Neural Networks}
+
+A feed-forward neural network defines a parametric function
+\begin{equation}
+f_\theta(x) = \phi_L\!\left(W_L \phi_{L-1}\!\left(\cdots \phi_1(W_1 x + b_1)\cdots\right) + b_L\right),
+\end{equation}
+where $W_\ell \in \mathbb{R}^{n_\ell \times n_{\ell-1}}$ are weight matrices, $b_\ell$ are bias vectors, and $\phi_\ell$ are nonlinear activation functions applied element-wise.
+
+From a mathematical perspective, the network is a composition of linear operators and nonlinear maps. The project investigates:
+\begin{itemize}
+  \item Stability and conditioning of deep operator compositions,
+  \item The role of activation functions in gradient propagation,
+  \item Jacobian and Hessian structure of the network with respect to parameters.
+\end{itemize}
+
+\section{Backpropagation and Optimization}
+
+Training the network corresponds to minimizing a loss function
+\begin{equation}
+\min_\theta \; \mathcal{L}(\theta) = \frac{1}{N}\sum_{i=1}^N \ell(f_\theta(x_i), y_i),
+\end{equation}
+where $(x_i,y_i)$ are labeled data.
+
+Backpropagation is derived rigorously as reverse-mode automatic differentiation of the composite function $f_\theta$. Students will derive the gradient expressions
+\begin{equation}
+\nabla_{W_\ell} \mathcal{L} = \delta_\ell h_{\ell-1}^T,
+\end{equation}
+where $\delta_\ell$ denotes the backpropagated error at layer $\ell$.
+
+The project analyzes stochastic gradient descent as a noisy optimization method, focusing on:
+\begin{itemize}
+  \item Step-size stability and convergence,
+  \item Conditioning of the loss landscape,
+  \item Effects of mini-batch size on gradient variance.
+\end{itemize}
+
+\section{GPU Architecture as a Mathematical Model}
+
+GPUs are modeled as massively parallel SIMD/SIMT processors with hierarchical memory. The project introduces:
+\begin{itemize}
+  \item Thread- and block-level parallelism,
+  \item Memory hierarchy (registers, shared memory, global memory),
+  \item Arithmetic intensity and latency hiding.
+\end{itemize}
+
+Performance is modeled via the decomposition
+\begin{equation}
+T_{\text{total}} = T_{\text{compute}} + T_{\text{memory}},
+\end{equation}
+leading to a roofline-style analysis that compares theoretical peak performance with measured throughput.
+
+\section{Neural Networks as GPU Algorithms}
+
+Both the forward and backward passes of a feed-forward network are dominated by dense linear algebra:
+\begin{itemize}
+  \item Forward propagation as batched matrix multiplication,
+  \item Backpropagation as transposed matrix multiplication and reductions,
+  \item Element-wise nonlinear kernels.
+\end{itemize}
+
+Students will derive floating-point operation counts and memory traffic estimates for each layer, and analyze how batch size and layer dimensions affect GPU efficiency.
+
+\section{Implementation and Benchmarking}
+
+The practical component consists of implementing identical feed-forward networks for regression and classification using:
+\begin{itemize}
+  \item CPU execution (baseline),
+  \item GPU execution (CUDA-enabled framework).
+\end{itemize}
+
+Controlled experiments vary:
+\begin{itemize}
+  \item Network depth and width,
+  \item Batch size,
+  \item Numerical precision (FP32 vs mixed precision).
+\end{itemize}
+
+Performance metrics include wall-clock time, throughput, and scaling behavior. Profiling tools are used to relate empirical results to theoretical performance models.
+
+\section{Numerical Effects and Precision}
+
+The project investigates the mathematical consequences of finite-precision arithmetic on GPUs, including:
+\begin{itemize}
+  \item Floating-point round-off error in gradient computation,
+  \item Stability of optimization under reduced precision,
+  \item Comparison of FP32 and mixed-precision training.
+\end{itemize}
+
+The sensitivity of gradient descent to numerical perturbations is analyzed both theoretically and empirically.
+
+\section*{Expected Outcomes}
+
+By completing this project, students will:
+\begin{itemize}
+  \item Understand neural networks as structured numerical algorithms,
+  \item Relate abstract mathematical concepts to concrete GPU performance limits,
+  \item Gain experience in performance modeling and scientific benchmarking,
+  \item Develop transferable skills relevant to computational physics, HPC, and scientific machine learning.
+\end{itemize}
+
+\end{document}
+
