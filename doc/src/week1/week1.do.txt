@@ -6,28 +6,28 @@ DATE: January 22, 2026
 ===== Overview of first week, January 19-23, 2026  =====
 
 !bblock 
-o Presentation of course
-o Discussion of possible projects
-o Deep learning methods, mathematics and  review of neural networks
+* Presentation of course
+* Discussion of possible projects
+* Deep learning methods, mathematics and  review of neural networks
 #  o "Video of lecture at URL:"https://youtu.be/SY57dC46L9o"
-o Recommended reading first three weeks: Raschka et al chapters 11-12 and Goodfellow et al chapters 6-8
-o Permanent Zoom link for the whole semester is URL:"https://uio.zoom.us/my/mortenhj"
+* Recommended reading first three weeks: Raschka et al chapters 11-12 and Goodfellow et al chapters 6-8
+*  Permanent Zoom link for the whole semester is URL:"https://uio.zoom.us/my/mortenhj"
 !eblock
 
 
 !split
 ===== Practicalities  =====
 
-o Lectures Thursdays 1015am-12pm, room FØ434, Department of Physics
-o Lab and exercise sessions Thursdays 1215pm-2pm, room FØ434, Department of Physics 
-o We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants
-o No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively, one long project which counts 100% of the final grade
-o All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
+* Lectures Thursdays 1015am-12pm, room FØ434, Department of Physics
+* Lab and exercise sessions Thursdays 1215pm-2pm, room FØ434, Department of Physics. First time january 29. Note that this is not in the official schedule.
+* We plan to work on two projects which will define the content of the course, the format can be agreed upon by the participants. Alternatively, one project only.
+* No exam, only two projects. Each projects counts 1/2 of the final grade. Alternatively, one long project which counts 100% of the final grade
+* All info at the GitHub address URL:"https://github.com/CompPhysics/AdvancedMachineLearning"
 
 !split
 =====  Deep learning methods covered, tentative =====
 
-o _Deep learning_, often described as discriminative methods
+* _Deep learning_, often described as discriminative methods
   o Feed forward neural networks and its mathematics (NNs)
   o Convolutional neural networks (CNNs)
   o Recurrent neural networks (RNNs)
@@ -37,7 +37,7 @@ o _Deep learning_, often described as discriminative methods
 
 !split
 ===== Generative methods =====
-o _Deep learning, generative methods_
+* _Deep learning, generative methods_
   o Basics of generative models
   o Boltzmann machines and energy based methods
   o Diffusion models (tentative)
@@ -48,12 +48,12 @@ o _Deep learning, generative methods_
 !split
 ===== Reinforcement learning =====
 
-o Basics of rerinforcement learning (tentative)
+* Basics of rerinforcement learning (tentative)
 
 !split
 ===== Both discriminative and generative =====
 
-o _Physics informed neural networks, PINNs_
+* _Physics informed neural networks, PINNs_
 
 Projects can in general be designed to fit specific scientific goals
 and research paths of the participants.
@@ -76,37 +76,96 @@ variable).
 
 These topics are not covered by the lectures but can be used to define projects.
 
+
+
+!split
+===== Good books with hands-on material and codes =====
+!bblock
+* "Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
+* "David Foster, Generative Deep Learning with TensorFlow":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"
+* "Bali and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
+!eblock
+
+All three books have GitHub addresses from where  one can download all codes. We will borrow most of the material from these three texts as well as 
+from Goodfellow, Bengio and Courville's text "Deep Learning":"https://www.deeplearningbook.org/"
+
+
+
+
 !split
 ===== Project paths, overarching view =====
 
 The course can also be used as a self-study course and besides the
 lectures, many of you may wish to independently work on your own
-projects related to for example your thesis or research. In general,
-we have often followed five main paths for the project(s):
+projects related to for example your thesis project or own
+research. In general, we have often followed five main paths for the
+project(s). Below is a description of the various possibilities and
+how they link with the lectures.
 
-o The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.
-o The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs.
-o Implementing generative methods, starts normally with discriminative methods
-o The own data path. Some of you may have data you wish to analyze with different deep learning methods
-o The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
 
 !split
-===== Possible paths for the projects =====
+===== Project options =====
 
-The differential equation path: Here we propose a set of differential
-equations (ordinary and/or partial) to be solved first using neural
-networks (using either your own code or TensorFlow/Pytorch or similar
-libraries). Thereafter we can extend the set of methods for
-solving these equations to recurrent neural networks and autoencoders
-(AE) and/or Generalized Adversarial Networks (GANs). All these
-approaches can be expanded into one large project. This project can
-also be extended into including "Physics informed machine
-learning":"https://github.com/maziarraissi/PINNs". Here we can discuss
-neural networks that are trained to solve supervised learning tasks
-while respecting any given law of physics described by general
-nonlinear partial differential equations.
+The lectures during the first part of the semester deal with deep learning methods and their mathematics, including
+* Neural networks (NNs)
+* Convolutional neural networks (CNNs)
+* Recurrent neural networks (RNNs)
+* Autoencoders (AEs)
 
-For those interested in mathematical aspects of deep learning, this could also be included.
+Based on these topics we can define one project with deadline March 20 or a one semester-long project with final deadline June 1 that focuses on
+
+* Physics Informed neural network path (PINNs) with a focus on partial differential equations (PDEs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected PDEs using NNs. These can be expanded to include studies of RNNs and/or Autoencoders. In the lectures we will use selected PDEs to illustrate how we can use neural networks to solve differential equations.
+
+For coding, we leave it to you to decide if you wish to write your own code or use deep learning libraries like PyTorch, Tensorflow/Keras, or other. 
+
+!split
+===== Classification projects =====
+
+For the first part of the semester, focusing on the same methods as above, you can study (either with own data or data suggested by us) classification problems with
+* NNs, CNNs and AEs (and possibly RNNs if you have classification problems with a temporal dependence). This topic can be extended to a full project (semester-long variant) where you also include the generative methods discussed below.
+
+
+!split
+===== Mathematics of deep learning =====
+
+This project aims to bridge theoretical mathematics with practical
+deep learning by developing neural networks for both regression and
+classification tasks. The objective is to demonstrate how core
+mathematical concepts such as linear algebra, multivariate calculus,
+optimization theory, and probability, directly inform the design and
+training of neural networks. In essence, familiar math tools (matrix
+operations, derivatives, gradient-based optimization, probabilistic
+loss functions) form the backbone of deep learning.
+
+By tying theory to implementation, the project aims at 
+illustrating that every practical behavior of a neural network
+(convergence, generalization, etc.) has a mathematical explanation.
+
+
+
+!split
+===== Write your own CNN or RNN (or even a light LLM) from scratch =====
+
+Here we propose a path where you develop your
+own code for a convolutional or eventually recurrent neural network
+and apply this to data selects of your own selection. The code should
+be object oriented and flexible allowing for eventual extensions by
+including different Loss/Cost functions and other
+functionalities. Feel free to select data sets from those suggested
+below here. This code can also be extended upon by adding for example
+autoencoders. You can compare your own codes with implementations
+using TensorFlow(Keras)/PyTorch or other libraries.
+
+
+!split
+===== High-performance computing path =====
+
+
+
+o Implementing generative methods, starts normally with discriminative methods
+
+o The Bayesian ML path is not covered by the present lecture material and leads normally to independent self-study work.
+
 
 !split
 ===== More on projects and final grade =====
@@ -124,18 +183,6 @@ o If you opt for one project only, we need a temporary report (1-2 pages) of wha
 This path brings us from discriminative models (like the standard application of NNs, CNNs etc) to generative models. Two projects that follow to a large extent
 the lectures. Topics for data sets will be discussed.
 
-!split
-===== Paths for projects, writing own codes =====
-
-The computational path: Here we propose a path where you develop your
-own code for a convolutional or eventually recurrent neural network
-and apply this to data selects of your own selection. The code should
-be object oriented and flexible allowing for eventual extensions by
-including different Loss/Cost functions and other
-functionalities. Feel free to select data sets from those suggested
-below here. This code can also be extended upon by adding for example
-autoencoders. You can compare your own codes with implementations
-using TensorFlow(Keras)/PyTorch or other libraries.
 
 !split
 ===== The application path/own data =====
@@ -169,16 +216,10 @@ mathematical aspects of deep learning methods.
 
 
 
-!split
-===== Good books with hands-on material and codes =====
-!bblock
-* "Sebastian Rashcka et al, Machine learning with Sickit-Learn and PyTorch":"https://sebastianraschka.com/blog/2022/ml-pytorch-book.html"
-* "David Foster, Generative Deep Learning with TensorFlow":"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html"
-* "Bali and Gavras, Generative AI with Python and TensorFlow 2":"https://github.com/PacktPublishing/Hands-On-Generative-AI-with-Python-and-TensorFlow-2"
-!eblock
 
-All three books have GitHub addresses from where  one can download all codes. We will borrow most of the material from these three texts as well as 
-from Goodfellow, Bengio and Courville's text "Deep Learning":"https://www.deeplearningbook.org/"
+
+
+
 
 !split
 ===== Test yourself: Deep learning 1  =====
