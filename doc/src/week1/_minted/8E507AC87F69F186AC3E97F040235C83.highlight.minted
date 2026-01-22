@@ -1,0 +1,53 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{tf}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{keras}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{n+nn}{.}\PYG{n+nn}{keras}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{layers}\PYG{p}{,} \PYG{n}{regularizers}
+
+\PYG{c+c1}{\PYGZsh{} Check for GPU (TensorFlow will use it automatically if available)}
+\PYG{n}{gpus} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{config}\PYG{o}{.}\PYG{n}{list\PYGZus{}physical\PYGZus{}devices}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{GPU}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{GPUs available: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{gpus}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 1) Load and preprocess MNIST}
+\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test}\PYG{p}{)} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{datasets}\PYG{o}{.}\PYG{n}{mnist}\PYG{o}{.}\PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Normalize to [0, 1]}
+\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{float32}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mf}{255.0}\PYG{p}{)}
+\PYG{n}{x\PYGZus{}test}  \PYG{o}{=} \PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{float32}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mf}{255.0}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 2) Build the model: 784 \PYGZhy{}\PYGZgt{} 100 \PYGZhy{}\PYGZgt{} 100 \PYGZhy{}\PYGZgt{} 10}
+\PYG{n}{l2\PYGZus{}reg} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}4}  \PYG{c+c1}{\PYGZsh{} L2 regularization strength}
+
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}
+    \PYG{n}{layers}\PYG{o}{.}\PYG{n}{Input}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{layers}\PYG{o}{.}\PYG{n}{Flatten}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{relu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                 \PYG{n}{kernel\PYGZus{}regularizer}\PYG{o}{=}\PYG{n}{regularizers}\PYG{o}{.}\PYG{n}{l2}\PYG{p}{(}\PYG{n}{l2\PYGZus{}reg}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{relu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                 \PYG{n}{kernel\PYGZus{}regularizer}\PYG{o}{=}\PYG{n}{regularizers}\PYG{o}{.}\PYG{n}{l2}\PYG{p}{(}\PYG{n}{l2\PYGZus{}reg}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{softmax}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} output probabilities for 10 classes}
+\PYG{p}{]}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 3) Compile with SGD + weight decay via L2 regularizers}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{compile}\PYG{p}{(}
+    \PYG{n}{optimizer}\PYG{o}{=}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{optimizers}\PYG{o}{.}\PYG{n}{SGD}\PYG{p}{(}\PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{l+m+mf}{0.01}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{loss}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{sparse\PYGZus{}categorical\PYGZus{}crossentropy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{metrics}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{accuracy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
+\PYG{p}{)}
+
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 4) Train}
+\PYG{n}{history} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}
+    \PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,}
+    \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,}
+    \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{64}\PYG{p}{,}
+    \PYG{n}{validation\PYGZus{}split}\PYG{o}{=}\PYG{l+m+mf}{0.1}\PYG{p}{,}  \PYG{c+c1}{\PYGZsh{} optional: monitor validation during training}
+    \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{1}
+\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 5) Evaluate on test set}
+\PYG{n}{test\PYGZus{}loss}\PYG{p}{,} \PYG{n}{test\PYGZus{}acc} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{evaluate}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Test accuracy: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{test\PYGZus{}acc}\PYG{l+s+si}{:}\PYG{l+s+s2}{.4f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, Test loss: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{test\PYGZus{}loss}\PYG{l+s+si}{:}\PYG{l+s+s2}{.4f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+
+\end{MintedVerbatim}
