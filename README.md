@@ -56,19 +56,9 @@ All teaching material is available from the present GitHub link.
 
 The course can also be used as a self-study course and besides the
 lectures, many of you may wish to independently work on your own
-projects related to for example your thesis or research. In general,
-in addition to the lectures, we have often followed five main paths:
-
-- Projects (two in total)  and exercises that follow the lectures
-
-- The coding path. This leads often to a single project only where one focuses on coding for example CNNs or RNNs or parts of LLMs from scratch.
-
-- The Physics Informed neural network path (PINNs). Here we define some basic PDEs which are solved by using PINNs. We start normally with studies of selected differential equations using NNs, and/or RNNs, and/or GNNs or Autoencoders before moving over to PINNs. 
-
-- The own data path. Some of you may have data you wish to analyze with different deep learning methods
-
-- The Bayesian ML path is not covered by the present lecture material. It is  normally based on independent work.
-
+projects related to for example your thesis or research.
+For project proposals, see the lecture material from the first week at for example
+https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 
 
 ## January 19-23: Presentation of couse, review of neural networks and deep Learning and discussion of possible projects
@@ -79,7 +69,7 @@ in addition to the lectures, we have often followed five main paths:
 - Mathematics  of deep learning, basics of neural networks and writing a neural network code
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/ipynb/week1.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka chapter 11
-- Video of lecture and whiteboard notes to be added
+- Video of lecture at https://youtu.be/suZZGf3INbY
 
 ##  January 26-30
 
