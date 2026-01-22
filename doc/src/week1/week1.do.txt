@@ -1035,6 +1035,12 @@ where the $y_i$s are our $n$ targets (the values we want to
 reproduce), while the outputs of the network after having propagated
 all inputs $\bm{x}$ are given by $\bm{\tilde{y}}_i$.
 
+
+!split
+===== Layout of a neural network with three hidden layers =====
+
+FIGURE: [figures/nn1.pdf, width=900 frac=1.0]
+
 !split
 ===== Definitions =====
 
@@ -1064,7 +1070,7 @@ compact form as the matrix-vector products we discussed earlier,
 !et
 
 !split
-===== Inputs to tje activation function =====
+===== Inputs to the activation function =====
 
 With the activation values $\bm{z}^l$ we can in turn define the
 output of layer $l$ as $\bm{a}^l = f(\bm{z}^l)$ where $f$ is our
