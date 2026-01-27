@@ -73,7 +73,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 ##  January 26-30
 
-- Mathematics  of deep learning, basics of neural networks and writing a neural network code
+- Mathematics  of deep learning, basics of neural networks and writing a neural network code, emphasis on solving differential equations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week2/ipynb/week2.ipynb
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
 - Link to video of lecture to be added 
