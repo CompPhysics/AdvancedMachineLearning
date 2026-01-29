@@ -1,0 +1,8 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n}{input\PYGZus{}nodes} \PYG{o}{=} \PYG{n}{X\PYGZus{}train}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{n}{output\PYGZus{}nodes} \PYG{o}{=} \PYG{l+m+mi}{1}
+
+\PYG{n}{linear\PYGZus{}regression} \PYG{o}{=} \PYG{n}{FFNN}\PYG{p}{(}\PYG{p}{(}\PYG{n}{input\PYGZus{}nodes}\PYG{p}{,} \PYG{n}{output\PYGZus{}nodes}\PYG{p}{)}\PYG{p}{,} \PYG{n}{output\PYGZus{}func}\PYG{o}{=}\PYG{n}{identity}\PYG{p}{,} \PYG{n}{cost\PYGZus{}func}\PYG{o}{=}\PYG{n}{CostOLS}\PYG{p}{,} \PYG{n}{seed}\PYG{o}{=}\PYG{l+m+mi}{2023}\PYG{p}{)}
+
+
+\end{MintedVerbatim}

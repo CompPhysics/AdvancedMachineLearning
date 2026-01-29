@@ -1,0 +1,134 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{autograd}\PYG{n+nn}{.}\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Scheduler}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Abstract class for Schedulers}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{=} \PYG{n}{eta}
+
+    \PYG{c+c1}{\PYGZsh{} should be overwritten}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{raise} \PYG{n+ne}{NotImplementedError}
+
+    \PYG{c+c1}{\PYGZsh{} overwritten if needed}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{pass}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Constant}\PYG{p}{(}\PYG{n}{Scheduler}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n}{eta}\PYG{p}{)}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{*} \PYG{n}{gradient}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{pass}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Momentum}\PYG{p}{(}\PYG{n}{Scheduler}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{:} \PYG{n+nb}{float}\PYG{p}{,} \PYG{n}{momentum}\PYG{p}{:} \PYG{n+nb}{float}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n}{eta}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{momentum} \PYG{o}{=} \PYG{n}{momentum}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{momentum} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{*} \PYG{n}{gradient}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{pass}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Adagrad}\PYG{p}{(}\PYG{n}{Scheduler}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n}{eta}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{=} \PYG{k+kc}{None}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{delta} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}8}  \PYG{c+c1}{\PYGZsh{} avoid division ny zero}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o+ow}{is} \PYG{k+kc}{None}\PYG{p}{:}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{p}{(}\PYG{n}{gradient}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{n}{gradient}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}\PYG{p}{)}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{+}\PYG{o}{=} \PYG{n}{gradient} \PYG{o}{@} \PYG{n}{gradient}\PYG{o}{.}\PYG{n}{T}
+
+        \PYG{n}{G\PYGZus{}t\PYGZus{}inverse} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{/} \PYG{p}{(}
+            \PYG{n}{delta} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{diagonal}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+        \PYG{p}{)}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{*} \PYG{n}{gradient} \PYG{o}{*} \PYG{n}{G\PYGZus{}t\PYGZus{}inverse}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{=} \PYG{k+kc}{None}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{AdagradMomentum}\PYG{p}{(}\PYG{n}{Scheduler}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{,} \PYG{n}{momentum}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n}{eta}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{=} \PYG{k+kc}{None}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{momentum} \PYG{o}{=} \PYG{n}{momentum}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{delta} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}8}  \PYG{c+c1}{\PYGZsh{} avoid division ny zero}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o+ow}{is} \PYG{k+kc}{None}\PYG{p}{:}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{p}{(}\PYG{n}{gradient}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{n}{gradient}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}\PYG{p}{)}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{+}\PYG{o}{=} \PYG{n}{gradient} \PYG{o}{@} \PYG{n}{gradient}\PYG{o}{.}\PYG{n}{T}
+
+        \PYG{n}{G\PYGZus{}t\PYGZus{}inverse} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{/} \PYG{p}{(}
+            \PYG{n}{delta} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{diagonal}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+        \PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{momentum} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{*} \PYG{n}{gradient} \PYG{o}{*} \PYG{n}{G\PYGZus{}t\PYGZus{}inverse}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{change}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{G\PYGZus{}t} \PYG{o}{=} \PYG{k+kc}{None}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{RMS\PYGZus{}prop}\PYG{p}{(}\PYG{n}{Scheduler}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{,} \PYG{n}{rho}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n}{eta}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho} \PYG{o}{=} \PYG{n}{rho}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{delta} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}8}  \PYG{c+c1}{\PYGZsh{} avoid division ny zero}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{+} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho}\PYG{p}{)} \PYG{o}{*} \PYG{n}{gradient} \PYG{o}{*} \PYG{n}{gradient}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{*} \PYG{n}{gradient} \PYG{o}{/} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{+} \PYG{n}{delta}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Adam}\PYG{p}{(}\PYG{n}{Scheduler}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{eta}\PYG{p}{,} \PYG{n}{rho}\PYG{p}{,} \PYG{n}{rho2}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n}{eta}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho} \PYG{o}{=} \PYG{n}{rho}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho2} \PYG{o}{=} \PYG{n}{rho2}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{moment} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n\PYGZus{}epochs} \PYG{o}{=} \PYG{l+m+mi}{1}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{update\PYGZus{}change}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{gradient}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{delta} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}8}  \PYG{c+c1}{\PYGZsh{} avoid division ny zero}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{moment} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{moment} \PYG{o}{+} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho}\PYG{p}{)} \PYG{o}{*} \PYG{n}{gradient}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho2} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{+} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho2}\PYG{p}{)} \PYG{o}{*} \PYG{n}{gradient} \PYG{o}{*} \PYG{n}{gradient}
+
+        \PYG{n}{moment\PYGZus{}corrected} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{moment} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho}\PYG{o}{*}\PYG{o}{*}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n\PYGZus{}epochs}\PYG{p}{)}
+        \PYG{n}{second\PYGZus{}corrected} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rho2}\PYG{o}{*}\PYG{o}{*}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n\PYGZus{}epochs}\PYG{p}{)}
+
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{eta} \PYG{o}{*} \PYG{n}{moment\PYGZus{}corrected} \PYG{o}{/} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{second\PYGZus{}corrected} \PYG{o}{+} \PYG{n}{delta}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{reset}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{n\PYGZus{}epochs} \PYG{o}{+}\PYG{o}{=} \PYG{l+m+mi}{1}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{moment} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{second} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+
+\end{MintedVerbatim}

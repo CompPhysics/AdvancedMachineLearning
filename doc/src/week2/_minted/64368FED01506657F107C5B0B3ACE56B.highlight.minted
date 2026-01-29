@@ -1,0 +1,30 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{datasets}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{load\PYGZus{}digits}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{onehot}\PYG{p}{(}\PYG{n}{target}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{onehot} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{p}{(}\PYG{n}{target}\PYG{o}{.}\PYG{n}{size}\PYG{p}{,} \PYG{n}{target}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{onehot}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n}{target}\PYG{o}{.}\PYG{n}{size}\PYG{p}{)}\PYG{p}{,} \PYG{n}{target}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{1}
+    \PYG{k}{return} \PYG{n}{onehot}
+
+\PYG{n}{digits} \PYG{o}{=} \PYG{n}{load\PYGZus{}digits}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{digits}\PYG{o}{.}\PYG{n}{data}
+\PYG{n}{target} \PYG{o}{=} \PYG{n}{digits}\PYG{o}{.}\PYG{n}{target}
+\PYG{n}{target} \PYG{o}{=} \PYG{n}{onehot}\PYG{p}{(}\PYG{n}{target}\PYG{p}{)}
+
+\PYG{n}{input\PYGZus{}nodes} \PYG{o}{=} \PYG{l+m+mi}{64}
+\PYG{n}{hidden\PYGZus{}nodes1} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{n}{hidden\PYGZus{}nodes2} \PYG{o}{=} \PYG{l+m+mi}{30}
+\PYG{n}{output\PYGZus{}nodes} \PYG{o}{=} \PYG{l+m+mi}{10}
+
+\PYG{n}{dims} \PYG{o}{=} \PYG{p}{(}\PYG{n}{input\PYGZus{}nodes}\PYG{p}{,} \PYG{n}{hidden\PYGZus{}nodes1}\PYG{p}{,} \PYG{n}{hidden\PYGZus{}nodes2}\PYG{p}{,} \PYG{n}{output\PYGZus{}nodes}\PYG{p}{)}
+
+\PYG{n}{multiclass} \PYG{o}{=} \PYG{n}{FFNN}\PYG{p}{(}\PYG{n}{dims}\PYG{p}{,} \PYG{n}{hidden\PYGZus{}func}\PYG{o}{=}\PYG{n}{LRELU}\PYG{p}{,} \PYG{n}{output\PYGZus{}func}\PYG{o}{=}\PYG{n}{softmax}\PYG{p}{,} \PYG{n}{cost\PYGZus{}func}\PYG{o}{=}\PYG{n}{CostCrossEntropy}\PYG{p}{)}
+
+\PYG{n}{multiclass}\PYG{o}{.}\PYG{n}{reset\PYGZus{}weights}\PYG{p}{(}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} reset weights such that previous runs or reruns don\PYGZsq{}t affect the weights}
+
+\PYG{n}{scheduler} \PYG{o}{=} \PYG{n}{Adam}\PYG{p}{(}\PYG{n}{eta}\PYG{o}{=}\PYG{l+m+mf}{1e\PYGZhy{}4}\PYG{p}{,} \PYG{n}{rho}\PYG{o}{=}\PYG{l+m+mf}{0.9}\PYG{p}{,} \PYG{n}{rho2}\PYG{o}{=}\PYG{l+m+mf}{0.999}\PYG{p}{)}
+\PYG{n}{scores} \PYG{o}{=} \PYG{n}{multiclass}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{target}\PYG{p}{,} \PYG{n}{scheduler}\PYG{p}{,} \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{1000}\PYG{p}{)}
+
+
+\end{MintedVerbatim}
