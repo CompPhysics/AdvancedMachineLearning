@@ -1,0 +1,55 @@
+\frametitle{And a similar example using Tensorflow with Keras}
+
+\begin{minted}[fontsize=\fontsize{9pt}{9pt},linenos=false,mathescape,baselinestretch=1.0,fontfamily=tt,xleftmargin=2mm]{python}
+
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers, regularizers
+
+# Check for GPU (TensorFlow will use it automatically if available)
+gpus = tf.config.list_physical_devices('GPU')
+print(f"GPUs available: {gpus}")
+
+# 1) Load and preprocess MNIST
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+# Normalize to [0, 1]
+x_train = (x_train.astype("float32") / 255.0)
+x_test  = (x_test.astype("float32") / 255.0)
+
+# 2) Build the model: 784 -> 100 -> 100 -> 10
+l2_reg = 1e-4  # L2 regularization strength
+
+model = keras.Sequential([
+    layers.Input(shape=(28, 28)),
+    layers.Flatten(),
+    layers.Dense(100, activation="relu",
+                 kernel_regularizer=regularizers.l2(l2_reg)),
+    layers.Dense(100, activation="relu",
+                 kernel_regularizer=regularizers.l2(l2_reg)),
+    layers.Dense(10, activation="softmax")  # output probabilities for 10 classes
+])
+
+# 3) Compile with SGD + weight decay via L2 regularizers
+model.compile(
+    optimizer=keras.optimizers.SGD(learning_rate=0.01),
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"],
+)
+
+model.summary()
+
+# 4) Train
+history = model.fit(
+    x_train, y_train,
+    epochs=10,
+    batch_size=64,
+    validation_split=0.1,  # optional: monitor validation during training
+    verbose=1
+)
+
+# 5) Evaluate on test set
+test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
+print(f"Test accuracy: {test_acc:.4f}, Test loss: {test_loss:.4f}")
+
+
+\end{minted}
