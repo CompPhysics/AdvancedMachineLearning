@@ -1,0 +1,359 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+
+\usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
+\usepackage{physics}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+
+\title{The Mathematics of Convolutional Neural Networks}
+\subtitle{Operator Theory, Symmetry, PDE Limits, and Expressivity}
+\author{Morten Hjorth-Jensen}
+\date{Spring 2026}
+
+\begin{document}
+
+%=========================================================
+\begin{frame}
+\titlepage
+\end{frame}
+
+%=========================================================
+\section*{Lecture 1: Convolution as an Operator}
+
+%---------------------------------------------------------
+\begin{frame}{Linear Shift-Invariant Operators}
+Let $T_a f(x)=f(x-a)$ on $\ell^2(\mathbb{Z}^d)$.
+
+\textbf{Definition:}
+$L$ is shift-invariant if
+\[
+L T_a = T_a L.
+\]
+
+\textbf{Theorem (Structure theorem):}
+Every bounded linear shift-invariant operator
+\[
+L:\ell^2(\mathbb{Z}^d)\to\ell^2(\mathbb{Z}^d)
+\]
+is convolution with some $k\in\ell^1$.
+
+\[
+(Lf)(x)=\sum_y k(x-y)f(y).
+\]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Proof Sketch}
+Let $\delta_0$ be Kronecker delta.
+
+Define
+\[
+k(x)=L\delta_0(x).
+\]
+
+Using shift invariance:
+\[
+L\delta_y = T_y L\delta_0 = k(\cdot - y).
+\]
+
+For general $f$,
+\[
+Lf=\sum_y f(y)L\delta_y
+=\sum_y f(y)k(\cdot - y).
+\]
+
+Hence $Lf=f*k$.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Fourier Diagonalization}
+Fourier transform:
+\[
+\hat f(\omega)=\sum_x f(x)e^{-i\omega x}.
+\]
+
+Then
+\[
+\widehat{f*k}=\hat k \hat f.
+\]
+
+Thus convolution operators are diagonal in Fourier basis.
+
+Eigenfunctions:
+\[
+e^{i\omega x}
+\]
+with eigenvalues $\hat k(\omega)$.
+\end{frame}
+
+%=========================================================
+\section*{Lecture 2: Variational and Functional View}
+
+%---------------------------------------------------------
+\begin{frame}{CNN Layers as Nonlinear Operators}
+A CNN layer:
+\[
+\Phi(f)=\sigma(K*f).
+\]
+
+Interpret as operator on Banach space
+\[
+\Phi: L^p(\Omega)\to L^p(\Omega).
+\]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Variational Interpretation}
+Consider functional
+\[
+\mathcal{J}(f)=\int_\Omega |f(x)|^2 dx.
+\]
+
+Convolution acts as quadratic form:
+\[
+\langle f, K*f\rangle
+=
+\int \hat k(\omega)|\hat f(\omega)|^2 d\omega.
+\]
+
+Thus kernels define spectral penalties.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Expressivity Theorem}
+\textbf{Theorem:}
+Deep convolutional networks with ReLU activation approximate any continuous translation-equivariant map
+\[
+F:C(\Omega)\to C(\Omega).
+\]
+
+Idea:
+\begin{itemize}
+    \item Finite receptive fields
+    \item Increasing depth expands support
+\end{itemize}
+\end{frame}
+
+%=========================================================
+\section*{Lecture 3: Continuous Limit and Neural PDEs}
+
+%---------------------------------------------------------
+\begin{frame}{Continuous Convolution}
+In continuum:
+\[
+(K*f)(x)=\int K(x-y)f(y)dy.
+\]
+
+For small kernels:
+\[
+K(x)=\delta(x)+\epsilon \kappa(x).
+\]
+
+Then
+\[
+K*f=f+\epsilon \kappa*f.
+\]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Diffusion Limit}
+If $\kappa$ symmetric and localized:
+
+\[
+\kappa*f \approx c \Delta f.
+\]
+
+Thus one layer:
+\[
+f_{l+1}=f_l + \epsilon c \Delta f_l.
+\]
+
+In deep limit:
+\[
+\partial_t f = c \Delta f.
+\]
+
+CNN approximates diffusion PDE.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Neural ODE Limit}
+Let depth $\to\infty$, step $\to0$:
+
+\[
+f_{l+1}-f_l = h \Phi(f_l)
+\]
+
+Continuous limit:
+\[
+\partial_t f = \Phi(f).
+\]
+
+Thus CNN approximates nonlinear PDE.
+\end{frame}
+
+%=========================================================
+\section*{Lecture 4: Renormalization Group View}
+
+%---------------------------------------------------------
+\begin{frame}{Hierarchical Representation}
+CNN layers increase receptive field.
+
+Analogy:
+\[
+\text{RG step: integrate short-scale modes}
+\]
+
+Pooling:
+\[
+f(x) \mapsto f(2x)
+\]
+
+acts as coarse-graining.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Scale Decomposition}
+Fourier perspective:
+
+Early layers: high frequency filtering.
+
+Deeper layers: low frequency structure.
+
+This mirrors Wilsonian RG:
+\[
+\Lambda \to \Lambda/b.
+\]
+\end{frame}
+
+%=========================================================
+\section*{Lecture 5: Group Equivariance}
+
+%---------------------------------------------------------
+\begin{frame}{General Group Convolution}
+For group $G$:
+
+\[
+(f * k)(g)=\int_G f(h)k(h^{-1}g)dh.
+\]
+
+Equivariant if
+\[
+\Phi(L_g f)=L_g\Phi(f).
+\]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Representation Theory}
+Decompose
+\[
+L^2(G)=\bigoplus_{\pi} V_\pi.
+\]
+
+Equivariant operators block-diagonal in irreducible representations.
+
+Explains:
+\begin{itemize}
+    \item SO(3) CNNs
+    \item Gauge equivariant nets
+\end{itemize}
+\end{frame}
+
+%=========================================================
+\section*{Lecture 6: Fourier Neural Operators}
+
+%---------------------------------------------------------
+\begin{frame}{FNO Definition}
+FNO layer:
+\[
+f_{l+1}(x)=\sigma\left(\mathcal{F}^{-1}\left(R(\omega)\hat f(\omega)\right)\right).
+\]
+
+Truncated Fourier modes.
+
+Global operator learning.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Comparison to CNN}
+CNN:
+\[
+\text{local kernel}
+\]
+
+FNO:
+\[
+\text{global spectral multiplier}
+\]
+
+CNN approximates local PDEs.
+
+FNO approximates integral operators.
+\end{frame}
+
+%=========================================================
+\section*{Lecture 7: Optimization and Stability}
+
+%---------------------------------------------------------
+\begin{frame}{Gradient of Convolution}
+\[
+\frac{\partial \mathcal{L}}{\partial K}
+=
+f * \delta.
+\]
+
+Adjoint:
+\[
+\tilde K(x)=K(-x).
+\]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Stability}
+If
+\[
+\|\hat k\|_\infty < 1
+\]
+
+then convolution is contraction.
+
+Deep nets stable under spectral normalization.
+\end{frame}
+
+%=========================================================
+\section*{Exercises}
+
+%---------------------------------------------------------
+\begin{frame}{Exercise 1}
+Prove that every bounded translation-invariant operator on $\ell^2$ is convolution.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Exercise 2}
+Show diffusion limit of symmetric kernel explicitly via Taylor expansion.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Exercise 3}
+Derive continuous depth limit leading to reaction-diffusion PDE.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Exercise 4}
+Show that group convolution preserves equivariance.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Summary}
+CNNs are:
+\begin{itemize}
+    \item Convolution operators
+    \item Spectral filters
+    \item Nonlinear PDE discretizations
+    \item Hierarchical renormalization flows
+    \item Symmetry-preserving operator learners
+\end{itemize}
+\end{frame}
+
+\end{document}
