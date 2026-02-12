@@ -81,9 +81,12 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 
 ## February 2-6
-- From neural networks to convolutional neural networks
+- Neural networks and Physics informed neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week3/ipynb/week3.ipynb
+- Video of lecture at https://youtu.be/68vKsagw6Zo
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek3.pdf
 - Recommended reading Goodfellow et al chapters 6 and 7 and Raschka et al chapter 11. For Pytorch see Raschka et al chapter 12.
+
 
 ## February 9-13
 - Mathematics of convolutional neural networks
