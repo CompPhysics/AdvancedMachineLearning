@@ -1,0 +1,274 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amssymb,physics}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{enumitem}
+\geometry{margin=2.5cm}
+
+\title{\textbf{Methodological Roadmap for Machine Learning-Based Inference of Lévy Jump-Diffusion Processes}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{1. Scientific Objective}
+
+The objective of this project is to develop and compare machine learning methodologies for estimating the parameters and structure of Lévy jump-diffusion processes underlying financial asset prices.
+
+We consider stochastic processes of the form
+\begin{equation}
+dS_t = \mu S_t dt + \sigma S_t dW_t + S_{t^-} dJ_t,
+\end{equation}
+where
+\begin{itemize}
+    \item $\mu$ is the drift,
+    \item $\sigma^2$ is diffusion variance,
+    \item $W_t$ is Brownian motion,
+    \item $J_t$ is a compound Poisson jump process with intensity $\lambda$ and jump distribution $\nu(dx)$.
+\end{itemize}
+
+The parameter vector is
+\[
+\theta = (\mu, \sigma^2, \lambda, \nu).
+\]
+
+The task is to infer $\theta$ (or approximate the underlying distribution) from discrete-time observations of $S_t$.
+
+\section*{2. Mathematical Framework}
+
+\subsection*{2.1 Kolmogorov Forward Equation}
+
+The probability density $p(x,t)$ satisfies a partial integro-differential equation (PIDE):
+
+\begin{equation}
+\partial_t p = -\mu \partial_x p + \frac{\sigma^2}{2}\partial_x^2 p 
++ \lambda \int_{\mathbb{R}} \left[ p(x-y,t) - p(x,t) \right] \nu(dy).
+\end{equation}
+
+This provides a deterministic constraint that can be embedded in physics-informed neural networks.
+
+\subsection*{2.2 Inverse Problem}
+
+Given data $\mathcal{D} = \{S_{t_i}\}_{i=1}^N$, estimate:
+
+\[
+\theta^* = \arg\max_\theta p(\mathcal{D} \mid \theta),
+\]
+
+or approximate the posterior distribution:
+
+\[
+p(\theta \mid \mathcal{D}).
+\]
+
+\section*{3. Methodological Architecture}
+
+The project is structured in five stages.
+
+\section*{Stage I: Synthetic Data Generation}
+
+\begin{itemize}
+    \item Implement simulation of Lévy processes.
+    \item Generate datasets across parameter regimes.
+    \item Study identifiability and sensitivity.
+    \item Validate statistical estimators (MLE, method of moments).
+\end{itemize}
+
+Deliverable: Baseline statistical inference benchmark.
+
+\section*{Stage II: Supervised Neural Network Estimation}
+
+\subsection*{2A. Direct Parameter Regression}
+
+Train networks:
+\[
+\text{Time Series} \rightarrow (\mu, \sigma^2, \lambda, \text{jump parameters})
+\]
+
+Architectures:
+\begin{itemize}
+    \item MLP (baseline)
+    \item 1D CNN
+    \item LSTM / GRU
+    \item Transformer encoder
+\end{itemize}
+
+Loss function:
+\[
+\mathcal{L} = \sum_i \norm{\hat{\theta}_i - \theta_i}^2.
+\]
+
+Evaluation:
+\begin{itemize}
+    \item Parameter estimation error
+    \item Sensitivity to sampling frequency
+    \item Robustness under model misspecification
+\end{itemize}
+
+\section*{Stage III: Physics-Informed Neural Networks (PINNs)}
+
+Instead of regressing parameters directly, approximate $p(x,t)$ by a neural network $p_\phi(x,t)$.
+
+Loss function:
+
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{data} + \alpha \mathcal{L}_{PIDE},
+\end{equation}
+
+where
+
+\begin{equation}
+\mathcal{L}_{PIDE} = \norm{
+\partial_t p_\phi 
++ \mu \partial_x p_\phi
+- \frac{\sigma^2}{2}\partial_x^2 p_\phi
+- \lambda \int (p_\phi(x-y)-p_\phi(x)) \nu(dy)
+}^2.
+\end{equation}
+
+Goals:
+\begin{itemize}
+    \item Enforce physical consistency
+    \item Improve generalization
+    \item Study stability of integro-differential operator learning
+\end{itemize}
+
+\section*{Stage IV: Bayesian Machine Learning}
+
+\subsection*{4A. Bayesian Neural Networks}
+
+Place priors on weights and infer posterior:
+
+\[
+p(\theta \mid \mathcal{D})
+\]
+
+via:
+\begin{itemize}
+    \item Variational inference
+    \item Monte Carlo dropout
+    \item Hamiltonian Monte Carlo (if feasible)
+\end{itemize}
+
+\subsection*{4B. Gaussian Process Hybrid Models}
+
+Model:
+\[
+X_t = \text{GP diffusion} + \text{Sparse jump process}
+\]
+
+Study:
+\begin{itemize}
+    \item Jump detection
+    \item Volatility decomposition
+    \item Uncertainty quantification
+\end{itemize}
+
+Deliverable: Credible intervals for parameters.
+
+\section*{Stage V: Neural Stochastic Differential Equations}
+
+Generalize to neural SDE framework:
+
+\begin{equation}
+dX_t = f_\theta(X_t,t) dt + g_\theta(X_t,t) dW_t + dJ_t.
+\end{equation}
+
+Objectives:
+\begin{itemize}
+    \item Learn drift and diffusion functions non-parametrically.
+    \item Compare structured Lévy assumption vs neural SDE flexibility.
+    \item Study overfitting vs interpretability trade-offs.
+\end{itemize}
+
+\section*{4. Comparative Evaluation Framework}
+
+All methods will be benchmarked against:
+
+\begin{itemize}
+    \item Maximum likelihood estimation
+    \item Expectation–maximization methods
+    \item Classical jump-diffusion calibration
+\end{itemize}
+
+Metrics:
+
+\begin{itemize}
+    \item Parameter RMSE
+    \item Log-likelihood on unseen data
+    \item Predictive density calibration
+    \item Computational cost
+    \item Uncertainty quantification quality
+\end{itemize}
+
+\section*{5. Application to Real Financial Data}
+
+\begin{itemize}
+    \item Calibrate on synthetic data.
+    \item Apply to historical equity and FX data.
+    \item Compare parameter estimates to standard econometric methods.
+    \item Study stability across market regimes.
+\end{itemize}
+
+\section*{6. Risk Analysis}
+
+\begin{itemize}
+    \item Identifiability issues for $\lambda$ at low frequency.
+    \item Jump distribution non-uniqueness.
+    \item Overfitting of neural SDE models.
+    \item Numerical instability in PINN integro-differential terms.
+\end{itemize}
+
+Mitigation:
+\begin{itemize}
+    \item Regularization.
+    \item Bayesian priors.
+    \item Cross-validation.
+    \item Theoretical error bounds.
+\end{itemize}
+
+\section*{7. Expected Scientific Contributions}
+
+\begin{itemize}
+    \item Systematic comparison of ML paradigms for Lévy inference.
+    \item Demonstration of PINNs for integro-differential stochastic systems.
+    \item Uncertainty-aware neural parameter estimation.
+    \item Insights into interpretability vs flexibility trade-offs.
+\end{itemize}
+
+\section*{8. Publication Strategy}
+
+Potential venues:
+
+\begin{itemize}
+    \item Quantitative Finance
+    \item Journal of Computational Finance
+    \item SIAM Journal on Financial Mathematics
+    \item Machine Learning in Finance
+    \item NeurIPS / ICML workshops (if neural SDE focus)
+\end{itemize}
+
+\section*{9. Timeline (12–18 Months)}
+
+\begin{itemize}
+    \item Months 1–3: Simulation + classical benchmarks.
+    \item Months 4–6: Supervised neural models.
+    \item Months 7–9: PINN development.
+    \item Months 10–12: Bayesian extensions.
+    \item Months 13–15: Neural SDE models.
+    \item Months 16–18: Real data application + publication.
+\end{itemize}
+
+\section*{Conclusion}
+
+This roadmap provides a structured, progressively sophisticated
+approach to applying machine learning to Lévy jump-diffusion
+inference. The project balances statistical rigor, physical
+constraints, uncertainty quantification, and modern deep learning
+architectures. It offers both methodological innovation and practical
+financial relevance.
+
+\end{document}
+
