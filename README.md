@@ -101,6 +101,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Recurrent neural networks (RNNs)
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week5/ipynb/week5.ipynb
 - Recommended reading Goodfellow et al chapter 9. Raschka et al chapter 13
+- Video of lecture at https://youtu.be/oVCUYXlpBUs
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek5.pdf
 - Video of lecture and whiteboard notes to be added
 
 ## February 23-27
