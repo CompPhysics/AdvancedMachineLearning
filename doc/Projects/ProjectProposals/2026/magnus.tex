@@ -1,0 +1,281 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,physics}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\title{Machine Learning Analysis of DCA-Z Distributions in ALICE Data:\\
+From Discriminative Classification to Generative Modeling}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+In high-energy nuclear collision experiments such as ALICE at CERN,
+the longitudinal distance of closest approach (DCA-Z) of reconstructed
+tracks provides a powerful observable for distinguishing between
+single-vertex events and pileup events originating from multiple
+interactions. Traditional approaches rely on parametric fits or
+statistical indicators such as the bimodal coefficient, which can be
+computationally expensive and ambiguous for large-scale data
+sets. This proposal outlines a comprehensive machine learning
+framework for analyzing DCA-Z distributions using both discriminative
+and generative methods. We propose convolutional neural networks
+(CNNs) as primary classifiers, complemented by autoencoders,
+variational autoencoders (VAEs), and diffusion models to capture
+underlying structure, perform anomaly detection, and generate
+synthetic data. The project aims to deliver scalable, robust, and
+physically interpretable methods for vertex multiplicity
+classification in ALICE data.
+
+\end{abstract}
+
+\section{Introduction and Motivation}
+
+In high-energy nuclear collision experiments, identifying whether an
+event originates from a single interaction vertex or multiple
+overlapping interactions (pileup) is a central problem. The DCA-Z
+distribution of reconstructed tracks provides a sensitive probe of
+this structure.
+
+Traditional approaches rely on:
+\begin{itemize}
+\item Parametric fitting of peaks
+\item Statistical measures such as skewness, kurtosis, and bimodality coefficients
+\end{itemize}
+
+However, these methods suffer from:
+\begin{itemize}
+\item Ambiguity in peak definition
+\item Sensitivity to noise and detector resolution
+\item Poor scalability for large datasets
+\end{itemize}
+
+This motivates a transition toward machine learning approaches that:
+\begin{itemize}
+\item Learn directly from data
+\item Capture complex peak structures
+\item Scale efficiently to large datasets
+\end{itemize}
+
+\section{Problem Formulation}
+
+Each event is represented by a DCA-Z distribution, discretized into a histogram:
+\[
+\mathbf{x} = (x_1, x_2, \dots, x_N),
+\]
+where $x_i$ represents counts in bin $i$.
+
+The goal is to learn a mapping:
+\[
+f(\mathbf{x}) \rightarrow y,
+\]
+where:
+\begin{itemize}
+\item $y = 0$: single-vertex (unimodal)
+\item $y = 1$: multi-vertex (pileup)
+\end{itemize}
+
+Extensions include:
+\begin{itemize}
+\item Regression: predicting number of vertices
+\item Unsupervised learning: discovering latent structure
+\end{itemize}
+
+\section{Discriminative Machine Learning Approaches}
+
+\subsection{Fully Connected Neural Networks}
+
+A baseline approach is a multilayer perceptron:
+\[
+f(\mathbf{x}) = \sigma(W_L \cdots \sigma(W_1 \mathbf{x})).
+\]
+
+Advantages:
+\begin{itemize}
+\item Simple implementation
+\item Fast inference
+\end{itemize}
+
+Limitations:
+\begin{itemize}
+\item No explicit modeling of local structure
+\end{itemize}
+
+\subsection{Convolutional Neural Networks (CNNs)}
+
+We propose CNNs as the primary model.
+
+The convolution operation:
+\[
+y_i = \sum_{j} w_j x_{i+j}
+\]
+
+captures:
+\begin{itemize}
+\item Peak shapes
+\item Local correlations
+\item Peak separation
+\end{itemize}
+
+Advantages:
+\begin{itemize}
+\item Physically meaningful (matched filtering)
+\item Robust to noise
+\item Efficient parameter sharing
+\end{itemize}
+
+\subsection{Recurrent Neural Networks (RNNs)}
+
+RNNs treat the histogram as a sequence:
+\[
+h_t = f(x_t, h_{t-1})
+\]
+
+However:
+\begin{itemize}
+\item No natural temporal structure exists
+\item Less efficient than CNNs
+\end{itemize}
+
+Thus, RNNs are not expected to outperform CNNs. And you should spend time on them.
+
+\subsection{Autoencoders}
+
+Autoencoders learn compressed representations:
+\[
+\mathbf{x} \rightarrow \mathbf{z} \rightarrow \hat{\mathbf{x}}.
+\]
+
+Applications:
+\begin{itemize}
+\item Anomaly detection (pileup as deviation)
+\item Feature extraction
+\end{itemize}
+
+\section{Generative Modeling Approaches}
+
+\subsection{Variational Autoencoders (VAEs)}
+
+VAEs introduce a probabilistic latent space:
+\[
+z \sim \mathcal{N}(\mu(\mathbf{x}), \sigma(\mathbf{x}))
+\]
+
+Objective:
+\[
+\mathcal{L} = \mathbb{E}[\log p(\mathbf{x}|z)] - D_{\text{KL}}(q(z|\mathbf{x}) || p(z))
+\]
+
+Advantages:
+\begin{itemize}
+\item Interpretable latent variables
+\item Semi-supervised learning
+\item Synthetic data generation
+\end{itemize}
+
+\subsection{Diffusion Models}
+
+Diffusion models learn data distributions through a noise process:
+\[
+x_t = \sqrt{\alpha_t} x_0 + \sqrt{1-\alpha_t} \epsilon
+\]
+
+Applications:
+\begin{itemize}
+\item Generating realistic DCA-Z distributions
+\item Denoising detector effects
+\item Modeling uncertainties
+\end{itemize}
+
+\subsection{Normalizing Flows}
+
+Flows provide exact likelihoods:
+\[
+p(\mathbf{x}) = p(z) \left|\det \frac{\partial z}{\partial x}\right|
+\]
+
+Applications:
+\begin{itemize}
+\item Likelihood-based classification
+\item Model comparison
+\end{itemize}
+
+\section{Physics Considerations}
+
+\subsection{Correlation Structure}
+
+The problem is fundamentally about detecting:
+\begin{itemize}
+\item Peak multiplicity
+\item Peak overlap
+\item Detector smearing
+\end{itemize}
+
+\subsection{Label Ambiguity}
+
+Peak definitions depend on:
+\begin{itemize}
+\item Minimum width
+\item Peak separation
+\end{itemize}
+
+This introduces:
+\begin{itemize}
+\item Systematic uncertainties
+\item Label noise
+\end{itemize}
+
+\subsection{Class Imbalance}
+
+Pileup events are typically rare:
+\begin{itemize}
+\item Requires weighted loss functions
+\item Use of focal loss
+\end{itemize}
+
+\section{Proposed Work Plan}
+
+\subsection{Phase 1: Baseline Models}
+\begin{itemize}
+\item Implement MLP and CNN classifiers
+\item Evaluate classification accuracy
+\end{itemize}
+
+\subsection{Phase 2: Enhanced Models}
+\begin{itemize}
+\item CNN with regression output (number of peaks)
+\item Uncertainty estimation
+\end{itemize}
+
+\subsection{Phase 3: Generative Models}
+\begin{itemize}
+\item Train VAE for latent structure learning
+\item Use autoencoders for anomaly detection
+\end{itemize}
+
+\subsection{Phase 4: Advanced Generative Modeling}
+\begin{itemize}
+\item Implement diffusion models
+\item Generate synthetic datasets
+\item Perform denoising and uncertainty quantification
+\end{itemize}
+
+\section{Expected Outcomes}
+
+\begin{itemize}
+\item Fast and scalable classification of pileup events
+\item Improved robustness compared to parametric methods
+\item Interpretable latent representations of vertex structure
+\item Generative models for simulation and uncertainty analysis
+\end{itemize}
+
+
+\end{document}
