@@ -109,7 +109,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Mathematics of recurrent neural networks
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week6/ipynb/week6.ipynb
 - Recommended reading Goodfellow et al chapters 9 and 10 and Raschka et al chapters 14 and 15
-- Video of lecture and whiteboard notes to be added
+- Video of lecture at https://youtu.be/Vza4M1wQglo
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek6.pdf
 
 
 ## March 2-6
