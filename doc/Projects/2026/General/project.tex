@@ -1,0 +1,211 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+
+\title{Semester long Project: Integrating Discriminative and Generative Models}
+\author{FYS5429/9429}
+\date{Spring 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction and Motivation}
+
+Modern machine learning spans two complementary paradigms:
+
+\begin{itemize}
+\item \textbf{Discriminative models}, which learn mappings from inputs to outputs (e.g.\ classification and regression).
+\item \textbf{Generative models}, which aim to learn the underlying data distribution.
+\end{itemize}
+
+While discriminative models such as neural networks, convolutional
+neural networks (CNNs), and recurrent neural networks (RNNs) are
+highly effective for prediction tasks, generative models such as
+variational autoencoders (VAEs), Boltzmann machines, and diffusion
+models provide deeper insight into the structure and distribution of
+data.
+
+The purpose of this project is to explore the interplay between these paradigms through theoretical analysis, implementation, and empirical evaluation.
+
+\section{Project Objectives}
+
+The main objectives of the project are:
+
+\begin{itemize}
+\item Develop a solid understanding of both discriminative and generative modeling approaches.
+\item Implement and train selected models on real datasets.
+\item Compare performance across models and tasks.
+\item Investigate how generative models can enhance discriminative tasks.
+\item Analyze strengths, limitations, and computational complexity.
+\end{itemize}
+
+\section{Project Tasks}
+
+The project consists of three main components.
+
+\subsection{Part I: Discriminative Modeling}
+
+You should implement and analyze at least two of the following models:
+
+\begin{itemize}
+\item Fully connected neural networks
+\item Convolutional neural networks (CNNs)
+\item Recurrent neural networks (RNNs) for temporal data
+\item Autoencoders (as feature extractors)
+\end{itemize}
+
+Tasks include (you should select whether you wish to study
+classification or regression problems):
+
+\begin{itemize}
+\item Training on classification datasets (e.g.\ MNIST, Fashion-MNIST)
+\item Optional regression tasks (e.g.\ time series prediction)
+\item Evaluation using appropriate metrics (accuracy, MSE, etc.)
+\end{itemize}
+
+\subsection{Part II: Generative Modeling}
+
+You should implement at least one generative model:
+
+\begin{itemize}
+\item Variational Autoencoder (VAE)
+\item Restricted Boltzmann Machine (RBM) or Boltzmann machine
+\item Diffusion model (optional advanced component)
+\end{itemize}
+
+Tasks include:
+
+\begin{itemize}
+\item Learning latent representations
+\item Generating new samples
+\item Evaluating generative quality (visual inspection, likelihood proxies)
+\end{itemize}
+
+\subsection{Part III: Integration and Comparison}
+
+The key part of the project is to combine the two paradigms.
+
+Possible directions include:
+
+\begin{itemize}
+\item Using latent variables from a VAE as input to a classifier
+\item Data augmentation using generative models
+\item Comparing classification performance with and without generative preprocessing
+\item Hybrid models combining reconstruction and prediction losses
+\end{itemize}
+
+\section{Datasets}
+
+You may choose among the following datasets (please feel free to add):
+
+\begin{itemize}
+\item \textbf{MNIST / Fashion-MNIST}: image classification
+\item \textbf{CIFAR-10}: more complex image classification
+\item \textbf{Time series datasets}: e.g.\ stock prices, physical signals
+\item \textbf{Synthetic datasets}: for controlled experiments
+\end{itemize}
+
+You are encouraged to explore both:
+
+\begin{itemize}
+\item \textbf{Static data} (images, tabular)
+\item \textbf{Temporal data} (time series, sequences)
+\end{itemize}
+
+\section{Methodology}
+
+You should:
+
+\begin{itemize}
+\item Clearly define model architectures
+\item Perform hyperparameter tuning
+\item Use appropriate training procedures (e.g.\ Adam optimizer)
+\item Ensure reproducibility of results
+\end{itemize}
+
+The report should include:
+
+\begin{itemize}
+\item Mathematical formulation of models
+\item Description of training procedures
+\item Analysis of results
+\item Visualization of learned representations
+\end{itemize}
+
+
+\section{Possible Extensions}
+
+If you wish to go beyond the above you may explore:
+
+\begin{itemize}
+\item Diffusion models for data generation
+\item Energy-based models and connections to statistical physics
+\item Bayesian interpretations of generative models
+\item Application to scientific data (e.g.\ physics simulations)
+\end{itemize}
+
+\section{Conclusion}
+
+This project provides an opportunity to bridge two central paradigms
+in machine learning. By combining discriminative and generative
+approaches, the hope is that you  will gain a deeper understanding of both
+predictive modeling and data representation, preparing them for
+research and applications in modern machine learning.
+
+\section{Introduction to numerical projects}
+
+
+Here follows a brief recipe and recommendation on how to write a report for the
+project.
+
+\begin{itemize}
+  \item Give a short description of the nature of the problem and the eventual  numerical methods you have used.
+
+  \item Describe the algorithm you have used and/or developed. Here you may find it convenient to use pseudocoding. In many cases you can describe the algorithm in the program itself.
+
+  \item Include the source code of your program. Comment your program properly.
+
+  \item If possible, try to find analytic solutions, or known limits in order to test your program when developing the code.
+
+  \item Include your results either in figure form or in a table. Remember to        label your results. All tables and figures should have relevant captions        and labels on the axes.
+
+  \item Try to evaluate the reliabilty and numerical stability/precision of your results. If possible, include a qualitative and/or quantitative discussion of the numerical stability, eventual loss of precision etc.
+
+  \item Try to give an interpretation of you results in your answers to  the problems.
+
+  \item Critique: if possible include your comments and reflections about the  exercise, whether you felt you learnt something, ideas for improvements and  other thoughts you've made when solving the exercise. We wish to keep this course at the interactive level and your comments can help us improve it.
+
+  \item Try to establish a practice where you log your work at the  computerlab. You may find such a logbook very handy at later stages in your work, especially when you don't properly remember  what a previous test version  of your program did. Here you could also record  the time spent on solving the exercise, various algorithms you may have tested or other topics which you feel worthy of mentioning.
+\end{itemize}
+
+\noindent
+\subsection*{Format for electronic delivery of report and programs}
+
+The preferred format for the report is a PDF file. You can also use DOC or postscript formats or as an ipython notebook file.  As programming language we prefer that you choose between C/C++, Fortran2008 or Python. The following prescription should be followed when preparing the report:
+
+\begin{itemize}
+  \item Send us an email in order  to hand in your projects with a link to your GitHub/Gitlab repository.
+
+  \item In your GitHub/GitLab or similar repository, please include a folder which contains selected results. These can be in the form of output from your code for a selected set of runs and input parameters.
+\end{itemize}
+
+\noindent
+Finally, 
+we encourage you to collaborate. Optimal working groups consist of 
+2-3 students. You can then hand in a common report. 
+
+
+
+
+
+\end{document}
+
+
+
+% ------------------- end of main content ---------------
+
+\end{document}
+
