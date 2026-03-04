@@ -1,0 +1,63 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Key points:}
+\PYG{l+s+sd}{1. The input images (28x28 pixels) are treated as sequences of 28 timesteps with 28 features each}
+\PYG{l+s+sd}{2. The LSTM layer processes this sequential data}
+\PYG{l+s+sd}{3. A final dense layer with softmax activation handles the classification}
+\PYG{l+s+sd}{4. Typical accuracy ranges between 95\PYGZhy{}98\PYGZpc{} (lower than CNNs but reasonable for demonstration)}
+
+\PYG{l+s+sd}{Note: LSTMs are not typically used for image classification (CNNs are more efficient), but this demonstrates how to adapt them for such tasks. Training might take longer compared to CNN architectures.}
+
+\PYG{l+s+sd}{To improve performance, you could:}
+\PYG{l+s+sd}{1. Add more LSTM layers}
+\PYG{l+s+sd}{2. Use Bidirectional LSTMs}
+\PYG{l+s+sd}{3. Increase the number of units}
+\PYG{l+s+sd}{4. Add dropout for regularization}
+\PYG{l+s+sd}{5. Use learning rate scheduling}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{tf}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{n+nn}{.}\PYG{n+nn}{keras}\PYG{n+nn}{.}\PYG{n+nn}{models}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{Sequential}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{n+nn}{.}\PYG{n+nn}{keras}\PYG{n+nn}{.}\PYG{n+nn}{layers}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{LSTM}\PYG{p}{,} \PYG{n}{Dense}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{n+nn}{.}\PYG{n+nn}{keras}\PYG{n+nn}{.}\PYG{n+nn}{utils}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{to\PYGZus{}categorical}
+
+\PYG{c+c1}{\PYGZsh{} Load and preprocess data}
+\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test}\PYG{p}{)} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{datasets}\PYG{o}{.}\PYG{n}{mnist}\PYG{o}{.}\PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Normalize pixel values to [0, 1]}
+\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{n}{x\PYGZus{}train}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{float32}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+\PYG{n}{x\PYGZus{}test} \PYG{o}{=} \PYG{n}{x\PYGZus{}test}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{float32}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+
+\PYG{c+c1}{\PYGZsh{} Reshape data for LSTM (samples, timesteps, features)}
+\PYG{c+c1}{\PYGZsh{} MNIST images are 28x28, so we treat each image as 28 timesteps of 28 features}
+\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{n}{x\PYGZus{}train}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{x\PYGZus{}test} \PYG{o}{=} \PYG{n}{x\PYGZus{}test}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Convert labels to one\PYGZhy{}hot encoding}
+\PYG{n}{y\PYGZus{}train} \PYG{o}{=} \PYG{n}{to\PYGZus{}categorical}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{to\PYGZus{}categorical}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Build LSTM model}
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{LSTM}\PYG{p}{(}\PYG{l+m+mi}{128}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} 128 LSTM units}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{softmax}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Compile the model}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{compile}\PYG{p}{(}\PYG{n}{loss}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{categorical\PYGZus{}crossentropy}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+             \PYG{n}{optimizer}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{adam}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+             \PYG{n}{metrics}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{accuracy}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Display model summary}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Train the model}
+\PYG{n}{history} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,}
+                   \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{64}\PYG{p}{,}
+                   \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,}
+                   \PYG{n}{validation\PYGZus{}split}\PYG{o}{=}\PYG{l+m+mf}{0.2}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Evaluate on test data}
+\PYG{n}{test\PYGZus{}loss}\PYG{p}{,} \PYG{n}{test\PYGZus{}acc} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{evaluate}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{Test accuracy: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{test\PYGZus{}acc}\PYG{l+s+si}{:}\PYG{l+s+s1}{.4f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\end{MintedVerbatim}
