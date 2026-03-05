@@ -1,0 +1,702 @@
+\documentclass{beamer}
+
+\usetheme{Madrid}
+
+\usepackage{amsmath,amsfonts,amssymb,graphicx}
+
+\title{Recurrent Neural Networks}
+\subtitle{Mathematics, Algorithms, and Applications}
+\author{Morten Hjorth-Jensen}
+\date{FYS5429/9429 March 5}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%------------------------------------------------
+\section{Motivation}
+
+\begin{frame}{Why Sequential Models?}
+
+Many physical and computational problems involve sequences:
+
+\begin{itemize}
+\item time series analysis
+\item natural language processing
+\item dynamical systems
+\item signal processing
+\item control problems
+\end{itemize}
+
+Examples of applications in the physical sciences:
+
+\begin{itemize}
+\item molecular dynamics trajectories
+\item quantum time evolution
+\item climate modelling
+\item detector signals
+\end{itemize}
+
+Standard feed-forward networks assume independent samples.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Sequential Data Structure}
+
+Instead of a single input vector:
+
+\[
+x \in \mathbb{R}^d
+\]
+
+we have a sequence
+
+\[
+x_1,x_2,\dots,x_T
+\]
+
+Each element:
+
+\[
+x_t \in \mathbb{R}^d
+\]
+
+represents the system at time step \(t\).
+\end{frame}
+
+%------------------------------------------------
+\section{Recurrent Neural Networks}
+
+\begin{frame}{Core Idea}
+
+Recurrent neural networks introduce a hidden state
+
+\[
+h_t
+\]
+
+that summarizes the past.
+
+\[
+h_t = f(x_t,h_{t-1})
+\]
+
+The hidden state acts as a memory.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{RNN Update Equations}
+
+Standard formulation:
+
+\[
+h_t = \sigma(W_{xh}x_t + W_{hh}h_{t-1} + b_h)
+\]
+
+Output:
+
+\[
+y_t = \phi(W_{hy}h_t + b_y)
+\]
+
+Parameters:
+
+\[
+\theta = \{W_{xh},W_{hh},W_{hy},b_h,b_y\}
+\]
+\end{frame}
+
+%------------------------------------------------
+\section{Forward Propagation}
+
+\begin{frame}{Forward Propagation}
+
+For each time step:
+
+\[
+h_t = \sigma(W_{xh}x_t + W_{hh}h_{t-1} + b_h)
+\]
+
+\[
+y_t = \phi(W_{hy}h_t + b_y)
+\]
+
+Initial state:
+
+\[
+h_0 = 0
+\]
+
+or learned parameters.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Unrolling the Network}
+
+RNNs can be viewed as deep networks over time.
+
+\[
+x_1 \rightarrow h_1 \rightarrow y_1
+\]
+
+\[
+x_2 \rightarrow h_2 \rightarrow y_2
+\]
+
+\[
+x_3 \rightarrow h_3 \rightarrow y_3
+\]
+
+Weights are shared across time.
+\end{frame}
+
+%------------------------------------------------
+\section{Loss Functions}
+
+\begin{frame}{Sequence Loss}
+
+Define total loss:
+
+\[
+L = \sum_{t=1}^{T} \ell(y_t,\hat y_t)
+\]
+
+Examples:
+
+Mean squared error:
+
+\[
+\ell = ||y_t-\hat y_t||^2
+\]
+
+Cross entropy:
+
+\[
+\ell = - \sum_i \hat y_i \log y_i
+\]
+\end{frame}
+
+%------------------------------------------------
+\section{Backpropagation Through Time}
+
+\begin{frame}{Training the Network}
+
+Training requires computing
+
+\[
+\frac{\partial L}{\partial \theta}
+\]
+
+Since hidden states depend on earlier states, gradients must propagate through time.
+
+This algorithm is called
+
+\textbf{Backpropagation Through Time (BPTT)}.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Hidden State Gradient}
+
+Define
+
+\[
+\delta_t = \frac{\partial L}{\partial h_t}
+\]
+
+Using the chain rule:
+
+\[
+\delta_t =
+\frac{\partial \ell_t}{\partial h_t}
++
+W_{hh}^T\delta_{t+1}
+\]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Weight Gradients}
+
+\[
+\frac{\partial L}{\partial W_{hh}}
+=
+\sum_{t=1}^T \delta_t h_{t-1}^T
+\]
+
+\[
+\frac{\partial L}{\partial W_{xh}}
+=
+\sum_{t=1}^T \delta_t x_t^T
+\]
+
+\[
+\frac{\partial L}{\partial W_{hy}}
+=
+\sum_{t=1}^T
+\frac{\partial \ell_t}{\partial y_t}
+h_t^T
+\]
+\end{frame}
+
+%------------------------------------------------
+\section{Gradient Instabilities}
+
+\begin{frame}{Vanishing Gradients}
+
+Backpropagation involves repeated multiplication:
+
+\[
+(W_{hh})^k
+\]
+
+If eigenvalues satisfy
+
+\[
+|\lambda| < 1
+\]
+
+gradients decay exponentially.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Exploding Gradients}
+
+If
+
+\[
+|\lambda| > 1
+\]
+
+gradients grow exponentially.
+
+Solutions:
+
+\begin{itemize}
+\item gradient clipping
+\item improved architectures
+\item careful initialization
+\end{itemize}
+\end{frame}
+
+
+%=========================================================
+\section{BPTT: Full Derivation with Matrix Calculus}
+%=========================================================
+
+\begin{frame}{Setup and Notation (Vectorized)}
+  We consider a (single-sequence) vanilla RNN with hidden size \(m\), input size \(d\), output size \(k\).
+
+  Forward equations:
+  \[
+  a_t = W_{xh} x_t + W_{hh} h_{t-1} + b_h,\qquad h_t = \sigma(a_t)
+  \]
+  \[
+  o_t = W_{hy} h_t + b_y,\qquad y_t = \phi(o_t)
+  \]
+
+  Dimensions:
+  \[
+  W_{xh}\in\mathbb{R}^{m\times d},\quad W_{hh}\in\mathbb{R}^{m\times m},\quad b_h\in\mathbb{R}^m
+  \]
+  \[
+  W_{hy}\in\mathbb{R}^{k\times m},\quad b_y\in\mathbb{R}^k
+  \]
+
+  Total loss (sequence-to-sequence):
+  \[
+  L=\sum_{t=1}^T \ell_t(y_t,\hat y_t).
+  \]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Matrix Calculus Rules Used}
+  We use the following standard identities:
+
+  \begin{itemize}
+  \item For \(z = Ax\), \( \frac{\partial L}{\partial x} = A^T \frac{\partial L}{\partial z}\).
+  \item For \(z = Ax + b\), \( \frac{\partial L}{\partial A} = \frac{\partial L}{\partial z}\, x^T\), \(\frac{\partial L}{\partial b} = \frac{\partial L}{\partial z}\).
+  \item For elementwise nonlinearity \(h=\sigma(a)\):
+    \[
+    \frac{\partial L}{\partial a} = \frac{\partial L}{\partial h}\odot \sigma'(a),
+    \]
+    where \(\odot\) is Hadamard product.
+  \end{itemize}
+
+  We will compute gradients by backpropagating through the unrolled computational graph.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Local Output Gradients}
+  Define output-layer ``error signals'':
+  \[
+  \delta^o_t \equiv \frac{\partial L}{\partial o_t}\in\mathbb{R}^k.
+  \]
+
+  By chain rule:
+  \[
+  \delta^o_t = \left(\frac{\partial \ell_t}{\partial y_t}\right)\odot \phi'(o_t).
+  \]
+
+  Then (matrix calculus):
+  \[
+  \frac{\partial L}{\partial W_{hy}} = \sum_{t=1}^T \delta^o_t\, h_t^T,
+  \qquad
+  \frac{\partial L}{\partial b_y} = \sum_{t=1}^T \delta^o_t.
+  \]
+
+  Hidden contribution from output at time \(t\):
+  \[
+  \left.\frac{\partial L}{\partial h_t}\right|_{\text{out}}
+  =
+  W_{hy}^T \delta^o_t.
+  \]
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Key Quantity: Hidden-State Sensitivity}
+  We want the total sensitivity
+  \[
+  \delta^h_t \equiv \frac{\partial L}{\partial h_t}\in\mathbb{R}^m.
+  \]
+
+  Because \(h_t\) influences:
+  \begin{itemize}
+  \item the loss at time \(t\) via \(o_t\),
+  \item all future hidden states \(h_{t+1},h_{t+2},\dots\) through recurrence.
+  \end{itemize}
+
+  Thus:
+  \[
+  \delta^h_t
+  =
+  \left.\frac{\partial L}{\partial h_t}\right|_{\text{out}}
+  +
+  \left.\frac{\partial L}{\partial h_t}\right|_{\text{future}}.
+  \]
+
+  We now compute the future term via the recurrence Jacobian.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{From \(\delta^h_t\) to \(\delta^a_t\)}
+  Define the pre-activation error:
+  \[
+  \delta^a_t \equiv \frac{\partial L}{\partial a_t}\in\mathbb{R}^m.
+  \]
+
+  Since \(h_t=\sigma(a_t)\) elementwise:
+  \[
+  \delta^a_t = \delta^h_t \odot \sigma'(a_t).
+  \]
+
+  This \(\delta^a_t\) is the central object used to compute parameter gradients in the recurrent core.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Recurrence Jacobian and Backward Recursion}
+  We have
+  \[
+  a_{t+1} = W_{xh}x_{t+1}+W_{hh}h_t+b_h.
+  \]
+
+  Hence the Jacobian of \(a_{t+1}\) w.r.t. \(h_t\) is:
+  \[
+  \frac{\partial a_{t+1}}{\partial h_t} = W_{hh}.
+  \]
+
+  Using matrix calculus:
+  \[
+  \left.\frac{\partial L}{\partial h_t}\right|_{\text{future}}
+  =
+  \left(\frac{\partial a_{t+1}}{\partial h_t}\right)^T
+  \frac{\partial L}{\partial a_{t+1}}
+  =
+  W_{hh}^T \delta^a_{t+1}.
+  \]
+
+  Therefore the BPTT recursion is:
+  \[
+  \boxed{\delta^h_t = W_{hy}^T\delta^o_t + W_{hh}^T\delta^a_{t+1}},
+  \qquad
+  \boxed{\delta^a_t = \delta^h_t \odot \sigma'(a_t)}
+  \]
+  with terminal condition \(\delta^a_{T+1}=0\).
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Core Parameter Gradients via Matrix Calculus}
+  Recall:
+  \[
+  a_t = W_{xh}x_t + W_{hh}h_{t-1} + b_h.
+  \]
+
+  Using the identity \(\partial L/\partial A = (\partial L/\partial z)\,x^T\) for \(z=Ax\):
+
+  \[
+  \boxed{
+    \frac{\partial L}{\partial W_{xh}} = \sum_{t=1}^T \delta^a_t\, x_t^T}
+  \]
+
+  \[
+  \boxed{
+    \frac{\partial L}{\partial W_{hh}} = \sum_{t=1}^T \delta^a_t\, h_{t-1}^T}
+  \]
+
+  \[
+  \boxed{
+    \frac{\partial L}{\partial b_h} = \sum_{t=1}^T \delta^a_t}
+  \]
+
+  These are the standard BPTT gradients for a vanilla RNN.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Explicit ``Unrolled'' Form (Useful for Analysis)}
+  Iterating the recursion:
+  \[
+  \delta^h_t = W_{hy}^T\delta^o_t + W_{hh}^T(\delta^h_{t+1}\odot\sigma'(a_{t+1})).
+  \]
+
+  Expanding gives:
+  \[
+  \delta^h_t
+  =
+  W_{hy}^T\delta^o_t
+  +
+  W_{hh}^T D_{t+1} W_{hy}^T\delta^o_{t+1}
+  +
+  W_{hh}^T D_{t+1} W_{hh}^T D_{t+2} W_{hy}^T\delta^o_{t+2}
+  +\cdots
+  \]
+  where \(D_t=\mathrm{diag}(\sigma'(a_t))\).
+
+  This makes the role of repeated Jacobian products explicit.
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Vanishing/Exploding Gradients from Jacobian Products}
+  The ``future'' influence involves products like:
+  \[
+  (W_{hh}^T D_{t+1})(W_{hh}^T D_{t+2})\cdots (W_{hh}^T D_{t+k}).
+  \]
+
+  If the operator norm satisfies (roughly)
+  \[
+  \|W_{hh}\|\cdot \max_t\|D_t\| < 1,
+  \]
+  then gradients shrink exponentially (vanishing gradients).
+
+  If
+  \[
+  \|W_{hh}\|\cdot \max_t\|D_t\| > 1,
+  \]
+  then gradients can grow exponentially (exploding gradients).
+
+  Mitigation strategies:
+  \begin{itemize}
+  \item gradient clipping
+  \item orthogonal/unitary \(W_{hh}\)
+  \item gating (LSTM/GRU)
+  \end{itemize}
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{BPTT Algorithm (Practical Implementation)}
+  Forward pass (store \(a_t,h_t,o_t,y_t\) for \(t=1,\dots,T\)).
+
+  Backward pass:
+  \begin{enumerate}
+  \item Initialize \(\delta^a_{T+1}=0\).
+  \item For \(t=T,\dots,1\):
+    \begin{itemize}
+    \item compute \(\delta^o_t=\frac{\partial \ell_t}{\partial y_t}\odot\phi'(o_t)\)
+    \item compute \(\delta^h_t = W_{hy}^T\delta^o_t + W_{hh}^T\delta^a_{t+1}\)
+    \item compute \(\delta^a_t = \delta^h_t \odot \sigma'(a_t)\)
+    \item accumulate gradients:
+      \[
+      \nabla W_{hy} {+}{=} \delta^o_t h_t^T,\quad
+      \nabla b_y {+}{=} \delta^o_t
+      \]
+      \[
+      \nabla W_{xh} {+}{=} \delta^a_t x_t^T,\quad
+      \nabla W_{hh} {+}{=} \delta^a_t h_{t-1}^T,\quad
+      \nabla b_h {+}{=} \delta^a_t
+      \]
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}{Truncated BPTT}
+  For very long sequences, backpropagating through all \(T\) steps is costly and unstable.
+
+  Truncated BPTT:
+  \begin{itemize}
+  \item Split sequence into blocks of length \(K\).
+  \item Backpropagate only \(K\) steps at a time.
+  \end{itemize}
+
+  Effect:
+  \begin{itemize}
+  \item reduces cost from \(O(T)\) memory to \(O(K)\)
+  \item limits long-range credit assignment
+  \end{itemize}
+\end{frame}
+
+
+%------------------------------------------------
+\section{Long Short-Term Memory}
+
+\begin{frame}{Motivation for LSTM}
+
+Simple RNNs struggle with long-range dependencies.
+
+LSTMs introduce gates that control information flow.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{LSTM Equations}
+
+Forget gate:
+
+\[
+f_t = \sigma(W_f x_t + U_f h_{t-1} + b_f)
+\]
+
+Input gate:
+
+\[
+i_t = \sigma(W_i x_t + U_i h_{t-1} + b_i)
+\]
+
+Candidate state:
+
+\[
+\tilde c_t = \tanh(W_c x_t + U_c h_{t-1})
+\]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Cell State Update}
+
+\[
+c_t = f_t \odot c_{t-1} + i_t \odot \tilde c_t
+\]
+
+Output gate:
+
+\[
+o_t = \sigma(W_o x_t + U_o h_{t-1})
+\]
+
+Hidden state:
+
+\[
+h_t = o_t \odot \tanh(c_t)
+\]
+\end{frame}
+
+%------------------------------------------------
+\section{Gated Recurrent Units}
+
+\begin{frame}{GRU Architecture}
+
+Simplified alternative to LSTM.
+
+Update gate:
+
+\[
+z_t = \sigma(W_z x_t + U_z h_{t-1})
+\]
+
+Reset gate:
+
+\[
+r_t = \sigma(W_r x_t + U_r h_{t-1})
+\]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{GRU Update}
+
+\[
+\tilde h_t =
+\tanh(W_h x_t + U_h (r_t \odot h_{t-1}))
+\]
+
+\[
+h_t =
+(1-z_t)h_{t-1} + z_t \tilde h_t
+\]
+\end{frame}
+
+%------------------------------------------------
+\section{Computational Considerations}
+
+\begin{frame}{Computational Complexity}
+
+Cost per time step:
+
+\[
+O(n_h^2)
+\]
+
+where \(n_h\) is the hidden dimension.
+
+Total cost:
+
+\[
+O(Tn_h^2)
+\]
+\end{frame}
+
+%------------------------------------------------
+\section{Applications in physical sciences}
+
+\begin{frame}{RNN applications}
+
+Examples:
+
+\begin{itemize}
+\item quantum state reconstruction
+\item time-series modelling
+\item turbulence prediction
+\item particle detector signals
+\item dynamical system forecasting
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Example: Dynamical Systems}
+
+Given data
+
+\[
+x_{t+1} = F(x_t)
+\]
+
+RNN learns
+
+\[
+x_{t+1} \approx f_\theta(x_t,h_t)
+\]
+
+This provides a learned surrogate model.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Summary}
+
+\begin{itemize}
+\item RNNs model sequential data using hidden states
+\item training uses backpropagation through time
+\item gradients can vanish or explode
+\item LSTM and GRU mitigate these problems
+\item widely used in physics and machine learning
+\end{itemize}
+
+\end{frame}
+
+\end{document}
+
+
+
