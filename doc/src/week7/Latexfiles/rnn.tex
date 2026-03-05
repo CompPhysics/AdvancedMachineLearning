@@ -40,6 +40,97 @@ Examples of applications in the physical sciences:
 Standard feed-forward networks assume independent samples.
 \end{frame}
 
+%================================================
+\section{Motivation and Background}
+%================================================
+
+\begin{frame}{Why sequential models?}
+Many datasets are \emph{ordered} and exhibit temporal/causal structure:
+\begin{itemize}
+\item time series in physics and engineering (signals, sensors, trajectories)
+\item language (sentences), speech, audio
+\item dynamical systems and control
+\end{itemize}
+
+A feed-forward network typically assumes:
+\begin{itemize}
+\item fixed-size input vectors,
+\item exchangeability (ordering does not matter),
+\item no internal memory.
+\end{itemize}
+
+RNNs introduce a \textbf{state} that evolves with the sequence.
+\end{frame}
+
+\begin{frame}{Sequential data notation}
+We represent an input sequence as
+\[
+x_{1:T} \equiv (x_1,x_2,\dots,x_T), \qquad x_t\in\mathbb{R}^{d}.
+\]
+Typical prediction settings:
+\begin{itemize}
+\item \textbf{many-to-one:} predict a label from the whole sequence
+\item \textbf{one-to-many:} generate a sequence from one input
+\item \textbf{many-to-many:} sequence tagging or forecasting
+\end{itemize}
+
+Core challenge: capture dependencies across time steps \(t\).
+\end{frame}
+
+\begin{frame}{Sources and pointers (for students)}
+Standard references:
+\begin{itemize}
+\item I. Goodfellow, Y. Bengio, A. Courville, \emph{Deep Learning} (RNN chapter)
+\item C. Bishop, \emph{Pattern Recognition and Machine Learning} (sequence models background)
+\item S. Hochreiter \& J. Schmidhuber (1997): LSTM
+\item K. Cho et al. (2014): GRU
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Recurrent Neural Networks: Concepts}
+%================================================
+
+\begin{frame}{What is an RNN?}
+An RNN maintains a \textbf{hidden state} \(h_t\in\mathbb{R}^m\) that summarizes the past:
+\[
+h_t = f_\theta(x_t,h_{t-1}).
+\]
+Key idea: parameters \(\theta\) are \emph{shared} across time steps.
+\begin{itemize}
+\item compact parameterization for long sequences
+\item natural inductive bias for temporal structure
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why RNNs?}
+RNNs are designed to learn:
+\begin{itemize}
+\item \textbf{short-range dependencies} (local patterns)
+\item \textbf{long-range dependencies} (delayed effects, memory)
+\end{itemize}
+
+In varios applciations this resembles:
+\begin{itemize}
+\item state-space models
+\item discrete-time dynamical systems
+\item Markovian updates with learnable transition maps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations of vanilla RNNs}
+Training a basic RNN can be difficult due to:
+\begin{itemize}
+\item \textbf{vanishing gradients} (long-range information fades)
+\item \textbf{exploding gradients} (instability)
+\item optimization challenges in deep unrolled computation graphs
+\end{itemize}
+
+Modern gated architectures (LSTM/GRU) mitigate these issues.
+\end{frame}
+
+
+
 %------------------------------------------------
 \begin{frame}{Sequential Data Structure}
 
@@ -105,6 +196,55 @@ Parameters:
 \theta = \{W_{xh},W_{hh},W_{hy},b_h,b_y\}
 \]
 \end{frame}
+
+
+\subsection{Architecture and forward propagation}
+
+\begin{frame}{Vanilla RNN architecture (vector form)}
+Let \(x_t\in\mathbb{R}^d\), hidden state \(h_t\in\mathbb{R}^m\), output pre-activation \(o_t\in\mathbb{R}^k\).
+Define
+\[
+a_t = W_{xh}x_t + W_{hh}h_{t-1} + b_h,\qquad h_t = \sigma(a_t),
+\]
+\[
+o_t = W_{hy}h_t + b_y,\qquad y_t = \phi(o_t).
+\]
+Parameters:
+\[
+W_{xh}\in\mathbb{R}^{m\times d},\;
+W_{hh}\in\mathbb{R}^{m\times m},\;
+W_{hy}\in\mathbb{R}^{k\times m}.
+\]
+\end{frame}
+
+\begin{frame}{Unrolling through time}
+The recurrence couples time steps:
+\[
+h_t = \sigma(W_{xh}x_t + W_{hh}h_{t-1}+b_h).
+\]
+Unrolling yields a depth-\(T\) computation graph with weight sharing:
+\begin{itemize}
+\item forward pass computes \(h_1,\dots,h_T\) sequentially
+\item backward pass propagates sensitivities from \(T\) back to \(1\)
+\end{itemize}
+
+Initialization: \(h_0=0\) (or learn \(h_0\)).
+\end{frame}
+
+\begin{frame}{Loss functions for sequences}
+Common objective:
+\[
+\mathcal{L} = \sum_{t=1}^T \ell_t(y_t,\hat y_t).
+\]
+Examples:
+\begin{itemize}
+\item regression: \(\ell_t=\frac12\|y_t-\hat y_t\|^2\)
+\item classification: \(\ell_t=-\sum_i \hat y_{t,i}\log y_{t,i}\)
+\end{itemize}
+We now derive gradients for training via \textbf{backpropagation through time} (BPTT).
+\end{frame}
+
+
 
 %------------------------------------------------
 \section{Forward Propagation}
@@ -700,3 +840,142 @@ This provides a learned surrogate model.
 
 
 
+
+
+
+%================================================
+\subsection{Backpropagation Through Time (BPTT)}
+%================================================
+
+\begin{frame}{BPTT: core idea}
+BPTT is ordinary backpropagation applied to the \emph{unrolled} graph.
+We compute:
+\[
+\nabla_\theta \mathcal{L} = \frac{\partial \mathcal{L}}{\partial \theta},
+\]
+with \(\theta=\{W_{xh},W_{hh},b_h,W_{hy},b_y\}\).
+
+Two coupled chains:
+\begin{itemize}
+\item output chain: \(o_t\to y_t\to \ell_t\)
+\item recurrent chain: \(h_t\to a_{t+1}\to h_{t+1}\to \cdots\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Output-layer backpropagation}
+Define output error signal:
+\[
+\delta_t^{o} \equiv \frac{\partial \mathcal{L}}{\partial o_t}\in\mathbb{R}^k
+= \left(\frac{\partial \ell_t}{\partial y_t}\right)\odot \phi'(o_t).
+\]
+Then
+\[
+\frac{\partial \mathcal{L}}{\partial W_{hy}} = \sum_{t=1}^T \delta_t^{o}\,h_t^\top,\qquad
+\frac{\partial \mathcal{L}}{\partial b_y} = \sum_{t=1}^T \delta_t^{o}.
+\]
+Contribution to hidden state:
+\[
+\left.\frac{\partial \mathcal{L}}{\partial h_t}\right|_{\text{out}}=W_{hy}^\top \delta_t^{o}.
+\]
+\end{frame}
+
+\begin{frame}{Hidden-state sensitivities and recursion}
+Define
+\[
+\delta_t^{h} \equiv \frac{\partial \mathcal{L}}{\partial h_t}\in\mathbb{R}^{m},\qquad
+\delta_t^{a} \equiv \frac{\partial \mathcal{L}}{\partial a_t}\in\mathbb{R}^{m}.
+\]
+Elementwise nonlinearity gives
+\[
+\delta_t^{a} = \delta_t^{h}\odot \sigma'(a_t).
+\]
+Since \(a_{t+1}=W_{xh}x_{t+1}+W_{hh}h_t+b_h\),
+\[
+\left.\frac{\partial \mathcal{L}}{\partial h_t}\right|_{\text{future}}
+=
+\left(\frac{\partial a_{t+1}}{\partial h_t}\right)^\top \delta_{t+1}^{a}
+= W_{hh}^\top \delta_{t+1}^{a}.
+\]
+Therefore, the BPTT recursion (backwards in time) is
+\[
+\boxed{\delta_t^{h}=W_{hy}^\top \delta_t^{o} + W_{hh}^\top \delta_{t+1}^{a}},\qquad
+\boxed{\delta_t^{a}=\delta_t^{h}\odot \sigma'(a_t)},
+\]
+with terminal condition \(\delta_{T+1}^{a}=0\).
+\end{frame}
+
+\begin{frame}{Gradients for recurrent core parameters}
+Using \(a_t=W_{xh}x_t+W_{hh}h_{t-1}+b_h\),
+matrix calculus yields:
+\[
+\boxed{\frac{\partial \mathcal{L}}{\partial W_{xh}} = \sum_{t=1}^{T}\delta_t^{a}\,x_t^\top},\qquad
+\boxed{\frac{\partial \mathcal{L}}{\partial W_{hh}} = \sum_{t=1}^{T}\delta_t^{a}\,h_{t-1}^\top},
+\]
+\[
+\boxed{\frac{\partial \mathcal{L}}{\partial b_h} = \sum_{t=1}^{T}\delta_t^{a}}.
+\]
+These, together with output-layer gradients, complete training for a vanilla RNN.
+\end{frame}
+
+\begin{frame}{Vanishing and exploding gradients (mathematical origin)}
+Unrolling the recursion reveals repeated Jacobian products:
+\[
+\delta_t^{h} \sim (W_{hh}^\top D_{t+1})(W_{hh}^\top D_{t+2})\cdots (W_{hh}^\top D_{t+k})\,(\cdots),
+\]
+where \(D_t=\mathrm{diag}(\sigma'(a_t))\).
+
+Heuristic criterion using operator norms:
+\[
+\|W_{hh}\|\cdot \max_t \|D_t\| < 1 \Rightarrow \text{vanishing gradients},
+\]
+\[
+\|W_{hh}\|\cdot \max_t \|D_t\| > 1 \Rightarrow \text{exploding gradients}.
+\]
+\end{frame}
+
+\begin{frame}{Mitigation strategies}
+Common practical fixes:
+\begin{itemize}
+\item \textbf{Gradient clipping:} enforce \(\|\nabla\|\le \tau\).
+\item \textbf{Initialization:} orthogonal/unitary \(W_{hh}\), careful scaling.
+\item \textbf{Truncated BPTT:} backpropagate only \(K\) steps.
+\item \textbf{Gating:} LSTM/GRU architectures.
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Algorithmic Summary}
+%================================================
+
+\begin{frame}{BPTT algorithm (single sequence)}
+\textbf{Forward pass:}
+\begin{itemize}
+\item for \(t=1\) to \(T\): compute \(a_t,h_t,o_t,y_t\) and store them
+\end{itemize}
+
+\textbf{Backward pass:}
+\begin{itemize}
+\item set \(\delta_{T+1}^{a}=0\)
+\item for \(t=T\) down to \(1\):
+\begin{align*}
+\delta_t^{o} &\leftarrow \left(\frac{\partial \ell_t}{\partial y_t}\right)\odot \phi'(o_t),\\
+\delta_t^{h} &\leftarrow W_{hy}^\top \delta_t^{o} + W_{hh}^\top \delta_{t+1}^{a},\\
+\delta_t^{a} &\leftarrow \delta_t^{h}\odot \sigma'(a_t),
+\end{align*}
+and accumulate gradients.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+\item RNNs are state-space models with learnable transitions and shared parameters.
+\item Vanilla RNN forward dynamics:
+\[
+h_t=\sigma(W_{xh}x_t+W_{hh}h_{t-1}+b_h).
+\]
+\item Training uses BPTT on the unrolled graph with a backward recursion.
+\item Long sequences lead to vanishing/exploding gradients; LSTM/GRU and practical tricks help.
+\end{itemize}
+\end{frame}
+
+\end{document}
