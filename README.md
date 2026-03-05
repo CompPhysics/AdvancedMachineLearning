@@ -115,13 +115,14 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 ## March 2-6
 - Recurrent neural networks, mathematics  and codes
-- Applications to differential equations
+- Long short term memory and RNNs
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week7/ipynb/week7.ipynb
 - Recommended reading Goodfellow et al chapters 10 and Raschka et al chapter 15 and 18
-- Video of lecture and whiteboard notes to be added
+- Video of lecture at https://youtu.be/6wYD12g5kfU
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek7.pdf"
 
 ## March 9-13
-- Long short term memory and RNNs
+
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
