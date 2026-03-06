@@ -1,0 +1,41 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}\PYG{n+nn}{.}\PYG{n+nn}{nn}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{nn}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}\PYG{n+nn}{.}\PYG{n+nn}{nn}\PYG{n+nn}{.}\PYG{n+nn}{functional}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{F}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}\PYG{n+nn}{.}\PYG{n+nn}{optim}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{optim}
+
+\PYG{c+c1}{\PYGZsh{} Network Parameters}
+\PYG{n}{num\PYGZus{}hidden\PYGZus{}1} \PYG{o}{=} \PYG{l+m+mi}{256}  \PYG{c+c1}{\PYGZsh{} 1st layer num features}
+\PYG{n}{num\PYGZus{}hidden\PYGZus{}2} \PYG{o}{=} \PYG{l+m+mi}{128}  \PYG{c+c1}{\PYGZsh{} 2nd layer num features (the latent dim)}
+\PYG{n}{num\PYGZus{}input} \PYG{o}{=} \PYG{l+m+mi}{784}  \PYG{c+c1}{\PYGZsh{} MNIST data input (img shape: 28*28)}
+
+
+\PYG{c+c1}{\PYGZsh{} Building the encoder}
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Autoencoder}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x\PYGZus{}dim}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim1}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim2}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{Autoencoder}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} encoder part}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc1} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{x\PYGZus{}dim}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim1}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc2} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim1}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim2}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} decoder part}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc3} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim2}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim1}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc4} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim1}\PYG{p}{,} \PYG{n}{x\PYGZus{}dim}\PYG{p}{)}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{encoder}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{sigmoid}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{sigmoid}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc2}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{x}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{decoder}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{sigmoid}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc3}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{sigmoid}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc4}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{x}
+
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{encoder}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{decoder}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{x}
+
+\PYG{c+c1}{\PYGZsh{} When initializing, it will run \PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}() function as above}
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{Autoencoder}\PYG{p}{(}\PYG{n}{num\PYGZus{}input}\PYG{p}{,} \PYG{n}{num\PYGZus{}hidden\PYGZus{}1}\PYG{p}{,} \PYG{n}{num\PYGZus{}hidden\PYGZus{}2}\PYG{p}{)}
+
+\end{MintedVerbatim}

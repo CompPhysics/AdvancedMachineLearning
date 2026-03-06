@@ -1,0 +1,477 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage{amsmath,amssymb,amsfonts,bm}
+\usepackage{mathtools}
+
+\title{Linear Autoencoders Recover PCA}
+\author{Morten Hjorth-Jensen}
+\date{Spring 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Statement of the result}
+Let \(X\in \mathbb{R}^{d\times N}\) be a centered data matrix, whose columns are data vectors
+\[
+x_1,\dots,x_N\in \mathbb{R}^d,
+\qquad
+\frac1N \sum_{n=1}^N x_n = 0.
+\]
+
+Consider a linear autoencoder with encoder matrix \(W_e\in \mathbb{R}^{k\times d}\)
+and decoder matrix \(W_d\in \mathbb{R}^{d\times k}\), where \(k<d\).
+
+The reconstruction is
+\[
+\widehat X = W_d W_e X.
+\]
+
+We minimize the squared reconstruction error
+\[
+\mathcal L(W_d,W_e)
+=
+\|X-W_dW_eX\|_F^2.
+\]
+
+\medskip
+
+\textbf{Claim:} every global minimizer spans the same \(k\)-dimensional principal subspace as PCA.
+\end{frame}
+
+\begin{frame}{What exactly must be proved?}
+There are two levels of the result:
+
+\begin{enumerate}
+\item The optimal product
+\[
+A^\star = W_d^\star W_e^\star
+\]
+is the orthogonal projector onto the principal \(k\)-dimensional subspace.
+
+\item The encoder and decoder individually need not equal the PCA matrices uniquely, but their column/row spaces recover the same subspace.
+\end{enumerate}
+
+So the precise statement is not that
+\[
+W_e^\star = U_k^T,\qquad W_d^\star = U_k
+\]
+must hold uniquely, but that the optimal autoencoder reconstructs by projection onto the PCA subspace.
+\end{frame}
+
+\begin{frame}{Step 1: Reformulate the problem}
+Define
+\[
+A = W_d W_e \in \mathbb{R}^{d\times d}.
+\]
+
+Because \(W_d\in \mathbb{R}^{d\times k}\) and \(W_e\in \mathbb{R}^{k\times d}\),
+the matrix \(A\) satisfies
+\[
+\operatorname{rank}(A)\le k.
+\]
+
+Thus the linear autoencoder optimization can be rewritten as
+\[
+\min_{W_d,W_e}\|X-W_dW_eX\|_F^2
+\quad \Longrightarrow \quad
+\min_{\operatorname{rank}(A)\le k}\|X-AX\|_F^2.
+\]
+
+So the problem is to find the best rank-\(k\) linear operator \(A\) that approximates the identity on the dataset.
+\end{frame}
+
+\begin{frame}{Step 2: Introduce the sample covariance matrix}
+Since the data are centered, the empirical covariance matrix is
+\[
+S = \frac1N XX^T.
+\]
+
+It is symmetric and positive semidefinite, so it admits the eigendecomposition
+\[
+S = U \Lambda U^T,
+\]
+where
+\[
+U = (u_1,\dots,u_d),\qquad
+\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_d),
+\]
+with
+\[
+\lambda_1\ge \lambda_2\ge \dots \ge \lambda_d \ge 0.
+\]
+
+The PCA subspace of dimension \(k\) is
+\[
+\mathcal U_k = \operatorname{span}\{u_1,\dots,u_k\}.
+\]
+\end{frame}
+
+\begin{frame}{Step 3: Expand the loss}
+We compute
+\[
+\|X-AX\|_F^2
+=
+\operatorname{Tr}\Big((X-AX)^T(X-AX)\Big).
+\]
+
+Expanding,
+\[
+\|X-AX\|_F^2
+=
+\operatorname{Tr}(X^TX)
+-2\operatorname{Tr}(X^TAX)
++\operatorname{Tr}(X^TA^TAX).
+\]
+
+Using cyclicity of the trace,
+\[
+\operatorname{Tr}(X^TAX)=\operatorname{Tr}(AXX^T),
+\qquad
+\operatorname{Tr}(X^TA^TAX)=\operatorname{Tr}(A^TAXX^T).
+\]
+
+Since \(XX^T = N S\), we get
+\[
+\|X-AX\|_F^2
+=
+N\Big[
+\operatorname{Tr}(S)
+-2\operatorname{Tr}(AS)
++\operatorname{Tr}(A^TAS)
+\Big].
+\]
+\end{frame}
+
+\begin{frame}{Step 4: Restrict first to orthogonal projectors}
+Suppose \(P\) is an orthogonal projector of rank \(k\):
+\[
+P^2=P,\qquad P^T=P,\qquad \operatorname{rank}(P)=k.
+\]
+
+Then
+\[
+P^TP = P,
+\]
+and the loss becomes
+\[
+\|X-PX\|_F^2
+=
+N\Big[\operatorname{Tr}(S)-2\operatorname{Tr}(PS)+\operatorname{Tr}(PS)\Big]
+=
+N\Big[\operatorname{Tr}(S)-\operatorname{Tr}(PS)\Big].
+\]
+
+Therefore minimizing the loss over rank-\(k\) orthogonal projectors is equivalent to maximizing
+\[
+\operatorname{Tr}(PS).
+\]
+\end{frame}
+
+\begin{frame}{Step 5: Parameterize a rank-\(k\) projector}
+Any rank-\(k\) orthogonal projector can be written as
+\[
+P = BB^T,
+\]
+where \(B\in \mathbb{R}^{d\times k}\) has orthonormal columns:
+\[
+B^TB=I_k.
+\]
+
+Then
+\[
+\operatorname{Tr}(PS)
+=
+\operatorname{Tr}(BB^TS)
+=
+\operatorname{Tr}(B^TSB).
+\]
+
+So the optimization becomes
+\[
+\max_{B^TB=I_k}\operatorname{Tr}(B^TSB).
+\]
+This is the standard variational characterization of PCA.
+\end{frame}
+
+\begin{frame}{Step 6: Use the eigendecomposition of \(S\)}
+Write
+\[
+S = U\Lambda U^T.
+\]
+
+Let
+\[
+C = U^T B.
+\]
+
+Since \(U\) is orthogonal and \(B^TB=I_k\),
+\[
+C^TC = B^TUU^TB = B^TB = I_k.
+\]
+
+Now
+\[
+\operatorname{Tr}(B^TSB)
+=
+\operatorname{Tr}(B^TU\Lambda U^TB)
+=
+\operatorname{Tr}(C^T\Lambda C).
+\]
+\end{frame}
+
+\begin{frame}{Step 7: Expand the trace in eigen-coordinates}
+Let \(c_{ij}\) be the entries of \(C\). Then
+\[
+\operatorname{Tr}(C^T\Lambda C)
+=
+\sum_{j=1}^k \sum_{i=1}^d \lambda_i c_{ij}^2
+=
+\sum_{i=1}^d \lambda_i \sum_{j=1}^k c_{ij}^2.
+\]
+
+Define
+\[
+\alpha_i = \sum_{j=1}^k c_{ij}^2.
+\]
+
+Then
+\[
+\operatorname{Tr}(C^T\Lambda C)=\sum_{i=1}^d \lambda_i \alpha_i.
+\]
+
+Because \(C^TC=I_k\),
+\[
+\sum_{i=1}^d \alpha_i
+=
+\sum_{i=1}^d \sum_{j=1}^k c_{ij}^2
+=
+\sum_{j=1}^k \sum_{i=1}^d c_{ij}^2
+=
+k.
+\]
+
+Also each \(\alpha_i\) satisfies
+\[
+0\le \alpha_i \le 1.
+\]
+\end{frame}
+
+\begin{frame}{Step 8: Maximize the weighted sum}
+We must maximize
+\[
+\sum_{i=1}^d \lambda_i \alpha_i
+\]
+subject to
+\[
+0\le \alpha_i \le 1,
+\qquad
+\sum_{i=1}^d \alpha_i = k.
+\]
+
+Since the eigenvalues are ordered
+\[
+\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_d,
+\]
+the maximum is obtained by putting all the weight on the largest \(k\) eigenvalues:
+\[
+\alpha_1=\cdots=\alpha_k=1,
+\qquad
+\alpha_{k+1}=\cdots=\alpha_d=0.
+\]
+
+Hence
+\[
+\max_{B^TB=I_k}\operatorname{Tr}(B^TSB)
+=
+\sum_{i=1}^k \lambda_i.
+\]
+
+This is achieved when the columns of \(B\) span the top-\(k\) eigenspace:
+\[
+B = U_k R,
+\]
+where \(U_k=(u_1,\dots,u_k)\) and \(R\in \mathbb{R}^{k\times k}\) is orthogonal.
+\end{frame}
+
+\begin{frame}{Conclusion for orthogonal projectors}
+Thus the optimal orthogonal projector is
+\[
+P^\star = U_k U_k^T.
+\]
+
+The corresponding reconstruction error is
+\[
+\|X-P^\star X\|_F^2
+=
+N\left(\operatorname{Tr}(S)-\sum_{i=1}^k \lambda_i\right)
+=
+N\sum_{i=k+1}^d \lambda_i.
+\]
+
+This is exactly the PCA reconstruction error.
+\end{frame}
+
+\begin{frame}{Step 9: Why this also solves the full linear autoencoder problem}
+So far we optimized over rank-\(k\) orthogonal projectors.
+But the autoencoder problem allows any factorization
+\[
+A = W_dW_e
+\]
+with \(\operatorname{rank}(A)\le k\), not necessarily a projector.
+
+We now show that no such \(A\) can do better than the PCA projector.
+\end{frame}
+
+\begin{frame}{Image-space argument}
+Let
+\[
+\mathcal M = \operatorname{Im}(A)
+\]
+be the image of \(A\). Since \(\operatorname{rank}(A)\le k\), this is a subspace of dimension at most \(k\).
+
+For each data vector \(x_n\), the reconstruction \(Ax_n\) lies in \(\mathcal M\).
+Therefore \(Ax_n\) is some point in \(\mathcal M\), but not necessarily the \emph{orthogonal projection} of \(x_n\) onto \(\mathcal M\).
+
+Let \(P_{\mathcal M}\) denote the orthogonal projector onto \(\mathcal M\).
+By the defining property of orthogonal projection,
+\[
+\|x_n - P_{\mathcal M}x_n\|_2^2 \le \|x_n - Ax_n\|_2^2
+\]
+for every \(n\).
+\]
+Summing over \(n\),
+\[
+\|X-P_{\mathcal M}X\|_F^2 \le \|X-AX\|_F^2.
+\]
+\end{frame}
+
+\begin{frame}{Finish the argument}
+This means: for every rank-\(k\) matrix \(A\), there exists an orthogonal projector \(P_{\mathcal M}\) of rank at most \(k\) with no larger error.
+
+Hence the global minimizer of
+\[
+\min_{\operatorname{rank}(A)\le k}\|X-AX\|_F^2
+\]
+may be taken to be an orthogonal projector.
+
+But we already proved that the best rank-\(k\) orthogonal projector is
+\[
+P^\star = U_kU_k^T.
+\]
+
+Therefore
+\[
+\min_{\operatorname{rank}(A)\le k}\|X-AX\|_F^2
+=
+\|X-U_kU_k^TX\|_F^2.
+\]
+
+So the optimal linear autoencoder reconstructs by projection onto the PCA subspace.
+\end{frame}
+
+\begin{frame}{How to choose encoder and decoder}
+A convenient choice is
+\[
+W_d^\star = U_k,
+\qquad
+W_e^\star = U_k^T.
+\]
+
+Then
+\[
+W_d^\star W_e^\star = U_kU_k^T = P^\star.
+\]
+
+So the encoder computes principal coordinates
+\[
+z = U_k^T x,
+\]
+and the decoder reconstructs by
+\[
+\hat x = U_k z = U_kU_k^T x.
+\]
+
+This is exactly PCA reconstruction.
+\end{frame}
+
+\begin{frame}{Non-uniqueness of the factorization}
+The optimal product \(A^\star = U_kU_k^T\) is unique if the PCA subspace is unique, but the factors are not.
+
+For any invertible matrix \(M\in \mathbb{R}^{k\times k}\),
+\[
+W_d = U_k M,
+\qquad
+W_e = M^{-1} U_k^T
+\]
+also satisfy
+\[
+W_dW_e = U_kU_k^T.
+\]
+
+Thus the learned latent coordinates are not unique:
+they are determined only up to an invertible linear change of basis.
+\end{frame}
+
+\begin{frame}{Equivalent statement using SVD}
+If
+\[
+X = U \Sigma V^T
+\]
+is the singular value decomposition of \(X\), then
+\[
+S = \frac1N XX^T = \frac1N U\Sigma^2 U^T.
+\]
+
+Thus the principal directions are the left singular vectors of \(X\).
+
+The optimal linear autoencoder reconstructs with
+\[
+A^\star = U_kU_k^T,
+\]
+where \(U_k\) contains the first \(k\) left singular vectors.
+
+So the result is equivalent to the rank-\(k\) approximation theorem of Eckart--Young--Mirsky.
+\end{frame}
+
+\begin{frame}{Final theorem}
+\textbf{Theorem.}
+Let \(X\in \mathbb{R}^{d\times N}\) be centered data and let \(k<d\).
+Consider the linear autoencoder objective
+\[
+\min_{W_d\in\mathbb{R}^{d\times k},\; W_e\in\mathbb{R}^{k\times d}}
+\|X-W_dW_eX\|_F^2.
+\]
+
+Then every global minimizer satisfies
+\[
+\operatorname{Im}(W_d^\star)=\mathcal U_k,
+\]
+the principal \(k\)-dimensional PCA subspace, and the optimal reconstruction map is
+\[
+W_d^\star W_e^\star = U_kU_k^T.
+\]
+
+Hence linear autoencoders recover PCA.
+\end{frame}
+
+\begin{frame}{Summary}
+Main steps of the proof:
+\begin{enumerate}
+\item Rewrite the autoencoder as a rank-constrained linear map \(A=W_dW_e\).
+\item Show that for fixed image subspace, orthogonal projection is optimal.
+\item Reduce the optimization to maximizing
+\[
+\operatorname{Tr}(B^TSB)
+\quad \text{subject to} \quad B^TB=I_k.
+\]
+\item Use the eigendecomposition of \(S\) to show the maximizer is the span of the top \(k\) eigenvectors.
+\end{enumerate}
+
+Therefore the optimal linear autoencoder performs exactly PCA projection and reconstruction.
+\end{frame}
+
+\end{document}

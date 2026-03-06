@@ -1,0 +1,22 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n}{tf}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{set\PYGZus{}seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+
+\PYG{n}{denoising\PYGZus{}encoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Flatten}\PYG{p}{(}\PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{GaussianNoise}\PYG{p}{(}\PYG{l+m+mf}{0.2}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{denoising\PYGZus{}decoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{30}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{28} \PYG{o}{*} \PYG{l+m+mi}{28}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{sigmoid}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Reshape}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{]}\PYG{p}{)}
+\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{denoising\PYGZus{}ae} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}\PYG{n}{denoising\PYGZus{}encoder}\PYG{p}{,} \PYG{n}{denoising\PYGZus{}decoder}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{denoising\PYGZus{}ae}\PYG{o}{.}\PYG{n}{compile}\PYG{p}{(}\PYG{n}{loss}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{binary\PYGZus{}crossentropy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{optimizer}\PYG{o}{=}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{optimizers}\PYG{o}{.}\PYG{n}{SGD}\PYG{p}{(}\PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{l+m+mf}{1.0}\PYG{p}{)}\PYG{p}{,}
+                     \PYG{n}{metrics}\PYG{o}{=}\PYG{p}{[}\PYG{n}{rounded\PYGZus{}accuracy}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{history} \PYG{o}{=} \PYG{n}{denoising\PYGZus{}ae}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,}
+                           \PYG{n}{validation\PYGZus{}data}\PYG{o}{=}\PYG{p}{(}\PYG{n}{X\PYGZus{}valid}\PYG{p}{,} \PYG{n}{X\PYGZus{}valid}\PYG{p}{)}\PYG{p}{)}
+
+\end{MintedVerbatim}
