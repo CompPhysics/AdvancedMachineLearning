@@ -1,0 +1,1808 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
+\usepackage{physics}
+\usepackage{dsfont}
+
+\title{Autoencoders and Representation Learning}
+\author{Morten Hjorth-Jensen}
+\date{Spring 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Course structure}
+This mini-course is organized as four one-hour lectures:
+\begin{enumerate}
+\item Foundations of representation learning and autoencoders
+\item Linear autoencoders and the full connection to PCA
+\item Nonlinear and regularized autoencoders
+\item Probabilistic autoencoders, PPCA, and VAEs
+\end{enumerate}
+
+The emphasis is on:
+\begin{itemize}
+\item linear algebra and optimization,
+\item geometry of latent representations,
+\item reconstruction error minimization,
+\item the relation between autoencoders, PCA, and probabilistic PCA.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Notation}
+We denote:
+\begin{itemize}
+\item \(x \in \mathbb{R}^d\): input vector,
+\item \(z \in \mathbb{R}^k\): latent code, with \(k<d\) in the undercomplete case,
+\item \(X=[x_1,\dots,x_N]\in \mathbb{R}^{d\times N}\): data matrix,
+\item \(\hat x\): reconstruction,
+\item \(\|A\|_F^2 = \operatorname{Tr}(A^T A)\): Frobenius norm.
+\end{itemize}
+We will assume throughout that the data are centered when discussing PCA:
+\[
+\frac{1}{N}\sum_{n=1}^N x_n = 0.
+\]
+\end{frame}
+\section{Lecture 1: Foundations of Autoencoders}
+
+\begin{frame}{What is representation learning?}
+
+Given observations \(x\in\mathbb{R}^d\), representation learning seeks a transformation
+\[
+x \mapsto z = f(x)
+\]
+such that \(z\) captures the structure relevant for a downstream task or for reconstruction.
+
+Typical goals:
+\begin{itemize}
+\item reduce dimension,
+\item denoise,
+\item identify latent factors,
+\item learn a coordinate system adapted to the data.
+\end{itemize}
+
+Autoencoders realize this idea through an encoder--decoder architecture trained end-to-end.
+
+\end{frame}
+
+\begin{frame}{Dimensionality reduction as approximation}
+
+A reduced representation of dimension \(k<d\) is useful only if the original data can be approximately recovered:
+\[
+x \approx \hat x = g(f(x)).
+\]
+Thus dimensionality reduction is naturally posed as an approximation problem:
+\[
+\min_{f,g} \sum_{n=1}^N \ell\bigl(x_n,g(f(x_n))\bigr).
+\]
+The simplest choice is squared error,
+\[
+\ell(x,\hat x)=\|x-\hat x\|_2^2.
+\]
+This makes autoencoders closely related to least-squares approximation and low-rank matrix approximation.
+
+\end{frame}
+
+\begin{frame}{Encoder--decoder architecture}
+
+An autoencoder consists of:
+\[
+z = f_\theta(x), \qquad \hat x = g_\phi(z).
+\]
+Hence the full model is
+\[
+\hat x = g_\phi(f_\theta(x)).
+\]
+Interpretation:
+\begin{itemize}
+\item \(f_\theta\) compresses data into latent coordinates,
+\item \(g_\phi\) reconstructs the original data from those coordinates,
+\item the pair \((f_\theta,g_\phi)\) is trained to minimize reconstruction loss.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Undercomplete, overcomplete, and bottlenecks}
+
+The latent dimension \(k\) plays a fundamental role.
+
+\textbf{Undercomplete autoencoder:}
+\[
+k<d.
+\]
+The network is forced to compress.
+
+\textbf{Overcomplete autoencoder:}
+\[
+k\ge d.
+\]
+Without additional regularization, the network may learn the identity map.
+
+Therefore a bottleneck alone is a structural regularizer, but not the only possible one.
+
+\end{frame}
+
+\begin{frame}{Empirical risk for autoencoders}
+
+Given data matrix
+\[
+X = [x_1,\dots,x_N] \in \mathbb{R}^{d\times N},
+\]
+the empirical reconstruction objective is
+\[
+\mathcal{L}(\theta,\phi)
+=
+\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(x_n))\|_2^2.
+\]
+Equivalently, if \(\hat X=[\hat x_1,\dots,\hat x_N]\),
+\[
+\mathcal{L}(\theta,\phi)=\frac{1}{N}\|X-\hat X\|_F^2.
+\]
+Thus the geometry of the Frobenius norm is central from the very beginning.
+
+\end{frame}
+
+\begin{frame}{The Frobenius norm viewpoint}
+
+Recall
+\[
+\|A\|_F^2 = \sum_{i,j} a_{ij}^2 = \operatorname{Tr}(A^T A).
+\]
+Hence the reconstruction objective can be written as
+\[
+\|X-\hat X\|_F^2
+=
+\operatorname{Tr}\bigl((X-\hat X)^T(X-\hat X)\bigr).
+\]
+This form is especially useful for deriving optimal linear autoencoders and for proving the connection to PCA.
+
+\end{frame}
+
+\begin{frame}{Latent variables as coordinates}
+
+If the data lie near a \(k\)-dimensional manifold \(\mathcal{M}\subset\mathbb{R}^d\), the encoder can be interpreted as producing local coordinates:
+\[
+z=f_\theta(x)\in \mathbb{R}^k.
+\]
+The decoder then acts as a chart map:
+\[
+g_\phi: \mathbb{R}^k \to \mathbb{R}^d.
+\]
+Thus autoencoders can be viewed as learning a nonlinear parameterization of the data manifold.
+
+\end{frame}
+
+\begin{frame}{A local linearization viewpoint}
+
+Suppose \(f\) and \(g\) are differentiable. Around a point \(x_0\),
+\[
+f(x) \approx f(x_0) + J_f(x_0)(x-x_0),
+\]
+\[
+g(z) \approx g(z_0) + J_g(z_0)(z-z_0).
+\]
+Hence, locally,
+\[
+g(f(x)) \approx g(f(x_0)) + J_g(z_0)J_f(x_0)(x-x_0).
+\]
+Thus even nonlinear autoencoders behave like linear dimension reducers in a local neighborhood.
+
+\end{frame}
+
+\begin{frame}{Connection to classical methods}
+
+Autoencoders are related to:
+\begin{itemize}
+\item PCA: linear projection minimizing squared reconstruction error,
+\item factor analysis / probabilistic PCA: latent Gaussian linear models,
+\item manifold learning: nonlinear low-dimensional structure,
+\item dictionary learning: sparse representations over learned atoms.
+\end{itemize}
+The key difference is that autoencoders learn both representation and reconstruction maps directly from data.
+
+\end{frame}
+
+\begin{frame}{When does reconstruction imply representation?}
+
+A low reconstruction error does not automatically imply a ``good'' representation in every sense.
+
+Questions to keep in mind:
+\begin{itemize}
+\item Does the latent space separate classes?
+\item Is the representation stable under perturbations?
+\item Is the map approximately invertible on the data manifold?
+\item Does the latent code capture semantic or physical variables?
+\end{itemize}
+This motivates adding regularization beyond plain reconstruction.
+
+\end{frame}
+
+\begin{frame}{A general regularized objective}
+
+A broad class of autoencoder objectives has the form
+\[
+\mathcal{L}(\theta,\phi)
+=
+\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(x_n))\|_2^2
++
+\lambda\,\Omega(\theta,\phi;X),
+\]
+where \(\Omega\) may penalize:
+\begin{itemize}
+\item latent activity (sparse AE),
+\item sensitivity of the encoder (contractive AE),
+\item deviation from a prior (VAE),
+\item complexity of the weights.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Why linear autoencoders matter}
+
+Although deep nonlinear autoencoders are more expressive, linear autoencoders are foundational because:
+\begin{itemize}
+\item they admit a full analytic treatment,
+\item they reveal the relation between reconstruction and projection,
+\item they recover PCA exactly under mild assumptions.
+\end{itemize}
+The next lecture develops this connection rigorously.
+
+\end{frame}
+
+\begin{frame}{Optimization problem in abstract form}
+
+Let \(\mathcal{F}\) be a class of encoders and \(\mathcal{G}\) a class of decoders. Then we solve
+\[
+\min_{f\in\mathcal{F},\, g\in\mathcal{G}}
+\sum_{n=1}^N \|x_n-g(f(x_n))\|_2^2.
+\]
+If \(\mathcal{F}\) and \(\mathcal{G}\) are linear, the problem becomes a constrained quadratic optimization problem.
+If they are nonlinear neural networks, the problem becomes nonconvex but highly expressive.
+
+\end{frame}
+
+\begin{frame}{Autoencoders as identity approximation with constraints}
+
+An autoencoder attempts to approximate the identity map
+\[
+x \mapsto x,
+\]
+but only through the restricted factorization
+\[
+x \mapsto z=f(x)\mapsto \hat x=g(z).
+\]
+Hence the entire method can be understood as:
+\begin{quote}
+Find the best constrained approximation to the identity on the data cloud.
+\end{quote}
+When the constraint is low rank and linear, the optimal solution is PCA.
+
+\end{frame}
+
+\begin{frame}{Reconstruction error decomposition (preview)}
+
+A recurring theme will be:
+\[
+\|X-\hat X\|_F^2 = \text{total variance} - \text{explained variance}.
+\]
+For PCA and linear autoencoders, minimizing reconstruction error is equivalent to maximizing variance captured by a \(k\)-dimensional subspace.
+This identity will become explicit in Lecture 2.
+
+\end{frame}
+
+\begin{frame}{Lecture 1 summary}
+
+Main points:
+\begin{itemize}
+\item Autoencoders learn compressed latent representations through reconstruction.
+\item The reconstruction objective is naturally expressed in Frobenius norm.
+\item Linear autoencoders form the bridge to PCA.
+\item Nonlinear and regularized autoencoders extend the idea beyond linear subspaces.
+\end{itemize}
+
+\end{frame}
+
+\section{Lecture 2: Linear Autoencoders and PCA}
+
+\begin{frame}{Linear autoencoder architecture}
+
+A linear autoencoder uses
+\[
+z = W_e x,\qquad \hat x = W_d z = W_d W_e x,
+\]
+with
+\[
+W_e\in\mathbb{R}^{k\times d},\qquad W_d\in\mathbb{R}^{d\times k}.
+\]
+Thus the reconstruction map is linear:
+\[
+\hat x = A x,\qquad A=W_dW_e.
+\]
+Since \(A\) factors through \(\mathbb{R}^k\),
+\[
+\rank(A)\le k.
+\]
+
+\end{frame}
+
+\begin{frame}{Matrix formulation of the training problem}
+
+For centered data \(X=[x_1,\dots,x_N]\in\mathbb{R}^{d\times N}\), the objective is
+\[
+\min_{W_d,W_e}\|X-W_dW_eX\|_F^2.
+\]
+Defining \(A=W_dW_e\), we rewrite this as
+\[
+\min_{\rank(A)\le k}\|X-AX\|_F^2.
+\]
+Therefore linear autoencoder training is a rank-constrained approximation problem.
+
+\end{frame}
+
+\begin{frame}{Sample covariance matrix}
+
+Assume
+\[
+\frac{1}{N}\sum_{n=1}^N x_n = 0.
+\]
+Then the empirical covariance matrix is
+\[
+S = \frac{1}{N}XX^T.
+\]
+It is symmetric and positive semidefinite, so
+\[
+S=U\Lambda U^T,
+\]
+where
+\[
+\Lambda = \diag(\lambda_1,\dots,\lambda_d),
+\qquad
+\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_d\ge 0.
+\]
+
+\end{frame}
+
+\begin{frame}{PCA as variance maximization}
+
+The principal \(k\)-dimensional subspace is spanned by the top \(k\) eigenvectors:
+\[
+U_k = [u_1,\dots,u_k].
+\]
+PCA solves
+\[
+\max_{B^TB=I_k}\Tr(B^T S B).
+\]
+Interpretation:
+\begin{itemize}
+\item columns of \(B\) form an orthonormal basis for a \(k\)-dimensional subspace,
+\item \(\Tr(B^TSB)\) is the variance captured by that subspace.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{PCA as projection minimization}
+
+Equivalent formulation:
+\[
+\min_{P^2=P,\; P^T=P,\; \rank(P)=k}\|X-PX\|_F^2.
+\]
+The optimal projector is
+\[
+P^\star = U_k U_k^T.
+\]
+Thus the PCA reconstruction is
+\[
+\hat x = U_k U_k^T x.
+\]
+
+\end{frame}
+
+\begin{frame}{Expanding the linear AE loss}
+
+Let \(A\in\mathbb{R}^{d\times d}\) with \(\rank(A)\le k\). Then
+\[
+\|X-AX\|_F^2
+=
+\Tr\bigl((X-AX)^T(X-AX)\bigr).
+\]
+Expanding:
+\[
+\|X-AX\|_F^2
+=
+\Tr(X^TX)-2\Tr(X^TAX)+\Tr(X^TA^TAX).
+\]
+Using cyclicity of the trace and \(XX^T = NS\),
+\[
+\|X-AX\|_F^2
+=
+N\Bigl[\Tr(S)-2\Tr(AS)+\Tr(A^TAS)\Bigr].
+\]
+
+\end{frame}
+
+\begin{frame}{Reduction to orthogonal projection}
+
+Let \(\mathcal{M}=\operatorname{Im}(A)\), with \(\dim \mathcal{M}\le k\).
+For each \(x_n\), the reconstruction \(Ax_n\in \mathcal{M}\).
+Let \(P_{\mathcal{M}}\) be the orthogonal projector onto \(\mathcal{M}\). Then
+\[
+\|x_n-P_{\mathcal{M}}x_n\|_2^2 \le \|x_n-Ax_n\|_2^2
+\]
+for every \(n\), because orthogonal projection is the closest point in the subspace.
+
+Therefore
+\[
+\|X-P_{\mathcal{M}}X\|_F^2 \le \|X-AX\|_F^2.
+\]
+So the global optimum may be taken to be an orthogonal projector of rank at most \(k\).
+
+\end{frame}
+
+\begin{frame}{Projector parameterization}
+
+Any rank-\(k\) orthogonal projector can be written as
+\[
+P = BB^T,
+\]
+where
+\[
+B\in\mathbb{R}^{d\times k},\qquad B^TB=I_k.
+\]
+Then
+\[
+\|X-PX\|_F^2
+=
+N\Bigl[\Tr(S)-\Tr(B^TSB)\Bigr].
+\]
+Thus minimizing the reconstruction error is equivalent to maximizing
+\[
+\Tr(B^TSB)
+\quad \text{subject to} \quad B^TB=I_k.
+\]
+
+\end{frame}
+
+\begin{frame}{Variational characterization in eigenbasis}
+
+Let
+\[
+S = U\Lambda U^T,\qquad C = U^T B.
+\]
+Since \(U\) is orthogonal and \(B^TB=I_k\),
+\[
+C^T C = I_k.
+\]
+Now
+\[
+\Tr(B^TSB) = \Tr(C^T \Lambda C).
+\]
+Write \(c_{ij}\) for the entries of \(C\). Then
+\[
+\Tr(C^T\Lambda C)=\sum_{i=1}^d \lambda_i \alpha_i,
+\qquad
+\alpha_i = \sum_{j=1}^k c_{ij}^2.
+\]
+Also,
+\[
+0\le \alpha_i \le 1,\qquad \sum_{i=1}^d \alpha_i = k.
+\]
+
+\end{frame}
+
+\begin{frame}{Maximization argument}
+
+Because
+\[
+\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_d,
+\]
+the quantity
+\[
+\sum_{i=1}^d \lambda_i \alpha_i
+\]
+is maximized by placing all available weight on the largest \(k\) eigenvalues:
+\[
+\alpha_1=\cdots=\alpha_k=1,\qquad \alpha_{k+1}=\cdots=\alpha_d=0.
+\]
+Hence
+\[
+\max_{B^TB=I_k}\Tr(B^TSB)=\sum_{i=1}^k \lambda_i,
+\]
+and the maximizing subspace is
+\[
+\operatorname{span}(B)=\operatorname{span}(u_1,\dots,u_k).
+\]
+
+\end{frame}
+
+\begin{frame}{Optimal reconstruction map}
+
+Therefore the optimal rank-\(k\) projector is
+\[
+P^\star = U_k U_k^T.
+\]
+Since the optimal linear autoencoder may be chosen to be a projector,
+\[
+A^\star = W_d^\star W_e^\star = U_k U_k^T.
+\]
+So linear autoencoders recover the PCA subspace.
+
+\end{frame}
+
+\begin{frame}{Choice of encoder and decoder}
+
+A canonical choice is
+\[
+W_e^\star = U_k^T,\qquad W_d^\star = U_k.
+\]
+Then
+\[
+W_d^\star W_e^\star = U_k U_k^T.
+\]
+The latent code is
+\[
+z = U_k^T x,
+\]
+which is exactly the vector of principal coordinates, and the reconstruction is
+\[
+\hat x = U_k z = U_k U_k^T x.
+\]
+
+\end{frame}
+
+\begin{frame}{Non-uniqueness of the factors}
+
+The product \(A^\star=U_kU_k^T\) is determined by the principal subspace, but \(W_e^\star\) and \(W_d^\star\) are not unique.
+For any invertible \(M\in\mathbb{R}^{k\times k}\),
+\[
+W_d = U_k M,\qquad W_e = M^{-1} U_k^T
+\]
+also satisfy
+\[
+W_d W_e = U_kU_k^T.
+\]
+Hence the latent coordinates are unique only up to an invertible linear change of basis.
+
+\end{frame}
+
+\begin{frame}{Reconstruction error and discarded variance}
+
+The optimal reconstruction error is
+\[
+\|X-U_kU_k^T X\|_F^2
+=
+N\sum_{i=k+1}^d \lambda_i.
+\]
+So PCA and the optimal linear autoencoder discard exactly the variance associated with the trailing eigenvalues.
+This is one of the most useful interpretations of PCA:
+\[
+\text{reconstruction error} = \text{unexplained variance}.
+\]
+
+\end{frame}
+
+\begin{frame}{Connection to SVD}
+
+Let
+\[
+X = U\Sigma V^T
+\]
+be the singular value decomposition.
+Then
+\[
+S = \frac{1}{N}XX^T = \frac{1}{N}U\Sigma^2 U^T.
+\]
+Hence the PCA directions are the left singular vectors of \(X\).
+The optimal linear autoencoder reconstructs with
+\[
+A^\star = U_k U_k^T,
+\]
+where \(U_k\) contains the first \(k\) left singular vectors.
+
+\end{frame}
+
+\begin{frame}{Relation to Eckart--Young--Mirsky}
+
+The Eckart--Young--Mirsky theorem states that the best rank-\(k\) approximation to \(X\) in Frobenius norm is
+\[
+X_k = U_k \Sigma_k V_k^T.
+\]
+The projector form is related by
+\[
+U_k U_k^T X = U_k U_k^T (U\Sigma V^T)=U_k\Sigma_k V_k^T = X_k.
+\]
+Thus the linear autoencoder recovers the same approximation as truncated SVD.
+
+\end{frame}
+
+\begin{frame}{Bias terms and centering}
+
+If biases are included,
+\[
+z = W_e x + b_e,\qquad \hat x = W_d z + b_d,
+\]
+then the relation to PCA is cleanest after centering the data.
+Otherwise the affine part tends to learn the empirical mean.
+In practice:
+\begin{itemize}
+\item center first for the pure PCA theorem,
+\item or interpret the bias as handling the data mean.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Orthonormality and tied weights}
+
+Sometimes one imposes tied weights:
+\[
+W_d = W_e^T.
+\]
+Then the model becomes
+\[
+\hat x = W_e^T W_e x.
+\]
+If the rows of \(W_e\) are orthonormal, then \(W_e^TW_e\) is the orthogonal projector onto the row space of \(W_e\).
+This makes the PCA connection even more direct, although tied weights are not necessary for the theorem.
+
+\end{frame}
+
+\begin{frame}{Geometric meaning of the theorem}
+
+Linear autoencoders do not merely learn a low-dimensional code:
+they learn the \emph{best} \(k\)-dimensional linear subspace in the least-squares sense.
+
+So the theorem says:
+\begin{quote}
+Among all \(k\)-dimensional linear reconstructions, the optimal one is orthogonal projection onto the principal subspace.
+\end{quote}
+That is exactly the geometric content of PCA.
+
+\end{frame}
+
+\begin{frame}{Lecture 2 summary}
+
+Main results:
+\begin{itemize}
+\item The linear autoencoder objective is a rank-constrained least-squares problem.
+\item Its global minimizer is an orthogonal projector.
+\item The optimal projector is \(U_kU_k^T\), the PCA projector.
+\item Therefore linear autoencoders recover PCA exactly.
+\end{itemize}
+
+\end{frame}
+
+\section{Lecture 3: Nonlinear and Regularized Autoencoders}
+
+\begin{frame}{Why go beyond PCA?}
+
+PCA captures only linear subspaces.
+But many datasets lie near nonlinear manifolds:
+\begin{itemize}
+\item images of a rotated object,
+\item molecular conformations,
+\item solutions of nonlinear PDEs,
+\item speech signals.
+\end{itemize}
+A nonlinear autoencoder replaces linear maps by compositions of affine maps and nonlinear activations.
+
+\end{frame}
+
+\begin{frame}{Deep autoencoder architecture}
+
+A deep encoder may have the form
+\[
+z = f_\theta(x)=\sigma_L(W_L \sigma_{L-1}(W_{L-1}\cdots \sigma_1(W_1 x+b_1)\cdots+b_{L-1})+b_L),
+\]
+and the decoder similarly
+\[
+\hat x = g_\phi(z).
+\]
+These nested nonlinear maps can approximate highly non-Euclidean structure.
+
+\end{frame}
+
+\begin{frame}{Local linearization of nonlinear autoencoders}
+
+If \(f\) and \(g\) are differentiable, then around \(x_0\),
+\[
+f(x) \approx f(x_0)+J_f(x_0)(x-x_0),
+\]
+\[
+g(z) \approx g(z_0)+J_g(z_0)(z-z_0).
+\]
+Hence
+\[
+g(f(x)) \approx g(f(x_0)) + J_g(z_0)J_f(x_0)(x-x_0).
+\]
+So the Jacobian product \(J_g J_f\) acts as the local linear reconstruction operator.
+
+\end{frame}
+
+\begin{frame}{Latent manifolds and charts}
+
+If the data lie on a manifold \(\mathcal{M}\subset\mathbb{R}^d\) of intrinsic dimension \(k\), then
+\[
+f_\theta : \mathcal{M}\to\mathbb{R}^k
+\]
+can be interpreted as a chart, and
+\[
+g_\phi : \mathbb{R}^k\to\mathcal{M}
+\]
+as a reconstruction map.
+
+Autoencoders therefore fit naturally into differential-geometric language:
+\begin{itemize}
+\item latent space gives coordinates,
+\item decoder parameterizes the manifold in ambient space.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Denoising autoencoders}
+
+In a denoising autoencoder, one corrupts the input:
+\[
+\tilde x = x + \varepsilon,
+\]
+and trains the network to reconstruct \(x\) from \(\tilde x\):
+\[
+\min_{\theta,\phi}\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(\tilde x_n))\|_2^2.
+\]
+This prevents the model from trivially copying the input and encourages extraction of robust structure.
+
+\end{frame}
+
+\begin{frame}{Statistical meaning of denoising}
+
+For small Gaussian noise, the denoising map approximates a score-like direction.
+In fact, denoising autoencoders are closely related to score matching:
+the reconstruction vector
+\[
+r(x)-x
+\]
+encodes information about the gradient of the log-density of the data distribution.
+Thus denoising autoencoders anticipate ideas that later appear in diffusion and score-based models.
+
+\end{frame}
+
+\begin{frame}{Sparse autoencoders}
+
+Sparse autoencoders add a penalty encouraging latent activations to be mostly zero:
+\[
+\mathcal{L} =
+\frac{1}{N}\sum_{n=1}^N \|x_n-\hat x_n\|_2^2
++\lambda \sum_{n=1}^N \|z_n\|_1.
+\]
+Interpretation:
+\begin{itemize}
+\item each input activates only a small subset of latent units,
+\item latent units can become feature detectors,
+\item the model resembles dictionary learning and sparse coding.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Contractive autoencoders}
+
+Contractive autoencoders penalize the sensitivity of the encoder:
+\[
+\mathcal{L} =
+\frac{1}{N}\sum_{n=1}^N \|x_n-\hat x_n\|_2^2
++
+\lambda \sum_{n=1}^N \|J_f(x_n)\|_F^2.
+\]
+This encourages the representation to be stable under small perturbations orthogonal to the data manifold.
+Hence the encoder becomes approximately invariant to directions that do not matter.
+
+\end{frame}
+
+\begin{frame}{Jacobian penalty and geometry}
+
+The Jacobian \(J_f(x)\) measures how latent coordinates change with the input.
+If
+\[
+\|J_f(x)\|_F^2
+\]
+is small in directions orthogonal to the manifold, then the encoder contracts those directions.
+So contractive autoencoders can be seen as learning tangent directions of the data manifold while suppressing normal directions.
+
+\end{frame}
+
+\begin{frame}{Overcomplete autoencoders and regularization}
+
+An overcomplete autoencoder with \(k\ge d\) can easily learn
+\[
+g(f(x))=x.
+\]
+To prevent this, one must impose additional structure:
+\begin{itemize}
+\item sparsity,
+\item denoising corruption,
+\item contractive penalty,
+\item weight decay or architectural constraints.
+\end{itemize}
+Thus regularization can replace the role of a bottleneck.
+
+\end{frame}
+
+\begin{frame}{Kernel PCA vs nonlinear autoencoders}
+
+Kernel PCA uses a fixed nonlinear feature map \(\Phi(x)\) and performs PCA in feature space.
+A nonlinear autoencoder instead learns both:
+\begin{itemize}
+\item the representation map,
+\item and the inverse reconstruction map.
+\end{itemize}
+Kernel PCA is nonparametric and spectral;
+autoencoders are parametric and optimization-based.
+
+\end{frame}
+
+\begin{frame}{Relation to manifold learning methods}
+
+Classical manifold learning methods include:
+\begin{itemize}
+\item Isomap,
+\item LLE,
+\item Laplacian eigenmaps,
+\item diffusion maps.
+\end{itemize}
+These methods often construct embeddings from graph geometry.
+Autoencoders instead learn a parametric map
+\[
+x \mapsto z
+\]
+and an explicit decoder
+\[
+z \mapsto \hat x,
+\]
+which is often advantageous for out-of-sample extension.
+
+\end{frame}
+
+\begin{frame}{Latent interpolation}
+
+One practical way to test a learned latent geometry is interpolation:
+\[
+z(\tau)=(1-\tau)z_1+\tau z_2,\qquad 0\le \tau \le 1,
+\]
+followed by decoding
+\[
+\hat x(\tau)=g_\phi(z(\tau)).
+\]
+If the autoencoder has learned a smooth latent manifold, then these interpolations should remain data-like.
+
+\end{frame}
+
+\begin{frame}{Optimization landscape}
+
+Nonlinear autoencoder training is nonconvex because of:
+\begin{itemize}
+\item multilayer compositions,
+\item nonlinear activations,
+\item coupled encoder/decoder parameters.
+\end{itemize}
+Thus unlike linear autoencoders, we generally do not have closed-form global minimizers.
+Instead, gradient-based optimization is used.
+
+\end{frame}
+
+\begin{frame}{Generalization issues}
+
+A nonlinear autoencoder can memorize the training set if too expressive.
+Hence we must ask:
+\begin{itemize}
+\item does it generalize to unseen data?
+\item is the latent structure stable?
+\item does reconstruction preserve physically meaningful variation?
+\end{itemize}
+These questions motivate probabilistic and information-theoretic viewpoints.
+
+\end{frame}
+
+\begin{frame}{Lecture 3 summary}
+
+Main ideas:
+\begin{itemize}
+\item Nonlinear autoencoders generalize PCA from linear subspaces to nonlinear manifolds.
+\item Denoising, sparse, and contractive variants add structure to the latent representation.
+\item Jacobians provide the local differential geometry of the encoder and decoder.
+\end{itemize}
+
+\end{frame}
+
+\section{Lecture 4: Probabilistic Autoencoders, PPCA, and VAEs}
+
+\begin{frame}{From deterministic to probabilistic models}
+
+Deterministic autoencoders produce a code
+\[
+z=f_\theta(x)
+\]
+and a reconstruction
+\[
+\hat x=g_\phi(z).
+\]
+A probabilistic autoencoder instead introduces a latent-variable model
+\[
+p_\theta(x,z)=p_\theta(x\mid z)p(z),
+\]
+where \(z\) is a random latent variable.
+This turns representation learning into statistical inference.
+
+\end{frame}
+
+\begin{frame}{Probabilistic PCA model}
+
+Probabilistic PCA assumes
+\[
+z \sim \mathcal{N}(0,I_k),
+\]
+and
+\[
+x = W z + \mu + \epsilon,
+\qquad
+\epsilon \sim \mathcal{N}(0,\sigma^2 I_d).
+\]
+Hence
+\[
+p(x\mid z)=\mathcal{N}(Wz+\mu,\sigma^2 I_d).
+\]
+This is a linear-Gaussian latent variable model.
+
+\end{frame}
+
+\begin{frame}{Marginal distribution in PPCA}
+
+Integrating out \(z\), one gets
+\[
+x \sim \mathcal{N}(\mu,\, WW^T+\sigma^2 I_d).
+\]
+Thus PPCA models the covariance by a low-rank term plus isotropic noise:
+\[
+\Sigma = WW^T + \sigma^2 I_d.
+\]
+This is the probabilistic analogue of low-dimensional linear structure.
+
+\end{frame}
+
+\begin{frame}{PPCA and classical PCA}
+
+As \(\sigma^2 \to 0\), the PPCA model approaches a deterministic projection model.
+Moreover, maximum-likelihood estimation in PPCA yields a loading matrix whose column space is the PCA subspace.
+So PPCA recovers the same principal directions as classical PCA, but with a probabilistic interpretation.
+
+\end{frame}
+
+\begin{frame}{Posterior distribution in PPCA}
+
+Because the model is linear-Gaussian, the posterior is analytic:
+\[
+p(z\mid x)=\mathcal{N}(M^{-1}W^T(x-\mu),\;\sigma^2 M^{-1}),
+\qquad
+M=W^TW+\sigma^2 I_k.
+\]
+Thus PPCA has exact inference, unlike general nonlinear latent-variable models.
+
+\end{frame}
+
+\begin{frame}{EM perspective for PPCA}
+
+PPCA can be trained by EM:
+\begin{itemize}
+\item E-step: compute posterior moments of \(z\) given \(x\),
+\item M-step: update \(W\) and \(\sigma^2\) to maximize expected complete-data log-likelihood.
+\end{itemize}
+This makes PPCA an important bridge between PCA and variational autoencoders.
+
+\end{frame}
+
+\begin{frame}{General latent-variable model}
+
+In a general generative model,
+\[
+p_\theta(x)=\int p_\theta(x\mid z)p(z)\,dz.
+\]
+This integral is usually intractable for nonlinear \(p_\theta(x\mid z)\).
+So direct maximum likelihood is difficult.
+We therefore introduce an approximate posterior \(q_\phi(z\mid x)\).
+
+\end{frame}
+
+\begin{frame}{Variational inference and the ELBO}
+
+Starting from
+\[
+\log p_\theta(x)
+=
+\log \int q_\phi(z\mid x)\frac{p_\theta(x,z)}{q_\phi(z\mid x)}\,dz,
+\]
+Jensen's inequality gives
+\[
+\log p_\theta(x)
+\ge
+\mathbb{E}_{q_\phi(z\mid x)}
+\left[
+\log \frac{p_\theta(x,z)}{q_\phi(z\mid x)}
+\right].
+\]
+This lower bound is the evidence lower bound (ELBO).
+
+\end{frame}
+
+\begin{frame}{ELBO decomposition}
+
+Expanding the ELBO,
+\[
+\mathcal{L}_{\mathrm{ELBO}}(x)
+=
+\mathbb{E}_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]
+-
+\mathrm{KL}\bigl(q_\phi(z\mid x)\|p(z)\bigr).
+\]
+Interpretation:
+\begin{itemize}
+\item reconstruction term encourages faithful decoding,
+\item KL term regularizes the latent distribution toward the prior.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Why the ELBO is useful}
+
+The ELBO satisfies
+\[
+\log p_\theta(x)
+=
+\mathcal{L}_{\mathrm{ELBO}}(x)
++
+\mathrm{KL}\bigl(q_\phi(z\mid x)\|p_\theta(z\mid x)\bigr).
+\]
+Since KL divergence is nonnegative,
+\[
+\mathcal{L}_{\mathrm{ELBO}}(x)\le \log p_\theta(x).
+\]
+Maximizing the ELBO therefore simultaneously:
+\begin{itemize}
+\item increases the data likelihood,
+\item makes the approximate posterior \(q_\phi(z\mid x)\) close to the true posterior.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Variational autoencoder architecture}
+
+A VAE parameterizes:
+\begin{itemize}
+\item encoder (approximate posterior): \(q_\phi(z\mid x)\),
+\item decoder (likelihood model): \(p_\theta(x\mid z)\),
+\item prior: usually \(p(z)=\mathcal{N}(0,I)\).
+\end{itemize}
+Typically,
+\[
+q_\phi(z\mid x)=\mathcal{N}(\mu_\phi(x),\diag(\sigma_\phi(x)^2)).
+\]
+Thus the encoder outputs the parameters of a distribution, not a single deterministic code.
+
+\end{frame}
+
+\begin{frame}{Reparameterization trick}
+
+To differentiate through stochastic sampling, write
+\[
+z = \mu_\phi(x) + \sigma_\phi(x)\odot \epsilon,
+\qquad
+\epsilon\sim\mathcal{N}(0,I).
+\]
+Then the randomness is isolated in \(\epsilon\), while \(\mu_\phi\) and \(\sigma_\phi\) remain differentiable parameters.
+This makes stochastic gradient training possible.
+
+\end{frame}
+
+\begin{frame}{VAE objective as autoencoder + regularizer}
+
+The VAE objective can be read as
+\[
+\text{reconstruction quality}
+-
+\text{latent complexity penalty}.
+\]
+Hence the VAE is an autoencoder with a probabilistic latent bottleneck.
+Unlike deterministic autoencoders, the latent space is explicitly shaped by the prior.
+
+\end{frame}
+
+\begin{frame}{Information bottleneck viewpoint}
+
+The KL term
+\[
+\mathrm{KL}(q_\phi(z\mid x)\|p(z))
+\]
+limits how much information about \(x\) is stored in \(z\).
+Thus VAEs are closely related to the information bottleneck principle:
+\begin{itemize}
+\item keep information useful for reconstruction,
+\item discard irrelevant detail,
+\item regularize the representation toward a simple latent distribution.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Rate--distortion interpretation}
+
+The ELBO also resembles a rate--distortion tradeoff:
+\begin{itemize}
+\item distortion \(\leftrightarrow\) reconstruction error,
+\item rate \(\leftrightarrow\) KL cost of encoding information in \(z\).
+\end{itemize}
+In \(\beta\)-VAEs, one explicitly tunes this tradeoff:
+\[
+\mathcal{L}_{\beta\text{-VAE}}
+=
+\mathbb{E}_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]
+-
+\beta\, \mathrm{KL}(q_\phi(z\mid x)\|p(z)).
+\]
+
+\end{frame}
+
+\begin{frame}{Linear VAE and PPCA}
+
+If the decoder is linear and Gaussian and the encoder family is chosen appropriately, the VAE reduces to a variational treatment of PPCA.
+Thus there is a hierarchy:
+\[
+\text{PCA}
+\longrightarrow
+\text{Linear AE}
+\longrightarrow
+\text{PPCA}
+\longrightarrow
+\text{VAE}.
+\]
+Each step adds modeling flexibility and probabilistic structure.
+
+\end{frame}
+
+\begin{frame}{Deterministic AE vs VAE}
+
+Deterministic autoencoder:
+\[
+z=f_\theta(x),\qquad \hat x = g_\phi(z).
+\]
+
+Variational autoencoder:
+\[
+z\sim q_\phi(z\mid x),\qquad x\sim p_\theta(x\mid z).
+\]
+
+Difference:
+\begin{itemize}
+\item AE optimizes reconstruction directly,
+\item VAE optimizes a lower bound on likelihood and learns a structured latent distribution.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{What PCA misses that VAEs capture}
+
+PCA gives:
+\begin{itemize}
+\item linear coordinates,
+\item variance-maximizing subspace,
+\item deterministic projection.
+\end{itemize}
+
+VAEs additionally provide:
+\begin{itemize}
+\item nonlinear latent geometry,
+\item generative sampling,
+\item uncertainty in latent representations,
+\item explicit prior structure.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Global summary of the mini-course}
+
+We have developed a progression:
+\begin{enumerate}
+\item Autoencoders as constrained identity approximators.
+\item Linear autoencoders as exact recoverers of PCA.
+\item Nonlinear autoencoders as manifold learners.
+\item Probabilistic autoencoders and VAEs as latent-variable generative models.
+\end{enumerate}
+
+This unifies linear algebra, geometry, optimization, and probabilistic modeling.
+
+\end{frame}
+
+\begin{frame}{Possible follow-up topics}
+
+Natural continuations include:
+\begin{itemize}
+\item denoising score matching and its relation to denoising autoencoders,
+\item normalizing flows and invertible autoencoding ideas,
+\item diffusion models as denoising-based generative models,
+\item information-theoretic analysis of latent variable learning.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Representation learning as compression}
+
+Suppose \(x\) is generated from latent factors \(s\in\mathbb{R}^k\) with \(k\ll d\).
+Then a good representation \(z\) should satisfy:
+\begin{itemize}
+\item \(\dim z\) is small,
+\item \(z\) is sufficient for reconstruction,
+\item \(z\) is stable under small perturbations.
+\end{itemize}
+This motivates optimization problems of the form
+\[
+\min_{f,g}\; \mathbb{E}\|x-g(f(x))\|^2
+\]
+subject to complexity constraints on \(f\) and \(g\).
+
+\end{frame}
+
+\begin{frame}{Why not learn the identity map?}
+
+If the autoencoder is too expressive, then it may learn
+\[
+g_\phi(f_\theta(x)) = x
+\]
+for all training examples without extracting useful structure.
+
+This occurs especially when:
+\begin{itemize}
+\item the latent space is overcomplete,
+\item no regularization is used,
+\item the network has enough capacity to memorize the dataset.
+\end{itemize}
+
+Hence a useful autoencoder must include a mechanism that prevents trivial copying.
+
+\end{frame}
+
+\begin{frame}{Data manifolds and tangent spaces}
+
+If the data lie on a smooth manifold \(\mathcal{M}\subset \mathbb{R}^d\), then at each point \(x\in\mathcal{M}\) there is a tangent space
+\[
+T_x\mathcal{M}\subset \mathbb{R}^d.
+\]
+A good encoder should preserve variation along tangent directions and suppress variation normal to the manifold.
+This geometric viewpoint explains why Jacobians play a key role in regularized autoencoders.
+
+\end{frame}
+
+\begin{frame}{Loss functions beyond squared error}
+
+Although the standard choice is
+\[
+\ell(x,\hat x)=\|x-\hat x\|_2^2,
+\]
+other reconstruction losses are often appropriate:
+\begin{itemize}
+\item binary cross-entropy for binary or Bernoulli data,
+\item weighted quadratic loss for heteroscedastic noise,
+\item perceptual losses in image applications.
+\end{itemize}
+However, squared error is the natural loss for the link to PCA.
+
+\end{frame}
+
+\begin{frame}{Batch optimization form}
+
+For a dataset matrix \(X\), the encoder produces latent matrix \(Z\), and the decoder produces
+\[
+\hat X = g_\phi(f_\theta(X)).
+\]
+The batch objective becomes
+\[
+\mathcal{L} = \frac{1}{N}\|X-\hat X\|_F^2.
+\]
+This matrix form emphasizes that an autoencoder learns a transformation of an entire cloud of points, not merely independent reconstructions.
+
+\end{frame}
+
+\begin{frame}{Linear algebra of latent codes}
+
+If the latent code for the \(n\)-th sample is \(z_n\), then collecting them gives
+\[
+Z=[z_1,\dots,z_N]\in \mathbb{R}^{k\times N}.
+\]
+The decoder then maps \(Z\) back to \(\hat X\in \mathbb{R}^{d\times N}\).
+Thus the autoencoder implicitly factorizes the data through a low-dimensional representation:
+\[
+X \mapsto Z \mapsto \hat X.
+\]
+This already hints at matrix factorization and low-rank approximation.
+
+\end{frame}
+
+\begin{frame}{Autoencoders and inverse problems}
+
+In many applications, \(x\) is not observed directly but through a forward model \(y=Ax+\eta\).
+An autoencoder can then be used as a structural prior:
+\[
+x \approx g_\phi(z).
+\]
+Instead of solving for \(x\in\mathbb{R}^d\), one solves for \(z\in\mathbb{R}^k\), which reduces dimension and imposes regularity.
+This is one reason autoencoders are useful beyond pure unsupervised learning.
+
+\end{frame}
+
+\begin{frame}{Lecture 1 conceptual exercise}
+
+Show that if \(g\circ f\) is linear and idempotent,
+\[
+(g\circ f)^2 = g\circ f,
+\]
+then the reconstruction map is a projector.
+Why is this already suggestive of a connection to PCA?
+
+\end{frame}
+
+\begin{frame}{PCA from a constrained basis}
+
+If \(B=[b_1,\dots,b_k]\in\mathbb{R}^{d\times k}\) with \(B^TB=I_k\), then the projector onto \(\operatorname{span}(B)\) is
+\[
+P_B = BB^T.
+\]
+The PCA problem can be written as
+\[
+\min_{B^TB=I_k}\|X-BB^TX\|_F^2.
+\]
+Thus PCA is a search over orthonormal \(k\)-frames in \(\mathbb{R}^d\).
+
+\end{frame}
+
+\begin{frame}{Trace expansion for PCA}
+
+Using \(P=BB^T\),
+\[
+\|X-PX\|_F^2
+=
+\Tr(X^TX)-2\Tr(X^TPX)+\Tr(X^TP^TPX).
+\]
+Since \(P^T=P\) and \(P^2=P\),
+\[
+\|X-PX\|_F^2=\Tr(X^TX)-\Tr(X^TPX).
+\]
+Because \(XX^T=NS\),
+\[
+\|X-PX\|_F^2 = N\bigl(\Tr(S)-\Tr(B^TSB)\bigr).
+\]
+
+\end{frame}
+
+\begin{frame}{Why orthogonal projection is best in a fixed subspace}
+
+Fix a subspace \(\mathcal{M}\subset \mathbb{R}^d\). Among all \(y\in \mathcal{M}\), the orthogonal projection \(P_{\mathcal{M}}x\) uniquely minimizes
+\[
+\|x-y\|_2^2.
+\]
+Proof: write \(x = P_{\mathcal{M}}x + r\), with \(r\perp \mathcal{M}\). Then for any \(y\in\mathcal{M}\),
+\[
+\|x-y\|_2^2
+=
+\|P_{\mathcal{M}}x-y\|_2^2 + \|r\|_2^2 \ge \|r\|_2^2.
+\]
+This is the key step allowing us to reduce the linear autoencoder problem to PCA.
+
+\end{frame}
+
+\begin{frame}{Lagrange multiplier derivation of PCA}
+
+To maximize
+\[
+\Tr(B^TSB)
+\quad \text{subject to} \quad B^TB=I_k,
+\]
+consider
+\[
+\mathcal{J}(B,\Lambda)=\Tr(B^TSB)-\Tr\bigl(\Lambda(B^TB-I_k)\bigr).
+\]
+Differentiating with respect to \(B\) gives
+\[
+2SB - 2B\Lambda = 0,
+\]
+so
+\[
+SB = B\Lambda.
+\]
+Hence the columns of \(B\) are eigenvectors of \(S\).
+
+\end{frame}
+
+\begin{frame}{Explained variance}
+
+For the principal projector \(P_k=U_kU_k^T\),
+\[
+\Tr(P_k S)=\sum_{i=1}^k \lambda_i.
+\]
+This is called the explained variance.
+The fraction of variance explained is
+\[
+\frac{\sum_{i=1}^k \lambda_i}{\sum_{i=1}^d \lambda_i}.
+\]
+This provides a principled way to choose the bottleneck dimension \(k\) in a linear autoencoder.
+
+\end{frame}
+
+\begin{frame}{Orthogonality of reconstruction error}
+
+For PCA projection,
+\[
+x = U_kU_k^T x + (I-U_kU_k^T)x.
+\]
+The residual satisfies
+\[
+U_k^T (I-U_kU_k^T)x = 0.
+\]
+Thus the reconstruction error is orthogonal to the retained subspace, which is another hallmark of least-squares optimality.
+
+\end{frame}
+
+\begin{frame}{Tied weights and symmetry}
+
+With tied weights \(W_d=W_e^T\), the linear autoencoder objective becomes
+\[
+\min_{W_e}\|X-W_e^TW_eX\|_F^2.
+\]
+If \(W_eW_e^T=I_k\), then \(W_e^TW_e\) is a rank-\(k\) orthogonal projector.
+Therefore tied-weight linear autoencoders naturally encourage PCA-like structure.
+
+\end{frame}
+
+\begin{frame}{When the PCA subspace is not unique}
+
+If
+\[
+\lambda_k = \lambda_{k+1},
+\]
+then the principal \(k\)-dimensional subspace need not be unique.
+In this case, linear autoencoders still recover a principal subspace, but not a unique one.
+The non-uniqueness comes from both:
+\begin{itemize}
+\item degeneracy of the eigenspace,
+\item invertible changes of latent basis.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Centered versus uncentered data}
+
+PCA theory assumes centered data. If \(X\) is not centered, then minimizing
+\[
+\|X-W_dW_eX\|_F^2
+\]
+need not coincide exactly with PCA of the covariance matrix.
+In practice, one often centers:
+\[
+X \leftarrow X - \bar x \mathds{1}^T.
+\]
+Then the linear autoencoder theorem applies directly.
+
+\end{frame}
+
+\begin{frame}{Lecture 2 proof checkpoint}
+
+The full proof that linear autoencoders recover PCA had four key steps:
+\begin{enumerate}
+\item rewrite the model using \(A=W_dW_e\),
+\item reduce to projection onto a \(k\)-dimensional subspace,
+\item solve the projection problem by spectral optimization,
+\item identify the optimal projector as \(U_kU_k^T\).
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Lecture 2 exercise}
+
+Show directly from the SVD \(X=U\Sigma V^T\) that
+\[
+U_kU_k^TX = U_k\Sigma_k V_k^T.
+\]
+Why does this imply that the PCA reconstruction is the best rank-\(k\) approximation to \(X\)?
+
+\end{frame}
+
+\begin{frame}{Activation functions and expressivity}
+
+Common activations in autoencoders include:
+\begin{itemize}
+\item sigmoid,
+\item hyperbolic tangent,
+\item ReLU and leaky ReLU,
+\item smooth activations such as GELU or softplus.
+\end{itemize}
+The activation determines both expressive power and local geometry through its derivative.
+
+\end{frame}
+
+\begin{frame}{Universal approximation intuition}
+
+A feed-forward network with nonlinear activations can approximate broad classes of continuous maps.
+Hence a nonlinear autoencoder can in principle learn a curved manifold embedding
+\[
+f:\mathbb{R}^d \to \mathbb{R}^k,\qquad g:\mathbb{R}^k\to \mathbb{R}^d
+\]
+far beyond the linear subspace model of PCA.
+
+\end{frame}
+
+\begin{frame}{Decoder as manifold parameterization}
+
+The decoder map
+\[
+g_\phi(z)
+\]
+can be interpreted as a learned surface embedded in \(\mathbb{R}^d\).
+If \(k=2\), for example, then \(g_\phi\) parameterizes a 2D surface inside a high-dimensional ambient space.
+Thus nonlinear autoencoders replace linear subspaces by learned immersed manifolds.
+
+\end{frame}
+
+\begin{frame}{Encoder Jacobian and sensitivity}
+
+For encoder \(f:\mathbb{R}^d\to\mathbb{R}^k\), the Jacobian is
+\[
+J_f(x) = \frac{\partial f(x)}{\partial x}\in \mathbb{R}^{k\times d}.
+\]
+Its singular values quantify local sensitivity:
+\begin{itemize}
+\item large singular values: latent code changes rapidly,
+\item small singular values: local contraction.
+\end{itemize}
+Regularizers based on \(J_f\) therefore control local geometry.
+
+\end{frame}
+
+\begin{frame}{Denoising as manifold projection}
+
+If noisy observations satisfy
+\[
+\tilde x = x + \varepsilon,
+\]
+with \(x\) on or near a manifold \(\mathcal{M}\), then denoising can be interpreted as approximately mapping \(\tilde x\) back toward \(\mathcal{M}\).
+So a denoising autoencoder learns a map resembling a noisy manifold projection.
+
+\end{frame}
+
+\begin{frame}{Sparse coding viewpoint}
+
+Sparse autoencoders are closely related to the optimization
+\[
+\min_{D,Z} \|X-DZ\|_F^2 + \lambda \|Z\|_1,
+\]
+where \(D\) is a dictionary and \(Z\) contains sparse codes.
+Thus sparse autoencoders connect neural representation learning with classical sparse approximation.
+
+\end{frame}
+
+\begin{frame}{Contractive penalty in coordinates}
+
+For a one-hidden-layer encoder
+\[
+h = \sigma(Wx+b),
+\]
+the Jacobian is
+\[
+J_f(x)=\diag(\sigma'(Wx+b))\,W.
+\]
+Hence the contractive penalty
+\[
+\|J_f(x)\|_F^2
+\]
+depends on both weights and activation derivatives, and suppresses sensitivity especially when activations saturate.
+
+\end{frame}
+
+\begin{frame}{Robustness to perturbations}
+
+A desirable latent representation should satisfy
+\[
+\|f(x+\delta)-f(x)\| \ll \|\delta\|
+\]
+for nuisance perturbations \(\delta\), while still preserving relevant variation.
+Contractive and denoising objectives both encourage such robustness, but in different ways:
+\begin{itemize}
+\item denoising acts through corrupted inputs,
+\item contractive training acts through local derivative control.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Nonlinear autoencoders vs PCA locally}
+
+Although nonlinear autoencoders are globally nonlinear, around any point \(x_0\) they induce a local linear map
+\[
+J_g(z_0)J_f(x_0).
+\]
+This local map can be compared to the PCA projector.
+Thus one can interpret nonlinear autoencoders as learning a data-dependent family of local projections rather than one global projection.
+
+\end{frame}
+
+\begin{frame}{Lecture 3 exercise}
+
+Suppose a denoising autoencoder is trained with small Gaussian noise.
+Why should the reconstruction vector \(r(x)-x\) point approximately toward high-density regions of the data distribution?
+Relate your reasoning to denoising and local score estimation.
+
+\end{frame}
+
+\begin{frame}{Complete-data log likelihood in PPCA}
+
+For the PPCA model,
+\[
+p(x,z)=p(x\mid z)p(z),
+\]
+the complete-data log likelihood is, up to constants,
+\[
+-\frac{1}{2\sigma^2}\|x-Wz-\mu\|_2^2 - \frac{1}{2}\|z\|_2^2.
+\]
+This quadratic structure is what makes EM and exact posterior inference tractable.
+
+\end{frame}
+
+\begin{frame}{Maximum-likelihood estimator in PPCA}
+
+At the ML optimum, one may write
+\[
+W_{\mathrm{ML}} = U_k (\Lambda_k - \sigma^2 I)^{1/2} R,
+\]
+where \(R\) is orthogonal.
+Thus the column space of \(W_{\mathrm{ML}}\) is the PCA subspace.
+So PPCA preserves the principal directions while adding an explicit isotropic noise model.
+
+\end{frame}
+
+\begin{frame}{Deriving the ELBO carefully}
+
+Insert any density \(q_\phi(z\mid x)\):
+\[
+\log p_\theta(x)
+=
+\log \int q_\phi(z\mid x)\frac{p_\theta(x,z)}{q_\phi(z\mid x)}\,dz.
+\]
+Applying Jensen:
+\[
+\log p_\theta(x)
+\ge
+\int q_\phi(z\mid x)\log \frac{p_\theta(x,z)}{q_\phi(z\mid x)}\,dz.
+\]
+This is the fundamental inequality underlying VAEs.
+
+\end{frame}
+
+\begin{frame}{KL decomposition identity}
+
+Starting from Bayes' rule,
+\[
+p_\theta(z\mid x)=\frac{p_\theta(x,z)}{p_\theta(x)},
+\]
+one shows
+\[
+\log p_\theta(x)
+=
+\mathcal{L}_{\mathrm{ELBO}}(x)
++
+\mathrm{KL}\bigl(q_\phi(z\mid x)\|p_\theta(z\mid x)\bigr).
+\]
+Thus maximizing the ELBO simultaneously:
+\begin{itemize}
+\item increases the likelihood,
+\item improves approximate inference.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Gaussian VAE components}
+
+A common VAE parameterization is
+\[
+q_\phi(z\mid x)=\mathcal{N}(\mu_\phi(x), \diag(\sigma_\phi(x)^2)),
+\]
+\[
+p(z)=\mathcal{N}(0,I),
+\]
+\[
+p_\theta(x\mid z)=\mathcal{N}(\mu_\theta(z), \sigma_x^2 I)
+\]
+or a Bernoulli model for binary data.
+The analytic KL term is especially convenient for Gaussian encoder and prior.
+
+\end{frame}
+
+\begin{frame}{Closed form KL for Gaussian latent variables}
+
+If
+\[
+q(z\mid x)=\mathcal{N}(\mu,\diag(\sigma^2)),
+\qquad
+p(z)=\mathcal{N}(0,I),
+\]
+then
+\[
+\mathrm{KL}(q\|p)
+=
+\frac{1}{2}\sum_{i=1}^k \left(\mu_i^2+\sigma_i^2-\log \sigma_i^2 -1\right).
+\]
+This makes VAE training computationally practical.
+
+\end{frame}
+
+\begin{frame}{Posterior collapse}
+
+A known pathology in VAEs is posterior collapse:
+\[
+q_\phi(z\mid x) \approx p(z).
+\]
+Then the latent variable carries little information about \(x\).
+This is more likely when:
+\begin{itemize}
+\item the decoder is too powerful,
+\item KL regularization dominates,
+\item optimization is poorly balanced.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Information bottleneck formulation}
+
+The information bottleneck objective is often written schematically as
+\[
+\min I(X;Z) - \beta I(Z;Y),
+\]
+or, in unsupervised settings, as a tradeoff between compression and faithful representation.
+The VAE KL term controls \(I(X;Z)\) indirectly by encouraging the aggregate posterior to remain close to the prior.
+
+\end{frame}
+
+\begin{frame}{Rate--distortion and beta-VAE}
+
+In \(\beta\)-VAE,
+\[
+\mathcal{L}_\beta
+=
+\mathbb{E}_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]
+-\beta \,\mathrm{KL}(q_\phi(z\mid x)\|p(z)).
+\]
+Larger \(\beta\) increases compression but often sacrifices reconstruction quality.
+This mirrors classical rate--distortion theory: lower rate comes at higher distortion.
+
+\end{frame}
+
+\begin{frame}{From PCA to VAE as a hierarchy}
+
+The conceptual chain is:
+\[
+\text{PCA}
+\quad\to\quad
+\text{Linear autoencoder}
+\quad\to\quad
+\text{Probabilistic PCA}
+\quad\to\quad
+\text{Variational autoencoder}.
+\]
+Each step adds:
+\begin{itemize}
+\item more flexibility,
+\item more probabilistic structure,
+\item richer latent geometry.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Lecture 4 exercise}
+
+Show that if the decoder is linear and Gaussian and the posterior family is exact, then the latent-variable model reduces to a linear-Gaussian inference problem.
+How does this explain the relation between VAEs and PPCA?
+
+\end{frame}
+
+\end{document}
