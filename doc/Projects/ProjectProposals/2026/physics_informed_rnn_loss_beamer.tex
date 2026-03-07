@@ -1,0 +1,445 @@
+
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
+\usepackage{physics}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\lstset{
+    basicstyle=\ttfamily\tiny,
+    backgroundcolor=\color{codegray},
+    breaklines=true,
+    frame=single,
+    columns=fullflexible,
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    commentstyle=\color{teal},
+    stringstyle=\color{red}
+}
+
+\title{Loss Functions for Recurrent Neural Networks on Spatiotemporal Grids}
+\subtitle{Including an Example of a Physics-Informed RNN in PyTorch}
+\author{Morten Hjorth-Jensen}
+\date{FYS5429/9429}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Problem setting}
+We consider a recurrent neural network for temporal data on a spatial grid
+\[
+(x,y)\in \Omega_x\times\Omega_y
+\]
+with two height fields (or layers)
+\[
+h_t^{(1)}(x,y), \qquad h_t^{(2)}(x,y).
+\]
+
+At each time \(t\), the target field is
+\[
+Y_t(x,y)=\bigl(h_t^{(1)}(x,y),\,h_t^{(2)}(x,y)\bigr).
+\]
+
+The central question is:
+\begin{quote}
+What is the most reasonable loss function for training such a recurrent model?
+\end{quote}
+\end{frame}
+
+\begin{frame}{Main recommendation}
+A good default choice is to use \textbf{one joint loss} over all times, grid points, and both layers,
+rather than two completely separate training objectives.
+
+\medskip
+
+The reason is that the two layers are usually:
+\begin{itemize}
+\item measured on the same spatial grid,
+\item coupled through the underlying dynamics,
+\item and likely to share latent spatiotemporal structure.
+\end{itemize}
+
+Thus the model should usually output two channels and be trained jointly.
+\end{frame}
+
+\begin{frame}{A natural baseline loss}
+A standard baseline is a weighted mean-squared error:
+\[
+\mathcal{L}
+=
+\frac{1}{T N_x N_y}
+\sum_{t=1}^{T}\sum_{x,y}
+\left[
+w_1\bigl(\hat h_t^{(1)}(x,y)-h_t^{(1)}(x,y)\bigr)^2
++
+w_2\bigl(\hat h_t^{(2)}(x,y)-h_t^{(2)}(x,y)\bigr)^2
+\right].
+\]
+
+Equivalently,
+\[
+\mathcal{L} = w_1 \mathcal{L}_1 + w_2 \mathcal{L}_2,
+\]
+where \(\mathcal{L}_1\) and \(\mathcal{L}_2\) are the losses for the two layers.
+
+This is still best viewed as a \emph{single joint objective}.
+\end{frame}
+
+\begin{frame}{Should one use two separate losses?}
+Using two separate losses is usually not necessary unless:
+\begin{itemize}
+\item the two layers have very different scales,
+\item one layer is more important scientifically,
+\item one layer is much noisier,
+\item or one wants to formulate a multi-task learning problem explicitly.
+\end{itemize}
+
+In practice, it is usually sufficient to define
+\[
+\mathcal{L} = \alpha \mathcal{L}_1 + \beta \mathcal{L}_2
+\]
+and tune \(\alpha,\beta\) or normalize the two channels beforehand.
+\end{frame}
+
+\begin{frame}{Why channel weighting matters}
+If the magnitudes of the two layers differ strongly, then an unweighted MSE may be dominated by the larger field.
+
+A practical choice is
+\[
+\alpha = \frac{1}{\sigma_1^2},
+\qquad
+\beta = \frac{1}{\sigma_2^2},
+\]
+where \(\sigma_1,\sigma_2\) are characteristic scales or standard deviations of the two layers.
+
+This leads to a normalized objective in which both channels influence training more comparably.
+\end{frame}
+
+\begin{frame}{Alternative pointwise losses}
+Besides MSE, one may use:
+\begin{itemize}
+\item \textbf{MAE:}
+\[
+\mathcal{L}_{\mathrm{MAE}} = \frac{1}{N}\sum |\hat y-y|
+\]
+which is more robust to outliers,
+\item \textbf{Huber loss,}
+which interpolates between MSE and MAE,
+\item weighted losses if uncertainty or heteroscedastic noise is known.
+\end{itemize}
+
+For smooth physical fields, MSE is usually the best starting point.
+\end{frame}
+
+\begin{frame}{Why pointwise loss may not be enough}
+For spatiotemporal fields, a pointwise MSE can produce overly smooth predictions.
+
+If preserving coherent structures matters, it is often useful to add a spatial derivative penalty:
+\[
+\mathcal{L}
+=
+\mathcal{L}_{\mathrm{data}}
++
+\lambda_{\nabla}\mathcal{L}_{\nabla},
+\]
+with
+\[
+\mathcal{L}_{\nabla}
+=
+\sum_{t,x,y,c}
+\abs{\nabla \hat h_t^{(c)}(x,y)-\nabla h_t^{(c)}(x,y)}^2.
+\]
+
+This encourages the correct spatial gradients and sharp structures.
+\end{frame}
+
+\begin{frame}{Temporal weighting}
+If the recurrent network predicts many future time steps, it is natural to use
+\[
+\mathcal{L}
+=
+\sum_{t=1}^{T}\omega_t \mathcal{L}_t,
+\]
+where \(\mathcal{L}_t\) is the loss at time \(t\).
+
+Choices include:
+\begin{itemize}
+\item \(\omega_t=1\): equal weighting,
+\item larger \(\omega_t\) for later times if long-term prediction is important,
+\item larger \(\omega_t\) for early times if short-term stabilization is the main goal.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A useful practical combined objective}
+A practical recommendation is
+\[
+\mathcal{L}
+=
+\alpha \mathcal{L}_1
++
+\beta \mathcal{L}_2
++
+\lambda_{\nabla}\mathcal{L}_{\nabla}
++
+\lambda_{\mathrm{phys}}\mathcal{L}_{\mathrm{phys}},
+\]
+where:
+\begin{itemize}
+\item \(\mathcal{L}_1,\mathcal{L}_2\): data losses for the two layers,
+\item \(\mathcal{L}_{\nabla}\): gradient-matching loss,
+\item \(\mathcal{L}_{\mathrm{phys}}\): physics-informed penalty.
+\end{itemize}
+
+This is often better than training the two layers independently.
+\end{frame}
+
+\begin{frame}{Physics-informed RNN idea}
+A physics-informed RNN augments the ordinary data-fitting objective with a residual enforcing the governing equations.
+
+Suppose the fields satisfy symbolic PDEs
+\[
+\partial_t h^{(1)} = \mathcal{F}_1(h^{(1)},h^{(2)}),
+\qquad
+\partial_t h^{(2)} = \mathcal{F}_2(h^{(1)},h^{(2)}).
+\]
+
+Then we define residuals
+\[
+R_1 = \partial_t \hat h^{(1)} - \mathcal{F}_1(\hat h^{(1)},\hat h^{(2)}),
+\qquad
+R_2 = \partial_t \hat h^{(2)} - \mathcal{F}_2(\hat h^{(1)},\hat h^{(2)}),
+\]
+and penalize them in the loss.
+\end{frame}
+
+\begin{frame}{Physics-informed loss}
+A general physics-informed objective can be written as
+\[
+\mathcal{L}_{\mathrm{total}}
+=
+\mathcal{L}_{\mathrm{data}}
++
+\lambda_{\mathrm{phys}}\mathcal{L}_{\mathrm{phys}},
+\]
+where
+\[
+\mathcal{L}_{\mathrm{data}}
+=
+\alpha \mathcal{L}_1 + \beta \mathcal{L}_2,
+\]
+and
+\[
+\mathcal{L}_{\mathrm{phys}}
+=
+\frac{1}{T N_x N_y}
+\sum_{t,x,y}
+\left(
+R_1(t,x,y)^2 + R_2(t,x,y)^2
+\right).
+\]
+
+This encourages both agreement with the data and consistency with the underlying PDE.
+\end{frame}
+
+\begin{frame}{Discrete derivatives on a grid}
+On a uniform grid one may approximate derivatives by finite differences, for example
+\[
+\partial_t h_t \approx \frac{h_{t+1}-h_t}{\Delta t},
+\]
+\[
+\partial_x h_{i,j} \approx \frac{h_{i+1,j}-h_{i-1,j}}{2\Delta x},
+\qquad
+\partial_y h_{i,j} \approx \frac{h_{i,j+1}-h_{i,j-1}}{2\Delta y}.
+\]
+
+These discrete operators can be implemented directly in PyTorch using tensor slicing.
+\end{frame}
+
+\begin{frame}{Recommended training strategy}
+A good practical training strategy is:
+\begin{enumerate}
+\item normalize each layer separately,
+\item use one recurrent model with two output channels,
+\item start with weighted MSE over both channels,
+\item add a physics term only after the baseline trains stably,
+\item optionally add spatial-gradient penalties if the fields become too smooth.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Recommended default choice}
+A strong default objective is
+\[
+\mathcal{L}
+=
+\frac{1}{T N_x N_y}
+\sum_{t,x,y}
+\sum_{c=1}^{2}
+w_c\bigl(\hat h_t^{(c)}(x,y)-h_t^{(c)}(x,y)\bigr)^2
++
+\lambda_{\mathrm{phys}}\mathcal{L}_{\mathrm{phys}}.
+\]
+
+So the answer is:
+\begin{itemize}
+\item usually \textbf{one joint loss},
+\item but with \textbf{channel weights} if needed,
+\item and possibly with a \textbf{physics-informed residual} term.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch example: physics-informed RNN (1)}
+\begin{lstlisting}[language=Python]
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class PhysicsInformedRNN(nn.Module):
+    def __init__(self, nx, ny, hidden_size=128):
+        super().__init__()
+        self.nx = nx
+        self.ny = ny
+        self.input_size = 2 * nx * ny
+        self.hidden_size = hidden_size
+        self.rnn = nn.GRU(
+            input_size=self.input_size,
+            hidden_size=hidden_size,
+            batch_first=True
+        )
+        self.out = nn.Linear(hidden_size, self.input_size)
+
+    def forward(self, x):
+        # x: [batch, time, 2, nx, ny]
+        b, t, c, nx, ny = x.shape
+        x_flat = x.reshape(b, t, c * nx * ny)
+        h, _ = self.rnn(x_flat)
+        y = self.out(h)
+        y = y.reshape(b, t, 2, nx, ny)
+        return y
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch example: finite-difference operators (2)}
+\begin{lstlisting}[language=Python]
+def dx(field, dx_val):
+    # field: [batch, time, nx, ny]
+    return (field[:, :, 2:, 1:-1] - field[:, :, :-2, 1:-1]) / (2.0 * dx_val)
+
+def dy(field, dy_val):
+    return (field[:, :, 1:-1, 2:] - field[:, :, 1:-1, :-2]) / (2.0 * dy_val)
+
+def dt(field, dt_val):
+    # central time difference for interior points
+    return (field[:, 2:, :, :] - field[:, :-2, :, :]) / (2.0 * dt_val)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch example: a simple PDE residual (3)}
+\begin{lstlisting}[language=Python]
+def physics_residual(pred, dt_val, dx_val, dy_val, nu=0.01):
+    # Example residual for two coupled diffusion-like fields
+    # pred: [batch, time, 2, nx, ny]
+    h1 = pred[:, :, 0]
+    h2 = pred[:, :, 1]
+
+    h1_t = dt(h1, dt_val)
+    h2_t = dt(h2, dt_val)
+
+    h1_xx = (h1[:, 1:-1, 2:, 1:-1] - 2*h1[:, 1:-1, 1:-1, 1:-1]
+             + h1[:, 1:-1, :-2, 1:-1]) / (dx_val**2)
+    h1_yy = (h1[:, 1:-1, 1:-1, 2:] - 2*h1[:, 1:-1, 1:-1, 1:-1]
+             + h1[:, 1:-1, 1:-1, :-2]) / (dy_val**2)
+
+    h2_xx = (h2[:, 1:-1, 2:, 1:-1] - 2*h2[:, 1:-1, 1:-1, 1:-1]
+             + h2[:, 1:-1, :-2, 1:-1]) / (dx_val**2)
+    h2_yy = (h2[:, 1:-1, 1:-1, 2:] - 2*h2[:, 1:-1, 1:-1, 1:-1]
+             + h2[:, 1:-1, 1:-1, :-2]) / (dy_val**2)
+
+    r1 = h1_t[:, :, 1:-1, 1:-1] - nu * (h1_xx + h1_yy)
+    r2 = h2_t[:, :, 1:-1, 1:-1] - nu * (h2_xx + h2_yy)
+    return r1, r2
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch example: total loss (4)}
+\begin{lstlisting}[language=Python]
+def total_loss(pred, target, dt_val, dx_val, dy_val,
+               w1=1.0, w2=1.0, lambda_phys=1.0):
+    # pred, target: [batch, time, 2, nx, ny]
+    mse1 = F.mse_loss(pred[:, :, 0], target[:, :, 0])
+    mse2 = F.mse_loss(pred[:, :, 1], target[:, :, 1])
+    data_loss = w1 * mse1 + w2 * mse2
+
+    r1, r2 = physics_residual(pred, dt_val, dx_val, dy_val)
+    phys_loss = r1.pow(2).mean() + r2.pow(2).mean()
+
+    return data_loss + lambda_phys * phys_loss, {
+        "data_loss": data_loss.detach(),
+        "phys_loss": phys_loss.detach(),
+        "mse1": mse1.detach(),
+        "mse2": mse2.detach(),
+    }
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch example: training step (5)}
+\begin{lstlisting}[language=Python]
+model = PhysicsInformedRNN(nx=32, ny=32, hidden_size=128)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+for batch_x, batch_y in train_loader:
+    optimizer.zero_grad()
+
+    pred = model(batch_x)
+    loss, info = total_loss(
+        pred, batch_y,
+        dt_val=0.1,
+        dx_val=1.0,
+        dy_val=1.0,
+        w1=1.0,
+        w2=1.0,
+        lambda_phys=0.1
+    )
+
+    loss.backward()
+    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+    optimizer.step()
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Remarks on the code example}
+The code is only a template. In a real application you would typically adapt:
+\begin{itemize}
+\item the recurrent cell (GRU, LSTM, ConvLSTM),
+\item the PDE residual,
+\item the boundary handling,
+\item normalization of the two layers,
+\item and the choice of \(\lambda_{\mathrm{phys}}\).
+\end{itemize}
+
+For genuine spatiotemporal data, a ConvLSTM or a convolutional recurrent model is often even more natural than flattening the grid.
+\end{frame}
+
+\begin{frame}{Final summary}
+For a recurrent neural network with two height layers on a fixed \((x,y)\)-grid:
+\begin{itemize}
+\item use a \textbf{joint multi-output loss} rather than two unrelated losses,
+\item weight the two channels if their scales differ,
+\item add spatial-gradient penalties if structure matters,
+\item and add a physics-informed residual if governing equations are known.
+\end{itemize}
+
+A practical default is
+\[
+\mathcal{L}
+=
+w_1\mathcal{L}_1 + w_2\mathcal{L}_2 + \lambda_{\mathrm{phys}}\mathcal{L}_{\mathrm{phys}}.
+\]
+\end{frame}
+
+\end{document}
