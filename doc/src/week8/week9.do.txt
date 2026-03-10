@@ -6,12 +6,8 @@ DATE: March 12, 2026
 ===== Plans for the week March 9-13  =====
 
 !bblock
-* Autoencoders (AEs), Foundations of representation learning and autoencoders
-* Linear autoencoders and the full connection to Principal Component Analysis (PCA)
-* Next week
-  * Foundations of representation learning and autoencoders with code examples
-  * Nonlinear and regularized autoencoders
-  * Probabilistic autoencoders, PPCA, and VAEs
+o Autoencoders (AEs)
+o Links between Principal Component Analysis (PCA) and AE
 #o Video of lecture at URL:"https://youtu.be/CvXcwXk5JRc"
 #o Whiteboard notes at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch13.pdf"
 #o Discussion of specific examples relevant for project 1, "see project from last year by Daniel and Keran":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/Projects/2023/ProjectExamples/RNNs.pdf"
@@ -305,463 +301,6 @@ the input observation $\mathbf{x}_{i}$. The most typical RE used is the MSE
 \]
 !et
 
-!split
-===== Notation =====
-We denote:
-* \(x \in \mathbb{R}^d\): input vector,
-* \(z \in \mathbb{R}^k\): latent code, with \(k<d\) in the undercomplete case,
-* \(X=[x_1,\dots,x_N]\in \mathbb{R}^{d\times N}\): data matrix,
-* \(\hat x\): reconstruction,
-* \(\|A\|_F^2 = \operatorname{Tr}(A^T A)\): Frobenius norm.
-
-We will assume throughout that the data are centered when discussing PCA:
-!bt
-\[
-\frac{1}{N}\sum_{n=1}^N x_n = 0.
-\]
-!et
-!split
-===== What is representation learning? =====
-
-Given observations \(x\in\mathbb{R}^d\), representation learning seeks a transformation
-!bt
-\[
-x \mapsto z = f(x)
-\]
-!et
-such that \(z\) captures the structure relevant for a downstream task or for reconstruction.
-
-!bblock Typical goals:
-* reduce dimension,
-* denoise,
-* identify latent factors,
-* learn a coordinate system adapted to the data.
-Autoencoders realize this idea through an encoder--decoder architecture trained end-to-end.
-!eblock
-
-
-!split
-===== Dimensionality reduction as approximation =====
-
-A reduced representation of dimension \(k<d\) is useful only if the original data can be approximately recovered:
-!bt
-\[
-x \approx \hat x = g(f(x)).
-\]
-!et
-Thus dimensionality reduction is naturally posed as an approximation problem:
-!bt
-\[
-\min_{f,g} \sum_{n=1}^N \ell\bigl(x_n,g(f(x_n))\bigr).
-\]
-!et
-The simplest choice is squared error,
-!bt
-\[
-\ell(x,\hat x)=\|x-\hat x\|_2^2.
-\]
-!et
-This makes autoencoders closely related to least-squares approximation and low-rank matrix approximation.
-
-
-!split
-===== Encoder--decoder architecture =====
-
-An autoencoder consists of:
-!bt
-\[
-z = f_\theta(x), \qquad \hat x = g_\phi(z).
-\]
-!et
-Hence the full model is
-!bt
-\[
-\hat x = g_\phi(f_\theta(x)).
-\]
-!et
-!bblock Interpretation:
-* \(f_\theta\) compresses data into latent coordinates,
-* \(g_\phi\) reconstructs the original data from those coordinates,
-* the pair \((f_\theta,g_\phi)\) is trained to minimize reconstruction loss.
-!eblock
-
-!split
-===== Undercomplete, overcomplete, and bottlenecks =====
-
-The latent dimension \(k\) plays a fundamental role.
-
-!bblock Undercomplete autoencoder:
-!bt
-\[
-k<d.
-\]
-!et
-The network is forced to compress.
-!eblock
-!bblock Overcomplete autoencoder:
-!bt
-\[
-k\ge d.
-\]
-!et
-!eblock
-Without additional regularization, the network may learn the identity map.
-Therefore a bottleneck alone is a structural regularizer, but not the only possible one.
-
-
-!split
-===== Empirical risk for autoencoders =====
-
-Given data matrix
-!bt
-\[
-X = [x_1,\dots,x_N] \in \mathbb{R}^{d\times N},
-\]
-!et
-the empirical reconstruction objective is
-!bt
-\[
-\mathcal{L}(\theta,\phi)
-=
-\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(x_n))\|_2^2.
-\]
-!et
-Equivalently, if \(\hat X=[\hat x_1,\dots,\hat x_N]\),
-!bt
-\[
-\mathcal{L}(\theta,\phi)=\frac{1}{N}\|X-\hat X\|_F^2.
-\]
-!et
-Thus the geometry of the Frobenius norm is central from the very beginning.
-
-!split
-===== The Frobenius norm viewpoint =====
-
-Recall
-!bt
-\[
-\|A\|_F^2 = \sum_{i,j} a_{ij}^2 = \mathrm{Tr}(A^T A).
-\]
-!et
-Hence the reconstruction objective can be written as
-!bt
-\[
-\|X-\hat X\|_F^2
-=
-\mathrm{Tr}\bigl((X-\hat X)^T(X-\hat X)\bigr).
-\]
-!et
-This form is especially useful for deriving optimal linear autoencoders and for proving the connection to PCA.
-
-
-!split
-===== Latent variables as coordinates =====
-
-If the data lie near a \(k\)-dimensional manifold \(\mathcal{M}\subset\mathbb{R}^d\), the encoder can be interpreted as producing local coordinates:
-!bt
-\[
-z=f_\theta(x)\in \mathbb{R}^k.
-\]
-!et
-The decoder then acts as a chart map:
-!bt
-\[
-g_\phi: \mathbb{R}^k \to \mathbb{R}^d.
-\]
-!et
-Thus autoencoders can be viewed as learning a nonlinear parameterization of the data manifold.
-
-
-!split
-===== A local linearization viewpoint =====
-
-Suppose \(f\) and \(g\) are differentiable. Around a point \(x_0\),
-!bt
-\[
-f(x) \approx f(x_0) + J_f(x_0)(x-x_0),
-\]
-!et
-!bt
-\[
-g(z) \approx g(z_0) + J_g(z_0)(z-z_0).
-\]
-!et
-Hence, locally,
-!bt
-\[
-g(f(x)) \approx g(f(x_0)) + J_g(z_0)J_f(x_0)(x-x_0).
-\]
-!et
-Thus even nonlinear autoencoders behave like linear dimension reducers in a local neighborhood.
-
-!split
-===== Connection to classical methods =====
-
-!bblock Autoencoders are related to:
-* PCA: linear projection minimizing squared reconstruction error,
-* factor analysis / probabilistic PCA: latent Gaussian linear models,
-* manifold learning: nonlinear low-dimensional structure,
-* dictionary learning: sparse representations over learned atoms.
-!eblock
-The key difference is that autoencoders learn both representation and reconstruction maps directly from data.
-
-!split
-===== When does reconstruction imply representation? =====
-
-A low reconstruction error does not automatically imply a _good_ representation in every sense.
-
-!bblock Questions to keep in mind:
-* Does the latent space separate classes?
-* Is the representation stable under perturbations?
-* Is the map approximately invertible on the data manifold?
-* Does the latent code capture semantic or physical variables?
-!eblock
-This motivates adding regularization beyond plain reconstruction.
-
-!split
-===== A general regularized objective =====
-
-A broad class of autoencoder objectives has the form
-!bt
-\[
-\mathcal{L}(\theta,\phi)
-=
-\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(x_n))\|_2^2
-+
-\lambda\,\Omega(\theta,\phi;X),
-\]
-!et
-where \(\Omega\) may penalize:
-!bblock
-* latent activity (sparse AE),
-* sensitivity of the encoder (contractive AE),
-* deviation from a prior (VAE) to be discussed when we introduce generative methods,
-* complexity of the weights.
-!eblock
-
-!split
-===== Why linear autoencoders matter =====
-
-Although deep nonlinear autoencoders are more expressive, linear autoencoders are foundational because:
-!bblock
-* they admit a full analytic treatment,
-* they reveal the relation between reconstruction and projection,
-* they recover PCA exactly under mild assumptions.
-!eblock
-
-
-!split
-===== Optimization problem in abstract form =====
-
-Let \(\mathcal{F}\) be a class of encoders and \(\mathcal{G}\) a class of decoders. Then we solve
-!bt
-\[
-\min_{f\in\mathcal{F},\, g\in\mathcal{G}}
-\sum_{n=1}^N \|x_n-g(f(x_n))\|_2^2.
-\]
-!et
-If \(\mathcal{F}\) and \(\mathcal{G}\) are linear, the problem becomes a constrained quadratic optimization problem.
-If they are nonlinear neural networks, the problem becomes nonconvex but highly expressive.
-
-!split
-===== Autoencoders as identity approximation with constraints =====
-
-An autoencoder attempts to approximate the identity map
-!bt
-\[
-x \mapsto x,
-\]
-!et
-but only through the restricted factorization
-!bt
-\[
-x \mapsto z=f(x)\mapsto \hat x=g(z).
-\]
-!et
-!bblock Hence the entire method can be understood as:
-Find the best constrained approximation to the identity on the data cloud.
-!eblock
-When the constraint is low rank and linear, the optimal solution is PCA.
-
-!split
-===== Reconstruction error decomposition  =====
-
-A recurring theme will be:
-!bt
-\[
-\|X-\hat X\|_F^2 = \text{total variance} - \text{explained variance}.
-\]
-!et
-For PCA and linear autoencoders, minimizing reconstruction error is equivalent to maximizing variance captured by a \(k\)-dimensional subspace.
-
-!split
-===== Linear autoencoder architecture =====
-
-A linear autoencoder uses
-!bt
-\[
-z = W_e x,\qquad \hat x = W_d z = W_d W_e x,
-\]
-!et
-with
-!bt
-\[
-W_e\in\mathbb{R}^{k\times d},\qquad W_d\in\mathbb{R}^{d\times k}.
-\]
-!et
-Thus the reconstruction map is linear:
-!bt
-\[
-\hat x = A x,\qquad A=W_dW_e.
-\]
-!et
-Since \(A\) factors through \(\mathbb{R}^k\),
-!bt
-\[
-\mathrm{rank}(A)\le k.
-\]
-!et
-
-!split
-===== Matrix formulation of the training problem =====
-
-For centered data \(X=[x_1,\dots,x_N]\in\mathbb{R}^{d\times N}\), the objective is
-!bt
-\[
-\min_{W_d,W_e}\|X-W_dW_eX\|_F^2.
-\]
-!et
-Defining \(A=W_dW_e\), we rewrite this as
-!bt
-\[
-\min_{\mathrm{rank}(A)\le k}\|X-AX\|_F^2.
-\]
-!et
-Therefore linear autoencoder training is a rank-constrained approximation problem.
-
-
-!split
-===== PCA as variance maximization =====
-
-The principal \(k\)-dimensional subspace is spanned by the top \(k\) eigenvectors:
-!bt
-\[
-U_k = [u_1,\dots,u_k].
-\]
-!et
-PCA solves
-!bt
-\[
-\max_{B^TB=I_k}\mathrm{Tr}(B^T S B).
-\]
-!et
-!bblock Interpretation:
-* columns of \(B\) form an orthonormal basis for a \(k\)-dimensional subspace,
-* \(\mathrm{Tr}(B^TSB)\) is the variance captured by that subspace.
-!eblock
-
-!split
-===== PCA as projection minimization =====
-
-Equivalent formulation:
-!bt
-\[
-\min_{P^2=P,\; P^T=P,\; \mathrm{rank}(P)=k}\|X-PX\|_F^2.
-\]
-!et
-The optimal projector is
-!bt
-\[
-P^\star = U_k U_k^T.
-\]
-!et
-Thus the PCA reconstruction is
-!bt
-\[
-\hat x = U_k U_k^T x.
-\]
-!et
-
-!split
-===== Expanding the linear AE loss =====
-
-Let \(A\in\mathbb{R}^{d\times d}\) with \(\mathrm{rank}(A)\le k\). Then
-!bt
-\[
-\|X-AX\|_F^2
-=
-\mathrm{Tr}\bigl((X-AX)^T(X-AX)\bigr).
-\]
-!et
-Expanding:
-!bt
-\[
-\|X-AX\|_F^2
-=
-\mathrm{Tr}(X^TX)-2\mathrm{Tr}(X^TAX)+\mathrm{Tr}(X^TA^TAX).
-\]
-!et
-Using cyclicity of the trace and \(XX^T = NS\),
-!bt
-\[
-\|X-AX\|_F^2
-=
-N\Bigl[\mathrm{Tr}(S)-2\mathrm{Tr}(AS)+\mathrm{Tr}(A^TAS)\Bigr].
-\]
-!et
-
-!split
-===== Reduction to orthogonal projection =====
-
-Let \(\mathcal{M}=\operatorname{Im}(A)\), with \(\dim \mathcal{M}\le k\).
-For each \(x_n\), the reconstruction \(Ax_n\in \mathcal{M}\).
-Let \(P_{\mathcal{M}}\) be the orthogonal projector onto \(\mathcal{M}\). Then
-!bt
-\[
-\|x_n-P_{\mathcal{M}}x_n\|_2^2 \le \|x_n-Ax_n\|_2^2
-\]
-!et
-for every \(n\), because orthogonal projection is the closest point in the subspace.
-
-Therefore
-!bt
-\[
-\|X-P_{\mathcal{M}}X\|_F^2 \le \|X-AX\|_F^2.
-\]
-!et
-So the global optimum may be taken to be an orthogonal projector of rank at most \(k\).
-
-!split
-===== Projector parameterization =====
-
-Any rank-\(k\) orthogonal projector can be written as
-!bt
-\[
-P = BB^T,
-\]
-!et
-where
-!bt
-\[
-B\in\mathbb{R}^{d\times k},\qquad B^TB=I_k.
-\]
-!et
-Then
-!bt
-\[
-\|X-PX\|_F^2
-=
-N\Bigl[\mathrm{Tr}(S)-\mathrm{Tr}(B^TSB)\Bigr].
-\]
-!et
-Thus minimizing the reconstruction error is equivalent to maximizing
-!bt
-\[
-\mathrm{Tr}(B^TSB)
-\quad \text{subject to} \quad B^TB=I_k.
-\]
-!et
-
 
 
 
@@ -769,7 +308,7 @@ Thus minimizing the reconstruction error is equivalent to maximizing
 !split
 ===== Towards the PCA theorem =====
 
-The covariance matrix (the correlation matrix involves a simple rescaling) is given as
+We have from last week that the covariance matrix (the correlation matrix involves a simple rescaling) is given as
 !bt
 \[
 \bm{C}[\bm{x}] = \frac{1}{n}\bm{X}^T\bm{X}= \mathbb{E}[\bm{X}^T\bm{X}].
@@ -1286,22 +825,534 @@ Here are some of the most popular:
 
 
 !split
-===== Geometric meaning of the theorem =====
+===== Back to Autoencoders: Linear Autoencoders =====
 
-Linear autoencoders do not merely learn a low-dimensional code:
-they learn the \emph{best} \(k\)-dimensional linear subspace in the least-squares sense.
+These examples here are based the codes from A. Geron's textbook. They
+can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
 
-!bblock So the theorem says:
-Among all \(k\)-dimensional linear reconstructions, the optimal one is orthogonal projection onto the principal subspace.
-That is exactly the geometric content of PCA.
-!eblock
+
+
+!bc pycod
+import sys
+assert sys.version_info >= (3, 5)
+
+# Is this notebook running on Colab or Kaggle?
+IS_COLAB = "google.colab" in sys.modules
+IS_KAGGLE = "kaggle_secrets" in sys.modules
+
+# Scikit-Learn >=0.20 is required
+import sklearn
+assert sklearn.__version__ >= "0.20"
+
+# TensorFlow >= 2.0 is required
+import tensorflow as tf
+from tensorflow import keras
+assert tf.__version__ >= "2.0"
+
+if not tf.config.list_physical_devices('GPU'):
+    print("No GPU was detected. LSTMs and CNNs can be very slow without a GPU.")
+    if IS_COLAB:
+        print("Go to Runtime > Change runtime and select a GPU hardware accelerator.")
+    if IS_KAGGLE:
+        print("Go to Settings > Accelerator and select GPU.")
+
+# Common imports
+import numpy as np
+import os
+
+# to make this notebook's output stable across runs
+np.random.seed(42)
+tf.random.set_seed(42)
+
+# To plot pretty figures
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+mpl.rc('axes', labelsize=14)
+mpl.rc('xtick', labelsize=12)
+mpl.rc('ytick', labelsize=12)
+
+# Where to save the figures
+PROJECT_ROOT_DIR = "."
+CHAPTER_ID = "autoencoders"
+IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
+os.makedirs(IMAGES_PATH, exist_ok=True)
+
+def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
+    print("Saving figure", fig_id)
+    if tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, format=fig_extension, dpi=resolution)
+
+def plot_image(image):
+    plt.imshow(image, cmap="binary")
+    plt.axis("off")
+
+
+np.random.seed(4)
+
+def generate_3d_data(m, w1=0.1, w2=0.3, noise=0.1):
+    angles = np.random.rand(m) * 3 * np.pi / 2 - 0.5
+    data = np.empty((m, 3))
+    data[:, 0] = np.cos(angles) + np.sin(angles)/2 + noise * np.random.randn(m) / 2
+    data[:, 1] = np.sin(angles) * 0.7 + noise * np.random.randn(m) / 2
+    data[:, 2] = data[:, 0] * w1 + data[:, 1] * w2 + noise * np.random.randn(m)
+    return data
+
+X_train = generate_3d_data(60)
+X_train = X_train - X_train.mean(axis=0, keepdims=0)
+
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+encoder = keras.models.Sequential([keras.layers.Dense(2, input_shape=[3])])
+decoder = keras.models.Sequential([keras.layers.Dense(3, input_shape=[2])])
+autoencoder = keras.models.Sequential([encoder, decoder])
+
+autoencoder.compile(loss="mse", optimizer=keras.optimizers.SGD(learning_rate=1.5))
+
+codings = encoder.predict(X_train)
+fig = plt.figure(figsize=(4,3))
+plt.plot(codings[:,0], codings[:, 1], "b.")
+plt.xlabel("$z_1$", fontsize=18)
+plt.ylabel("$z_2$", fontsize=18, rotation=0)
+plt.grid(True)
+save_fig("linear_autoencoder_pca_plot")
+plt.show()
+
+!ec
 
 !split
-===== PAC summary =====
+===== More advanced features, stacked AEs =====
 
-!bblock Main results:
-* The linear autoencoder objective is a rank-constrained least-squares problem.
-* Its global minimizer is an orthogonal projector.
-* The optimal projector is \(U_kU_k^T\), the PCA projector.
-* Therefore linear autoencoders recover PCA exactly.
-!eblock 
+!bc pycod
+# You can select the so-called fashion data as well, here we just use the MNIST standard set
+#(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
+X_train_full = X_train_full.astype(np.float32) / 255
+X_test = X_test.astype(np.float32) / 255
+X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
+y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
+!ec
+
+We can now train all layers at once by building a stacked AE with 3 hidden layers and 1 output layer (i.e., 2 stacked Autoencoders).
+
+!bc pycod
+def rounded_accuracy(y_true, y_pred):
+    return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
+tf.random.set_seed(42)
+np.random.seed(42)
+
+stacked_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu"),
+])
+stacked_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+stacked_ae = keras.models.Sequential([stacked_encoder, stacked_decoder])
+stacked_ae.compile(loss="binary_crossentropy",
+                   optimizer=keras.optimizers.SGD(learning_rate=1.5), metrics=[rounded_accuracy])
+history = stacked_ae.fit(X_train, X_train, epochs=20,
+                         validation_data=(X_valid, X_valid))
+!ec
+
+
+This function processes a few test images through the autoencoder and
+displays the original images and their reconstructions.
+
+!bc pycod
+def show_reconstructions(model, images=X_valid, n_images=5):
+    reconstructions = model.predict(images[:n_images])
+    fig = plt.figure(figsize=(n_images * 1.5, 3))
+    for image_index in range(n_images):
+        plt.subplot(2, n_images, 1 + image_index)
+        plot_image(images[image_index])
+        plt.subplot(2, n_images, 1 + n_images + image_index)
+        plot_image(reconstructions[image_index])
+show_reconstructions(stacked_ae)
+save_fig("reconstruction_plot")
+!ec
+
+Then visualize 
+!bc pycod
+np.random.seed(42)
+from sklearn.manifold import TSNE
+X_valid_compressed = stacked_encoder.predict(X_valid)
+tsne = TSNE()
+X_valid_2D = tsne.fit_transform(X_valid_compressed)
+X_valid_2D = (X_valid_2D - X_valid_2D.min()) / (X_valid_2D.max() - X_valid_2D.min())
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap="tab10")
+plt.axis("off")
+plt.show()
+!ec
+And visualize in a nicer way
+!bc pycod
+# adapted from https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html
+plt.figure(figsize=(10, 8))
+cmap = plt.cm.tab10
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap=cmap)
+image_positions = np.array([[1., 1.]])
+for index, position in enumerate(X_valid_2D):
+    dist = np.sum((position - image_positions) ** 2, axis=1)
+    if np.min(dist) > 0.02: # if far enough from other images
+        image_positions = np.r_[image_positions, [position]]
+        imagebox = mpl.offsetbox.AnnotationBbox(
+            mpl.offsetbox.OffsetImage(X_valid[index], cmap="binary"),
+            position, bboxprops={"edgecolor": cmap(y_valid[index]), "lw": 2})
+        plt.gca().add_artist(imagebox)
+plt.axis("off")
+save_fig("fashion_mnist_visualization_plot")
+plt.show()
+!ec
+
+!split
+===== Using Convolutional Layers Instead of Dense Layers =====
+
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+conv_encoder = keras.models.Sequential([
+    keras.layers.Reshape([28, 28, 1], input_shape=[28, 28]),
+    keras.layers.Conv2D(16, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2),
+    keras.layers.Conv2D(32, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2),
+    keras.layers.Conv2D(64, kernel_size=3, padding="SAME", activation="selu"),
+    keras.layers.MaxPool2D(pool_size=2)
+])
+conv_decoder = keras.models.Sequential([
+    keras.layers.Conv2DTranspose(32, kernel_size=3, strides=2, padding="VALID", activation="selu",
+                                 input_shape=[3, 3, 64]),
+    keras.layers.Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2DTranspose(1, kernel_size=3, strides=2, padding="SAME", activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+conv_ae = keras.models.Sequential([conv_encoder, conv_decoder])
+
+conv_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                metrics=[rounded_accuracy])
+history = conv_ae.fit(X_train, X_train, epochs=5,
+                      validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+conv_encoder.summary()
+conv_decoder.summary()
+!ec
+
+!bc pycod
+show_reconstructions(conv_ae)
+plt.show()
+!ec
+
+!split
+===== Recurrent Autoencoders =====
+
+!bc pycod
+recurrent_encoder = keras.models.Sequential([
+    keras.layers.LSTM(100, return_sequences=True, input_shape=[28, 28]),
+    keras.layers.LSTM(30)
+])
+recurrent_decoder = keras.models.Sequential([
+    keras.layers.RepeatVector(28, input_shape=[30]),
+    keras.layers.LSTM(100, return_sequences=True),
+    keras.layers.TimeDistributed(keras.layers.Dense(28, activation="sigmoid"))
+])
+recurrent_ae = keras.models.Sequential([recurrent_encoder, recurrent_decoder])
+recurrent_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(0.1),
+                     metrics=[rounded_accuracy])
+history = recurrent_ae.fit(X_train, X_train, epochs=10, validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+show_reconstructions(recurrent_ae)
+plt.show()
+!ec
+!split
+===== Stacked denoising Autoencoder with Gaussian noise =====
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+denoising_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.GaussianNoise(0.2),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+denoising_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+denoising_ae = keras.models.Sequential([denoising_encoder, denoising_decoder])
+denoising_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                     metrics=[rounded_accuracy])
+history = denoising_ae.fit(X_train, X_train, epochs=10,
+                           validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+noise = keras.layers.GaussianNoise(0.2)
+show_reconstructions(denoising_ae, noise(X_valid, training=True))
+plt.show()
+!ec
+And using dropout
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+dropout_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+dropout_ae = keras.models.Sequential([dropout_encoder, dropout_decoder])
+dropout_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                   metrics=[rounded_accuracy])
+history = dropout_ae.fit(X_train, X_train, epochs=10,
+                         validation_data=(X_valid, X_valid))
+!ec
+
+!bc pycod
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout = keras.layers.Dropout(0.5)
+show_reconstructions(dropout_ae, dropout(X_valid, training=True))
+save_fig("dropout_denoising_plot", tight_layout=False)
+!ec
+
+
+!split
+===== PyTorch example =====
+We will continue with the MNIST database, which has $60000$ training examples and a test set of 10000 handwritten numbers. The images have
+only one color channel and have a size of $28\times 28$ pixels.
+We start by uploading the data set.
+!bc pycod
+# import the Torch packages
+# transforms are used to preprocess the images, e.g. crop, rotate, normalize, etc
+import torch
+from torchvision import datasets,transforms
+
+# specify the data path in which you would like to store the downloaded files
+# ToTensor() here is used to convert data type to tensor
+
+train_dataset = datasets.MNIST(root='./mnist_data/', train=True, transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.MNIST(root='./mnist_data/', train=False, transform=transforms.ToTensor(), download=True)
+print(train_dataset)
+batchSize=128
+
+#only after packed in DataLoader, can we feed the data into the neural network iteratively
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batchSize, shuffle=True)
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batchSize, shuffle=False)
+!ec 
+
+We visualize the images here using the $imshow$ function  function and the $make\_grid$ function from PyTorch to arrange and display them.
+
+!bc pycod
+# package we used to manipulate matrix
+import numpy as np
+# package we used for image processing
+from matplotlib import pyplot as plt
+from torchvision.utils import make_grid
+
+def imshow(img):
+    npimg = img.numpy()
+    #transpose: change array axis to correspond to the plt.imshow() function     
+    plt.imshow(np.transpose(npimg, (1, 2, 0))) 
+    plt.show()
+
+# load the first 16 training samples from next iteration
+# [:16,:,:,:] for the 4 dimension of examples, first dimension take first 16, other dimension take all data
+# arrange the image in grid
+examples, _ = next(iter(train_loader))
+example_show=make_grid(examples[:16,:,:,:], 4)
+
+# then display them
+imshow(example_show)
+!ec
+
+Our autoencoder consists of two parts, see also the TensorFlow example
+above. The encoder and decoder parts are represented by two fully
+connected feed forward neural networks where we use the standard
+Sigmoid function.  In the encoder part we reduce the dimensionality of
+the image from $28\times 28=784$ pixels to first $16\times 16=256$
+pixels and then to 128 pixels. The 128 pixel representation is then
+used to define the representation of the input and the input to the
+decoder part.  The latter attempts to reconstruct the images.
+
+!bc pycod
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# Network Parameters
+num_hidden_1 = 256  # 1st layer num features
+num_hidden_2 = 128  # 2nd layer num features (the latent dim)
+num_input = 784  # MNIST data input (img shape: 28*28)
+
+
+# Building the encoder
+class Autoencoder(nn.Module):
+    def __init__(self, x_dim, h_dim1, h_dim2):
+        super(Autoencoder, self).__init__()
+        # encoder part
+        self.fc1 = nn.Linear(x_dim, h_dim1)
+        self.fc2 = nn.Linear(h_dim1, h_dim2)
+        # decoder part
+        self.fc3 = nn.Linear(h_dim2, h_dim1)
+        self.fc4 = nn.Linear(h_dim1, x_dim)
+
+    def encoder(self, x):
+        x = torch.sigmoid(self.fc1(x))
+        x = torch.sigmoid(self.fc2(x))
+        return x
+
+    def decoder(self, x):
+        x = torch.sigmoid(self.fc3(x))
+        x = torch.sigmoid(self.fc4(x))
+        return x
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
+# When initializing, it will run __init__() function as above
+model = Autoencoder(num_input, num_hidden_1, num_hidden_2)
+!ec
+
+We define here the cost/loss function and the optimizer we employ (Adam here).
+!bc pycod 
+# define loss function and parameters
+optimizer = optim.Adam(model.parameters())
+epoch = 100
+# MSE loss will calculate Mean Squared Error between the inputs 
+loss_function = nn.MSELoss()
+
+print('====Training start====')
+for i in range(epoch):
+    train_loss = 0
+    for batch_idx, (data, _) in enumerate(train_loader):
+        # prepare input data
+        inputs = torch.reshape(data,(-1, 784)) # -1 can be any value.
+        # set gradient to zero
+        optimizer.zero_grad()
+        # feed inputs into model
+        recon_x = model(inputs)
+        # calculating loss 
+        loss = loss_function(recon_x, inputs)
+        # calculate gradient of each parameter
+        loss.backward()
+        train_loss += loss.item()
+        # update the weight based on the gradient calculated
+        optimizer.step()
+    if i%10==0:    
+        print('====> Epoch: {} Average loss: {:.9f}'.format(i, train_loss ))
+print('====Training finish====')
+!ec
+As we have trained the network, we will now reconstruct various test samples to see if the model can generalize to data which
+were not included in the training set. 
+!bc pycod
+# load 16 images from testset
+inputs, _ = next(iter(test_loader))
+inputs_example = make_grid(inputs[:16,:,:,:],4)
+imshow(inputs_example)
+
+#convert from image to tensor
+#inputs=inputs.cuda()
+inputs=torch.reshape(inputs,(-1,784))
+
+# get the outputs from the trained model
+outputs=model(inputs)
+
+#convert from tensor to image
+outputs=torch.reshape(outputs,(-1,1,28,28))
+outputs=outputs.detach().cpu()
+
+#show the output images
+outputs_example = make_grid(outputs[:16,:,:,:],4)
+imshow(outputs_example)
+!ec
+
+After training the auto-encoder, we can now use the model to reconstruct some images.
+In order to reconstruct different training images, the model
+has learned to recognize how the image looks like and describe it in
+the 128-dimensional  latent space. In other words, the visual information of
+images is compressed and encoded in the 128-dimensional representations. As we
+assume that samples from the same categories should be more visually
+similar than those from different classes, the representations can
+then be used for image recognition, i.e., handwritten digit images
+recognition in our case.
+
+One simple way to recognize images is to randomly select ten training
+samples from each class and annotate them with the corresponding label.
+Then given the
+test data, we can predict which classes they belong to by finding the
+most similar labelled training samples to them.
+
+
+!bc pycod
+# get 100 image-label pairs from training set
+x_train, y_train = next(iter(train_loader))
+
+# 10 classes, 10 samples per class, 100 in total
+candidates = np.random.choice(batchSize, 10*10)
+
+# randomly select 100 samples
+x_train = x_train[candidates]
+y_train = y_train[candidates]
+
+# display the selected samples and print their labels
+
+imshow(make_grid(x_train[:100,:,:,:],10))
+print(y_train.reshape(10, 10))
+
+# get 100 image-label pairs from test set
+x_test, y_test = next(iter(train_loader))
+candidates_test = np.random.choice(batchSize, 10*10)
+
+x_test = x_test[candidates_test]
+y_test = y_test[candidates_test]
+
+# display the selected samples and print their labels
+imshow(make_grid(x_test[:100,:,:,:],10))
+
+print(y_test.reshape(10, 10))
+!ec
+
+!bc pycod
+# compute the representations of training and test samples
+#h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))
+#h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))
+h_train=model.encoder(torch.reshape(x_train,(-1,784)))
+h_test=model.encoder(torch.reshape(x_test,(-1,784)))
+
+# find the nearest training samples to each test instance, in terms of MSE
+MSEs = np.mean(np.power(np.expand_dims(h_test.detach().cpu(), axis=1) - np.expand_dims(h_train.detach().cpu(), axis=0), 2), axis=2)
+neighbours = MSEs.argmin(axis=1)
+predicts = y_train[neighbours]
+
+# print(np.stack([y_test, predicts], axis=1))
+print('Recognition accuracy according to the learned representation is %.1f%%' % (100 * (y_test == predicts).numpy().astype(np.float32).mean()))
+
+!ec
