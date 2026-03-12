@@ -1,39 +1,363 @@
-TITLE: Advanced machine learning and data analysis for the physical sciences
-AUTHOR: Morten Hjorth-Jensen {copyright, 1999-present|CC BY-NC} at Department of Physics and Center for Computing in Science Education, University of Oslo, Norway
-DATE: March 12, 2026
+%%
+%% Automatically generated file from DocOnce source
+%% (https://github.com/doconce/doconce/)
+%% doconce format latex week8.do.txt --latex_title_layout=beamer --latex_table_format=footnotesize --no_mako
+%%
+% #ifdef PTEX2TEX_EXPLANATION
+%%
+%% The file follows the ptex2tex extended LaTeX format, see
+%% ptex2tex: https://code.google.com/p/ptex2tex/
+%%
+%% Run
+%%      ptex2tex myfile
+%% or
+%%      doconce ptex2tex myfile
+%%
+%% to turn myfile.p.tex into an ordinary LaTeX file myfile.tex.
+%% (The ptex2tex program: https://code.google.com/p/ptex2tex)
+%% Many preprocess options can be added to ptex2tex or doconce ptex2tex
+%%
+%%      ptex2tex -DMINTED myfile
+%%      doconce ptex2tex myfile envir=minted
+%%
+%% ptex2tex will typeset code environments according to a global or local
+%% .ptex2tex.cfg configure file. doconce ptex2tex will typeset code
+%% according to options on the command line (just type doconce ptex2tex to
+%% see examples). If doconce ptex2tex has envir=minted, it enables the
+%% minted style without needing -DMINTED.
+% #endif
 
-!split
-===== Plans for the week March 9-13  =====
+% #define PREAMBLE
 
-!bblock
-* Autoencoders (AEs), Foundations of representation learning and autoencoders
-* Linear autoencoders and the full connection to Principal Component Analysis (PCA)
-* Next week
-  * Foundations of representation learning and autoencoders with code examples
-  * Nonlinear and regularized autoencoders
-  * Probabilistic autoencoders, PPCA, and VAEs
-* Video of lecture at URL:"https://youtu.be/gGDZQY3UDp8"
-* Whiteboard notes at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/Notesweek8.pdf"
-!eblock
+% #ifdef PREAMBLE
+%-------------------- begin preamble ----------------------
 
-!split
-===== Reading recommendations =====
+\documentclass[%
+oneside,                 % oneside: electronic viewing, twoside: printing
+final,                   % draft: marks overfull hboxes, figures with paths
+10pt]{article}
 
-!bblock
-o Goodfellow et al chapter 14.
-o Rashcka et al. Their chapter 17 contains a brief introduction only.
-o Deep Learning Tutorial on AEs from Stanford University at URL:"http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/"
-o Building AEs in Keras at URL:"https://blog.keras.io/building-autoencoders-in-keras.html"
-o Introduction to AEs in TensorFlow at URL:"https://www.tensorflow.org/tutorials/generative/autoencoder"
-o Grosse, University of Toronto, Lecture on AEs at URL:"http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf"
-o Bank et al on AEs at URL:"https://arxiv.org/abs/2003.05991"  
-o Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)
-!eblock
+\listfiles               %  print all files needed to compile this document
+
+\usepackage{relsize,makeidx,color,setspace,amsmath,amsfonts,amssymb}
+\usepackage[table]{xcolor}
+\usepackage{bm,ltablex,microtype}
+
+\usepackage[pdftex]{graphicx}
+
+\usepackage{ptex2tex}
+% #ifdef MINTED
+\usepackage{minted}
+\usemintedstyle{default}
+% #endif
+
+\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{lmodern}         % Latin Modern fonts derived from Computer Modern
+
+% Hyperlinks in PDF:
+\definecolor{linkcolor}{rgb}{0,0,0.4}
+\usepackage{hyperref}
+\hypersetup{
+    breaklinks=true,
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    citecolor=black,
+    filecolor=black,
+    %filecolor=blue,
+    pdfmenubar=true,
+    pdftoolbar=true,
+    bookmarksdepth=3   % Uncomment (and tweak) for PDF bookmarks with more levels than the TOC
+    }
+%\hyperbaseurl{}   % hyperlinks are relative to this root
+
+\setcounter{tocdepth}{2}  % levels in table of contents
+
+% Tricks for having figures close to where they are defined:
+% 1. define less restrictive rules for where to put figures
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\floatpagefraction}{0.75}
+% floatpagefraction must always be less than topfraction!
+% 2. ensure all figures are flushed before next section
+\usepackage[section]{placeins}
+% 3. enable begin{figure}[H] (often leads to ugly pagebreaks)
+%\usepackage{float}\restylefloat{figure}
+
+% --- fancyhdr package for fancy headers ---
+\usepackage{fancyhdr}
+\fancyhf{} % sets both header and footer to nothing
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[LE,RO]{\thepage}
+% Ensure copyright on titlepage (article style) and chapter pages (book style)
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{{\footnotesize \copyright\ 1999-2026, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license}}
+%  \renewcommand{\footrulewidth}{0mm}
+  \renewcommand{\headrulewidth}{0mm}
+}
+% Ensure copyright on titlepages with \thispagestyle{empty}
+\fancypagestyle{empty}{
+  \fancyhf{}
+  \fancyfoot[C]{{\footnotesize \copyright\ 1999-2026, Morten Hjorth-Jensen. Released under CC Attribution-NonCommercial 4.0 license}}
+  \renewcommand{\footrulewidth}{0mm}
+  \renewcommand{\headrulewidth}{0mm}
+}
+
+\pagestyle{fancy}
+
+
+\usepackage[framemethod=TikZ]{mdframed}
+
+% --- begin definitions of admonition environments ---
+
+% Admonition style "mdfbox" is an oval colored box based on mdframed
+% "notice" admon
+\colorlet{mdfbox_notice_background}{gray!5}
+\newmdenv[
+  skipabove=15pt,
+  skipbelow=15pt,
+  outerlinewidth=0,
+  backgroundcolor=mdfbox_notice_background,
+  linecolor=black,
+  linewidth=2pt,       % frame thickness
+  frametitlebackgroundcolor=mdfbox_notice_background,
+  frametitlerule=true,
+  frametitlefont=\normalfont\bfseries,
+  shadow=false,        % frame shadow?
+  shadowsize=11pt,
+  leftmargin=0,
+  rightmargin=0,
+  roundcorner=5,
+  needspace=0pt,
+]{notice_mdfboxmdframed}
+
+\newenvironment{notice_mdfboxadmon}[1][]{
+\begin{notice_mdfboxmdframed}[frametitle=#1]
+}
+{
+\end{notice_mdfboxmdframed}
+}
+
+% Admonition style "mdfbox" is an oval colored box based on mdframed
+% "summary" admon
+\colorlet{mdfbox_summary_background}{gray!5}
+\newmdenv[
+  skipabove=15pt,
+  skipbelow=15pt,
+  outerlinewidth=0,
+  backgroundcolor=mdfbox_summary_background,
+  linecolor=black,
+  linewidth=2pt,       % frame thickness
+  frametitlebackgroundcolor=mdfbox_summary_background,
+  frametitlerule=true,
+  frametitlefont=\normalfont\bfseries,
+  shadow=false,        % frame shadow?
+  shadowsize=11pt,
+  leftmargin=0,
+  rightmargin=0,
+  roundcorner=5,
+  needspace=0pt,
+]{summary_mdfboxmdframed}
+
+\newenvironment{summary_mdfboxadmon}[1][]{
+\begin{summary_mdfboxmdframed}[frametitle=#1]
+}
+{
+\end{summary_mdfboxmdframed}
+}
+
+% Admonition style "mdfbox" is an oval colored box based on mdframed
+% "warning" admon
+\colorlet{mdfbox_warning_background}{gray!5}
+\newmdenv[
+  skipabove=15pt,
+  skipbelow=15pt,
+  outerlinewidth=0,
+  backgroundcolor=mdfbox_warning_background,
+  linecolor=black,
+  linewidth=2pt,       % frame thickness
+  frametitlebackgroundcolor=mdfbox_warning_background,
+  frametitlerule=true,
+  frametitlefont=\normalfont\bfseries,
+  shadow=false,        % frame shadow?
+  shadowsize=11pt,
+  leftmargin=0,
+  rightmargin=0,
+  roundcorner=5,
+  needspace=0pt,
+]{warning_mdfboxmdframed}
+
+\newenvironment{warning_mdfboxadmon}[1][]{
+\begin{warning_mdfboxmdframed}[frametitle=#1]
+}
+{
+\end{warning_mdfboxmdframed}
+}
+
+% Admonition style "mdfbox" is an oval colored box based on mdframed
+% "question" admon
+\colorlet{mdfbox_question_background}{gray!5}
+\newmdenv[
+  skipabove=15pt,
+  skipbelow=15pt,
+  outerlinewidth=0,
+  backgroundcolor=mdfbox_question_background,
+  linecolor=black,
+  linewidth=2pt,       % frame thickness
+  frametitlebackgroundcolor=mdfbox_question_background,
+  frametitlerule=true,
+  frametitlefont=\normalfont\bfseries,
+  shadow=false,        % frame shadow?
+  shadowsize=11pt,
+  leftmargin=0,
+  rightmargin=0,
+  roundcorner=5,
+  needspace=0pt,
+]{question_mdfboxmdframed}
+
+\newenvironment{question_mdfboxadmon}[1][]{
+\begin{question_mdfboxmdframed}[frametitle=#1]
+}
+{
+\end{question_mdfboxmdframed}
+}
+
+% Admonition style "mdfbox" is an oval colored box based on mdframed
+% "block" admon
+\colorlet{mdfbox_block_background}{gray!5}
+\newmdenv[
+  skipabove=15pt,
+  skipbelow=15pt,
+  outerlinewidth=0,
+  backgroundcolor=mdfbox_block_background,
+  linecolor=black,
+  linewidth=2pt,       % frame thickness
+  frametitlebackgroundcolor=mdfbox_block_background,
+  frametitlerule=true,
+  frametitlefont=\normalfont\bfseries,
+  shadow=false,        % frame shadow?
+  shadowsize=11pt,
+  leftmargin=0,
+  rightmargin=0,
+  roundcorner=5,
+  needspace=0pt,
+]{block_mdfboxmdframed}
+
+\newenvironment{block_mdfboxadmon}[1][]{
+\begin{block_mdfboxmdframed}[frametitle=#1]
+}
+{
+\end{block_mdfboxmdframed}
+}
+
+% --- end of definitions of admonition environments ---
+
+% prevent orhpans and widows
+\clubpenalty = 10000
+\widowpenalty = 10000
+
+% --- end of standard preamble for documents ---
+
+
+% insert custom LaTeX commands...
+
+\raggedbottom
+\makeindex
+
+%-------------------- end preamble ----------------------
+
+\begin{document}
+
+% matching end for #ifdef PREAMBLE
+% #endif
+
+\newcommand{\exercisesection}[1]{\subsection*{#1}}
+
+
+% ------------------- main content ----------------------
 
 
 
-!split
-===== Autoencoders: Overarching view =====
+% ----------------- title -------------------------
+
+\title{Advanced machine learning and data analysis for the physical sciences}
+
+% ----------------- author(s) -------------------------
+
+\author{Morten Hjorth-Jensen\inst{1}}
+\institute{Department of Physics and Center for Computing in Science Education, University of Oslo, Norway\inst{1}}
+% ----------------- end author(s) -------------------------
+
+\date{March 12, 2026
+% <optional titlepage figure>
+% <optional copyright>
+}
+
+% !split
+\subsection{Plans for the week March 9-13}
+
+\begin{block}{}
+\begin{itemize}
+\item Autoencoders (AEs), Foundations of representation learning and autoencoders
+
+\item Linear autoencoders and the full connection to Principal Component Analysis (PCA)
+
+\item Next week
+\begin{itemize}
+
+  \item Foundations of representation learning and autoencoders with code examples
+
+  \item Nonlinear and regularized autoencoders
+
+  \item Probabilistic autoencoders, PPCA, and VAEs
+
+\end{itemize}
+
+\noindent
+\item Video of lecture at \href{{https://youtu.be/gGDZQY3UDp8}}{\nolinkurl{https://youtu.be/gGDZQY3UDp8}}
+
+\item Whiteboard notes at \href{{https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/Notesweek8.pdf}}{\nolinkurl{https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/Notesweek8.pdf}}
+\end{itemize}
+
+\noindent
+\end{block}
+
+% !split
+\subsection{Reading recommendations}
+
+\begin{block}{}
+\begin{enumerate}
+\item Goodfellow et al chapter 14.
+
+\item Rashcka et al.~Their chapter 17 contains a brief introduction only.
+
+\item Deep Learning Tutorial on AEs from Stanford University at \href{{http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/}}{\nolinkurl{http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/}}
+
+\item Building AEs in Keras at \href{{https://blog.keras.io/building-autoencoders-in-keras.html}}{\nolinkurl{https://blog.keras.io/building-autoencoders-in-keras.html}}
+
+\item Introduction to AEs in TensorFlow at \href{{https://www.tensorflow.org/tutorials/generative/autoencoder}}{\nolinkurl{https://www.tensorflow.org/tutorials/generative/autoencoder}}
+
+\item Grosse, University of Toronto, Lecture on AEs at \href{{http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf}}{\nolinkurl{http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf}}
+
+\item Bank et al on AEs at \href{{https://arxiv.org/abs/2003.05991}}{\nolinkurl{https://arxiv.org/abs/2003.05991}}  
+
+\item Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)
+\end{enumerate}
+
+\noindent
+\end{block}
+
+% !split
+\subsection{Autoencoders: Overarching view}
 
 Autoencoders are artificial neural networks capable of learning
 efficient representations of the input data (these representations are called codings)  without
@@ -50,8 +374,8 @@ features or hidden structure of the data, and they can be used for
 data compression, denoising, anomaly detection, and generative
 modeling.
 
-!split
-===== Powerful detectors =====
+% !split
+\subsection{Powerful detectors}
 
 More importantly, autoencoders act as powerful feature detectors, and
 they can be used for unsupervised pretraining of deep neural networks.
@@ -71,16 +395,12 @@ which forces it to learn efficient ways of representing the data. In
 short, the codings are byproducts of the autoencoder’s attempt to
 learn the identity function under some constraints.
 
-
-
-
-!split
-===== First introduction of AEs =====
+% !split
+\subsection{First introduction of AEs}
 
 Autoencoders were first introduced by Rumelhart, Hinton, and Williams
 in 1986 with the goal of learning to reconstruct the input
 observations with the lowest error possible.
-
 
 Why would one want to learn to reconstruct the input observations? If
 you have problems imagining what that means, think of having a dataset
@@ -90,85 +410,72 @@ may be confused, as there is no apparent reason of doing so. To better
 understand why autoencoders are useful we need a more informative
 (although not yet unambiguous) definition.
 
-!bblock
-An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications ("see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders":"https://arxiv.org/abs/2003.05991") by learning to reconstruct a set of input observations well enough.
-!eblock
+\begin{block}{}
+An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications (\href{{https://arxiv.org/abs/2003.05991}}{see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders}) by learning to reconstruct a set of input observations well enough.
+\end{block}
 
-
-
-!split
-===== Autoencoder structure =====
-
+% !split
+\subsection{Autoencoder structure}
 
 Autoencoders are neural networks where the outputs are its own
-inputs. They are split into an _encoder part_
+inputs. They are split into an \textbf{encoder part}
 which maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this
-is the encoder part) to a _so-called code part_ (or intermediate part)
+is the encoder part) to a \textbf{so-called code part} (or intermediate part)
 with the result $\bm{h}$
 
-!bt
 \[
 \bm{h} = f(\bm{x},\bm{W})),
 \]
-!et
-where $\bm{W}$ are the weights to be determined.  The _decoder_ parts maps, via its own parameters (weights given by the matrix $\bm{V}$ and its own biases) to 
+where $\bm{W}$ are the weights to be determined.  The \textbf{decoder} parts maps, via its own parameters (weights given by the matrix $\bm{V}$ and its own biases) to 
 the final ouput
-!bt
 \[
 \tilde{\bm{x}} = g(\bm{h},\bm{V})).
 \]
-!et
 
 The goal is to minimize the construction error.
 
-!split
-===== Schematic image of an Autoencoder =====
+% !split
+\subsection{Schematic image of an Autoencoder}
 
-FIGURE: [figures/ae1.png, width=700 frac=1.0]
+\vspace{6mm}
 
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/ae1.png}}
 
+\vspace{6mm}
 
-!split
-===== More on the structure =====
+% !split
+\subsection{More on the structure}
 
 In most typical architectures, the encoder and the decoder are neural networks
 since they can be easily trained with existing software libraries such as TensorFlow or PyTorch with back propagation.
 
-
-
 In general, the encoder can be written as a function $g$ that will depend on some parameters
-!bt
 \[
 \mathbf{h}_{i} = g(\mathbf{x}_{i}),
 \]
-!et
 where $\mathbf{h}_{i}\in\mathbb{R}^{q}$  (the latent feature representation) is the output of the encoder block where we evaluate
 it using the input $\mathbf{x}_{i}$.
 
-!split
-===== Decoder part =====
+% !split
+\subsection{Decoder part}
 
 Note that we have $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{q}$
 The decoder and the output of the network $\tilde{\mathbf{x}}_{i}$ can be written then as a second generic function
 of the latent features
-!bt
 \[
 \tilde{\mathbf{x}}_{i} = f\left(\mathbf{h}_{i}\right) = f\left(g\left(\mathbf{x}_{i}\right)\right),
 \]
-!et
 where $\tilde{\mathbf{x}}_{i}\mathbf{\in }\mathbb{R}^{n}$.
 
 Training an autoencoder simply means finding the functions $g(\cdot)$ and $f(\cdot)$
 that satisfy
-!bt
 \[
 \textrm{arg}\min_{f,g}<\left[\Delta (\mathbf{x}_{i}, f(g\left(\mathbf{x}_{i}\right))\right]>.
 \]
-!et
 
-
-!split
-===== Typical AEs =====
+% !split
+\subsection{Typical AEs}
 
 The standard setup is done via a standard feed forward neural network (FFNN), or what is called a Feed Forward Autoencoder.
 
@@ -178,23 +485,26 @@ Typically, the first layer has a number of neurons $n_{1} = n$ which equals the 
 
 As we move toward the center of the network, the number of neurons in each layer drops in some measure.
 The middle layer usually has the smallest number of neurons.
-The fact that the number of neurons in this layer is smaller than the size of the input, is often called the _bottleneck_.
+The fact that the number of neurons in this layer is smaller than the size of the input, is often called the \textbf{bottleneck}.
 
-!split
-===== Feed Forward Autoencoder =====
+% !split
+\subsection{Feed Forward Autoencoder}
 
-FIGURE: [figures/ae2.pdf, width=700 frac=1.0]
+\vspace{6mm}
 
+% inline figure
+\centerline{\includegraphics[width=1.0\linewidth]{figures/ae2.pdf}}
 
-!split
-===== Mirroring =====
+\vspace{6mm}
+
+% !split
+\subsection{Mirroring}
 
 In almost all practical applications,
 the layers after the middle one are a mirrored version of the layers before the middle one.
 For example, an autoencoder with three layers could have the following numbers of neurons:
 
 $n_{1} = 10$, $n_{2} = 5$ and then $n_{3} = n_{1} = 10$ where the input dimension is equal to ten.
-
 
 All the layers up to and including the middle one, make what is called the encoder, and all the layers from and including
 the middle one (up to the output) make what is called the decoder.
@@ -206,11 +516,11 @@ What is essential to notice is that the decoder can reconstruct the
 input by using only a much smaller number of features than the input
 observations initially have.
 
-!split
-===== Output of middle layer =====
+% !split
+\subsection{Output of middle layer}
 
 The output of the middle layer
-$\mathbf{h}_{\mathbf{i}}$ are also called a _learned representation_ of the input observation $\mathbf{x}_{i}$.
+$\mathbf{h}_{\mathbf{i}}$ are also called a \textbf{learned representation} of the input observation $\mathbf{x}_{i}$.
 
 The encoder can reduce the number of dimensions of the input
 observation and create a learned representation
@@ -221,37 +531,32 @@ This learned representation is enough for the decoder to reconstruct
 the input accurately (if the autoencoder training was successful as
 intended).
 
-!split
-===== Activation Function of the Output Layer =====
+% !split
+\subsection{Activation Function of the Output Layer}
 
 In autoencoders based on neural networks, the output layer's
 activation function plays a particularly important role.  The most
 used functions are ReLU and Sigmoid. 
 
-!split
-===== ReLU =====
+% !split
+\subsection{ReLU}
 
 The  ReLU activation function can assume all values in the range $\left[0,\infty\right]$. As a remainder, its formula is
-!bt
 \[
 \textrm{ReLU}\left(x\right) = \max\left(0,x\right).
 \]
-!et
 This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
-If the input $\mathbf{x}_{i}$ can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called _Leaky ReLu_ or just modified ReLU.
+If the input $\mathbf{x}_{i}$ can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called \textbf{Leaky ReLu} or just modified ReLU.
 
 The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  
 
-!split
-===== Sigmoid =====
+% !split
+\subsection{Sigmoid}
 
 The sigmoid function $\sigma$ can assume all values in the range $[0,1]$,
-!bt
 \[
 \sigma\left(x\right) =\frac{1}{1+e^{-x}}.
 \]
-!et
-
 
 This activation function can only be used if the input observations
 $\mathbf{x}_{i}$ are all in the range $[0,1]$  or if you have
@@ -263,21 +568,18 @@ would make each observation (each image) have only pixel values
 between 0 and 1. In this case, the sigmoid would be a good choice for
 the output layer's activation function.
 
-!split
-===== Cost/Loss Function =====
+% !split
+\subsection{Cost/Loss Function}
 
 If an autoencoder is trying to solve a regression problem, the most
 common choice as a loss function is the Mean Square Error
 
-!bt
 \[
 L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 \]
-!et
 
-
-!split
-===== Binary Cross-Entropy =====
+% !split
+\subsection{Binary Cross-Entropy}
 
 If the activation function of the output layer of the AE is a sigmoid
 function, thus limiting neuron outputs to be between 0 and 1, and the
@@ -286,242 +588,228 @@ function the binary cross-entropy. This cots/loss function is
 typically used in classification problems, but it works well for
 autoencoders. The formula for it is
 
-!bt
 \[
 L_{\textrm{CE}} = -\frac{1}{n}\sum_{i = 1}^{n}\sum_{j = 1}^{p}[x_{j,i} \log\tilde{x}_{j,i}+\left(1-x_{j,i}\right)\log (1-\tilde{x}_{j,i})].
 \]
-!et
 
-!split
-===== Reconstruction Error =====
+% !split
+\subsection{Reconstruction Error}
 
 The reconstruction error (RE) is a metric that gives you an indication of how good (or bad) the autoencoder was able to reconstruct
 the input observation $\mathbf{x}_{i}$. The most typical RE used is the MSE
 
-!bt
 \[
 \textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
 \]
-!et
 
-!split
-===== Notation =====
+% !split
+\subsection{Notation}
 We denote:
-* \(x \in \mathbb{R}^d\): input vector,
-* \(z \in \mathbb{R}^k\): latent code, with \(k<d\) in the undercomplete case,
-* \(X=[x_1,\dots,x_N]\in \mathbb{R}^{d\times N}\): data matrix,
-* \(\hat x\): reconstruction,
-* \(\|A\|_F^2 = \operatorname{Tr}(A^T A)\): Frobenius norm.
+\begin{itemize}
+\item \(x \in \mathbb{R}^d\): input vector,
 
+\item \(z \in \mathbb{R}^k\): latent code, with \(k<d\) in the undercomplete case,
+
+\item \(X=[x_1,\dots,x_N]\in \mathbb{R}^{d\times N}\): data matrix,
+
+\item \(\hat x\): reconstruction,
+
+\item \(\|A\|_F^2 = \operatorname{Tr}(A^T A)\): Frobenius norm.
+\end{itemize}
+
+\noindent
 We will assume throughout that the data are centered when discussing PCA:
-!bt
 \[
 \frac{1}{N}\sum_{n=1}^N x_n = 0.
 \]
-!et
-!split
-===== What is representation learning? =====
+% !split
+\subsection{What is representation learning?}
 
 Given observations \(x\in\mathbb{R}^d\), representation learning seeks a transformation
-!bt
 \[
 x \mapsto z = f(x)
 \]
-!et
 such that \(z\) captures the structure relevant for a downstream task or for reconstruction.
 
-!bblock Typical goals:
-* reduce dimension,
-* denoise,
-* identify latent factors,
-* learn a coordinate system adapted to the data.
+\begin{block}{Typical goals: }
+\begin{itemize}
+\item reduce dimension,
+
+\item denoise,
+
+\item identify latent factors,
+
+\item learn a coordinate system adapted to the data.
+\end{itemize}
+
+\noindent
 Autoencoders realize this idea through an encoder--decoder architecture trained end-to-end.
-!eblock
+\end{block}
 
-
-!split
-===== Dimensionality reduction as approximation =====
+% !split
+\subsection{Dimensionality reduction as approximation}
 
 A reduced representation of dimension \(k<d\) is useful only if the original data can be approximately recovered:
-!bt
 \[
 x \approx \hat x = g(f(x)).
 \]
-!et
 Thus dimensionality reduction is naturally posed as an approximation problem:
-!bt
 \[
 \min_{f,g} \sum_{n=1}^N \ell\bigl(x_n,g(f(x_n))\bigr).
 \]
-!et
 The simplest choice is squared error,
-!bt
 \[
 \ell(x,\hat x)=\|x-\hat x\|_2^2.
 \]
-!et
 This makes autoencoders closely related to least-squares approximation and low-rank matrix approximation.
 
-
-!split
-===== Encoder--decoder architecture =====
+% !split
+\subsection{Encoder--decoder architecture}
 
 An autoencoder consists of:
-!bt
 \[
 z = f_\theta(x), \qquad \hat x = g_\phi(z).
 \]
-!et
 Hence the full model is
-!bt
 \[
 \hat x = g_\phi(f_\theta(x)).
 \]
-!et
-!bblock Interpretation:
-* \(f_\theta\) compresses data into latent coordinates,
-* \(g_\phi\) reconstructs the original data from those coordinates,
-* the pair \((f_\theta,g_\phi)\) is trained to minimize reconstruction loss.
-!eblock
+\begin{block}{Interpretation: }
+\begin{itemize}
+\item \(f_\theta\) compresses data into latent coordinates,
 
-!split
-===== Undercomplete, overcomplete, and bottlenecks =====
+\item \(g_\phi\) reconstructs the original data from those coordinates,
+
+\item the pair \((f_\theta,g_\phi)\) is trained to minimize reconstruction loss.
+\end{itemize}
+
+\noindent
+\end{block}
+
+% !split
+\subsection{Undercomplete, overcomplete, and bottlenecks}
 
 The latent dimension \(k\) plays a fundamental role.
 
-!bblock Undercomplete autoencoder:
-!bt
+\begin{block}{Undercomplete autoencoder: }
 \[
 k<d.
 \]
-!et
 The network is forced to compress.
-!eblock
-!bblock Overcomplete autoencoder:
-!bt
+\end{block}
+\begin{block}{Overcomplete autoencoder: }
 \[
 k\ge d.
 \]
-!et
-!eblock
+\end{block}
 Without additional regularization, the network may learn the identity map.
 Therefore a bottleneck alone is a structural regularizer, but not the only possible one.
 
-
-!split
-===== Empirical risk for autoencoders =====
+% !split
+\subsection{Empirical risk for autoencoders}
 
 Given data matrix
-!bt
 \[
 X = [x_1,\dots,x_N] \in \mathbb{R}^{d\times N},
 \]
-!et
 the empirical reconstruction objective is
-!bt
 \[
 \mathcal{L}(\theta,\phi)
 =
 \frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(x_n))\|_2^2.
 \]
-!et
 Equivalently, if \(\hat X=[\hat x_1,\dots,\hat x_N]\),
-!bt
 \[
 \mathcal{L}(\theta,\phi)=\frac{1}{N}\|X-\hat X\|_F^2.
 \]
-!et
 Thus the geometry of the Frobenius norm is central from the very beginning.
 
-!split
-===== The Frobenius norm viewpoint =====
+% !split
+\subsection{The Frobenius norm viewpoint}
 
 Recall
-!bt
 \[
 \|A\|_F^2 = \sum_{i,j} a_{ij}^2 = \mathrm{Tr}(A^T A).
 \]
-!et
 Hence the reconstruction objective can be written as
-!bt
 \[
 \|X-\hat X\|_F^2
 =
 \mathrm{Tr}\bigl((X-\hat X)^T(X-\hat X)\bigr).
 \]
-!et
 This form is especially useful for deriving optimal linear autoencoders and for proving the connection to PCA.
 
-
-!split
-===== Latent variables as coordinates =====
+% !split
+\subsection{Latent variables as coordinates}
 
 If the data lie near a \(k\)-dimensional manifold \(\mathcal{M}\subset\mathbb{R}^d\), the encoder can be interpreted as producing local coordinates:
-!bt
 \[
 z=f_\theta(x)\in \mathbb{R}^k.
 \]
-!et
 The decoder then acts as a chart map:
-!bt
 \[
 g_\phi: \mathbb{R}^k \to \mathbb{R}^d.
 \]
-!et
 Thus autoencoders can be viewed as learning a nonlinear parameterization of the data manifold.
 
-
-!split
-===== A local linearization viewpoint =====
+% !split
+\subsection{A local linearization viewpoint}
 
 Suppose \(f\) and \(g\) are differentiable. Around a point \(x_0\),
-!bt
 \[
 f(x) \approx f(x_0) + J_f(x_0)(x-x_0),
 \]
-!et
-!bt
 \[
 g(z) \approx g(z_0) + J_g(z_0)(z-z_0).
 \]
-!et
 Hence, locally,
-!bt
 \[
 g(f(x)) \approx g(f(x_0)) + J_g(z_0)J_f(x_0)(x-x_0).
 \]
-!et
 Thus even nonlinear autoencoders behave like linear dimension reducers in a local neighborhood.
 
-!split
-===== Connection to classical methods =====
+% !split
+\subsection{Connection to classical methods}
 
-!bblock Autoencoders are related to:
-* PCA: linear projection minimizing squared reconstruction error,
-* factor analysis / probabilistic PCA: latent Gaussian linear models,
-* manifold learning: nonlinear low-dimensional structure,
-* dictionary learning: sparse representations over learned atoms.
-!eblock
+\begin{block}{Autoencoders are related to: }
+\begin{itemize}
+\item PCA: linear projection minimizing squared reconstruction error,
+
+\item factor analysis / probabilistic PCA: latent Gaussian linear models,
+
+\item manifold learning: nonlinear low-dimensional structure,
+
+\item dictionary learning: sparse representations over learned atoms.
+\end{itemize}
+
+\noindent
+\end{block}
 The key difference is that autoencoders learn both representation and reconstruction maps directly from data.
 
-!split
-===== When does reconstruction imply representation? =====
+% !split
+\subsection{When does reconstruction imply representation?}
 
-A low reconstruction error does not automatically imply a _good_ representation in every sense.
+A low reconstruction error does not automatically imply a \textbf{good} representation in every sense.
 
-!bblock Questions to keep in mind:
-* Does the latent space separate classes?
-* Is the representation stable under perturbations?
-* Is the map approximately invertible on the data manifold?
-* Does the latent code capture semantic or physical variables?
-!eblock
+\begin{block}{Questions to keep in mind: }
+\begin{itemize}
+\item Does the latent space separate classes?
+
+\item Is the representation stable under perturbations?
+
+\item Is the map approximately invertible on the data manifold?
+
+\item Does the latent code capture semantic or physical variables?
+\end{itemize}
+
+\noindent
+\end{block}
 This motivates adding regularization beyond plain reconstruction.
 
-!split
-===== A general regularized objective =====
+% !split
+\subsection{A general regularized objective}
 
 A broad class of autoencoder objectives has the form
-!bt
 \[
 \mathcal{L}(\theta,\phi)
 =
@@ -529,285 +817,239 @@ A broad class of autoencoder objectives has the form
 +
 \lambda\,\Omega(\theta,\phi;X),
 \]
-!et
 where \(\Omega\) may penalize:
-!bblock
-* latent activity (sparse AE),
-* sensitivity of the encoder (contractive AE),
-* deviation from a prior (VAE) to be discussed when we introduce generative methods,
-* complexity of the weights.
-!eblock
+\begin{block}{}
+\begin{itemize}
+\item latent activity (sparse AE),
 
-!split
-===== Why linear autoencoders matter =====
+\item sensitivity of the encoder (contractive AE),
+
+\item deviation from a prior (VAE) to be discussed when we introduce generative methods,
+
+\item complexity of the weights.
+\end{itemize}
+
+\noindent
+\end{block}
+
+% !split
+\subsection{Why linear autoencoders matter}
 
 Although deep nonlinear autoencoders are more expressive, linear autoencoders are foundational because:
-!bblock
-* they admit a full analytic treatment,
-* they reveal the relation between reconstruction and projection,
-* they recover PCA exactly under mild assumptions.
-!eblock
+\begin{block}{}
+\begin{itemize}
+\item they admit a full analytic treatment,
 
+\item they reveal the relation between reconstruction and projection,
 
-!split
-===== Optimization problem in abstract form =====
+\item they recover PCA exactly under mild assumptions.
+\end{itemize}
+
+\noindent
+\end{block}
+
+% !split
+\subsection{Optimization problem in abstract form}
 
 Let \(\mathcal{F}\) be a class of encoders and \(\mathcal{G}\) a class of decoders. Then we solve
-!bt
 \[
 \min_{f\in\mathcal{F},\, g\in\mathcal{G}}
 \sum_{n=1}^N \|x_n-g(f(x_n))\|_2^2.
 \]
-!et
 If \(\mathcal{F}\) and \(\mathcal{G}\) are linear, the problem becomes a constrained quadratic optimization problem.
 If they are nonlinear neural networks, the problem becomes nonconvex but highly expressive.
 
-!split
-===== Autoencoders as identity approximation with constraints =====
+% !split
+\subsection{Autoencoders as identity approximation with constraints}
 
 An autoencoder attempts to approximate the identity map
-!bt
 \[
 x \mapsto x,
 \]
-!et
 but only through the restricted factorization
-!bt
 \[
 x \mapsto z=f(x)\mapsto \hat x=g(z).
 \]
-!et
-!bblock Hence the entire method can be understood as:
+\begin{block}{Hence the entire method can be understood as: }
 Find the best constrained approximation to the identity on the data cloud.
-!eblock
+\end{block}
 When the constraint is low rank and linear, the optimal solution is PCA.
 
-!split
-===== Reconstruction error decomposition  =====
+% !split
+\subsection{Reconstruction error decomposition}
 
 A recurring theme will be:
-!bt
 \[
 \|X-\hat X\|_F^2 = \text{total variance} - \text{explained variance}.
 \]
-!et
 For PCA and linear autoencoders, minimizing reconstruction error is equivalent to maximizing variance captured by a \(k\)-dimensional subspace.
 
-!split
-===== Linear autoencoder architecture =====
+% !split
+\subsection{Linear autoencoder architecture}
 
 A linear autoencoder uses
-!bt
 \[
 z = W_e x,\qquad \hat x = W_d z = W_d W_e x,
 \]
-!et
 with
-!bt
 \[
 W_e\in\mathbb{R}^{k\times d},\qquad W_d\in\mathbb{R}^{d\times k}.
 \]
-!et
 Thus the reconstruction map is linear:
-!bt
 \[
 \hat x = A x,\qquad A=W_dW_e.
 \]
-!et
 Since \(A\) factors through \(\mathbb{R}^k\),
-!bt
 \[
 \mathrm{rank}(A)\le k.
 \]
-!et
 
-!split
-===== Matrix formulation of the training problem =====
+% !split
+\subsection{Matrix formulation of the training problem}
 
 For centered data \(X=[x_1,\dots,x_N]\in\mathbb{R}^{d\times N}\), the objective is
-!bt
 \[
 \min_{W_d,W_e}\|X-W_dW_eX\|_F^2.
 \]
-!et
 Defining \(A=W_dW_e\), we rewrite this as
-!bt
 \[
 \min_{\mathrm{rank}(A)\le k}\|X-AX\|_F^2.
 \]
-!et
 Therefore linear autoencoder training is a rank-constrained approximation problem.
 
-
-!split
-===== PCA as variance maximization =====
+% !split
+\subsection{PCA as variance maximization}
 
 The principal \(k\)-dimensional subspace is spanned by the top \(k\) eigenvectors:
-!bt
 \[
 U_k = [u_1,\dots,u_k].
 \]
-!et
 PCA solves
-!bt
 \[
 \max_{B^TB=I_k}\mathrm{Tr}(B^T S B).
 \]
-!et
-!bblock Interpretation:
-* columns of \(B\) form an orthonormal basis for a \(k\)-dimensional subspace,
-* \(\mathrm{Tr}(B^TSB)\) is the variance captured by that subspace.
-!eblock
+\begin{block}{Interpretation: }
+\begin{itemize}
+\item columns of \(B\) form an orthonormal basis for a \(k\)-dimensional subspace,
 
-!split
-===== PCA as projection minimization =====
+\item \(\mathrm{Tr}(B^TSB)\) is the variance captured by that subspace.
+\end{itemize}
+
+\noindent
+\end{block}
+
+% !split
+\subsection{PCA as projection minimization}
 
 Equivalent formulation:
-!bt
 \[
 \min_{P^2=P,\; P^T=P,\; \mathrm{rank}(P)=k}\|X-PX\|_F^2.
 \]
-!et
 The optimal projector is
-!bt
 \[
 P^\star = U_k U_k^T.
 \]
-!et
 Thus the PCA reconstruction is
-!bt
 \[
 \hat x = U_k U_k^T x.
 \]
-!et
 
-!split
-===== Expanding the linear AE loss =====
+% !split
+\subsection{Expanding the linear AE loss}
 
 Let \(A\in\mathbb{R}^{d\times d}\) with \(\mathrm{rank}(A)\le k\). Then
-!bt
 \[
 \|X-AX\|_F^2
 =
 \mathrm{Tr}\bigl((X-AX)^T(X-AX)\bigr).
 \]
-!et
 Expanding:
-!bt
 \[
 \|X-AX\|_F^2
 =
 \mathrm{Tr}(X^TX)-2\mathrm{Tr}(X^TAX)+\mathrm{Tr}(X^TA^TAX).
 \]
-!et
 Using cyclicity of the trace and \(XX^T = NS\),
-!bt
 \[
 \|X-AX\|_F^2
 =
 N\Bigl[\mathrm{Tr}(S)-2\mathrm{Tr}(AS)+\mathrm{Tr}(A^TAS)\Bigr].
 \]
-!et
 
-!split
-===== Reduction to orthogonal projection =====
+% !split
+\subsection{Reduction to orthogonal projection}
 
 Let \(\mathcal{M}=\operatorname{Im}(A)\), with \(\dim \mathcal{M}\le k\).
 For each \(x_n\), the reconstruction \(Ax_n\in \mathcal{M}\).
 Let \(P_{\mathcal{M}}\) be the orthogonal projector onto \(\mathcal{M}\). Then
-!bt
 \[
 \|x_n-P_{\mathcal{M}}x_n\|_2^2 \le \|x_n-Ax_n\|_2^2
 \]
-!et
 for every \(n\), because orthogonal projection is the closest point in the subspace.
 
 Therefore
-!bt
 \[
 \|X-P_{\mathcal{M}}X\|_F^2 \le \|X-AX\|_F^2.
 \]
-!et
 So the global optimum may be taken to be an orthogonal projector of rank at most \(k\).
 
-!split
-===== Projector parameterization =====
+% !split
+\subsection{Projector parameterization}
 
 Any rank-\(k\) orthogonal projector can be written as
-!bt
 \[
 P = BB^T,
 \]
-!et
 where
-!bt
 \[
 B\in\mathbb{R}^{d\times k},\qquad B^TB=I_k.
 \]
-!et
 Then
-!bt
 \[
 \|X-PX\|_F^2
 =
 N\Bigl[\mathrm{Tr}(S)-\mathrm{Tr}(B^TSB)\Bigr].
 \]
-!et
 Thus minimizing the reconstruction error is equivalent to maximizing
-!bt
 \[
 \mathrm{Tr}(B^TSB)
 \quad \text{subject to} \quad B^TB=I_k.
 \]
-!et
 
-
-
-
-
-!split
-===== Towards the PCA theorem =====
+% !split
+\subsection{Towards the PCA theorem}
 
 The covariance matrix (the correlation matrix involves a simple rescaling) is given as
-!bt
 \[
 \bm{C}[\bm{x}] = \frac{1}{n}\bm{X}^T\bm{X}= \mathbb{E}[\bm{X}^T\bm{X}].
 \]
-!et
 Let us now assume that we can perform a series of orthogonal transformations where we employ some orthogonal matrices $\bm{S}$.
 These matrices are defined as $\bm{S}\in {\mathbb{R}}^{p\times p}$ and obey the orthogonality requirements $\bm{S}\bm{S}^T=\bm{S}^T\bm{S}=\bm{I}$. The matrix can be written out in terms of the column vectors $\bm{s}_i$ as $\bm{S}=[\bm{s}_0,\bm{s}_1,\dots,\bm{s}_{p-1}]$ and $\bm{s}_i \in {\mathbb{R}}^{p}$.
 
-!split
-===== More details =====
+% !split
+\subsection{More details}
 
 Assume also that there is a transformation $\bm{S}^T\bm{C}[\bm{x}]\bm{S}=\bm{C}[\bm{y}]$ such that the new matrix $\bm{C}[\bm{y}]$ is diagonal with elements $[\lambda_0,\lambda_1,\lambda_2,\dots,\lambda_{p-1}]$.  
 
 That is we have
-!bt
 \[
 \bm{C}[\bm{y}] = \mathbb{E}[\bm{S}^T\bm{X}^T\bm{X}T\bm{S}]=\bm{S}^T\bm{C}[\bm{x}]\bm{S},
 \]
-!et
 since the matrix $\bm{S}$ is not a data dependent matrix.   Multiplying with $\bm{S}$ from the left we have
-!bt
 \[
 \bm{S}\bm{C}[\bm{y}] = \bm{C}[\bm{x}]\bm{S},
 \]
-!et
 and since $\bm{C}[\bm{y}]$ is diagonal we have for a given eigenvalue $i$ of the covariance matrix that
 
-!bt
 \[
 \bm{S}_i\lambda_i = \bm{C}[\bm{x}]\bm{S}_i.
 \]
-!et
 
-!split
-===== More on the PCA Theorem =====
+% !split
+\subsection{More on the PCA Theorem}
 
 In the derivation of the PCA theorem we will assume that the eigenvalues are ordered in descending order, that is
 $\lambda_0 > \lambda_1 > \dots > \lambda_{p-1}$. 
-
 
 The eigenvalues tell us then how much we need to stretch the
 corresponding eigenvectors. Dimensions with large eigenvalues have
@@ -821,12 +1063,15 @@ dimensions where the eigenvalues are very small. If $p$ is very large,
 we could then aim at reducing $p$ to $l << p$ and handle only $l$
 features/predictors.
 
-!split
-===== The Algorithm before the Theorem =====
+% !split
+\subsection{The Algorithm before the Theorem}
 
 Here's how we would proceed in setting up the algorithm for the PCA, see also discussion below here. 
-* Set up the datapoints for the design/feature matrix $\bm{X}$ with $\bm{X}\in {\mathbb{R}}^{n\times p}$, with the predictors/features $p$  referring to the column numbers and the entries $n$ being the row elements.
-!bt
+\begin{itemize}
+\item Set up the datapoints for the design/feature matrix $\bm{X}$ with $\bm{X}\in {\mathbb{R}}^{n\times p}$, with the predictors/features $p$  referring to the column numbers and the entries $n$ being the row elements.
+\end{itemize}
+
+\noindent
 \[
 \bm{X}=\begin{bmatrix}
 x_{0,0} & x_{0,1} & x_{0,2}& \dots & \dots x_{0,p-1}\\
@@ -837,38 +1082,51 @@ x_{n-2,0} & x_{n-2,1} & x_{n-2,2}& \dots & \dots x_{n-2,p-1}\\
 x_{n-1,0} & x_{n-1,1} & x_{n-1,2}& \dots & \dots x_{n-1,p-1}\\
 \end{bmatrix},
 \]
-!et
 
-!split
-===== Further steps =====
+% !split
+\subsection{Further steps}
 
-* Center the data by subtracting the mean value for each column. This leads to a new matrix $\bm{X}\rightarrow \overline{\bm{X}}$.
-* Compute then the covariance/correlation matrix $\mathbb{E}[\overline{\bm{X}}^T\overline{\bm{X}}]$.
-* Find the eigenpairs of $\bm{C}$ with eigenvalues $[\lambda_0,\lambda_1,\dots,\lambda_{p-1}]$ and eigenvectors $[\bm{s}_0,\bm{s}_1,\dots,\bm{s}_{p-1}]$.
-* Order the eigenvalue (and the eigenvectors accordingly) in order of decreasing eigenvalues.
-* Keep only those $l$ eigenvalues larger than a selected threshold value, discarding thus $p-l$ features since we expect small variations in the data here.
+\begin{itemize}
+\item Center the data by subtracting the mean value for each column. This leads to a new matrix $\bm{X}\rightarrow \overline{\bm{X}}$.
 
-!split
-===== Writing our own PCA code =====
+\item Compute then the covariance/correlation matrix $\mathbb{E}[\overline{\bm{X}}^T\overline{\bm{X}}]$.
+
+\item Find the eigenpairs of $\bm{C}$ with eigenvalues $[\lambda_0,\lambda_1,\dots,\lambda_{p-1}]$ and eigenvectors $[\bm{s}_0,\bm{s}_1,\dots,\bm{s}_{p-1}]$.
+
+\item Order the eigenvalue (and the eigenvectors accordingly) in order of decreasing eigenvalues.
+
+\item Keep only those $l$ eigenvalues larger than a selected threshold value, discarding thus $p-l$ features since we expect small variations in the data here.
+\end{itemize}
+
+\noindent
+% !split
+\subsection{Writing our own PCA code}
 
 We will use a simple example first with two-dimensional data
 drawn from a multivariate normal distribution with the following mean and covariance matrix (we have fixed these quantities but will play around with them below):
-!bt
 \[
 \mu = (-1,2) \qquad \Sigma = \begin{bmatrix} 4 & 2 \\
 2 & 2
 \end{bmatrix}
 \]
-!et
 Note that the mean refers to each column of data. 
 We will generate $n = 10000$ points $X = \{ x_1, \ldots, x_N \}$ from
 this distribution, and store them in the $1000 \times 2$ matrix $\bm{X}$. This is our design matrix where we have forced the covariance and mean values to take specific values.
 
-!split
-===== Implementing it =====
+% !split
+\subsection{Implementing it}
 The following Python code aids in setting up the data and writing out the design matrix.
-Note that the function _multivariate_ returns also the covariance discussed above and that it is defined by dividing by $n-1$ instead of $n$.
-!bc pycod 
+Note that the function \textbf{multivariate} returns also the covariance discussed above and that it is defined by dividing by $n-1$ instead of $n$.
+
+
+
+
+
+
+
+
+
+\bpycod
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -877,42 +1135,48 @@ n = 10000
 mean = (-1, 2)
 cov = [[4, 2], [2, 2]]
 X = np.random.multivariate_normal(mean, cov, n)
-!ec
+
+\epycod
+
 
 Now we are going to implement the PCA algorithm. We will break it down into various substeps.
 
-!split
-===== First Step =====
+% !split
+\subsection{First Step}
 
 The first step of PCA is to compute the sample mean of the data and use it to center the data. Recall that the sample mean is
-!bt
 \[
 \mu_n = \frac{1}{n} \sum_{i=1}^n x_i
 \]
-!et
 and the mean-centered data $\bar{X} = \{ \bar{x}_1, \ldots, \bar{x}_n \}$ takes the form
-!bt
 \[
 \bar{x}_i = x_i - \mu_n.
 \]
-!et
 When you are done with these steps, print out $\mu_n$ to verify it is
 close to $\mu$ and plot your mean centered data to verify it is
 centered at the origin! 
-The following code elements perform these operations using _pandas_ or using our own functionality for doing so. The latter, using _numpy_ is rather simple through the _mean()_ function. 
-!bc pycod
+The following code elements perform these operations using \textbf{pandas} or using our own functionality for doing so. The latter, using \textbf{numpy} is rather simple through the \textbf{mean()} function. 
+
+
+
+
+
+
+\bpycod
 df = pd.DataFrame(X)
 # Pandas does the centering for us
 df = df -df.mean()
 # we center it ourselves
 X_centered = X - X.mean(axis=0)
-!ec
 
-!split
-===== Scaling =====
+\epycod
+
+
+% !split
+\subsection{Scaling}
 Alternatively, we could use the functions we discussed
 earlier for scaling the data set.  That is, we could have used the
-_StandardScaler_ function in _Scikit-Learn_, a function which ensures
+\textbf{StandardScaler} function in \textbf{Scikit-Learn}, a function which ensures
 that for each feature/predictor we study the mean value is zero and
 the variance is one (every column in the design/feature matrix).  You
 would then not get the same results, since we divide by the
@@ -920,24 +1184,41 @@ variance. The diagonal covariance matrix elements will then be one,
 while the non-diagonal ones need to be divided by $2\sqrt{2}$ for our
 specific case.
 
-!split
-===== Centered Data =====
+% !split
+\subsection{Centered Data}
 
 Now we are going to use the mean centered data to compute the sample covariance of the data by using the following equation
-!bt
 \begin{equation*}
 \Sigma_n = \frac{1}{n-1} \sum_{i=1}^n \bar{x}_i^T \bar{x}_i = \frac{1}{n-1} \sum_{i=1}^n (x_i - \mu_n)^T (x_i - \mu_n)
 \end{equation*}
-!et
 where the data points $x_i \in \mathbb{R}^p$ (here in this example $p = 2$) are column vectors and $x^T$ is the transpose of $x$.
-We can write our own code or simply use either the functionaly of _numpy_ or that of _pandas_, as follows
-!bc pycod
+We can write our own code or simply use either the functionaly of \textbf{numpy} or that of \textbf{pandas}, as follows
+
+
+
+\bpycod
 print(df.cov())
 print(np.cov(X_centered.T))
-!ec
-Note that the way we define the covariance matrix here has a factor $n-1$ instead of $n$. This is included in the _cov()_ function by _numpy_ and _pandas_. 
+
+\epycod
+
+Note that the way we define the covariance matrix here has a factor $n-1$ instead of $n$. This is included in the \textbf{cov()} function by \textbf{numpy} and \textbf{pandas}. 
 Our own code here is not very elegant and asks for obvious improvements. It is tailored to this specific $2\times 2$ covariance matrix. 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bpycod
 # extract the relevant columns from the centered design matrix of dim n x 2
 x = X_centered[:,0]
 y = X_centered[:,1]
@@ -951,46 +1232,75 @@ print(Cov)
 plt.plot(x, y, 'x')
 plt.axis('equal')
 plt.show()
-!ec
 
-!split
-===== Exploring =====
+\epycod
+
+
+% !split
+\subsection{Exploring}
 
 Depending on the number of points $n$, we will get results that are close to the covariance values defined above.
 The plot shows how the data are clustered around a line with slope close to one. Is this expected?  Try to change the covariance and the mean values. For example, try to make the variance of the first element much larger than that of the second diagonal element. Try also to shrink the covariance  (the non-diagonal elements) and see how the data points are distributed. 
 
-!split
-===== Diagonalize the sample covariance matrix to obtain the principal components =====
+% !split
+\subsection{Diagonalize the sample covariance matrix to obtain the principal components}
 
 Now we are ready to solve for the principal components! To do so we
 diagonalize the sample covariance matrix $\Sigma$. We can use the
-function _np.linalg.eig_ to do so. It will return the eigenvalues and
+function \textbf{np.linalg.eig} to do so. It will return the eigenvalues and
 eigenvectors of $\Sigma$. Once we have these we can perform the 
 following tasks:
 
-* We compute the percentage of the total variance captured by the first principal component
-* We plot the mean centered data and lines along the first and second principal components
-* Then we project the mean centered data onto the first and second principal components, and plot the projected data. 
-* Finally, we approximate the data as
+\begin{itemize}
+\item We compute the percentage of the total variance captured by the first principal component
 
-!bt
+\item We plot the mean centered data and lines along the first and second principal components
+
+\item Then we project the mean centered data onto the first and second principal components, and plot the projected data. 
+
+\item Finally, we approximate the data as
+\end{itemize}
+
+\noindent
 \begin{equation*}
 x_i \approx \tilde{x}_i = \mu_n + \langle x_i, v_0 \rangle v_0
 \end{equation*}
-!et
 where $v_0$ is the first principal component. 
 
-!split
-===== Collecting all Steps =====
+% !split
+\subsection{Collecting all Steps}
 
 Collecting all these steps we can write our own PCA function and
-compare this with the functionality included in _Scikit-Learn_.  
+compare this with the functionality included in \textbf{Scikit-Learn}.  
 
 The code here outlines some of the elements we could include in the
 analysis. Feel free to extend upon this in order to address the above
 questions.
 
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bpycod
 # diagonalize and obtain eigenvalues, not necessarily sorted
 EigValues, EigVectors = np.linalg.eig(Cov)
 # sort eigenvectors and eigenvalues
@@ -1013,19 +1323,19 @@ X2Dsl = pca.fit_transform(X)
 print("Eigenvector of largest eigenvalue")
 print(pca.components_.T[:, 0])
 
-!ec
-This code does not contain all the above elements, but it shows how we can use _Scikit-Learn_ to extract the eigenvector which corresponds to the largest eigenvalue. Try to address the questions we pose before the above code.  Try also to change the values of the covariance matrix by making one of the diagonal elements much larger than the other. What do you observe then? 
 
-!split
-===== Classical PCA Theorem   =====
+\epycod
+
+This code does not contain all the above elements, but it shows how we can use \textbf{Scikit-Learn} to extract the eigenvector which corresponds to the largest eigenvalue. Try to address the questions we pose before the above code.  Try also to change the values of the covariance matrix by making one of the diagonal elements much larger than the other. What do you observe then? 
+
+% !split
+\subsection{Classical PCA Theorem}
 
 We assume now that we have a design matrix $\bm{X}$ which has been
 centered as discussed above. For the sake of simplicity we skip the
 overline symbol. The matrix is defined in terms of the various column
 vectors $[\bm{x}_0,\bm{x}_1,\dots, \bm{x}_{p-1}]$ each with dimension
 $\bm{x}\in {\mathbb{R}}^{n}$.
-
-
 
 The PCA theorem states that minimizing the above reconstruction error
 corresponds to setting $\bm{W}=\bm{S}$, the orthogonal matrix which
@@ -1035,20 +1345,15 @@ $\bm{z}_i$ with at most $l$ vectors, with $l << p$, defined by the
 orthogonal projection of the data onto the columns spanned by the
 eigenvectors of the covariance(correlations matrix).
 
-
-
-!split
-===== The PCA Theorem =====
+% !split
+\subsection{The PCA Theorem}
 
 To show the PCA theorem let us start with the assumption that there is one vector $\bm{s}_0$ which corresponds to a solution which minimized the reconstruction error $J$. This is an orthogonal vector. It means that we now approximate the reconstruction error in terms of $\bm{w}_0$ and $\bm{z}_0$ as
-
-
 
 We are almost there, we have obtained a relation between minimizing
 the reconstruction error and the variance and the covariance
 matrix. Minimizing the error is equivalent to maximizing the variance
 of the projected data.
-
 
 We could trivially maximize the variance of the projection (and
 thereby minimize the error in the reconstruction function) by letting
@@ -1057,30 +1362,22 @@ want the matrix $\bm{W}$ to be an orthogonal matrix, is constrained by
 $\vert\vert \bm{w}_0 \vert\vert_2^2=1$. Imposing this condition via a
 Lagrange multiplier we can then in turn maximize
 
-!bt
 \[
 J(\bm{w}_0)= \bm{w}_0^T\bm{C}[\bm{x}]\bm{w}_0+\lambda_0(1-\bm{w}_0^T\bm{w}_0).
 \]
-!et
 Taking the derivative with respect to $\bm{w}_0$ we obtain
 
-!bt
 \[
 \frac{\partial J(\bm{w}_0)}{\partial \bm{w}_0}= 2\bm{C}[\bm{x}]\bm{w}_0-2\lambda_0\bm{w}_0=0,
 \]
-!et
 meaning that
-!bt
 \[
 \bm{C}[\bm{x}]\bm{w}_0=\lambda_0\bm{w}_0.
 \]
-!et
-_The direction that maximizes the variance (or minimizes the construction error) is an eigenvector of the covariance matrix_! If we left multiply with $\bm{w}_0^T$ we have the variance of the projected data is
-!bt
+\textbf{The direction that maximizes the variance (or minimizes the construction error) is an eigenvector of the covariance matrix}! If we left multiply with $\bm{w}_0^T$ we have the variance of the projected data is
 \[
 \bm{w}_0^T\bm{C}[\bm{x}]\bm{w}_0=\lambda_0.
 \]
-!et
 
 If we want to maximize the variance (minimize the construction error)
 we simply pick the eigenvector of the covariance matrix with the
@@ -1092,26 +1389,50 @@ observations encoded in the design/feature matrix $\bm{X}$.
 The proof
 for the other eigenvectors $\bm{w}_1,\bm{w}_2,\dots$ can be
 established by applying the above arguments and using the fact that
-our basis of eigenvectors is orthogonal, see "Murphy chapter
-12.2":"https://mitpress.mit.edu/books/machine-learning-1".  The
+our basis of eigenvectors is orthogonal, see \href{{https://mitpress.mit.edu/books/machine-learning-1}}{Murphy chapter
+12.2}.  The
 discussion in chapter 12.2 of Murphy's text has also a nice link with
 the Singular Value Decomposition theorem. For categorical data, see
 chapter 12.4 and discussion therein.
 
-For more details, see for example "Vidal, Ma and Sastry, chapter 2":"https://www.springer.com/gp/book/9780387878102".
+For more details, see for example \href{{https://www.springer.com/gp/book/9780387878102}}{Vidal, Ma and Sastry, chapter 2}.
 
-!split
-===== Geometric Interpretation and link with Singular Value Decomposition =====
+% !split
+\subsection{Geometric Interpretation and link with Singular Value Decomposition}
 
-For a detailed demonstration of the geometric interpretation, see "Vidal, Ma and Sastry, section 2.1.2":"https://www.springer.com/gp/book/9780387878102".
-
+For a detailed demonstration of the geometric interpretation, see \href{{https://www.springer.com/gp/book/9780387878102}}{Vidal, Ma and Sastry, section 2.1.2}.
 
 Principal Component Analysis (PCA) is by far the most popular dimensionality reduction algorithm.
 First it identifies the hyperplane that lies closest to the data, and then it projects the data onto it.
 
-The following Python code uses NumPy’s _svd()_ function to obtain all the principal components of the
-training set, then extracts the first two principal components. First we center the data using either _pandas_ or our own code
-!bc pycod
+The following Python code uses NumPy’s \textbf{svd()} function to obtain all the principal components of the
+training set, then extracts the first two principal components. First we center the data using either \textbf{pandas} or our own code
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bpycod
 import numpy as np
 import pandas as pd
 from IPython.display import display
@@ -1136,7 +1457,9 @@ c2 = V.T[:, 1]
 W2 = V.T[:, :2]
 X2D = X_centered.dot(W2)
 print(X2D)
-!ec
+
+\epycod
+
 
 PCA assumes that the dataset is centered around the origin. Scikit-Learn’s PCA classes take care of centering
 the data for you. However, if you implement PCA yourself (as in the preceding example), or if you use other libraries, don’t
@@ -1145,39 +1468,86 @@ forget to center the data first.
 Once you have identified all the principal components, you can reduce the dimensionality of the dataset
 down to $d$ dimensions by projecting it onto the hyperplane defined by the first $d$ principal components.
 Selecting this hyperplane ensures that the projection will preserve as much variance as possible. 
-!bc pycod
+
+
+
+\bpycod
 W2 = V.T[:, :2]
 X2D = X_centered.dot(W2)
-!ec
 
-!split
-===== PCA and scikit-learn =====
+\epycod
+
+
+% !split
+\subsection{PCA and scikit-learn}
 
 Scikit-Learn’s PCA class implements PCA using SVD decomposition just like we did before. The
 following code applies PCA to reduce the dimensionality of the dataset down to two dimensions (note
 that it automatically takes care of centering the data):
-!bc pycod
+
+
+
+
+
+
+\bpycod
 #thereafter we do a PCA with Scikit-learn
 from sklearn.decomposition import PCA
 pca = PCA(n_components = 2)
 X2D = pca.fit_transform(X)
 print(X2D)
-!ec
+
+\epycod
+
 After fitting the PCA transformer to the dataset, you can access the principal components using the
 components variable (note that it contains the PCs as horizontal vectors, so, for example, the first
 principal component is equal to 
-!bc pycod
+
+
+\bpycod
 pca.components_.T[:, 0]
-!ec
+
+\epycod
+
 Another very useful piece of information is the explained variance ratio of each principal component,
 available via the $explained\_variance\_ratio$ variable. It indicates the proportion of the dataset’s
 variance that lies along the axis of each principal component. 
 
-!split
-===== Example of Cancer Data =====
+% !split
+\subsection{Example of Cancer Data}
 We can now repeat the above but applied to real data, in this case the Wisconsin breast cancer data.
 Here we compute performance scores on the training data using logistic regression.
-!bc pycod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bpycod
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import  train_test_split 
@@ -1207,33 +1577,46 @@ X2D_train = pca.fit_transform(X_train_scaled)
 logreg.fit(X2D_train,y_train)
 print("Train set accuracy scaled and PCA data: {:.2f}".format(logreg.score(X2D_train,y_train)))
 
-!ec
+
+\epycod
+
 
 We see that our training data after the PCA decomposition has a performance similar to the non-scaled data. 
 
-
 Instead of arbitrarily choosing the number of dimensions to reduce down to, it is generally preferable to
-choose the number of dimensions that add up to a sufficiently large portion of the variance (e.g., 95%).
+choose the number of dimensions that add up to a sufficiently large portion of the variance (e.g., 95\%).
 Unless, of course, you are reducing dimensionality for data visualization — in that case you will
 generally want to reduce the dimensionality down to 2 or 3.
 The following code computes PCA without reducing dimensionality, then computes the minimum number
-of dimensions required to preserve 95% of the training set’s variance:
-!bc pycod
+of dimensions required to preserve 95\% of the training set’s variance:
+
+
+
+
+
+\bpycod
 pca = PCA()
 pca.fit(X_train)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
 d = np.argmax(cumsum >= 0.95) + 1
-!ec
+
+\epycod
+
 You could then set $n\_components=d$ and run PCA again. However, there is a much better option: instead
 of specifying the number of principal components you want to preserve, you can set $n\_components$ to be
 a float between 0.0 and 1.0, indicating the ratio of variance you wish to preserve:
-!bc pycod
+
+
+
+\bpycod
 pca = PCA(n_components=0.95)
 X_reduced = pca.fit_transform(X_train)
-!ec
 
-!split
-===== Incremental PCA =====
+\epycod
+
+
+% !split
+\subsection{Incremental PCA}
 
 One problem with the preceding implementation of PCA is that it requires the whole training set to fit in
 memory in order for the SVD algorithm to run. Fortunately, Incremental PCA (IPCA) algorithms have
@@ -1241,18 +1624,13 @@ been developed: you can split the training set into mini-batches and feed an IPC
 at a time. This is useful for large training sets, and also to apply PCA online (i.e., on the fly, as new
 instances arrive).
 
-
-=== Randomized PCA ===
-
+\paragraph{Randomized PCA.}
 Scikit-Learn offers yet another option to perform PCA, called Randomized PCA. This is a stochastic
 algorithm that quickly finds an approximation of the first d principal components. Its computational
 complexity is $O(m \times d^2)+O(d^3)$, instead of $O(m \times n^2) + O(n^3)$, so it is dramatically faster than the
 previous algorithms when $d$ is much smaller than $n$.
 
-
-=== Kernel PCA ===
-
-
+\paragraph{Kernel PCA.}
 The kernel trick is a mathematical technique that implicitly maps instances into a
 very high-dimensional space (called the feature space), enabling nonlinear classification and regression
 with Support Vector Machines. Recall that a linear decision boundary in the high-dimensional feature
@@ -1262,45 +1640,66 @@ projections for dimensionality reduction. This is called Kernel PCA (kPCA). It i
 preserving clusters of instances after projection, or sometimes even unrolling datasets that lie close to a
 twisted manifold.
 For example, the following code uses Scikit-Learn’s KernelPCA class to perform kPCA with an
-!bc pycod
+
+
+
+
+\bpycod
 from sklearn.decomposition import KernelPCA
 rbf_pca = KernelPCA(n_components = 2, kernel="rbf", gamma=0.04)
 X_reduced = rbf_pca.fit_transform(X)
-!ec
 
-!split
-=====  Other techniques =====
+\epycod
 
+
+% !split
+\subsection{Other techniques}
 
 There are many other dimensionality reduction techniques, several of which are available in Scikit-Learn.
 
 Here are some of the most popular:
-* _Multidimensional Scaling (MDS)_ reduces dimensionality while trying to preserve the distances between the instances.
-* _Isomap_ creates a graph by connecting each instance to its nearest neighbors, then reduces dimensionality while trying to preserve the geodesic distances between the instances.
-* _t-Distributed Stochastic Neighbor Embedding_ (t-SNE) reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space (e.g., to visualize the MNIST images in 2D).
-* Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.
+\begin{itemize}
+\item \textbf{Multidimensional Scaling (MDS)} reduces dimensionality while trying to preserve the distances between the instances.
 
+\item \textbf{Isomap} creates a graph by connecting each instance to its nearest neighbors, then reduces dimensionality while trying to preserve the geodesic distances between the instances.
 
+\item \textbf{t-Distributed Stochastic Neighbor Embedding} (t-SNE) reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space (e.g., to visualize the MNIST images in 2D).
 
+\item Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.
+\end{itemize}
 
-
-!split
-===== Geometric meaning of the theorem =====
+\noindent
+% !split
+\subsection{Geometric meaning of the theorem}
 
 Linear autoencoders do not merely learn a low-dimensional code:
 they learn the \emph{best} \(k\)-dimensional linear subspace in the least-squares sense.
 
-!bblock So the theorem says:
+\begin{block}{So the theorem says: }
 Among all \(k\)-dimensional linear reconstructions, the optimal one is orthogonal projection onto the principal subspace.
 That is exactly the geometric content of PCA.
-!eblock
+\end{block}
 
-!split
-===== PCA summary =====
+% !split
+\subsection{PCA summary}
 
-!bblock Main results:
-* The linear autoencoder objective is a rank-constrained least-squares problem.
-* Its global minimizer is an orthogonal projector.
-* The optimal projector is \(U_kU_k^T\), the PCA projector.
-* Therefore linear autoencoders recover PCA exactly.
-!eblock 
+\begin{block}{Main results: }
+\begin{itemize}
+\item The linear autoencoder objective is a rank-constrained least-squares problem.
+
+\item Its global minimizer is an orthogonal projector.
+
+\item The optimal projector is \(U_kU_k^T\), the PCA projector.
+
+\item Therefore linear autoencoders recover PCA exactly.
+\end{itemize}
+
+\noindent
+\end{block} 
+
+% ------------------- end of main content ---------------
+
+% #ifdef PREAMBLE
+\end{document}
+% #endif
+

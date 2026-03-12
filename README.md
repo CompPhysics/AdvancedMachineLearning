@@ -126,7 +126,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Autoencoders and PCA
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb
 - Recommended reading Goodfellow et al chapter 14 for Autoenconders and Rashcka et al chapter 18
-- Video	of lecture to be added
+- Video of lecture at https://youtu.be/gGDZQY3UDp8
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/Notesweek8.pdf
 
 
 ## March 16-20: Autoencoders
