@@ -7,7 +7,7 @@ DATE: March 19, 2026
 
 !bblock
 o Discussion of Autoencoders (AEs) and reminder from last week
-o Finalizing discussion of Linear autoencoders and the full connection to PCA
+o Finalizing discussion of Linear autoencoders and the full connection to PCA (see whiteboard notes)
 o Nonlinear and regularized autoencoders and discussion of codes
 #o "Video of Lecture":"https://youtu.be/5Blyxyvfc9U"
 #o "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesMarch20.pdf"
@@ -241,10 +241,10 @@ The  ReLU activation function can assume all values in the range $\left[0,\infty
 \textrm{ReLU}\left(x\right) = \max\left(0,x\right).
 \]
 !et
-This choice is good when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive values.
+This choice is good when the input observations $\mathbf{x}_{i}$ assume a wide range of positive values.
 If the input $\mathbf{x}_{i}$ can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called _Leaky ReLu_ or just modified ReLU.
 
-The ReLU activation function for the output layer is well suited for cases when the input observations \(\mathbf{x}_{i}\) assume a wide range of positive real values.  
+The ReLU activation function for the output layer is well suited for cases when the input observations $\mathbf{x}_{i}$ assume a wide range of positive real values.  
 
 !split
 ===== Sigmoid =====
@@ -318,249 +318,6 @@ eigenvectors of the covariance(correlations matrix).
 
 
 
-!split
-===== The PCA Theorem =====
-
-To show the PCA theorem let us start with the assumption that there is one vector $\bm{s}_0$ which corresponds to a solution which minimized the reconstruction error $J$. This is an orthogonal vector. It means that we now approximate the reconstruction error in terms of $\bm{w}_0$ and $\bm{z}_0$ as
-
-
-
-We are almost there, we have obtained a relation between minimizing
-the reconstruction error and the variance and the covariance
-matrix. Minimizing the error is equivalent to maximizing the variance
-of the projected data.
-
-
-We could trivially maximize the variance of the projection (and
-thereby minimize the error in the reconstruction function) by letting
-the norm-2 of $\bm{w}_0$ go to infinity. However, this norm since we
-want the matrix $\bm{W}$ to be an orthogonal matrix, is constrained by
-$\vert\vert \bm{w}_0 \vert\vert_2^2=1$. Imposing this condition via a
-Lagrange multiplier we can then in turn maximize
-
-!bt
-\[
-J(\bm{w}_0)= \bm{w}_0^T\bm{C}[\bm{x}]\bm{w}_0+\lambda_0(1-\bm{w}_0^T\bm{w}_0).
-\]
-!et
-Taking the derivative with respect to $\bm{w}_0$ we obtain
-
-!bt
-\[
-\frac{\partial J(\bm{w}_0)}{\partial \bm{w}_0}= 2\bm{C}[\bm{x}]\bm{w}_0-2\lambda_0\bm{w}_0=0,
-\]
-!et
-meaning that
-!bt
-\[
-\bm{C}[\bm{x}]\bm{w}_0=\lambda_0\bm{w}_0.
-\]
-!et
-_The direction that maximizes the variance (or minimizes the construction error) is an eigenvector of the covariance matrix_! If we left multiply with $\bm{w}_0^T$ we have the variance of the projected data is
-!bt
-\[
-\bm{w}_0^T\bm{C}[\bm{x}]\bm{w}_0=\lambda_0.
-\]
-!et
-
-If we want to maximize the variance (minimize the construction error)
-we simply pick the eigenvector of the covariance matrix with the
-largest eigenvalue. This establishes the link between the minimization
-of the reconstruction function $J$ in terms of an orthogonal matrix
-and the maximization of the variance and thereby the covariance of our
-observations encoded in the design/feature matrix $\bm{X}$.
-
-The proof
-for the other eigenvectors $\bm{w}_1,\bm{w}_2,\dots$ can be
-established by applying the above arguments and using the fact that
-our basis of eigenvectors is orthogonal, see "Murphy chapter
-12.2":"https://mitpress.mit.edu/books/machine-learning-1".  The
-discussion in chapter 12.2 of Murphy's text has also a nice link with
-the Singular Value Decomposition theorem. For categorical data, see
-chapter 12.4 and discussion therein.
-
-For more details, see for example "Vidal, Ma and Sastry, chapter 2":"https://www.springer.com/gp/book/9780387878102".
-
-!split
-===== Geometric Interpretation and link with Singular Value Decomposition =====
-
-For a detailed demonstration of the geometric interpretation, see "Vidal, Ma and Sastry, section 2.1.2":"https://www.springer.com/gp/book/9780387878102".
-
-
-Principal Component Analysis (PCA) is by far the most popular dimensionality reduction algorithm.
-First it identifies the hyperplane that lies closest to the data, and then it projects the data onto it.
-
-The following Python code uses NumPy’s _svd()_ function to obtain all the principal components of the
-training set, then extracts the first two principal components. First we center the data using either _pandas_ or our own code
-!bc pycod
-import numpy as np
-import pandas as pd
-from IPython.display import display
-np.random.seed(100)
-# setting up a 10 x 5 vanilla matrix 
-rows = 10
-cols = 5
-X = np.random.randn(rows,cols)
-df = pd.DataFrame(X)
-# Pandas does the centering for us
-df = df -df.mean()
-display(df)
-
-# we center it ourselves
-X_centered = X - X.mean(axis=0)
-# Then check the difference between pandas and our own set up
-print(X_centered-df)
-#Now we do an SVD
-U, s, V = np.linalg.svd(X_centered)
-c1 = V.T[:, 0]
-c2 = V.T[:, 1]
-W2 = V.T[:, :2]
-X2D = X_centered.dot(W2)
-print(X2D)
-!ec
-
-PCA assumes that the dataset is centered around the origin. Scikit-Learn’s PCA classes take care of centering
-the data for you. However, if you implement PCA yourself (as in the preceding example), or if you use other libraries, don’t
-forget to center the data first.
-
-Once you have identified all the principal components, you can reduce the dimensionality of the dataset
-down to $d$ dimensions by projecting it onto the hyperplane defined by the first $d$ principal components.
-Selecting this hyperplane ensures that the projection will preserve as much variance as possible. 
-!bc pycod
-W2 = V.T[:, :2]
-X2D = X_centered.dot(W2)
-!ec
-
-!split
-===== PCA and scikit-learn =====
-
-Scikit-Learn’s PCA class implements PCA using SVD decomposition just like we did before. The
-following code applies PCA to reduce the dimensionality of the dataset down to two dimensions (note
-that it automatically takes care of centering the data):
-!bc pycod
-#thereafter we do a PCA with Scikit-learn
-from sklearn.decomposition import PCA
-pca = PCA(n_components = 2)
-X2D = pca.fit_transform(X)
-print(X2D)
-!ec
-After fitting the PCA transformer to the dataset, you can access the principal components using the
-components variable (note that it contains the PCs as horizontal vectors, so, for example, the first
-principal component is equal to 
-!bc pycod
-pca.components_.T[:, 0]
-!ec
-Another very useful piece of information is the explained variance ratio of each principal component,
-available via the $explained\_variance\_ratio$ variable. It indicates the proportion of the dataset’s
-variance that lies along the axis of each principal component. 
-
-!split
-===== Example of Cancer Data =====
-We can now repeat the above but applied to real data, in this case the Wisconsin breast cancer data.
-Here we compute performance scores on the training data using logistic regression.
-!bc pycod
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.model_selection import  train_test_split 
-from sklearn.datasets import load_breast_cancer
-from sklearn.linear_model import LogisticRegression
-cancer = load_breast_cancer()
-
-X_train, X_test, y_train, y_test = train_test_split(cancer.data,cancer.target,random_state=0)
-
-logreg = LogisticRegression()
-logreg.fit(X_train, y_train)
-print("Train set accuracy from Logistic Regression: {:.2f}".format(logreg.score(X_train,y_train)))
-# We scale the data
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-scaler.fit(X_train)
-X_train_scaled = scaler.transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-# Then perform again a log reg fit
-logreg.fit(X_train_scaled, y_train)
-print("Train set accuracy scaled data: {:.2f}".format(logreg.score(X_train_scaled,y_train)))
-#thereafter we do a PCA with Scikit-learn
-from sklearn.decomposition import PCA
-pca = PCA(n_components = 2)
-X2D_train = pca.fit_transform(X_train_scaled)
-# and finally compute the log reg fit and the score on the training data	
-logreg.fit(X2D_train,y_train)
-print("Train set accuracy scaled and PCA data: {:.2f}".format(logreg.score(X2D_train,y_train)))
-
-!ec
-
-We see that our training data after the PCA decomposition has a performance similar to the non-scaled data. 
-
-
-Instead of arbitrarily choosing the number of dimensions to reduce down to, it is generally preferable to
-choose the number of dimensions that add up to a sufficiently large portion of the variance (e.g., 95%).
-Unless, of course, you are reducing dimensionality for data visualization — in that case you will
-generally want to reduce the dimensionality down to 2 or 3.
-The following code computes PCA without reducing dimensionality, then computes the minimum number
-of dimensions required to preserve 95% of the training set’s variance:
-!bc pycod
-pca = PCA()
-pca.fit(X_train)
-cumsum = np.cumsum(pca.explained_variance_ratio_)
-d = np.argmax(cumsum >= 0.95) + 1
-!ec
-You could then set $n\_components=d$ and run PCA again. However, there is a much better option: instead
-of specifying the number of principal components you want to preserve, you can set $n\_components$ to be
-a float between 0.0 and 1.0, indicating the ratio of variance you wish to preserve:
-!bc pycod
-pca = PCA(n_components=0.95)
-X_reduced = pca.fit_transform(X_train)
-!ec
-
-!split
-===== Incremental PCA =====
-
-One problem with the preceding implementation of PCA is that it requires the whole training set to fit in
-memory in order for the SVD algorithm to run. Fortunately, Incremental PCA (IPCA) algorithms have
-been developed: you can split the training set into mini-batches and feed an IPCA algorithm one minibatch
-at a time. This is useful for large training sets, and also to apply PCA online (i.e., on the fly, as new
-instances arrive).
-
-
-=== Randomized PCA ===
-
-Scikit-Learn offers yet another option to perform PCA, called Randomized PCA. This is a stochastic
-algorithm that quickly finds an approximation of the first d principal components. Its computational
-complexity is $O(m \times d^2)+O(d^3)$, instead of $O(m \times n^2) + O(n^3)$, so it is dramatically faster than the
-previous algorithms when $d$ is much smaller than $n$.
-
-
-=== Kernel PCA ===
-
-
-The kernel trick is a mathematical technique that implicitly maps instances into a
-very high-dimensional space (called the feature space), enabling nonlinear classification and regression
-with Support Vector Machines. Recall that a linear decision boundary in the high-dimensional feature
-space corresponds to a complex nonlinear decision boundary in the original space.
-It turns out that the same trick can be applied to PCA, making it possible to perform complex nonlinear
-projections for dimensionality reduction. This is called Kernel PCA (kPCA). It is often good at
-preserving clusters of instances after projection, or sometimes even unrolling datasets that lie close to a
-twisted manifold.
-For example, the following code uses Scikit-Learn’s KernelPCA class to perform kPCA with an
-!bc pycod
-from sklearn.decomposition import KernelPCA
-rbf_pca = KernelPCA(n_components = 2, kernel="rbf", gamma=0.04)
-X_reduced = rbf_pca.fit_transform(X)
-!ec
-
-!split
-=====  Other techniques =====
-
-
-There are many other dimensionality reduction techniques, several of which are available in Scikit-Learn.
-
-Here are some of the most popular:
-* _Multidimensional Scaling (MDS)_ reduces dimensionality while trying to preserve the distances between the instances.
-* _Isomap_ creates a graph by connecting each instance to its nearest neighbors, then reduces dimensionality while trying to preserve the geodesic distances between the instances.
-* _t-Distributed Stochastic Neighbor Embedding_ (t-SNE) reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space (e.g., to visualize the MNIST images in 2D).
-* Linear Discriminant Analysis (LDA) is actually a classification algorithm, but during training it learns the most discriminative axes between the classes, and these axes can then be used to define a hyperplane onto which to project the data. The benefit is that the projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as a Support Vector Machine (SVM) classifier discussed in the SVM lectures.
-
 
 !split
 ===== Why go beyond PCA? =====
@@ -599,7 +356,7 @@ These nested nonlinear maps can approximate complicated non-linear structures.
 !split
 ===== Local linearization of nonlinear autoencoders =====
 
-If \(f\) and \(g\) are differentiable, then around \(x_0\),
+If $f$ and $g$ are differentiable, then around $x_0$,
 !bt
 \[
 f(x) \approx f(x_0)+J_f(x_0)(x-x_0),
@@ -616,7 +373,7 @@ Hence
 g(f(x)) \approx g(f(x_0)) + J_g(z_0)J_f(x_0)(x-x_0).
 \]
 !et
-So the Jacobian product \(J_g J_f\) acts as the local linear reconstruction operator.
+So the Jacobian product $J_g J_f$ acts as the local linear reconstruction operator.
 
 
 
@@ -629,7 +386,7 @@ In a denoising autoencoder, one corrupts the input:
 \tilde x = x + \varepsilon,
 \]
 !et
-and trains the network to reconstruct \(x\) from \(\tilde x\):
+and trains the network to reconstruct $x$ from $\tilde x$:
 !bt
 \[
 \min_{\theta,\phi}\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(\tilde x_n))\|_2^2.
@@ -695,7 +452,7 @@ Hence the encoder becomes approximately invariant to directions that do not matt
 !split
 ===== Jacobian penalty and geometry =====
 
-The Jacobian \(J_f(x)\) measures how latent coordinates change with the input.
+The Jacobian $J_f(x)$ measures how latent coordinates change with the input.
 If
 !bt
 \[
@@ -710,7 +467,7 @@ So contractive autoencoders can be seen as learning tangent directions of the da
 !split
 ===== Overcomplete autoencoders and regularization =====
 
-An overcomplete autoencoder with \(k\ge d\) can easily learn
+An overcomplete autoencoder with $k\ge d$ can easily learn
 !bt
 \[
 g(f(x))=x.
@@ -730,7 +487,7 @@ Thus regularization can replace the role of a bottleneck.
 !split
 ===== Kernel PCA vs nonlinear autoencoders =====
 
-Kernel PCA uses a fixed nonlinear feature map \(\Phi(x)\) and performs PCA in feature space.
+Kernel PCA uses a fixed nonlinear feature map $\Phi(x)$ and performs PCA in feature space.
 A nonlinear autoencoder instead learns both:
 
 * the representation map,
@@ -788,7 +545,7 @@ A probabilistic autoencoder instead introduces a latent-variable model
 p_\theta(x,z)=p_\theta(x\mid z)p(z),
 \]
 !et
-where \(z\) is a random latent variable.
+where $z$ is a random latent variable.
 This turns representation learning into statistical inference.
 
 
@@ -823,7 +580,7 @@ This is a linear-Gaussian latent variable model.
 !split
 ===== Marginal distribution in PPCA =====
 
-Integrating out \(z\), one gets
+Integrating out $z$, one gets
 !bt
 \[
 x \sim \mathcal{N}(\mu,\, WW^T+\sigma^2 I_d).
@@ -842,7 +599,7 @@ This is the probabilistic analogue of low-dimensional linear structure.
 !split
 ===== PPCA and classical PCA =====
 
-As \(\sigma^2 \to 0\), the PPCA model approaches a deterministic projection model.
+As $\sigma^2 \to 0$, the PPCA model approaches a deterministic projection model.
 Moreover, maximum-likelihood estimation in PPCA yields a loading matrix whose column space is the PCA subspace.
 So PPCA recovers the same principal directions as classical PCA, but with a probabilistic interpretation.
 
