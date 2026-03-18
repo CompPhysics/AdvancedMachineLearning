@@ -1,0 +1,91 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{sys}
+\PYG{k}{assert} \PYG{n}{sys}\PYG{o}{.}\PYG{n}{version\PYGZus{}info} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Is this notebook running on Colab or Kaggle?}
+\PYG{n}{IS\PYGZus{}COLAB} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{google.colab}\PYG{l+s+s2}{\PYGZdq{}} \PYG{o+ow}{in} \PYG{n}{sys}\PYG{o}{.}\PYG{n}{modules}
+\PYG{n}{IS\PYGZus{}KAGGLE} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{kaggle\PYGZus{}secrets}\PYG{l+s+s2}{\PYGZdq{}} \PYG{o+ow}{in} \PYG{n}{sys}\PYG{o}{.}\PYG{n}{modules}
+
+\PYG{c+c1}{\PYGZsh{} Scikit\PYGZhy{}Learn \PYGZgt{}=0.20 is required}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{sklearn}
+\PYG{k}{assert} \PYG{n}{sklearn}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}version\PYGZus{}\PYGZus{}} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{0.20}\PYG{l+s+s2}{\PYGZdq{}}
+
+\PYG{c+c1}{\PYGZsh{} TensorFlow \PYGZgt{}= 2.0 is required}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{tf}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tensorflow}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{keras}
+\PYG{k}{assert} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}version\PYGZus{}\PYGZus{}} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2.0}\PYG{l+s+s2}{\PYGZdq{}}
+
+\PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{config}\PYG{o}{.}\PYG{n}{list\PYGZus{}physical\PYGZus{}devices}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{GPU}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{No GPU was detected. LSTMs and CNNs can be very slow without a GPU.}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{IS\PYGZus{}COLAB}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Go to Runtime \PYGZgt{} Change runtime and select a GPU hardware accelerator.}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{IS\PYGZus{}KAGGLE}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Go to Settings \PYGZgt{} Accelerator and select GPU.}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Common imports}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{os}
+
+\PYG{c+c1}{\PYGZsh{} to make this notebook\PYGZsq{}s output stable across runs}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+\PYG{n}{tf}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{set\PYGZus{}seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} To plot pretty figures}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{mpl}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{plt}
+\PYG{n}{mpl}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{axes}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{labelsize}\PYG{o}{=}\PYG{l+m+mi}{14}\PYG{p}{)}
+\PYG{n}{mpl}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{xtick}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{labelsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{)}
+\PYG{n}{mpl}\PYG{o}{.}\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ytick}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{labelsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Where to save the figures}
+\PYG{n}{PROJECT\PYGZus{}ROOT\PYGZus{}DIR} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{.}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{n}{CHAPTER\PYGZus{}ID} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{autoencoders}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{n}{IMAGES\PYGZus{}PATH} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{PROJECT\PYGZus{}ROOT\PYGZus{}DIR}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{images}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{CHAPTER\PYGZus{}ID}\PYG{p}{)}
+\PYG{n}{os}\PYG{o}{.}\PYG{n}{makedirs}\PYG{p}{(}\PYG{n}{IMAGES\PYGZus{}PATH}\PYG{p}{,} \PYG{n}{exist\PYGZus{}ok}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{save\PYGZus{}fig}\PYG{p}{(}\PYG{n}{fig\PYGZus{}id}\PYG{p}{,} \PYG{n}{tight\PYGZus{}layout}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{fig\PYGZus{}extension}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{resolution}\PYG{o}{=}\PYG{l+m+mi}{300}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{path} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{IMAGES\PYGZus{}PATH}\PYG{p}{,} \PYG{n}{fig\PYGZus{}id} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{.}\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{n}{fig\PYGZus{}extension}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Saving figure}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{fig\PYGZus{}id}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{tight\PYGZus{}layout}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{path}\PYG{p}{,} \PYG{n+nb}{format}\PYG{o}{=}\PYG{n}{fig\PYGZus{}extension}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{n}{resolution}\PYG{p}{)}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{plot\PYGZus{}image}\PYG{p}{(}\PYG{n}{image}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{image}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{binary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{off}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{generate\PYGZus{}3d\PYGZus{}data}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,} \PYG{n}{w1}\PYG{o}{=}\PYG{l+m+mf}{0.1}\PYG{p}{,} \PYG{n}{w2}\PYG{o}{=}\PYG{l+m+mf}{0.3}\PYG{p}{,} \PYG{n}{noise}\PYG{o}{=}\PYG{l+m+mf}{0.1}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{angles} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{m}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mi}{3} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi} \PYG{o}{/} \PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{0.5}
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{(}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{angles}\PYG{p}{)} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{angles}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{noise} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{m}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{2}
+    \PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{angles}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mf}{0.7} \PYG{o}{+} \PYG{n}{noise} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{m}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{2}
+    \PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{n}{w1} \PYG{o}{+} \PYG{n}{data}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{*} \PYG{n}{w2} \PYG{o}{+} \PYG{n}{noise} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{m}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{data}
+
+\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{generate\PYGZus{}3d\PYGZus{}data}\PYG{p}{(}\PYG{l+m+mi}{60}\PYG{p}{)}
+\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train} \PYG{o}{\PYGZhy{}} \PYG{n}{X\PYGZus{}train}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{keepdims}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+\PYG{n}{tf}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{set\PYGZus{}seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+
+\PYG{n}{encoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{)}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{decoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Dense}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{)}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{autoencoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}\PYG{n}{encoder}\PYG{p}{,} \PYG{n}{decoder}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{n}{autoencoder}\PYG{o}{.}\PYG{n}{compile}\PYG{p}{(}\PYG{n}{loss}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{mse}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{optimizer}\PYG{o}{=}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{optimizers}\PYG{o}{.}\PYG{n}{SGD}\PYG{p}{(}\PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{l+m+mf}{1.5}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n}{codings} \PYG{o}{=} \PYG{n}{encoder}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{codings}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{n}{codings}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{b.}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdl{}z\PYGZus{}1\PYGZdl{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{18}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdl{}z\PYGZus{}2\PYGZdl{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{18}\PYG{p}{,} \PYG{n}{rotation}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{save\PYGZus{}fig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{linear\PYGZus{}autoencoder\PYGZus{}pca\PYGZus{}plot}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\end{MintedVerbatim}

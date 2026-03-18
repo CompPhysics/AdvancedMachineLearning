@@ -1,0 +1,19 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+c1}{\PYGZsh{} adapted from https://scikit\PYGZhy{}learn.org/stable/auto\PYGZus{}examples/manifold/plot\PYGZus{}lle\PYGZus{}digits.html}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{cmap} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{cm}\PYG{o}{.}\PYG{n}{tab10}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{X\PYGZus{}valid\PYGZus{}2D}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{n}{X\PYGZus{}valid\PYGZus{}2D}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{y\PYGZus{}valid}\PYG{p}{,} \PYG{n}{s}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{n}{cmap}\PYG{p}{)}
+\PYG{n}{image\PYGZus{}positions} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{p}{[}\PYG{p}{[}\PYG{l+m+mf}{1.}\PYG{p}{,} \PYG{l+m+mf}{1.}\PYG{p}{]}\PYG{p}{]}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{index}\PYG{p}{,} \PYG{n}{position} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{X\PYGZus{}valid\PYGZus{}2D}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{dist} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{p}{(}\PYG{n}{position} \PYG{o}{\PYGZhy{}} \PYG{n}{image\PYGZus{}positions}\PYG{p}{)} \PYG{o}{*}\PYG{o}{*} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{np}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(}\PYG{n}{dist}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mf}{0.02}\PYG{p}{:} \PYG{c+c1}{\PYGZsh{} if far enough from other images}
+        \PYG{n}{image\PYGZus{}positions} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{r\PYGZus{}}\PYG{p}{[}\PYG{n}{image\PYGZus{}positions}\PYG{p}{,} \PYG{p}{[}\PYG{n}{position}\PYG{p}{]}\PYG{p}{]}
+        \PYG{n}{imagebox} \PYG{o}{=} \PYG{n}{mpl}\PYG{o}{.}\PYG{n}{offsetbox}\PYG{o}{.}\PYG{n}{AnnotationBbox}\PYG{p}{(}
+            \PYG{n}{mpl}\PYG{o}{.}\PYG{n}{offsetbox}\PYG{o}{.}\PYG{n}{OffsetImage}\PYG{p}{(}\PYG{n}{X\PYGZus{}valid}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{binary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{position}\PYG{p}{,} \PYG{n}{bboxprops}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{edgecolor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{cmap}\PYG{p}{(}\PYG{n}{y\PYGZus{}valid}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{lw}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mi}{2}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{gca}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{add\PYGZus{}artist}\PYG{p}{(}\PYG{n}{imagebox}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{off}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{save\PYGZus{}fig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{fashion\PYGZus{}mnist\PYGZus{}visualization\PYGZus{}plot}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+\end{MintedVerbatim}

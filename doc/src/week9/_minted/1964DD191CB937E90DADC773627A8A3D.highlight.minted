@@ -1,0 +1,22 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+c1}{\PYGZsh{} load 16 images from testset}
+\PYG{n}{inputs}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n+nb}{next}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{(}\PYG{n}{test\PYGZus{}loader}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{inputs\PYGZus{}example} \PYG{o}{=} \PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{16}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{inputs\PYGZus{}example}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}convert from image to tensor}
+\PYG{c+c1}{\PYGZsh{}inputs=inputs.cuda()}
+\PYG{n}{inputs}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{,}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{784}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} get the outputs from the trained model}
+\PYG{n}{outputs}\PYG{o}{=}\PYG{n}{model}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}convert from tensor to image}
+\PYG{n}{outputs}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{outputs}\PYG{p}{,}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{outputs}\PYG{o}{=}\PYG{n}{outputs}\PYG{o}{.}\PYG{n}{detach}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{cpu}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}show the output images}
+\PYG{n}{outputs\PYGZus{}example} \PYG{o}{=} \PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{outputs}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{16}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{outputs\PYGZus{}example}\PYG{p}{)}
+
+\end{MintedVerbatim}
