@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Recurrent Neural Network and Autoencoder for Learning ODE Solutions
+LSTM and Autoencoder for Learning ODE Solutions
 Using PyTorch and RK4 Solver Output  --  OPTIMISED VERSION
 
-Training RNN and Autoencoder models on forced oscillator differential equation:
+Training LSTM and Autoencoder models on forced oscillator differential equation:
 d**2x/dt**2 + 2*gamma*(dx/dt) + x = F_tilde*cos(Omega_tilde*t)
 
 Performance optimisations applied (vs original)
@@ -284,35 +284,9 @@ def main():
     print(f"  Test batches: {len(test_loader)}")
     
     # ============================================================================
-    # PART IV: RNN MODELS
+    # PART IV: LSTM MODEL
     # ============================================================================
-    
-    class SimpleRNN(nn.Module):
-        """Simple RNN model."""
-        
-        def __init__(self, input_size=1, hidden_size=64, num_layers=2, output_size=1):
-            super(SimpleRNN, self).__init__()
-            
-            self.hidden_size = hidden_size
-            self.num_layers = num_layers
-            
-            self.rnn = nn.RNN(
-                input_size=input_size,
-                hidden_size=hidden_size,
-                num_layers=num_layers,
-                batch_first=True
-            )
-            
-            self.fc = nn.Linear(hidden_size, output_size)
-        
-        def forward(self, x):
-            # Passing None lets PyTorch initialise h0 internally via optimised
-            # C++/CUDA code, avoiding a Python-side torch.zeros() allocation
-            # on every forward call.
-            out, _ = self.rnn(x, None)
-            out = self.fc(out[:, -1, :])
-            return out
-    
+
     class LSTMModel(nn.Module):
         """LSTM model."""
         
@@ -334,29 +308,6 @@ def main():
         def forward(self, x):
             # None causes LSTM to allocate (h0, c0) internally.
             out, _ = self.lstm(x, None)
-            out = self.fc(out[:, -1, :])
-            return out
-    
-    class GRUModel(nn.Module):
-        """GRU model."""
-        
-        def __init__(self, input_size=1, hidden_size=64, num_layers=2, output_size=1):
-            super(GRUModel, self).__init__()
-            
-            self.hidden_size = hidden_size
-            self.num_layers = num_layers
-            
-            self.gru = nn.GRU(
-                input_size=input_size,
-                hidden_size=hidden_size,
-                num_layers=num_layers,
-                batch_first=True
-            )
-            
-            self.fc = nn.Linear(hidden_size, output_size)
-        
-        def forward(self, x):
-            out, _ = self.gru(x, None)
             out = self.fc(out[:, -1, :])
             return out
     
@@ -469,15 +420,6 @@ def main():
     epochs = 150
     learning_rate = 0.001
     
-    # Train Simple RNN
-    print("\n" + "-"*70)
-    print("SIMPLE RNN")
-    print("-"*70)
-    rnn_model = SimpleRNN(input_size=1, hidden_size=hidden_size, num_layers=num_layers, output_size=1)
-    rnn_train_losses, rnn_test_losses = train_model(
-        rnn_model, train_loader, test_loader, epochs=epochs, lr=learning_rate, device=device
-    )
-    
     # Train LSTM
     print("\n" + "-"*70)
     print("LSTM")
@@ -485,15 +427,6 @@ def main():
     lstm_model = LSTMModel(input_size=1, hidden_size=hidden_size, num_layers=num_layers, output_size=1)
     lstm_train_losses, lstm_test_losses = train_model(
         lstm_model, train_loader, test_loader, epochs=epochs, lr=learning_rate, device=device
-    )
-    
-    # Train GRU
-    print("\n" + "-"*70)
-    print("GRU")
-    print("-"*70)
-    gru_model = GRUModel(input_size=1, hidden_size=hidden_size, num_layers=num_layers, output_size=1)
-    gru_train_losses, gru_test_losses = train_model(
-        gru_model, train_loader, test_loader, epochs=epochs, lr=learning_rate, device=device
     )
     
     # ============================================================================
@@ -531,14 +464,8 @@ def main():
     print("GENERATING PREDICTIONS")
     print("="*70)
     
-    rnn_preds_train = generate_predictions(rnn_model, X_train, device)
-    rnn_preds_test = generate_predictions(rnn_model, X_test, device)
-    
     lstm_preds_train = generate_predictions(lstm_model, X_train, device)
-    lstm_preds_test = generate_predictions(lstm_model, X_test, device)
-    
-    gru_preds_train = generate_predictions(gru_model, X_train, device)
-    gru_preds_test = generate_predictions(gru_model, X_test, device)
+    lstm_preds_test  = generate_predictions(lstm_model, X_test,  device)
     
     # Calculate metrics
     def compute_metrics(y_true, y_pred):
@@ -556,179 +483,85 @@ def main():
     print("\nTest Set Metrics:")
     print("-"*70)
     
-    rnn_metrics = compute_metrics(y_test.flatten(), rnn_preds_test)
-    print(f"\nSimple RNN:")
-    for key, val in rnn_metrics.items():
-        print(f"  {key:6s} = {val:.6f}")
-    
     lstm_metrics = compute_metrics(y_test.flatten(), lstm_preds_test)
     print(f"\nLSTM:")
     for key, val in lstm_metrics.items():
         print(f"  {key:6s} = {val:.6f}")
     
-    gru_metrics = compute_metrics(y_test.flatten(), gru_preds_test)
-    print(f"\nGRU:")
-    for key, val in gru_metrics.items():
-        print(f"  {key:6s} = {val:.6f}")
-    
     # ============================================================================
-    # PART VIII: VISUALIZATION
+    # PART VIII: LSTM VISUALISATION
     # ============================================================================
     
     print("\n" + "="*70)
-    print("GENERATING VISUALIZATIONS")
+    print("GENERATING LSTM VISUALIZATIONS")
     print("="*70)
     
-    fig = plt.figure(figsize=(18, 14))
+    train_indices = np.arange(seq_length, seq_length + len(lstm_preds_train))
+    test_indices  = np.arange(seq_length + len(lstm_preds_train),
+                              seq_length + len(lstm_preds_train) + len(lstm_preds_test))
     
-    # Plot 1: Original ODE solution
-    ax1 = plt.subplot(4, 3, 1)
+    fig, axes = plt.subplots(2, 3, figsize=(16, 9))
+    fig.suptitle('LSTM: ODE Solution (Driven Damped Oscillator)',
+                 fontsize=14, fontweight='bold')
+    
+    # Panel 1: ODE solution with train/test split
+    ax = axes[0, 0]
     split_idx = train_size + seq_length
-    ax1.plot(t_ode, x_ode, 'b-', linewidth=1, alpha=0.7, label='ODE Solution')
-    ax1.axvline(x=t_ode[split_idx], color='r', linestyle='--', 
-                linewidth=2, label='Train/Test split')
-    ax1.set_xlabel('Time [s]', fontsize=10)
-    ax1.set_ylabel('Position x [m]', fontsize=10)
-    ax1.set_title('ODE Solution: Driven Damped Oscillator', fontsize=12, fontweight='bold')
-    ax1.legend(fontsize=9)
-    ax1.grid(True, alpha=0.3)
+    ax.plot(t_ode, x_ode, 'b-', linewidth=1, alpha=0.7, label='ODE Solution')
+    ax.axvline(x=t_ode[split_idx], color='r', linestyle='--',
+               linewidth=2, label='Train/Test split')
+    ax.set(xlabel='Time [s]', ylabel='Position x [m]',
+           title='ODE Solution: Driven Damped Oscillator')
+    ax.legend(fontsize=9); ax.grid(True, alpha=0.3)
     
-    # Plot 2: Phase space
-    ax2 = plt.subplot(4, 3, 2)
-    ax2.plot(x_ode, v_ode, 'b-', linewidth=0.5, alpha=0.5)
-    ax2.set_xlabel('Position x [m]', fontsize=10)
-    ax2.set_ylabel('Velocity v [m/s]', fontsize=10)
-    ax2.set_title('Phase Space Portrait', fontsize=12, fontweight='bold')
-    ax2.grid(True, alpha=0.3)
+    # Panel 2: Phase space
+    ax = axes[0, 1]
+    ax.plot(x_ode, v_ode, 'b-', linewidth=0.5, alpha=0.5)
+    ax.set(xlabel='Position x [m]', ylabel='Velocity v [m/s]',
+           title='Phase Space Portrait')
+    ax.grid(True, alpha=0.3)
     
-    # Plot 3: Data distribution
-    ax3 = plt.subplot(4, 3, 3)
-    ax3.hist(x_ode, bins=50, alpha=0.7, edgecolor='black')
-    ax3.set_xlabel('Position x [m]', fontsize=10)
-    ax3.set_ylabel('Frequency', fontsize=10)
-    ax3.set_title('Position Distribution', fontsize=12, fontweight='bold')
-    ax3.grid(True, alpha=0.3, axis='y')
+    # Panel 3: LSTM training curves
+    ax = axes[0, 2]
+    ax.plot(lstm_train_losses, 'b-', linewidth=2, label='Train')
+    ax.plot(lstm_test_losses,  'r-', linewidth=2, label='Test')
+    ax.set(xlabel='Epoch', ylabel='Loss (MSE)', title='LSTM: Training Curves')
+    ax.set_yscale('log'); ax.legend(fontsize=9); ax.grid(True, alpha=0.3)
     
-    # Plot 4: Training curves - RNN
-    ax4 = plt.subplot(4, 3, 4)
-    ax4.plot(rnn_train_losses, 'b-', linewidth=2, label='Train')
-    ax4.plot(rnn_test_losses, 'r-', linewidth=2, label='Test')
-    ax4.set_xlabel('Epoch', fontsize=10)
-    ax4.set_ylabel('Loss (MSE)', fontsize=10)
-    ax4.set_title('Simple RNN: Training Curves', fontsize=12, fontweight='bold')
-    ax4.legend(fontsize=9)
-    ax4.grid(True, alpha=0.3)
-    ax4.set_yscale('log')
+    # Panel 4: LSTM predictions
+    ax = axes[1, 0]
+    ax.plot(train_indices, y_train.flatten(),  'b-', linewidth=1, alpha=0.5, label='True (train)')
+    ax.plot(train_indices, lstm_preds_train,   'g-', linewidth=1, label='LSTM pred (train)')
+    ax.plot(test_indices,  y_test.flatten(),   'r-', linewidth=1, alpha=0.5, label='True (test)')
+    ax.plot(test_indices,  lstm_preds_test, 'orange', linewidth=1, label='LSTM pred (test)')
+    ax.set(xlabel='Time Step', ylabel='Position x [m]', title='LSTM: Predictions')
+    ax.legend(fontsize=8); ax.grid(True, alpha=0.3)
     
-    # Plot 5: Training curves - LSTM
-    ax5 = plt.subplot(4, 3, 5)
-    ax5.plot(lstm_train_losses, 'b-', linewidth=2, label='Train')
-    ax5.plot(lstm_test_losses, 'r-', linewidth=2, label='Test')
-    ax5.set_xlabel('Epoch', fontsize=10)
-    ax5.set_ylabel('Loss (MSE)', fontsize=10)
-    ax5.set_title('LSTM: Training Curves', fontsize=12, fontweight='bold')
-    ax5.legend(fontsize=9)
-    ax5.grid(True, alpha=0.3)
-    ax5.set_yscale('log')
-    
-    # Plot 6: Training curves - GRU
-    ax6 = plt.subplot(4, 3, 6)
-    ax6.plot(gru_train_losses, 'b-', linewidth=2, label='Train')
-    ax6.plot(gru_test_losses, 'r-', linewidth=2, label='Test')
-    ax6.set_xlabel('Epoch', fontsize=10)
-    ax6.set_ylabel('Loss (MSE)', fontsize=10)
-    ax6.set_title('GRU: Training Curves', fontsize=12, fontweight='bold')
-    ax6.legend(fontsize=9)
-    ax6.grid(True, alpha=0.3)
-    ax6.set_yscale('log')
-    
-    # Plot 7: Predictions - Simple RNN
-    ax7 = plt.subplot(4, 3, 7)
-    train_indices = np.arange(seq_length, seq_length + len(rnn_preds_train))
-    test_indices = np.arange(seq_length + len(rnn_preds_train), 
-                             seq_length + len(rnn_preds_train) + len(rnn_preds_test))
-    ax7.plot(train_indices, y_train.flatten(), 'b-', linewidth=1, alpha=0.5, label='Train True')
-    ax7.plot(train_indices, rnn_preds_train, 'g-', linewidth=1, label='Train Pred')
-    ax7.plot(test_indices, y_test.flatten(), 'r-', linewidth=1, alpha=0.5, label='Test True')
-    ax7.plot(test_indices, rnn_preds_test, 'orange', linewidth=1, label='Test Pred')
-    ax7.set_xlabel('Time Step', fontsize=10)
-    ax7.set_ylabel('Position x [m]', fontsize=10)
-    ax7.set_title('Simple RNN: Predictions', fontsize=12, fontweight='bold')
-    ax7.legend(fontsize=8)
-    ax7.grid(True, alpha=0.3)
-    
-    # Plot 8: Predictions - LSTM
-    ax8 = plt.subplot(4, 3, 8)
-    ax8.plot(train_indices, y_train.flatten(), 'b-', linewidth=1, alpha=0.5, label='Train True')
-    ax8.plot(train_indices, lstm_preds_train, 'g-', linewidth=1, label='Train Pred')
-    ax8.plot(test_indices, y_test.flatten(), 'r-', linewidth=1, alpha=0.5, label='Test True')
-    ax8.plot(test_indices, lstm_preds_test, 'orange', linewidth=1, label='Test Pred')
-    ax8.set_xlabel('Time Step', fontsize=10)
-    ax8.set_ylabel('Position x [m]', fontsize=10)
-    ax8.set_title('LSTM: Predictions', fontsize=12, fontweight='bold')
-    ax8.legend(fontsize=8)
-    ax8.grid(True, alpha=0.3)
-    
-    # Plot 9: Predictions - GRU
-    ax9 = plt.subplot(4, 3, 9)
-    ax9.plot(train_indices, y_train.flatten(), 'b-', linewidth=1, alpha=0.5, label='Train True')
-    ax9.plot(train_indices, gru_preds_train, 'g-', linewidth=1, label='Train Pred')
-    ax9.plot(test_indices, y_test.flatten(), 'r-', linewidth=1, alpha=0.5, label='Test True')
-    ax9.plot(test_indices, gru_preds_test, 'orange', linewidth=1, label='Test Pred')
-    ax9.set_xlabel('Time Step', fontsize=10)
-    ax9.set_ylabel('Position x [m]', fontsize=10)
-    ax9.set_title('GRU: Predictions', fontsize=12, fontweight='bold')
-    ax9.legend(fontsize=8)
-    ax9.grid(True, alpha=0.3)
-    
-    # Plot 10: Test error - RNN
-    ax10 = plt.subplot(4, 3, 10)
-    rnn_errors = rnn_preds_test - y_test.flatten()
-    ax10.hist(rnn_errors, bins=30, alpha=0.7, edgecolor='black')
-    ax10.axvline(x=0, color='r', linestyle='--', linewidth=2)
-    ax10.set_xlabel('Prediction Error', fontsize=10)
-    ax10.set_ylabel('Frequency', fontsize=10)
-    ax10.set_title(f'RNN Error (MAE={rnn_metrics["MAE"]:.4f})', fontsize=12, fontweight='bold')
-    ax10.grid(True, alpha=0.3, axis='y')
-    
-    # Plot 11: Test error - LSTM
-    ax11 = plt.subplot(4, 3, 11)
+    # Panel 5: LSTM prediction error histogram
+    ax = axes[1, 1]
     lstm_errors = lstm_preds_test - y_test.flatten()
-    ax11.hist(lstm_errors, bins=30, alpha=0.7, edgecolor='black')
-    ax11.axvline(x=0, color='r', linestyle='--', linewidth=2)
-    ax11.set_xlabel('Prediction Error', fontsize=10)
-    ax11.set_ylabel('Frequency', fontsize=10)
-    ax11.set_title(f'LSTM Error (MAE={lstm_metrics["MAE"]:.4f})', fontsize=12, fontweight='bold')
-    ax11.grid(True, alpha=0.3, axis='y')
+    ax.hist(lstm_errors, bins=40, alpha=0.75, edgecolor='black', color='steelblue')
+    ax.axvline(x=0, color='r', linestyle='--', linewidth=2)
+    ax.set(xlabel='Prediction Error', ylabel='Frequency',
+           title=f'LSTM Test Error  (MAE={lstm_metrics["MAE"]:.4f})')
+    ax.grid(True, alpha=0.3, axis='y')
     
-    # Plot 12: Model comparison
-    ax12 = plt.subplot(4, 3, 12)
-    models = ['RNN', 'LSTM', 'GRU']
-    test_losses_final = [rnn_test_losses[-1], lstm_test_losses[-1], gru_test_losses[-1]]
-    r2_scores = [rnn_metrics['R²'], lstm_metrics['R²'], gru_metrics['R²']]
-    
-    x_pos = np.arange(len(models))
-    width = 0.35
-    
-    bars1 = ax12.bar(x_pos - width/2, test_losses_final, width, label='Test Loss', alpha=0.7)
-    ax12_twin = ax12.twinx()
-    bars2 = ax12_twin.bar(x_pos + width/2, r2_scores, width, label='R² Score', 
-                          alpha=0.7, color='orange')
-    
-    ax12.set_xlabel('Model', fontsize=10)
-    ax12.set_ylabel('Test Loss (MSE)', fontsize=10, color='blue')
-    ax12_twin.set_ylabel('R² Score', fontsize=10, color='orange')
-    ax12.set_title('Model Comparison', fontsize=12, fontweight='bold')
-    ax12.set_xticks(x_pos)
-    ax12.set_xticklabels(models)
-    ax12.tick_params(axis='y', labelcolor='blue')
-    ax12_twin.tick_params(axis='y', labelcolor='orange')
-    ax12.grid(True, alpha=0.3, axis='y')
+    # Panel 6: Metrics bar chart
+    ax = axes[1, 2]
+    metric_names  = ['MSE', 'RMSE', 'MAE', 'R²']
+    metric_values = [lstm_metrics[k] for k in metric_names]
+    colors = ['#4C72B0', '#55A868', '#C44E52', '#8172B2']
+    bars = ax.bar(metric_names, metric_values, color=colors, alpha=0.85, edgecolor='k')
+    for bar, val in zip(bars, metric_values):
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(metric_values)*0.01,
+                f'{val:.4f}', ha='center', va='bottom', fontsize=9, fontweight='bold')
+    ax.set(ylabel='Value', title='LSTM: Test Set Metrics')
+    ax.grid(True, alpha=0.3, axis='y')
     
     plt.tight_layout()
     plt.show()
-    #plt.savefig('/mnt/user-data/outputs/rnn_ode_results.png', dpi=150, bbox_inches='tight')
-    print("\n✓ Plot saved to: rnn_ode_results.png")
+    #plt.savefig('/mnt/user-data/outputs/lstm_ode_results.png', dpi=150, bbox_inches='tight')
+    print("\n✓ LSTM plot saved to: lstm_ode_results.png")
     
     # ============================================================================
     # PART IX: AUTOENCODER MODELS
@@ -1401,14 +1234,14 @@ def main():
               title=f'Latent Predictor Error  (MAE={lp_metrics["MAE"]:.4f})')
     ax_e2.grid(True, alpha=0.3, axis='y')
     
-    # ---- Row 4: Full model comparison across ALL models ----------------------
+    # ---- Row 4: Full model comparison across LSTM + AE models ---------------
     ax_cmp = plt.subplot(4, 4, 13)
-    all_models  = ['RNN', 'LSTM', 'GRU', 'CAE', 'Lat.Pred.']
-    all_metrics_list = [rnn_metrics, lstm_metrics, gru_metrics, cae_metrics, lp_metrics]
-    all_r2    = [m['R²']  for m in all_metrics_list]
+    all_models       = ['LSTM', 'CAE', 'Lat.Pred.']
+    all_metrics_list = [lstm_metrics, cae_metrics, lp_metrics]
+    all_r2    = [m['R²']   for m in all_metrics_list]
     all_rmse  = [m['RMSE'] for m in all_metrics_list]
     all_mae   = [m['MAE']  for m in all_metrics_list]
-    bar_colors = ['#4C72B0', '#55A868', '#C44E52', '#8172B2', '#CCB974']
+    bar_colors = ['#55A868', '#8172B2', '#CCB974']
     
     x_all = np.arange(len(all_models))
     ax_cmp.bar(x_all, all_r2, color=bar_colors, alpha=0.85, edgecolor='k')
@@ -1479,9 +1312,7 @@ def main():
     print(f"  Sequence length: {seq_length}")
     
     print(f"\nModels trained:")
-    print(f"  Hidden size: {hidden_size}")
-    print(f"  Num layers: {num_layers}")
-    print(f"  Epochs: {epochs}")
+    print(f"  LSTM — hidden size: {hidden_size}, layers: {num_layers}, epochs: {epochs}")
     
     print(f"\nAutoencoder models trained:")
     print(f"  Latent dim : {ae_latent_dim}")
@@ -1491,15 +1322,13 @@ def main():
     print(f"\nPerformance — Next-Step Prediction (Test Set):")
     print(f"  {'Model':<16s} {'MSE':<12s} {'RMSE':<12s} {'MAE':<12s} {'R²':<10s}")
     print(f"  {'-'*66}")
-    for name, m in [('RNN',          rnn_metrics),
-                    ('LSTM',         lstm_metrics),
-                    ('GRU',          gru_metrics),
+    for name, m in [('LSTM',         lstm_metrics),
                     ('CAE (recon)',   cae_metrics),
                     ('Latent Pred.', lp_metrics)]:
         print(f"  {name:<16s} {m['MSE']:<12.6f} {m['RMSE']:<12.6f} "
               f"{m['MAE']:<12.6f} {m['R²']:<10.6f}")
     
-    print("\n✓ All models (RNN + Autoencoder) successfully trained on ODE solution data!")
+    print("\n✓ LSTM and Autoencoder models successfully trained on ODE solution data!")
     print("="*70)
 
 
