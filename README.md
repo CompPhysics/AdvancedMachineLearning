@@ -133,7 +133,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 ## March 16-20: Autoencoders
 - Autoencoders and links with Principal Component Analysis. Discussion of AE implementations
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb- Reading recommendation: Goodfellow et al chapter 14
-- Video of Lecture at https://youtu.be/hdDKlQUkPsY
+- Video of Lecture at https://drive.google.com/drive/folders/1qLEk0REgf4eYrZ9p0ABKXFhjXMqaW0Fx
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek9.pdf
 
 
