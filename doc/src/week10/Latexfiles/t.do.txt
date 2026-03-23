@@ -1,5 +1,5 @@
 !split
-===== Deep Learning in Context =====
+===== Deep Learning  =====
 Classical deep learning architectures include:
 
 * multilayer perceptrons (MLPs),
@@ -17,7 +17,7 @@ Each architecture encodes a specific inductive bias:
 Transformers are also deep neural networks, but with a different structural principle: _adaptive interaction through attention._
 
 !split
-===== What Is a Transformer? =====
+===== What ss a transformer? =====
 A transformer is a neural-network architecture built around the idea of _self-attention_.
 
 Core principle:
@@ -34,7 +34,7 @@ This makes them especially powerful for:
 * scientific fields and operator learning.
 
 !split
-===== Input as a Sequence of Vectors =====
+===== Input as a sequence of vectors =====
 Suppose the input is a sequence
 
 !bt
@@ -56,7 +56,7 @@ A transformer maps this sequence to another sequence of vectors:
 
 
 !split
-===== Self-Attention: The Basic Formula =====
+===== Self-attention: The basic formula =====
 
 For each position $i$, the transformer forms
 !bt
@@ -67,7 +67,8 @@ For each position $i$, the transformer forms
 where:
 * $v_j = W_V x_j$ are the _values_,
 * $\alpha_{ij}$ are attention weights.
-  
+
+
 !split
 ===== How to compute weights =====
 The weights are computed from
@@ -89,7 +90,7 @@ This is the central mechanism of a transformer.
 
 
 !split
-===== Matrix Form of Attention =====
+===== Matrix form of attention =====
 
 
 Collect the input vectors into a matrix
@@ -120,7 +121,7 @@ Here:
   
 
 !split
-===== Interpretation of the Attention Matrix =====
+===== Interpretation of the attention matrix =====
 The matrix
 !bt
 \[
@@ -246,91 +247,83 @@ Without normalization, these logits can become large, causing the softmax to sat
 to stabilize optimization and keep gradients in a useful regime.
 
 
-!split ===== Multi-Head Attention}
-  In practice, transformers use multiple attention heads.
+!split
+===== Multi-Head Attention =====
+
+In practice, transformers use multiple attention heads.
 
   For head \(h\):
-  \[
+!bt
+\[
   Q^{(h)} = XW_Q^{(h)},\quad
   K^{(h)} = XW_K^{(h)},\quad
   V^{(h)} = XW_V^{(h)}.
-  \]
-
-  Each head computes
-  \[
-  \mathrm{head}_h
-  =
-  \mathrm{Attention}(Q^{(h)},K^{(h)},V^{(h)}).
-  \]
-
-  Then all heads are concatenated and linearly mixed:
-  \[
-  \mathrm{MultiHead}(X)
-  =
-  \mathrm{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_H)W_O.
-  \]
-
-  Intuition:
-  
-  * different heads learn different interaction patterns,
-  * one head may capture local structure, another long-range dependence.
-  
+\]
+!et
+Each head computes
+!bt
+\[
+  \mathrm{head}_h=\mathrm{Attention}(Q^{(h)},K^{(h)},V^{(h)}).
+\]
+!et
+Then all heads are concatenated and linearly mixed:
+!bt
+\[
+  \mathrm{MultiHead}(X)=\mathrm{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_H)W_O.
+\]
+!et
+!bblock Intuition:
+* different heads learn different interaction patterns,
+* one head may capture local structure, another long-range dependence.
+!eblock  
 
 
-%------------------------------------------------
-!split ===== The Transformer Block}
-  A standard transformer block contains:
+!split
+===== The Transformer Block =====
+A standard transformer block contains:
+* multi-head attention,
+* residual connection,
+* layer normalization,
+* position-wise feedforward network,
+* another residual connection and normalization.
 
-  \begin{enumerate}
-  * multi-head attention,
-  * residual connection,
-  * layer normalization,
-  * position-wise feedforward network,
-  * another residual connection and normalization.
-  \end{enumerate}
-
-  Schematically:
-  \[
+Schematically:
+!bt
+\[
   X \mapsto X + \mathrm{MHA}(X)
-  \]
-  followed by
-  \[
+\]
+!et
+followed by
+!bt
+\[
   X \mapsto X + \mathrm{MLP}(X).
-  \]
+\]
+!et
+So a transformer is still a deep network built from familiar components:
+!bt
+\[
+\text{attention} + \text{MLP} + \text{residual structure}.
+\]
+!et
 
-  So a transformer is still a deep network built from familiar components:
-  \[
-  \text{attention} + \text{MLP} + \text{residual structure}.
-  \]
 
-
-%------------------------------------------------
-!split ===== Positional Information}
-  Attention itself is permutation-equivariant:
-  \[
+!split
+===== Positional Information =====
+Attention itself is permutation-equivariant:
+!bt
+\[
   (x_1,\dots,x_n)\mapsto (y_1,\dots,y_n)
-  \]
-  depends only on pairwise relations, not on absolute order.
+\]
+!et
+depends only on pairwise relations, not on absolute order.
 
-  For sequence tasks we must add positional information.
+For sequence tasks we must add positional information. Common approaches:
+* learned positional embeddings,
+* sinusoidal encodings,
+* relative position encodings.
 
-  Common approaches:
-  
-  * learned positional embeddings,
-  * sinusoidal encodings,
-  * relative position encodings.
-  
-
-  For example, sinusoidal encodings use
-  \[
-  \mathrm{PE}(m,2r)=\sin\!\left(\frac{m}{10000^{2r/d}}\right),
-  \qquad
-  \mathrm{PE}(m,2r+1)=\cos\!\left(\frac{m}{10000^{2r/d}}\right).
-  \]
-
-
-%------------------------------------------------
-!split ===== Transformers as Kernel Machines}
+!split
+===== Transformers as Kernel Machines =====
   Attention has the form
   \[
   y_i = \sum_j A_{ij}(X)\, v_j.
