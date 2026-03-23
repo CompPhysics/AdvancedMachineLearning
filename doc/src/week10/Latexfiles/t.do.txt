@@ -145,9 +145,9 @@ is a weighted average of the value vectors.
 !split
 ===== Interpretation: =====
 !bblock  
-* query $q_i$: ``what does position \(i\) look for?''
-* key $k_j$: ``what does position \(j\) offer?''
-* value $v_j$: ``what information does position \(j\) contribute?''
+* query $q_i$: ``what does position $i$ look for?''
+* key $k_j$: ``what does position $j$ offer?''
+* value $v_j$: ``what information does position $j$ contribute?''
 !eblock  
 
 
@@ -231,13 +231,13 @@ The attention logits are
  q_i \cdot k_j.
 \]
 !et
-If $q_i$ and \(k_j\) have \(d_k\) components with comparable variance, then typically
+If $q_i$ and $k_j$ have $d_k$ components with comparable variance, then typically
 !bt
 \[
   q_i \cdot k_j \sim O(\sqrt{d_k})
 \]
 !et
-or \(O(d_k)\) depending on scaling assumptions.
+or $O(d_k)$ depending on scaling assumptions.
 Without normalization, these logits can become large, causing the softmax to saturate. Therefore one rescales by
 !bt
 \[
@@ -252,7 +252,7 @@ to stabilize optimization and keep gradients in a useful regime.
 
 In practice, transformers use multiple attention heads.
 
-  For head \(h\):
+  For head $h$:
 !bt
 \[
   Q^{(h)} = XW_Q^{(h)},\quad
@@ -324,138 +324,84 @@ For sequence tasks we must add positional information. Common approaches:
 
 !split
 ===== Transformers as Kernel Machines =====
-  Attention has the form
-  \[
-  y_i = \sum_j A_{ij}(X)\, v_j.
-  \]
+Attention has the form
+!bt
+\[
+y_i = \sum_j A_{ij}(X)\, v_j.
+\]
+!et
+This resembles an integral kernel operator:
+!bt
+\[
+  (\mathcal{K}f)(x)=\int K(x,x') f(x')\, dx'.
+\]
+!et
+In the discrete setting, attention acts like
+!bt
+\[
+y_i = \sum_j K(x_i,x_j)\, v_j,
+\]
+!et
+but with a kernel $K$ learned adaptively from the data.
+This viewpoint is useful in scientific machine learning and operator learning.
 
-  This resembles an integral kernel operator:
-  \[
-  (\mathcal{K}f)(x)
-  =
-  \int K(x,x') f(x')\, dx'.
-  \]
-
-  In the discrete setting, attention acts like
-  \[
-  y_i = \sum_j K(x_i,x_j)\, v_j,
-  \]
-  but with a kernel \(K\) learned adaptively from the data.
-
-  This viewpoint is useful in scientific machine learning and operator learning.
 
 
-%------------------------------------------------
-!split ===== Physics Viewpoint I: Adaptive Many-Body Couplings}
-  A useful physics analogy is
-  \[
+!split
+===== Physics Viewpoint: Adaptive Many-Body Couplings =====
+A useful analogy is
+!bt
+\[
   y_i = \sum_j J_{ij}(X)\, x_j,
-  \]
-  where
-  \[
+\]
+!et
+where
+!bt
+\[
   J_{ij}(X) \equiv A_{ij}(X)
-  \]
-  is an input-dependent coupling.
-
-  This resembles:
-  
-  * mean-field interaction matrices,
-  * adaptive spin couplings,
-  * message-passing in many-body systems,
-  * self-consistent effective interactions.
-  
-
-  So transformers can be interpreted as systems with
-  \[
-  \text{state-dependent interaction kernels}.
-  \]
+\]
+!et
+is an input-dependent coupling.
+This resembles:
+* mean-field interaction matrices,
+* adaptive spin couplings,
+* message-passing in many-body systems,
+* self-consistent effective interactions.
+Transformers can be interpreted as systems with state-dependent interaction kernels.
 
 
-%------------------------------------------------
-!split ===== Physics Viewpoint II: Statistical Mechanics Analogy}
-  The softmax weights are
-  \[
-  A_{ij} =
-  \frac{e^{s_{ij}}}{\sum_\ell e^{s_{i\ell}}},
-  \qquad
-  s_{ij} = \frac{q_i\cdot k_j}{\sqrt{d_k}}.
-  \]
 
-  This looks like a Gibbs or Boltzmann weight:
-  \[
-  p_j = \frac{e^{-\beta E_j}}{Z}.
-  \]
+!split
+===== Attention and graph structure =====
 
-  Indeed, if we identify
-  \[
-  E_{ij} = - s_{ij},
-  \]
-  then attention weights are Gibbs-like probabilities over interaction partners.
-
-  This suggests a statistical-mechanics interpretation:
-  
-  * scores \(s_{ij}\) define effective energies,
-  * softmax performs a local partition-function normalization.
-  
-
-
-%------------------------------------------------
-!split ===== Mean-Field Interpretation}
-  Suppose each degree of freedom \(i\) updates by coupling to all others through effective coefficients \(A_{ij}\):
-  \[
-  y_i = \sum_j A_{ij} v_j.
-  \]
-
-  This resembles a mean-field update:
-  \[
-  m_i^{\text{new}} = F\!\left(\sum_j J_{ij} m_j\right),
-  \]
-  except that the couplings themselves depend on the current state.
-
-  Thus transformers may be viewed as
-  \[
-  \text{nonlinear, adaptive mean-field models}.
-  \]
-
-
-%------------------------------------------------
-!split ===== Attention and Graph Structure}
-  If the input is viewed as a graph with nodes \(i\), then attention defines a complete graph with weighted edges
-  \[
+If the input is viewed as a graph with nodes $i$, then attention defines a complete graph with weighted edges
+!bt
+\[
   i \longleftrightarrow j
-  \]
-  of strength \(A_{ij}\).
+\]
+!et
+of strength $A_{ij}$.
+This makes transformers closely related to:
+* graph neural networks,
+* message-passing networks,
+* nonlocal interaction models.
 
-  This makes transformers closely related to:
-  
-  * graph neural networks,
-  * message-passing networks,
-  * nonlocal interaction models.
-  
-
-  Difference:
-  
-  * graph neural networks often use a fixed graph,
-  * transformers learn the graph dynamically from the data.
+Difference:
+* graph neural networks often use a fixed graph,
+* transformers learn the graph dynamically from the data.
   
 
+!split
+===== Transformers and PDEs: Why they Matter =====
 
-%------------------------------------------------
-!split ===== Transformers and PDEs: Why They Matter}
-  Many PDE problems involve long-range dependencies:
+Many PDE problems involve long-range dependencies:
+* elliptic equations,
+* nonlocal operators,
+* multiscale dynamics,
+* global constraints.
   
-  * elliptic equations,
-  * nonlocal operators,
-  * multiscale dynamics,
-  * global constraints.
-  
-
-  CNNs are excellent for local structure, but transformers can naturally represent
-  \[
-  \text{nonlocal coupling across the whole domain}.
-  \]
-
-  This is one reason transformers have become important in scientific machine learning.
+CNNs are excellent for local structure, but transformers can naturally represent nonlocal coupling across the whole domain.
+This is one reason transformers have become important in scientific machine learning.
 
 
 
@@ -503,7 +449,7 @@ Attention then computes
   y_i = \sum_j A_{ij} v_j,
 \]
 !et
-which allows the representation at point \(x_i\) to depend on all other sampled points.
+which allows the representation at point $x_i$ to depend on all other sampled points.
 
 !split
 ===== Useful for =====
