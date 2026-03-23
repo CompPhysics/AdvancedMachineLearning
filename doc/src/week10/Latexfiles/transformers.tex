@@ -1,0 +1,716 @@
+\documentclass{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{bm}
+\usepackage{physics}
+\usepackage{mathtools}
+
+\title{Transformers in Machine Learning}
+\subtitle{Mathematical Structure and Connections to Physics and PDEs}
+\author{}
+\date{}
+
+\begin{document}
+
+%------------------------------------------------
+\frame{\titlepage}
+
+%------------------------------------------------
+\begin{frame}{Outline}
+\begin{enumerate}
+\item Deep learning architectures in context
+\item What is a transformer?
+\item The mathematics of self-attention
+\item Comparison with MLPs, CNNs, and RNNs
+\item Multi-head attention and transformer blocks
+\item Physics and statistical mechanics viewpoints
+\item Transformers for PDEs and scientific machine learning
+\item Summary
+\end{enumerate}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Deep Learning in Context}
+Classical deep learning architectures include:
+\begin{itemize}
+\item multilayer perceptrons (MLPs),
+\item convolutional neural networks (CNNs),
+\item recurrent neural networks (RNNs).
+\end{itemize}
+
+Each architecture encodes a specific inductive bias:
+\begin{itemize}
+\item MLPs: dense global mixing,
+\item CNNs: locality and translation structure,
+\item RNNs: sequential recurrence and memory.
+\end{itemize}
+
+Transformers are also deep neural networks, but with a different structural principle:
+\[
+\textbf{adaptive interaction through attention.}
+\]
+\end{frame}
+%------------------------------------------------
+\begin{frame}{What Is a Transformer?}
+  A transformer is a neural-network architecture built around the idea of
+  \textbf{self-attention}.
+
+  Core principle:
+  \begin{itemize}
+  \item each input element can interact directly with every other input element,
+  \item the interaction strengths are learned and depend on the data itself.
+  \end{itemize}
+
+  Thus transformers replace fixed interaction patterns by
+  \[
+  \text{data-dependent couplings}.
+  \]
+
+  This makes them especially powerful for:
+  \begin{itemize}
+  \item language,
+  \item long sequences,
+  \item images,
+  \item scientific fields and operator learning.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Input as a Sequence of Vectors}
+  Suppose the input is a sequence
+  \[
+  x_1, x_2, \dots, x_n,
+  \qquad x_i \in \mathbb{R}^d.
+  \]
+
+  Examples:
+  \begin{itemize}
+  \item words in a sentence,
+  \item patches in an image,
+  \item nodes in a discretized field,
+  \item spatial or temporal samples of a PDE solution.
+  \end{itemize}
+
+  A transformer maps this sequence to another sequence of vectors:
+  \[
+  (x_1,\dots,x_n) \longmapsto (y_1,\dots,y_n).
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Self-Attention: The Basic Formula}
+  For each position \(i\), the transformer forms
+  \[
+  y_i = \sum_{j=1}^n \alpha_{ij} v_j,
+  \]
+  where:
+  \begin{itemize}
+  \item \(v_j = W_V x_j\) are the \emph{values},
+  \item \(\alpha_{ij}\) are attention weights.
+  \end{itemize}
+
+  The weights are computed from
+  \[
+  q_i = W_Q x_i, \qquad k_j = W_K x_j,
+  \]
+  called the \emph{query} and \emph{key} vectors.
+
+  Then
+  \[
+  \alpha_{ij}
+  =
+  \frac{\exp\!\left(q_i \cdot k_j / \sqrt{d_k}\right)}
+       {\sum_{\ell=1}^n \exp\!\left(q_i \cdot k_\ell / \sqrt{d_k}\right)}.
+       \]
+
+       This is the central mechanism of a transformer.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Matrix Form of Attention}
+  Collect the input vectors into a matrix
+  \[
+  X \in \mathbb{R}^{n \times d}.
+  \]
+
+  Define
+  \[
+  Q = X W_Q,\qquad K = X W_K,\qquad V = X W_V.
+  \]
+
+  Then the attention operation is
+  \[
+  \mathrm{Attention}(Q,K,V)
+  =
+  \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V.
+  \]
+
+  Here:
+  \begin{itemize}
+  \item \(QK^\top\) is an \(n\times n\) interaction matrix,
+  \item the softmax normalizes each row,
+  \item multiplication by \(V\) aggregates information.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation of the Attention Matrix}
+  The matrix
+  \[
+  A = \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)
+  \]
+  acts like a learned kernel or coupling matrix.
+
+  Its entries satisfy
+  \[
+  A_{ij} \ge 0,
+  \qquad
+  \sum_j A_{ij}=1.
+  \]
+
+  Thus
+  \[
+  y_i = \sum_j A_{ij} v_j
+  \]
+  is a weighted average of the value vectors.
+
+  Interpretation:
+  \begin{itemize}
+  \item query \(q_i\): ``what does position \(i\) look for?''
+  \item key \(k_j\): ``what does position \(j\) offer?''
+  \item value \(v_j\): ``what information does position \(j\) contribute?''
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Comparison with a Standard MLP}
+  A standard MLP layer has the form
+  \[
+  y = \sigma(Wx + b),
+  \]
+  with fixed weights \(W\).
+
+  In contrast, attention uses
+  \[
+  y_i = \sum_j A_{ij}(X)\, v_j,
+  \]
+  where the effective coupling \(A_{ij}\) depends on the input \(X\).
+
+  Thus:
+  \[
+  \text{MLP: fixed couplings}
+  \qquad\text{vs}\qquad
+  \text{Transformer: adaptive couplings}.
+  \]
+
+  This is one reason transformers are so expressive.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Comparison with CNNs}
+  In a convolutional neural network,
+  \[
+  y_i = \sum_{r \in \mathcal{N}(i)} w_r\, x_{i+r},
+  \]
+  where \(\mathcal{N}(i)\) is a small local neighborhood.
+
+  Thus CNNs assume:
+  \begin{itemize}
+  \item locality,
+  \item translation invariance,
+  \item fixed kernels.
+  \end{itemize}
+
+  Attention instead uses
+  \[
+  y_i = \sum_j A_{ij}(X)\, x_j,
+  \]
+  which is
+  \begin{itemize}
+  \item global,
+  \item adaptive,
+  \item not restricted to local neighborhoods.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Comparison with RNNs}
+  In an RNN,
+  \[
+  h_t = f(h_{t-1}, x_t),
+  \]
+  so information propagates sequentially.
+
+  Advantages:
+  \begin{itemize}
+  \item natural for time series,
+  \item explicit recurrence.
+  \end{itemize}
+
+  Limitations:
+  \begin{itemize}
+  \item long-range dependencies are hard,
+  \item training can be unstable,
+  \item computation is hard to parallelize.
+  \end{itemize}
+
+  Transformers avoid recurrence and instead connect all positions simultaneously through attention.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Why the Factor \(1/\sqrt{d_k}\)?}
+  The attention logits are
+  \[
+  q_i \cdot k_j.
+  \]
+
+  If \(q_i\) and \(k_j\) have \(d_k\) components with comparable variance, then typically
+  \[
+  q_i \cdot k_j \sim O(\sqrt{d_k})
+  \]
+  or \(O(d_k)\) depending on scaling assumptions.
+
+  Without normalization, these logits can become large, causing the softmax to saturate.
+
+  Therefore one rescales by
+  \[
+  \frac{1}{\sqrt{d_k}}
+  \]
+  to stabilize optimization and keep gradients in a useful regime.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Multi-Head Attention}
+  In practice, transformers use multiple attention heads.
+
+  For head \(h\):
+  \[
+  Q^{(h)} = XW_Q^{(h)},\quad
+  K^{(h)} = XW_K^{(h)},\quad
+  V^{(h)} = XW_V^{(h)}.
+  \]
+
+  Each head computes
+  \[
+  \mathrm{head}_h
+  =
+  \mathrm{Attention}(Q^{(h)},K^{(h)},V^{(h)}).
+  \]
+
+  Then all heads are concatenated and linearly mixed:
+  \[
+  \mathrm{MultiHead}(X)
+  =
+  \mathrm{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_H)W_O.
+  \]
+
+  Intuition:
+  \begin{itemize}
+  \item different heads learn different interaction patterns,
+  \item one head may capture local structure, another long-range dependence.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{The Transformer Block}
+  A standard transformer block contains:
+
+  \begin{enumerate}
+  \item multi-head attention,
+  \item residual connection,
+  \item layer normalization,
+  \item position-wise feedforward network,
+  \item another residual connection and normalization.
+  \end{enumerate}
+
+  Schematically:
+  \[
+  X \mapsto X + \mathrm{MHA}(X)
+  \]
+  followed by
+  \[
+  X \mapsto X + \mathrm{MLP}(X).
+  \]
+
+  So a transformer is still a deep network built from familiar components:
+  \[
+  \text{attention} + \text{MLP} + \text{residual structure}.
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Positional Information}
+  Attention itself is permutation-equivariant:
+  \[
+  (x_1,\dots,x_n)\mapsto (y_1,\dots,y_n)
+  \]
+  depends only on pairwise relations, not on absolute order.
+
+  For sequence tasks we must add positional information.
+
+  Common approaches:
+  \begin{itemize}
+  \item learned positional embeddings,
+  \item sinusoidal encodings,
+  \item relative position encodings.
+  \end{itemize}
+
+  For example, sinusoidal encodings use
+  \[
+  \mathrm{PE}(m,2r)=\sin\!\left(\frac{m}{10000^{2r/d}}\right),
+  \qquad
+  \mathrm{PE}(m,2r+1)=\cos\!\left(\frac{m}{10000^{2r/d}}\right).
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Transformers as Kernel Machines}
+  Attention has the form
+  \[
+  y_i = \sum_j A_{ij}(X)\, v_j.
+  \]
+
+  This resembles an integral kernel operator:
+  \[
+  (\mathcal{K}f)(x)
+  =
+  \int K(x,x') f(x')\, dx'.
+  \]
+
+  In the discrete setting, attention acts like
+  \[
+  y_i = \sum_j K(x_i,x_j)\, v_j,
+  \]
+  but with a kernel \(K\) learned adaptively from the data.
+
+  This viewpoint is useful in scientific machine learning and operator learning.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Physics Viewpoint I: Adaptive Many-Body Couplings}
+  A useful physics analogy is
+  \[
+  y_i = \sum_j J_{ij}(X)\, x_j,
+  \]
+  where
+  \[
+  J_{ij}(X) \equiv A_{ij}(X)
+  \]
+  is an input-dependent coupling.
+
+  This resembles:
+  \begin{itemize}
+  \item mean-field interaction matrices,
+  \item adaptive spin couplings,
+  \item message-passing in many-body systems,
+  \item self-consistent effective interactions.
+  \end{itemize}
+
+  So transformers can be interpreted as systems with
+  \[
+  \text{state-dependent interaction kernels}.
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Physics Viewpoint II: Statistical Mechanics Analogy}
+  The softmax weights are
+  \[
+  A_{ij} =
+  \frac{e^{s_{ij}}}{\sum_\ell e^{s_{i\ell}}},
+  \qquad
+  s_{ij} = \frac{q_i\cdot k_j}{\sqrt{d_k}}.
+  \]
+
+  This looks like a Gibbs or Boltzmann weight:
+  \[
+  p_j = \frac{e^{-\beta E_j}}{Z}.
+  \]
+
+  Indeed, if we identify
+  \[
+  E_{ij} = - s_{ij},
+  \]
+  then attention weights are Gibbs-like probabilities over interaction partners.
+
+  This suggests a statistical-mechanics interpretation:
+  \begin{itemize}
+  \item scores \(s_{ij}\) define effective energies,
+  \item softmax performs a local partition-function normalization.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mean-Field Interpretation}
+  Suppose each degree of freedom \(i\) updates by coupling to all others through effective coefficients \(A_{ij}\):
+  \[
+  y_i = \sum_j A_{ij} v_j.
+  \]
+
+  This resembles a mean-field update:
+  \[
+  m_i^{\text{new}} = F\!\left(\sum_j J_{ij} m_j\right),
+  \]
+  except that the couplings themselves depend on the current state.
+
+  Thus transformers may be viewed as
+  \[
+  \text{nonlinear, adaptive mean-field models}.
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Attention and Graph Structure}
+  If the input is viewed as a graph with nodes \(i\), then attention defines a complete graph with weighted edges
+  \[
+  i \longleftrightarrow j
+  \]
+  of strength \(A_{ij}\).
+
+  This makes transformers closely related to:
+  \begin{itemize}
+  \item graph neural networks,
+  \item message-passing networks,
+  \item nonlocal interaction models.
+  \end{itemize}
+
+  Difference:
+  \begin{itemize}
+  \item graph neural networks often use a fixed graph,
+  \item transformers learn the graph dynamically from the data.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Transformers and PDEs: Why They Matter}
+  Many PDE problems involve long-range dependencies:
+  \begin{itemize}
+  \item elliptic equations,
+  \item nonlocal operators,
+  \item multiscale dynamics,
+  \item global constraints.
+  \end{itemize}
+
+  CNNs are excellent for local structure, but transformers can naturally represent
+  \[
+  \text{nonlocal coupling across the whole domain}.
+  \]
+
+  This is one reason transformers have become important in scientific machine learning.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Operator Learning Viewpoint}
+  In PDEs one often wants to learn not just one solution, but an operator:
+  \[
+  \mathcal{G}: u_0(x) \mapsto u(x,t)
+  \]
+  or
+  \[
+  a(x) \mapsto u(x),
+  \]
+  where \(a(x)\) might be a coefficient field.
+
+  Transformers can be used to approximate such mappings by treating the discretized field values as tokens and learning nonlocal interactions between them.
+
+  This links transformers to:
+  \begin{itemize}
+  \item neural operators,
+  \item Fourier neural operators,
+  \item attention-based operator learning.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Example: Discretized PDE Fields as Tokens}
+  Suppose a field \(u(x)\) is sampled at points
+  \[
+  x_1,\dots,x_n.
+  \]
+
+  Then each token may be
+  \[
+  x_i^{\text{token}} = \big(x_i, u(x_i), a(x_i), \dots \big).
+  \]
+
+  Attention then computes
+  \[
+  y_i = \sum_j A_{ij} v_j,
+  \]
+  which allows the representation at point \(x_i\) to depend on all other sampled points.
+
+  This is particularly useful for:
+  \begin{itemize}
+  \item nonlocal PDEs,
+  \item integral equations,
+  \item strongly coupled multiscale systems.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Transformers vs Fourier Methods for PDEs}
+  In scientific machine learning, Fourier-based methods and transformers both capture nonlocal structure.
+
+  Fourier-based methods:
+  \begin{itemize}
+  \item use spectral decomposition,
+  \item are natural for translation-invariant problems,
+  \item often efficient on regular grids.
+  \end{itemize}
+
+  Transformers:
+  \begin{itemize}
+  \item are more flexible,
+  \item handle irregular domains and adaptive relations,
+  \item learn data-dependent kernels rather than fixed spectral ones.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Complexity of Self-Attention}
+  A standard attention layer computes an \(n\times n\) matrix:
+  \[
+  QK^\top,
+  \]
+  so the cost scales as
+  \[
+  O(n^2 d).
+  \]
+
+  This is one of the main computational bottlenecks.
+
+  By contrast:
+  \begin{itemize}
+  \item CNNs scale more locally,
+  \item RNNs scale linearly in sequence length but sequentially in time.
+  \end{itemize}
+
+  This has motivated many sparse and efficient transformer variants.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Why Transformers Became So Important}
+  Transformers became dominant because they combine:
+  \begin{itemize}
+  \item global context,
+  \item parallel computation,
+  \item strong scaling with data and model size,
+  \item flexible learned interaction structure.
+  \end{itemize}
+
+  They perform especially well when long-range correlations matter.
+
+  In physics language:
+  \[
+  \text{they are powerful models for systems with rich nonlocal interactions.}
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Relation to Standard Deep Learning}
+  Transformers are not separate from deep learning; they are a modern architecture within deep learning.
+
+  They still use:
+  \begin{itemize}
+  \item linear layers,
+  \item nonlinearities,
+  \item residual connections,
+  \item normalization,
+  \item gradient-based training.
+  \end{itemize}
+
+  What is new is the central primitive:
+  \[
+  \boxed{\text{self-attention}}
+  \]
+  rather than convolution or recurrence.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Strengths and Weaknesses}
+  Strengths:
+  \begin{itemize}
+  \item captures long-range dependencies,
+  \item highly parallelizable,
+  \item adaptable to many data types.
+  \end{itemize}
+
+  Weaknesses:
+  \begin{itemize}
+  \item quadratic cost in sequence length,
+  \item often data-hungry,
+  \item can be less structured than domain-specific architectures.
+  \end{itemize}
+
+  In scientific applications, hybrids are often useful:
+  \[
+  \text{physics priors} + \text{attention mechanisms}.
+  \]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Transformers in Scientific Machine Learning}
+  Active directions include:
+  \begin{itemize}
+  \item PDE surrogates,
+  \item turbulence modeling,
+  \item climate and weather forecasting,
+  \item molecular and materials modeling,
+  \item operator learning,
+  \item quantum many-body representations.
+  \end{itemize}
+
+  The central attraction is that attention provides a flexible way to encode interactions across scales and distances.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Summary}
+  Transformers are deep neural networks built around self-attention.
+
+  Mathematically:
+  \[
+  \mathrm{Attention}(Q,K,V)
+  =
+  \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V.
+  \]
+
+  Compared with standard methods:
+  \begin{itemize}
+  \item MLPs use fixed dense couplings,
+  \item CNNs use local kernels,
+  \item RNNs use sequential recurrence,
+  \item transformers use adaptive global couplings.
+  \end{itemize}
+
+  This makes them especially powerful for nonlocal and multiscale problems.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Physics Interpretation}
+  A useful physics summary is:
+  \begin{itemize}
+  \item attention defines an input-dependent interaction matrix,
+  \item softmax resembles Gibbs-type normalization,
+  \item transformer layers resemble adaptive many-body updates,
+  \item this connects naturally to statistical mechanics, graph models, and operator learning.
+  \end{itemize}
+
+  This is why transformers are becoming increasingly relevant in physics and PDE-based scientific machine learning.
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Possible Extensions}
+  Natural follow-up topics include:
+  \begin{itemize}
+  \item transformers for quantum many-body states,
+  \item graph transformers,
+  \item neural operators and Fourier neural operators,
+  \item attention in PDE solvers,
+  \item statistical-mechanics interpretations of deep architectures.
+  \end{itemize}
+\end{frame}
+
+\end{document}

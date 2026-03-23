@@ -1,0 +1,1883 @@
+
+# ==============================================================================
+# <!-- HTML file automatically generated from DocOnce source (https://github.com/doconce/doconce/)
+# doconce format html week9.do.txt  -->
+# <!-- dom:TITLE: Advanced machine learning and data analysis for the physical sciences -->
+# ==============================================================================
+
+# ==============================================================================
+# # Advanced machine learning and data analysis for the physical sciences
+# **Morten Hjorth-Jensen**, Department of Physics and Center for Computing in Science Education, University of Oslo, Norway
+# 
+# Date: **March 19, 2026**
+# ==============================================================================
+
+# ==============================================================================
+# ## Plans for the week March 16-20
+# 
+# 1. Discussion of Autoencoders (AEs) and reminder from last week
+# 
+# 2. Finalizing discussion of Linear autoencoders and the full connection to PCA (see whiteboard notes)
+# 
+# 3. Nonlinear and regularized autoencoders and discussion of codes
+# 
+# 4. Video of Lecture at <https://drive.google.com/drive/folders/1qLEk0REgf4eYrZ9p0ABKXFhjXMqaW0Fx>
+# 
+# 5. Whiteboard notes at <https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek9.pdf>
+# 
+# **Our emphasis is on:**
+# 
+# 1. Linear algebra and optimization,
+# 
+# 2. Geometry of latent representations,
+# 
+# 3. Reconstruction error minimization,
+# ==============================================================================
+
+# ==============================================================================
+# ## Reading recommendations
+# 
+# 1. Goodfellow et al chapter 14.
+# 
+# 2. Rashcka et al. Their chapter 17 contains a brief introduction only.
+# 
+# 3. Deep Learning Tutorial on AEs from Stanford University at <http://ufldl.stanford.edu/tutorial/unsupervised/Autoencoders/>
+# 
+# 4. Building AEs in Keras at <https://blog.keras.io/building-autoencoders-in-keras.html>
+# 
+# 5. Introduction to AEs in TensorFlow at <https://www.tensorflow.org/tutorials/generative/autoencoder>
+# 
+# 6. Grosse, University of Toronto, Lecture on AEs at <http://www.cs.toronto.edu/~rgrosse/courses/csc321_2017/slides/lec20.pdf>
+# 
+# 7. Bank et al on AEs at <https://arxiv.org/abs/2003.05991>  
+# 
+# 8. Baldi and Hornik, Neural networks and principal component analysis: Learning from examples without local minima, Neural Networks 2, 53 (1989)
+# ==============================================================================
+
+# ==============================================================================
+# ## Autoencoders: Overarching view, reminder from last week
+# 
+# Autoencoders are artificial neural networks capable of learning
+# efficient representations of the input data (these representations are called codings)  without
+# any supervision (i.e., the training set is unlabeled). These codings
+# typically have a much lower dimensionality than the input data, making
+# autoencoders useful for dimensionality reduction. 
+# 
+# Autoencoders learn to encode the
+# input data into a lower-dimensional representation, and then decode it
+# back to the original data. The goal of autoencoders is to minimize the
+# reconstruction error, which measures how well the output matches the
+# input. Autoencoders can be seen as a way of learning the latent
+# features or hidden structure of the data, and they can be used for
+# data compression, denoising, anomaly detection, and generative
+# modeling.
+# ==============================================================================
+
+# ==============================================================================
+# ## Powerful detectors
+# 
+# More importantly, autoencoders act as powerful feature detectors, and
+# they can be used for unsupervised pretraining of deep neural networks.
+# 
+# Lastly, they are capable of randomly generating new data that looks
+# very similar to the training data; this is called a generative
+# model. For example, you could train an autoencoder on pictures of
+# faces, and it would then be able to generate new faces.  Surprisingly,
+# autoencoders work by simply learning to copy their inputs to their
+# outputs. This may sound like a trivial task, but we will see that
+# constraining the network in various ways can make it rather
+# difficult. For example, you can limit the size of the internal
+# representation, or you can add noise to the inputs and train the
+# network to recover the original inputs. These constraints prevent the
+# autoencoder from trivially copying the inputs directly to the outputs,
+# which forces it to learn efficient ways of representing the data. In
+# short, the codings are byproducts of the autoencoder’s attempt to
+# learn the identity function under some constraints.
+# ==============================================================================
+
+# ==============================================================================
+# ## First introduction of AEs
+# 
+# Autoencoders were first introduced by Rumelhart, Hinton, and Williams
+# in 1986 with the goal of learning to reconstruct the input
+# observations with the lowest error possible.
+# 
+# Why would one want to learn to reconstruct the input observations? If
+# you have problems imagining what that means, think of having a dataset
+# made of images. An autoencoder would be an algorithm that can give as
+# output an image that is as similar as possible to the input one. You
+# may be confused, as there is no apparent reason of doing so. To better
+# understand why autoencoders are useful we need a more informative
+# (although not yet unambiguous) definition.
+# 
+# An autoencoder is a type of algorithm with the primary purpose of learning an "informative" representation of the data that can be used for different applications ([see Bank, D., Koenigstein, N., and Giryes, R., Autoencoders](https://arxiv.org/abs/2003.05991)) by learning to reconstruct a set of input observations well enough.
+# ==============================================================================
+
+# ==============================================================================
+# ## Autoencoder structure
+# 
+# Autoencoders are neural networks where the outputs are its own
+# inputs. They are split into an **encoder part**
+# which maps the input $\boldsymbol{x}$ via a function $f(\boldsymbol{x},\boldsymbol{W})$ (this
+# is the encoder part) to a **so-called code part** (or intermediate part)
+# with the result $\boldsymbol{h}$
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \boldsymbol{h} = f(\boldsymbol{x},\boldsymbol{W})),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# where $\boldsymbol{W}$ are the weights to be determined.  The **decoder** parts maps, via its own parameters (weights given by the matrix $\boldsymbol{V}$ and its own biases) to 
+# the final ouput
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \tilde{\boldsymbol{x}} = g(\boldsymbol{h},\boldsymbol{V})).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# The goal is to minimize the construction error.
+# ==============================================================================
+
+# ==============================================================================
+# ## Schematic image of an Autoencoder
+# 
+# <!-- dom:FIGURE: [figures/ae1.png, width=700 frac=1.0] -->
+# <!-- begin figure -->
+# 
+# <img src="figures/ae1.png" width="700"><p style="font-size: 0.9em"><i>Figure 1: </i></p>
+# <!-- end figure -->
+# ==============================================================================
+
+# ==============================================================================
+# ## More on the structure
+# 
+# In most typical architectures, the encoder and the decoder are neural networks
+# since they can be easily trained with existing software libraries such as TensorFlow or PyTorch with back propagation.
+# 
+# In general, the encoder can be written as a function $g$ that will depend on some parameters
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \mathbf{h}_{i} = g(\mathbf{x}_{i}),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# where $\mathbf{h}_{i}\in\mathbb{R}^{q}$  (the latent feature representation) is the output of the encoder block where we evaluate
+# it using the input $\mathbf{x}_{i}$.
+# ==============================================================================
+
+# ==============================================================================
+# ## Decoder part
+# 
+# Note that we have $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{q}$
+# The decoder and the output of the network $\tilde{\mathbf{x}}_{i}$ can be written then as a second generic function
+# of the latent features
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \tilde{\mathbf{x}}_{i} = f\left(\mathbf{h}_{i}\right) = f\left(g\left(\mathbf{x}_{i}\right)\right),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# where $\tilde{\mathbf{x}}_{i}\mathbf{\in }\mathbb{R}^{n}$.
+# 
+# Training an autoencoder simply means finding the functions $g(\cdot)$ and $f(\cdot)$
+# that satisfy
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \textrm{arg}\min_{f,g}<\left[\Delta (\mathbf{x}_{i}, f(g\left(\mathbf{x}_{i}\right))\right]>.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# ## Typical AEs
+# 
+# The standard setup is done via a standard feed forward neural network (FFNN), or what is called a Feed Forward Autoencoder.
+# 
+# A typical FFNN architecture has an odd number of layers and is symmetrical with respect to the middle layer.
+# 
+# Typically, the first layer has a number of neurons $n_{1} = n$ which equals the size of the input observation $\mathbf{x}_{\mathbf{i}}$.
+# 
+# As we move toward the center of the network, the number of neurons in each layer drops in some measure.
+# The middle layer usually has the smallest number of neurons.
+# The fact that the number of neurons in this layer is smaller than the size of the input, is often called the **bottleneck**.
+# ==============================================================================
+
+# ==============================================================================
+# ## Feed Forward Autoencoder
+# 
+# <!-- dom:FIGURE: [figures/ae2.png, width=700 frac=1.0] -->
+# <!-- begin figure -->
+# 
+# <img src="figures/ae2.png" width="700"><p style="font-size: 0.9em"><i>Figure 1: </i></p>
+# <!-- end figure -->
+# ==============================================================================
+
+# ==============================================================================
+# ## Mirroring
+# 
+# In almost all practical applications,
+# the layers after the middle one are a mirrored version of the layers before the middle one.
+# For example, an autoencoder with three layers could have the following numbers of neurons:
+# 
+# $n_{1} = 10$, $n_{2} = 5$ and then $n_{3} = n_{1} = 10$ where the input dimension is equal to ten.
+# 
+# All the layers up to and including the middle one, make what is called the encoder, and all the layers from and including
+# the middle one (up to the output) make what is called the decoder.
+# 
+# If the FFNN training is successful, the result will
+# be a good approximation of the input $\tilde{\mathbf{x}}_{i}\approx\mathbf{x}_{i}$.
+# 
+# What is essential to notice is that the decoder can reconstruct the
+# input by using only a much smaller number of features than the input
+# observations initially have.
+# ==============================================================================
+
+# ==============================================================================
+# ## Output of middle layer
+# 
+# The output of the middle layer
+# $\mathbf{h}_{\mathbf{i}}$ are also called a **learned representation** of the input observation $\mathbf{x}_{i}$.
+# 
+# The encoder can reduce the number of dimensions of the input
+# observation and create a learned representation
+# $\mathbf{h}_{\mathbf{i}}\mathbf{) }$ of the input that has a smaller
+# dimension $q<n$.
+# 
+# This learned representation is enough for the decoder to reconstruct
+# the input accurately (if the autoencoder training was successful as
+# intended).
+# ==============================================================================
+
+# ==============================================================================
+# ## Activation Function of the Output Layer
+# 
+# In autoencoders based on neural networks, the output layer's
+# activation function plays a particularly important role.  The most
+# used functions are ReLU and Sigmoid.
+# ==============================================================================
+
+# ==============================================================================
+# ## ReLU
+# 
+# The  ReLU activation function can assume all values in the range $\left[0,\infty\right]$. As a remainder, its formula is
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \textrm{ReLU}\left(x\right) = \max\left(0,x\right).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# This choice is good when the input observations $\mathbf{x}_{i}$ assume a wide range of positive values.
+# If the input $\mathbf{x}_{i}$ can assume negative values, the ReLU is, of course, a terrible choice, and the identity function is a much better choice. It is then common to replace to the ReLU with the so-called **Leaky ReLu** or just modified ReLU.
+# 
+# The ReLU activation function for the output layer is well suited for cases when the input observations $\mathbf{x}_{i}$ assume a wide range of positive real values.
+# ==============================================================================
+
+# ==============================================================================
+# ## Sigmoid
+# 
+# The sigmoid function $\sigma$ can assume all values in the range $[0,1]$,
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \sigma\left(x\right) =\frac{1}{1+e^{-x}}.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# This activation function can only be used if the input observations
+# $\mathbf{x}_{i}$ are all in the range $[0,1]$  or if you have
+# normalized them to be in that range. Consider as an example the MNIST
+# dataset. Each value of the input observation $\mathbf{x}_{i}$ (one
+# image) is the gray values of the pixels that can assume any value from
+# 0 to 255. Normalizing the data by dividing the pixel values by 255
+# would make each observation (each image) have only pixel values
+# between 0 and 1. In this case, the sigmoid would be a good choice for
+# the output layer's activation function.
+# ==============================================================================
+
+# ==============================================================================
+# ## Cost/Loss Function
+# 
+# If an autoencoder is trying to solve a regression problem, the most
+# common choice as a loss function is the Mean Square Error
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# L_{\textrm{MSE}} = \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# ## Reconstruction Error
+# 
+# The reconstruction error (RE) is a metric that gives you an indication of how good (or bad) the autoencoder was able to reconstruct
+# the input observation $\mathbf{x}_{i}$. The most typical RE used is the MSE
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \textrm{RE}\equiv \textrm{MSE} = \frac{1}{n}\sum_{i = 1}^{n}\left\vert\vert\mathbf{x}_{i}-\tilde{\mathbf{x}}_{i}\right\vert\vert^{2}_2.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# ## Classical PCA Theorem
+# 
+# We assume now that we have a design matrix $\boldsymbol{X}$ which has been
+# centered as discussed above. For the sake of simplicity we skip the
+# overline symbol. The matrix is defined in terms of the various column
+# vectors $[\boldsymbol{x}_0,\boldsymbol{x}_1,\dots, \boldsymbol{x}_{p-1}]$ each with dimension
+# $\boldsymbol{x}\in {\mathbb{R}}^{n}$.
+# 
+# The PCA theorem states that minimizing the above reconstruction error
+# corresponds to setting $\boldsymbol{W}=\boldsymbol{S}$, the orthogonal matrix which
+# diagonalizes the empirical covariance(correlation) matrix. The optimal
+# low-dimensional encoding of the data is then given by a set of vectors
+# $\boldsymbol{z}_i$ with at most $l$ vectors, with $l << p$, defined by the
+# orthogonal projection of the data onto the columns spanned by the
+# eigenvectors of the covariance(correlations matrix).
+# ==============================================================================
+
+# ==============================================================================
+# ## Why go beyond PCA?
+# 
+# PCA captures only linear subspaces.
+# But many datasets lie near nonlinear manifolds:
+# 
+# * images of a rotated object,
+# 
+# * molecular conformations,
+# 
+# * solutions of nonlinear PDEs,
+# 
+# * speech signals.
+# 
+# A nonlinear autoencoder replaces linear maps by compositions of affine maps and nonlinear activations.
+# ==============================================================================
+
+# ==============================================================================
+# ## Deep autoencoder architecture
+# 
+# A deep encoder may have the form
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# z = f_\theta(x)=\sigma_L(W_L \sigma_{L-1}(W_{L-1}\cdots \sigma_1(W_1 x+b_1)\cdots+b_{L-1})+b_L),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# and the decoder similarly
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \hat x = g_\phi(z).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# These nested nonlinear maps can approximate complicated non-linear structures.
+# ==============================================================================
+
+# ==============================================================================
+# ## Local linearization of nonlinear autoencoders
+# 
+# If $f$ and $g$ are differentiable, then around $x_0$,
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# f(x) \approx f(x_0)+J_f(x_0)(x-x_0),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# g(z) \approx g(z_0)+J_g(z_0)(z-z_0).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# Hence
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# g(f(x)) \approx g(f(x_0)) + J_g(z_0)J_f(x_0)(x-x_0).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# So the Jacobian product $J_g J_f$ acts as the local linear reconstruction operator.
+# ==============================================================================
+
+# ==============================================================================
+# ## Denoising autoencoders
+# 
+# In a denoising autoencoder, one corrupts the input:
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \tilde x = x + \varepsilon,
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# and trains the network to reconstruct $x$ from $\tilde x$:
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \min_{\theta,\phi}\frac{1}{N}\sum_{n=1}^N \|x_n-g_\phi(f_\theta(\tilde x_n))\|_2^2.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# This prevents the model from trivially copying the input and encourages extraction of robust structure.
+# ==============================================================================
+
+# ==============================================================================
+# ## Statistical meaning of denoising
+# 
+# For small Gaussian noise, the denoising map approximates a score-like direction.
+# In fact, denoising autoencoders are closely related to score matching:
+# the reconstruction vector
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# r(x)-x
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# encodes information about the gradient of the log-density of the data distribution.
+# Thus denoising autoencoders anticipate ideas that later appear in diffusion and score-based models.
+# ==============================================================================
+
+# ==============================================================================
+# ## Sparse autoencoders
+# 
+# Sparse autoencoders add a penalty encouraging latent activations to be mostly zero:
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \mathcal{L} =
+# \frac{1}{N}\sum_{n=1}^N \|x_n-\hat x_n\|_2^2
+# +\lambda \sum_{n=1}^N \|z_n\|_1.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# Interpretation:
+# 
+# * each input activates only a small subset of latent units,
+# 
+# * latent units can become feature detectors,
+# 
+# * the model resembles dictionary learning and sparse coding.
+# ==============================================================================
+
+# ==============================================================================
+# ## Contractive autoencoders
+# 
+# Contractive autoencoders penalize the sensitivity of the encoder:
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \mathcal{L} =
+# \frac{1}{N}\sum_{n=1}^N \|x_n-\hat x_n\|_2^2
+# +
+# \lambda \sum_{n=1}^N \|J_f(x_n)\|_F^2.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# This encourages the representation to be stable under small perturbations orthogonal to the data manifold.
+# Hence the encoder becomes approximately invariant to directions that do not matter.
+# ==============================================================================
+
+# ==============================================================================
+# ## Jacobian penalty and geometry
+# 
+# The Jacobian $J_f(x)$ measures how latent coordinates change with the input.
+# If
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \|J_f(x)\|_F^2
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# is small in directions orthogonal to the manifold, then the encoder contracts those directions.
+# So contractive autoencoders can be seen as learning tangent directions of the data manifold while suppressing normal directions.
+# ==============================================================================
+
+# ==============================================================================
+# ## Overcomplete autoencoders and regularization
+# 
+# An overcomplete autoencoder with $k\ge d$ can easily learn
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# g(f(x))=x.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# To prevent this, one must impose additional structure:
+# 
+# * sparsity,
+# 
+# * denoising corruption,
+# 
+# * contractive penalty,
+# 
+# * weight decay or architectural constraints.
+# 
+# Thus regularization can replace the role of a bottleneck.
+# ==============================================================================
+
+# ==============================================================================
+# ## Kernel PCA vs nonlinear autoencoders
+# 
+# Kernel PCA uses a fixed nonlinear feature map $\Phi(x)$ and performs PCA in feature space.
+# A nonlinear autoencoder instead learns both:
+# 
+# * the representation map,
+# 
+# * and the inverse reconstruction map.
+# 
+# Kernel PCA is nonparametric and spectral;
+# autoencoders are parametric and optimization-based.
+# ==============================================================================
+
+# ==============================================================================
+# ## Optimization landscape
+# 
+# Nonlinear autoencoder training is nonconvex because of:
+# 
+# * multilayer compositions,
+# 
+# * nonlinear activations,
+# 
+# * coupled encoder/decoder parameters.
+# 
+# Thus unlike linear autoencoders, we generally do not have closed-form global minimizers.
+# Instead, gradient-based optimization is used.
+# ==============================================================================
+
+# ==============================================================================
+# ## Generalization issues
+# 
+# A nonlinear autoencoder can memorize the training set if too expressive.
+# Hence we must ask:
+# 
+# * does it generalize to unseen data?
+# 
+# * is the latent structure stable?
+# 
+# * does reconstruction preserve physically meaningful variation?
+# 
+# These questions motivate probabilistic and information-theoretic viewpoints.
+# ==============================================================================
+
+# ==============================================================================
+# ## From deterministic to probabilistic models
+# 
+# Deterministic autoencoders produce a code
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# z=f_\theta(x)
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# and a reconstruction
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \hat x=g_\phi(z).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# A probabilistic autoencoder instead introduces a latent-variable model
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# p_\theta(x,z)=p_\theta(x\mid z)p(z),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# where $z$ is a random latent variable.
+# This turns representation learning into statistical inference.
+# ==============================================================================
+
+# ==============================================================================
+# ## Probabilistic PCA model
+# 
+# Probabilistic PCA (PPCA) assumes
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# z \sim \mathcal{N}(0,I_k),
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# and
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# x = W z + \mu + \epsilon,
+# \qquad
+# \epsilon \sim \mathcal{N}(0,\sigma^2 I_d).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# Hence
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# p(x\mid z)=\mathcal{N}(Wz+\mu,\sigma^2 I_d).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# This is a linear-Gaussian latent variable model.
+# ==============================================================================
+
+# ==============================================================================
+# ## Marginal distribution in PPCA
+# 
+# Integrating out $z$, one gets
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# x \sim \mathcal{N}(\mu,\, WW^T+\sigma^2 I_d).
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# Thus PPCA models the covariance by a low-rank term plus isotropic noise:
+# ==============================================================================
+
+# ==============================================================================
+# $$
+# \Sigma = WW^T + \sigma^2 I_d.
+# $$
+# ==============================================================================
+
+# ==============================================================================
+# This is the probabilistic analogue of low-dimensional linear structure.
+# ==============================================================================
+
+# ==============================================================================
+# ## PPCA and classical PCA
+# 
+# As $\sigma^2 \to 0$, the PPCA model approaches a deterministic projection model.
+# Moreover, maximum-likelihood estimation in PPCA yields a loading matrix whose column space is the PCA subspace.
+# So PPCA recovers the same principal directions as classical PCA, but with a probabilistic interpretation.
+# 
+# In our discussions of generative models, we will dive deeper into probabilistic approaches.
+# ==============================================================================
+
+# ==============================================================================
+# ## Codes for Autoencoders: Linear Autoencoders
+# 
+# The examples here 
+# can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
+# ==============================================================================
+
+# --- Cell 92 ------------------------------------------------------------
+#%matplotlib inline
+
+import sys
+assert sys.version_info >= (3, 5)
+
+# Is this notebook running on Colab or Kaggle?
+IS_COLAB = "google.colab" in sys.modules
+IS_KAGGLE = "kaggle_secrets" in sys.modules
+
+# Scikit-Learn >=0.20 is required
+import sklearn
+assert sklearn.__version__ >= "0.20"
+
+# TensorFlow >= 2.0 is required
+import tensorflow as tf
+from tensorflow import keras
+assert tf.__version__ >= "2.0"
+
+if not tf.config.list_physical_devices('GPU'):
+    print("No GPU was detected. LSTMs and CNNs can be very slow without a GPU.")
+    if IS_COLAB:
+        print("Go to Runtime > Change runtime and select a GPU hardware accelerator.")
+    if IS_KAGGLE:
+        print("Go to Settings > Accelerator and select GPU.")
+
+# Common imports
+import numpy as np
+import os
+
+# to make this notebook's output stable across runs
+np.random.seed(42)
+tf.random.set_seed(42)
+
+# To plot pretty figures
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+mpl.rc('axes', labelsize=14)
+mpl.rc('xtick', labelsize=12)
+mpl.rc('ytick', labelsize=12)
+
+# Where to save the figures
+PROJECT_ROOT_DIR = "."
+CHAPTER_ID = "autoencoders"
+IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
+os.makedirs(IMAGES_PATH, exist_ok=True)
+
+def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
+    print("Saving figure", fig_id)
+    if tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, format=fig_extension, dpi=resolution)
+
+def plot_image(image):
+    plt.imshow(image, cmap="binary")
+    plt.axis("off")
+
+
+np.random.seed(4)
+
+def generate_3d_data(m, w1=0.1, w2=0.3, noise=0.1):
+    angles = np.random.rand(m) * 3 * np.pi / 2 - 0.5
+    data = np.empty((m, 3))
+    data[:, 0] = np.cos(angles) + np.sin(angles)/2 + noise * np.random.randn(m) / 2
+    data[:, 1] = np.sin(angles) * 0.7 + noise * np.random.randn(m) / 2
+    data[:, 2] = data[:, 0] * w1 + data[:, 1] * w2 + noise * np.random.randn(m)
+    return data
+
+X_train = generate_3d_data(60)
+X_train = X_train - X_train.mean(axis=0, keepdims=0)
+
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+encoder = keras.models.Sequential([keras.layers.Dense(2, input_shape=[3])])
+decoder = keras.models.Sequential([keras.layers.Dense(3, input_shape=[2])])
+autoencoder = keras.models.Sequential([encoder, decoder])
+
+autoencoder.compile(loss="mse", optimizer=keras.optimizers.SGD(learning_rate=1.5))
+
+codings = encoder.predict(X_train)
+fig = plt.figure(figsize=(4,3))
+plt.plot(codings[:,0], codings[:, 1], "b.")
+plt.xlabel("$z_1$", fontsize=18)
+plt.ylabel("$z_2$", fontsize=18, rotation=0)
+plt.grid(True)
+save_fig("linear_autoencoder_pca_plot")
+plt.show()
+
+# ==============================================================================
+# ## More advanced features, stacked AEs
+# ==============================================================================
+
+# --- Cell 94 ------------------------------------------------------------
+# You can select the so-called fashion data as well, here we just use the MNIST standard set
+#(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
+X_train_full = X_train_full.astype(np.float32) / 255
+X_test = X_test.astype(np.float32) / 255
+X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
+y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
+
+# ==============================================================================
+# We can now train all layers at once by building a stacked AE with 3 hidden layers and 1 output layer (i.e., 2 stacked Autoencoders).
+# ==============================================================================
+
+# --- Cell 96 ------------------------------------------------------------
+def rounded_accuracy(y_true, y_pred):
+    return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
+tf.random.set_seed(42)
+np.random.seed(42)
+
+stacked_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu"),
+])
+stacked_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+stacked_ae = keras.models.Sequential([stacked_encoder, stacked_decoder])
+stacked_ae.compile(loss="binary_crossentropy",
+                   optimizer=keras.optimizers.SGD(learning_rate=1.5), metrics=[rounded_accuracy])
+history = stacked_ae.fit(X_train, X_train, epochs=20,
+                         validation_data=(X_valid, X_valid))
+
+# ==============================================================================
+# This function processes a few test images through the autoencoder and
+# displays the original images and their reconstructions.
+# ==============================================================================
+
+# --- Cell 98 ------------------------------------------------------------
+def show_reconstructions(model, images=X_valid, n_images=5):
+    reconstructions = model.predict(images[:n_images])
+    fig = plt.figure(figsize=(n_images * 1.5, 3))
+    for image_index in range(n_images):
+        plt.subplot(2, n_images, 1 + image_index)
+        plot_image(images[image_index])
+        plt.subplot(2, n_images, 1 + n_images + image_index)
+        plot_image(reconstructions[image_index])
+show_reconstructions(stacked_ae)
+save_fig("reconstruction_plot")
+
+# ==============================================================================
+# Then visualize
+# ==============================================================================
+
+# --- Cell 100 ------------------------------------------------------------
+np.random.seed(42)
+from sklearn.manifold import TSNE
+X_valid_compressed = stacked_encoder.predict(X_valid)
+tsne = TSNE()
+X_valid_2D = tsne.fit_transform(X_valid_compressed)
+X_valid_2D = (X_valid_2D - X_valid_2D.min()) / (X_valid_2D.max() - X_valid_2D.min())
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap="tab10")
+plt.axis("off")
+plt.show()
+
+# ==============================================================================
+# And visualize in a nicer way
+# ==============================================================================
+
+# --- Cell 102 ------------------------------------------------------------
+# adapted from https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html
+plt.figure(figsize=(10, 8))
+cmap = plt.cm.tab10
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap=cmap)
+image_positions = np.array([[1., 1.]])
+for index, position in enumerate(X_valid_2D):
+    dist = np.sum((position - image_positions) ** 2, axis=1)
+    if np.min(dist) > 0.02: # if far enough from other images
+        image_positions = np.r_[image_positions, [position]]
+        imagebox = mpl.offsetbox.AnnotationBbox(
+            mpl.offsetbox.OffsetImage(X_valid[index], cmap="binary"),
+            position, bboxprops={"edgecolor": cmap(y_valid[index]), "lw": 2})
+        plt.gca().add_artist(imagebox)
+plt.axis("off")
+save_fig("fashion_mnist_visualization_plot")
+plt.show()
+
+# ==============================================================================
+# ## Using Convolutional Layers Instead of Dense Layers
+# ==============================================================================
+
+# --- Cell 104 ------------------------------------------------------------
+tf.random.set_seed(42)
+np.random.seed(42)
+
+# Symmetric convolutional autoencoder for 28x28 MNIST.
+#
+# Encoder: 3 x Conv2D(k=3, stride=2, padding=SAME) + SELU
+#   (28,28,1) -> (14,14,16) -> (7,7,32) -> (4,4,64)
+#
+# Decoder: exact mirror — 3 x Conv2DTranspose(k=3, stride=2, padding=SAME) + SELU
+#   (4,4,64) -> (7,7,32) -> (14,14,16) -> (28,28,1)  [Sigmoid on last layer]
+# A Lambda layer crops the output to exactly 28x28 in case of half-pixel
+# rounding from the transpose convolutions.
+#
+# Original used MaxPool + mismatched VALID/SAME padding in the decoder, which
+# broke symmetry.  All layers now use identical kernel=3, stride=2, SAME.
+
+conv_encoder = keras.models.Sequential([
+    keras.layers.Reshape([28, 28, 1], input_shape=[28, 28]),
+    keras.layers.Conv2D(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2D(32, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2D(64, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+], name="conv_encoder")
+
+conv_decoder = keras.models.Sequential([
+    keras.layers.Conv2DTranspose(32, kernel_size=3, strides=2, padding="SAME",
+                                  activation="selu", input_shape=[4, 4, 64]),
+    keras.layers.Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME",
+                                  activation="selu"),
+    keras.layers.Conv2DTranspose(1,  kernel_size=3, strides=2, padding="SAME",
+                                  activation="sigmoid"),
+    keras.layers.Lambda(lambda x: x[:, :28, :28, :]),  # crop to exact 28x28
+    keras.layers.Reshape([28, 28]),
+], name="conv_decoder")
+
+conv_ae = keras.models.Sequential([conv_encoder, conv_decoder], name="conv_ae")
+conv_ae.compile(loss="binary_crossentropy",
+                optimizer=keras.optimizers.Adam(learning_rate=1e-3),
+                metrics=[rounded_accuracy])
+history = conv_ae.fit(X_train, X_train, epochs=10,
+                      validation_data=(X_valid, X_valid))
+
+# --- Cell 105 ------------------------------------------------------------
+conv_encoder.summary()
+conv_decoder.summary()
+
+# --- Cell 106 ------------------------------------------------------------
+show_reconstructions(conv_ae)
+plt.show()
+
+# ==============================================================================
+# ## Recurrent Autoencoders
+# ==============================================================================
+
+# --- Cell 108 ------------------------------------------------------------
+# Symmetric recurrent autoencoder for MNIST rows (28 time-steps of 28 features).
+#
+# Encoder: LSTM(100, return_seq=True) -> LSTM(30)
+#          (sequence of 28 rows -> 30-dim code)
+#
+# Decoder: exact mirror in reverse order
+#   RepeatVector(28)                        broadcast code to 28 steps
+#   LSTM(30,  return_seq=True)              mirror of encoder LSTM(30) [1]
+#   LSTM(100, return_seq=True)              mirror of encoder LSTM(100)
+#   TimeDistributed(Dense(28, sigmoid))     reconstruct each row
+#
+# [1] The innermost decoder LSTM uses 30 units (matching the bottleneck size)
+#     before expanding back to 100 units, giving a true structural mirror.
+
+recurrent_encoder = keras.models.Sequential([
+    keras.layers.LSTM(100, return_sequences=True, input_shape=[28, 28]),
+    keras.layers.LSTM(30),
+], name="recurrent_encoder")
+
+recurrent_decoder = keras.models.Sequential([
+    keras.layers.RepeatVector(28, input_shape=[30]),
+    keras.layers.LSTM(30,  return_sequences=True),   # mirror of inner encoder LSTM
+    keras.layers.LSTM(100, return_sequences=True),   # mirror of outer encoder LSTM
+    keras.layers.TimeDistributed(keras.layers.Dense(28, activation="sigmoid")),
+], name="recurrent_decoder")
+
+recurrent_ae = keras.models.Sequential([recurrent_encoder, recurrent_decoder],
+                                        name="recurrent_ae")
+recurrent_ae.compile(loss="binary_crossentropy",
+                     optimizer=keras.optimizers.Adam(1e-3),
+                     metrics=[rounded_accuracy])
+history = recurrent_ae.fit(X_train, X_train, epochs=10,
+                            validation_data=(X_valid, X_valid))
+
+# --- Cell 109 ------------------------------------------------------------
+show_reconstructions(recurrent_ae)
+plt.show()
+
+# ==============================================================================
+# ## Stacked denoising Autoencoder with Gaussian noise
+# ==============================================================================
+
+# --- Cell 111 ------------------------------------------------------------
+tf.random.set_seed(42)
+np.random.seed(42)
+
+denoising_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.GaussianNoise(0.2),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+denoising_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+denoising_ae = keras.models.Sequential([denoising_encoder, denoising_decoder])
+denoising_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                     metrics=[rounded_accuracy])
+history = denoising_ae.fit(X_train, X_train, epochs=10,
+                           validation_data=(X_valid, X_valid))
+
+# --- Cell 112 ------------------------------------------------------------
+tf.random.set_seed(42)
+np.random.seed(42)
+
+noise = keras.layers.GaussianNoise(0.2)
+show_reconstructions(denoising_ae, noise(X_valid, training=True))
+plt.show()
+
+# ==============================================================================
+# And using dropout
+# ==============================================================================
+
+# --- Cell 114 ------------------------------------------------------------
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+dropout_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+dropout_ae = keras.models.Sequential([dropout_encoder, dropout_decoder])
+dropout_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                   metrics=[rounded_accuracy])
+history = dropout_ae.fit(X_train, X_train, epochs=10,
+                         validation_data=(X_valid, X_valid))
+
+# --- Cell 115 ------------------------------------------------------------
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout = keras.layers.Dropout(0.5)
+show_reconstructions(dropout_ae, dropout(X_valid, training=True))
+save_fig("dropout_denoising_plot", tight_layout=False)
+
+# ==============================================================================
+# ## PyTorch example
+# We will continue with the MNIST database, which has $60000$ training examples and a test set of 10000 handwritten numbers. The images have
+# only one color channel and have a size of $28\times 28$ pixels.
+# We start by uploading the data set.
+# ==============================================================================
+
+# --- Cell 117 ------------------------------------------------------------
+# import the Torch packages
+# transforms are used to preprocess the images, e.g. crop, rotate, normalize, etc
+import torch
+from torchvision import datasets,transforms
+
+# specify the data path in which you would like to store the downloaded files
+# ToTensor() here is used to convert data type to tensor
+
+train_dataset = datasets.MNIST(root='./mnist_data/', train=True, transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.MNIST(root='./mnist_data/', train=False, transform=transforms.ToTensor(), download=True)
+print(train_dataset)
+batchSize=128
+
+#only after packed in DataLoader, can we feed the data into the neural network iteratively
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batchSize, shuffle=True)
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batchSize, shuffle=False)
+
+# ==============================================================================
+# We visualize the images here using the $imshow$ function  function and the $make\_grid$ function from PyTorch to arrange and display them.
+# ==============================================================================
+
+# --- Cell 119 ------------------------------------------------------------
+# package we used to manipulate matrix
+import numpy as np
+# package we used for image processing
+from matplotlib import pyplot as plt
+from torchvision.utils import make_grid
+
+def imshow(img):
+    npimg = img.numpy()
+    #transpose: change array axis to correspond to the plt.imshow() function     
+    plt.imshow(np.transpose(npimg, (1, 2, 0))) 
+    plt.show()
+
+# load the first 16 training samples from next iteration
+# [:16,:,:,:] for the 4 dimension of examples, first dimension take first 16, other dimension take all data
+# arrange the image in grid
+examples, _ = next(iter(train_loader))
+example_show=make_grid(examples[:16,:,:,:], 4)
+
+# then display them
+imshow(example_show)
+
+# ==============================================================================
+# Our autoencoder consists of two parts, see also the TensorFlow example
+# above. The encoder and decoder parts are represented by two fully
+# connected feed forward neural networks where we use the standard
+# Sigmoid function.  In the encoder part we reduce the dimensionality of
+# the image from $28\times 28=784$ pixels to first $16\times 16=256$
+# pixels and then to 128 pixels. The 128 pixel representation is then
+# used to define the representation of the input and the input to the
+# decoder part.  The latter attempts to reconstruct the images.
+# ==============================================================================
+
+# --- Cell 121 ------------------------------------------------------------
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+num_input    = 784   # 28*28
+num_hidden_1 = 256   # first hidden layer
+num_hidden_2 = 128   # bottleneck
+
+# Symmetric autoencoder:
+#   Encoder:  784 -[ReLU+BN]-> 256 -[ReLU+BN]-> 128
+#   Decoder:  128 -[ReLU+BN]-> 256 -[Sigmoid]->  784
+#
+# Changes vs original:
+# 1. Hidden layers use ReLU instead of Sigmoid: avoids vanishing gradients
+#    and matches standard practice for intermediate layers.
+# 2. BatchNorm1d after each Linear stabilises and accelerates training.
+# 3. Encoder and decoder are exposed as nn.Sequential attributes so that
+#    model.encoder(x) and model.decoder(z) can be called directly for
+#    latent-space analysis (same API as the original, but now a Sequential).
+# 4. Decoder is an exact structural mirror: same layer widths in reverse,
+#    same activations at each depth (ReLU for hidden, Sigmoid for output).
+
+class Autoencoder(nn.Module):
+    def __init__(self, x_dim, h_dim1, h_dim2):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(x_dim,  h_dim1), nn.BatchNorm1d(h_dim1), nn.ReLU(),
+            nn.Linear(h_dim1, h_dim2), nn.BatchNorm1d(h_dim2), nn.ReLU(),
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(h_dim2, h_dim1), nn.BatchNorm1d(h_dim1), nn.ReLU(),
+            nn.Linear(h_dim1, x_dim),  nn.Sigmoid(),
+        )
+    def forward(self, x):
+        return self.decoder(self.encoder(x))
+
+model = Autoencoder(num_input, num_hidden_1, num_hidden_2)
+print(model)
+print(f"\nEncoder params: {sum(p.numel() for p in model.encoder.parameters()):,}")
+print(f"Decoder params: {sum(p.numel() for p in model.decoder.parameters()):,}")
+
+# ==============================================================================
+# We define here the cost/loss function and the optimizer we employ (Adam here).
+# ==============================================================================
+
+# --- Cell 123 ------------------------------------------------------------
+# Optimised training loop.
+# Changes vs original:
+# 1. zero_grad(set_to_none=True) skips the memset() call per parameter tensor.
+# 2. A validation pass runs every epoch so convergence can be monitored.
+# 3. Report includes both train and validation loss every 10 epochs.
+
+optimizer     = optim.Adam(model.parameters(), lr=1e-3)
+loss_function = nn.MSELoss()
+num_epochs    = 100
+
+val_loader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
+
+print("==== Training start ====")
+for epoch in range(1, num_epochs + 1):
+    model.train()
+    train_loss = 0.0
+    for data, _ in train_loader:
+        inputs = data.view(-1, 784)
+        recon  = model(inputs)
+        loss   = loss_function(recon, inputs)
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        optimizer.step()
+        train_loss += loss.item()
+    train_loss /= len(train_loader)
+
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for data, _ in val_loader:
+            inputs   = data.view(-1, 784)
+            val_loss += loss_function(model(inputs), inputs).item()
+    val_loss /= len(val_loader)
+
+    if epoch % 10 == 0:
+        print(f"Epoch {epoch:3d}/{num_epochs}  "
+              f"train: {train_loss:.6f}  val: {val_loss:.6f}")
+print("==== Training finish ====")
+
+# ==============================================================================
+# As we have trained the network, we will now reconstruct various test samples to see if the model can generalize to data which
+# were not included in the training set.
+# ==============================================================================
+
+# --- Cell 125 ------------------------------------------------------------
+# load 16 images from testset
+inputs, _ = next(iter(test_loader))
+inputs_example = make_grid(inputs[:16,:,:,:],4)
+imshow(inputs_example)
+
+#convert from image to tensor
+#inputs=inputs.cuda()
+inputs=torch.reshape(inputs,(-1,784))
+
+# get the outputs from the trained model
+outputs=model(inputs)
+
+#convert from tensor to image
+outputs=torch.reshape(outputs,(-1,1,28,28))
+outputs=outputs.detach().cpu()
+
+#show the output images
+outputs_example = make_grid(outputs[:16,:,:,:],4)
+imshow(outputs_example)
+
+# ==============================================================================
+# After training the auto-encoder, we can now use the model to reconstruct some images.
+# In order to reconstruct different training images, the model
+# has learned to recognize how the image looks like and describe it in
+# the 128-dimensional  latent space. In other words, the visual information of
+# images is compressed and encoded in the 128-dimensional representations. As we
+# assume that samples from the same categories should be more visually
+# similar than those from different classes, the representations can
+# then be used for image recognition, i.e., handwritten digit images
+# recognition in our case.
+# 
+# One simple way to recognize images is to randomly select ten training
+# samples from each class and annotate them with the corresponding label.
+# Then given the
+# test data, we can predict which classes they belong to by finding the
+# most similar labelled training samples to them.
+# ==============================================================================
+
+# --- Cell 127 ------------------------------------------------------------
+# get 100 image-label pairs from training set
+x_train, y_train = next(iter(train_loader))
+
+# 10 classes, 10 samples per class, 100 in total
+candidates = np.random.choice(batchSize, 10*10)
+
+# randomly select 100 samples
+x_train = x_train[candidates]
+y_train = y_train[candidates]
+
+# display the selected samples and print their labels
+
+imshow(make_grid(x_train[:100,:,:,:],10))
+print(y_train.reshape(10, 10))
+
+# get 100 image-label pairs from test set
+x_test, y_test = next(iter(train_loader))
+candidates_test = np.random.choice(batchSize, 10*10)
+
+x_test = x_test[candidates_test]
+y_test = y_test[candidates_test]
+
+# display the selected samples and print their labels
+imshow(make_grid(x_test[:100,:,:,:],10))
+
+print(y_test.reshape(10, 10))
+
+# --- Cell 128 ------------------------------------------------------------
+# compute the representations of training and test samples
+#h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))
+#h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))
+h_train=model.encoder(torch.reshape(x_train,(-1,784)))
+h_test=model.encoder(torch.reshape(x_test,(-1,784)))
+
+# find the nearest training samples to each test instance, in terms of MSE
+MSEs = np.mean(np.power(np.expand_dims(h_test.detach().cpu(), axis=1) - np.expand_dims(h_train.detach().cpu(), axis=0), 2), axis=2)
+neighbours = MSEs.argmin(axis=1)
+predicts = y_train[neighbours]
+
+# print(np.stack([y_test, predicts], axis=1))
+print('Recognition accuracy according to the learned representation is %.1f%%' % (100 * (y_test == predicts).numpy().astype(np.float32).mean()))
+
+# ==============================================================================
+# ## And the differential equation code discussed in connection with RNNs
+# Here we include the usage of AEs to solve a differential equation. The code here is an extension of the one from week 6 on recurrent neural networks.
+# ==============================================================================
+
+# --- Cell 130 ------------------------------------------------------------
+#!/usr/bin/env python3
+"""
+Autoencoder for Learning ODE Solutions
+Using PyTorch and RK4 Solver Output
+
+Models:
+  - ConvAutoencoder (CAE)  : symmetric 1-D convolutional AE
+  - VariationalAutoencoder  : symmetric convolutional VAE (beta-VAE)
+  - LatentPredictor (MLP)  : next-step prediction in the CAE latent space
+
+ODE: d^2x/dt^2 + 2*gamma*dx/dt + x = F*cos(Omega*t)  (driven damped oscillator)
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
+from numpy.lib.stride_tricks import sliding_window_view
+import math, time, os, multiprocessing
+from math import ceil
+
+np.random.seed(42)
+torch.manual_seed(42)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+_START_METHOD = multiprocessing.get_start_method(allow_none=True) or "spawn"
+_NUM_WORKERS  = min(4, os.cpu_count() or 1) if _START_METHOD == "fork" else 0
+_PIN_MEMORY   = device.type == "cuda"
+USE_COMPILE   = False   # set True on Linux for torch.compile speedup
+
+print(f"Device        : {device}")
+print(f"num_workers   : {_NUM_WORKERS}  pin_memory: {_PIN_MEMORY}")
+
+# ─── RK4 solver ──────────────────────────────────────────────────────────────
+
+def RK4_solver(x0, v0, DeltaT, tfinal, gamma, Omegatilde, Ftilde):
+    """RK4 for the driven damped oscillator. cos() calls pre-vectorised."""
+    n        = ceil(tfinal / DeltaT)
+    t        = np.arange(n, dtype=np.float64) * DeltaT
+    cos_full = Ftilde * np.cos(Omegatilde * t)
+    cos_half = Ftilde * np.cos(Omegatilde * (t + 0.5 * DeltaT))
+    x = np.empty(n); v = np.empty(n)
+    x[0] = x0;  v[0] = v0
+
+    def F(vv, xx, c): return -2*gamma*vv - xx + c
+
+    for i in range(n - 1):
+        xi, vi, f1, f24, f4 = x[i], v[i], cos_full[i], cos_half[i], cos_full[i+1]
+        k1x = DeltaT*vi;             k1v = DeltaT*F(vi,           xi,           f1)
+        k2x = DeltaT*(vi+0.5*k1v);  k2v = DeltaT*F(vi+0.5*k1v,  xi+0.5*k1x,  f24)
+        k3x = DeltaT*(vi+0.5*k2v);  k3v = DeltaT*F(vi+0.5*k2v,  xi+0.5*k2x,  f24)
+        k4x = DeltaT*(vi+k3v);       k4v = DeltaT*F(vi+k3v,       xi+k3x,      f4)
+        x[i+1] = xi + (k1x+2*k2x+2*k3x+k4x)/6
+        v[i+1] = vi + (k1v+2*k2v+2*k3v+k4v)/6
+    return t, x, v
+
+# ─── ODE parameters & solve ──────────────────────────────────────────────────
+gamma, Omegatilde, Ftilde = 0.2, 0.5, 1.0
+x0, v0, DeltaT, tfinal    = 1.0, 0.0, 0.001, 20.0
+
+print("\n" + "="*60)
+print("SOLVING ODE: DRIVEN DAMPED HARMONIC OSCILLATOR")
+print("="*60)
+t_ode, x_ode, v_ode = RK4_solver(x0, v0, DeltaT, tfinal,
+                                   gamma, Omegatilde, Ftilde)
+print(f"  Time points : {len(t_ode)}")
+print(f"  x range     : [{x_ode.min():.4f}, {x_ode.max():.4f}]")
+
+# ─── Sequence dataset ────────────────────────────────────────────────────────
+seq_length  = 100
+pred_length = 1
+
+windows     = sliding_window_view(x_ode, seq_length)
+X           = windows[:-pred_length].copy()
+y_seq       = x_ode[seq_length : seq_length + len(X)].reshape(-1, 1)
+
+train_size  = int(0.75 * len(X))
+X_train, X_test     = X[:train_size],     X[train_size:]
+y_train, y_test     = y_seq[:train_size], y_seq[train_size:]
+
+print(f"\nSequences   : {len(X)}  (train {len(X_train)}, test {len(X_test)})")
+print(f"Window shape: {X.shape}")
+
+# ─── AE-specific dataset & dataloaders ───────────────────────────────────────
+
+class AEDataset(Dataset):
+    def __init__(self, X):
+        self.X = torch.FloatTensor(X)
+    def __len__(self): return len(self.X)
+    def __getitem__(self, i): return self.X[i]
+
+ae_bs = 128
+ae_train_loader = DataLoader(AEDataset(X_train), batch_size=ae_bs,
+                             shuffle=True,  num_workers=_NUM_WORKERS,
+                             pin_memory=_PIN_MEMORY)
+ae_test_loader  = DataLoader(AEDataset(X_test),  batch_size=ae_bs,
+                             shuffle=False, num_workers=_NUM_WORKERS,
+                             pin_memory=_PIN_MEMORY)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AUTOENCODER MODELS
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# All three models share the same principle: encoder and decoder are
+# **exact structural mirrors** of each other.
+#
+#  ConvAutoencoder
+#  ───────────────
+#  Encoder: (B,L) ──unsqueeze──> (B,1,L)
+#           Conv1d( 1→16, k=5, s=2, p=2) + ReLU   L → L/2
+#           Conv1d(16→32, k=5, s=2, p=2) + ReLU   L/2 → L/4
+#           Conv1d(32→64, k=3, s=2, p=1) + ReLU   L/4 → L/8
+#           Flatten + Linear(64*L/8 → latent)
+#  Decoder: Linear(latent → 64*L/8) + Reshape(B,64,L/8)
+#           ConvTranspose1d(64→32, k=3, s=2, p=1, op=1) + ReLU
+#           ConvTranspose1d(32→16, k=5, s=2, p=2, op=1) + ReLU
+#           ConvTranspose1d(16→ 1, k=5, s=2, p=2, op=1)
+#           Trim to exact seq_length
+#
+#  VariationalAutoencoder
+#  ──────────────────────
+#  Same conv stacks; encoder outputs (mu, log_var); reparametrisation trick;
+#  loss = MSE_reconstruction + beta * KL(N(mu,sigma) || N(0,I))
+#
+#  LatentPredictor
+#  ───────────────
+#  MLP:  latent → 128 → 128 → latent  (ReLU activations)
+#  Trained on consecutive (z_t, z_{t+1}) pairs from the CAE encoder.
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ConvAutoencoder(nn.Module):
+    """
+    Symmetric 1-D convolutional autoencoder.
+
+    Encoder and decoder are exact mirrors:
+      each Conv1d(Cin→Cout, k, s, p) in the encoder is matched by a
+      ConvTranspose1d(Cout→Cin, k, s, p, output_padding) in the decoder
+      with the same kernel, stride, and padding so that spatial dimensions
+      are exactly restored.
+    """
+    def __init__(self, seq_length=100, latent_dim=16):
+        super().__init__()
+        self.seq_length = seq_length
+        self.latent_dim = latent_dim
+        self.seq_enc    = math.ceil(math.ceil(math.ceil(seq_length/2)/2)/2)
+
+        # ── Encoder (3 strided Conv1d layers) ──────────────────────────────
+        self.encoder_conv = nn.Sequential(
+            nn.Conv1d( 1, 16, kernel_size=5, stride=2, padding=2), nn.ReLU(),
+            nn.Conv1d(16, 32, kernel_size=5, stride=2, padding=2), nn.ReLU(),
+            nn.Conv1d(32, 64, kernel_size=3, stride=2, padding=1), nn.ReLU(),
+        )
+        self.encoder_fc = nn.Linear(64 * self.seq_enc, latent_dim)
+
+        # ── Decoder (exact mirror: 3 ConvTranspose1d layers) ───────────────
+        self.decoder_fc = nn.Linear(latent_dim, 64 * self.seq_enc)
+        self.decoder_conv = nn.Sequential(
+            nn.ConvTranspose1d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1), nn.ReLU(),
+            nn.ConvTranspose1d(32, 16, kernel_size=5, stride=2, padding=2, output_padding=1), nn.ReLU(),
+            nn.ConvTranspose1d(16,  1, kernel_size=5, stride=2, padding=2, output_padding=1),
+        )
+
+    def encode(self, x):
+        z = self.encoder_conv(x.unsqueeze(1))   # (B,1,L) -> (B,64,L/8)
+        return self.encoder_fc(z.flatten(1))     # (B, latent)
+
+    def decode(self, z):
+        x = self.decoder_fc(z).view(-1, 64, self.seq_enc)
+        x = self.decoder_conv(x)                 # (B,1,L_approx)
+        return x[:, 0, :self.seq_length]         # trim to exact L
+
+    def forward(self, x):
+        return self.decode(self.encode(x)), self.encode(x)
+
+
+class VariationalAutoencoder(nn.Module):
+    """
+    Symmetric convolutional VAE.
+
+    Encoder outputs (mu, log_var); decoder mirrors the encoder exactly.
+    Loss = MSE_recon + beta * KL(N(mu,sigma) || N(0,I))
+    """
+    def __init__(self, seq_length=100, latent_dim=16, beta=0.5):
+        super().__init__()
+        self.seq_length = seq_length
+        self.latent_dim = latent_dim
+        self.beta       = beta
+        self.seq_enc    = math.ceil(math.ceil(math.ceil(seq_length/2)/2)/2)
+        flat            = 64 * self.seq_enc
+
+        # ── Encoder ────────────────────────────────────────────────────────
+        self.encoder_conv = nn.Sequential(
+            nn.Conv1d( 1, 16, kernel_size=5, stride=2, padding=2), nn.ReLU(),
+            nn.Conv1d(16, 32, kernel_size=5, stride=2, padding=2), nn.ReLU(),
+            nn.Conv1d(32, 64, kernel_size=3, stride=2, padding=1), nn.ReLU(),
+        )
+        self.fc_mu      = nn.Linear(flat, latent_dim)
+        self.fc_log_var = nn.Linear(flat, latent_dim)
+
+        # ── Decoder (mirror) ───────────────────────────────────────────────
+        self.decoder_fc = nn.Linear(latent_dim, flat)
+        self.decoder_conv = nn.Sequential(
+            nn.ConvTranspose1d(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1), nn.ReLU(),
+            nn.ConvTranspose1d(32, 16, kernel_size=5, stride=2, padding=2, output_padding=1), nn.ReLU(),
+            nn.ConvTranspose1d(16,  1, kernel_size=5, stride=2, padding=2, output_padding=1),
+        )
+
+    def encode(self, x):
+        h = self.encoder_conv(x.unsqueeze(1)).flatten(1)
+        return self.fc_mu(h), self.fc_log_var(h)
+
+    def reparametrise(self, mu, lv):
+        return mu + torch.randn_like(mu) * (0.5*lv).exp() if self.training else mu
+
+    def decode(self, z):
+        x = self.decoder_fc(z).view(-1, 64, self.seq_enc)
+        return self.decoder_conv(x)[:, 0, :self.seq_length]
+
+    def forward(self, x):
+        mu, lv = self.encode(x)
+        return self.decode(self.reparametrise(mu, lv)), mu, lv
+
+    def vae_loss(self, recon, x, mu, lv):
+        r = nn.functional.mse_loss(recon, x, reduction="mean")
+        k = -0.5 * torch.mean(1 + lv - mu.pow(2) - lv.exp())
+        return r + self.beta*k, r, k
+
+
+class LatentPredictor(nn.Module):
+    """
+    MLP next-step predictor in the CAE latent space.
+    Symmetric bottleneck: latent -> 128 -> 128 -> latent
+    """
+    def __init__(self, latent_dim=16):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(latent_dim, 128), nn.ReLU(),
+            nn.Linear(128, 128),        nn.ReLU(),
+            nn.Linear(128, latent_dim),
+        )
+    def forward(self, z): return self.net(z)
+
+# ─── compile helper ──────────────────────────────────────────────────────────
+
+def maybe_compile(m):
+    if USE_COMPILE and hasattr(torch, "compile"):
+        try:   return torch.compile(m)
+        except Exception: pass
+    return m
+
+# ─── training helpers ────────────────────────────────────────────────────────
+
+def train_cae_epoch(model, loader, opt):
+    model.train(); total = 0.0; crit = nn.MSELoss()
+    for x in loader:
+        x = x.to(device, non_blocking=True)
+        r, _ = model(x)
+        loss  = crit(r, x)
+        opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+        total += loss.item()
+    return total / len(loader)
+
+def eval_cae_epoch(model, loader):
+    model.eval(); total = 0.0; crit = nn.MSELoss()
+    with torch.no_grad():
+        for x in loader:
+            x = x.to(device, non_blocking=True)
+            r, _ = model(x); total += crit(r, x).item()
+    return total / len(loader)
+
+def train_vae_epoch(model, loader, opt):
+    model.train(); tot = tot_r = tot_k = 0.0
+    for x in loader:
+        x = x.to(device, non_blocking=True)
+        r, mu, lv   = model(x)
+        loss, rl, kl = model.vae_loss(r, x, mu, lv)
+        opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+        tot += loss.item(); tot_r += rl.item(); tot_k += kl.item()
+    n = len(loader)
+    return tot/n, tot_r/n, tot_k/n
+
+def eval_vae_epoch(model, loader):
+    model.eval(); total = 0.0
+    with torch.no_grad():
+        for x in loader:
+            x = x.to(device, non_blocking=True)
+            r, mu, lv = model(x)
+            total += model.vae_loss(r, x, mu, lv)[0].item()
+    return total / len(loader)
+
+def train_ae(model, tr_loader, te_loader, epochs, lr, kind="cae"):
+    model = model.to(device); model = maybe_compile(model)
+    opt   = optim.Adam(model.parameters(), lr=lr)
+    tr_losses, te_losses = [], []
+    print(f"\nTraining {model.__class__.__name__}  latent={model.latent_dim}  epochs={epochs}")
+    t0 = time.time()
+    for ep in range(epochs):
+        if kind == "cae":
+            tl = train_cae_epoch(model, tr_loader, opt)
+            vl = eval_cae_epoch(model, te_loader)
+        else:
+            tl, _, _ = train_vae_epoch(model, tr_loader, opt)
+            vl       = eval_vae_epoch(model, te_loader)
+        tr_losses.append(tl); te_losses.append(vl)
+        if (ep+1) % 20 == 0:
+            print(f"  ep {ep+1:3d}/{epochs}  train={tl:.6f}  test={vl:.6f}")
+    print(f"  Done in {time.time()-t0:.1f}s  final test loss={te_losses[-1]:.6f}")
+    return tr_losses, te_losses
+
+def encode_all(cae, X, bs=512):
+    cae.eval(); out = []
+    with torch.no_grad():
+        for i in range(0, len(X), bs):
+            b = torch.FloatTensor(X[i:i+bs]).to(device, non_blocking=True)
+            out.append(cae.encode(b).cpu().numpy())
+    return np.concatenate(out)
+
+def reconstruct_all(cae, X, bs=512):
+    cae.eval(); out = []
+    with torch.no_grad():
+        for i in range(0, len(X), bs):
+            b = torch.FloatTensor(X[i:i+bs]).to(device, non_blocking=True)
+            r, _ = cae(b); out.append(r.cpu().numpy())
+    return np.concatenate(out)
+
+def latent_predict_all(cae, lp, X, bs=512):
+    cae.eval(); lp.eval(); out = []
+    with torch.no_grad():
+        for i in range(0, len(X), bs):
+            b = torch.FloatTensor(X[i:i+bs]).to(device, non_blocking=True)
+            out.append(cae.decode(lp(cae.encode(b)))[:, -1].cpu().numpy())
+    return np.concatenate(out)
+
+def metrics(y_true, y_pred):
+    mse  = np.mean((y_true-y_pred)**2)
+    rmse = np.sqrt(mse)
+    mae  = np.mean(np.abs(y_true-y_pred))
+    ss   = np.sum((y_true-y_pred)**2); st = np.sum((y_true-y_true.mean())**2)
+    r2   = 1 - ss/st if st > 0 else 0
+    return dict(MSE=mse, RMSE=rmse, MAE=mae, R2=r2)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TRAIN MODELS
+# ─────────────────────────────────────────────────────────────────────────────
+latent_dim = 16
+ae_epochs  = 150
+ae_lr      = 1e-3
+
+print("\n" + "="*60)
+print("TRAINING: CONVOLUTIONAL AUTOENCODER (CAE)")
+print("="*60)
+cae = ConvAutoencoder(seq_length=seq_length, latent_dim=latent_dim)
+cae_tr, cae_te = train_ae(cae, ae_train_loader, ae_test_loader,
+                           ae_epochs, ae_lr, kind="cae")
+
+print("\n" + "="*60)
+print("TRAINING: VARIATIONAL AUTOENCODER (VAE, beta=0.5)")
+print("="*60)
+vae = VariationalAutoencoder(seq_length=seq_length, latent_dim=latent_dim, beta=0.5)
+vae_tr, vae_te = train_ae(vae, ae_train_loader, ae_test_loader,
+                           ae_epochs, ae_lr, kind="vae")
+
+# ─── Latent representations ──────────────────────────────────────────────────
+print("\n" + "="*60)
+print("EXTRACTING LATENT REPRESENTATIONS")
+print("="*60)
+Z_train = encode_all(cae, X_train)
+Z_test  = encode_all(cae, X_test)
+print(f"  Z_train : {Z_train.shape}  norm={np.linalg.norm(Z_train,axis=1).mean():.3f}")
+print(f"  Z_test  : {Z_test.shape}")
+
+# ─── Latent Predictor ─────────────────────────────────────────────────────────
+
+class LatentDataset(Dataset):
+    def __init__(self, Z):
+        Z = torch.FloatTensor(Z)
+        self.src = Z[:-1]; self.tgt = Z[1:]
+    def __len__(self): return len(self.src)
+    def __getitem__(self, i): return self.src[i], self.tgt[i]
+
+lp_tr_loader = DataLoader(LatentDataset(Z_train), batch_size=ae_bs,
+                           shuffle=True,  num_workers=_NUM_WORKERS,
+                           pin_memory=_PIN_MEMORY)
+lp_te_loader = DataLoader(LatentDataset(Z_test),  batch_size=ae_bs,
+                           shuffle=False, num_workers=_NUM_WORKERS,
+                           pin_memory=_PIN_MEMORY)
+
+lp     = LatentPredictor(latent_dim).to(device); lp = maybe_compile(lp)
+lp_opt = optim.Adam(lp.parameters(), lr=ae_lr)
+crit   = nn.MSELoss()
+lp_tr, lp_te = [], []
+
+print("\n" + "="*60)
+print("TRAINING: LATENT PREDICTOR (MLP)")
+print("="*60)
+t0 = time.time()
+for ep in range(ae_epochs):
+    lp.train(); tl = 0.0
+    for z_in, z_tgt in lp_tr_loader:
+        z_in, z_tgt = z_in.to(device, non_blocking=True), z_tgt.to(device, non_blocking=True)
+        loss = crit(lp(z_in), z_tgt)
+        lp_opt.zero_grad(set_to_none=True); loss.backward(); lp_opt.step()
+        tl += loss.item()
+    tl /= len(lp_tr_loader)
+    lp.eval(); vl = 0.0
+    with torch.no_grad():
+        for z_in, z_tgt in lp_te_loader:
+            z_in, z_tgt = z_in.to(device, non_blocking=True), z_tgt.to(device, non_blocking=True)
+            vl += crit(lp(z_in), z_tgt).item()
+    vl /= len(lp_te_loader); lp_tr.append(tl); lp_te.append(vl)
+    if (ep+1) % 20 == 0:
+        print(f"  ep {ep+1:3d}/{ae_epochs}  train={tl:.6f}  test={vl:.6f}")
+print(f"  Done in {time.time()-t0:.1f}s  final test={lp_te[-1]:.6f}")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PREDICTIONS & METRICS
+# ─────────────────────────────────────────────────────────────────────────────
+print("\n" + "="*60)
+print("COMPUTING PREDICTIONS & METRICS")
+print("="*60)
+
+cae_recon_tr = reconstruct_all(cae, X_train)
+cae_recon_te = reconstruct_all(cae, X_test)
+cae_pred_tr  = cae_recon_tr[:, -1]
+cae_pred_te  = cae_recon_te[:, -1]
+
+lp_pred_tr = latent_predict_all(cae, lp, X_train)
+lp_pred_te = latent_predict_all(cae, lp, X_test)
+
+cae_mse_te = np.mean((X_test - cae_recon_te)**2)
+print(f"  CAE reconstruction MSE (test): {cae_mse_te:.6f}")
+
+cae_m = metrics(y_test.flatten(), cae_pred_te)
+lp_m  = metrics(y_test.flatten(), lp_pred_te)
+
+print("\n  Next-step prediction (test set):")
+print(f"  {'Model':<20s} {'MSE':<12s} {'RMSE':<12s} {'MAE':<12s} {'R2':<10s}")
+print("  " + "-"*62)
+for name, m in [("CAE (last recon)", cae_m), ("Latent Predictor", lp_m)]:
+    print(f"  {name:<20s} {m['MSE']:<12.6f} {m['RMSE']:<12.6f} "
+          f"{m['MAE']:<12.6f} {m['R2']:<10.6f}")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VISUALISATION
+# ─────────────────────────────────────────────────────────────────────────────
+from sklearn.decomposition import PCA
+
+train_idx = np.arange(seq_length, seq_length + len(cae_pred_tr))
+test_idx  = np.arange(train_idx[-1]+1, train_idx[-1]+1 + len(cae_pred_te))
+
+fig, axes = plt.subplots(4, 4, figsize=(20, 16))
+fig.suptitle("Autoencoder Results: ODE (Driven Damped Oscillator)",
+             fontsize=14, fontweight="bold")
+
+# Row 1 — training curves
+for ax, tr, te, title in zip(
+        axes[0, :3],
+        [cae_tr, vae_tr, lp_tr],
+        [cae_te, vae_te, lp_te],
+        ["CAE Loss", "VAE Loss (recon+βKL)", "Latent Predictor Loss"]):
+    ax.plot(tr, "b-", lw=2, label="train")
+    ax.plot(te, "r-", lw=2, label="test")
+    ax.set_yscale("log"); ax.set(xlabel="Epoch", ylabel="Loss", title=title)
+    ax.legend(fontsize=9); ax.grid(True, alpha=0.3)
+
+# Row 1, panel 4 — PCA of CAE latent space
+pca2   = PCA(n_components=2).fit_transform(Z_train)
+sc     = axes[0, 3].scatter(pca2[:,0], pca2[:,1],
+                             c=np.arange(len(pca2)), cmap="viridis", s=4, alpha=0.6)
+fig.colorbar(sc, ax=axes[0,3], label="Sequence index")
+axes[0,3].set(xlabel="PC 1", ylabel="PC 2", title="CAE Latent Space (PCA, train)")
+axes[0,3].grid(True, alpha=0.3)
+
+# Row 2 — window reconstructions (4 examples, single batched VAE call)
+ex_idx = np.linspace(0, len(X_test)-1, 4, dtype=int)
+vae.eval()
+with torch.no_grad():
+    vae_recons = vae(torch.FloatTensor(X_test[ex_idx]).to(device))[0].cpu().numpy()
+
+for k, idx in enumerate(ex_idx):
+    ax = axes[1, k]
+    ax.plot(X_test[idx],         "b-",  lw=1.5, label="Original")
+    ax.plot(cae_recon_te[idx],   "r--", lw=1.5, label="CAE")
+    ax.plot(vae_recons[k],       "g--", lw=1.0, label="VAE", alpha=0.8)
+    ax.set(xlabel="Step", ylabel="x", title=f"Recon — window {idx}")
+    ax.legend(fontsize=7); ax.grid(True, alpha=0.3)
+
+# Row 3 — next-step predictions
+for ax, pred_tr, pred_te, title in zip(
+        axes[2, :2],
+        [cae_pred_tr, lp_pred_tr],
+        [cae_pred_te, lp_pred_te],
+        ["CAE: Next-Step Prediction", "Latent Predictor: Next-Step Prediction"]):
+    ax.plot(train_idx, y_train.flatten(), "b-",      lw=1, alpha=0.5, label="True (train)")
+    ax.plot(train_idx, pred_tr,           "g-",      lw=1, label="Pred (train)")
+    ax.plot(test_idx,  y_test.flatten(),  "r-",      lw=1, alpha=0.5, label="True (test)")
+    ax.plot(test_idx,  pred_te,           "orange",  lw=1, label="Pred (test)")
+    ax.set(xlabel="Time step", ylabel="x", title=title)
+    ax.legend(fontsize=7); ax.grid(True, alpha=0.3)
+
+# Row 3, panels 3-4 — error histograms
+for ax, errs, m, title in zip(
+        axes[2, 2:],
+        [cae_pred_te - y_test.flatten(), lp_pred_te - y_test.flatten()],
+        [cae_m, lp_m],
+        ["CAE Error", "Latent Predictor Error"]):
+    ax.hist(errs, bins=30, alpha=0.7, edgecolor="black")
+    ax.axvline(0, color="r", ls="--", lw=2)
+    ax.set(xlabel="Error", ylabel="Count",
+           title=f"{title}  MAE={m['MAE']:.4f}")
+    ax.grid(True, alpha=0.3, axis="y")
+
+# Row 4 — model comparison bars + ODE overview + latent interpolation
+bar_models  = ["CAE", "Latent Pred."]
+bar_colors  = ["#8172B2", "#CCB974"]
+x_pos       = np.arange(2)
+for ax, vals, ylabel, title in zip(
+        axes[3, :3],
+        [[cae_m["R2"],   lp_m["R2"]],
+         [cae_m["RMSE"], lp_m["RMSE"]],
+         [cae_m["MAE"],  lp_m["MAE"]]],
+        ["R2", "RMSE", "MAE"],
+        ["R2 (higher better)", "RMSE (lower better)", "MAE (lower better)"]):
+    ax.bar(x_pos, vals, color=bar_colors, alpha=0.85, edgecolor="k")
+    ax.set(xticks=x_pos, xticklabels=bar_models, ylabel=ylabel, title=title)
+    ax.grid(True, alpha=0.3, axis="y")
+
+# Row 4, panel 4 — latent-space PC1 interpolation
+ax = axes[3, 3]
+pca1       = PCA(n_components=1).fit(Z_train)
+Z_1d       = pca1.transform(Z_train)
+alphas     = np.linspace(float(Z_1d.min()), float(Z_1d.max()), 6)
+cae.eval()
+with torch.no_grad():
+    for a in alphas:
+        z = torch.FloatTensor(pca1.inverse_transform([[a]])).to(device)
+        ax.plot(cae.decode(z).cpu().numpy()[0], alpha=0.7, lw=1.2)
+ax.set(xlabel="Step", ylabel="x", title="CAE Latent Interp. (PC1 sweep)")
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# ─── ODE solution overview ────────────────────────────────────────────────────
+fig2, axes2 = plt.subplots(1, 3, figsize=(15, 4))
+split_t = t_ode[train_size + seq_length]
+
+axes2[0].plot(t_ode, x_ode, "b-", lw=1, alpha=0.7)
+axes2[0].axvline(split_t, color="r", ls="--", lw=2, label="Train/Test split")
+axes2[0].set(xlabel="Time [s]", ylabel="x [m]",
+             title="ODE Solution: Driven Damped Oscillator")
+axes2[0].legend(); axes2[0].grid(True, alpha=0.3)
+
+axes2[1].plot(x_ode, v_ode, "b-", lw=0.5, alpha=0.5)
+axes2[1].set(xlabel="x [m]", ylabel="v [m/s]", title="Phase Space Portrait")
+axes2[1].grid(True, alpha=0.3)
+
+axes2[2].hist(x_ode, bins=50, alpha=0.7, edgecolor="black")
+axes2[2].set(xlabel="x [m]", ylabel="Count", title="Position Distribution")
+axes2[2].grid(True, alpha=0.3, axis="y")
+
+fig2.suptitle("ODE Data Overview", fontsize=13, fontweight="bold")
+plt.tight_layout(); plt.show()
+print("\n✓ Done.")

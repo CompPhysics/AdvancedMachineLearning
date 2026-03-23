@@ -1,0 +1,50 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+
+\PYG{n}{tf}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{set\PYGZus{}seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{42}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Symmetric convolutional autoencoder for 28x28 MNIST.}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} Encoder: 3 x Conv2D(k=3, stride=2, padding=SAME) + SELU}
+\PYG{c+c1}{\PYGZsh{}   (28,28,1) \PYGZhy{}\PYGZgt{} (14,14,16) \PYGZhy{}\PYGZgt{} (7,7,32) \PYGZhy{}\PYGZgt{} (4,4,64)}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} Decoder: exact mirror — 3 x Conv2DTranspose(k=3, stride=2, padding=SAME) + SELU}
+\PYG{c+c1}{\PYGZsh{}   (4,4,64) \PYGZhy{}\PYGZgt{} (7,7,32) \PYGZhy{}\PYGZgt{} (14,14,16) \PYGZhy{}\PYGZgt{} (28,28,1)  [Sigmoid on last layer]}
+\PYG{c+c1}{\PYGZsh{} A Lambda layer crops the output to exactly 28x28 in case of half\PYGZhy{}pixel}
+\PYG{c+c1}{\PYGZsh{} rounding from the transpose convolutions.}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} Original used MaxPool + mismatched VALID/SAME padding in the decoder, which}
+\PYG{c+c1}{\PYGZsh{} broke symmetry.  All layers now use identical kernel=3, stride=2, SAME.}
+
+\PYG{n}{conv\PYGZus{}encoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Reshape}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2D}\PYG{p}{(}\PYG{l+m+mi}{16}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{strides}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SAME}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2D}\PYG{p}{(}\PYG{l+m+mi}{32}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{strides}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SAME}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2D}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{strides}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SAME}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+\PYG{p}{]}\PYG{p}{,} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{conv\PYGZus{}encoder}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{conv\PYGZus{}decoder} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2DTranspose}\PYG{p}{(}\PYG{l+m+mi}{32}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{strides}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SAME}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                                  \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{input\PYGZus{}shape}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2DTranspose}\PYG{p}{(}\PYG{l+m+mi}{16}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{strides}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SAME}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                                  \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{selu}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Conv2DTranspose}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{strides}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SAME}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                                  \PYG{n}{activation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{sigmoid}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Lambda}\PYG{p}{(}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{p}{:}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{p}{:}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{p}{:}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}  \PYG{c+c1}{\PYGZsh{} crop to exact 28x28}
+    \PYG{n}{keras}\PYG{o}{.}\PYG{n}{layers}\PYG{o}{.}\PYG{n}{Reshape}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+\PYG{p}{]}\PYG{p}{,} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{conv\PYGZus{}decoder}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{conv\PYGZus{}ae} \PYG{o}{=} \PYG{n}{keras}\PYG{o}{.}\PYG{n}{models}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{p}{[}\PYG{n}{conv\PYGZus{}encoder}\PYG{p}{,} \PYG{n}{conv\PYGZus{}decoder}\PYG{p}{]}\PYG{p}{,} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{conv\PYGZus{}ae}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{conv\PYGZus{}ae}\PYG{o}{.}\PYG{n}{compile}\PYG{p}{(}\PYG{n}{loss}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{binary\PYGZus{}crossentropy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                \PYG{n}{optimizer}\PYG{o}{=}\PYG{n}{keras}\PYG{o}{.}\PYG{n}{optimizers}\PYG{o}{.}\PYG{n}{Adam}\PYG{p}{(}\PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{l+m+mf}{1e\PYGZhy{}3}\PYG{p}{)}\PYG{p}{,}
+                \PYG{n}{metrics}\PYG{o}{=}\PYG{p}{[}\PYG{n}{rounded\PYGZus{}accuracy}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{history} \PYG{o}{=} \PYG{n}{conv\PYGZus{}ae}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,}
+                      \PYG{n}{validation\PYGZus{}data}\PYG{o}{=}\PYG{p}{(}\PYG{n}{X\PYGZus{}valid}\PYG{p}{,} \PYG{n}{X\PYGZus{}valid}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n}{conv\PYGZus{}encoder}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{conv\PYGZus{}decoder}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{show\PYGZus{}reconstructions}\PYG{p}{(}\PYG{n}{conv\PYGZus{}ae}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\end{MintedVerbatim}

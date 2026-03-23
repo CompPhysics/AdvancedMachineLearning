@@ -1,0 +1,227 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+c1}{\PYGZsh{} import the Torch packages}
+\PYG{c+c1}{\PYGZsh{} transforms are used to preprocess the images, e.g. crop, rotate, normalize, etc}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{torchvision}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{datasets}\PYG{p}{,}\PYG{n}{transforms}
+
+\PYG{c+c1}{\PYGZsh{} specify the data path in which you would like to store the downloaded files}
+\PYG{c+c1}{\PYGZsh{} ToTensor() here is used to convert data type to tensor}
+
+\PYG{n}{train\PYGZus{}dataset} \PYG{o}{=} \PYG{n}{datasets}\PYG{o}{.}\PYG{n}{MNIST}\PYG{p}{(}\PYG{n}{root}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{./mnist\PYGZus{}data/}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{train}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{transform}\PYG{o}{=}\PYG{n}{transforms}\PYG{o}{.}\PYG{n}{ToTensor}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{download}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{test\PYGZus{}dataset} \PYG{o}{=} \PYG{n}{datasets}\PYG{o}{.}\PYG{n}{MNIST}\PYG{p}{(}\PYG{n}{root}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{./mnist\PYGZus{}data/}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{train}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,} \PYG{n}{transform}\PYG{o}{=}\PYG{n}{transforms}\PYG{o}{.}\PYG{n}{ToTensor}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{download}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{train\PYGZus{}dataset}\PYG{p}{)}
+\PYG{n}{batchSize}\PYG{o}{=}\PYG{l+m+mi}{128}
+
+\PYG{c+c1}{\PYGZsh{}only after packed in DataLoader, can we feed the data into the neural network iteratively}
+\PYG{n}{train\PYGZus{}loader} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{utils}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{DataLoader}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{n}{train\PYGZus{}dataset}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{batchSize}\PYG{p}{,} \PYG{n}{shuffle}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{test\PYGZus{}loader} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{utils}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{DataLoader}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{n}{test\PYGZus{}dataset}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{batchSize}\PYG{p}{,} \PYG{n}{shuffle}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+\PYG{c+c1}{\PYGZsh{} We visualize the images here using the $imshow$ function  function and the $make\_grid$ function from PyTorch to arrange and display them.}
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+
+\PYG{c+c1}{\PYGZsh{} package we used to manipulate matrix}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{c+c1}{\PYGZsh{} package we used for image processing}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{pyplot} \PYG{k}{as} \PYG{n}{plt}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{torchvision}\PYG{n+nn}{.}\PYG{n+nn}{utils}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{make\PYGZus{}grid}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{imshow}\PYG{p}{(}\PYG{n}{img}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{npimg} \PYG{o}{=} \PYG{n}{img}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{(}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{}transpose: change array axis to correspond to the plt.imshow() function}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{transpose}\PYG{p}{(}\PYG{n}{npimg}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} load the first 16 training samples from next iteration}
+\PYG{c+c1}{\PYGZsh{} [:16,:,:,:] for the 4 dimension of examples, first dimension take first 16, other dimension take all data}
+\PYG{c+c1}{\PYGZsh{} arrange the image in grid}
+\PYG{n}{examples}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n+nb}{next}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{(}\PYG{n}{train\PYGZus{}loader}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{example\PYGZus{}show}\PYG{o}{=}\PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{examples}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{16}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} then display them}
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{example\PYGZus{}show}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+\PYG{c+c1}{\PYGZsh{} Our autoencoder consists of two parts, see also the TensorFlow example}
+\PYG{c+c1}{\PYGZsh{} above. The encoder and decoder parts are represented by two fully}
+\PYG{c+c1}{\PYGZsh{} connected feed forward neural networks where we use the standard}
+\PYG{c+c1}{\PYGZsh{} Sigmoid function.  In the encoder part we reduce the dimensionality of}
+\PYG{c+c1}{\PYGZsh{} the image from $28\times 28=784$ pixels to first $16\times 16=256$}
+\PYG{c+c1}{\PYGZsh{} pixels and then to 128 pixels. The 128 pixel representation is then}
+\PYG{c+c1}{\PYGZsh{} used to define the representation of the input and the input to the}
+\PYG{c+c1}{\PYGZsh{} decoder part.  The latter attempts to reconstruct the images.}
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}\PYG{n+nn}{.}\PYG{n+nn}{nn}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{nn}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}\PYG{n+nn}{.}\PYG{n+nn}{nn}\PYG{n+nn}{.}\PYG{n+nn}{functional}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{F}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{torch}\PYG{n+nn}{.}\PYG{n+nn}{optim}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{optim}
+
+\PYG{n}{num\PYGZus{}input}    \PYG{o}{=} \PYG{l+m+mi}{784}   \PYG{c+c1}{\PYGZsh{} 28*28}
+\PYG{n}{num\PYGZus{}hidden\PYGZus{}1} \PYG{o}{=} \PYG{l+m+mi}{256}   \PYG{c+c1}{\PYGZsh{} first hidden layer}
+\PYG{n}{num\PYGZus{}hidden\PYGZus{}2} \PYG{o}{=} \PYG{l+m+mi}{128}   \PYG{c+c1}{\PYGZsh{} bottleneck}
+
+\PYG{c+c1}{\PYGZsh{} Symmetric autoencoder:}
+\PYG{c+c1}{\PYGZsh{}   Encoder:  784 \PYGZhy{}[ReLU+BN]\PYGZhy{}\PYGZgt{} 256 \PYGZhy{}[ReLU+BN]\PYGZhy{}\PYGZgt{} 128}
+\PYG{c+c1}{\PYGZsh{}   Decoder:  128 \PYGZhy{}[ReLU+BN]\PYGZhy{}\PYGZgt{} 256 \PYGZhy{}[Sigmoid]\PYGZhy{}\PYGZgt{}  784}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} Changes vs original:}
+\PYG{c+c1}{\PYGZsh{} 1. Hidden layers use ReLU instead of Sigmoid: avoids vanishing gradients}
+\PYG{c+c1}{\PYGZsh{}    and matches standard practice for intermediate layers.}
+\PYG{c+c1}{\PYGZsh{} 2. BatchNorm1d after each Linear stabilises and accelerates training.}
+\PYG{c+c1}{\PYGZsh{} 3. Encoder and decoder are exposed as nn.Sequential attributes so that}
+\PYG{c+c1}{\PYGZsh{}    model.encoder(x) and model.decoder(z) can be called directly for}
+\PYG{c+c1}{\PYGZsh{}    latent\PYGZhy{}space analysis (same API as the original, but now a Sequential).}
+\PYG{c+c1}{\PYGZsh{} 4. Decoder is an exact structural mirror: same layer widths in reverse,}
+\PYG{c+c1}{\PYGZsh{}    same activations at each depth (ReLU for hidden, Sigmoid for output).}
+
+\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{Autoencoder}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x\PYGZus{}dim}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim1}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim2}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{encoder} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{x\PYGZus{}dim}\PYG{p}{,}  \PYG{n}{h\PYGZus{}dim1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm1d}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim1}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm1d}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+        \PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{decoder} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim2}\PYG{p}{,} \PYG{n}{h\PYGZus{}dim1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm1d}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{n}{h\PYGZus{}dim1}\PYG{p}{,} \PYG{n}{x\PYGZus{}dim}\PYG{p}{)}\PYG{p}{,}  \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sigmoid}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+        \PYG{p}{)}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{decoder}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{encoder}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{Autoencoder}\PYG{p}{(}\PYG{n}{num\PYGZus{}input}\PYG{p}{,} \PYG{n}{num\PYGZus{}hidden\PYGZus{}1}\PYG{p}{,} \PYG{n}{num\PYGZus{}hidden\PYGZus{}2}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{Encoder params: }\PYG{l+s+si}{\PYGZob{}}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{p}\PYG{o}{.}\PYG{n}{numel}\PYG{p}{(}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{n}{p}\PYG{+w}{ }\PYG{o+ow}{in}\PYG{+w}{ }\PYG{n}{model}\PYG{o}{.}\PYG{n}{encoder}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{l+s+si}{:}\PYG{l+s+s2}{,}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Decoder params: }\PYG{l+s+si}{\PYGZob{}}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{p}\PYG{o}{.}\PYG{n}{numel}\PYG{p}{(}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }\PYG{n}{p}\PYG{+w}{ }\PYG{o+ow}{in}\PYG{+w}{ }\PYG{n}{model}\PYG{o}{.}\PYG{n}{decoder}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{l+s+si}{:}\PYG{l+s+s2}{,}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+\PYG{c+c1}{\PYGZsh{} We define here the cost/loss function and the optimizer we employ (Adam here).}
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+
+\PYG{c+c1}{\PYGZsh{} Optimised training loop.}
+\PYG{c+c1}{\PYGZsh{} Changes vs original:}
+\PYG{c+c1}{\PYGZsh{} 1. zero\PYGZus{}grad(set\PYGZus{}to\PYGZus{}none=True) skips the memset() call per parameter tensor.}
+\PYG{c+c1}{\PYGZsh{} 2. A validation pass runs every epoch so convergence can be monitored.}
+\PYG{c+c1}{\PYGZsh{} 3. Report includes both train and validation loss every 10 epochs.}
+
+\PYG{n}{optimizer}     \PYG{o}{=} \PYG{n}{optim}\PYG{o}{.}\PYG{n}{Adam}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{lr}\PYG{o}{=}\PYG{l+m+mf}{1e\PYGZhy{}3}\PYG{p}{)}
+\PYG{n}{loss\PYGZus{}function} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{MSELoss}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{num\PYGZus{}epochs}    \PYG{o}{=} \PYG{l+m+mi}{100}
+
+\PYG{n}{val\PYGZus{}loader} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{utils}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{DataLoader}\PYG{p}{(}\PYG{n}{test\PYGZus{}dataset}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{shuffle}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{==== Training start ====}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{epoch} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{num\PYGZus{}epochs} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{train}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{train\PYGZus{}loss} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{k}{for} \PYG{n}{data}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n}{train\PYGZus{}loader}\PYG{p}{:}
+        \PYG{n}{inputs} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{784}\PYG{p}{)}
+        \PYG{n}{recon}  \PYG{o}{=} \PYG{n}{model}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{)}
+        \PYG{n}{loss}   \PYG{o}{=} \PYG{n}{loss\PYGZus{}function}\PYG{p}{(}\PYG{n}{recon}\PYG{p}{,} \PYG{n}{inputs}\PYG{p}{)}
+        \PYG{n}{optimizer}\PYG{o}{.}\PYG{n}{zero\PYGZus{}grad}\PYG{p}{(}\PYG{n}{set\PYGZus{}to\PYGZus{}none}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+        \PYG{n}{loss}\PYG{o}{.}\PYG{n}{backward}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{optimizer}\PYG{o}{.}\PYG{n}{step}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{train\PYGZus{}loss} \PYG{o}{+}\PYG{o}{=} \PYG{n}{loss}\PYG{o}{.}\PYG{n}{item}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{train\PYGZus{}loss} \PYG{o}{/}\PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{train\PYGZus{}loader}\PYG{p}{)}
+
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{eval}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{val\PYGZus{}loss} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{k}{with} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{no\PYGZus{}grad}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{for} \PYG{n}{data}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n}{val\PYGZus{}loader}\PYG{p}{:}
+            \PYG{n}{inputs}   \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{784}\PYG{p}{)}
+            \PYG{n}{val\PYGZus{}loss} \PYG{o}{+}\PYG{o}{=} \PYG{n}{loss\PYGZus{}function}\PYG{p}{(}\PYG{n}{model}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{)}\PYG{p}{,} \PYG{n}{inputs}\PYG{p}{)}\PYG{o}{.}\PYG{n}{item}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{val\PYGZus{}loss} \PYG{o}{/}\PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{val\PYGZus{}loader}\PYG{p}{)}
+
+    \PYG{k}{if} \PYG{n}{epoch} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{10} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Epoch }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{epoch}\PYG{l+s+si}{:}\PYG{l+s+s2}{3d}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{/}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{num\PYGZus{}epochs}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{  }\PYG{l+s+s2}{\PYGZdq{}}
+              \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{train: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{train\PYGZus{}loss}\PYG{l+s+si}{:}\PYG{l+s+s2}{.6f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{  val: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{val\PYGZus{}loss}\PYG{l+s+si}{:}\PYG{l+s+s2}{.6f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{==== Training finish ====}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+\PYG{c+c1}{\PYGZsh{} As we have trained the network, we will now reconstruct various test samples to see if the model can generalize to data which}
+\PYG{c+c1}{\PYGZsh{} were not included in the training set.}
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+
+
+\PYG{c+c1}{\PYGZsh{} load 16 images from testset}
+\PYG{n}{inputs}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n+nb}{next}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{(}\PYG{n}{test\PYGZus{}loader}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{inputs\PYGZus{}example} \PYG{o}{=} \PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{16}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{inputs\PYGZus{}example}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}convert from image to tensor}
+\PYG{c+c1}{\PYGZsh{}inputs=inputs.cuda()}
+\PYG{n}{inputs}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{,}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{784}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} get the outputs from the trained model}
+\PYG{n}{outputs}\PYG{o}{=}\PYG{n}{model}\PYG{p}{(}\PYG{n}{inputs}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}convert from tensor to image}
+\PYG{n}{outputs}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{outputs}\PYG{p}{,}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{outputs}\PYG{o}{=}\PYG{n}{outputs}\PYG{o}{.}\PYG{n}{detach}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{cpu}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}show the output images}
+\PYG{n}{outputs\PYGZus{}example} \PYG{o}{=} \PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{outputs}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{16}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{outputs\PYGZus{}example}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+\PYG{c+c1}{\PYGZsh{} After training the auto\PYGZhy{}encoder, we can now use the model to reconstruct some images.}
+\PYG{c+c1}{\PYGZsh{} In order to reconstruct different training images, the model}
+\PYG{c+c1}{\PYGZsh{} has learned to recognize how the image looks like and describe it in}
+\PYG{c+c1}{\PYGZsh{} the 128\PYGZhy{}dimensional  latent space. In other words, the visual information of}
+\PYG{c+c1}{\PYGZsh{} images is compressed and encoded in the 128\PYGZhy{}dimensional representations. As we}
+\PYG{c+c1}{\PYGZsh{} assume that samples from the same categories should be more visually}
+\PYG{c+c1}{\PYGZsh{} similar than those from different classes, the representations can}
+\PYG{c+c1}{\PYGZsh{} then be used for image recognition, i.e., handwritten digit images}
+\PYG{c+c1}{\PYGZsh{} recognition in our case.}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{} One simple way to recognize images is to randomly select ten training}
+\PYG{c+c1}{\PYGZsh{} samples from each class and annotate them with the corresponding label.}
+\PYG{c+c1}{\PYGZsh{} Then given the}
+\PYG{c+c1}{\PYGZsh{} test data, we can predict which classes they belong to by finding the}
+\PYG{c+c1}{\PYGZsh{} most similar labelled training samples to them.}
+\PYG{c+c1}{\PYGZsh{} ==============================================================================}
+
+
+\PYG{c+c1}{\PYGZsh{} get 100 image\PYGZhy{}label pairs from training set}
+\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{next}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{(}\PYG{n}{train\PYGZus{}loader}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 10 classes, 10 samples per class, 100 in total}
+\PYG{n}{candidates} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{batchSize}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{o}{*}\PYG{l+m+mi}{10}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} randomly select 100 samples}
+\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{n}{x\PYGZus{}train}\PYG{p}{[}\PYG{n}{candidates}\PYG{p}{]}
+\PYG{n}{y\PYGZus{}train} \PYG{o}{=} \PYG{n}{y\PYGZus{}train}\PYG{p}{[}\PYG{n}{candidates}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} display the selected samples and print their labels}
+
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{100}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,}\PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} get 100 image\PYGZhy{}label pairs from test set}
+\PYG{n}{x\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{next}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{(}\PYG{n}{train\PYGZus{}loader}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{candidates\PYGZus{}test} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{batchSize}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{o}{*}\PYG{l+m+mi}{10}\PYG{p}{)}
+
+\PYG{n}{x\PYGZus{}test} \PYG{o}{=} \PYG{n}{x\PYGZus{}test}\PYG{p}{[}\PYG{n}{candidates\PYGZus{}test}\PYG{p}{]}
+\PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{y\PYGZus{}test}\PYG{p}{[}\PYG{n}{candidates\PYGZus{}test}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} display the selected samples and print their labels}
+\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{100}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{,}\PYG{p}{:}\PYG{p}{]}\PYG{p}{,}\PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} compute the representations of training and test samples}
+\PYG{c+c1}{\PYGZsh{}h\PYGZus{}train=model.encoder(torch.reshape(x\PYGZus{}train.cuda(),(\PYGZhy{}1,784)))}
+\PYG{c+c1}{\PYGZsh{}h\PYGZus{}test=model.encoder(torch.reshape(x\PYGZus{}test.cuda(),(\PYGZhy{}1,784)))}
+\PYG{n}{h\PYGZus{}train}\PYG{o}{=}\PYG{n}{model}\PYG{o}{.}\PYG{n}{encoder}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{784}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{h\PYGZus{}test}\PYG{o}{=}\PYG{n}{model}\PYG{o}{.}\PYG{n}{encoder}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{,}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{784}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} find the nearest training samples to each test instance, in terms of MSE}
+\PYG{n}{MSEs} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{power}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{expand\PYGZus{}dims}\PYG{p}{(}\PYG{n}{h\PYGZus{}test}\PYG{o}{.}\PYG{n}{detach}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{cpu}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{expand\PYGZus{}dims}\PYG{p}{(}\PYG{n}{h\PYGZus{}train}\PYG{o}{.}\PYG{n}{detach}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{cpu}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{neighbours} \PYG{o}{=} \PYG{n}{MSEs}\PYG{o}{.}\PYG{n}{argmin}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{predicts} \PYG{o}{=} \PYG{n}{y\PYGZus{}train}\PYG{p}{[}\PYG{n}{neighbours}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} print(np.stack([y\PYGZus{}test, predicts], axis=1))}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Recognition accuracy according to the learned representation is }\PYG{l+s+si}{\PYGZpc{}.1f}\PYG{l+s+si}{\PYGZpc{}\PYGZpc{}}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{\PYGZpc{}} \PYG{p}{(}\PYG{l+m+mi}{100} \PYG{o}{*} \PYG{p}{(}\PYG{n}{y\PYGZus{}test} \PYG{o}{==} \PYG{n}{predicts}\PYG{p}{)}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{)}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+
+
+\end{MintedVerbatim}

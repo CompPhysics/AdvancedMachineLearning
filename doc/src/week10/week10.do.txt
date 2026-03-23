@@ -7,16 +7,647 @@ DATE: March 26
 
 !bblock
 * Finalizing discussion on autoencoders and implementing Autoencoders with TensorFlow/Keras and PyTorch
+* Discussion of Transformers
 * Overview of generative models
-* Probability distributions and Markov Chain Monte Carlo simulations
 * Reading recommendation: Goodfellow et al chapters 16 and 18.1 and 18.2. Chapter 17 gives a background to Monte Carlo Markov Chains.
 * "Video of lecture":"https://youtu.be/ez9SrGOTOjA"
 #* "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek10.pdf"
 !eblock
 
+!split
+===== Autoencoders: Overarching view, reminder from last week =====
+
+ Autoencoders are artificial neural networks capable of learning
+ efficient representations of the input data (these representations
+ are called codings) without any supervision (i.e., the training set
+ is unlabeled). These codings typically have a much lower
+ dimensionality than the input data, making autoencoders useful for
+ dimensionality reduction.
+ 
+ Autoencoders learn to encode the input data into a lower-dimensional
+ representation, and then decode it back to the original data. The
+ goal of autoencoders is to minimize the reconstruction error, which
+ measures how well the output matches the input. Autoencoders can be
+ seen as a way of learning the latent features or hidden structure of
+ the data, and they can be used for data compression, denoising,
+ anomaly detection, and generative modeling.  
 
 !split
-===== Autoencoders: code examples =====
+===== Powerful detectors =====
+
+More importantly, autoencoders act as powerful feature detectors, and
+they can be used for unsupervised pretraining of deep neural networks.
+
+Lastly, they are capable of randomly generating new data that looks
+very similar to the training data; this is called a generative
+model. For example, you could train an autoencoder on pictures of
+faces, and it would then be able to generate new faces.  Surprisingly,
+autoencoders work by simply learning to copy their inputs to their
+outputs. This may sound like a trivial task, but we will see that
+constraining the network in various ways can make it rather
+difficult. For example, you can limit the size of the internal
+representation, or you can add noise to the inputs and train the
+network to recover the original inputs. These constraints prevent the
+autoencoder from trivially copying the inputs directly to the outputs,
+which forces it to learn efficient ways of representing the data. In
+short, the codings are byproducts of the autoencoder’s attempt to
+learn the identity function under some constraints.
+
+
+!split
+===== Program examples for Autoencoders =====
+
+The examples here 
+can be easily  modified and adapted to different data sets. The first example is a straightforward AE.
+
+
+
+!bc pycod
+import sys
+assert sys.version_info >= (3, 5)
+
+# Is this notebook running on Colab or Kaggle?
+IS_COLAB = "google.colab" in sys.modules
+IS_KAGGLE = "kaggle_secrets" in sys.modules
+
+# Scikit-Learn >=0.20 is required
+import sklearn
+assert sklearn.__version__ >= "0.20"
+
+# TensorFlow >= 2.0 is required
+import tensorflow as tf
+from tensorflow import keras
+assert tf.__version__ >= "2.0"
+
+if not tf.config.list_physical_devices('GPU'):
+    print("No GPU was detected. LSTMs and CNNs can be very slow without a GPU.")
+    if IS_COLAB:
+        print("Go to Runtime > Change runtime and select a GPU hardware accelerator.")
+    if IS_KAGGLE:
+        print("Go to Settings > Accelerator and select GPU.")
+
+# Common imports
+import numpy as np
+import os
+
+# to make this notebook's output stable across runs
+np.random.seed(42)
+tf.random.set_seed(42)
+
+# To plot pretty figures
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+mpl.rc('axes', labelsize=14)
+mpl.rc('xtick', labelsize=12)
+mpl.rc('ytick', labelsize=12)
+
+# Where to save the figures
+PROJECT_ROOT_DIR = "."
+CHAPTER_ID = "autoencoders"
+IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
+os.makedirs(IMAGES_PATH, exist_ok=True)
+
+def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
+    print("Saving figure", fig_id)
+    if tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, format=fig_extension, dpi=resolution)
+
+def plot_image(image):
+    plt.imshow(image, cmap="binary")
+    plt.axis("off")
+
+
+np.random.seed(4)
+
+def generate_3d_data(m, w1=0.1, w2=0.3, noise=0.1):
+    angles = np.random.rand(m) * 3 * np.pi / 2 - 0.5
+    data = np.empty((m, 3))
+    data[:, 0] = np.cos(angles) + np.sin(angles)/2 + noise * np.random.randn(m) / 2
+    data[:, 1] = np.sin(angles) * 0.7 + noise * np.random.randn(m) / 2
+    data[:, 2] = data[:, 0] * w1 + data[:, 1] * w2 + noise * np.random.randn(m)
+    return data
+
+X_train = generate_3d_data(60)
+X_train = X_train - X_train.mean(axis=0, keepdims=0)
+
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+encoder = keras.models.Sequential([keras.layers.Dense(2, input_shape=[3])])
+decoder = keras.models.Sequential([keras.layers.Dense(3, input_shape=[2])])
+autoencoder = keras.models.Sequential([encoder, decoder])
+
+autoencoder.compile(loss="mse", optimizer=keras.optimizers.SGD(learning_rate=1.5))
+
+codings = encoder.predict(X_train)
+fig = plt.figure(figsize=(4,3))
+plt.plot(codings[:,0], codings[:, 1], "b.")
+plt.xlabel("$z_1$", fontsize=18)
+plt.ylabel("$z_2$", fontsize=18, rotation=0)
+plt.grid(True)
+save_fig("linear_autoencoder_pca_plot")
+plt.show()
+!ec
+
+!split
+===== More advanced features, stacked AEs =====
+
+!bc pycod
+# You can select the so-called fashion data as well, here we just use the MNIST standard set
+#(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
+X_train_full = X_train_full.astype(np.float32) / 255
+X_test = X_test.astype(np.float32) / 255
+X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
+y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
+
+# ==============================================================================
+# We can now train all layers at once by building a stacked AE with 3 hidden layers and 1 output layer (i.e., 2 stacked Autoencoders).
+# ==============================================================================
+
+
+def rounded_accuracy(y_true, y_pred):
+    return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
+tf.random.set_seed(42)
+np.random.seed(42)
+
+stacked_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu"),
+])
+stacked_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+stacked_ae = keras.models.Sequential([stacked_encoder, stacked_decoder])
+stacked_ae.compile(loss="binary_crossentropy",
+                   optimizer=keras.optimizers.SGD(learning_rate=1.5), metrics=[rounded_accuracy])
+history = stacked_ae.fit(X_train, X_train, epochs=20,
+                         validation_data=(X_valid, X_valid))
+
+# ==============================================================================
+# This function processes a few test images through the autoencoder and
+# displays the original images and their reconstructions.
+# ==============================================================================
+
+
+def show_reconstructions(model, images=X_valid, n_images=5):
+    reconstructions = model.predict(images[:n_images])
+    fig = plt.figure(figsize=(n_images * 1.5, 3))
+    for image_index in range(n_images):
+        plt.subplot(2, n_images, 1 + image_index)
+        plot_image(images[image_index])
+        plt.subplot(2, n_images, 1 + n_images + image_index)
+        plot_image(reconstructions[image_index])
+show_reconstructions(stacked_ae)
+save_fig("reconstruction_plot")
+
+# ==============================================================================
+# Then visualize
+# ==============================================================================
+
+np.random.seed(42)
+from sklearn.manifold import TSNE
+X_valid_compressed = stacked_encoder.predict(X_valid)
+tsne = TSNE()
+X_valid_2D = tsne.fit_transform(X_valid_compressed)
+X_valid_2D = (X_valid_2D - X_valid_2D.min()) / (X_valid_2D.max() - X_valid_2D.min())
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap="tab10")
+plt.axis("off")
+plt.show()
+
+# ==============================================================================
+# And visualize in a nicer way
+# ==============================================================================
+
+# adapted from https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html
+plt.figure(figsize=(10, 8))
+cmap = plt.cm.tab10
+plt.scatter(X_valid_2D[:, 0], X_valid_2D[:, 1], c=y_valid, s=10, cmap=cmap)
+image_positions = np.array([[1., 1.]])
+for index, position in enumerate(X_valid_2D):
+    dist = np.sum((position - image_positions) ** 2, axis=1)
+    if np.min(dist) > 0.02: # if far enough from other images
+        image_positions = np.r_[image_positions, [position]]
+        imagebox = mpl.offsetbox.AnnotationBbox(
+            mpl.offsetbox.OffsetImage(X_valid[index], cmap="binary"),
+            position, bboxprops={"edgecolor": cmap(y_valid[index]), "lw": 2})
+        plt.gca().add_artist(imagebox)
+plt.axis("off")
+save_fig("fashion_mnist_visualization_plot")
+plt.show()
+
+!ec
+
+!split
+===== Using Convolutional Layers Instead of Dense Layers =====
+
+!bc pycod
+
+tf.random.set_seed(42)
+np.random.seed(42)
+
+# Symmetric convolutional autoencoder for 28x28 MNIST.
+#
+# Encoder: 3 x Conv2D(k=3, stride=2, padding=SAME) + SELU
+#   (28,28,1) -> (14,14,16) -> (7,7,32) -> (4,4,64)
+#
+# Decoder: exact mirror — 3 x Conv2DTranspose(k=3, stride=2, padding=SAME) + SELU
+#   (4,4,64) -> (7,7,32) -> (14,14,16) -> (28,28,1)  [Sigmoid on last layer]
+# A Lambda layer crops the output to exactly 28x28 in case of half-pixel
+# rounding from the transpose convolutions.
+#
+# Original used MaxPool + mismatched VALID/SAME padding in the decoder, which
+# broke symmetry.  All layers now use identical kernel=3, stride=2, SAME.
+
+conv_encoder = keras.models.Sequential([
+    keras.layers.Reshape([28, 28, 1], input_shape=[28, 28]),
+    keras.layers.Conv2D(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2D(32, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+    keras.layers.Conv2D(64, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+], name="conv_encoder")
+
+conv_decoder = keras.models.Sequential([
+    keras.layers.Conv2DTranspose(32, kernel_size=3, strides=2, padding="SAME",
+                                  activation="selu", input_shape=[4, 4, 64]),
+    keras.layers.Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME",
+                                  activation="selu"),
+    keras.layers.Conv2DTranspose(1,  kernel_size=3, strides=2, padding="SAME",
+                                  activation="sigmoid"),
+    keras.layers.Lambda(lambda x: x[:, :28, :28, :]),  # crop to exact 28x28
+    keras.layers.Reshape([28, 28]),
+], name="conv_decoder")
+
+conv_ae = keras.models.Sequential([conv_encoder, conv_decoder], name="conv_ae")
+conv_ae.compile(loss="binary_crossentropy",
+                optimizer=keras.optimizers.Adam(learning_rate=1e-3),
+                metrics=[rounded_accuracy])
+history = conv_ae.fit(X_train, X_train, epochs=10,
+                      validation_data=(X_valid, X_valid))
+
+conv_encoder.summary()
+conv_decoder.summary()
+show_reconstructions(conv_ae)
+plt.show()
+
+!ec
+
+
+!split
+===== Recurrent Autoencoders =====
+
+!bc pycod
+
+# Symmetric recurrent autoencoder for MNIST rows (28 time-steps of 28 features).
+#
+# Encoder: LSTM(100, return_seq=True) -> LSTM(30)
+#          (sequence of 28 rows -> 30-dim code)
+#
+# Decoder: exact mirror in reverse order
+#   RepeatVector(28)                        broadcast code to 28 steps
+#   LSTM(30,  return_seq=True)              mirror of encoder LSTM(30) [1]
+#   LSTM(100, return_seq=True)              mirror of encoder LSTM(100)
+#   TimeDistributed(Dense(28, sigmoid))     reconstruct each row
+#
+# [1] The innermost decoder LSTM uses 30 units (matching the bottleneck size)
+#     before expanding back to 100 units, giving a true structural mirror.
+
+recurrent_encoder = keras.models.Sequential([
+    keras.layers.LSTM(100, return_sequences=True, input_shape=[28, 28]),
+    keras.layers.LSTM(30),
+], name="recurrent_encoder")
+
+recurrent_decoder = keras.models.Sequential([
+    keras.layers.RepeatVector(28, input_shape=[30]),
+    keras.layers.LSTM(30,  return_sequences=True),   # mirror of inner encoder LSTM
+    keras.layers.LSTM(100, return_sequences=True),   # mirror of outer encoder LSTM
+    keras.layers.TimeDistributed(keras.layers.Dense(28, activation="sigmoid")),
+], name="recurrent_decoder")
+
+recurrent_ae = keras.models.Sequential([recurrent_encoder, recurrent_decoder],
+                                        name="recurrent_ae")
+recurrent_ae.compile(loss="binary_crossentropy",
+                     optimizer=keras.optimizers.Adam(1e-3),
+                     metrics=[rounded_accuracy])
+history = recurrent_ae.fit(X_train, X_train, epochs=10,
+                            validation_data=(X_valid, X_valid))
+
+
+show_reconstructions(recurrent_ae)
+plt.show()
+
+# ==============================================================================
+# ## Stacked denoising Autoencoder with Gaussian noise
+# ==============================================================================
+
+
+tf.random.set_seed(42)
+np.random.seed(42)
+
+denoising_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.GaussianNoise(0.2),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+denoising_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+denoising_ae = keras.models.Sequential([denoising_encoder, denoising_decoder])
+denoising_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                     metrics=[rounded_accuracy])
+history = denoising_ae.fit(X_train, X_train, epochs=10,
+                           validation_data=(X_valid, X_valid))
+
+
+tf.random.set_seed(42)
+np.random.seed(42)
+
+noise = keras.layers.GaussianNoise(0.2)
+show_reconstructions(denoising_ae, noise(X_valid, training=True))
+plt.show()
+
+# ==============================================================================
+# And using dropout
+# ==============================================================================
+
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout_encoder = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(100, activation="selu"),
+    keras.layers.Dense(30, activation="selu")
+])
+dropout_decoder = keras.models.Sequential([
+    keras.layers.Dense(100, activation="selu", input_shape=[30]),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
+])
+dropout_ae = keras.models.Sequential([dropout_encoder, dropout_decoder])
+dropout_ae.compile(loss="binary_crossentropy", optimizer=keras.optimizers.SGD(learning_rate=1.0),
+                   metrics=[rounded_accuracy])
+history = dropout_ae.fit(X_train, X_train, epochs=10,
+                         validation_data=(X_valid, X_valid))
+
+tf.random.set_seed(42)
+np.random.seed(42)
+
+dropout = keras.layers.Dropout(0.5)
+show_reconstructions(dropout_ae, dropout(X_valid, training=True))
+save_fig("dropout_denoising_plot", tight_layout=False)
+
+!ec
+
+
+
+!split
+===== PyTorch example =====
+
+
+We will continue with the MNIST database, which has $60000$ training
+examples and a test set of 10000 handwritten numbers. The images have
+only one color channel and have a size of $28\times 28$ pixels.  We
+start by uploading the data set.
+
+!bc pycod
+# import the Torch packages
+# transforms are used to preprocess the images, e.g. crop, rotate, normalize, etc
+import torch
+from torchvision import datasets,transforms
+
+# specify the data path in which you would like to store the downloaded files
+# ToTensor() here is used to convert data type to tensor
+
+train_dataset = datasets.MNIST(root='./mnist_data/', train=True, transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.MNIST(root='./mnist_data/', train=False, transform=transforms.ToTensor(), download=True)
+print(train_dataset)
+batchSize=128
+
+#only after packed in DataLoader, can we feed the data into the neural network iteratively
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batchSize, shuffle=True)
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batchSize, shuffle=False)
+
+# ==============================================================================
+# We visualize the images here using the $imshow$ function  function and the $make\_grid$ function from PyTorch to arrange and display them.
+# ==============================================================================
+
+# package we used to manipulate matrix
+import numpy as np
+# package we used for image processing
+from matplotlib import pyplot as plt
+from torchvision.utils import make_grid
+
+def imshow(img):
+    npimg = img.numpy()
+    #transpose: change array axis to correspond to the plt.imshow() function     
+    plt.imshow(np.transpose(npimg, (1, 2, 0))) 
+    plt.show()
+
+# load the first 16 training samples from next iteration
+# [:16,:,:,:] for the 4 dimension of examples, first dimension take first 16, other dimension take all data
+# arrange the image in grid
+examples, _ = next(iter(train_loader))
+example_show=make_grid(examples[:16,:,:,:], 4)
+
+# then display them
+imshow(example_show)
+
+# ==============================================================================
+# Our autoencoder consists of two parts, see also the TensorFlow example
+# above. The encoder and decoder parts are represented by two fully
+# connected feed forward neural networks where we use the standard
+# Sigmoid function.  In the encoder part we reduce the dimensionality of
+# the image from $28\times 28=784$ pixels to first $16\times 16=256$
+# pixels and then to 128 pixels. The 128 pixel representation is then
+# used to define the representation of the input and the input to the
+# decoder part.  The latter attempts to reconstruct the images.
+# ==============================================================================
+
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+num_input    = 784   # 28*28
+num_hidden_1 = 256   # first hidden layer
+num_hidden_2 = 128   # bottleneck
+
+# Symmetric autoencoder:
+#   Encoder:  784 -[ReLU+BN]-> 256 -[ReLU+BN]-> 128
+#   Decoder:  128 -[ReLU+BN]-> 256 -[Sigmoid]->  784
+#
+# Changes vs original:
+# 1. Hidden layers use ReLU instead of Sigmoid: avoids vanishing gradients
+#    and matches standard practice for intermediate layers.
+# 2. BatchNorm1d after each Linear stabilises and accelerates training.
+# 3. Encoder and decoder are exposed as nn.Sequential attributes so that
+#    model.encoder(x) and model.decoder(z) can be called directly for
+#    latent-space analysis (same API as the original, but now a Sequential).
+# 4. Decoder is an exact structural mirror: same layer widths in reverse,
+#    same activations at each depth (ReLU for hidden, Sigmoid for output).
+
+class Autoencoder(nn.Module):
+    def __init__(self, x_dim, h_dim1, h_dim2):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(x_dim,  h_dim1), nn.BatchNorm1d(h_dim1), nn.ReLU(),
+            nn.Linear(h_dim1, h_dim2), nn.BatchNorm1d(h_dim2), nn.ReLU(),
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(h_dim2, h_dim1), nn.BatchNorm1d(h_dim1), nn.ReLU(),
+            nn.Linear(h_dim1, x_dim),  nn.Sigmoid(),
+        )
+    def forward(self, x):
+        return self.decoder(self.encoder(x))
+
+model = Autoencoder(num_input, num_hidden_1, num_hidden_2)
+print(model)
+print(f"\nEncoder params: {sum(p.numel() for p in model.encoder.parameters()):,}")
+print(f"Decoder params: {sum(p.numel() for p in model.decoder.parameters()):,}")
+
+# ==============================================================================
+# We define here the cost/loss function and the optimizer we employ (Adam here).
+# ==============================================================================
+
+# Optimised training loop.
+# Changes vs original:
+# 1. zero_grad(set_to_none=True) skips the memset() call per parameter tensor.
+# 2. A validation pass runs every epoch so convergence can be monitored.
+# 3. Report includes both train and validation loss every 10 epochs.
+
+optimizer     = optim.Adam(model.parameters(), lr=1e-3)
+loss_function = nn.MSELoss()
+num_epochs    = 100
+
+val_loader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
+
+print("==== Training start ====")
+for epoch in range(1, num_epochs + 1):
+    model.train()
+    train_loss = 0.0
+    for data, _ in train_loader:
+        inputs = data.view(-1, 784)
+        recon  = model(inputs)
+        loss   = loss_function(recon, inputs)
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        optimizer.step()
+        train_loss += loss.item()
+    train_loss /= len(train_loader)
+
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for data, _ in val_loader:
+            inputs   = data.view(-1, 784)
+            val_loss += loss_function(model(inputs), inputs).item()
+    val_loss /= len(val_loader)
+
+    if epoch % 10 == 0:
+        print(f"Epoch {epoch:3d}/{num_epochs}  "
+              f"train: {train_loss:.6f}  val: {val_loss:.6f}")
+print("==== Training finish ====")
+
+# ==============================================================================
+# As we have trained the network, we will now reconstruct various test samples to see if the model can generalize to data which
+# were not included in the training set.
+# ==============================================================================
+
+
+# load 16 images from testset
+inputs, _ = next(iter(test_loader))
+inputs_example = make_grid(inputs[:16,:,:,:],4)
+imshow(inputs_example)
+
+#convert from image to tensor
+#inputs=inputs.cuda()
+inputs=torch.reshape(inputs,(-1,784))
+
+# get the outputs from the trained model
+outputs=model(inputs)
+
+#convert from tensor to image
+outputs=torch.reshape(outputs,(-1,1,28,28))
+outputs=outputs.detach().cpu()
+
+#show the output images
+outputs_example = make_grid(outputs[:16,:,:,:],4)
+imshow(outputs_example)
+
+# ==============================================================================
+# After training the auto-encoder, we can now use the model to reconstruct some images.
+# In order to reconstruct different training images, the model
+# has learned to recognize how the image looks like and describe it in
+# the 128-dimensional  latent space. In other words, the visual information of
+# images is compressed and encoded in the 128-dimensional representations. As we
+# assume that samples from the same categories should be more visually
+# similar than those from different classes, the representations can
+# then be used for image recognition, i.e., handwritten digit images
+# recognition in our case.
+# 
+# One simple way to recognize images is to randomly select ten training
+# samples from each class and annotate them with the corresponding label.
+# Then given the
+# test data, we can predict which classes they belong to by finding the
+# most similar labelled training samples to them.
+# ==============================================================================
+
+
+# get 100 image-label pairs from training set
+x_train, y_train = next(iter(train_loader))
+
+# 10 classes, 10 samples per class, 100 in total
+candidates = np.random.choice(batchSize, 10*10)
+
+# randomly select 100 samples
+x_train = x_train[candidates]
+y_train = y_train[candidates]
+
+# display the selected samples and print their labels
+
+imshow(make_grid(x_train[:100,:,:,:],10))
+print(y_train.reshape(10, 10))
+
+# get 100 image-label pairs from test set
+x_test, y_test = next(iter(train_loader))
+candidates_test = np.random.choice(batchSize, 10*10)
+
+x_test = x_test[candidates_test]
+y_test = y_test[candidates_test]
+
+# display the selected samples and print their labels
+imshow(make_grid(x_test[:100,:,:,:],10))
+
+print(y_test.reshape(10, 10))
+
+
+# compute the representations of training and test samples
+#h_train=model.encoder(torch.reshape(x_train.cuda(),(-1,784)))
+#h_test=model.encoder(torch.reshape(x_test.cuda(),(-1,784)))
+h_train=model.encoder(torch.reshape(x_train,(-1,784)))
+h_test=model.encoder(torch.reshape(x_test,(-1,784)))
+
+# find the nearest training samples to each test instance, in terms of MSE
+MSEs = np.mean(np.power(np.expand_dims(h_test.detach().cpu(), axis=1) - np.expand_dims(h_train.detach().cpu(), axis=0), 2), axis=2)
+neighbours = MSEs.argmin(axis=1)
+predicts = y_train[neighbours]
+
+# print(np.stack([y_test, predicts], axis=1))
+print('Recognition accuracy according to the learned representation is %.1f%%' % (100 * (y_test == predicts).numpy().astype(np.float32).mean()))
+
+!ec 
+
+
+
+
 
 !split
 ===== What Is Generative Modeling? =====
@@ -534,563 +1165,5 @@ and
 \]
 !et
 
-
-!split
-===== Reminder on Markov Chain Monte Carlo =====
-
-* We want to study a physical system which evolves towards equilibrium, from given  initial conditions.
-* We start with a PDF $w(x_0,t_0)$  and we want to understand how the system evolves with time.
-* We want to reach a situation where after a given number of time steps we obtain a steady state. This means that the system reaches its most likely state (equilibrium situation)
-* Our PDF is normally a multidimensional object whose normalization constant is impossible to find.
-* Analytical calculations from $w(x,t)$ are not possible.
-* To sample directly from from $w(x,t)$ is not possible/difficult.
-* The transition probability $W$ is also not  known.
-* How can we establish that we have reached a steady state?   Sounds impossible!
-
-_Use Markov chain Monte Carlo_
-
-!split 
-===== Brownian motion and Markov processes =====
-A Markov process is a random walk with a selected probability for making a
-move. The new move is independent of the previous history of the system.
-
-The Markov process is used repeatedly in Monte Carlo simulations in order to generate
-new random states.
-
-The reason for choosing a Markov process is that when it is run for a
-long enough time starting with a random state, we will eventually reach the most likely state of the system.
-
-In thermodynamics, this means that after a certain number of Markov processes
-we reach an equilibrium distribution.
-
-This mimicks the way a real system reaches
-its most likely state at a given temperature of the surroundings.
-
-!split 
-===== Brownian motion and Markov processes, Ergodicity and Detailed balance =====
-
-To reach this distribution, the Markov process needs to obey two important conditions, that of
-_ergodicity_ and _detailed balance_. These conditions impose then constraints on our algorithms
-for accepting or rejecting new random states.
-
-
-The Metropolis algorithm discussed here
-abides to both these constraints.
-
-The Metropolis algorithm is widely used in Monte Carlo
-simulations and the understanding of it rests within
-the interpretation of random walks and Markov processes.
-
-For a proof the ergodic theorem see URL:"https://www.pnas.org/doi/10.1073/pnas.17.2.656".
-
-!split 
-===== Brownian motion and Markov processes, jargon =====
-
-In a random walk one defines a mathematical entity called a _walker_, 
-whose  attributes
-completely define the state of the system in question. 
-
-The state of the system  can refer to any physical quantities,
-from the vibrational state of a molecule specified by a set of quantum numbers, 
-to the brands of coffee in your favourite supermarket.
-
-
-The walker moves in an appropriate state space by a combination of 
-deterministic and random displacements from its previous
-position.
-
-This sequence of steps forms a _chain_.
-
-!split 
-===== Brownian motion and Markov processes, sequence of ingredients =====
-
-* We want to study a physical system which evolves towards equilibrium, from given  initial conditions.
-* Markov chains are intimately linked with the physical process of diffusion. 
-* From a Markov chain we can then derive the conditions for detailed balance and ergodicity. These are the conditions needed for obtaining a steady state.
-* The widely used algorithm for doing this is the so-called Metropolis algorithm, in its refined form the Metropolis-Hastings algorithm.
-
-!split
-===== Markov processes =====
-!bblock
-A Markov process allows in principle for a microscopic description of Brownian motion.
-As with the random walk studied in the previous section, we consider a particle 
-which moves along the  $x$-axis in the form of a series of jumps with step length 
-$\Delta x = l$. Time and space are discretized and the subsequent moves are
-statistically independent, i.e., the new move depends only on the previous step
-and not on the results from earlier trials. 
-We start at a position $x=jl=j\Delta x$ and move to 
-a new position $x =i\Delta x$ during a step $\Delta t=\epsilon$, where 
-$i\ge  0$ and $j\ge 0$ are integers. 
-The original probability distribution function (PDF) of the particles is given by  
-$p_i(t=0)$ where $i$ refers to a specific position on the grid in 
-!eblock
-The function $p_i(t=0)$ is now the discretized version of $p(x,t)$.
-We can regard the discretized PDF as a vector.
-
-!split
-===== Markov processes =====
-!bblock
-For the Markov process we have a transition probability from a position
-$x=jl$ to a position $x=il$ given by
-!bt
-\begin{equation*}
-   W_{ij}(\epsilon)=W(il-jl,\epsilon)=\left\{\begin{array}{cc}\frac{1}{2} & |i-j| = 1\\
-             0 & \mathrm{else} \end{array} \right. ,
-\end{equation*}
-!et
-where $W_{ij}$ is normally called 
-the transition probability and we can represent it, see below,
-as a matrix. 
-_Here we have specialized to a case where the transition probability is known_.
-
-Our new PDF $p_i(t=\epsilon)$ is now related to the PDF at
-$t=0$ through the relation
-
-!bt
-\begin{equation*} 
-   p_i(t=\epsilon) =\sum_{j} W(j\rightarrow i)p_j(t=0).
-\end{equation*}
-!et
- 
-This equation represents the discretized time-development of an original 
-PDF with equal probability of jumping left or right.
-!eblock
-
-!split
-===== Markov processes, the probabilities =====
-!bblock
-
-Since both $\bm{W}$ and $\bm{p}$ represent probabilities, they have to be normalized, i.e., we require
-that at each time step we have
-
-!bt
-\begin{equation*} 
-   \sum_i p_i(t) = 1, 
-\end{equation*}
-!et
-and
-
-!bt
-\begin{equation*} 
-   \sum_j W(j\rightarrow i) = 1,
-\end{equation*}
-!et
-which applies for all $j$-values.
-The further constraints are
-$0 \le W_{ij} \le 1$  and  $0 \le p_{j} \le 1$.
-Note that the probability for remaining at the same place is in general 
-not necessarily equal zero. 
-!eblock
-
-!split
-===== Markov processes =====
-!bblock
-The time development of our initial PDF can now be represented through the action of
-the transition probability matrix applied $n$ times. At a 
-time  $t_n=n\epsilon$ our initial distribution has developed into
-
-!bt
-\begin{equation*}
-   p_i(t_n) = \sum_jW_{ij}(t_n)p_j(0),
-\end{equation*}
-!et
-and defining
-
-!bt
-\begin{equation*}
-   W(il-jl,n\epsilon)=(W^n(\epsilon))_{ij}
-\end{equation*}
-!et
-we obtain
-
-!bt
-\begin{equation*}
-   p_i(n\epsilon) = \sum_j(W^n(\epsilon))_{ij}p_j(0),
-\end{equation*}
-!et
-or in matrix-vector form
-!bt
-\begin{equation} label{eq:wfinal}
-   \bm{p}(n\epsilon) = \bm{W}^n(\epsilon)\bm{p}(0).
-\end{equation}
-!et
-!eblock
-
-
-!split
-===== What do the results mean? =====
-
-
-We have after $t$-steps
-
-!bt
-\begin{equation*}
-   \bm{p}(t) = \bm{W}^t\bm{p}(0),
-\end{equation*}
-!et
-with $\bm{p}(0)$ the distribution at $t=0$ and $\bm{W}$ representing the 
-transition probability matrix. 
-
-
-
-!split
-===== Understanding the basics =====
-
-
-We can always expand $\bm{w}(0)$ in terms of the right eigenvectors 
-$\bm{v}$ of $\bm{W}$ as
-
-!bt
-\begin{equation*}
-    \bm{p}(0)  = \sum_i\alpha_i\bm{v}_i,
-\end{equation*}
-!et
-resulting in
-
-!bt
-\begin{equation*}
-\bm{p}(t) = \bm{W}^t\bm{p}(0)=\bm{W}^t\sum_i\alpha_i\bm{v}_i=
-\sum_i\lambda_i^t\alpha_i\bm{v}_i,
-\end{equation*}
-!et
-with $\lambda_i$ the $i^{\mathrm{th}}$ eigenvalue corresponding to  
-the eigenvector $\bm{v}_i$. 
-
-If we assume that $\lambda_0$ is the largest eigenvector we see that in the limit $t\rightarrow \infty$,
-$\bm{p}(t)$ becomes proportional to the corresponding eigenvector 
-$\bm{v}_0$. This is our steady state or final distribution. 
-
-
-
-
-
-!split
-===== Basics of the Metropolis Algorithm =====
-
-
-The Metropolis
-algorithm is a method to sample a normalized probability
-distribution by a stochastic process. We define $p_i^{(n)}$ to
-be the probability for finding the system in the state $i$ at step $n$.
-
-In the simulations, our assumption is that we have a model for $p_i^{(n)}$, but we do not know $W$.
-We will hence model $W$ in terms of a likelihood for making transition $T$ and a likelihood for accepting a transition.
-That is
-!bt
-\[
-W_{i\rightarrow j}=A_{i\rightarrow j}T_{i\rightarrow j}
-\]
-!et
-
-!split
-=====  The basic of the Metropolis Algorithm =====
-
-
-
-* Sample a possible new state $j$ with some probability $T_{i\rightarrow j}$.
-* Accept the new state $j$ with probability $A_{i \rightarrow j}$ and use it as the next sample.
-* With probability $1-A_{i\rightarrow j}$ the move is rejected and the original state $i$ is used again as a sample.
-
-
-We wish to derive the required properties of $T$ and $A$ such that
-$p_i^{(n\rightarrow \infty)} \rightarrow p_i$ so that starting
-from any distribution, the method converges to the correct distribution.
-Note that the description here is for a discrete probability distribution.
-Replacing probabilities $p_i$ with expressions like $p(x_i)dx_i$ will
-take all of these over to the corresponding continuum expressions.
-
-!split
-===== More on the Metropolis =====
-
-The dynamical equation for $p_i^{(n)}$ can be written directly from
-the description above. The probability of being in the state $i$ at step $n$
-is given by the probability of being in any state $j$ at the previous step,
-and making an accepted transition to $i$ added to the probability of
-being in the state $i$, making a transition to any state $j$ and
-rejecting the move:
-!bt
-\begin{equation}
-\label{eq:eq1}
-p^{(n)}_i = \sum_j \left [
-p^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
-+p^{(n-1)}_iT_{i\rightarrow j}\left ( 1- A_{i\rightarrow j} \right)
-\right ] \,.
-\end{equation}
-!et
-
-!split
-=====  Metropolis algorithm, setting it up =====
-Since the probability of making some transition must be 1,
-$\sum_j T_{i\rightarrow j} = 1$, and Eq. (ref{eq:eq1}) becomes
-
-!bt
-\begin{equation}
-p^{(n)}_i = p^{(n-1)}_i +
- \sum_j \left [
-p^{(n-1)}_jT_{j\rightarrow i} A_{j\rightarrow i} 
--p^{(n-1)}_iT_{i\rightarrow j}A_{i\rightarrow j}
-\right ] \,.
-\end{equation}
-!et
-
-!split
-===== Metropolis continues =====
-
-For large $n$ we require that $p^{(n\rightarrow \infty)}_i = p_i$,
-the desired probability distribution. Taking this limit, gives the
-balance requirement
-
-!bt
-\begin{equation}
-\sum_j \left [p_jT_{j\rightarrow i} A_{j\rightarrow i}-p_iT_{i\rightarrow j}A_{i\rightarrow j}
-\right ] = 0,
-\end{equation}
-!et
-
-
-!split
-===== Detailed Balance =====
-
-The balance requirement is very weak. Typically the much stronger detailed
-balance requirement is enforced, that is rather than the sum being
-set to zero, we set each term separately to zero and use this
-to determine the acceptance probabilities. Rearranging, the result is
-
-!bt
-\begin{equation}
-\frac{ A_{j\rightarrow i}}{A_{i\rightarrow j}}
-= \frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}} \,.
-\end{equation}
-!et
-
-This is the "detailed balance requirement":"https://cims.nyu.edu/~holmes/teaching/asa19/handout_Lecture3_2019.pdf"
-
-!split
-===== More on Detailed Balance =====
-
-The Metropolis choice is to maximize the $A$ values, that is
-
-!bt
-\begin{equation}
-A_{j \rightarrow i} = \min \left ( 1,
-\frac{p_iT_{i\rightarrow j}}{ p_jT_{j\rightarrow i}}\right ).
-\end{equation}
-!et
-
-Other choices are possible, but they all correspond to multiplying
-$A_{i\rightarrow j}$ and $A_{j\rightarrow i}$ by the same constant
-smaller than unity. The penalty function method uses just such
-a factor to compensate for $p_i$ that are evaluated stochastically
-and are therefore noisy.
-
-Having chosen the acceptance probabilities, we have guaranteed that
-if the  $p_i^{(n)}$ has equilibrated, that is if it is equal to $p_i$,
-it will remain equilibrated.
-
-
-
-!split
-===== Gibbs sampling =====
-
-An efficient way if performing the sampling is through the use of
-Gibbs sampling. The latter uses the conditional probability instead of
-the full probability as done in the Metropolis algorithm.
-
-Gibbs sampling is useful for sampling from high-dimensional
-distributions where single-variable conditional distributions are
-known.
-
-For example, say it is too expensive to sample from $p(x_0, x_1, x_2,
-..., x_d)$. With Gibbs sampling, we initialize all variables to
-arbitrary values. Then while taking each sample, we also iterate
-through the dimensions and replace its value with a sample from the
-univariate conditional distribution. For example we can update $x_1$
-using $p(x_1 \mid x_0, x_2, ..., x_d)$, which is easy to sample over
-because it is  only one dimension.
-
-
-!split
-===== Understanding Gibbs samoling =====
-
-This part is best seen with the jupyter-notebook.
-These notes have been adapted from URL:"https://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/"
-
-To illustrate Gibbs
-sampling we will sample several points and compare them with those
-generated from a known distribution, in our case the well-known
-two-dimensional Gaussian defined as
-
-!bt
-\[
-p(a, b) = \mathcal N\left(\left[\begin{array}{c} a \\ b \end{array}\right]; \left[\begin{array}{c}\mu_a \\ \mu_b\end{array}\right], \left[\begin{array}{cc}\sigma_a & cov(a, b) \\ cov(a, b) & \sigma_b\end{array}\right]\right) = \mathcal N\left(\left[\begin{array}{c}a \\ b\end{array}\right]; \left[\begin{array}{c}0 \\ 0\end{array}\right], \left[\begin{array}{cc}1 & 0.5 \\ 0.5 & 1\end{array}\right]\right).
-\]
-!et
-
-!bc pycod
-import numpy as np
-import matplotlib.pyplot as plt
-# two dimensions
-D = 2
-
-# set up the means (standard normal distribution
-a_mu = 0
-b_mu = 0
-# and the variances and covariances
-a_sigma = 1
-b_sigma = 1
-a_b_cov = 0.5
-
-joint_cov = np.vstack(((a_sigma, a_b_cov), (a_b_cov, b_sigma)))
-joint_mu = np.vstack((a_mu, b_mu))
-!ec
-
-Here we have used $\epsilon \sim \mathcal N(0, 1)$ which allows us to sample from $\mathcal{N}(\mu, \sigma^2)$ by using $\sigma\epsilon + \mu$.
-In the case of multivariate Gaussians, we use the Cholesky decomposition of the covariance matrix
-and then use it and the mean to adjust numbers generated using `np.random.randn`.
-
-!bc pycod
-N = 10000
-L = np.linalg.cholesky(joint_cov)
-samples_from_true_distribution =  L @ np.random.randn(D, N) + joint_mu
-plt.plot(*samples_from_true_distribution, '.', alpha=0.1)
-plt.axis([-4, 4, -4, 4])
-plt.show()
-!ec
-
-!split
-===== Conditional probabilities =====
-
-Gibbs sampling requires conditional distributions for each variable. 
-
-In the case of Gaussians, there is  a closed-form for the conditional. With a "multivariate Gaussian":"http://www.inf.ed.ac.uk/teaching/courses/mlpr/2017/notes/w7c_gaussian_processes.html" we have
-!bt
-\[
-p(\textbf{f}, \textbf{g}) = 
-\mathcal N\left(
-\left[\begin{array}{c} \textbf{f} \\ \textbf{g} \end{array}\right];
-\left[\begin{array}{c}\textbf{a} \\ \textbf{b}\end{array}\right], 
-\left[\begin{array}{cc}A & C^{\top} \\ C & B\end{array}\right]
-\right),
-\]
-!et
-with the conditional probability
-!bt
-\[
-p(\textbf{f} \mid \textbf{g}) = \mathcal N(\textbf{f}; \textbf{a} + CB^{-1}(\textbf{g} - \textbf{b}), A - CB^{-1}C^{\top}).
-\]
-!et
-
-!bc pycod
-def get_conditional_dist(joint_mu, joint_cov, var_index):
-    '''Returns the conditional distribution given the joint distribution and which variable
-    the conditional probability should use.
-    Right now this only works for 2-variable joint distributions.
-    
-      joint_mu: joint distribution's mu
-      joint_cov: joint distribution's covariance
-      var_index: index of the variable in the joint distribution. Everything else will be 
-        conditioned on. For example, if the joint distribution p(a, b, c) has mu [mu_a, mu_b, mu_c],
-        to get p(c | a, b), use var_index = 2.
-      
-    returns:
-      a function that can sample from the univariate conditional distribution
-    '''
-    assert joint_mu.shape[0] == 2, 'Sorry, this function only works for 2-dimensional joint distributions right now'
-    a = joint_mu[var_index]
-    b = joint_mu[~var_index]
-    
-    A = joint_cov[var_index, var_index]
-    B = joint_cov[~var_index, ~var_index]
-    C = joint_cov[var_index, ~var_index]
-    
-    # we're dealing with one dimension so
-    B_inv = 1/B
-    
-    # Return a function that can sample given a value of g
-    def dist(g):
-        # a + C*B^{-1}(g - b)
-        mu = a + C * B_inv * (g - b)
-        # A - C * B^{-1} * C^T
-        cov = A - B_inv * C * C
-        return np.sqrt(cov) * np.random.randn(1) + mu
-    
-    return dist
-
-!ec
-With this we can set up the conditionals for this problem
-!bc pycod
-# Set up the conditional probability distribution for each dimension
-# For example, I can sample p(a | b) using sample_for_dim[0].
-
-univariate_conditionals = [
-    get_conditional_dist(joint_mu, joint_cov, d)
-    for d in range(D)
-]
-!ec
-
-The $gibbs\_sample$ function here only needs the univariate conditionals and how many samples to take.
-!bc pycod
-def gibbs_sample(univariate_conditionals, sample_count):
-    '''Does Gibbs sampling given the distribution's univariate conditionals.
-    
-    Returns a D x N matrix
-    '''
-    D = len(univariate_conditionals)
-    assert D == 2, "Sorry, this only supports 2 dimensions right now"
-    
-    # initializes an empty matrix for the samples
-    samples = np.zeros((D, sample_count))
-
-    # initialize the first sample to some arbitrary value
-    samples[:, 0] = [3, -3]
-    
-    for i in range(1, sample_count):
-        # first set this sample equal to the previous sample
-        samples[:, i] = samples[:, i - 1]
-        
-        # now update the dimension whose turn it is using the conditional distribution
-        # pass in all dimension from the previous sample except this dimension
-        d = i % D
-        samples[d, i] = univariate_conditionals[d](samples[~d, i - 1])
-                 
-    return samples
-!ec
-
-One thing to keep in mind about Gibbs sampling is that it only updates
-one dimension at a time. This means that samples from around the same
-time are correlated with each other. We have drawn the line connecting
-sequential samples to show this.
-
-
-
-!bc pycod
-samples = gibbs_sample(univariate_conditionals, sample_count=100)
-fig, ax = plt.subplots()
-
-ax.plot(*samples_from_true_distribution, '.', alpha=0.1)
-ax.plot(*samples, 'k')
-ax.plot(*samples, '.r')
-ax.axis('square')
-plt.show()
-!ec
-
-Finally we sample a bunch of points and see how they compare to those
-from the original distribution. It looks the same! What's cool is that
-the one using Gibbs sampling only used samples from the univariate
-conditionals!
-
-!bc pycod
-samples = gibbs_sample(univariate_conditionals, sample_count=N)
-fig, axs = plt.subplots(1, 3, figsize=(12, 4), sharex=True, sharey=True)
-# set all the axes
-axs[0].axis([-4, 4, -4, 4])
-axs[0].plot(*samples_from_true_distribution, '.', alpha=0.1)
-axs[0].set_title('original p(a, b)')
-axs[1].plot(*samples, 'k', alpha=0.8)
-axs[1].set_title('gibbs sampling path')
-axs[2].plot(*samples, '.g', alpha=0.1)
-axs[2].set_title('gibbs samples')
-plt.show()
-!ec
 
 
