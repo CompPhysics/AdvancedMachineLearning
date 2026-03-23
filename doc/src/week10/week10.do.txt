@@ -8,9 +8,10 @@ DATE: March 26
 !bblock
 * Finalizing discussion on autoencoders and implementing Autoencoders with TensorFlow/Keras and PyTorch
 * Discussion of Transformers
+* Reading recommendation: Raschka et al chapter 16 for transformer
 * Overview of generative models
-* Reading recommendation: Goodfellow et al chapters 16 and 18.1 and 18.2. Chapter 17 gives a background to Monte Carlo Markov Chains.
-* "Video of lecture":"https://youtu.be/ez9SrGOTOjA"
+* Reading recommendation: Goodfellow et al chapters 16 and 18.1 and 18.2 for generative models.
+#* "Video of lecture":"https://youtu.be/ez9SrGOTOjA"
 #* "Whiteboard notes":"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek10.pdf"
 !eblock
 
@@ -647,7 +648,7 @@ print('Recognition accuracy according to the learned representation is %.1f%%' %
 
 
 !split
-===== Deep Learning  =====
+===== Deep Learning and  Transformers  =====
 Classical deep learning architectures include:
 
 * multilayer perceptrons (MLPs),
@@ -665,7 +666,7 @@ Each architecture encodes a specific inductive bias:
 Transformers are also deep neural networks, but with a different structural principle: _adaptive interaction through attention._
 
 !split
-===== What ss a transformer? =====
+===== What is a transformer? =====
 A transformer is a neural-network architecture built around the idea of _self-attention_.
 
 Core principle:
@@ -815,7 +816,7 @@ In contrast, attention uses
 \]
 !et
 where the effective coupling $A_{ij}$ depends on the input $X$.
-Thus: fixed couplings versus Transformers which have  adaptive couplings.
+_In standard neural networks we have fixed couplings while Transformers have  adaptive couplings_.
 This is one reason transformers are so expressive.
 
 
@@ -834,7 +835,10 @@ where $\mathcal{N}(i)$ is a small local neighborhood.
 * locality,
 * translation invariance,
 * fixed kernels/filters.
-!eblock  
+!eblock
+
+!split
+===== Attention =====
 !bblock Attention instead uses
 !bt
 \[
@@ -1146,7 +1150,7 @@ This has motivated many sparse and efficient transformer variants.
 
 
 !split
-===== Why Transformers cecame so important =====
+===== Why Transformers became so important =====
 !bblock Transformers became dominant because they combine:
 * global context,
 * parallel computation,
@@ -1240,6 +1244,8 @@ A useful physical Science summary is:
 This is why transformers are becoming increasingly relevant in physics and PDE-based scientific machine learning.
 
 
+!split
+===== Program example =====
 
 
 
@@ -1415,58 +1421,6 @@ necesseraly normalized and is normally called the likelihood function.
 The function $p(X)$ on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.
 
 Let us try to illustrate Bayes' theorem through an example.
-
-!split
-=====  Example of Usage of Bayes' theorem =====
-
-Let us suppose that you are undergoing a series of mammography scans in
-order to rule out possible breast cancer cases.  We define the
-sensitivity for a positive event by the variable $X$. It takes binary
-values with $X=1$ representing a positive event and $X=0$ being a
-negative event. We reserve $Y$ as a classification parameter for
-either a negative or a positive breast cancer confirmation. (Short note on wordings: positive here means having breast cancer, although none of us would consider this being a  positive thing).
-
-We let $Y=1$ represent the the case of having breast cancer and $Y=0$ as not.
-
-Let us assume that if you have breast cancer, the test will be positive with a probability of $0.8$, that is we have
-
-!bt
-\[
-p(X=1\vert Y=1) =0.8.
-\]
-!et
-
-This obviously sounds  scary since many would conclude that if the test is positive, there is a likelihood of $80\%$ for having cancer.
-It is however not correct, as the following Bayesian analysis shows.
-
-!split
-===== Doing it correctly =====
-
-If we look at various national surveys on breast cancer, the general likelihood of developing breast cancer is a very small number.
-Let us assume that the prior probability in the population as a whole is
-
-!bt
-\[
-p(Y=1) =0.004.
-\]
-!et
-
-We need also to account for the fact that the test may produce a false positive result (false alarm). Let us here assume that we have
-!bt
-\[
-p(X=1\vert Y=0) =0.1.
-\]
-!et
-
-Using Bayes' theorem we can then find the posterior probability that the person has breast cancer in case of a positive test, that is we can compute
-
-!bt
-\[
-p(Y=1\vert X=1)=\frac{p(X=1\vert Y=1)p(Y=1)}{p(X=1\vert Y=1)p(Y=1)+p(X=1\vert Y=0)p(Y=0)}=\frac{0.8\times 0.004}{0.8\times 0.004+0.1\times 0.996}=0.031.
-\]
-!et
-That is, in case of a positive test, there is only a $3\%$ chance of having breast cancer!
-
 !split
 ===== Maximum Likelihood Estimation (MLE) =====
 
