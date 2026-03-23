@@ -121,131 +121,131 @@ Here:
 
 !split
 ===== Interpretation of the Attention Matrix =====
-  The matrix
-  \[
+The matrix
+!bt
+\[
   A = \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)
-  \]
-  acts like a learned kernel or coupling matrix.
-
-  Its entries satisfy
-  \[
-  A_{ij} \ge 0,
-  \qquad
-  \sum_j A_{ij}=1.
-  \]
-
-  Thus
-  \[
+\]
+!et
+acts like a learned kernel or coupling matrix. Its entries satisfy
+!bt
+\[
+  A_{ij} \ge 0, \qquad \sum_j A_{ij}=1.
+\]
+!et
+Thus
+!bt
+\[
   y_i = \sum_j A_{ij} v_j
-  \]
-  is a weighted average of the value vectors.
+\]
+!et
+is a weighted average of the value vectors.
 
-  Interpretation:
-  
-  * query \(q_i\): ``what does position \(i\) look for?''
-  * key \(k_j\): ``what does position \(j\) offer?''
-  * value \(v_j\): ``what information does position \(j\) contribute?''
-  
+!split
+===== Interpretation: =====
+!bblock  
+* query $q_i$: ``what does position \(i\) look for?''
+* key $k_j$: ``what does position \(j\) offer?''
+* value $v_j$: ``what information does position \(j\) contribute?''
+!eblock  
 
 
-%------------------------------------------------
-!split ===== Comparison with a Standard MLP}
-  A standard MLP layer has the form
-  \[
+!split
+===== Comparison with a Standard MLP =====
+A standard MLP layer has the form
+!bt
+\[
   y = \sigma(Wx + b),
-  \]
-  with fixed weights \(W\).
-
-  In contrast, attention uses
-  \[
+\]
+!et
+with fixed weights $W$.
+In contrast, attention uses
+!bt
+\[
   y_i = \sum_j A_{ij}(X)\, v_j,
-  \]
-  where the effective coupling \(A_{ij}\) depends on the input \(X\).
-
-  Thus:
-  \[
-  \text{MLP: fixed couplings}
-  \qquad\text{vs}\qquad
-  \text{Transformer: adaptive couplings}.
-  \]
-
-  This is one reason transformers are so expressive.
+\]
+!et
+where the effective coupling $A_{ij}$ depends on the input $X$.
+Thus: $\text{MLP: fixed couplings} \qquad\text{vs}\qquad\text{Transformer: adaptive couplings$.
+This is one reason transformers are so expressive.
 
 
-%------------------------------------------------
-!split ===== Comparison with CNNs}
-  In a convolutional neural network,
-  \[
+
+!split
+===== Comparison with CNNs =====
+
+In a convolutional neural network,
+!bt
+\[
   y_i = \sum_{r \in \mathcal{N}(i)} w_r\, x_{i+r},
-  \]
-  where \(\mathcal{N}(i)\) is a small local neighborhood.
-
-  Thus CNNs assume:
-  
-  * locality,
-  * translation invariance,
-  * fixed kernels.
-  
-
-  Attention instead uses
-  \[
+\]
+!et
+where $\mathcal{N}(i)$ is a small local neighborhood.
+!bblock Thus CNNs assume:
+* locality,
+* translation invariance,
+* fixed kernels/filters.
+!eblock  
+!bblock Attention instead uses
+!bt
+\[
   y_i = \sum_j A_{ij}(X)\, x_j,
-  \]
-  which is
-  
-  * global,
-  * adaptive,
-  * not restricted to local neighborhoods.
-  
+\]
+!et
+which is
+* global,
+* adaptive,
+* not restricted to local neighborhoods.
+!eblock  
 
 
-%------------------------------------------------
-!split ===== Comparison with RNNs}
-  In an RNN,
-  \[
+
+!split
+===== Comparison with RNNs =====
+In an RNN,
+!bt
+\[
   h_t = f(h_{t-1}, x_t),
-  \]
-  so information propagates sequentially.
-
-  Advantages:
-  
-  * natural for time series,
-  * explicit recurrence.
-  
-
-  Limitations:
-  
-  * long-range dependencies are hard,
-  * training can be unstable,
-  * computation is hard to parallelize.
-  
-
-  Transformers avoid recurrence and instead connect all positions simultaneously through attention.
+\]
+!et
+so information propagates sequentially.
+!bblock  Advantages:
+* natural for time series,
+* explicit recurrence.
+!eblock  
+!bblock  Limitations:
+* long-range dependencies are hard,
+* training can be unstable,
+* computation is hard to parallelize.
+!eblock  
+Transformers avoid recurrence and instead connect all positions simultaneously through attention.
 
 
-%------------------------------------------------
-!split ===== Why the Factor \(1/\sqrt{d_k}\)?}
-  The attention logits are
-  \[
-  q_i \cdot k_j.
-  \]
 
-  If \(q_i\) and \(k_j\) have \(d_k\) components with comparable variance, then typically
-  \[
+!split
+===== Why the Factor $1/\sqrt{d_k}$? =====
+The attention logits are
+!bt
+\[
+ q_i \cdot k_j.
+\]
+!et
+If $q_i$ and \(k_j\) have \(d_k\) components with comparable variance, then typically
+!bt
+\[
   q_i \cdot k_j \sim O(\sqrt{d_k})
-  \]
-  or \(O(d_k)\) depending on scaling assumptions.
-
-  Without normalization, these logits can become large, causing the softmax to saturate.
-
-  Therefore one rescales by
-  \[
+\]
+!et
+or \(O(d_k)\) depending on scaling assumptions.
+Without normalization, these logits can become large, causing the softmax to saturate. Therefore one rescales by
+!bt
+\[
   \frac{1}{\sqrt{d_k}}
-  \]
-  to stabilize optimization and keep gradients in a useful regime.
+\]
+!et
+to stabilize optimization and keep gradients in a useful regime.
 
 
-%------------------------------------------------
 !split ===== Multi-Head Attention}
   In practice, transformers use multiple attention heads.
 
