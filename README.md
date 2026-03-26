@@ -139,16 +139,17 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 ## March 23-27: Generative models
 - Summary of Autoencoders
-- Monte Carlo methods and structured probabilistic models for deep learning
-- Partition function and Boltzmann machines
-- Boltzmann machines
+- Brief introductio to transformer, reading recommendation Raschka et al chapter 16
+- Introduction to generative methods
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week10/ipynb/week10.ipynb  
 - Reading recommendation: Goodfellow et al chapters 16-18
-- Video of lecture and whiteboard notes to be added
+- Video of lecture at https://youtu.be/0M3PranWMJI
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek10.pdf
 
 ## March 30- April 3: Public holiday, no lectures
 
 ## April 6-10: Deep generative models, Boltzmann machines
+- Generative models, basic equations and survey of methods to be covered
 - Restricted Boltzmann machines
 - Reminder on Markov Chain Monte Carlo and Gibbs sampling
 - Discussions of various Boltzmann machines
@@ -186,10 +187,10 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 
 ## May 11-15:  Discussion of projects and summary of course
-- Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
+- Thursday May 14 is a public holiday in Norway, no lecture
 
 ## May 18-22:  Discussion of projects
-
+- Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
 
 
 ## Recommended textbooks:
