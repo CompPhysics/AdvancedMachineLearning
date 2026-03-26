@@ -1,0 +1,427 @@
+\documentclass{beamer}
+
+\usepackage{amsmath,amsfonts,amssymb,bm}
+\usepackage{physics}
+\usepackage{braket}
+
+\usetheme{Madrid}
+
+\title{Can Transformers Be Used to Solve Partial Differential Equations?}
+%\subtitle{A Physics-Oriented Perspective}
+\author{Morten Hjorth-Jensen}
+\date{FYS5429/9429 Spring 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%================================================
+\section{Main Idea}
+%================================================
+
+\begin{frame}{Short Answer}
+Yes, transformers can be used to solve partial differential equations (PDEs), but not usually in the same direct sense as a classical numerical solver.
+
+\medskip
+
+Instead, they typically learn an \emph{operator map}:
+\[
+\mathcal{L}[u](x,t) = f(x,t)
+\qquad \Longrightarrow \qquad
+u = \mathcal{G}(f),
+\]
+where \(\mathcal{G}=\mathcal{L}^{-1}\) is the solution operator.
+
+\medskip
+
+The transformer learns an approximation
+\[
+\mathcal{G}_\theta : f \mapsto u.
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Physical Interpretation}
+A PDE defines a map from:
+\begin{itemize}
+\item coefficients,
+\item forcing terms,
+\item initial and boundary conditions
+\end{itemize}
+to a solution field.
+
+\medskip
+
+Thus the learning problem is:
+\[
+u(x,t) \approx \mathrm{Transformer}_\theta(\text{input fields}).
+\]
+
+From a PDE point of view, this is best seen as \emph{learning the inverse operator} associated with the PDE.
+\end{frame}
+
+%================================================
+\section{Transformers and PDE Operators}
+%================================================
+
+\begin{frame}{Why Transformers Are Relevant}
+Transformers are sequence-to-sequence models based on attention.
+
+\medskip
+
+For PDEs, one reinterprets:
+\begin{itemize}
+\item input tokens \(\rightarrow\) spatial or spacetime grid points,
+\item hidden states \(\rightarrow\) local field values,
+\item attention weights \(\rightarrow\) couplings between points.
+\end{itemize}
+
+This makes transformers natural candidates for learning nonlocal mappings.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Attention as a Learned Kernel}
+A transformer computes outputs of the general form
+\[
+u(x) \approx \sum_{x'} \alpha(x,x')\, v(x'),
+\]
+where \(\alpha(x,x')\) is a learned attention weight.
+
+\medskip
+
+Compare this with an integral representation of a PDE solution:
+\[
+u(x) = \int G(x,x') f(x')\,dx'.
+\]
+
+This suggests the correspondence
+\[
+\boxed{\text{attention} \;\sim\; \text{learned Green's function or kernel}.}
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Operator Learning Viewpoint}
+Many PDEs define solution operators
+\[
+\mathcal{G} : a(x), f(x), u_0(x) \mapsto u(x,t),
+\]
+where \(a(x)\) may be coefficients, \(f(x)\) forcing, and \(u_0(x)\) initial data.
+
+\medskip
+
+A transformer can be trained to approximate this map:
+\[
+u_\theta = \mathcal{G}_\theta(a,f,u_0).
+\]
+
+So one is not solving the PDE from scratch each time, but learning the family of solutions.
+\end{frame}
+
+%================================================
+\section{Ways to Use Transformers for PDEs}
+%================================================
+
+\begin{frame}{Three Main Strategies}
+There are several ways transformers can be used for PDEs:
+
+\begin{enumerate}
+\item \textbf{Purely data-driven operator learning}
+\item \textbf{Physics-informed training}
+\item \textbf{Hybrid numerical-ML methods}
+\end{enumerate}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{1. Data-Driven Operator Learning}
+Train on supervised pairs
+\[
+(\text{input fields}, \text{solution fields}).
+\]
+
+Examples:
+\begin{itemize}
+\item input: coefficient field + forcing
+\item output: PDE solution
+\end{itemize}
+
+Then the model approximates
+\[
+u \approx \mathcal{G}_\theta(\text{input}).
+\]
+
+This is similar in spirit to neural operators.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{2. Physics-Informed Transformers}
+Instead of relying only on solution data, one can enforce the PDE residual directly.
+
+\medskip
+
+If \(u_\theta\) is the transformer prediction, define a loss such as
+\[
+\mathcal{L}_{\mathrm{PDE}} =
+\| \mathcal{L}[u_\theta] - f \|^2.
+\]
+
+Possible additions:
+\begin{itemize}
+\item boundary-condition losses,
+\item initial-condition losses,
+\item conservation-law penalties.
+\end{itemize}
+
+This is analogous to physics-informed neural networks (PINNs), but with transformer architectures.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{3. Hybrid Approaches}
+Transformers can also be used together with classical PDE solvers.
+
+Examples:
+\begin{itemize}
+\item accelerate coarse-to-fine corrections,
+\item learn closures for multiscale models,
+\item post-process or denoise numerical solutions,
+\item emulate expensive substeps in time evolution.
+\end{itemize}
+
+In this setting the transformer acts more like a surrogate or correction model than a full solver.
+\end{frame}
+
+%================================================
+\section{Advantages}
+%================================================
+
+\begin{frame}{Why Use Transformers?}
+Transformers may be attractive for PDEs because they can:
+\begin{itemize}
+\item capture long-range and nonlocal interactions,
+\item handle parametric families of PDEs,
+\item learn reusable surrogate operators,
+\item work on irregular dependencies more flexibly than some convolutional models.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{High-Dimensional and Parametric PDEs}
+Transformers are particularly interesting when solving a PDE repeatedly for many parameter values:
+\[
+\mathcal{L}_\mu u = f,
+\]
+where \(\mu\) labels material parameters, geometry, or external fields.
+
+\medskip
+
+Instead of solving each instance separately, one trains a model to learn
+\[
+\mu \mapsto u_\mu.
+\]
+
+This can be valuable for uncertainty quantification, inverse problems, and control.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Nonlocal Structure}
+Many important physical systems have nonlocal couplings.
+
+Examples:
+\begin{itemize}
+\item integral equations,
+\item long-range interactions,
+\item multiscale transport,
+\item effective coarse-grained dynamics.
+\end{itemize}
+
+Attention is naturally suited to such settings because it directly couples distant points in the input.
+\end{frame}
+
+%================================================
+\section{Limitations}
+%================================================
+
+\begin{frame}{Important Limitations}
+Transformers do not automatically provide exact PDE solutions.
+
+Potential issues include:
+\begin{itemize}
+\item lack of rigorous error guarantees,
+\item costly training,
+\item uncertain extrapolation outside the training set,
+\item possible violation of symmetries or conservation laws,
+\item reduced reliability for stiff or highly oscillatory systems.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Generalization and Physical Structure}
+A transformer may interpolate well within the training distribution while failing outside it.
+
+\medskip
+
+For physics applications, one must think carefully about:
+\begin{itemize}
+\item symmetry constraints,
+\item conservation laws,
+\item stability,
+\item boundary conditions,
+\item physically meaningful inductive biases.
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Comparison with Other ML Methods}
+%================================================
+
+\begin{frame}{Comparison with PINNs and Neural Operators}
+Three important families are:
+
+\begin{itemize}
+\item \textbf{PINNs}: enforce the PDE residual directly
+\item \textbf{Fourier Neural Operators (FNOs)}: learn in spectral space
+\item \textbf{Transformers}: use attention to learn flexible nonlocal mappings
+\end{itemize}
+
+Each method has strengths and weaknesses depending on the structure of the PDE.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Transformers vs Fourier Neural Operators}
+Fourier neural operators are often especially strong when:
+\begin{itemize}
+\item the domain is regular,
+\item spectral structure is important,
+\item convolution-like global operators are natural.
+\end{itemize}
+
+Transformers may be preferable when:
+\begin{itemize}
+\item geometry is irregular,
+\item interactions are complex or heterogeneous,
+\item adaptive nonlocal couplings matter.
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Connections to Green's functions}
+%================================================
+
+\begin{frame}{Connection to Green's Functions}
+A PDE solution can often be written formally as
+\[
+u = \mathcal{L}^{-1} f.
+\]
+
+In many cases this becomes
+\[
+u(x) = \int G(x,x') f(x')\, dx',
+\]
+where \(G(x,x')\) is a Green's function.
+
+\medskip
+
+This is why transformers can be interpreted as learning the kernel \(G(x,x')\) from data.
+\end{frame}
+
+%================================================
+\section{Concrete Example}
+%================================================
+
+\begin{frame}{Example: Poisson Equation}
+Consider the Poisson equation
+\[
+-\nabla^2 u(x) = f(x).
+\]
+
+Formally, the solution is
+\[
+u(x) = \int G(x,x') f(x')\, dx'.
+\]
+
+A transformer-based solver would:
+\begin{itemize}
+\item take discretized \(f(x)\) as input,
+\item output a predicted field \(u(x)\),
+\item learn the effective kernel linking the two.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{What the Transformer is Really Learning}
+The key point is:
+
+\[
+\boxed{
+\text{The transformer is not solving the PDE in the classical deterministic sense.}
+}
+\]
+
+Instead, it is learning the map
+\[
+f \mapsto u,
+\]
+or more generally
+\[
+(a,f,u_0) \mapsto u.
+\]
+
+From a PDE viewpoint, this means learning an approximate Green's function or response operator.
+\end{frame}
+
+%================================================
+\section{Summary}
+%================================================
+
+\begin{frame}{Summary}
+Transformers can be used for PDEs.
+
+\medskip
+
+Their main role is to:
+\begin{itemize}
+\item learn PDE solution operators,
+\item approximate Green's functions or inverse operators,
+\item serve as fast surrogates for repeated PDE solves.
+\end{itemize}
+
+Conceptually:
+\[
+\text{transformer attention}
+\;\longleftrightarrow\;
+\text{learned kernel}
+\;\longleftrightarrow\;
+\text{approximate Green's function}.
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Final Perspective}
+A concise way to summarize the situation is:
+\[
+\boxed{
+\text{Transformers do not usually solve PDEs exactly; they learn the mapping defined by the PDE.}
+}
+\]
+
+Or, in more PDE-like language:
+\[
+\boxed{
+\text{They learn an approximate inverse operator or Green's function.}
+}
+\]
+\end{frame}
+
+\end{document}
