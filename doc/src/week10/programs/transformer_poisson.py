@@ -148,7 +148,7 @@ def make_sample(n, k_max=K_MAX, rng=None):
         rng = np.random
     x      = interior_grid(n)
     ks     = np.arange(1, k_max + 1)
-    amps   = rng.randn(k_max)
+    amps   = rng.standard_normal(k_max)
     # Normalise so the solution has unit RMS for numerical stability
     f_vals = np.sum(amps[:, None] * np.sin(np.pi * ks[:, None] * x[None, :]),
                     axis=0)
