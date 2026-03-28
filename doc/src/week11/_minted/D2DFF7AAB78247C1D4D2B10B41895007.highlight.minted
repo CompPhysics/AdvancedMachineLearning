@@ -1,0 +1,18 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{plt}
+\PYG{c+c1}{\PYGZsh{} two dimensions}
+\PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
+
+\PYG{c+c1}{\PYGZsh{} set up the means (standard normal distribution}
+\PYG{n}{a\PYGZus{}mu} \PYG{o}{=} \PYG{l+m+mi}{0}
+\PYG{n}{b\PYGZus{}mu} \PYG{o}{=} \PYG{l+m+mi}{0}
+\PYG{c+c1}{\PYGZsh{} and the variances and covariances}
+\PYG{n}{a\PYGZus{}sigma} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{b\PYGZus{}sigma} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{a\PYGZus{}b\PYGZus{}cov} \PYG{o}{=} \PYG{l+m+mf}{0.5}
+
+\PYG{n}{joint\PYGZus{}cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{vstack}\PYG{p}{(}\PYG{p}{(}\PYG{p}{(}\PYG{n}{a\PYGZus{}sigma}\PYG{p}{,} \PYG{n}{a\PYGZus{}b\PYGZus{}cov}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n}{a\PYGZus{}b\PYGZus{}cov}\PYG{p}{,} \PYG{n}{b\PYGZus{}sigma}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{joint\PYGZus{}mu} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{vstack}\PYG{p}{(}\PYG{p}{(}\PYG{n}{a\PYGZus{}mu}\PYG{p}{,} \PYG{n}{b\PYGZus{}mu}\PYG{p}{)}\PYG{p}{)}
+
+\end{MintedVerbatim}

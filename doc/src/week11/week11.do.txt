@@ -20,18 +20,139 @@ o See also Foster, chapter 7 on energy-based models at URL:"https://github.com/d
 
 
 !split
-===== Essential elements of generative models, reminder from last week =====
+===== Essential elements of generative models, brief reminder from  last lecture (March 26) =====
 
 The aim of generative methods is to train a probability distribution $p$. The methods we will focus on are:
 o Energy based models, with the family of Boltzmann distributions as a typical example
 o Variational autoencoders, based on our discussions on autoencoders
-o Generative adversarial networks (GANs) and
+o Generative adversarial networks (GANs), normalizing flows and
 o Diffusion models
 
-!split
-===== Energy models =====
 
-Last week we defined a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_1, \dots , x_{n-1}\}$ with a pertinent probability distribution
+!split
+===== Brief reminder on Statistics and Bayes' theorem =====
+
+A central theorem in statistics is Bayes' theorem. This theorem plays a similar role as the good old Pythagoras' theorem in geometry.
+Bayes' theorem is extremely simple to derive. But to do so we need some basic axioms from statistics.
+
+Assume we have two domains of events $X=[x_0,x_1,\dots,x_{n-1}]$ and $Y=[y_0,y_1,\dots,y_{n-1}]$.
+
+We define also the likelihood for $X$ and $Y$ as $p(X)$ and $p(Y)$ respectively.
+The likelihood of a specific event $x_i$ (or $y_i$) is then written as $p(X=x_i)$ or just $p(x_i)=p_i$. 
+
+!bblock Union of events is given by
+!bt
+\[
+p(X \cup Y)= p(X)+p(Y)-p(X \cap Y).
+\]
+!et
+!eblock
+
+!split
+===== The product rule =====
+
+!bblock The product rule (aka joint probability) is given by
+!bt
+\[
+p(X \cup Y)= p(X,Y)= p(X\vert Y)p(Y)=p(Y\vert X)p(X),
+\]
+!et
+where we read $p(X\vert Y)$ as the likelihood of obtaining $X$ given $Y$.
+!eblock
+
+If we have independent events then $p(X,Y)=p(X)p(Y)$.
+
+
+!split
+===== Marginal Probability =====
+
+The marginal probability is defined in terms of only one of the set of variables $X,Y$. For a discrete probability we have
+!bblock 
+!bt
+\[
+p(X)=\sum_{i=0}^{n-1}p(X,Y=y_i)=\sum_{i=0}^{n-1}p(X\vert Y=y_i)p(Y=y_i)=\sum_{i=0}^{n-1}p(X\vert y_i)p(y_i).
+\]
+!et
+!eblock
+
+
+!split
+===== Conditional  Probability =====
+
+The conditional  probability, if $p(Y) > 0$, is 
+!bblock 
+!bt
+\[
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)}=\frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}.
+\]
+!et
+!eblock
+
+
+!split
+===== Bayes' Theorem =====
+
+If we combine the conditional probability with the marginal probability and the standard product rule, we have
+!bt
+\[
+p(X\vert Y)= \frac{p(X,Y)}{p(Y)},
+\]
+!et
+which we can rewrite as
+
+!bt
+\[
+p(X\vert Y)= \frac{p(X,Y)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)}=\frac{p(Y\vert X)p(X)}{\sum_{i=0}^{n-1}p(Y\vert X=x_i)p(x_i)},
+\]
+!et
+which is Bayes' theorem. It allows us to evaluate the uncertainty in in $X$ after we have observed $Y$. We can easily interchange $X$ with $Y$.  
+
+!split
+===== Interpretations of Bayes' Theorem =====
+
+The quantity $p(Y\vert X)$ on the right-hand side of the theorem is
+evaluated for the observed data $Y$ and can be viewed as a function of
+the parameter space represented by $X$. This function is not
+necesseraly normalized and is normally called the likelihood function.
+
+The function $p(X)$ on the right hand side is called the prior while the function on the left hand side is the called the posterior probability. The denominator on the right hand side serves as a normalization factor for the posterior distribution.
+
+!split
+===== Maximum Likelihood Estimation (MLE) =====
+
+We assume now that the various variables are stochastically distributed and  
+_Independent and Identically Distrubuted_ (iid).
+
+In statistics, maximum likelihood estimation (MLE) is a method of
+estimating the parameters of an assumed probability distribution,
+given some observed data. This is achieved by maximizing a likelihood
+function so that, under the assumed statistical model, the observed
+data is the most probable. The probability is then written in terms of the products of the individual probabilities.
+
+However, computing the derivatives of a
+product function is cumbersome and can easily lead to overflow and/or
+underflowproblems, with potentials for loss of numerical precision.
+
+!split
+===== Introducing the logarithm =====
+
+In practice, it is more convenient to maximize the logarithm of the
+PDF because it is a monotonically increasing function of the argument.
+Alternatively, and this will be our option, we will minimize the
+negative of the logarithm since this is a monotonically decreasing
+function.
+
+Note also that maximization/minimization of the logarithm of the PDF
+is equivalent to the maximization/minimization of the function itself.
+
+
+
+
+
+!split
+===== Energy models aka Boltzmann machines =====
+
+We define a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_1, \dots , x_{n-1}\}$ with a pertinent probability distribution
 !bt
 \[
 p(\bm{X})=\prod_{x_i\in \bm{X}}p(x_i),
@@ -41,6 +162,11 @@ where we have assumed that the random varaibles $x_i$ are all independent and id
 
 We will now assume that we can defined this function in terms of optimization parameters $\bm{\Theta}$, which could be the biases and weights of deep network, and a set of hidden variables we also assume to be random variables which also are iid. The domain of these variables is
 $\bm{H}= \{h_0,h_1, \dots , h_{m-1}\}$.
+
+
+
+
+
 
 !split
 ===== Probability model =====

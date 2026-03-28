@@ -1,0 +1,27 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{gibbs\PYGZus{}sample}\PYG{p}{(}\PYG{n}{univariate\PYGZus{}conditionals}\PYG{p}{,} \PYG{n}{sample\PYGZus{}count}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}Does Gibbs sampling given the distribution\PYGZsq{}s univariate conditionals.}
+
+\PYG{l+s+sd}{    Returns a D x N matrix}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{D} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{univariate\PYGZus{}conditionals}\PYG{p}{)}
+    \PYG{k}{assert} \PYG{n}{D} \PYG{o}{==} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Sorry, this only supports 2 dimensions right now}\PYG{l+s+s2}{\PYGZdq{}}
+
+    \PYG{c+c1}{\PYGZsh{} initializes an empty matrix for the samples}
+    \PYG{n}{samples} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{p}{(}\PYG{n}{D}\PYG{p}{,} \PYG{n}{sample\PYGZus{}count}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} initialize the first sample to some arbitrary value}
+    \PYG{n}{samples}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{]}
+
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{sample\PYGZus{}count}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} first set this sample equal to the previous sample}
+        \PYG{n}{samples}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{samples}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,} \PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]}
+
+        \PYG{c+c1}{\PYGZsh{} now update the dimension whose turn it is using the conditional distribution}
+        \PYG{c+c1}{\PYGZsh{} pass in all dimension from the previous sample except this dimension}
+        \PYG{n}{d} \PYG{o}{=} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{n}{D}
+        \PYG{n}{samples}\PYG{p}{[}\PYG{n}{d}\PYG{p}{,} \PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{univariate\PYGZus{}conditionals}\PYG{p}{[}\PYG{n}{d}\PYG{p}{]}\PYG{p}{(}\PYG{n}{samples}\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{n}{d}\PYG{p}{,} \PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{n}{samples}
+
+\end{MintedVerbatim}

@@ -1,0 +1,10 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+c1}{\PYGZsh{} Set up the conditional probability distribution for each dimension}
+\PYG{c+c1}{\PYGZsh{} For example, I can sample p(a | b) using sample\PYGZus{}for\PYGZus{}dim[0].}
+
+\PYG{n}{univariate\PYGZus{}conditionals} \PYG{o}{=} \PYG{p}{[}
+    \PYG{n}{get\PYGZus{}conditional\PYGZus{}dist}\PYG{p}{(}\PYG{n}{joint\PYGZus{}mu}\PYG{p}{,} \PYG{n}{joint\PYGZus{}cov}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{d} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
+\PYG{p}{]}
+
+\end{MintedVerbatim}
