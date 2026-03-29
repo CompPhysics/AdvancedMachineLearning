@@ -75,6 +75,7 @@ import time
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
@@ -175,6 +176,10 @@ class CNNEncoder(nn.Module):
             nn.MaxPool2d(2),                      # → (B, 64,  7,  7)
         )
         self.fc = nn.Linear(self.FLAT_DIM, n_hidden)
+        # Small initialisation keeps encoder logits near zero at the start,
+        # preventing log1p(exp(x)) overflow before training stabilises.
+        nn.init.uniform_(self.fc.weight, -0.01, 0.01)
+        nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
         """
@@ -303,9 +308,12 @@ class ConvRBM(nn.Module):
         p(h_j = 1 | x) = σ( b_j + [f_enc(x)]_j )   [lecture cell 211]
 
         x : (B, 1, 28, 28)  →  (B, n_hidden)
+
+        Output is clamped to (ε, 1-ε) so that torch.bernoulli never
+        receives values outside [0, 1] due to floating-point edge cases.
         """
         pre = self.encoder(x)                   # (B, n_hidden)  pre-activations
-        return torch.sigmoid(pre + self.b)
+        return torch.sigmoid(pre + self.b).clamp(1e-6, 1.0 - 1e-6)
 
     def prob_x_given_h(self, h):
         """
@@ -336,6 +344,13 @@ class ConvRBM(nn.Module):
         Derived from marginalising h out of the joint (lecture cell 205).
         p(x) ∝ exp(-F(x)) — lower F means higher probability.
 
+        Numerical stability
+        -------------------
+        log(1 + exp(z)) is replaced by F.softplus(z), which uses the
+        numerically stable formulation  max(z,0) + log(1 + exp(-|z|)).
+        The naive torch.log1p(torch.exp(z)) overflows for z > 88 and
+        produces inf, which propagates into NaN gradients via Adam.
+
         x     : (B, 1, 28, 28)  binary visible configuration
         Returns scalar per sample, shape (B,)
         """
@@ -344,8 +359,10 @@ class ConvRBM(nn.Module):
         vis_term = x_flat @ self.a                # (B,)
 
         # Hidden term:  -Σ_j log(1 + exp(b_j + [f_enc(x)]_j))
-        pre      = self.encoder(x)                # (B, n_hidden)
-        hid_term = torch.log1p(torch.exp(pre + self.b)).sum(dim=1)  # (B,)
+        # Compute encoder ONCE and reuse (avoids a redundant forward pass).
+        # F.softplus(z) = log(1 + exp(z)) computed in a numerically stable way.
+        pre      = self.encoder(x)                          # (B, n_hidden)
+        hid_term = F.softplus(pre + self.b).sum(dim=1)      # (B,)
 
         return -(vis_term + hid_term)             # (B,)
 
@@ -406,11 +423,11 @@ class ConvRBM(nn.Module):
             _, h = self.sample_h(x)
             _, x = self.sample_x(h)
 
-        # Final pixel probabilities (smooth, not hard-thresholded)
-        prob_x, _ = self.sample_x(
-            torch.bernoulli(self.prob_h_given_x(x)))
-        prob_x = self.prob_x_given_h(
-            torch.bernoulli(self.prob_h_given_x(x)))
+        # One final clean step: return smooth pixel probabilities
+        # (not the hard binary sample) for better visualisation.
+        with torch.no_grad():
+            h_final  = torch.bernoulli(self.prob_h_given_x(x))
+            prob_x   = self.prob_x_given_h(h_final)   # pixel probs in (0,1)
         return prob_x, x
 
 # =============================================================================
