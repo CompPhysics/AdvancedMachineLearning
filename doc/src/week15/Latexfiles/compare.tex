@@ -1,0 +1,316 @@
+\documentclass{beamer}
+
+\usepackage{amsmath,amsfonts,amssymb,bm}
+\usepackage{physics}
+
+\usetheme{Madrid}
+
+\title{Diffusion Models and Normalizing Flows}
+\author{MHJ}
+\date{March 29, 2025}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%================================================
+\section{Motivation}
+%================================================
+
+\begin{frame}{Generative Modeling}
+Goal: learn a distribution
+\[
+p(x), \quad x \in \mathbb{R}^d
+\]
+
+Two major paradigms:
+\begin{itemize}
+\item Normalizing flows (deterministic)
+\item Diffusion models (stochastic)
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Normalizing Flows}
+%================================================
+
+\begin{frame}{Basic Idea}
+\[
+z \sim p_0(z), \quad x = f(z)
+\]
+
+\[
+p(x) = p_0(z)\left|\det \frac{\partial z}{\partial x}\right|
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Change of Variables}
+\[
+\log p(x) = \log p_0(z) - \log |\det J|
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Composition}
+\[
+x = f_K \circ \cdots \circ f_1(z)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Continuous Flow}
+\[
+\frac{dx}{dt} = v(x,t)
+\]
+
+\[
+\frac{d}{dt}\log p(x) = -\nabla \cdot v
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Interpretation}
+\begin{itemize}
+\item deterministic transport
+\item invertible mapping
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Diffusion Models}
+%================================================
+
+\begin{frame}{Forward Process}
+\[
+dx = -\frac{1}{2}\beta(t)x\,dt + \sqrt{\beta(t)}\,dW_t
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Fokker–Planck Equation}
+\[
+\partial_t p = -\nabla \cdot (f p) + \frac{1}{2}\nabla^2 (\sigma^2 p)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Reverse Process}
+\[
+dx = [f(x,t) - \sigma^2 \nabla \log p(x,t)]dt + \sigma d\bar{W}_t
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Score Function}
+\[
+s(x,t) = \nabla \log p(x,t)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Training Objective}
+\[
+\mathbb{E}\|s_\theta(x,t) - \nabla \log p(x,t)\|^2
+\]
+\end{frame}
+
+%================================================
+\section{Connection Between the Two}
+%================================================
+
+\begin{frame}{Common Structure}
+Both aim to construct:
+\[
+T: p_0 \rightarrow p(x)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Flows vs Diffusion}
+Flows:
+\[
+x = f(z)
+\]
+
+Diffusion:
+\[
+dx = v(x,t)dt + \sigma dW_t
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Deterministic vs Stochastic}
+\begin{itemize}
+\item flows: deterministic transport
+\item diffusion: stochastic evolution
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{PDE Perspective}
+%================================================
+
+\begin{frame}{Continuity Equation (Flows)}
+\[
+\partial_t p + \nabla \cdot (v p) = 0
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Fokker–Planck (Diffusion)}
+\[
+\partial_t p = -\nabla \cdot (v p) + \frac{1}{2}\nabla^2 (\sigma^2 p)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Key Difference}
+\begin{itemize}
+\item flows: transport only
+\item diffusion: transport + noise
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Statistical Physics Interpretation}
+%================================================
+
+\begin{frame}{Boltzmann Distribution}
+\[
+p(x) \propto e^{-E(x)}
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Diffusion as Langevin Dynamics}
+\[
+dx = -\nabla E(x)dt + \sqrt{2}dW_t
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Flows as Deterministic Maps}
+\begin{itemize}
+\item map Gaussian to Boltzmann
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Likelihood vs Score Matching}
+%================================================
+
+\begin{frame}{Flows}
+\[
+\max \log p(x)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Diffusion}
+\[
+\min \|s_\theta - \nabla \log p\|^2
+\]
+\end{frame}
+
+%================================================
+\section{Advantages and Limitations}
+%================================================
+
+\begin{frame}{Normalizing Flows}
+\begin{itemize}
+\item exact likelihood
+\item invertible
+\item limited flexibility
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Diffusion Models}
+\begin{itemize}
+\item highly expressive
+\item expensive sampling
+\item no explicit likelihood
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Geometric View}
+%================================================
+
+\begin{frame}{Flows}
+\begin{itemize}
+\item diffeomorphisms
+\item volume changes via Jacobian
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Diffusion}
+\begin{itemize}
+\item stochastic paths
+\item measure evolution
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Unification}
+%================================================
+
+\begin{frame}{Unified View}
+\[
+\text{Generative model} = \text{transport of probability measure}
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Operator Perspective}
+\begin{itemize}
+\item flows: pushforward operator
+\item diffusion: stochastic evolution operator
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Master Equation}
+\[
+\boxed{
+\text{Flows = deterministic transport}
+\quad
+\text{Diffusion = stochastic transport}
+}
+\]
+\end{frame}
+
+%================================================
+\section{Outlook}
+%================================================
+
+\begin{frame}{Future Directions}
+\begin{itemize}
+\item flow–diffusion hybrids
+\item Schrödinger bridges
+\item connections to quantum systems
+\end{itemize}
+\end{frame}
+
+\end{document}
