@@ -1,0 +1,348 @@
+\documentclass{beamer}
+
+\usepackage{amsmath,amsfonts,amssymb,bm}
+\usepackage{physics}
+\usepackage{graphicx}
+
+\usetheme{Madrid}
+
+\title{Normalizing Flows}
+\subtitle{Probability Transport and Invertible Models}
+\author{Morten Hjorth-Jensen}
+\date{Spring 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%================================================
+\section{Motivation}
+%================================================
+
+\begin{frame}{Generative Modeling Problem}
+We wish to model a probability density:
+\[
+p(x), \quad x \in \mathbb{R}^d
+\]
+
+Goal:
+\begin{itemize}
+\item tractable likelihood
+\item efficient sampling
+\item expressive model
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Key Idea}
+Start with simple distribution:
+\[
+z \sim p_0(z), \quad p_0 = \mathcal{N}(0,I)
+\]
+
+Apply invertible map:
+\[
+x = f(z)
+\]
+
+Then:
+\[
+p(x) = p_0(z) \left| \det \frac{\partial z}{\partial x} \right|
+\]
+\end{frame}
+
+%================================================
+\section{Change of Variables}
+%================================================
+
+\begin{frame}{Change of Variables Theorem}
+For invertible $f$:
+\[
+x = f(z)
+\]
+
+\[
+p(x) = p_0(z)\left|\det \frac{\partial f^{-1}}{\partial x}\right|
+\]
+
+Equivalently:
+\[
+p(x) = p_0(z)\left|\det \frac{\partial f}{\partial z}\right|^{-1}
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Log-Density}
+\[
+\log p(x) = \log p_0(z) - \log \left| \det \frac{\partial f}{\partial z} \right|
+\]
+\end{frame}
+
+%================================================
+\section{Composition of Flows}
+%================================================
+
+\begin{frame}{Flow Model}
+Define:
+\[
+x = f_K \circ f_{K-1} \circ \cdots \circ f_1(z)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Log-Likelihood}
+\[
+\log p(x) = \log p_0(z) - \sum_{k=1}^K \log \left|\det \frac{\partial f_k}{\partial h_{k-1}}\right|
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Interpretation}
+\begin{itemize}
+\item Each layer transports probability mass
+\item Total transformation = composition
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Simple Flow Layers}
+%================================================
+
+\begin{frame}{Affine Transformation}
+\[
+x = Az + b
+\]
+
+\[
+\det J = \det A
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Planar Flow}
+\[
+f(z) = z + u \tanh(w^T z + b)
+\]
+
+Jacobian:
+\[
+\det J = 1 + u^T \psi(z)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Radial Flow}
+\[
+f(z) = z + \beta \frac{z - z_0}{\alpha + \|z - z_0\|}
+\]
+\end{frame}
+
+%================================================
+\section{Coupling Layers}
+%================================================
+
+\begin{frame}{RealNVP Idea}
+Split variables:
+\[
+z = (z_1, z_2)
+\]
+
+Transform:
+\[
+x_1 = z_1, \quad x_2 = z_2 \odot e^{s(z_1)} + t(z_1)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Jacobian}
+\[
+\det J = \exp\left(\sum s(z_1)\right)
+\]
+
+\begin{itemize}
+\item triangular Jacobian → efficient
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Autoregressive Flows}
+%================================================
+
+\begin{frame}{Autoregressive Model}
+\[
+x_i = f_i(z_i; x_1,\dots,x_{i-1})
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Jacobian}
+\[
+\det J = \prod_i \frac{\partial x_i}{\partial z_i}
+\]
+\end{frame}
+
+%================================================
+\section{Continuous Normalizing Flows}
+%================================================
+
+\begin{frame}{Continuous Flow}
+\[
+\frac{dx}{dt} = v(x,t)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Density Evolution}
+\[
+\frac{d}{dt} \log p(x(t)) = -\nabla \cdot v(x,t)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Connection to Physics}
+\begin{itemize}
+\item continuity equation
+\item Liouville equation
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Geometric Interpretation}
+%================================================
+
+\begin{frame}{Flows as Diffeomorphisms}
+\[
+f: \mathbb{R}^d \rightarrow \mathbb{R}^d
+\]
+
+\begin{itemize}
+\item invertible
+\item smooth
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Manifold View}
+\begin{itemize}
+\item probability distributions as densities on manifold
+\item flow = transport map
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Connection to Statistical Physics}
+%================================================
+
+\begin{frame}{Boltzmann Distribution}
+\[
+p(x) = \frac{1}{Z} e^{-E(x)}
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Partition Function Problem}
+\[
+Z = \int e^{-E(x)} dx
+\]
+
+\begin{itemize}
+\item hard to compute
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Flow Interpretation}
+\[
+p(x) = p_0(z)\left|\det \frac{\partial z}{\partial x}\right|
+\]
+
+\begin{itemize}
+\item replaces partition function with Jacobian
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Optimal Transport Connection}
+%================================================
+
+\begin{frame}{Transport Map}
+\[
+T: p_0(z) \rightarrow p(x)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Monge Problem}
+\[
+\min_T \int \|x - T(x)\|^2 p_0(x) dx
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Relation to Flows}
+\begin{itemize}
+\item flows approximate transport maps
+\item connect to Wasserstein geometry
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Training}
+%================================================
+
+\begin{frame}{Maximum Likelihood}
+\[
+\mathcal{L} = \sum_i \log p(x_i)
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Gradient}
+\[
+\nabla_\theta \log p(x) =
+\nabla_\theta \log p_0(z) -
+\nabla_\theta \log |\det J|
+\]
+\end{frame}
+
+%================================================
+\section{Limitations}
+%================================================
+
+\begin{frame}{Challenges}
+\begin{itemize}
+\item invertibility constraint
+\item Jacobian computation
+\item expressivity vs tractability
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Summary}
+%================================================
+
+\begin{frame}{Summary}
+\begin{itemize}
+\item normalizing flows = invertible transformations
+\item exact likelihood computation
+\item deep connection to physics and geometry
+\end{itemize}
+\end{frame}
+
+\end{document}
