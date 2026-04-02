@@ -25,15 +25,6 @@ rm -f *.aux
 
 
 
-# Plain HTML documents
-html=${name}
-system doconce format html $name --pygments_html_style=default --html_style=bloodish --html_links_in_new_window --html_output=$html $opt
-system doconce split_html $html.html --method=space10
-
-# Bootstrap style
-html=${name}-bs
-system doconce format html $name --html_style=bootstrap --pygments_html_style=default --html_admon=bootstrap_panel --html_output=$html $opt
-system doconce split_html $html.html --method=split --pagination --nav_button=bottom
 
 # IPython notebook
 system doconce format ipynb $name $opt
@@ -51,11 +42,10 @@ mv -f $name.pdf ${name}.pdf
 cp $name.tex ${name}.tex
 
 # Publish
-dest=../../../../Projects/2024
+dest=../../../../Projects/2026
 if [ ! -d $dest/$name ]; then
 mkdir $dest/$name
 mkdir $dest/$name/pdf
-mkdir $dest/$name/html
 mkdir $dest/$name/ipynb
 fi
 cp ${name}*.tex $dest/$name/pdf
