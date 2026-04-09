@@ -155,6 +155,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Discussions of various Boltzmann machines
 - Reading recommendation: Goodfellow et al chapters 16, 17 and 18
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
+- Video of lecture at https://youtu.be/NkM6U9J7Rnc
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek11.pdf
 
 
 ## April 13-17: Deep generative models
