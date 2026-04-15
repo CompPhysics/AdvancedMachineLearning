@@ -1,0 +1,38 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}conditional\PYGZus{}dist}\PYG{p}{(}\PYG{n}{joint\PYGZus{}mu}\PYG{p}{,} \PYG{n}{joint\PYGZus{}cov}\PYG{p}{,} \PYG{n}{var\PYGZus{}index}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}Returns the conditional distribution given the joint distribution and which variable}
+\PYG{l+s+sd}{    the conditional probability should use.}
+\PYG{l+s+sd}{    Right now this only works for 2\PYGZhy{}variable joint distributions.}
+
+\PYG{l+s+sd}{      joint\PYGZus{}mu: joint distribution\PYGZsq{}s mu}
+\PYG{l+s+sd}{      joint\PYGZus{}cov: joint distribution\PYGZsq{}s covariance}
+\PYG{l+s+sd}{      var\PYGZus{}index: index of the variable in the joint distribution. Everything else will be}
+\PYG{l+s+sd}{        conditioned on. For example, if the joint distribution p(a, b, c) has mu [mu\PYGZus{}a, mu\PYGZus{}b, mu\PYGZus{}c],}
+\PYG{l+s+sd}{        to get p(c | a, b), use var\PYGZus{}index = 2.}
+
+\PYG{l+s+sd}{    returns:}
+\PYG{l+s+sd}{      a function that can sample from the univariate conditional distribution}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{k}{assert} \PYG{n}{joint\PYGZus{}mu}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Sorry, this function only works for 2\PYGZhy{}dimensional joint distributions right now}\PYG{l+s+s1}{\PYGZsq{}}
+    \PYG{n}{a} \PYG{o}{=} \PYG{n}{joint\PYGZus{}mu}\PYG{p}{[}\PYG{n}{var\PYGZus{}index}\PYG{p}{]}
+    \PYG{n}{b} \PYG{o}{=} \PYG{n}{joint\PYGZus{}mu}\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{n}{var\PYGZus{}index}\PYG{p}{]}
+
+    \PYG{n}{A} \PYG{o}{=} \PYG{n}{joint\PYGZus{}cov}\PYG{p}{[}\PYG{n}{var\PYGZus{}index}\PYG{p}{,} \PYG{n}{var\PYGZus{}index}\PYG{p}{]}
+    \PYG{n}{B} \PYG{o}{=} \PYG{n}{joint\PYGZus{}cov}\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{n}{var\PYGZus{}index}\PYG{p}{,} \PYG{o}{\PYGZti{}}\PYG{n}{var\PYGZus{}index}\PYG{p}{]}
+    \PYG{n}{C} \PYG{o}{=} \PYG{n}{joint\PYGZus{}cov}\PYG{p}{[}\PYG{n}{var\PYGZus{}index}\PYG{p}{,} \PYG{o}{\PYGZti{}}\PYG{n}{var\PYGZus{}index}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{} we\PYGZsq{}re dealing with one dimension so}
+    \PYG{n}{B\PYGZus{}inv} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{B}
+
+    \PYG{c+c1}{\PYGZsh{} Return a function that can sample given a value of g}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{dist}\PYG{p}{(}\PYG{n}{g}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} a + C*B\PYGZca{}\PYGZob{}\PYGZhy{}1\PYGZcb{}(g \PYGZhy{} b)}
+        \PYG{n}{mu} \PYG{o}{=} \PYG{n}{a} \PYG{o}{+} \PYG{n}{C} \PYG{o}{*} \PYG{n}{B\PYGZus{}inv} \PYG{o}{*} \PYG{p}{(}\PYG{n}{g} \PYG{o}{\PYGZhy{}} \PYG{n}{b}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} A \PYGZhy{} C * B\PYGZca{}\PYGZob{}\PYGZhy{}1\PYGZcb{} * C\PYGZca{}T}
+        \PYG{n}{cov} \PYG{o}{=} \PYG{n}{A} \PYG{o}{\PYGZhy{}} \PYG{n}{B\PYGZus{}inv} \PYG{o}{*} \PYG{n}{C} \PYG{o}{*} \PYG{n}{C}
+        \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{cov}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{+} \PYG{n}{mu}
+
+    \PYG{k}{return} \PYG{n}{dist}
+
+
+\end{MintedVerbatim}
