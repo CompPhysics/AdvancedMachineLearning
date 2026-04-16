@@ -1,0 +1,540 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,bm,mathtools}
+\usepackage{physics}
+\usepackage{braket}
+\usepackage{hyperref}
+
+\usetheme{Madrid}
+
+\title{Gibbs Sampling}
+\author{Morten Hjorth-Jensen}
+\date{FYS5429/9429 Spring 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Goals of These Additional Notes}
+These notes develop Gibbs sampling from a mathematical viewpoint, with emphasis on:
+\begin{itemize}
+    \item conditional distributions,
+    \item Markov chains and invariant measures,
+    \item detailed balance,
+    \item convergence intuition,
+    \item and connections to statistical physics and Bayesian inference.
+\end{itemize}
+
+\medskip
+
+The aim is to explain not only \emph{how} Gibbs sampling works, but \emph{why} it correctly samples from a target distribution.
+\end{frame}
+
+\begin{frame}{The Basic Sampling Problem}
+Suppose we want to sample from a probability distribution
+\[
+\pi(x_1,\dots,x_d)
+\]
+on a high-dimensional space.
+
+\medskip
+
+Typical situations:
+\begin{itemize}
+    \item a Boltzmann distribution in statistical mechanics,
+    \item a posterior distribution in Bayesian inference,
+    \item a latent-variable model in machine learning.
+\end{itemize}
+
+In many important cases:
+\begin{itemize}
+    \item \(\pi\) is known only up to normalization,
+    \item direct sampling is difficult,
+    \item but conditional distributions are simple.
+\end{itemize}
+
+This is exactly the setting where Gibbs sampling becomes useful.
+\end{frame}
+
+\begin{frame}{Target Distribution and Normalization}
+Often the target distribution has the form
+\[
+\pi(x)=\frac{1}{Z} f(x),
+\]
+where
+\[
+Z=\int f(x)\,dx
+\]
+or, in the discrete case,
+\[
+Z=\sum_x f(x).
+\]
+
+In statistical physics one often writes
+\[
+\pi(x)=\frac{1}{Z}e^{-\beta E(x)},
+\]
+where:
+\begin{itemize}
+    \item \(E(x)\) is an energy,
+    \item \(\beta = 1/(k_B T)\),
+    \item \(Z\) is the partition function.
+\end{itemize}
+
+The difficulty is that \(Z\) is usually hard to compute explicitly.
+\end{frame}
+
+\begin{frame}{Why Conditional Distributions Help}
+Even when \(\pi(x_1,\dots,x_d)\) is hard to sample from directly, the conditional distributions
+\[
+\pi(x_i \mid x_1,\dots,x_{i-1},x_{i+1},\dots,x_d)
+\]
+may be easy to sample.
+
+\medskip
+
+The core idea of Gibbs sampling is:
+\begin{quote}
+sample one coordinate at a time from its exact conditional distribution, while keeping the others fixed.
+\end{quote}
+
+This creates a Markov chain whose stationary distribution is the desired target \(\pi\).
+\end{frame}
+
+\begin{frame}{Conditional Probability}
+For two variables \(X,Y\), the conditional distribution is
+\[
+\pi(x\mid y)=\frac{\pi(x,y)}{\pi_Y(y)},
+\qquad
+\pi_Y(y)=\int \pi(x,y)\,dx,
+\]
+provided \(\pi_Y(y)>0\).
+
+In \(d\) dimensions, the conditional distribution for coordinate \(i\) is
+\[
+\pi(x_i \mid x_{-i})
+=
+\frac{\pi(x_i,x_{-i})}{\int \pi(x_i',x_{-i})\,dx_i'}.
+\]
+
+Here \(x_{-i}\) means all coordinates except \(x_i\).
+\end{frame}
+
+\begin{frame}{The Gibbs Sampling Update Rule}
+Let the current state be
+\[
+x^{(t)}=(x_1^{(t)},\dots,x_d^{(t)}).
+\]
+
+One full Gibbs sweep updates coordinates sequentially:
+\[
+x_1^{(t+1)} \sim \pi(x_1 \mid x_2^{(t)},\dots,x_d^{(t)}),
+\]
+\[
+x_2^{(t+1)} \sim \pi(x_2 \mid x_1^{(t+1)},x_3^{(t)},\dots,x_d^{(t)}),
+\]
+and so on until
+\[
+x_d^{(t+1)} \sim \pi(x_d \mid x_1^{(t+1)},\dots,x_{d-1}^{(t+1)}).
+\]
+
+This defines a Markov chain on the state space.
+\end{frame}
+
+\begin{frame}{Two-Variable Example}
+Suppose the target is \(\pi(x,y)\).
+
+A Gibbs iteration is:
+\[
+x^{(t+1)} \sim \pi(x \mid y^{(t)}),
+\]
+\[
+y^{(t+1)} \sim \pi(y \mid x^{(t+1)}).
+\]
+
+This is already enough to understand the general structure:
+\begin{itemize}
+    \item each update is exact conditional sampling,
+    \item the resulting process is Markovian,
+    \item the full joint distribution is preserved.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Transition Kernel for One Coordinate Update}
+Fix a coordinate \(i\). A single-coordinate Gibbs update defines a transition kernel
+\[
+K_i(x,dx')
+=
+\delta_{x_{-i}}(dx'_{-i})\,\pi(dx'_i\mid x_{-i}).
+\]
+
+Interpretation:
+\begin{itemize}
+    \item all coordinates except \(i\) remain unchanged,
+    \item coordinate \(i\) is redrawn from its conditional law.
+\end{itemize}
+
+A full Gibbs sweep is then the composition
+\[
+K = K_d \cdots K_2 K_1.
+\]
+\end{frame}
+
+\begin{frame}{Invariant Distribution: Strategy}
+We want to show that \(\pi\) is invariant under Gibbs updates.
+
+\medskip
+
+That means:
+\[
+\int \pi(dx)\, K(x,A) = \pi(A)
+\]
+for every measurable set \(A\).
+
+It is enough to prove this first for a single-coordinate update \(K_i\), then invariance for the full sweep follows by composition.
+\end{frame}
+
+\begin{frame}{Invariance of a Single-Coordinate Update}
+Consider one coordinate \(i\). Then
+\[
+\int \pi(dx)\,K_i(x,dx')
+=
+\int \pi(dx_i,dx_{-i})\,\delta_{x_{-i}}(dx'_{-i})\,\pi(dx'_i\mid x_{-i}).
+\]
+
+Using the factorization
+\[
+\pi(dx_i,dx_{-i}) = \pi(dx_i\mid x_{-i})\,\pi_{-i}(dx_{-i}),
+\]
+we integrate over \(x_i\):
+\[
+\int \pi(dx_i\mid x_{-i}) = 1.
+\]
+
+Hence
+\[
+\int \pi(dx)\,K_i(x,dx')
+=
+\pi(dx'_i\mid x'_{-i})\,\pi_{-i}(dx'_{-i})
+=
+\pi(dx').
+\]
+
+So \(\pi\) is invariant for each coordinate update.
+\end{frame}
+
+\begin{frame}{Detailed Balance for a Single Update}
+In fact, each single-coordinate Gibbs update satisfies detailed balance with respect to \(\pi\):
+\[
+\pi(dx)\,K_i(x,dx')
+=
+\pi(dx')\,K_i(x',dx).
+\]
+
+Why?
+
+\medskip
+
+Since only coordinate \(i\) changes, we must have \(x_{-i}=x'_{-i}\). Then
+\[
+\pi(x)\,K_i(x,x')
+=
+\pi(x_i,x_{-i})\,\pi(x'_i\mid x_{-i}),
+\]
+and similarly
+\[
+\pi(x')\,K_i(x',x)
+=
+\pi(x'_i,x_{-i})\,\pi(x_i\mid x_{-i}).
+\]
+
+But using
+\[
+\pi(x_i,x_{-i})=\pi(x_i\mid x_{-i})\pi(x_{-i}),
+\]
+both sides become
+\[
+\pi(x_{-i})\,\pi(x_i\mid x_{-i})\,\pi(x'_i\mid x_{-i}).
+\]
+\end{frame}
+
+\begin{frame}{Why Detailed Balance Matters}
+Detailed balance implies invariance:
+\[
+\pi(dx)\,K(x,dx')=\pi(dx')\,K(x',dx)
+\quad \Longrightarrow \quad
+\pi K = \pi.
+\]
+
+This gives a simple physical picture:
+\begin{quote}
+in equilibrium, probability flux from \(x\) to \(x'\) is exactly balanced by the reverse flux.
+\end{quote}
+
+For Gibbs sampling:
+\begin{itemize}
+    \item each coordinate update is reversible,
+    \item the full deterministic sweep is invariant,
+    \item random-scan Gibbs is also reversible under suitable conditions.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random-Scan Gibbs Sampling}
+Instead of updating coordinates in fixed order, one may choose a random coordinate \(I_t\in\{1,\dots,d\}\) at each step, for example uniformly:
+\[
+\mathbb{P}(I_t=i)=\frac{1}{d}.
+\]
+
+Then update
+\[
+x^{(t+1)}_i \sim \pi(x_i \mid x^{(t)}_{-i}),
+\]
+while leaving the remaining coordinates unchanged.
+
+The transition kernel becomes
+\[
+K=\frac{1}{d}\sum_{i=1}^d K_i.
+\]
+
+Since each \(K_i\) leaves \(\pi\) invariant, so does \(K\).
+\end{frame}
+
+\begin{frame}{Gibbs Sampling as a Special Case of Metropolis--Hastings}
+Metropolis--Hastings proposes a move \(x\to x'\) and accepts it with probability
+\[
+\alpha(x,x')=\min\left(1,\frac{\pi(x')q(x\mid x')}{\pi(x)q(x'\mid x)}\right).
+\]
+
+In Gibbs sampling, the proposal is exactly the conditional distribution:
+\[
+q(x'_i\mid x)=\pi(x'_i\mid x_{-i}).
+\]
+
+Then the acceptance ratio becomes
+\[
+\frac{\pi(x')q(x\mid x')}{\pi(x)q(x'\mid x)}=1,
+\]
+so every move is accepted.
+
+Thus Gibbs sampling is a rejection-free special case of Metropolis--Hastings.
+\end{frame}
+
+\begin{frame}{Connection to the Boltzmann Distribution}
+Suppose
+\[
+\pi(x)=\frac{1}{Z}e^{-\beta E(x)}.
+\]
+
+Then the conditional distribution for coordinate \(x_i\) is
+\[
+\pi(x_i\mid x_{-i})
+=
+\frac{e^{-\beta E(x_i,x_{-i})}}
+{\sum_{x_i'} e^{-\beta E(x_i',x_{-i})}}
+\]
+in the discrete case.
+
+This is the local Boltzmann law: update one degree of freedom while the environment \(x_{-i}\) is frozen.
+\end{frame}
+
+\begin{frame}{Example: Ising Model}
+For Ising spins \(s_i\in\{-1,+1\}\), the energy is
+\[
+E(s)=-\sum_{\langle i,j\rangle} J_{ij}s_i s_j - \sum_i h_i s_i.
+\]
+
+The Boltzmann distribution is
+\[
+\pi(s)=\frac{1}{Z}e^{-\beta E(s)}.
+\]
+
+To update spin \(s_i\), only terms involving \(s_i\) matter:
+\[
+E(s)= - s_i \left(\sum_{j\neq i} J_{ij}s_j + h_i\right) + \text{const}.
+\]
+
+Hence
+\[
+\pi(s_i\mid s_{-i})
+\propto
+\exp\left[
+\beta s_i \left(\sum_{j\neq i} J_{ij}s_j + h_i\right)
+\right].
+\]
+\end{frame}
+
+\begin{frame}{Explicit Conditional for the Ising Spin}
+Define the local field
+\[
+H_i^{\mathrm{loc}}=\sum_{j\neq i} J_{ij}s_j + h_i.
+\]
+
+Then
+\[
+\mathbb{P}(s_i=+1\mid s_{-i})
+=
+\frac{e^{\beta H_i^{\mathrm{loc}}}}
+{e^{\beta H_i^{\mathrm{loc}}}+e^{-\beta H_i^{\mathrm{loc}}}}
+=
+\frac{1}{1+e^{-2\beta H_i^{\mathrm{loc}}}}.
+\]
+
+Similarly,
+\[
+\mathbb{P}(s_i=-1\mid s_{-i})
+=
+\frac{1}{1+e^{2\beta H_i^{\mathrm{loc}}}}.
+\]
+
+This logistic form is one of the most important explicit examples of Gibbs sampling in physics.
+\end{frame}
+
+\begin{frame}{Continuous Example: Bivariate Gaussian}
+Let
+\[
+\begin{pmatrix}
+X\\Y
+\end{pmatrix}
+\sim \mathcal{N}
+\left(
+\begin{pmatrix}
+\mu_X\\\mu_Y
+\end{pmatrix},
+\begin{pmatrix}
+\sigma_X^2 & \rho \sigma_X \sigma_Y \\
+\rho \sigma_X \sigma_Y & \sigma_Y^2
+\end{pmatrix}
+\right).
+\]
+
+Then the conditional distributions are Gaussian:
+\[
+X\mid Y=y \sim \mathcal{N}\left(\mu_X+\rho\frac{\sigma_X}{\sigma_Y}(y-\mu_Y),\;\sigma_X^2(1-\rho^2)\right),
+\]
+\[
+Y\mid X=x \sim \mathcal{N}\left(\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x-\mu_X),\;\sigma_Y^2(1-\rho^2)\right).
+\]
+
+So Gibbs sampling alternates exact Gaussian draws.
+\end{frame}
+
+\begin{frame}{Convergence: What Must Be True?}
+Invariance alone is not enough. We also need the Markov chain to converge to \(\pi\).
+
+Typical sufficient conditions are:
+\begin{itemize}
+    \item irreducibility,
+    \item aperiodicity,
+    \item positive recurrence.
+\end{itemize}
+
+Under such conditions, Gibbs sampling satisfies
+\[
+\lim_{t\to\infty}\mathbb{P}(X^{(t)}\in A)=\pi(A)
+\]
+for suitable initial conditions.
+
+So the chain forgets its initial state and approaches equilibrium.
+\end{frame}
+
+\begin{frame}{Ergodic Theorem}
+If the Gibbs chain is ergodic and \(f\) is integrable, then
+\[
+\frac{1}{N}\sum_{t=1}^N f(X^{(t)})
+\longrightarrow
+\mathbb{E}_\pi[f]
+\]
+almost surely as \(N\to\infty\).
+
+This is the practical reason Gibbs sampling is useful:
+we can estimate expectations under \(\pi\) by time averages along the chain.
+
+\medskip
+
+Examples:
+\begin{itemize}
+    \item magnetization in the Ising model,
+    \item posterior means in Bayesian inference,
+    \item correlation functions in lattice models.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Gibbs Sampling Can Be Slow}
+Even though the algorithm is simple, convergence may be slow if:
+\begin{itemize}
+    \item variables are strongly correlated,
+    \item the target distribution is multimodal,
+    \item local updates move only small distances,
+    \item there is critical slowing down near phase transitions.
+\end{itemize}
+
+This is especially important in statistical physics, where local Gibbs updates may decorrelate very slowly near criticality.
+\end{frame}
+
+\begin{frame}{Blocked Gibbs Sampling}
+A standard improvement is to update blocks of variables together.
+
+Instead of sampling one coordinate \(x_i\), sample a block \(x_B\):
+\[
+x_B^{(t+1)} \sim \pi(x_B \mid x_{-B}^{(t)}).
+\]
+
+This can reduce autocorrelation when variables inside the block are strongly coupled.
+
+\medskip
+
+So the Gibbs philosophy remains the same:
+\begin{quote}
+sample exactly from conditional distributions
+\end{quote}
+but the conditionals are taken for larger subsets.
+\end{frame}
+
+\begin{frame}{Mathematical Summary of the Derivation}
+The logic of Gibbs sampling is:
+\begin{enumerate}
+    \item start from a target distribution \(\pi(x_1,\dots,x_d)\),
+    \item identify tractable conditional laws \(\pi(x_i\mid x_{-i})\),
+    \item define a Markov chain by sequentially sampling from these conditionals,
+    \item prove that each coordinate update preserves \(\pi\),
+    \item conclude that \(\pi\) is invariant for the full chain,
+    \item under ergodicity conditions, conclude convergence to \(\pi\).
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Physical Interpretation}
+In statistical physics, Gibbs sampling can be interpreted as:
+\begin{itemize}
+    \item local equilibration of one degree of freedom,
+    \item while the surrounding environment is held fixed,
+    \item repeated many times until global equilibrium is reached.
+\end{itemize}
+
+This makes it a natural algorithm for:
+\begin{itemize}
+    \item spin systems,
+    \item lattice field models,
+    \item Boltzmann machines,
+    \item Bayesian graphical models.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Final Take-Home Message}
+Gibbs sampling is mathematically simple but conceptually deep.
+
+\medskip
+
+It works because:
+\begin{itemize}
+    \item conditional distributions are exact,
+    \item the induced Markov chain preserves the full target distribution,
+    \item detailed balance and invariance guarantee correctness,
+    \item ergodicity guarantees convergence.
+\end{itemize}
+
+So Gibbs sampling is one of the clearest examples of how local probabilistic updates can reconstruct a global equilibrium distribution.
+\end{frame}
+
+\end{document}
