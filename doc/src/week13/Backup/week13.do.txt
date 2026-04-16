@@ -7,20 +7,33 @@ DATE: April 23, 2026
 ===== Plans for the week April 20-24, 2026  =====
 
 !bblock  Deep generative models
-* Variational Autoencoders (VAE), Mathematics and codes
-* Reading recommendation:
-  * Goodfellow et al sections  20.10-20-14 on VAEs
-  * Calvin Luo URL:"https://calvinyluo.com/2022/08/26/diffusion-tutorial.html"
-  * An Introduction to Variational Autoencoders, by Kingma and Welling, see URL:"https://arxiv.org/abs/1906.02691"
+o Discussion of project 2
+o Variational Autoencoders (VAE), Mathematics and codes, continuation from last week
+o Reading recommendation:
+  o Goodfellow et al sections  20.10-20-14 on VAEs
+  o Calvin Luo URL:"https://calvinyluo.com/2022/08/26/diffusion-tutorial.html"
+  o An Introduction to Variational Autoencoders, by Kingma and Welling, see URL:"https://arxiv.org/abs/1906.02691"
 #o Video of lecture at URL:"https://youtu.be/t5zb7RhBUwA"
 #o Whiteboard notes at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2025/NotesApril24.pdf"
 !eblock
 
 
+#todo: add about Langevin sampling, see https://www.lyndonduong.com/sgmcmc/
+# code for VAEs applied to MNIST
+
 
 
 !split
-===== Boltzmann machines and energy-based models and contrastive optimization, reminder from last  =====
+===== Summary of Variational Autoencoders (VAEs) =====
+
+In our summary of VAEs from last time, we will also remind you about the
+mathematics of Boltzmann machines and the Kullback-Leibler divergence,
+leading to various  ways to optimize the probability
+distributions, namely what is also called 
+* Contrastive optimization
+
+!split
+===== Boltzmann machines and energy-based models and contrastive optimization =====
 
 For Boltzmann machines  we defined a domain $\bm{X}$ of stochastic variables $\bm{X}= \{x_0,x_1, \dots , x_{n-1}\}$ with a pertinent probability distribution
 !bt
@@ -229,7 +242,8 @@ sampling as the standard sampling rule.
 !split
 ===== Kullback-Leibler divergence =====
 
-Before we continue, we need to introduce a . This will also allow
+Before we continue, we need to remind ourselves about the
+Kullback-Leibler divergence introduced earlier. This will also allow
 us to introduce another measure used in connection with the training
 of Generative Adversarial Networks, the so-called Jensen-Shannon divergence..
 These metrics are useful for quantifying the similarity between two probability distributions.
@@ -271,295 +285,6 @@ traditional maximum-likelihood approach to symmetric JS-divergence.
 =====  Generative model,  basic overview (Borrowed from Rashcka et al) =====
 
 FIGURE: [figures/figure1.png, width=900 frac=1.0]
-
-
-
-
-
-!split
-===== Theory of Variational Autoencoders =====
-
-Let us remind ourself about what an autoencoder is, see the jupyter-notebooks at URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week8/ipynb/week8.ipynb" and URL:"https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week9/ipynb/week9.ipynb".
-
-
-!split
-===== The Autoencoder again =====
-
-
-Autoencoders are neural networks where the outputs are its own
-inputs. They are split into an _encoder part_
-which maps the input $\bm{x}$ via a function $f(\bm{x},\bm{W})$ (this
-is the encoder part) to a _so-called code part_ (or intermediate part)
-with the result $\bm{h}$
-
-!bt
-\[
-\bm{h} = f(\bm{x},\bm{W})),
-\]
-!et
-where $\bm{W}$ are the weights to be determined.  The _decoder_ parts maps, via its own parameters (weights given by the matrix $\bm{V}$ and its own biases) to 
-the final ouput
-!bt
-\[
-\tilde{\bm{x}} = g(\bm{h},\bm{V})).
-\]
-!et
-
-The goal is to minimize the construction error, often done by optimizing the means squared error.
-
-!split
-===== Schematic image of an Autoencoder =====
-
-FIGURE: [figures/ae1.png, width=700 frac=1.0]
-
-
-!split
-===== Mathematics of Variational Autoencoders =====
-
-We have defined earlier a probability (marginal) distribution with hidden variables $\bm{h}$ and parameters $\bm{\Theta}$ as
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for continuous variables $\bm{h}$ and
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \sum_{\bm{h}}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for discrete stochastic events $\bm{h}$. The variables $\bm{h}$ are normally called the _latent variables_ in the theory of autoencoders. We will also call then for that here.
-
-!split
-===== Using the conditional probability =====
-
-Using the the definition of the conditional probabilities $p(\bm{x}\vert\bm{h};\bm{\Theta})$, $p(\bm{h}\vert\bm{x};\bm{\Theta})$ and 
-and the prior $p(\bm{h})$, we can rewrite the above equation as
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \sum_{\bm{h}}p(\bm{x}\vert\bm{h};\bm{\Theta})p(\bm{h}),
-\]
-!et
-
-which allows us to make the dependence of $\bm{x}$ on $\bm{h}$
-explicit by using the law of total probability. The intuition behind
-this approach for finding the marginal probability for $\bm{x}$ is to
-optimize the above equations with respect to the parameters
-$\bm{\Theta}$.  This is done normally by maximizing the probability,
-the so-called maximum-likelihood approach discussed earlier.
-
-!split
-===== VAEs versus autoencoders =====
-
-This trained probability is assumed to be able to produce similar
-samples as the input.  In VAEs it is then common to compare via for
-example the mean-squared error or the cross-entropy the predicted
-values with the input values.  Compared with autoencoders, we are now
-producing a probability instead of a functions which mimicks the
-input.
-
-In VAEs, the choice of this output distribution is often Gaussian,
-meaning that the conditional probability is
-!bt
-\[
-p(\bm{x}\vert\bm{h};\bm{\Theta})=N(\bm{x}\vert f(\bm{h};\bm{\Theta}), \sigma^2\times \bm{I}),
-\]
-!et
-with mean value given by the function $f(\bm{h};\bm{\Theta})$ and a
-diagonal covariance matrix multiplied by a parameter $\sigma^2$ which
-is treated as a hyperparameter.
-
-!split
-===== Gradient descent =====
-
-By having a Gaussian distribution, we can use gradient descent (or any
-other optimization technique) to increase $p(\bm{x};\bm{\Theta})$ by
-making $f(\bm{h};\bm{\Theta})$ approach $\bm{x}$ for some $\bm{h}$,
-gradually making the training data more likely under the generative
-model. The important property is simply that the marginal probability
-can be computed, and it is continuous in $\bm{\Theta}$.
-
-!split
-===== Are VAEs just modified autoencoders? =====
-
-The mathematical basis of VAEs actually has relatively little to do
-with classical autoencoders, for example the sparse autoencoders or
-denoising autoencoders discussed earlier.
-
-VAEs approximately maximize the probability equation discussed
-above. They are called autoencoders only because the final training
-objective that derives from this setup does have an encoder and a
-decoder, and resembles a traditional autoencoder. Unlike sparse
-autoencoders, there are generally no tuning parameters analogous to
-the sparsity penalties. And unlike sparse and denoising autoencoders,
-we can sample directly from $p(\bm{x})$ without performing Markov
-Chain Monte Carlo.
-
-
-!split
-===== Training VAEs =====
-
-To solve the integral or sum for $p(\bm{x})$, there are two problems
-that VAEs must deal with: how to define the latent variables $\bm{h}$,
-that is decide what information they represent, and how to deal with
-the integral over $\bm{h}$.  VAEs give a definite answer to both.
-
-
-
-!split
-===== Motivation from Kingma and Welling, An Introduction to Variational Autoencoders, URL:"https://arxiv.org/abs/1906.02691" =====
-
-
-*There are many reasons why generative modeling is attractive. First,
-we can express physical laws and constraints into the generative
-process while details that we don’t know or care about, i.e. nuisance
-variables, are treated as noise. The resulting models are usually
-highly intuitive and interpretable and by testing them against
-observations we can confirm or reject our theories about how the world
-works.  Another reason for trying to understand the generative process
-of data is that it naturally expresses causal relations of the
-world. Causal relations have the great advantage that they generalize
-much better to new situations than mere correlations. For instance,
-once we understand the generative process of an earthquake, we can use
-that knowledge both in California and in Chile.*
-
-
-!split
-===== Mathematics of  VAEs =====
-
-We want to train the marginal probability with some latent varrables $\bm{h}$
-!bt
-\[
-p(\bm{x};\bm{\Theta}) = \int d\bm{h}p(\bm{x},\bm{h};\bm{\Theta}),
-\]
-!et
-for the continuous version (see previous slides for the discrete variant).
-
-
-!split
-===== Using the KL divergence =====
-
-In practice, for most $\bm{h}$, $p(\bm{x}\vert \bm{h}; \bm{\Theta})$
-will be nearly zero, and hence contributes almost nothing to our
-estimate of $p(\bm{x})$.
-
-The key idea behind the variational autoencoder is to attempt to
-sample values of $\bm{h}$ that are likely to have produced $\bm{x}$,
-and compute $p(\bm{x})$ just from those.
-
-This means that we need a new function $Q(\bm{h}|\bm{x})$ which can
-take a value of $\bm{x}$ and give us a distribution over $\bm{h}$
-values that are likely to produce $\bm{x}$.  Hopefully the space of
-$\bm{h}$ values that are likely under $Q$ will be much smaller than
-the space of all $\bm{h}$'s that are likely under the prior
-$p(\bm{h})$.  This lets us, for example, compute $E_{\bm{h}\sim
-Q}p(\bm{x}\vert \bm{h})$ relatively easily. Note that we drop
-$\bm{\Theta}$ from here and for notational simplicity.
-
-
-!split
-===== Kullback-Leibler again =====
-
-However, if $\bm{h}$ is sampled from an arbitrary distribution with
-PDF $Q(\bm{h})$, which is not $\mathcal{N}(0,I)$, then how does that
-help us optimize $p(\bm{x})$?
-
-The first thing we need to do is relate
-$E_{\bm{h}\sim Q}P(\bm{x}\vert \bm{h})$ and $p(\bm{x})$.  We will see where $Q$ comes from later.
-
-The relationship between $E_{\bm{h}\sim Q}p(\bm{x}\vert \bm{h})$ and $p(\bm{x})$ is one of the cornerstones of variational Bayesian methods.
-We begin with the definition of Kullback-Leibler divergence (KL divergence or $\mathcal{D}$) between $p(\bm{h}\vert \bm{x})$ and $Q(\bm{h})$, for some arbitrary $Q$ (which may or may not depend on $\bm{x}$):
-!bt
-\[
-    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{h}|\bm{x}) \right].
-\]
-!et
-
-!split
-===== And applying Bayes rule =====
-
-We can get both $p(\bm{x})$ and $p(\bm{x}\vert \bm{h})$ into this equation by applying Bayes rule to $p(\bm{h}|\bm{x})$
-!bt
-\[
-    \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log Q(\bm{h}) - \log p(\bm{x}|\bm{h}) - \log p(\bm{h}) \right] + \log p(\bm{x}).
-\]
-!et
-
-Here, $\log p(\bm{x})$ comes out of the expectation because it does not depend on $\bm{h}$.
-Negating both sides, rearranging, and contracting part of $E_{\bm{h}\sim Q}$ into a KL-divergence terms yields:
-!bt
-\[
-\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h})\|p(\bm{h}\vert \bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}\vert\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h})\|P(\bm{h})\right].
-\]
-!et
-
-!split
-===== Rearranging =====
-
-Using Bayes rule we obtain
-!bt
-\[
-E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{h}|y_i,x_i) - \log p(\bm{h}|x_i) + \log p(y_i|x_i) \right]
-\]
-!et
-
-Rearranging the terms and subtracting $E_{\bm{h}\sim Q}\log Q(\bm{h})$ from both sides gives
-!bt
-\[
-\begin{array}{c}
-\log P(y_i|x_i) - E_{\bm{h}\sim Q}\left[\log Q(\bm{h})-\log p(\bm{h}|x_i,y_i)\right]=\hspace{10em}\\
-\hspace{10em}E_{\bm{h}\sim Q}\left[\log p(y_i|\bm{h},x_i)+\log p(\bm{h}|x_i)-\log Q(\bm{h})\right]
-\end{array}
-\]
-!et
-Note that $\bm{x}$ is fixed, and $Q$ can be \textit{any} distribution, not
-just a distribution which does a good job mapping $\bm{x}$ to the $\bm{h}$'s
-that can produce $X$.
-
-
-!split
-===== Inferring the probability =====
-
-Since we are interested in inferring $p(\bm{x})$, it makes sense to
-construct a $Q$ which \textit{does} depend on $\bm{x}$, and in particular,
-one which makes $\mathcal{D}\left[Q(\bm{h})\|p(\bm{h}|\bm{x})\right]$ small
-!bt
-\[
-\log p(\bm{x}) - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h}|\bm{x})\right]=E_{\bm{h}\sim Q}\left[\log p(\bm{x}|\bm{h})  \right] - \mathcal{D}\left[Q(\bm{h}|\bm{x})\|p(\bm{h})\right].
-\]
-!et
-
-Hence, during training, it makes sense to choose a $Q$ which will make
-$E_{\bm{h}\sim Q}[\log Q(\bm{h})-$ $\log p(\bm{h}|x_i,y_i)]$ (a
-$\mathcal{D}$-divergence) small, such that the right hand side is a
-close approximation to $\log p(y_i|y_i)$.
-
-!split
-===== Central equation of VAEs =====
-
-This equation serves as the core of the variational autoencoder, and
-it is worth spending some time thinking about what it means.
-
-o The left hand side has the quantity we want to maximize, namely $\log p(\bm{x})$ plus an error term.
-o The right hand side is something we can optimize via stochastic gradient descent given the right choice of $Q$.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 !split
@@ -895,6 +620,331 @@ In order to make VAEs work, it is essential to drive $q_{\bm{\phi}}$ to produce 
 
 
 
+!split
+===== Code examples using Keras =====
+
+Code taken from  URL:"https://keras.io/examples/generative/vae/"
+!bc pycod
+"""
+Title: Variational AutoEncoder
+Author: [fchollet](https://twitter.com/fchollet)
+Date created: 2020/05/03
+Last modified: 2023/11/22
+Description: Convolutional Variational AutoEncoder (VAE) trained on MNIST digits.
+Accelerator: GPU
+"""
+
+"""
+## Setup
+"""
+
+import os
+
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
+import numpy as np
+import tensorflow as tf
+import keras
+from keras import layers
+
+"""
+## Create a sampling layer
+"""
+
+
+class Sampling(layers.Layer):
+    """Uses (z_mean, z_log_var) to sample z, the vector encoding a digit."""
+
+    def call(self, inputs):
+        z_mean, z_log_var = inputs
+        batch = tf.shape(z_mean)[0]
+        dim = tf.shape(z_mean)[1]
+        epsilon = tf.random.normal(shape=(batch, dim))
+        return z_mean + tf.exp(0.5 * z_log_var) * epsilon
+
+
+"""
+## Build the encoder
+"""
+
+latent_dim = 2
+
+encoder_inputs = keras.Input(shape=(28, 28, 1))
+x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
+x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Flatten()(x)
+x = layers.Dense(16, activation="relu")(x)
+z_mean = layers.Dense(latent_dim, name="z_mean")(x)
+z_log_var = layers.Dense(latent_dim, name="z_log_var")(x)
+z = Sampling()([z_mean, z_log_var])
+encoder = keras.Model(encoder_inputs, [z_mean, z_log_var, z], name="encoder")
+encoder.summary()
+
+"""
+## Build the decoder
+"""
+
+latent_inputs = keras.Input(shape=(latent_dim,))
+x = layers.Dense(7 * 7 * 64, activation="relu")(latent_inputs)
+x = layers.Reshape((7, 7, 64))(x)
+x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
+decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
+decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
+decoder.summary()
+
+"""
+## Define the VAE as a `Model` with a custom `train_step`
+"""
+
+
+class VAE(keras.Model):
+    def __init__(self, encoder, decoder, **kwargs):
+        super().__init__(**kwargs)
+        self.encoder = encoder
+        self.decoder = decoder
+        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+        self.reconstruction_loss_tracker = keras.metrics.Mean(
+            name="reconstruction_loss"
+        )
+        self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+
+    @property
+    def metrics(self):
+        return [
+            self.total_loss_tracker,
+            self.reconstruction_loss_tracker,
+            self.kl_loss_tracker,
+        ]
+
+    def train_step(self, data):
+        with tf.GradientTape() as tape:
+            z_mean, z_log_var, z = self.encoder(data)
+            reconstruction = self.decoder(z)
+            reconstruction_loss = tf.reduce_mean(
+                tf.reduce_sum(
+                    keras.losses.binary_crossentropy(data, reconstruction),
+                    axis=(1, 2),
+                )
+            )
+            kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+            kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
+            total_loss = reconstruction_loss + kl_loss
+        grads = tape.gradient(total_loss, self.trainable_weights)
+        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+        self.total_loss_tracker.update_state(total_loss)
+        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+        self.kl_loss_tracker.update_state(kl_loss)
+        return {
+            "loss": self.total_loss_tracker.result(),
+            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+            "kl_loss": self.kl_loss_tracker.result(),
+        }
+
+
+"""
+## Train the VAE
+"""
+
+(x_train, _), (x_test, _) = keras.datasets.mnist.load_data()
+mnist_digits = np.concatenate([x_train, x_test], axis=0)
+mnist_digits = np.expand_dims(mnist_digits, -1).astype("float32") / 255
+
+vae = VAE(encoder, decoder)
+vae.compile(optimizer=keras.optimizers.Adam())
+vae.fit(mnist_digits, epochs=30, batch_size=128)
+
+"""
+## Display a grid of sampled digits
+"""
+
+import matplotlib.pyplot as plt
+
+
+def plot_latent_space(vae, n=30, figsize=15):
+    # display a n*n 2D manifold of digits
+    digit_size = 28
+    scale = 1.0
+    figure = np.zeros((digit_size * n, digit_size * n))
+    # linearly spaced coordinates corresponding to the 2D plot
+    # of digit classes in the latent space
+    grid_x = np.linspace(-scale, scale, n)
+    grid_y = np.linspace(-scale, scale, n)[::-1]
+
+    for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_sample = np.array([[xi, yi]])
+            x_decoded = vae.decoder.predict(z_sample, verbose=0)
+            digit = x_decoded[0].reshape(digit_size, digit_size)
+            figure[
+                i * digit_size : (i + 1) * digit_size,
+                j * digit_size : (j + 1) * digit_size,
+            ] = digit
+
+    plt.figure(figsize=(figsize, figsize))
+    start_range = digit_size // 2
+    end_range = n * digit_size + start_range
+    pixel_range = np.arange(start_range, end_range, digit_size)
+    sample_range_x = np.round(grid_x, 1)
+    sample_range_y = np.round(grid_y, 1)
+    plt.xticks(pixel_range, sample_range_x)
+    plt.yticks(pixel_range, sample_range_y)
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+    plt.imshow(figure, cmap="Greys_r")
+    plt.show()
+
+
+plot_latent_space(vae)
+
+"""
+## Display how the latent space clusters different digit classes
+"""
+
+
+def plot_label_clusters(vae, data, labels):
+    # display a 2D plot of the digit classes in the latent space
+    z_mean, _, _ = vae.encoder.predict(data, verbose=0)
+    plt.figure(figsize=(12, 10))
+    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
+    plt.colorbar()
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+    plt.show()
+
+
+(x_train, y_train), _ = keras.datasets.mnist.load_data()
+x_train = np.expand_dims(x_train, -1).astype("float32") / 255
+
+plot_label_clusters(vae, x_train, y_train)
+
+!ec
+
+
+!split
+===== Code in PyTorch for VAEs =====
+
+!bc pycod
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the VAE
+class VAE(nn.Module):
+   def __init__(self, input_dim=784, hidden_dim=400, latent_dim=2):
+       super(VAE, self).__init__()
+       self.fc1 = nn.Linear(input_dim, hidden_dim)
+       self.fc_mu = nn.Linear(hidden_dim, latent_dim)
+       self.fc_logvar = nn.Linear(hidden_dim, latent_dim)
+       self.fc3 = nn.Linear(latent_dim, hidden_dim)
+       self.fc4 = nn.Linear(hidden_dim, input_dim)
+
+   def encode(self, x):
+       h1 = F.relu(self.fc1(x))
+       return self.fc_mu(h1), self.fc_logvar(h1)
+
+   def reparameterize(self, mu, logvar):
+       std = torch.exp(0.5 * logvar)
+       eps = torch.randn_like(std)
+       return mu + eps * std
+
+   def decode(self, z):
+       h3 = F.relu(self.fc3(z))
+       return torch.sigmoid(self.fc4(h3))
+
+   def forward(self, x):
+       mu, logvar = self.encode(x.view(-1, 784))
+       z = self.reparameterize(mu, logvar)
+       return self.decode(z), mu, logvar
+
+# Loss function
+def loss_function(recon_x, x, mu, logvar):
+   BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
+   KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+   return BCE + KLD
+
+# Prepare data
+transform = transforms.ToTensor()
+train_dataset = datasets.MNIST('./data', train=True, download=True, transform=transform)
+test_dataset = datasets.MNIST('./data', train=False, download=True, transform=transform)
+train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
+
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = VAE().to(device)
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
+
+# Training function
+def train(epoch):
+   model.train()
+   train_loss = 0
+   for batch_idx, (data, _) in enumerate(train_loader):
+       data = data.to(device)
+       optimizer.zero_grad()
+       recon_batch, mu, logvar = model(data)
+       loss = loss_function(recon_batch, data, mu, logvar)
+       loss.backward()
+       train_loss += loss.item()
+       optimizer.step()
+   print(f"Epoch {epoch}: Avg Loss: {train_loss / len(train_loader.dataset):.4f}")
+
+# Run training
+for epoch in range(1, 11):
+   train(epoch)
+
+# Reconstruction Visualization
+model.eval()
+with torch.no_grad():
+   data, _ = next(iter(test_loader))
+   data = data.to(device)
+   recon_batch, _, _ = model(data)
+
+   n = 8
+   comparison = torch.cat([data[:n], recon_batch.view(-1, 1, 28, 28)[:n]])
+   comparison = comparison.cpu()
+
+   plt.figure(figsize=(12, 3))
+   for i in range(n):
+       plt.subplot(2, n, i + 1)
+       plt.imshow(comparison[i][0], cmap='gray')
+       plt.axis('off')
+       plt.subplot(2, n, i + 1 + n)
+       plt.imshow(comparison[i + n][0], cmap='gray')
+       plt.axis('off')
+   plt.suptitle("Top: Original | Bottom: Reconstructed")
+   plt.show()
+
+# Latent Space Visualization
+model.eval()
+z_list = []
+label_list = []
+
+with torch.no_grad():
+   for data, labels in test_loader:
+       data = data.to(device)
+       mu, _ = model.encode(data.view(-1, 784))
+       z_list.append(mu.cpu())
+       label_list.append(labels)
+
+z = torch.cat(z_list).numpy()
+labels = torch.cat(label_list).numpy()
+
+plt.figure(figsize=(8, 6))
+scatter = plt.scatter(z[:, 0], z[:, 1], c=labels, cmap='tab10', alpha=0.7, s=10)
+plt.colorbar(scatter, ticks=range(10))
+plt.title("2D Latent Space of MNIST")
+plt.xlabel("z[0]")
+plt.ylabel("z[1]")
+plt.grid(True)
+plt.show()
+
+!ec
 
 !split
 ===== Pros and cons about VAEs =====
@@ -1230,5 +1280,17 @@ estimated using only one random variable per timestep.  As it is
 computed by summing up $T-1$ consistency terms, the final estimated
 value may have high variance for large $T$ values.
 
+
+
+!split
+===== More details =====
+
+For more details and implementaions, see Calvin Luo at URL:"https://arxiv.org/abs/2208.11970"
+
+The plans for the rest of the semester are
+o May 1: public holiday
+o May 8: More on diffusion models and introduction to GANs. Project work
+o May 15: GANS and summary of course. Project work. This could also be the last lecture
+o May 22: Alternatively, we could discuss briefly reinforcement learning and do a summary of the course. Project work.
 
 
