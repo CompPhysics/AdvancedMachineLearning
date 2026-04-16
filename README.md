@@ -164,7 +164,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Variational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
-- Video of lecture and whiteboard notes to be added
+- Video of lecture at 
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek12.pdf
 
 ## April 20-24: Deep generative models
 
