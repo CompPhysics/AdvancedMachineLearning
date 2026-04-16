@@ -1,0 +1,712 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,bm,mathtools}
+\usepackage{physics}
+\usepackage{braket}
+\usepackage{hyperref}
+
+\usetheme{Madrid}
+
+\title{Gibbs Sampling}
+\author{Morten Hjorth-Jensen}
+\date{Spring 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Goals of These Notes}
+These notes develop Gibbs sampling with proper mathematics and add four further topics:
+\begin{itemize}
+    \item comparison with Metropolis sampling,
+    \item autocorrelation times and mixing,
+    \item Gibbs sampling in Boltzmann machines,
+    \item Gibbs sampling in Bayesian networks and graphical models.
+\end{itemize}
+
+The aim is to explain both the mathematical correctness and the practical strengths and limitations of Gibbs sampling.
+\end{frame}
+
+%================================================
+\section{The basic problem}
+%================================================
+
+\begin{frame}{The Sampling Problem}
+We want to sample from a probability distribution
+\[
+\pi(x_1,\dots,x_d)
+\]
+on a high-dimensional state space.
+
+Typical examples:
+\begin{itemize}
+    \item Boltzmann distributions in statistical mechanics,
+    \item posterior distributions in Bayesian inference,
+    \item latent-variable models in machine learning.
+\end{itemize}
+
+Usually:
+\begin{itemize}
+    \item \(\pi\) is known only up to normalization,
+    \item direct sampling is hard,
+    \item conditional distributions are tractable.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Normalized and Unnormalized Form}
+Often
+\[
+\pi(x)=\frac{1}{Z}f(x),
+\]
+where
+\[
+Z=\int f(x)\,dx
+\quad\text{or}\quad
+Z=\sum_x f(x).
+\]
+
+In statistical physics one writes
+\[
+\pi(x)=\frac{1}{Z}e^{-\beta E(x)}.
+\]
+
+The partition function \(Z\) is usually difficult to compute, but Gibbs sampling does not require \(Z\) explicitly.
+\end{frame}
+
+\begin{frame}{Conditional Distributions}
+For a coordinate \(i\), define
+\[
+\pi(x_i\mid x_{-i})
+=
+\frac{\pi(x_i,x_{-i})}{\int \pi(x_i',x_{-i})\,dx_i'}.
+\]
+
+Here \(x_{-i}\) denotes all coordinates except \(x_i\).
+
+The core idea of Gibbs sampling is:
+\[
+\text{sample one variable at a time from its exact conditional law.}
+\]
+\end{frame}
+
+\begin{frame}{Gibbs Update Rule}
+Let
+\[
+x^{(t)}=(x_1^{(t)},\dots,x_d^{(t)}).
+\]
+
+A deterministic Gibbs sweep updates
+\[
+x_1^{(t+1)} \sim \pi(x_1\mid x_2^{(t)},\dots,x_d^{(t)}),
+\]
+\[
+x_2^{(t+1)} \sim \pi(x_2\mid x_1^{(t+1)},x_3^{(t)},\dots,x_d^{(t)}),
+\]
+and so on until
+\[
+x_d^{(t+1)} \sim \pi(x_d\mid x_1^{(t+1)},\dots,x_{d-1}^{(t+1)}).
+\]
+
+This defines a Markov chain.
+\end{frame}
+
+\begin{frame}{Single-Coordinate Transition Kernel}
+A single-coordinate Gibbs update for coordinate \(i\) defines
+\[
+K_i(x,dx')=\delta_{x_{-i}}(dx'_{-i})\,\pi(dx_i'\mid x_{-i}).
+\]
+
+Interpretation:
+\begin{itemize}
+    \item all other coordinates remain fixed,
+    \item coordinate \(i\) is resampled exactly.
+\end{itemize}
+
+A full sweep is the composition
+\[
+K=K_d\cdots K_2K_1.
+\]
+\end{frame}
+
+%================================================
+\section{Correctness}
+%================================================
+
+\begin{frame}{Invariant Distribution}
+We want to show that \(\pi\) is invariant:
+\[
+\int \pi(dx)\,K(x,A)=\pi(A)
+\]
+for every measurable set \(A\).
+
+It is enough to prove invariance for each \(K_i\), since compositions of invariant kernels remain invariant.
+\end{frame}
+
+\begin{frame}{Proof of Invariance for One Coordinate}
+For one coordinate update,
+\[
+\int \pi(dx)\,K_i(x,dx')
+=
+\int \pi(dx_i,dx_{-i})\,\delta_{x_{-i}}(dx'_{-i})\,\pi(dx'_i\mid x_{-i}).
+\]
+
+Factorize
+\[
+\pi(dx_i,dx_{-i})=\pi(dx_i\mid x_{-i})\,\pi_{-i}(dx_{-i}).
+\]
+
+Integrating over \(x_i\),
+\[
+\int \pi(dx_i\mid x_{-i})=1.
+\]
+
+Hence
+\[
+\int \pi(dx)\,K_i(x,dx')
+=
+\pi(dx'_i\mid x'_{-i})\,\pi_{-i}(dx'_{-i})
+=
+\pi(dx').
+\]
+
+So \(\pi\) is invariant.
+\end{frame}
+
+\begin{frame}{Detailed Balance}
+A single-coordinate Gibbs update satisfies
+\[
+\pi(dx)\,K_i(x,dx')=\pi(dx')\,K_i(x',dx).
+\]
+
+Indeed, if \(x_{-i}\neq x'_{-i}\), both sides vanish. If \(x_{-i}=x'_{-i}\), then
+\[
+\pi(x)\,K_i(x,x')
+=
+\pi(x_i,x_{-i})\,\pi(x'_i\mid x_{-i}),
+\]
+and
+\[
+\pi(x')\,K_i(x',x)
+=
+\pi(x'_i,x_{-i})\,\pi(x_i\mid x_{-i}).
+\]
+
+Using
+\[
+\pi(x_i,x_{-i})=\pi(x_i\mid x_{-i})\pi(x_{-i}),
+\]
+both sides coincide.
+\end{frame}
+
+\begin{frame}{Why Detailed Balance Matters}
+Detailed balance implies invariance:
+\[
+\pi(dx)\,K(x,dx')=\pi(dx')\,K(x',dx)
+\quad\Longrightarrow\quad
+\pi K=\pi.
+\]
+
+This is the equilibrium flux condition: probability current from \(x\) to \(x'\) balances the reverse current.
+
+For Gibbs sampling:
+\begin{itemize}
+    \item each coordinate update is reversible,
+    \item random-scan Gibbs is reversible,
+    \item deterministic sweep is invariant though not always strictly reversible as a whole.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random-Scan Gibbs}
+If we choose coordinate \(I_t\in\{1,\dots,d\}\) randomly with
+\[
+\mathbb{P}(I_t=i)=p_i,\qquad \sum_i p_i=1,
+\]
+then the transition kernel is
+\[
+K=\sum_{i=1}^d p_i K_i.
+\]
+
+Since each \(K_i\) leaves \(\pi\) invariant, so does \(K\):
+\[
+\pi K=\sum_{i=1}^d p_i\,\pi K_i=\sum_{i=1}^d p_i\,\pi=\pi.
+\]
+\end{frame}
+
+%================================================
+\section{Gibbs vs Metropolis}
+%================================================
+
+\begin{frame}{Metropolis--Hastings Recap}
+Metropolis--Hastings proposes \(x\to x'\) from proposal density \(q(x'\mid x)\), then accepts with probability
+\[
+\alpha(x,x')=
+\min\left(
+1,\frac{\pi(x')q(x\mid x')}{\pi(x)q(x'\mid x)}
+\right).
+\]
+
+This ensures detailed balance with respect to \(\pi\).
+\end{frame}
+
+\begin{frame}{Gibbs as a Special Case of Metropolis--Hastings}
+In Gibbs sampling, the proposal for coordinate \(i\) is exactly the conditional:
+\[
+q(x_i'\mid x)=\pi(x_i'\mid x_{-i}).
+\]
+
+Then, for states differing only in coordinate \(i\),
+\[
+\frac{\pi(x')q(x\mid x')}{\pi(x)q(x'\mid x)}
+=
+\frac{\pi(x_i',x_{-i})\,\pi(x_i\mid x_{-i})}{\pi(x_i,x_{-i})\,\pi(x_i'\mid x_{-i})}=1.
+\]
+
+So Gibbs is a rejection-free Metropolis--Hastings method.
+\end{frame}
+
+\begin{frame}{Conceptual Difference: Gibbs vs Metropolis}
+\textbf{Gibbs sampling}
+\begin{itemize}
+    \item uses exact conditional distributions,
+    \item every move is accepted,
+    \item requires tractable conditionals.
+\end{itemize}
+
+\textbf{Metropolis sampling}
+\begin{itemize}
+    \item works with arbitrary proposals,
+    \item may reject moves,
+    \item often easier to apply when conditionals are unavailable.
+\end{itemize}
+
+Thus Gibbs is more specialized but often more efficient when exact conditionals are known.
+\end{frame}
+
+\begin{frame}{Example: Local Metropolis vs Gibbs in the Ising Model}
+For Ising spins \(s_i\in\{-1,+1\}\):
+\begin{itemize}
+    \item local Metropolis proposes \(s_i\to -s_i\) and accepts/rejects,
+    \item Gibbs directly samples \(s_i\) from its conditional distribution.
+\end{itemize}
+
+Metropolis:
+\[
+\alpha=\min(1,e^{-\beta \Delta E}).
+\]
+
+Gibbs:
+\[
+\mathbb{P}(s_i=+1\mid s_{-i})
+=
+\frac{1}{1+e^{-2\beta H_i^{\mathrm{loc}}}}.
+\]
+
+So Gibbs can be viewed as sampling the exact thermal distribution at a site, rather than flipping a site with an accept/reject rule.
+\end{frame}
+
+%================================================
+\section{Examples}
+%================================================
+
+\begin{frame}{Boltzmann Distribution}
+Suppose
+\[
+\pi(x)=\frac{1}{Z}e^{-\beta E(x)}.
+\]
+
+Then
+\[
+\pi(x_i\mid x_{-i})
+=
+\frac{e^{-\beta E(x_i,x_{-i})}}
+{\sum_{x_i'}e^{-\beta E(x_i',x_{-i})}}
+\]
+in the discrete case.
+
+So Gibbs sampling is local equilibrium sampling in a frozen environment.
+\end{frame}
+
+\begin{frame}{Ising Model}
+For spins \(s_i\in\{-1,+1\}\), energy
+\[
+E(s)=-\sum_{\langle i,j\rangle}J_{ij}s_i s_j-\sum_i h_i s_i.
+\]
+
+The local field at site \(i\) is
+\[
+H_i^{\mathrm{loc}}=\sum_{j\neq i}J_{ij}s_j+h_i.
+\]
+
+Then
+\[
+\pi(s_i\mid s_{-i})\propto e^{\beta s_i H_i^{\mathrm{loc}}}.
+\]
+
+Hence
+\[
+\mathbb{P}(s_i=+1\mid s_{-i})
+=
+\frac{1}{1+e^{-2\beta H_i^{\mathrm{loc}}}},
+\]
+\[
+\mathbb{P}(s_i=-1\mid s_{-i})
+=
+\frac{1}{1+e^{2\beta H_i^{\mathrm{loc}}}}.
+\]
+\end{frame}
+
+\begin{frame}{Continuous Example: Bivariate Gaussian}
+Let
+\[
+\begin{pmatrix}X\\Y\end{pmatrix}
+\sim\mathcal{N}\left(
+\begin{pmatrix}\mu_X\\\mu_Y\end{pmatrix},
+\begin{pmatrix}
+\sigma_X^2 & \rho\sigma_X\sigma_Y\\
+\rho\sigma_X\sigma_Y & \sigma_Y^2
+\end{pmatrix}
+\right).
+\]
+
+Then
+\[
+X\mid Y=y \sim
+\mathcal{N}\left(
+\mu_X+\rho\frac{\sigma_X}{\sigma_Y}(y-\mu_Y),
+\ \sigma_X^2(1-\rho^2)
+\right),
+\]
+\[
+Y\mid X=x \sim
+\mathcal{N}\left(
+\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x-\mu_X),
+\ \sigma_Y^2(1-\rho^2)
+\right).
+\]
+
+So Gibbs alternates exact Gaussian draws.
+\end{frame}
+
+%================================================
+\section{Convergence, mixing, autocorrelation}
+%================================================
+
+\begin{frame}{Convergence Conditions}
+To conclude convergence to \(\pi\), one usually requires:
+\begin{itemize}
+    \item irreducibility,
+    \item aperiodicity,
+    \item positive recurrence.
+\end{itemize}
+
+Under these conditions,
+\[
+\lim_{t\to\infty}\mathbb{P}(X^{(t)}\in A)=\pi(A).
+\]
+
+So the chain forgets its initial condition and approaches equilibrium.
+\end{frame}
+
+\begin{frame}{Ergodic Theorem}
+If the chain is ergodic and \(f\in L^1(\pi)\), then
+\[
+\frac{1}{N}\sum_{t=1}^N f(X^{(t)})
+\longrightarrow
+\mathbb{E}_{\pi}[f]
+\]
+almost surely.
+
+This is why MCMC is useful in practice: we estimate expectations under \(\pi\) by time averages.
+\end{frame}
+
+\begin{frame}{Autocorrelation Function}
+Samples in MCMC are correlated. For an observable \(f(X_t)\), define the autocovariance
+\[
+\Gamma_f(k)=\mathrm{Cov}_\pi(f(X_t),f(X_{t+k})).
+\]
+
+The normalized autocorrelation is
+\[
+\rho_f(k)=\frac{\Gamma_f(k)}{\Gamma_f(0)}.
+\]
+
+If \(\rho_f(k)\) decays slowly, then the chain mixes slowly and effective sampling is poor.
+\end{frame}
+
+\begin{frame}{Integrated Autocorrelation Time}
+Define the integrated autocorrelation time
+\[
+\tau_{\mathrm{int}}(f)=1+2\sum_{k=1}^{\infty}\rho_f(k),
+\]
+provided the sum converges.
+
+Then the variance of the empirical mean behaves like
+\[
+\mathrm{Var}\left(\frac{1}{N}\sum_{t=1}^N f(X_t)\right)
+\approx
+\frac{\Gamma_f(0)}{N}\tau_{\mathrm{int}}(f).
+\]
+
+Thus the effective sample size is roughly
+\[
+N_{\mathrm{eff}}\approx \frac{N}{\tau_{\mathrm{int}}(f)}.
+\]
+\end{frame}
+
+\begin{frame}{Mixing Time}
+A rough notion of mixing time is the number of steps needed for the chain to get close to equilibrium.
+
+Formally, one may define
+\[
+t_{\mathrm{mix}}(\varepsilon)
+=
+\min\left\{
+t:\sup_x \norm{K^t(x,\cdot)-\pi}_{\mathrm{TV}}\le \varepsilon
+\right\},
+\]
+where total variation distance is
+\[
+\norm{\mu-\nu}_{\mathrm{TV}}
+=
+\sup_A |\mu(A)-\nu(A)|.
+\]
+
+Small mixing time means rapid equilibration.
+\end{frame}
+
+\begin{frame}{Why Gibbs Sampling Can Mix Slowly}
+Gibbs sampling may be slow if:
+\begin{itemize}
+    \item variables are strongly correlated,
+    \item the target is multimodal,
+    \item local updates change the state only slightly,
+    \item the system is near a critical point.
+\end{itemize}
+
+In statistical physics this becomes critical slowing down.
+
+Near a phase transition, local updates often decorrelate very slowly, so both \(\tau_{\mathrm{int}}\) and \(t_{\mathrm{mix}}\) become large.
+\end{frame}
+
+\begin{frame}{Blocked Gibbs Sampling}
+To improve mixing, one may update a block \(x_B\) at once:
+\[
+x_B^{(t+1)}\sim \pi(x_B\mid x_{-B}^{(t)}).
+\]
+
+This preserves the Gibbs philosophy but can reduce autocorrelation dramatically when variables in a block are strongly coupled.
+
+Examples:
+\begin{itemize}
+    \item block spin updates,
+    \item latent Gaussian blocks in Bayesian models,
+    \item visible/hidden layers in Boltzmann machines.
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Boltzmann machines}
+%================================================
+
+\begin{frame}{Boltzmann Machines}
+A Boltzmann machine is a probabilistic model with energy
+\[
+E(v,h)
+=
+-\sum_i a_i v_i
+-\sum_j b_j h_j
+-\sum_{i,j} W_{ij} v_i h_j
+-\sum_{i<j} U_{ij} v_i v_j
+-\sum_{j<k} V_{jk} h_j h_k,
+\]
+where:
+\begin{itemize}
+    \item \(v\) are visible units,
+    \item \(h\) are hidden units.
+\end{itemize}
+
+The joint distribution is
+\[
+p(v,h)=\frac{1}{Z}e^{-E(v,h)}.
+\]
+
+Sampling from this distribution is naturally done by Gibbs updates.
+\end{frame}
+
+\begin{frame}{Restricted Boltzmann Machines}
+For a restricted Boltzmann machine (RBM), there are no intra-layer couplings:
+\[
+E(v,h)
+=
+-\sum_i a_i v_i
+-\sum_j b_j h_j
+-\sum_{i,j} W_{ij} v_i h_j.
+\]
+
+This bipartite structure implies conditional factorization:
+\[
+p(h\mid v)=\prod_j p(h_j\mid v),
+\qquad
+p(v\mid h)=\prod_i p(v_i\mid h).
+\]
+
+That is why Gibbs sampling is especially efficient for RBMs.
+\end{frame}
+
+\begin{frame}{RBM Conditional Distributions}
+For binary RBM units \(v_i,h_j\in\{0,1\}\),
+\[
+p(h_j=1\mid v)=\sigma\left(b_j+\sum_i W_{ij}v_i\right),
+\]
+\[
+p(v_i=1\mid h)=\sigma\left(a_i+\sum_j W_{ij}h_j\right),
+\]
+where
+\[
+\sigma(x)=\frac{1}{1+e^{-x}}.
+\]
+
+So Gibbs sampling alternates:
+\[
+v \to h \to v \to h \to \cdots
+\]
+
+This is the basis of contrastive divergence and related learning procedures.
+\end{frame}
+
+\begin{frame}{Why Gibbs Sampling is Useful in Boltzmann Machines}
+Training requires expectations such as
+\[
+\mathbb{E}_{p(v,h)}[v_i h_j],
+\]
+which are generally intractable exactly.
+
+Gibbs sampling is used to estimate these expectations by MCMC.
+
+For RBMs, block Gibbs is particularly natural:
+\begin{itemize}
+    \item sample all hidden units in parallel given visibles,
+    \item sample all visible units in parallel given hiddens.
+\end{itemize}
+\end{frame}
+
+%================================================
+\section{Bayesian networks and graphical models}
+%================================================
+
+\begin{frame}{Bayesian Networks}
+A Bayesian network is a directed acyclic graphical model with factorization
+\[
+p(x_1,\dots,x_d)=\prod_{i=1}^d p(x_i\mid \mathrm{pa}(x_i)),
+\]
+where \(\mathrm{pa}(x_i)\) denotes the parents of node \(x_i\).
+
+When conditioning on observed evidence, the posterior can become difficult to sample from directly.
+
+Gibbs sampling provides a way to sample each latent variable from its conditional distribution given the rest.
+\end{frame}
+
+\begin{frame}{Local Markov Blanket}
+In a Bayesian network, the conditional of a node depends only on its Markov blanket:
+\[
+p(x_i\mid x_{-i}) = p(x_i\mid \mathrm{MB}(x_i)).
+\]
+
+The Markov blanket \(\mathrm{MB}(x_i)\) contains:
+\begin{itemize}
+    \item the parents of \(x_i\),
+    \item the children of \(x_i\),
+    \item the co-parents of those children.
+\end{itemize}
+
+This locality makes Gibbs sampling computationally efficient in sparse graphical models.
+\end{frame}
+
+\begin{frame}{Gibbs Sampling in Bayesian Networks}
+To update node \(x_i\), compute
+\[
+p(x_i\mid x_{-i})\propto p(x_i\mid \mathrm{pa}(x_i))
+\prod_{y\in \mathrm{ch}(x_i)} p(y\mid \mathrm{pa}(y)),
+\]
+where \(\mathrm{ch}(x_i)\) are the children of \(x_i\).
+
+Thus only local factors are needed.
+
+This is the graphical-model analogue of the local Boltzmann update in statistical mechanics.
+\end{frame}
+
+\begin{frame}{Graphical Models: Physical Analogy}
+There is a strong analogy:
+\begin{itemize}
+    \item in spin systems, a variable interacts only with neighbors,
+    \item in Bayesian networks, a variable depends only on its local Markov blanket.
+\end{itemize}
+
+In both cases, Gibbs sampling exploits locality:
+\[
+\text{global equilibrium distribution}
+\quad\Longleftrightarrow\quad
+\text{repeated local conditional updates}.
+\]
+\end{frame}
+
+%================================================
+\section{Summary}
+%================================================
+
+\begin{frame}{Mathematical Summary}
+The logic of Gibbs sampling is:
+\begin{enumerate}
+    \item start from a target distribution \(\pi\),
+    \item identify tractable conditionals \(\pi(x_i\mid x_{-i})\),
+    \item define a Markov chain by local conditional updates,
+    \item prove invariance using conditional factorization,
+    \item obtain convergence under ergodicity assumptions.
+\end{enumerate}
+
+Gibbs sampling is a special rejection-free case of Metropolis--Hastings.
+\end{frame}
+
+\begin{frame}{Practical Summary}
+We also added:
+\begin{itemize}
+    \item Metropolis comparison,
+    \item autocorrelation and effective sample size,
+    \item mixing-time intuition,
+    \item blocked Gibbs strategies,
+    \item Gibbs sampling in Boltzmann machines,
+    \item Gibbs sampling in Bayesian networks.
+\end{itemize}
+
+So Gibbs sampling is both:
+\begin{itemize}
+    \item a rigorous MCMC method,
+    \item and a unifying algorithmic idea across physics, statistics, and machine learning.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Final Take-Home Message}
+Gibbs sampling works because exact local conditional sampling reconstructs the full global distribution.
+
+\medskip
+
+Its strengths:
+\begin{itemize}
+    \item mathematical clarity,
+    \item exact conditional updates,
+    \item wide applicability.
+\end{itemize}
+
+Its weaknesses:
+\begin{itemize}
+    \item can mix slowly,
+    \item suffers in strongly correlated or multimodal systems,
+    \item may require blocking or other improvements in hard problems.
+\end{itemize}
+
+This makes Gibbs sampling one of the foundational bridges between equilibrium physics and probabilistic inference.
+\end{frame}
+
+\end{document}
