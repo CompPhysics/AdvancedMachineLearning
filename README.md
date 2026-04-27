@@ -154,7 +154,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Reminder on Markov Chain Monte Carlo and Gibbs sampling
 - Discussions of various Boltzmann machines
 - Reading recommendation: Goodfellow et al chapters 16, 17 and 18
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  
+- Jupyter notebook  at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/ipynb/week11.ipynb  and PDF at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week11/pdf/week11.pdf  
 - Video of lecture at https://youtu.be/NkM6U9J7Rnc
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek11.pdf
 
@@ -164,6 +164,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Variational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
+- Jupyter notebook  at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/ipynb/week12.ipynb  and PDF at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week12/pdf/week12.pdf  
 - Video of lecture at https://youtu.be/zMC745I-9XI
 - Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek12.pdf
 
@@ -171,6 +172,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 - Variational autoencoders
 - Reading recommendation: Goodfellow et al chapter 20.10-20.14
+- Jupyter notebook  at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  and PDF at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/pdf/week13.pdf  
 - See also Foster, chapter 7 on energy-based models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week13/ipynb/week13.ipynb  
 - Video of lecture and whiteboard notes to be added
@@ -179,12 +181,13 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 ## April 27 - May 1:   Deep generative models
 - Diffusion models
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb, see also PDF file at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/pdf/week14.pdf  
-- Video	of lecture to be added
+- Video	of lecture and whiteboard notes to be added
 
 
 ## May 4-8: Deep generative models
 - Diffusion models
 - GANs
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb, see also PDF file at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/pdf/week15.pdf  
 - Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb  
 - Video of lecture and whiteboard notes to be added
 
