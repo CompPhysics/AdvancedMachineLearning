@@ -160,7 +160,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 
 ## April 13-17: Deep generative models
-- Reminder from previous week on Energy-based models and Langevin sampling
+- Reminder from previous week on Energy-based models
 - Variational Autoencoders
 - Reading recommendation: Goodfellow et al chapters 18.1-18.2,  20.1-20-7; To create Boltzmann machine using Keras, see Babcock and Bali chapter 4
 - See also Foster, chapter 7 on energy-based models
@@ -178,7 +178,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 ## April 27 - May 1:   Deep generative models
 - Diffusion models
-- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb  
+- Slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb, see also PDF file at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/pdf/week14.pdf  
 - Video	of lecture to be added
 
 
