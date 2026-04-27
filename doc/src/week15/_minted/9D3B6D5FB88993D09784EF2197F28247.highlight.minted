@@ -1,0 +1,10 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{q\PYGZus{}sample}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{,} \PYG{n}{t}\PYG{p}{,} \PYG{n}{noise}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Add noise to x0 at timestep t.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{if} \PYG{n}{noise} \PYG{o+ow}{is} \PYG{k+kc}{None}\PYG{p}{:}
+        \PYG{n}{noise} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{randn\PYGZus{}like}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{)}
+    \PYG{n}{sqrt\PYGZus{}acp} \PYG{o}{=} \PYG{n}{alphas\PYGZus{}cumprod}\PYG{p}{[}\PYG{n}{t}\PYG{p}{]}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mf}{0.5}
+    \PYG{n}{sqrt\PYGZus{}1macp} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{alphas\PYGZus{}cumprod}\PYG{p}{[}\PYG{n}{t}\PYG{p}{]}\PYG{p}{)}\PYG{o}{*}\PYG{o}{*}\PYG{l+m+mf}{0.5}
+    \PYG{k}{return} \PYG{n}{sqrt\PYGZus{}acp}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{n}{x0} \PYG{o}{+} \PYG{n}{sqrt\PYGZus{}1macp}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{n}{noise}
+
+\end{MintedVerbatim}

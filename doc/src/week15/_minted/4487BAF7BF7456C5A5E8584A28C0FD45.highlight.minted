@@ -1,0 +1,28 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n+nd}{@torch}\PYG{o}{.}\PYG{n}{no\PYGZus{}grad}\PYG{p}{(}\PYG{p}{)}
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{p\PYGZus{}sample\PYGZus{}loop}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,} \PYG{n}{shape}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{shape}\PYG{p}{,} \PYG{n}{device}\PYG{o}{=}\PYG{n}{device}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{reversed}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{T}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{t} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{full}\PYG{p}{(}\PYG{p}{(}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,}\PYG{p}{)}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{device}\PYG{o}{=}\PYG{n}{device}\PYG{p}{)}\PYG{o}{.}\PYG{n}{float}\PYG{p}{(}\PYG{p}{)}\PYG{o}{/}\PYG{n}{T}
+        \PYG{n}{eps\PYGZus{}pred} \PYG{o}{=} \PYG{n}{model}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+        \PYG{n}{beta\PYGZus{}t} \PYG{o}{=} \PYG{n}{betas}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+        \PYG{n}{alpha\PYGZus{}t} \PYG{o}{=} \PYG{n}{alphas}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+        \PYG{n}{acp\PYGZus{}t}   \PYG{o}{=} \PYG{n}{alphas\PYGZus{}cumprod}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+        \PYG{n}{coef1} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{/} \PYG{n}{alpha\PYGZus{}t}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{coef2} \PYG{o}{=} \PYG{n}{beta\PYGZus{}t} \PYG{o}{/} \PYG{p}{(} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{acp\PYGZus{}t}\PYG{p}{)}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{p}{)} \PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{coef1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x} \PYG{o}{\PYGZhy{}} \PYG{n}{coef2}\PYG{o}{*}\PYG{n}{eps\PYGZus{}pred}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{z} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{randn\PYGZus{}like}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+            \PYG{n}{sigma} \PYG{o}{=} \PYG{n}{beta\PYGZus{}t}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{p}{)}
+            \PYG{n}{x} \PYG{o}{=} \PYG{n}{x} \PYG{o}{+} \PYG{n}{sigma}\PYG{o}{*}\PYG{n}{z}
+    \PYG{k}{return} \PYG{n}{x}
+
+\PYG{c+c1}{\PYGZsh{} Generate samples}
+\PYG{n}{samples} \PYG{o}{=} \PYG{n}{p\PYGZus{}sample\PYGZus{}loop}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{16}\PYG{p}{,} \PYG{n}{channels}\PYG{p}{,} \PYG{n}{img\PYGZus{}size}\PYG{p}{,} \PYG{n}{img\PYGZus{}size}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{samples} \PYG{o}{=} \PYG{n}{samples}\PYG{o}{.}\PYG{n}{clamp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{cpu}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{grid} \PYG{o}{=} \PYG{n}{torchvision}\PYG{o}{.}\PYG{n}{utils}\PYG{o}{.}\PYG{n}{make\PYGZus{}grid}\PYG{p}{(}\PYG{n}{samples}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{normalize}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{grid}\PYG{o}{.}\PYG{n}{permute}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{off}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\end{MintedVerbatim}

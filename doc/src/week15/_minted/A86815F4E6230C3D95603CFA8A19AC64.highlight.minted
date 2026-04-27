@@ -1,0 +1,18 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n}{device} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{cuda}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{cuda}\PYG{o}{.}\PYG{n}{is\PYGZus{}available}\PYG{p}{(}\PYG{p}{)} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{cpu}\PYG{l+s+s1}{\PYGZsq{}}
+
+\PYG{c+c1}{\PYGZsh{} Training settings}
+\PYG{n}{batch\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{128}
+\PYG{n}{epochs}     \PYG{o}{=} \PYG{l+m+mi}{5}
+\PYG{n}{lr}         \PYG{o}{=} \PYG{l+m+mf}{2e\PYGZhy{}4}
+\PYG{n}{img\PYGZus{}size}   \PYG{o}{=} \PYG{l+m+mi}{28}
+\PYG{n}{channels}   \PYG{o}{=} \PYG{l+m+mi}{1}
+
+\PYG{c+c1}{\PYGZsh{} Diffusion hyperparameters}
+\PYG{n}{T} \PYG{o}{=} \PYG{l+m+mi}{300}  \PYG{c+c1}{\PYGZsh{} number of diffusion steps  [oai\PYGZus{}citation:5‡Medium](https://papers\PYGZhy{}100\PYGZhy{}lines.medium.com/diffusion\PYGZhy{}models\PYGZhy{}from\PYGZhy{}scratch\PYGZhy{}mnist\PYGZhy{}data\PYGZhy{}tutorial\PYGZhy{}in\PYGZhy{}100\PYGZhy{}lines\PYGZhy{}of\PYGZhy{}pytorch\PYGZhy{}code\PYGZhy{}a609e1558cee?utm\PYGZus{}source=chatgpt.com)}
+\PYG{n}{beta\PYGZus{}start}\PYG{p}{,} \PYG{n}{beta\PYGZus{}end} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}4}\PYG{p}{,} \PYG{l+m+mf}{0.02}
+\PYG{n}{betas} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{beta\PYGZus{}start}\PYG{p}{,} \PYG{n}{beta\PYGZus{}end}\PYG{p}{,} \PYG{n}{T}\PYG{p}{,} \PYG{n}{device}\PYG{o}{=}\PYG{n}{device}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} linear schedule  [oai\PYGZus{}citation:6‡Medium](https://medium.com/data\PYGZhy{}science/diffusion\PYGZhy{}model\PYGZhy{}from\PYGZhy{}scratch\PYGZhy{}in\PYGZhy{}pytorch\PYGZhy{}ddpm\PYGZhy{}9d9760528946?utm\PYGZus{}source=chatgpt.com)}
+\PYG{n}{alphas} \PYG{o}{=} \PYG{l+m+mf}{1.} \PYG{o}{\PYGZhy{}} \PYG{n}{betas}
+\PYG{n}{alphas\PYGZus{}cumprod} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{cumprod}\PYG{p}{(}\PYG{n}{alphas}\PYG{p}{,} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+\end{MintedVerbatim}

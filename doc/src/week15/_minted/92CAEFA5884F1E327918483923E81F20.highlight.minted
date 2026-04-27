@@ -1,0 +1,11 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{diffusion\PYGZus{}loss}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,} \PYG{n}{x0}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Compute MSE between predicted noise and true noise.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{n}{B} \PYG{o}{=} \PYG{n}{x0}\PYG{o}{.}\PYG{n}{size}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{t} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{randint}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{T}\PYG{p}{,} \PYG{p}{(}\PYG{n}{B}\PYG{p}{,}\PYG{p}{)}\PYG{p}{,} \PYG{n}{device}\PYG{o}{=}\PYG{n}{device}\PYG{p}{)}\PYG{o}{.}\PYG{n}{long}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{noise} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{randn\PYGZus{}like}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{)}
+    \PYG{n}{x\PYGZus{}noisy} \PYG{o}{=} \PYG{n}{q\PYGZus{}sample}\PYG{p}{(}\PYG{n}{x0}\PYG{p}{,} \PYG{n}{t}\PYG{p}{,} \PYG{n}{noise}\PYG{p}{)}
+    \PYG{n}{pred\PYGZus{}noise} \PYG{o}{=} \PYG{n}{model}\PYG{p}{(}\PYG{n}{x\PYGZus{}noisy}\PYG{p}{,} \PYG{n}{t}\PYG{o}{.}\PYG{n}{float}\PYG{p}{(}\PYG{p}{)}\PYG{o}{/}\PYG{n}{T}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{F}\PYG{o}{.}\PYG{n}{mse\PYGZus{}loss}\PYG{p}{(}\PYG{n}{pred\PYGZus{}noise}\PYG{p}{,} \PYG{n}{noise}\PYG{p}{)}
+
+\end{MintedVerbatim}
