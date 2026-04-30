@@ -180,7 +180,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 ## April 27 - May 1:   Deep generative models
 - Diffusion models
 - Jupyter-notebook at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb, see also PDF file at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/pdf/week14.pdf  
-- Video	of lecture and whiteboard notes to be added
+- Video	of lecture at https://youtu.be/NamASpDcHW4
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek14.pdf
 
 
 ## May 4-8: Deep generative models
