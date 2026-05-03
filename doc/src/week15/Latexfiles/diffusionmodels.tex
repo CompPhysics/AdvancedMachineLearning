@@ -1,0 +1,1113 @@
+% =============================================================================
+%  week15_diffusion.tex
+%  Diffusion Models: From VAEs to DDPM — Full Mathematical Derivation
+%  Morten Hjorth-Jensen, May 2026
+%  Revised: code slides removed; VAE kept as motivation; new derivations added
+% =============================================================================
+
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\usefonttheme[onlymath]{serif}
+
+\setbeamercolor{frametitle}{bg=blue!11!white, fg=blue!60!black}
+\setbeamercolor{title}{fg=blue!65!black}
+\setbeamercolor{block title}{bg=blue!16!white, fg=blue!60!black}
+\setbeamercolor{block body}{bg=blue!4!white}
+\setbeamercolor{alerted text}{fg=red!65!black}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.30\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.44\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.26\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{1em}%
+      \insertframenumber/\inserttotalframenumber\hspace*{1ex}
+    \end{beamercolorbox}}%
+  \vskip0pt}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,decorations.pathreplacing}
+\usepackage{hyperref}
+
+% ── Convenience macros ───────────────────────────────────────────────────────
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\DKL}{D_{\mathrm{KL}}}
+\newcommand{\Norm}{\mathcal{N}}
+\newcommand{\ELBO}{\mathcal{L}}
+\newcommand{\bx}{\bm{x}}
+\newcommand{\bh}{\bm{h}}
+\newcommand{\bz}{\bm{z}}
+\newcommand{\beps}{\bm{\epsilon}}
+\newcommand{\bmu}{\bm{\mu}}
+\newcommand{\bsig}{\bm{\sigma}}
+\newcommand{\btheta}{\bm{\theta}}
+\newcommand{\bphi}{\bm{\phi}}
+\newcommand{\half}{\tfrac{1}{2}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% ── Metadata ─────────────────────────────────────────────────────────────────
+\title[Diffusion Models]{Denoising Diffusion Probabilistic Models:\\
+       A Complete Mathematical Derivation}
+\subtitle{From Variational Autoencoders to Score-Based Generative Models}
+\author[M.\ Hjorth-Jensen]{Morten Hjorth-Jensen}
+\institute[UiO/MSU]{Department of Physics \& CCSE, University of Oslo\\
+                    \& Michigan State University}
+\date{May 2026}
+
+% =============================================================================
+\begin{document}
+% =============================================================================
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ── Table of contents ─────────────────────────────────────────────────────────
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% =============================================================================
+\section{Motivation: VAEs and Their Limits}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Generative models: the common thread}
+
+All deep generative models share one goal: learn a distribution
+$p_{\btheta}(\bx)$ over data~$\bx$ that we can both evaluate and sample from.
+
+\medskip
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{llll}
+\toprule
+\textbf{Family} & \textbf{Latent} & \textbf{Training signal} & \textbf{Sample cost}\\
+\midrule
+VAE            & $\bh \in \R^{d_h},\;d_h\!\ll\!d_x$ & ELBO             & 1 decoder pass\\
+\textbf{Diffusion} & $\bx_t\in\R^{d_x}$ (full dim)  & \textbf{ELBO, $T$ levels} & $T$ denoiser calls\\
+GAN            & $\bz\in\R^k$                       & Adversarial      & 1 generator pass\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\begin{alertblock}{Key insight}
+Diffusion models are \textbf{hierarchical VAEs} with $T$ latent levels,
+a fixed (non-learned) encoder, and full-dimensional latents.
+Understanding VAEs is the fastest route to understanding diffusion.
+\end{alertblock}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{The VAE: ELBO and reparameterisation (recap)}
+
+\textbf{Goal.} Maximise $\log p_{\btheta}(\bx)$ — intractable because
+$p(\bx)=\int p_{\btheta}(\bx|\bh)\,p(\bh)\,d\bh$.
+
+\medskip
+Introduce approximate posterior $q_{\bphi}(\bh|\bx)$.
+By Jensen's inequality on $\log$:
+\[
+  \log p(\bx)
+  = \log\E_{q_{\bphi}(\bh|\bx)}\!\left[\frac{p_{\btheta}(\bx,\bh)}{q_{\bphi}(\bh|\bx)}\right]
+  \;\geq\;
+  \E_{q_{\bphi}(\bh|\bx)}\!\left[\log\frac{p_{\btheta}(\bx,\bh)}{q_{\bphi}(\bh|\bx)}\right]
+  =: \ELBO(\bphi,\btheta).
+\]
+Splitting the joint $p(\bx,\bh)=p_{\btheta}(\bx|\bh)\,p(\bh)$:
+\[
+\boxed{
+\ELBO(\bphi,\btheta)
+= \underbrace{\E_{q_{\bphi}(\bh|\bx)}\!\left[\log p_{\btheta}(\bx|\bh)\right]}_{\text{reconstruction}}
+- \underbrace{\DKL\!\bigl(q_{\bphi}(\bh|\bx)\,\|\,p(\bh)\bigr)}_{\text{regularisation}}}
+\]
+
+\textbf{Reparameterisation.}  With Gaussian encoder
+$q_{\bphi}(\bh|\bx)=\Norm(\bmu_{\bphi},\bsig^2_{\bphi}\mathbf{I})$
+and prior $p(\bh)=\Norm(\bm{0},\mathbf{I})$:
+\[
+  \bh = \bmu_{\bphi}(\bx) + \bsig_{\bphi}(\bx)\odot\beps,\quad
+  \beps\sim\Norm(\bm{0},\mathbf{I}).
+\]
+Closed-form KL:
+$\DKL(q\|p) = \frac{1}{2}\sum_{j}\!\left(\mu_j^2+\sigma_j^2-\log\sigma_j^2-1\right)$.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Why VAEs produce blurry samples}
+
+\textbf{The $\ell_2$-averaging problem.}
+The decoder minimises
+\[
+  -\E_{q_{\bphi}}\!\left[\log p_{\btheta}(\bx|\bh)\right]
+  \;\propto\;
+  \E_{q_{\bphi}}\!\left[\|\bx - \hat{\bx}_{\btheta}(\bh)\|^2\right].
+\]
+Because the posterior $q_{\bphi}(\bh|\bx)$ has nonzero variance,
+$\hat{\bx}_{\btheta}$ learns the \emph{mean over all likely completions},
+which is systematically blurry.
+
+\bigskip
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{Other VAE limitations}
+\begin{itemize}
+  \item \textbf{Posterior collapse}: powerful decoder can ignore $\bh$,
+        KL$\to 0$, latent useless.
+  \item \textbf{ELBO gap}:
+        $\log p(\bx) = \ELBO + \DKL(q_{\bphi}\|p(\bh|\bx)) > \ELBO$.
+  \item Mean-field Gaussian approximation may miss
+        multi-modal true posteriors.
+\end{itemize}
+\end{block}
+
+\column{0.47\textwidth}
+\begin{alertblock}{The diffusion solution}
+\begin{itemize}
+  \item Replace 1 latent level with $T\gg 1$.
+  \item Fix the encoder: no collapse possible.
+  \item Predict only the \emph{noise added at one step},
+        not the full image — eliminates $\ell_2$-averaging artefacts.
+\end{itemize}
+\end{alertblock}
+\end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Hierarchical VAEs and the Diffusion Limit}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Markovian hierarchical VAE (MHVAE)}
+
+Generalise VAE to a \textbf{chain of $T$ latent spaces}
+$\bx_1,\bx_2,\ldots,\bx_T$ (we already write $\bx_t$ for the $t$-th latent):
+
+\begin{align*}
+p(\bx_0,\bx_{1:T})
+  &= p(\bx_T)\,p_{\btheta}(\bx_0|\bx_1)
+     \prod_{t=2}^{T}p_{\btheta}(\bx_{t-1}|\bx_t)
+     \quad\text{(generative)}\\[4pt]
+q(\bx_{1:T}|\bx_0)
+  &= q(\bx_1|\bx_0)
+     \prod_{t=2}^{T}q(\bx_t|\bx_{t-1})
+     \quad\text{(inference)}
+\end{align*}
+
+Substituting into the ELBO and using the Markov property:
+\[
+\log p(\bx_0)
+\geq
+\E_{q(\bx_{1:T}|\bx_0)}
+\!\left[\log\frac{
+    p(\bx_T)\,p_{\btheta}(\bx_0|\bx_1)
+    \prod_{t=2}^{T}p_{\btheta}(\bx_{t-1}|\bx_t)}
+  {q(\bx_1|\bx_0)\prod_{t=2}^{T}
+    q(\bx_t|\bx_{t-1})}\right]
+\]
+Each level contributes a reconstruction/regularisation pair.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Three constraints that define a diffusion model}
+
+A \textbf{Variational Diffusion Model} (VDM; Kingma et al.\ 2021;
+Luo 2022) is an MHVAE with three additional constraints:
+
+\begin{block}{Constraint 1 — Full-dimensional latents}
+$\dim(\bx_t) = \dim(\bx_0)$ for all $t$.
+No bottleneck; the latents live in \emph{data space}.
+\end{block}
+
+\begin{block}{Constraint 2 — Fixed Gaussian encoder (forward process)}
+\[
+q(\bx_t|\bx_{t-1})
+= \Norm\!\bigl(\bx_t;\,\sqrt{\alpha_t}\,\bx_{t-1},\,(1-\alpha_t)\mathbf{I}\bigr),
+\quad \alpha_t = 1-\beta_t\in(0,1).
+\]
+Not trained. The noise schedule $\{\beta_t\}$ is a design choice.
+\end{block}
+
+\begin{block}{Constraint 3 — Gaussian terminal distribution}
+$\{\alpha_t\}$ is chosen so that
+$q(\bx_T|\bx_0)\approx\Norm(\bm{0},\mathbf{I})$
+as $t\to T$.
+The model ``forgets'' the data completely.
+\end{block}
+\end{frame}
+
+% =============================================================================
+\section{The Forward Process}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Forward process: the Gaussian product rule}
+
+\textbf{Key tool.} If $\bx = a\bm{u} + b\bm{v}$ with
+$\bm{u}\sim\Norm(\bm{0},\mathbf{I})$ and $\bm{v}\sim\Norm(\bm{0},\mathbf{I})$
+independent, then
+\[
+  \bx \sim \Norm\!\bigl(\bm{0},\,(a^2+b^2)\mathbf{I}\bigr).
+\]
+
+\textbf{Proof of closed-form marginal.}
+Write one step as $\bx_t = \sqrt{\alpha_t}\,\bx_{t-1} + \sqrt{1-\alpha_t}\,\beps_{t-1}$
+with $\beps_{t-1}\sim\Norm(\bm{0},\mathbf{I})$.  Unrolling two steps:
+\begin{align*}
+\bx_t
+&= \sqrt{\alpha_t}\bigl(\sqrt{\alpha_{t-1}}\,\bx_{t-2}
+   + \sqrt{1-\alpha_{t-1}}\,\beps_{t-2}\bigr)
+   + \sqrt{1-\alpha_t}\,\beps_{t-1}\\
+&= \sqrt{\alpha_t\alpha_{t-1}}\,\bx_{t-2}
+   + \underbrace{\sqrt{\alpha_t(1-\alpha_{t-1})}\,\beps_{t-2}
+     + \sqrt{1-\alpha_t}\,\beps_{t-1}}_{\sim\,\Norm(\bm{0},\,
+       [\alpha_t(1-\alpha_{t-1})+(1-\alpha_t)]\mathbf{I})}\\
+&= \sqrt{\alpha_t\alpha_{t-1}}\,\bx_{t-2}
+   + \sqrt{1-\alpha_t\alpha_{t-1}}\;\bar{\beps}
+\end{align*}
+since $\alpha_t(1-\alpha_{t-1})+(1-\alpha_t) = 1-\alpha_t\alpha_{t-1}$.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Closed-form forward marginal $q(\bx_t|\bx_0)$}
+
+Define $\bar\alpha_t = \prod_{s=1}^{t}\alpha_s$.  Continuing the induction:
+
+\begin{block}{Closed-form marginal (key result)}
+\[
+\boxed{
+  q(\bx_t|\bx_0)
+  = \Norm\!\bigl(\bx_t;\;\sqrt{\bar\alpha_t}\,\bx_0,\;
+    (1-\bar\alpha_t)\mathbf{I}\bigr)
+}
+\]
+Equivalently, we can sample $\bx_t$ \emph{directly} in one step:
+\[
+  \bx_t = \sqrt{\bar\alpha_t}\,\bx_0 + \sqrt{1-\bar\alpha_t}\,\beps,
+  \qquad \beps\sim\Norm(\bm{0},\mathbf{I}).
+\]
+\end{block}
+
+\medskip
+\textbf{Interpretation.}
+\begin{itemize}
+  \item $\sqrt{\bar\alpha_t}$ is the \emph{signal coefficient}: decays toward 0.
+  \item $\sqrt{1-\bar\alpha_t}$ is the \emph{noise coefficient}: grows toward 1.
+  \item At $t=0$: $\bx_0 = \bx_0$ (clean).
+  \item At $t=T$: $\bx_T\approx\beps$ (pure noise).
+\end{itemize}
+No forward-pass through a network needed — this is just arithmetic.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Signal-to-noise ratio and noise schedules}
+
+Define the \textbf{signal-to-noise ratio}:
+\[
+  \mathrm{SNR}(t) = \frac{\bar\alpha_t}{1-\bar\alpha_t}.
+\]
+$\mathrm{SNR}(0)\gg 1$ (clean data); $\mathrm{SNR}(T)\approx 0$ (pure noise).
+The VDM objective can be rewritten entirely in terms of $\mathrm{SNR}(t)$,
+and the loss weight of each term equals $\mathrm{SNR}(t)-\mathrm{SNR}(t+1)$
+(Kingma et al.\ 2021).
+
+\bigskip
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Linear schedule} (Ho et al.\ 2020):
+\[
+  \beta_t = \beta_{\min} + \tfrac{t-1}{T-1}(\beta_{\max}-\beta_{\min})
+\]
+$\beta_{\min}=10^{-4}$, $\beta_{\max}=0.02$, $T=1000$.
+\smallskip
+
+Near-zero SNR early, then rapid collapse.
+
+\column{0.48\textwidth}
+\textbf{Cosine schedule} (Nichol \& Dhariwal 2021):
+\[
+  \bar\alpha_t = \frac{f(t)}{f(0)},\quad
+  f(t) = \cos^2\!\!\left(\frac{t/T + s}{1+s}\cdot\frac{\pi}{2}\right)
+\]
+$s=0.008$. SNR decreases more gradually, improving training at low $t$.
+\end{columns}
+
+\medskip
+The cosine schedule avoids the very small $\beta_t$ values that waste
+early training steps on near-identical images.
+\end{frame}
+
+% =============================================================================
+\section{The Forward Posterior}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Tractable forward posterior $q(\bx_{t-1}|\bx_t,\bx_0)$}
+
+The \emph{unconditional} reverse $q(\bx_{t-1}|\bx_t)$ is intractable.
+But conditioned on $\bx_0$ it is tractable via Bayes' rule:
+\[
+  q(\bx_{t-1}|\bx_t,\bx_0)
+  = \frac{q(\bx_t|\bx_{t-1},\bx_0)\,q(\bx_{t-1}|\bx_0)}{q(\bx_t|\bx_0)}
+  = \frac{q(\bx_t|\bx_{t-1})\,q(\bx_{t-1}|\bx_0)}{q(\bx_t|\bx_0)}.
+\]
+The last equality uses the Markov property: $q(\bx_t|\bx_{t-1},\bx_0)=q(\bx_t|\bx_{t-1})$.
+
+\medskip
+Each factor is Gaussian:
+\begin{align*}
+q(\bx_t|\bx_{t-1})    &= \Norm(\sqrt{\alpha_t}\,\bx_{t-1},\,(1-\alpha_t)\mathbf{I})\\
+q(\bx_{t-1}|\bx_0)   &= \Norm(\sqrt{\bar\alpha_{t-1}}\,\bx_0,\,(1-\bar\alpha_{t-1})\mathbf{I})\\
+q(\bx_t|\bx_0)        &= \Norm(\sqrt{\bar\alpha_t}\,\bx_0,\,(1-\bar\alpha_t)\mathbf{I})
+\end{align*}
+Substituting and completing the square in $\bx_{t-1}$
+yields a Gaussian in $\bx_{t-1}$.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Forward posterior: completing the square}
+
+The log of the numerator (as a function of $\bx_{t-1}$) is:
+\begin{align*}
+&-\frac{(\bx_t - \sqrt{\alpha_t}\,\bx_{t-1})^2}{2(1-\alpha_t)}
+ -\frac{(\bx_{t-1} - \sqrt{\bar\alpha_{t-1}}\,\bx_0)^2}{2(1-\bar\alpha_{t-1})}\\[4pt]
+=\;&-\frac{1}{2}\left[
+  \frac{\alpha_t}{1-\alpha_t}\bx_{t-1}^2
+  - \frac{2\sqrt{\alpha_t}\,\bx_t}{1-\alpha_t}\bx_{t-1}
+  + \frac{1}{1-\bar\alpha_{t-1}}\bx_{t-1}^2
+  - \frac{2\sqrt{\bar\alpha_{t-1}}\,\bx_0}{1-\bar\alpha_{t-1}}\bx_{t-1}
+  + \text{const}\right]
+\end{align*}
+
+Grouping the $\bx_{t-1}^2$ and $\bx_{t-1}$ terms gives a precision:
+\[
+  \frac{1}{\tilde\beta_t}
+  = \frac{\alpha_t}{1-\alpha_t} + \frac{1}{1-\bar\alpha_{t-1}}
+  = \frac{\alpha_t(1-\bar\alpha_{t-1}) + (1-\alpha_t)}{(1-\alpha_t)(1-\bar\alpha_{t-1})}
+  = \frac{1-\bar\alpha_t}{(1-\alpha_t)(1-\bar\alpha_{t-1})}.
+\]
+Therefore:
+\[
+  \tilde\beta_t
+  = \frac{(1-\alpha_t)(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}
+  = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\,\beta_t.
+\]
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Forward posterior: the mean $\tilde{\bmu}_t$}
+
+The mean of $q(\bx_{t-1}|\bx_t,\bx_0)$ is read off from the linear term:
+\[
+  \frac{\tilde{\bmu}_t}{\tilde\beta_t}
+  = \frac{\sqrt{\alpha_t}\,\bx_t}{1-\alpha_t}
+  + \frac{\sqrt{\bar\alpha_{t-1}}\,\bx_0}{1-\bar\alpha_{t-1}}.
+\]
+Multiplying through by $\tilde\beta_t$:
+\begin{align*}
+\tilde{\bmu}_t(\bx_t,\bx_0)
+&= \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\,\bx_t
+ + \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\,\bx_0
+\end{align*}
+
+\begin{block}{Forward posterior (exact result)}
+\[
+\boxed{
+q(\bx_{t-1}|\bx_t,\bx_0)
+= \Norm\!\bigl(\bx_{t-1};\;\tilde{\bmu}_t(\bx_t,\bx_0),\;\tilde\beta_t\mathbf{I}\bigr)
+}
+\]
+\vspace{-2mm}
+\[
+\tilde{\bmu}_t(\bx_t,\bx_0)
+= \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\,\bx_t
++ \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\,\bx_0,
+\qquad
+\tilde\beta_t = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\,\beta_t
+\]
+\end{block}
+
+This is the \emph{target} the learned reverse process must match.
+\end{frame}
+
+% =============================================================================
+\section{The ELBO and Its Decomposition}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{VDM ELBO: full decomposition}
+
+Substituting the VDM structure into the MHVAE ELBO and applying
+the Markov property at each level (Luo 2022, Sec.\ 3):
+
+\begin{align*}
+\log p(\bx_0)
+&\geq
+\underbrace{\E_{q(\bx_1|\bx_0)}
+  \!\left[\log p_{\btheta}(\bx_0|\bx_1)\right]}_{\mathcal{L}_0:\;\text{reconstruction}}\\
+&\quad
+-\underbrace{\DKL\!\bigl(q(\bx_T|\bx_0)\,\|\,p(\bx_T)\bigr)}_{\mathcal{L}_T:\;\text{prior matching}}\\
+&\quad
+-\underbrace{\sum_{t=2}^{T}\E_{q(\bx_t|\bx_0)}\!
+  \left[\DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\,\|\,
+               p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\right]}_{\mathcal{L}_{1:T-1}:\;\text{denoising matching}}
+\end{align*}
+
+\begin{itemize}
+  \item $\mathcal{L}_T = 0$: the noise schedule is designed so
+        $q(\bx_T|\bx_0)\approx p(\bx_T)=\Norm(\bm{0},\mathbf{I})$. No parameters here.
+  \item $\mathcal{L}_0$: a single reconstruction step; treated separately.
+  \item $\mathcal{L}_{1:T-1}$: the dominant $T-1$ terms, each a Gaussian KL.
+\end{itemize}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Why condition on $\bx_0$ reduces variance}
+
+\textbf{First attempt (naïve ELBO)} uses $q(\bx_{t-1}|\bx_t)$ in the KL,
+which requires an expectation over \emph{two} random variables per term.
+This has high Monte Carlo variance.
+
+\medskip
+\textbf{Second attempt (conditioned ELBO)} uses $q(\bx_{t-1}|\bx_t,\bx_0)$.
+By the tower property:
+\[
+  \E_{q(\bx_{t-1},\bx_t|\bx_0)}\!\left[
+    \DKL\!\bigl(q(\bx_{t-1}|\bx_t)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\right]
+  \;\geq\;
+  \E_{q(\bx_t|\bx_0)}\!\left[
+    \DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\right].
+\]
+The conditioned form is a tighter bound \emph{and} requires sampling only
+$\bx_t\sim q(\bx_t|\bx_0)$, which is one-shot via the closed-form marginal.
+Each KL term now involves only a \textbf{single Monte Carlo draw}.
+
+\begin{alertblock}{Practical consequence}
+We compute $\bx_t = \sqrt{\bar\alpha_t}\,\bx_0 + \sqrt{1-\bar\alpha_t}\,\beps$
+and evaluate the KL analytically — no expensive nested sampling.
+\end{alertblock}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Gaussian KL: closed-form evaluation}
+
+Each denoising term is a KL between two Gaussians.
+For general Gaussians $\mathcal{N}(\bmu_1,\Sigma_1)$ and
+$\mathcal{N}(\bmu_2,\Sigma_2)$ in $\R^d$:
+\[
+  \DKL\!\bigl(\Norm(\bmu_1,\Sigma_1)\,\|\,\Norm(\bmu_2,\Sigma_2)\bigr)
+  = \half\!\left[
+    \log\frac{|\Sigma_2|}{|\Sigma_1|}
+    - d
+    + \mathrm{tr}(\Sigma_2^{-1}\Sigma_1)
+    + (\bmu_2-\bmu_1)^\top\Sigma_2^{-1}(\bmu_2-\bmu_1)
+  \right].
+\]
+
+\medskip
+In our case both distributions have variance $\tilde\beta_t\mathbf{I}$,
+so the $\log|\cdot|$ and $\mathrm{tr}(\cdot)$ terms cancel exactly:
+\[
+  \DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)
+  = \frac{1}{2\tilde\beta_t}
+    \bigl\|\tilde{\bmu}_t(\bx_t,\bx_0) - \bmu_{\btheta}(\bx_t,t)\bigr\|^2
+  + C
+\]
+where $p_{\btheta}(\bx_{t-1}|\bx_t)=\Norm(\bmu_{\btheta}(\bx_t,t),\tilde\beta_t\mathbf{I})$
+and $C$ does not depend on $\btheta$.
+
+\medskip
+\textbf{Training reduces to matching means.}
+The network only needs to predict $\tilde{\bmu}_t$.
+\end{frame}
+
+% =============================================================================
+\section{Noise Prediction and the Training Objective}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Reparameterising $\tilde{\bmu}_t$ in terms of noise}
+
+From the closed-form forward marginal:
+$\bx_t = \sqrt{\bar\alpha_t}\,\bx_0 + \sqrt{1-\bar\alpha_t}\,\beps$,
+we can solve for $\bx_0$:
+\[
+  \bx_0 = \frac{1}{\sqrt{\bar\alpha_t}}\bigl(\bx_t - \sqrt{1-\bar\alpha_t}\,\beps\bigr).
+\]
+Substituting into $\tilde{\bmu}_t(\bx_t,\bx_0)$:
+\begin{align*}
+\tilde{\bmu}_t(\bx_t,\beps)
+&= \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\,\bx_t
+ + \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}
+   \cdot\frac{\bx_t - \sqrt{1-\bar\alpha_t}\,\beps}{\sqrt{\bar\alpha_t}}\\
+&= \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1}) + \beta_t\sqrt{\bar\alpha_{t-1}/\bar\alpha_t}}{1-\bar\alpha_t}\,\bx_t
+ - \frac{\beta_t\sqrt{\bar\alpha_{t-1}/\bar\alpha_t}\,\sqrt{1-\bar\alpha_t}}{1-\bar\alpha_t}\,\beps
+\end{align*}
+
+Using $\bar\alpha_t = \bar\alpha_{t-1}\alpha_t$ so $\sqrt{\bar\alpha_{t-1}/\bar\alpha_t}=1/\sqrt{\alpha_t}$,
+and collecting terms (see next slide):
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{The noise-parameterised mean}
+
+After collecting terms in $\bx_t$ and $\beps$:
+\[
+  \tilde{\bmu}_t
+  = \frac{1}{\sqrt{\alpha_t}}\!\left(
+      \bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\beps
+    \right).
+\]
+
+\textbf{Verification.}
+Numerator of $\bx_t$ coefficient:
+$\alpha_t(1-\bar\alpha_{t-1}) + \beta_t/\alpha_t \cdot \bar\alpha_{t-1}/\bar\alpha_{t-1}$...
+simplifies to $(1-\bar\alpha_t)/\sqrt{\alpha_t}$, giving coefficient $1/\sqrt{\alpha_t}$.\quad$\checkmark$
+
+\medskip
+If the network predicts noise
+$\beps_{\btheta}(\bx_t,t)\approx\beps$, then choose:
+\[
+\bmu_{\btheta}(\bx_t,t)
+= \frac{1}{\sqrt{\alpha_t}}\!\left(
+    \bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\beps_{\btheta}(\bx_t,t)
+  \right).
+\]
+
+The denoising KL becomes:
+\[
+  \mathcal{L}_{t-1}
+  = \E_{\bx_0,\beps}\!\left[
+    \frac{\beta_t^2}{2\tilde\beta_t\,\alpha_t(1-\bar\alpha_t)}\,
+    \bigl\|\beps - \beps_{\btheta}(\bx_t,t)\bigr\|^2
+  \right]
+\]
+where $\bx_t = \sqrt{\bar\alpha_t}\,\bx_0 + \sqrt{1-\bar\alpha_t}\,\beps$.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{The simplified DDPM training objective}
+
+Ho et al.\ (2020) observed empirically that \textbf{dropping the time-dependent
+weighting} $\beta_t^2/(2\tilde\beta_t\alpha_t(1-\bar\alpha_t))$ and averaging
+uniformly over $t$ gives a simpler objective with \emph{better} sample quality:
+
+\begin{block}{DDPM training loss $\mathcal{L}_{\mathrm{simple}}$}
+\[
+\boxed{
+\mathcal{L}_{\mathrm{simple}}
+= \E_{t\sim\mathrm{U}[1,T],\;\bx_0,\;\beps\sim\Norm(\bm{0},\mathbf{I})}\!\left[
+  \bigl\|\beps
+         - \beps_{\btheta}\!\left(
+             \sqrt{\bar\alpha_t}\,\bx_0
+             + \sqrt{1-\bar\alpha_t}\,\beps,\;t
+           \right)\bigr\|^2
+\right]
+}
+\]
+\end{block}
+
+\medskip
+\textbf{Intuition.}
+Dropping the weight up-weights early steps (small $t$, small noise, easy
+to denoise) relative to later steps. This has a regularising effect:
+the network focuses more on the hard tasks where its predictions matter.
+The original weighted sum is still a valid ELBO; the simple loss is a
+reweighted ELBO that happens to work better in practice.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Three equivalent parameterisations}
+
+Because $\bx_t,\bx_0,\beps$ are related by a linear equation,
+predicting any one of them is equivalent:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{llp{5.2cm}}
+\toprule
+\textbf{Predict} & \textbf{Objective} & \textbf{Notes}\\
+\midrule
+$\beps$ (noise) &
+  $\|\beps - \beps_{\btheta}(\bx_t,t)\|^2$ &
+  DDPM (Ho et al.\ 2020); most common\\[4pt]
+$\bx_0$ (data) &
+  $\|\bx_0 - \hat\bx_{\btheta}(\bx_t,t)\|^2$ &
+  Allows explicit image prior; can over-smooth\\[4pt]
+$\bm{v} = \sqrt{\bar\alpha_t}\,\beps - \sqrt{1-\bar\alpha_t}\,\bx_0$ &
+  $\|\bm{v} - \bm{v}_{\btheta}(\bx_t,t)\|^2$ &
+  Velocity (Salimans \& Ho 2022); stable near $t=0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\textbf{Conversions at inference:}
+\[
+\hat\bx_0 = \frac{\bx_t - \sqrt{1-\bar\alpha_t}\,\beps_{\btheta}}{\sqrt{\bar\alpha_t}},
+\qquad
+\hat\beps = \frac{\bx_t - \sqrt{\bar\alpha_t}\,\hat\bx_0}{\sqrt{1-\bar\alpha_t}}.
+\]
+All three targets give the same denoising KL when substituted back.
+\end{frame}
+
+% =============================================================================
+\section{Connection to Score Matching}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{The score function}
+
+The \textbf{score} of a distribution $p(\bx)$ is
+$\nabla_{\bx}\log p(\bx)$.
+It points towards regions of high probability density.
+
+\medskip
+\textbf{Score of the forward-diffused distribution.}
+Since
+$q(\bx_t|\bx_0) = \Norm(\sqrt{\bar\alpha_t}\,\bx_0,(1-\bar\alpha_t)\mathbf{I})$,
+its log-density is:
+\[
+  \log q(\bx_t|\bx_0)
+  = -\frac{1}{2(1-\bar\alpha_t)}\|\bx_t - \sqrt{\bar\alpha_t}\,\bx_0\|^2 + C.
+\]
+Differentiating with respect to $\bx_t$:
+\[
+  \nabla_{\bx_t}\log q(\bx_t|\bx_0)
+  = -\frac{\bx_t - \sqrt{\bar\alpha_t}\,\bx_0}{1-\bar\alpha_t}
+  = -\frac{\beps}{\sqrt{1-\bar\alpha_t}}.
+\]
+The score is proportional to the \emph{negative noise}.
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{DDPM as denoising score matching}
+
+Define the learned score network $\bm{s}_{\btheta}(\bx_t,t)$.
+The \textbf{score matching objective} minimises:
+\[
+  \E_{t,\bx_t}\!\left[\bigl\|\nabla_{\bx_t}\log q(\bx_t) - \bm{s}_{\btheta}(\bx_t,t)\bigr\|^2\right].
+\]
+
+The \textbf{denoising score matching} (Vincent 2011) substitution:
+\[
+  \nabla_{\bx_t}\log q(\bx_t)
+  = \E_{q(\bx_0|\bx_t)}\!\left[\nabla_{\bx_t}\log q(\bx_t|\bx_0)\right]
+  = -\E_{q(\bx_0|\bx_t)}\!\left[\frac{\beps}{\sqrt{1-\bar\alpha_t}}\right].
+\]
+
+With the optimal score network $\bm{s}^*_{\btheta}(\bx_t,t)=-\beps^*/\sqrt{1-\bar\alpha_t}$:
+\[
+  \bm{s}_{\btheta}(\bx_t,t)
+  = -\frac{\beps_{\btheta}(\bx_t,t)}{\sqrt{1-\bar\alpha_t}}
+  \;\;\Longrightarrow\;\;
+  \bm{s}^*_{\btheta}\approx\nabla_{\bx_t}\log q(\bx_t).
+\]
+
+\begin{alertblock}{Equivalence}
+\textbf{DDPM noise prediction = denoising score matching.}
+The DDPM network implicitly learns the score of the noisy data distribution
+at every noise level simultaneously.
+\end{alertblock}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{From score to SDE: the continuous-time limit}
+
+Song et al.\ (2021) embed the discrete chain into a continuous SDE.
+As $T\to\infty$ with $\beta_t\to\beta(t)\,dt$, the forward process becomes:
+\[
+  d\bx = -\tfrac{1}{2}\beta(t)\,\bx\,dt + \sqrt{\beta(t)}\,d\bm{W}_t,
+\]
+where $\bm{W}_t$ is Brownian motion.  By Anderson (1982), the
+\textbf{reverse SDE} is:
+\[
+  d\bx = \bigl[-\tfrac{1}{2}\beta(t)\,\bx
+               - \beta(t)\,\nabla_{\bx}\log p_t(\bx)\bigr]\,dt
+         + \sqrt{\beta(t)}\,d\bar{\bm{W}}_t
+\]
+where $\bar{\bm{W}}_t$ is reverse-time Brownian motion.
+Replacing the score by the learned network gives:
+\[
+d\bx = \bigl[-\tfrac{1}{2}\beta(t)\,\bx
+             + \beta(t)\,\tfrac{\beps_{\btheta}(\bx,t)}{\sqrt{1-\bar\alpha_t}}\bigr]\,dt
+       + \sqrt{\beta(t)}\,d\bar{\bm{W}}_t.
+\]
+The same network $\beps_{\btheta}$ that DDPM trains is the score estimator
+that drives the reverse SDE.
+\end{frame}
+
+% =============================================================================
+\section{The Reverse Process and Sampling}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{The learned reverse process}
+
+Choose the learned reverse as:
+\[
+  p_{\btheta}(\bx_{t-1}|\bx_t)
+  = \Norm\!\bigl(\bx_{t-1};\;\bmu_{\btheta}(\bx_t,t),\;\tilde\beta_t\mathbf{I}\bigr)
+\]
+with $\bmu_{\btheta}$ the noise-parameterised mean from Section~4.
+
+\medskip
+\textbf{Why use $\tilde\beta_t$ as the reverse variance?}
+The true posterior variance $\tilde\beta_t$ lies between
+$\beta_t$ (upper bound, for $q(\bx_{t-1}|\bx_t)$) and
+$\tilde\beta_t$ (exact, for $q(\bx_{t-1}|\bx_t,\bx_0)$).
+Ho et al.\ fixed it to $\tilde\beta_t$; later work (Nichol \& Dhariwal 2021)
+learns it as an interpolation:
+\[
+  \Sigma_{\btheta}(\bx_t,t)
+  = \exp\bigl(v\log\beta_t + (1-v)\log\tilde\beta_t\bigr),
+  \quad v = v_{\btheta}(\bx_t,t)\in[0,1].
+\]
+
+\begin{block}{DDPM reverse step}
+\[
+  \bx_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(
+    \bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\beps_{\btheta}(\bx_t,t)
+  \right)
+  + \sqrt{\tilde\beta_t}\,\bz,\quad
+  \bz\sim\Norm(\bm{0},\mathbf{I})\;(t>1),\;\bz=\bm{0}\;(t=1).
+\]
+\end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{DDPM reverse algorithm}
+
+\begin{block}{Complete DDPM sampling procedure}
+\begin{enumerate}
+  \setlength\itemsep{5pt}
+  \item Sample $\bx_T\sim\Norm(\bm{0},\mathbf{I})$.
+  \item For $t = T,\, T-1,\,\ldots,\,1$:
+    \begin{enumerate}
+      \item $\bz\sim\Norm(\bm{0},\mathbf{I})$ if $t>1$;\quad $\bz=\bm{0}$ if $t=1$.
+      \item Predict noise: $\hat\beps = \beps_{\btheta}(\bx_t,t)$.
+      \item Update:
+        $\displaystyle\bx_{t-1}
+         = \frac{1}{\sqrt{\alpha_t}}\!\left(
+             \bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\hat\beps
+           \right)
+           + \sqrt{\tilde\beta_t}\,\bz$.
+    \end{enumerate}
+  \item Return $\bx_0$.
+\end{enumerate}
+\end{block}
+
+\medskip
+\begin{itemize}
+  \item Each step is one network evaluation plus a cheap Gaussian update.
+  \item With $T=1000$: slow but high quality.
+  \item \textbf{No discriminator}, no adversarial dynamics, no mode collapse.
+\end{itemize}
+\end{frame}
+
+% =============================================================================
+\section{Faster Sampling: DDIM}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{DDIM: deterministic ODE sampling}
+
+Song et al.\ (2020) observe that the DDPM objective trains a score network
+that is \emph{independent of the sampling procedure}. One can therefore
+replace the stochastic reverse SDE with a deterministic ODE:
+
+\[
+  d\bx = \left[\frac{\bx - \sqrt{1-\bar\alpha}\,\beps_{\btheta}(\bx,\bar\alpha)}
+               {\sqrt{\bar\alpha}}\right] d\sqrt{\bar\alpha}
+\]
+
+Discretising over a \emph{subsequence} $\tau_1<\tau_2<\cdots<\tau_S$ of
+timesteps (with $S\ll T$):
+
+\begin{block}{DDIM update rule}
+\[
+  \bx_{\tau_{i-1}}
+  = \sqrt{\bar\alpha_{\tau_{i-1}}}\,\hat\bx_0(\bx_{\tau_i})
+  + \sqrt{1-\bar\alpha_{\tau_{i-1}} - \sigma_{\tau_i}^2}\;\beps_{\btheta}(\bx_{\tau_i},\tau_i)
+  + \sigma_{\tau_i}\,\bz
+\]
+where $\hat\bx_0(\bx_{\tau_i})
+= \frac{\bx_{\tau_i}-\sqrt{1-\bar\alpha_{\tau_i}}\,\beps_{\btheta}(\bx_{\tau_i},\tau_i)}{\sqrt{\bar\alpha_{\tau_i}}}$
+and $\sigma_{\tau_i} = \eta\sqrt{\tilde\beta_{\tau_i}}$.
+\end{block}
+
+\begin{itemize}
+  \item $\eta=0$: fully deterministic. Same $\bx_T\to$same~$\bx_0$.
+  \item $\eta=1$: recovers DDPM.
+  \item $S=50$ gives quality comparable to $T=1000$ DDPM.
+\end{itemize}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{DDIM: derivation of the update rule}
+
+Start from the DDIM non-Markovian inference distribution (Song et al.\ 2020):
+\[
+  q_\sigma(\bx_{\tau_{i-1}}|\bx_{\tau_i},\bx_0)
+  = \Norm\!\bigl(\bx_{\tau_{i-1}};\;
+    \sqrt{\bar\alpha_{\tau_{i-1}}}\,\bx_0
+    + \sqrt{1-\bar\alpha_{\tau_{i-1}}-\sigma^2}\;\tfrac{\bx_{\tau_i}-\sqrt{\bar\alpha_{\tau_i}}\,\bx_0}{\sqrt{1-\bar\alpha_{\tau_i}}},\;
+    \sigma^2\mathbf{I}\bigr).
+\]
+
+Replacing $\bx_0$ by the predicted $\hat\bx_0$ and the exact noise direction
+by $\beps_{\btheta}(\bx_{\tau_i},\tau_i)$ recovers the update rule on the
+previous slide.
+
+\medskip
+\textbf{Why does this work?}
+The DDIM update is a first-order ODE solver for the probability-flow ODE.
+The ODE and the reverse SDE share the same marginals
+$p_t(\bx_t)$ at every time $t$.
+Since $\beps_{\btheta}$ approximates the score of $p_t$,
+integrating the ODE gives the same distribution over $\bx_0$
+as ancestral sampling from the reverse SDE — but in far fewer steps.
+\end{frame}
+
+% =============================================================================
+\section{Latent Diffusion and Connections}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Latent Diffusion Models (Stable Diffusion)}
+
+\textbf{Problem.} Running DDPM in pixel space for high-resolution images
+($512\times512\times3 = 786\,432$ dimensions) is prohibitively expensive.
+
+\medskip
+\textbf{Solution} (Rombach et al.\ 2022):
+
+\begin{enumerate}
+  \setlength\itemsep{4pt}
+  \item Train a \textbf{VAE}: compress $\bx\in\R^{H\times W\times 3}$
+        to $\bz\in\R^{h\times w\times c}$ with $h=H/f$, $w=W/f$ ($f=8$),
+        $c=4$. Compression factor $\approx 48\times$.
+  \item Run \textbf{DDPM in latent space} $\bz$: much cheaper.
+  \item Decode with the VAE: $\hat\bz_0\to\hat\bx$.
+\end{enumerate}
+
+\begin{block}{Why this works}
+\begin{itemize}
+  \item The VAE provides a perceptually smooth, semantic latent space.
+  \item Diffusion in $\bz$ avoids modelling low-level pixel correlations.
+  \item Conditioning (text, depth map, class) enters via cross-attention in
+        the U-Net denoiser operating on $\bz$.
+  \item The VAE's KL regularisation ensures $\bz$ is smooth enough for a
+        diffusion model to learn a clean manifold.
+\end{itemize}
+\end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{VAE vs.\ Diffusion: mathematical parallel}
+
+Both maximise the same variational lower bound on $\log p(\bx)$:
+\[
+  \log p(\bx) \geq \ELBO(\bphi,\btheta)
+  = \underbrace{\E[\log p_{\btheta}(\bx|\bz)]}_{\text{reconstruction}}
+  - \underbrace{\DKL(q_{\bphi}\,\|\,p)}_{\text{regularisation}}.
+\]
+Their differences arise from how they apply this framework:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{Design axis} & \textbf{VAE} & \textbf{DDPM}\\
+\midrule
+Latent levels         & 1            & $T = 300$--$1000$\\
+Encoder learned?      & Yes          & No (fixed schedule)\\
+Bottleneck?           & Yes ($d_h\ll d_x$) & No ($d_h = d_x$)\\
+What does network predict? & $\bx$ from $\bh$ & $\beps$ from $(\bx_t,t)$\\
+KL terms              & 1            & $T-1$\\
+Training loss         & BCE + $\DKL$ & MSE (noise)\\
+Sampling cost         & 1 decoder call & $T$ denoiser calls\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{block}{Key insight}
+DDPM = VAE with (a) $T$ latent levels, (b) fixed encoder, (c) no bottleneck.
+\end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{VAE vs.\ Diffusion: pros and cons}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{VAE}
+\textcolor{green!60!black}{\textbf{Pros:}}
+\begin{itemize}\small
+  \item Fast inference and generation (1 pass)
+  \item Compact structured latent space
+  \item Stable training with closed-form KL
+  \item Good for downstream tasks (clustering, interpolation)
+  \item Scalable to large datasets
+\end{itemize}
+\textcolor{red!60!black}{\textbf{Cons:}}
+\begin{itemize}\small
+  \item \textbf{Blurry samples} ($\ell_2$-averaging)
+  \item Posterior collapse risk
+  \item ELBO gap — log-likelihood never fully recovered
+  \item Mean-field approximation limits expressivity
+\end{itemize}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{Diffusion (DDPM)}
+\textcolor{green!60!black}{\textbf{Pros:}}
+\begin{itemize}\small
+  \item \textbf{State-of-the-art} sample quality
+  \item No mode collapse — full distribution coverage
+  \item Stable training (MSE objective, no adversary)
+  \item Theoretically grounded via ELBO + score matching
+  \item Flexible conditioning
+\end{itemize}
+\textcolor{red!60!black}{\textbf{Cons:}}
+\begin{itemize}\small
+  \item \textbf{Slow} sampling ($T$ network evaluations)
+  \item No compact latent for downstream tasks
+  \item High memory for large~$T$
+  \item Less natural for representation learning
+\end{itemize}
+\end{block}
+\end{columns}
+\end{frame}
+
+% =============================================================================
+\section{Summary and Exercises}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Key equations: complete reference}
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{ll}
+\toprule
+\textbf{Concept} & \textbf{Formula}\\
+\midrule
+Forward step &
+  $q(\bx_t|\bx_{t-1}) = \Norm(\sqrt{\alpha_t}\,\bx_{t-1},\,(1-\alpha_t)\mathbf{I})$\\
+Forward marginal &
+  $q(\bx_t|\bx_0) = \Norm(\sqrt{\bar\alpha_t}\,\bx_0,\,(1-\bar\alpha_t)\mathbf{I})$\\
+One-shot sample &
+  $\bx_t = \sqrt{\bar\alpha_t}\,\bx_0 + \sqrt{1-\bar\alpha_t}\,\beps$\\
+Forward posterior mean &
+  $\tilde\bmu_t = \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\bx_t
+    + \frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}\bx_0$\\
+Forward posterior var. &
+  $\tilde\beta_t = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\,\beta_t$\\
+Noise-param.\ mean &
+  $\tilde\bmu_t = \frac{1}{\sqrt{\alpha_t}}\!\bigl(\bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\beps\bigr)$\\
+Training loss &
+  $\mathcal{L}_{\mathrm{simple}} = \E\bigl[\|\beps - \beps_{\btheta}(\bx_t,t)\|^2\bigr]$\\
+Score relation &
+  $\bm{s}_{\btheta}(\bx_t,t) = -\beps_{\btheta}(\bx_t,t)/\sqrt{1-\bar\alpha_t}$\\
+Reverse step &
+  $\bx_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\bigl(\bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\beps_{\btheta}\bigr) + \sqrt{\tilde\beta_t}\,\bz$\\
+SNR &
+  $\mathrm{SNR}(t) = \bar\alpha_t/(1-\bar\alpha_t)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{Exercises}
+
+\begin{block}{Mathematical derivations}
+\begin{enumerate}
+  \setlength\itemsep{4pt}
+  \item \textbf{Forward marginal.}
+        Prove $q(\bx_t|\bx_0)=\Norm(\sqrt{\bar\alpha_t}\bx_0,(1-\bar\alpha_t)\mathbf{I})$
+        by induction. Identify the variance at step $s+1$ from the variance at step $s$.
+
+  \item \textbf{Forward posterior.}
+        Apply Bayes' rule to derive $q(\bx_{t-1}|\bx_t,\bx_0)$.
+        Show explicitly that completing the square yields
+        mean $\tilde\bmu_t$ and variance $\tilde\beta_t$ as given.
+
+  \item \textbf{Gaussian KL.}
+        Derive $\DKL(\Norm(\bmu_1,\sigma^2\mathbf{I})\|\Norm(\bmu_2,\sigma^2\mathbf{I}))
+        = \|\bmu_1-\bmu_2\|^2/(2\sigma^2)$ from the general KL formula,
+        and verify that the log-determinant and trace terms cancel.
+
+  \item \textbf{Noise reparameterisation.}
+        Starting from $\tilde\bmu_t(\bx_t,\bx_0)$, substitute
+        $\bx_0 = (\bx_t - \sqrt{1-\bar\alpha_t}\,\beps)/\sqrt{\bar\alpha_t}$
+        and verify that the result equals
+        $\frac{1}{\sqrt{\alpha_t}}(\bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\beps)$.
+
+  \item \textbf{Score matching.}
+        Show that minimising the DDPM noise-prediction loss is equivalent
+        to denoising score matching by writing the score of $q(\bx_t|\bx_0)$
+        in terms of $\beps$ and identifying the score network.
+
+  \item \textbf{ELBO decomposition.}
+        Show that the MHVAE ELBO decomposes into
+        $\mathcal{L}_0 + \mathcal{L}_T + \sum_{t=2}^T\mathcal{L}_{t-1}$
+        by writing out the joint log-ratio and applying the chain rule of KL.
+        Explain why $\mathcal{L}_T = 0$ by design.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\begin{frame}{References}
+
+\begin{enumerate}\small
+  \setlength\itemsep{4pt}
+  \item D.\ Kingma \& M.\ Welling, \emph{Auto-Encoding Variational Bayes},
+        ICLR 2014. \href{https://arxiv.org/abs/1312.6114}{arXiv:1312.6114}
+
+  \item J.\ Sohl-Dickstein et al., \emph{Deep Unsupervised Learning using
+        Nonequilibrium Thermodynamics}, ICML 2015.
+        \href{https://arxiv.org/abs/1503.03585}{arXiv:1503.03585}
+
+  \item J.\ Ho, A.\ Jain \& P.\ Abbeel, \emph{Denoising Diffusion Probabilistic
+        Models}, NeurIPS 2020. \href{https://arxiv.org/abs/2006.11239}{arXiv:2006.11239}
+
+  \item J.\ Song, C.\ Meng \& S.\ Ermon, \emph{Denoising Diffusion Implicit
+        Models}, ICLR 2021. \href{https://arxiv.org/abs/2010.02502}{arXiv:2010.02502}
+
+  \item Y.\ Song et al., \emph{Score-Based Generative Modeling through
+        Stochastic Differential Equations}, ICLR 2021.
+        \href{https://arxiv.org/abs/2011.13456}{arXiv:2011.13456}
+
+  \item D.\ Kingma et al., \emph{Variational Diffusion Models}, NeurIPS 2021.
+        \href{https://arxiv.org/abs/2107.00630}{arXiv:2107.00630}
+
+  \item A.\ Nichol \& P.\ Dhariwal, \emph{Improved Denoising Diffusion
+        Probabilistic Models}, ICML 2021.
+        \href{https://arxiv.org/abs/2102.09672}{arXiv:2102.09672}
+
+  \item R.\ Rombach et al., \emph{High-Resolution Image Synthesis with
+        Latent Diffusion Models}, CVPR 2022.
+        \href{https://arxiv.org/abs/2112.10752}{arXiv:2112.10752}
+
+  \item C.\ Luo, \emph{Understanding Diffusion Models: A Unified Perspective},
+        2022. \href{https://arxiv.org/abs/2208.11970}{arXiv:2208.11970}
+\end{enumerate}
+\end{frame}
+
+\end{document}
