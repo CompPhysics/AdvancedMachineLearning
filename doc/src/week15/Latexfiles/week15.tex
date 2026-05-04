@@ -80,8 +80,9 @@
 \end{frame}
 
 % ── Table of contents ─────────────────────────────────────────────────────────
-\begin{frame}{Outline}
-  \tableofcontents
+\begin{frame}[allowframebreaks]{Outline}
+  \scriptsize
+  \tableofcontents[hideallsubsections]
 \end{frame}
 
 % =============================================================================
@@ -454,28 +455,28 @@ This is the \emph{target} the learned reverse process must match.
 
 % -----------------------------------------------------------------------------
 \begin{frame}{VDM ELBO: full decomposition}
+\small
+Substituting the VDM structure into the MHVAE ELBO (Luo 2022, Sec.\ 3):
 
-Substituting the VDM structure into the MHVAE ELBO and applying
-the Markov property at each level (Luo 2022, Sec.\ 3):
-
+\vspace{-2pt}
 \begin{align*}
 \log p(\bx_0)
 &\geq
-\underbrace{\E_{q(\bx_1|\bx_0)}
-  \!\left[\log p_{\btheta}(\bx_0|\bx_1)\right]}_{\mathcal{L}_0:\;\text{reconstruction}}\\
-&\quad
--\underbrace{\DKL\!\bigl(q(\bx_T|\bx_0)\,\|\,p(\bx_T)\bigr)}_{\mathcal{L}_T:\;\text{prior matching}}\\
+\underbrace{\E_{q(\bx_1|\bx_0)}\!
+  \bigl[\log p_{\btheta}(\bx_0|\bx_1)\bigr]}_{\mathcal{L}_0:\;\text{reconstruction}}
+-\underbrace{\DKL\!\bigl(q(\bx_T|\bx_0)\|\,p(\bx_T)\bigr)}_{\mathcal{L}_T:\;\text{prior matching}}\\
 &\quad
 -\underbrace{\sum_{t=2}^{T}\E_{q(\bx_t|\bx_0)}\!
-  \left[\DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\,\|\,
-               p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\right]}_{\mathcal{L}_{1:T-1}:\;\text{denoising matching}}
+  \Bigl[\DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\|\,
+               p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\Bigr]}_{\mathcal{L}_{1:T-1}:\;\text{denoising matching terms}}
 \end{align*}
 
+\vspace{-2pt}
 \begin{itemize}
-  \item $\mathcal{L}_T = 0$: the noise schedule is designed so
-        $q(\bx_T|\bx_0)\approx p(\bx_T)=\Norm(\bm{0},\mathbf{I})$. No parameters here.
-  \item $\mathcal{L}_0$: a single reconstruction step; treated separately.
-  \item $\mathcal{L}_{1:T-1}$: the dominant $T-1$ terms, each a Gaussian KL.
+  \setlength\itemsep{2pt}
+  \item $\mathcal{L}_T = 0$: schedule ensures $q(\bx_T|\bx_0)\approx\Norm(\bm{0},\mathbf{I})$.
+  \item $\mathcal{L}_0$: single reconstruction step, treated separately.
+  \item $\mathcal{L}_{1:T-1}$: dominant $T-1$ terms, each a Gaussian KL.
 \end{itemize}
 \end{frame}
 
@@ -489,13 +490,13 @@ This has high Monte Carlo variance.
 \medskip
 \textbf{Second attempt (conditioned ELBO)} uses $q(\bx_{t-1}|\bx_t,\bx_0)$.
 By the tower property:
-\[
-  \E_{q(\bx_{t-1},\bx_t|\bx_0)}\!\left[
-    \DKL\!\bigl(q(\bx_{t-1}|\bx_t)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\right]
-  \;\geq\;
-  \E_{q(\bx_t|\bx_0)}\!\left[
-    \DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\right].
-\]
+\begin{align*}
+  &\E_{q(\bx_{t-1},\bx_t|\bx_0)}\!\bigl[
+    \DKL\!\bigl(q(\bx_{t-1}|\bx_t)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\bigr]\\
+  &\;\geq\;
+  \E_{q(\bx_t|\bx_0)}\!\bigl[
+    \DKL\!\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\,\|\,p_{\btheta}(\bx_{t-1}|\bx_t)\bigr)\bigr].
+\end{align*}
 The conditioned form is a tighter bound \emph{and} requires sampling only
 $\bx_t\sim q(\bx_t|\bx_0)$, which is one-shot via the closed-form marginal.
 Each KL term now involves only a \textbf{single Monte Carlo draw}.
@@ -636,30 +637,30 @@ reweighted ELBO that happens to work better in practice.
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Three equivalent parameterisations}
+\small
+$\bx_t,\bx_0,\beps$ satisfy a linear equation, so predicting any one is equivalent:
 
-Because $\bx_t,\bx_0,\beps$ are related by a linear equation,
-predicting any one of them is equivalent:
-
+\vspace{3pt}
 \begin{center}
-\renewcommand{\arraystretch}{1.35}
-\begin{tabular}{llp{5.2cm}}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{llp{4.4cm}}
 \toprule
 \textbf{Predict} & \textbf{Objective} & \textbf{Notes}\\
 \midrule
 $\beps$ (noise) &
   $\|\beps - \beps_{\btheta}(\bx_t,t)\|^2$ &
-  DDPM (Ho et al.\ 2020); most common\\[4pt]
+  DDPM; most common\\[3pt]
 $\bx_0$ (data) &
   $\|\bx_0 - \hat\bx_{\btheta}(\bx_t,t)\|^2$ &
-  Allows explicit image prior; can over-smooth\\[4pt]
-$\bm{v} = \sqrt{\bar\alpha_t}\,\beps - \sqrt{1-\bar\alpha_t}\,\bx_0$ &
+  Can over-smooth\\[3pt]
+$\bm{v} = \sqrt{\bar\alpha_t}\beps - \sqrt{1-\bar\alpha_t}\bx_0$ &
   $\|\bm{v} - \bm{v}_{\btheta}(\bx_t,t)\|^2$ &
-  Velocity (Salimans \& Ho 2022); stable near $t=0$\\
+  Velocity; stable at $t\!\to\!0$\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\medskip
+\vspace{4pt}
 \textbf{Conversions at inference:}
 \[
 \hat\bx_0 = \frac{\bx_t - \sqrt{1-\bar\alpha_t}\,\beps_{\btheta}}{\sqrt{\bar\alpha_t}},
@@ -829,35 +830,34 @@ learns it as an interpolation:
 
 % -----------------------------------------------------------------------------
 \begin{frame}{DDIM: deterministic ODE sampling}
-
-Song et al.\ (2020) observe that the DDPM objective trains a score network
-that is \emph{independent of the sampling procedure}. One can therefore
-replace the stochastic reverse SDE with a deterministic ODE:
-
+\small
+The DDPM score network is \emph{independent of the sampling procedure},
+so the stochastic SDE can be replaced by a deterministic ODE:
 \[
-  d\bx = \left[\frac{\bx - \sqrt{1-\bar\alpha}\,\beps_{\btheta}(\bx,\bar\alpha)}
-               {\sqrt{\bar\alpha}}\right] d\sqrt{\bar\alpha}
+  d\bx = \Bigl[\tfrac{\bx - \sqrt{1-\bar\alpha}\,\beps_{\btheta}(\bx,\bar\alpha)}
+               {\sqrt{\bar\alpha}}\Bigr]\, d\sqrt{\bar\alpha}.
 \]
-
-Discretising over a \emph{subsequence} $\tau_1<\tau_2<\cdots<\tau_S$ of
-timesteps (with $S\ll T$):
-
-\begin{block}{DDIM update rule}
+Discretise over a subsequence $\tau_1<\cdots<\tau_S$ ($S\ll T$):
+\begin{block}{DDIM update ($\sigma_{\tau_i}=\eta\sqrt{\tilde\beta_{\tau_i}}$)}
+\vspace{-4pt}
 \[
   \bx_{\tau_{i-1}}
-  = \sqrt{\bar\alpha_{\tau_{i-1}}}\,\hat\bx_0(\bx_{\tau_i})
+  = \sqrt{\bar\alpha_{\tau_{i-1}}}\,\hat\bx_0
   + \sqrt{1-\bar\alpha_{\tau_{i-1}} - \sigma_{\tau_i}^2}\;\beps_{\btheta}(\bx_{\tau_i},\tau_i)
-  + \sigma_{\tau_i}\,\bz
+  + \sigma_{\tau_i}\bz,
 \]
-where $\hat\bx_0(\bx_{\tau_i})
-= \frac{\bx_{\tau_i}-\sqrt{1-\bar\alpha_{\tau_i}}\,\beps_{\btheta}(\bx_{\tau_i},\tau_i)}{\sqrt{\bar\alpha_{\tau_i}}}$
-and $\sigma_{\tau_i} = \eta\sqrt{\tilde\beta_{\tau_i}}$.
+\vspace{-6pt}
+\[
+  \hat\bx_0 = \tfrac{\bx_{\tau_i}-\sqrt{1-\bar\alpha_{\tau_i}}\,\beps_{\btheta}(\bx_{\tau_i},\tau_i)}
+                    {\sqrt{\bar\alpha_{\tau_i}}}.
+\]
 \end{block}
-
+\vspace{-2pt}
 \begin{itemize}
-  \item $\eta=0$: fully deterministic. Same $\bx_T\to$same~$\bx_0$.
-  \item $\eta=1$: recovers DDPM.
-  \item $S=50$ gives quality comparable to $T=1000$ DDPM.
+  \setlength\itemsep{2pt}
+  \item $\eta=0$: fully deterministic — same $\bx_T$ always gives same $\bx_0$.
+  \item $\eta=1$: recovers DDPM stochastic sampling.
+  \item $S=50$ matches quality of $T=1000$ DDPM steps.
 \end{itemize}
 \end{frame}
 
@@ -894,63 +894,56 @@ as ancestral sampling from the reverse SDE — but in far fewer steps.
 % -----------------------------------------------------------------------------
 \begin{frame}{Latent Diffusion Models (Stable Diffusion)}
 
-\textbf{Problem.} Running DDPM in pixel space for high-resolution images
-($512\times512\times3 = 786\,432$ dimensions) is prohibitively expensive.
+\textbf{Problem.} DDPM in pixel space ($512\!\times\!512\!\times\!3=786\,432$ dims) is too expensive.
 
-\medskip
-\textbf{Solution} (Rombach et al.\ 2022):
+\smallskip
+\textbf{Solution} (Rombach et al.\ 2022): run diffusion in a compressed VAE latent space.
 
 \begin{enumerate}
-  \setlength\itemsep{4pt}
-  \item Train a \textbf{VAE}: compress $\bx\in\R^{H\times W\times 3}$
-        to $\bz\in\R^{h\times w\times c}$ with $h=H/f$, $w=W/f$ ($f=8$),
-        $c=4$. Compression factor $\approx 48\times$.
-  \item Run \textbf{DDPM in latent space} $\bz$: much cheaper.
-  \item Decode with the VAE: $\hat\bz_0\to\hat\bx$.
+  \setlength\itemsep{2pt}
+  \item \textbf{VAE encoder}: $\bx\in\R^{H\times W\times 3}
+        \to\bz\in\R^{H/8\times W/8\times 4}$ ($\approx\!48\times$ compression).
+  \item \textbf{DDPM in} $\bz$: much cheaper than pixel space.
+  \item \textbf{VAE decoder}: $\hat\bz_0\to\hat\bx$.
 \end{enumerate}
 
 \begin{block}{Why this works}
 \begin{itemize}
-  \item The VAE provides a perceptually smooth, semantic latent space.
-  \item Diffusion in $\bz$ avoids modelling low-level pixel correlations.
-  \item Conditioning (text, depth map, class) enters via cross-attention in
-        the U-Net denoiser operating on $\bz$.
-  \item The VAE's KL regularisation ensures $\bz$ is smooth enough for a
-        diffusion model to learn a clean manifold.
+  \setlength\itemsep{1pt}
+  \item VAE latent is perceptually smooth and semantically structured.
+  \item Diffusion on $\bz$ skips low-level pixel correlations.
+  \item Conditioning (text, depth, class) via cross-attention in the U-Net.
+  \item KL regularisation keeps $\bz$ smooth enough for the diffusion prior.
 \end{itemize}
 \end{block}
 \end{frame}
 
 % -----------------------------------------------------------------------------
 \begin{frame}{VAE vs.\ Diffusion: mathematical parallel}
-
-Both maximise the same variational lower bound on $\log p(\bx)$:
-\[
-  \log p(\bx) \geq \ELBO(\bphi,\btheta)
-  = \underbrace{\E[\log p_{\btheta}(\bx|\bz)]}_{\text{reconstruction}}
-  - \underbrace{\DKL(q_{\bphi}\,\|\,p)}_{\text{regularisation}}.
-\]
-Their differences arise from how they apply this framework:
+\small
+Both maximise $\log p(\bx)\geq\ELBO(\bphi,\btheta)
+=\E[\log p_{\btheta}(\bx|\bz)]-\DKL(q_{\bphi}\|p)$.
+Differences lie in how this framework is applied:
 
 \begin{center}
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.15}
 \begin{tabular}{lll}
 \toprule
 \textbf{Design axis} & \textbf{VAE} & \textbf{DDPM}\\
 \midrule
-Latent levels         & 1            & $T = 300$--$1000$\\
-Encoder learned?      & Yes          & No (fixed schedule)\\
-Bottleneck?           & Yes ($d_h\ll d_x$) & No ($d_h = d_x$)\\
-What does network predict? & $\bx$ from $\bh$ & $\beps$ from $(\bx_t,t)$\\
-KL terms              & 1            & $T-1$\\
-Training loss         & BCE + $\DKL$ & MSE (noise)\\
-Sampling cost         & 1 decoder call & $T$ denoiser calls\\
+Latent levels    & 1                    & $T = 300$--$1000$\\
+Encoder          & Learned $q_{\bphi}$  & Fixed schedule\\
+Bottleneck       & Yes ($d_h\ll d_x$)   & No ($d_h = d_x$)\\
+Network predicts & $\bx$ from $\bh$     & $\beps$ from $(\bx_t,t)$\\
+KL terms         & 1                    & $T-1$\\
+Training loss    & BCE $+$ $\DKL$       & MSE (noise)\\
+Sampling cost    & 1 decoder call       & $T$ denoiser calls\\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{block}{Key insight}
-DDPM = VAE with (a) $T$ latent levels, (b) fixed encoder, (c) no bottleneck.
+DDPM $=$ VAE with (a) $T$ latent levels, (b) fixed encoder, (c) no bottleneck.
 \end{block}
 \end{frame}
 
@@ -961,37 +954,37 @@ DDPM = VAE with (a) $T$ latent levels, (b) fixed encoder, (c) no bottleneck.
 \column{0.5\textwidth}
 \begin{block}{VAE}
 \textcolor{green!60!black}{\textbf{Pros:}}
-\begin{itemize}\small
-  \item Fast inference and generation (1 pass)
+\begin{itemize}\footnotesize\setlength\itemsep{1pt}
+  \item Fast inference (1 pass)
   \item Compact structured latent space
-  \item Stable training with closed-form KL
-  \item Good for downstream tasks (clustering, interpolation)
+  \item Stable training, closed-form KL
+  \item Good for clustering / interpolation
   \item Scalable to large datasets
 \end{itemize}
 \textcolor{red!60!black}{\textbf{Cons:}}
-\begin{itemize}\small
+\begin{itemize}\footnotesize\setlength\itemsep{1pt}
   \item \textbf{Blurry samples} ($\ell_2$-averaging)
   \item Posterior collapse risk
-  \item ELBO gap — log-likelihood never fully recovered
-  \item Mean-field approximation limits expressivity
+  \item ELBO gap (log-likelihood not exact)
+  \item Mean-field limits posterior quality
 \end{itemize}
 \end{block}
 
 \column{0.5\textwidth}
 \begin{block}{Diffusion (DDPM)}
 \textcolor{green!60!black}{\textbf{Pros:}}
-\begin{itemize}\small
+\begin{itemize}\footnotesize\setlength\itemsep{1pt}
   \item \textbf{State-of-the-art} sample quality
-  \item No mode collapse — full distribution coverage
-  \item Stable training (MSE objective, no adversary)
-  \item Theoretically grounded via ELBO + score matching
+  \item No mode collapse
+  \item Stable training (MSE, no adversary)
+  \item Grounded via ELBO + score matching
   \item Flexible conditioning
 \end{itemize}
 \textcolor{red!60!black}{\textbf{Cons:}}
-\begin{itemize}\small
-  \item \textbf{Slow} sampling ($T$ network evaluations)
-  \item No compact latent for downstream tasks
-  \item High memory for large~$T$
+\begin{itemize}\footnotesize\setlength\itemsep{1pt}
+  \item \textbf{Slow} sampling ($T$ evaluations)
+  \item No compact latent space
+  \item High memory for large $T$
   \item Less natural for representation learning
 \end{itemize}
 \end{block}
@@ -1039,42 +1032,49 @@ SNR &
 
 % -----------------------------------------------------------------------------
 \begin{frame}{Exercises}
-
-\begin{block}{Mathematical derivations}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{Exercises 1--3}
+\footnotesize
 \begin{enumerate}
   \setlength\itemsep{4pt}
   \item \textbf{Forward marginal.}
         Prove $q(\bx_t|\bx_0)=\Norm(\sqrt{\bar\alpha_t}\bx_0,(1-\bar\alpha_t)\mathbf{I})$
-        by induction. Identify the variance at step $s+1$ from the variance at step $s$.
+        by induction from $q(\bx_t|\bx_{t-1})$.
 
   \item \textbf{Forward posterior.}
         Apply Bayes' rule to derive $q(\bx_{t-1}|\bx_t,\bx_0)$.
-        Show explicitly that completing the square yields
-        mean $\tilde\bmu_t$ and variance $\tilde\beta_t$ as given.
+        Show that completing the square gives $\tilde\bmu_t$ and $\tilde\beta_t$.
 
   \item \textbf{Gaussian KL.}
         Derive $\DKL(\Norm(\bmu_1,\sigma^2\mathbf{I})\|\Norm(\bmu_2,\sigma^2\mathbf{I}))
-        = \|\bmu_1-\bmu_2\|^2/(2\sigma^2)$ from the general KL formula,
-        and verify that the log-determinant and trace terms cancel.
-
-  \item \textbf{Noise reparameterisation.}
-        Starting from $\tilde\bmu_t(\bx_t,\bx_0)$, substitute
-        $\bx_0 = (\bx_t - \sqrt{1-\bar\alpha_t}\,\beps)/\sqrt{\bar\alpha_t}$
-        and verify that the result equals
-        $\frac{1}{\sqrt{\alpha_t}}(\bx_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\beps)$.
-
-  \item \textbf{Score matching.}
-        Show that minimising the DDPM noise-prediction loss is equivalent
-        to denoising score matching by writing the score of $q(\bx_t|\bx_0)$
-        in terms of $\beps$ and identifying the score network.
-
-  \item \textbf{ELBO decomposition.}
-        Show that the MHVAE ELBO decomposes into
-        $\mathcal{L}_0 + \mathcal{L}_T + \sum_{t=2}^T\mathcal{L}_{t-1}$
-        by writing out the joint log-ratio and applying the chain rule of KL.
-        Explain why $\mathcal{L}_T = 0$ by design.
+        = \|\bmu_1-\bmu_2\|^2/(2\sigma^2)$ and verify
+        that the trace and log-det terms cancel exactly.
 \end{enumerate}
 \end{block}
+
+\column{0.5\textwidth}
+\begin{block}{Exercises 4--6}
+\footnotesize
+\begin{enumerate}
+  \setlength\itemsep{4pt}
+  \setcounter{enumi}{3}
+  \item \textbf{Noise reparameterisation.}
+        Substitute $\bx_0=(\bx_t-\sqrt{1-\bar\alpha_t}\beps)/\sqrt{\bar\alpha_t}$
+        into $\tilde\bmu_t$ and verify the result equals
+        $\frac{1}{\sqrt{\alpha_t}}(\bx_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\beps)$.
+
+  \item \textbf{Score matching.}
+        Write the score of $q(\bx_t|\bx_0)$ in terms of $\beps$
+        and show the DDPM loss equals denoising score matching.
+
+  \item \textbf{ELBO decomposition.}
+        Derive the three-term decomposition
+        $\mathcal{L}_0+\mathcal{L}_T+\sum_{t}\mathcal{L}_{t-1}$
+        and explain why $\mathcal{L}_T=0$ by design.
+\end{enumerate}
+\end{block}
+\end{columns}
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -1123,35 +1123,31 @@ SNR &
 
 \begin{frame}{Transition: From Likelihood to Adversarial Training}
 
-So far we have studied models that maximise (a lower bound on) the
-\textbf{data log-likelihood}:
+So far we studied models maximising (a lower bound on) $\log p(\bx)$:
 
-\medskip
+\smallskip
 \begin{center}
-\renewcommand{\arraystretch}{1.25}
+\renewcommand{\arraystretch}{1.2}
 \begin{tabular}{lll}
 \toprule
 \textbf{Model} & \textbf{Objective} & \textbf{Key idea}\\
 \midrule
-VAE   & Maximise ELBO          & Variational inference, 1 latent level\\
-DDPM  & Maximise ELBO ($T$ levels) & Fixed encoder, noise prediction\\
-\textbf{GAN}   & \textbf{No likelihood bound} & \textbf{Adversarial game}\\
+VAE  & Maximise ELBO          & Variational inference, 1 latent level\\
+DDPM & Maximise ELBO ($T$ levels) & Fixed encoder, noise prediction\\
+\textbf{GAN}  & \textbf{No likelihood bound} & \textbf{Adversarial game}\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\medskip
+\smallskip
 \begin{alertblock}{Fundamental difference}
-GANs never evaluate or maximise $\log p_{\btheta}(\bx)$.
-Instead, a \textbf{discriminator} $D$ provides the training signal by trying
-to tell real from fake.  This adversarial feedback drives the
-\textbf{generator} $G$ to match the real distribution — without
-ever computing a likelihood.
+GANs never evaluate $\log p_{\btheta}(\bx)$.
+A \textbf{discriminator} $D$ provides the training signal by classifying
+real vs.\ fake, driving the \textbf{generator} $G$ to match $p_r$ —
+without any likelihood computation.\\[2pt]
+\textit{Benefit}: sharper samples, no $\ell_2$-blurring.
+\quad\textit{Cost}: no likelihood, mode collapse risk, instability.
 \end{alertblock}
-
-\medskip
-The benefit: sharper samples, no blurry $\ell_2$-averaging.\\
-The cost: no likelihood estimate, mode collapse risk, training instability.
 \end{frame}
 
 \section{What Is a GAN?}
@@ -1380,13 +1376,14 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
 %% ═══════════════════════════════════════════════════════════
 
 \begin{frame}{Deriving the Optimal Discriminator}
+\small
   Fix $G$ (hence fix $\pg$). Write $V$ as an integral:
   \[
     V(G,D) = \int_{\bx}
     \bigl[\pr(\bx)\log D(\bx) + \pg(\bx)\log(1-D(\bx))\bigr]\,d\bx.
   \]
 
-  \medskip
+  \smallskip
   For each $\bx$ independently, maximise the integrand
   $f(t)=A\log t+B\log(1-t)$, $A=\pr(\bx)$, $B=\pg(\bx)$, $t=D(\bx)\in(0,1)$:
   \[
@@ -1446,7 +1443,7 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
   with equality iff $p=q$ a.e.\ (Gibbs' inequality).
   Note: $\KL(p\|q)\ne\KL(q\|p)$ in general.
 
-  \medskip
+  \smallskip
   \textbf{Jensen-Shannon divergence} (symmetric, bounded):
   \[
     \JS(p\|q)
@@ -1493,57 +1490,53 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
 %% ═══════════════════════════════════════════════════════════
 
 \begin{frame}{Binary Cross-Entropy Losses}
+\small
   \textbf{Discriminator loss} (real label $=s$, fake label $=0$):
   \[
     \mathcal{L}_D
     = -\frac{1}{N}\sum_{i=1}^N \log D(\bx_i)
       -\frac{1}{M}\sum_{j=1}^M \log\bigl(1-D(G(\bz_j))\bigr).
   \]
-
-  \textbf{Generator loss} (non-saturating, fake label treated as real):
+  \textbf{Generator loss} (non-saturating):
   \[
     \mathcal{L}_G
     = -\frac{1}{M}\sum_{j=1}^M \log D(G(\bz_j)).
   \]
-
-  \begin{block}{One-sided label smoothing}
-    Replace the real target $1$ with $s<1$ (e.g.\ $s=0.9$).
-    The optimal discriminator becomes:
-    \[
-      D^*_s(\bx) = \frac{s\cdot\pr(\bx)}{\pr(\bx) + \pg(\bx)}.
-    \]
-    This prevents $D$ from becoming overconfident and provides softer
-    gradients to $G$ (prevents $\log D(G(\bz))\to-\infty$ when $D$ is perfect).
+  \begin{block}{One-sided label smoothing ($s=0.9$)}
+    Replace real target $1$ with $s<1$. The optimal discriminator becomes
+    $D^*_s(\bx) = s\cdot\pr(\bx)/(\pr(\bx)+\pg(\bx))$,
+    preventing overconfidence and keeping gradients to $G$ alive.
   \end{block}
 \end{frame}
 
 \begin{frame}{Wasserstein Distance (WGAN)}
   \begin{columns}[T]
     \column{0.52\textwidth}
+      \small
       \textbf{Problem with JS divergence.}
       When $\pr$ and $\pg$ have non-overlapping supports
       (common early in training): $\JS(\pr\|\pg)=\log 2$ constantly,
       giving zero gradient everywhere.
 
-      \medskip
-      \textbf{Wasserstein-1 distance} (Earth-mover distance):
-      \[
-        W(\pr,\pg)
-        = \inf_{\gamma\in\Pi(\pr,\pg)}
-          \E_{(\bx,\mathbf{y})\sim\gamma}\|\bx-\mathbf{y}\|,
-      \]
-      where $\Pi(\pr,\pg)$ is all couplings with marginals $\pr$, $\pg$.
+      \smallskip
+      \textbf{Wasserstein-1 distance} (\emph{Earth-mover}):
+      \begin{align*}
+        W(\pr,\pg) &= \inf_{\gamma\in\Pi(\pr,\pg)}\,
+          \E_{(\bx,\mathbf{y})\sim\gamma}\|\bx-\mathbf{y}\|
+      \end{align*}
+      $\Pi(\pr,\pg)$: all couplings with marginals $\pr$, $\pg$.
 
-    \column{0.45\textwidth}
+    \column{0.43\textwidth}
       \begin{block}{Kantorovich-Rubinstein duality}
         \[
           W(\pr,\pg) = \sup_{\|f\|_L\le 1}
-          \Bigl[\E_{\pr}[f(\bx)] - \E_{\pg}[f(\bx)]\Bigr].
+          \bigl(\E_{\pr}[f] - \E_{\pg}[f]\bigr).
         \]
-        Supremum over all 1-Lipschitz functions $f$.
+        Sup.\ over all 1-Lipschitz functions $f$.
       \end{block}
       \begin{alertblock}{Advantage}
-        $W$ provides meaningful gradients even when $\pr\cap\pg=\emptyset$.
+        $W$ gives meaningful gradients
+        even when $\pr\cap\pg=\emptyset$.
         Training is more stable.
       \end{alertblock}
   \end{columns}
@@ -1564,8 +1557,8 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
         \bigl(\|\nabla_{\hat{\bx}} f_w(\hat{\bx})\|_2 - 1\bigr)^2
       \Bigr],
   \]
-  where $\hat{\bx} = \epsilon\bx + (1-\epsilon)G(\bz)$, $\epsilon\sim U[0,1]$,
-  is sampled uniformly on straight lines between real and fake points.
+  where $\hat{\bx} = \epsilon\bx + (1-\epsilon)G(\bz)$, $\epsilon\sim U[0,1]$
+  (uniform on straight lines between real and fake points).
 
   \medskip
   \begin{itemize}
@@ -1744,17 +1737,19 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
 \begin{frame}{Generator Architecture for MNIST}
   \textbf{Fully-connected generator} (Goodfellow et al., 2014 style):
 
+  \small
   \[
-    \bz\in\R^{100}
-    \xrightarrow{\text{Linear+BN+LReLU}}
+    \bz\!\in\!\R^{100}
+    \xrightarrow{\text{Lin+BN+LReLU}}
     \R^{256}
-    \xrightarrow{\text{Linear+BN+LReLU}}
+    \xrightarrow{\text{Lin+BN+LReLU}}
     \R^{512}
-    \xrightarrow{\text{Linear+BN+LReLU}}
+    \xrightarrow{\text{Lin+BN+LReLU}}
     \R^{1024}
-    \xrightarrow{\text{Linear+Tanh}}
+    \xrightarrow{\text{Lin+Tanh}}
     \R^{784}
   \]
+  \normalsize
 
   \medskip
   \begin{columns}[T]
@@ -1820,11 +1815,11 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
       A \textbf{conditional GAN} (Mirza \& Osindero, 2014) conditions both
       $G$ and $D$ on auxiliary information $\mathbf{y}$ (class label, image, text):
 
-      \[
+      \begin{align*}
         \min_G\max_D\;V(G,D)
-        = \E[\log D(\bx|\mathbf{y})]
-        + \E[\log(1-D(G(\bz|\mathbf{y})))].
-      \]
+        &= \E[\log D(\bx|\mathbf{y})]\\
+        &\quad+ \E[\log(1-D(G(\bz|\mathbf{y})))].
+      \end{align*}
 
       For MNIST: $\mathbf{y}$ is the digit class (one-hot, $\R^{10}$).
       Concatenate $\mathbf{y}$ to both $G$'s input $\bz$ and $D$'s input $\bx$.
@@ -1866,17 +1861,18 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
 
 \begin{frame}{Comparison of GAN Variants}
   \begin{center}
-  \renewcommand{\arraystretch}{1.25}
-  \begin{tabular}{p{2.2cm}p{3.0cm}p{2.4cm}p{2.8cm}}
+  \small
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{p{2.0cm}p{2.8cm}p{2.3cm}p{2.6cm}}
     \toprule
     \textbf{Variant} & \textbf{Key change} & \textbf{Loss} & \textbf{Advantage}\\
     \midrule
-    Vanilla GAN & FC networks & JS divergence & Simple\\
-    DCGAN & Conv.\ networks & JS divergence & Better images\\
-    WGAN & Weight clipping & Wasserstein & More stable\\
-    WGAN-GP & Gradient penalty & Wasserstein+GP & Avoids clipping\\
-    cGAN & Conditioning & JS or W & Controlled gen.\\
-    StyleGAN & Style-based & W & State-of-the-art\\
+    Vanilla GAN & FC networks   & JS div.       & Simple\\
+    DCGAN       & Conv.\ nets   & JS div.       & Better images\\
+    WGAN        & Wt.\ clipping & Wasserstein   & More stable\\
+    WGAN-GP     & Grad.\ penalty& Wasser.+GP    & No clipping\\
+    cGAN        & Conditioning  & JS or W       & Controlled\\
+    StyleGAN    & Style-based   & W             & SOTA\\
     \bottomrule
   \end{tabular}
   \end{center}
@@ -1889,33 +1885,33 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
 %% ═══════════════════════════════════════════════════════════
 
 \begin{frame}{Key Equations: Summary}
-  \small
+  \footnotesize
   \begin{center}
-  \renewcommand{\arraystretch}{1.3}
+  \renewcommand{\arraystretch}{1.15}
   \begin{tabular}{ll}
     \toprule
     \textbf{Concept} & \textbf{Formula}\\
     \midrule
     Minimax objective
-      & $\min_G\max_D\;\E_{\pr}[\log D(\bx)]+\E_{\pz}[\log(1-D(G(\bz)))]$\\[4pt]
+      & $\min_G\max_D\;\E_{\pr}[\log D(\bx)]+\E_{\pz}[\log(1-D(G(\bz)))]$\\[2pt]
     Optimal discriminator
-      & $D^*(\bx) = \pr(\bx)/(\pr(\bx)+\pg(\bx))$\\[4pt]
+      & $D^*(\bx) = \pr(\bx)/(\pr(\bx)+\pg(\bx))$\\[2pt]
     Nash equilibrium
-      & $\pg=\pr$,\quad$D^*\equiv 1/2$\\[4pt]
+      & $\pg=\pr$,\quad$D^*\equiv 1/2$\\[2pt]
     Loss at equilibrium
-      & $V(G^*,D^*)=-2\log 2$\\[4pt]
+      & $V(G^*,D^*)=-2\log 2$\\[2pt]
     GAN loss = JS div.
-      & $V(G,D^*)=2\JS(\pr\|\pg)-2\log 2$\\[4pt]
+      & $V(G,D^*)=2\JS(\pr\|\pg)-2\log 2$\\[2pt]
     Non-sat.\ generator
-      & $\mathcal{L}_G=-\E_{\pz}[\log D(G(\bz))]$\\[4pt]
+      & $\mathcal{L}_G=-\E_{\pz}[\log D(G(\bz))]$\\[2pt]
     Discriminator loss
-      & $\mathcal{L}_D=-\E_{\pr}[\log D(\bx)]-\E_{\pz}[\log(1-D(G(\bz)))]$\\[4pt]
+      & $\mathcal{L}_D=-\E_{\pr}[\log D(\bx)]-\E_{\pz}[\log(1-D(G(\bz)))]$\\[2pt]
     Wasserstein distance
-      & $W(\pr,\pg)=\sup_{\|f\|_L\le1}(\E_{\pr}[f]-\E_{\pg}[f])$\\[4pt]
+      & $W(\pr,\pg)=\sup_{\|f\|_L\le1}(\E_{\pr}[f]-\E_{\pg}[f])$\\[2pt]
     Gradient penalty
-      & $\lambda\,\E[({\|\nabla f_w(\hat{\bx})\|_2-1})^2]$\\[4pt]
+      & $\lambda\,\E[(\|\nabla f_w(\hat{\bx})\|_2-1)^2]$\\[2pt]
     MMD
-      & $\sqrt{\E_{p\times p}[k]-2\E_{p\times q}[k]+\E_{q\times q}[k]}$\\[4pt]
+      & $\sqrt{\E_{p\times p}[k]-2\E_{p\times q}[k]+\E_{q\times q}[k]}$\\[2pt]
     FID
       & $\|\mu_r-\mu_g\|^2+\mathrm{Tr}(\Sigma_r+\Sigma_g-2(\Sigma_r\Sigma_g)^{1/2})$\\
     \bottomrule
@@ -1961,26 +1957,24 @@ The cost: no likelihood estimate, mode collapse risk, training instability.
 % =============================================================================
 
 \begin{frame}{Three Families: A Unified Mathematical View}
+\small
+All three learn $p_{\btheta}(\bx)$ but with different objectives and inductive biases.
 
-All three model classes aim to learn $p_{\btheta}(\bx)$, but with
-fundamentally different objectives and inductive biases.
-
-\medskip
 \begin{center}
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.15}
 \begin{tabular}{llll}
 \toprule
-\textbf{Criterion}     & \textbf{VAE}       & \textbf{Diffusion}  & \textbf{GAN} \\
+\textbf{Criterion}  & \textbf{VAE}   & \textbf{Diffusion} & \textbf{GAN}\\
 \midrule
-Training objective     & ELBO (lower bound) & ELBO ($T$ terms)    & Minimax / JS-div \\
-Likelihood estimate    & $\checkmark$ (ELBO)& $\checkmark$ (ELBO) & $\times$ (none) \\
-Latent space           & Compact $\bh\in\R^{d_h}$ & Full-dim $\bx_t$ & Noise $\bz\in\R^k$ \\
-Encoder                & Learned $q_{\bphi}(\bh|\bx)$ & Fixed schedule & None \\
-Sampling cost          & 1 decoder pass     & $T$ denoiser steps  & 1 generator pass \\
-Training stability     & High               & High                & Low--Moderate \\
-Sample quality         & Moderate (blurry)  & State of the art    & High (sharp) \\
-Mode coverage          & Good               & Excellent           & Partial (collapse)\\
-Anomaly detection      & $\checkmark$       & $\checkmark$        & $\times$ \\
+Objective      & ELBO           & ELBO ($T$ terms)   & Minimax / JS\\
+Likelihood     & $\checkmark$   & $\checkmark$       & $\times$\\
+Latent space   & Compact $\bh$  & Full-dim $\bx_t$   & Noise $\bz$\\
+Encoder        & Learned        & Fixed schedule     & None\\
+Sampling cost  & 1 decoder pass & $T$ steps          & 1 pass\\
+Stability      & High           & High               & Low--Moderate\\
+Sample quality & Moderate       & State of the art   & High (sharp)\\
+Mode coverage  & Good           & Excellent          & Partial\\
+Anomaly detect.& $\checkmark$   & $\checkmark$       & $\times$\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -2048,43 +2042,38 @@ that $\ell_2$ and even ELBO objectives systematically underweight.
 \end{frame}
 
 \begin{frame}{Training Stability: A Comparison}
-
+\footnotesize
 \begin{columns}[T]
 \column{0.33\textwidth}
-\begin{block}{VAE}
-\textbf{Stable.}
-ELBO is a well-defined scalar loss.
-Both encoder and decoder trained jointly with standard SGD.
-KL term prevents posterior collapse when properly weighted.
-The only instability is choosing the right $\beta$ for $\beta$-VAE.
+\begin{block}{VAE — Stable}
+ELBO is a well-defined scalar.
+Both networks trained with standard SGD.
+KL prevents collapse when weighted correctly.
+Main challenge: choosing $\beta$ for $\beta$-VAE.
 \end{block}
 
 \column{0.33\textwidth}
-\begin{block}{Diffusion}
-\textbf{Stable.}
-MSE on noise prediction is smooth and well-conditioned.
+\begin{block}{Diffusion — Stable}
+MSE on noise prediction is smooth.
 No adversarial dynamics.
-Variance of Monte Carlo gradient estimator is low because
-$\bx_t$ can be sampled in one step.
-The main challenge is choosing the noise schedule.
+Low MC gradient variance ($\bx_t$ sampled in one step).
+Main challenge: noise schedule design.
 \end{block}
 
 \column{0.32\textwidth}
-\begin{block}{GAN}
-\textbf{Unstable by design.}
-Two networks update simultaneously in a non-stationary environment.
-No guarantee of convergence to Nash equilibrium.
-Mode collapse and vanishing gradients require careful mitigation
-(WGAN-GP, spectral norm, label smoothing, two-time-scale updates).
+\begin{block}{GAN — Unstable}
+Non-stationary minimax landscape.
+No Nash convergence guarantee.
+$V(G,D)$ is concave-convex; simultaneous gradient ascent-descent
+diverges even for bilinear games.
+Requires WGAN-GP, spectral norm, label smoothing.
 \end{block}
 \end{columns}
 
-\medskip
+\smallskip
 \begin{alertblock}{Key insight}
-GAN instability stems from the minimax structure:
-$V(G,D)$ is a \emph{concave-convex} saddle problem, and simultaneous
-gradient ascent-descent does not converge in general even for
-bilinear games (cf.\ matching pennies).
+GAN instability is \emph{fundamental}: the minimax saddle structure prevents
+convergence guarantees that both VAE and DDPM enjoy.
 \end{alertblock}
 \end{frame}
 
@@ -2130,136 +2119,111 @@ to only a small noise correction rather than a full image prediction.
 \end{frame}
 
 \begin{frame}{Detailed Pros and Cons: VAEs}
-
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textcolor{green!60!black}{\textbf{Pros}}
-\begin{itemize}
-  \item \textbf{Principled likelihood bound}: ELBO provides a lower bound on
-        $\log p(\bx)$ usable for anomaly detection and model comparison.
-  \item \textbf{Compact structured latent space}: low-dimensional $\bh$
-        supports interpolation, clustering, disentanglement, property prediction.
-  \item \textbf{Fast generation}: single decoder pass at inference.
-  \item \textbf{Stable training}: well-defined ELBO objective, no adversary.
-  \item \textbf{Flexible posterior}: $\beta$-VAE promotes disentanglement;
-        hierarchical VAEs increase expressivity.
-  \item \textbf{Scientific utility}: compact latents ideal for
-        molecular design, spectral data, physical simulations.
+\begin{itemize}\footnotesize\setlength\itemsep{2pt}
+  \item \textbf{Likelihood bound}: ELBO usable for anomaly detection.
+  \item \textbf{Compact latent}: $\bh$ supports interpolation, clustering,
+        disentanglement, property prediction.
+  \item \textbf{Fast generation}: single decoder pass.
+  \item \textbf{Stable training}: well-defined ELBO, no adversary.
+  \item \textbf{Flexible}: $\beta$-VAE for disentanglement;
+        hierarchical VAEs for expressivity.
+  \item \textbf{Scientific use}: ideal for molecules, spectra, simulations.
 \end{itemize}
 
 \column{0.48\textwidth}
 \textcolor{red!60!black}{\textbf{Cons}}
-\begin{itemize}
-  \item \textbf{Blurry samples}: Gaussian decoder averages over modes
-        (fundamental, not just a capacity issue).
-  \item \textbf{Posterior collapse}: powerful decoders can ignore $\bh$;
-        KL$\to 0$, latent space useless.
-  \item \textbf{ELBO gap}: $\log p(\bx) = \mathrm{ELBO} +
-        \DKL(q_{\bphi}\|p(\bh|\bx)) > \mathrm{ELBO}$.
-  \item \textbf{Mean-field limitation}: factorised Gaussian misses
-        correlated posteriors.
-  \item \textbf{Fixed-dim bottleneck}: wrong choice of $d_h$ hurts quality.
+\begin{itemize}\footnotesize\setlength\itemsep{2pt}
+  \item \textbf{Blurry samples}: posterior averaging is fundamental,
+        not a capacity issue.
+  \item \textbf{Posterior collapse}: decoder ignores $\bh$;
+        KL$\to 0$, latent useless.
+  \item \textbf{ELBO gap}: $\log p(\bx)=\mathrm{ELBO}+
+        \DKL(q_{\bphi}\|p(\bh|\bx))>\mathrm{ELBO}$.
+  \item \textbf{Mean-field}: factorised Gaussian misses correlated posteriors.
+  \item \textbf{Fixed-dim bottleneck}: wrong $d_h$ hurts quality.
 \end{itemize}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Detailed Pros and Cons: Diffusion Models}
-
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textcolor{green!60!black}{\textbf{Pros}}
-\begin{itemize}
-  \item \textbf{State-of-the-art sample quality}: sharp, diverse, no blurring.
-  \item \textbf{Full distribution coverage}: fixed forward process prevents
-        mode collapse; $q(\bx_T|\bx_0)\approx\Norm(\bm{0},\mathbf{I})$ by design.
-  \item \textbf{Stable training}: noise-prediction MSE is smooth and
-        well-conditioned; no adversarial dynamics.
-  \item \textbf{Likelihood bound}: full ELBO converges to $\log p(\bx)$
-        as $T\to\infty$.
-  \item \textbf{Flexible conditioning}: text, class, depth, audio via
+\begin{itemize}\footnotesize\setlength\itemsep{2pt}
+  \item \textbf{Best sample quality}: sharp, diverse, no blurring.
+  \item \textbf{Full coverage}: fixed forward process prevents mode collapse.
+  \item \textbf{Stable training}: MSE on noise, no adversarial dynamics.
+  \item \textbf{Likelihood bound}: ELBO $\to\log p(\bx)$ as $T\to\infty$.
+  \item \textbf{Flexible conditioning}: text, class, depth via
         classifier-free guidance and cross-attention.
-  \item \textbf{SDE/score connection}: rich theory via Anderson (1982)
-        and Song et al.\ (2021).
+  \item \textbf{Rich theory}: SDE/score connection (Song et al.\ 2021).
 \end{itemize}
 
 \column{0.48\textwidth}
 \textcolor{red!60!black}{\textbf{Cons}}
-\begin{itemize}
-  \item \textbf{Slow sampling}: $T=100$--$1000$ network evaluations
-        (DDIM, DPM-Solver reduce to 10--50).
-  \item \textbf{No compact latent}: full-dim $\bx_t$ precludes downstream
-        clustering or property prediction.
-  \item \textbf{Computationally expensive}: large $T$ and high-dim $\bx$
-        demand significant GPU memory and training time.
-  \item \textbf{Less natural for representation learning}: no encoder
-        to extract structured features.
-  \item \textbf{Noise schedule sensitivity}: schedule choice affects
-        quality; cosine preferred over linear for high-res.
+\begin{itemize}\footnotesize\setlength\itemsep{2pt}
+  \item \textbf{Slow sampling}: $T\!=\!100$--$1000$ steps
+        (DDIM/DPM-Solver: 10--50).
+  \item \textbf{No compact latent}: full-dim $\bx_t$ precludes clustering
+        or property prediction.
+  \item \textbf{Compute-intensive}: large $T$, high-dim $\bx$ need
+        significant GPU memory.
+  \item \textbf{Poor for repr.\ learning}: no encoder for features.
+  \item \textbf{Schedule-sensitive}: cosine preferred over linear
+        at high resolution.
 \end{itemize}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Detailed Pros and Cons: GANs}
-
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textcolor{green!60!black}{\textbf{Pros}}
-\begin{itemize}
-  \item \textbf{Sharpest samples}: adversarial loss penalises blurriness and
-        perceptual artefacts that $\ell_2$/ELBO objectives miss.
-  \item \textbf{Fastest inference}: single generator pass, no iteration.
-  \item \textbf{Flexible loss}: adversarial training works when likelihood is
-        intractable or ill-defined.
-  \item \textbf{Rich extension ecosystem}: cGAN, DCGAN, WGAN-GP, StyleGAN,
-        CycleGAN, pix2pix.
-  \item \textbf{Image-to-image translation}: naturally handles paired and
-        unpaired domain transfer.
+\begin{itemize}\footnotesize\setlength\itemsep{2pt}
+  \item \textbf{Sharpest samples}: adversarial loss catches blurriness
+        that $\ell_2$/ELBO miss.
+  \item \textbf{Fastest inference}: single generator pass.
+  \item \textbf{Flexible loss}: works when likelihood is intractable.
+  \item \textbf{Rich ecosystem}: cGAN, DCGAN, WGAN-GP, StyleGAN, pix2pix.
+  \item \textbf{Image translation}: handles paired and unpaired transfer.
 \end{itemize}
 
 \column{0.48\textwidth}
 \textcolor{red!60!black}{\textbf{Cons}}
-\begin{itemize}
-  \item \textbf{No likelihood}: cannot evaluate $p_g(\bx)$ for anomaly
-        detection or density estimation.
-  \item \textbf{Mode collapse}: generator covers only a subset of $p_r$;
-        FID and IS may not detect it.
-  \item \textbf{Training instability}: non-stationary minimax landscape;
-        no convergence guarantee; hyperparameter-sensitive.
-  \item \textbf{JS flatness}: $\JS(\pr\|\pg)=\log 2$ when supports
-        do not overlap (fixed by WGAN).
-  \item \textbf{Discriminator is discarded}: wasted capacity after training.
+\begin{itemize}\footnotesize\setlength\itemsep{2pt}
+  \item \textbf{No likelihood}: no anomaly detection or density estimation.
+  \item \textbf{Mode collapse}: $G$ covers only part of $p_r$;
+        FID/IS may not detect it.
+  \item \textbf{Instability}: non-stationary minimax; no convergence
+        guarantee; hyperparameter-sensitive.
+  \item \textbf{JS flatness}: $\JS\!=\!\log 2$ when supports don't overlap
+        (WGAN fixes this).
+  \item \textbf{Wasted discriminator}: $D$ discarded after training.
 \end{itemize}
 \end{columns}
 \end{frame}
 
 \begin{frame}{When to Use Each Model}
-
+\footnotesize
 \begin{center}
-\renewcommand{\arraystretch}{1.35}
-\begin{tabular}{p{4.8cm}p{2.5cm}p{4.5cm}}
+\renewcommand{\arraystretch}{1.0}
+\begin{tabular}{p{3.8cm}p{2.1cm}p{3.8cm}}
 \toprule
-\textbf{Use case} & \textbf{Recommended} & \textbf{Reason} \\
+\textbf{Use case} & \textbf{Model} & \textbf{Reason}\\
 \midrule
-High-quality image/audio/video synthesis
-  & Diffusion & State-of-the-art quality, no collapse \\
-Text-to-image (Stable Diffusion)
-  & LDM       & VAE compression + diffusion quality \\
-Image-to-image translation
-  & GAN (pix2pix, CycleGAN) & Adversarial perceptual loss \\
-Real-time generation
-  & VAE or GAN & Single-pass inference \\
-Anomaly detection / density estimation
-  & VAE or Diffusion & Likelihood bound available \\
-Representation learning / clustering
-  & VAE       & Compact structured latent space \\
-Scientific simulation (molecules, spectra)
-  & VAE       & Low-dim latent enables property prediction \\
-Data augmentation (rare events)
-  & GAN or Diffusion & Sharp, diverse samples \\
-Inpainting / super-resolution
-  & Diffusion & Score-based posterior sampling \\
-Training with very limited data
-  & VAE       & Stable; regularised by KL term \\
+Image / audio / video synthesis & Diffusion & Best quality, no collapse\\
+Text-to-image (Stable Diffusion) & LDM & VAE compression + diffusion\\
+Image-to-image translation & GAN & Adversarial perceptual loss\\
+Real-time generation & VAE or GAN & Single-pass inference\\
+Anomaly detection & VAE or Diffusion & Likelihood bound available\\
+Representation / clustering & VAE & Compact structured latent\\
+Scientific data (molecules) & VAE & Low-dim latent for prediction\\
+Data augmentation & GAN or Diffusion & Sharp, diverse samples\\
+Inpainting / super-resolution & Diffusion & Score-based posterior\\
+Very limited data & VAE & Stable; KL regularisation\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -2268,7 +2232,7 @@ Training with very limited data
 \begin{frame}{Key Equations: Complete Summary Across All Three Models}
 \footnotesize
 \begin{center}
-\renewcommand{\arraystretch}{1.3}
+\renewcommand{\arraystretch}{1.15}
 \begin{tabular}{p{3.2cm}p{4.2cm}p{4.2cm}}
 \toprule
 \textbf{Concept} & \textbf{VAE / Diffusion} & \textbf{GAN}\\
@@ -2304,45 +2268,47 @@ Sampling &
 \end{frame}
 
 \begin{frame}{Exercises: Cross-Model Comparisons}
-
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{Exercises 1--3}
+\footnotesize
 \begin{enumerate}
-  \setlength\itemsep{5pt}
-  \item \textbf{Common ELBO structure.}
-        Show that the VAE ELBO (1 level) and DDPM ELBO ($T$ levels)
-        are both special cases of the MHVAE ELBO.
-        Identify the encoder, decoder, and prior in each case.
+  \setlength\itemsep{4pt}
+  \item \textbf{Common ELBO.}
+        Show VAE (1 level) and DDPM ($T$ levels) are special cases of
+        the MHVAE ELBO. Identify encoder, decoder, prior in each.
 
   \item \textbf{Blurriness from $\ell_2$.}
-        Let $p_r(x) = \frac{1}{2}\delta(x-a)+\frac{1}{2}\delta(x-b)$
-        (two-point mixture).  Show that the VAE decoder with Gaussian
-        likelihood learns $\hat{x}=(a+b)/2$, while a GAN generator can
-        learn to produce both $a$ and $b$ with equal probability.
+        For $p_r=\tfrac{1}{2}\delta(x\!-\!a)+\tfrac{1}{2}\delta(x\!-\!b)$,
+        show the VAE decoder learns $\hat x=(a+b)/2$
+        while a GAN can produce both modes.
 
-  \item \textbf{GAN vs.\ diffusion convergence.}
-        The minimax GAN objective has no gradient-descent convergence
-        guarantee. The DDPM ELBO does.  State precisely which property
-        of the DDPM ELBO makes it amenable to SGD while the GAN saddle
-        problem is not.
+  \item \textbf{Convergence.}
+        State which property of the DDPM ELBO makes it amenable to SGD
+        while the GAN minimax saddle is not.
+\end{enumerate}
+\end{block}
 
+\column{0.5\textwidth}
+\begin{block}{Exercises 4--6}
+\footnotesize
+\begin{enumerate}
+  \setlength\itemsep{4pt}
+  \setcounter{enumi}{3}
   \item \textbf{Wasserstein vs.\ JS.}
-        Compute $\JS(\Norm(0,1)\|\Norm(\mu,1))$ and
-        $W(\Norm(0,1),\Norm(\mu,1))$ as functions of $\mu$.
-        Show that $\JS$ saturates at $\log 2$ for large $|\mu|$ while
-        $W=|\mu|$ grows without bound.  Explain why this makes
-        WGAN more informative for training.
+        Compute $\JS(\Norm(0,1)\|\Norm(\mu,1))$ and $W(\Norm(0,1),\Norm(\mu,1))$.
+        Show $\JS$ saturates at $\log 2$ while $W=|\mu|$ grows.
 
   \item \textbf{Score matching bridge.}
-        The DDPM score $\nabla_{\bx_t}\log q(\bx_t|\bx_0)=-\beps/\sqrt{1-\bar\alpha_t}$.
-        Show that the DDPM training objective is equivalent to
-        denoising score matching as introduced by Vincent (2011).
+        Using $\nabla_{\bx_t}\log q(\bx_t|\bx_0)=-\beps/\sqrt{1-\bar\alpha_t}$,
+        show DDPM equals denoising score matching (Vincent 2011).
 
   \item \textbf{Latent Diffusion.}
-        A VAE compresses $\bx\in\R^{d_x}$ to $\bz\in\R^{d_z}$
-        with $d_z=d_x/f^2$.  A DDPM runs in the $\bz$-space with
-        $T$ steps.  Express the full LDM training objective as
-        a composition of the VAE ELBO and the DDPM ELBO, and
-        identify which parameters are trained in each stage.
+        Express the LDM objective as a composition of VAE ELBO and DDPM ELBO.
+        Identify which parameters are trained in each stage.
 \end{enumerate}
+\end{block}
+\end{columns}
 \end{frame}
 
 \begin{frame}{References}
