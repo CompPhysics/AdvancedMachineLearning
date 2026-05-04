@@ -185,7 +185,7 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 
 
 ## May 4-8: Deep generative models
-- Diffusion models
+- Diffusion models, discussion of codes and reminder from last week
 - GANs
 - Jupyter-notebook at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb, see also PDF file at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/pdf/week15.pdf  
 - Video of lecture and whiteboard notes to be added
