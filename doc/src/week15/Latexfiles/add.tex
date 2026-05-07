@@ -1,0 +1,718 @@
+% ============================================================
+%  week15.tex  —  Beamer slides translated from week15_do.txt
+%  Course: Advanced Machine Learning and Data Analysis
+%         for the Physical Sciences
+%  Author: Morten Hjorth-Jensen
+%  Date  : April 30, 2026
+% ============================================================
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% ── theme & colours ──────────────────────────────────────────
+\usetheme{Madrid}
+\usecolortheme{default}
+\definecolor{navyblue}{RGB}{0,43,127}
+\definecolor{goldyellow}{RGB}{204,153,0}
+\setbeamercolor{structure}{fg=navyblue}
+\setbeamercolor{title}{fg=white,bg=navyblue}
+\setbeamercolor{frametitle}{fg=white,bg=navyblue}
+\setbeamercolor{block title}{fg=white,bg=navyblue}
+\setbeamercolor{block body}{bg=navyblue!8}
+\setbeamercolor{itemize item}{fg=navyblue}
+\setbeamercolor{enumerate item}{fg=navyblue}
+\setbeamerfont{frametitle}{size=\normalsize,series=\bfseries}
+
+% ── packages ─────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,bm}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+% ── listings style for Python ────────────────────────────────
+\lstdefinestyle{pystyle}{
+  language=Python,
+  basicstyle=\ttfamily\tiny,
+  keywordstyle=\color{navyblue}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{orange!80!black},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  numbersep=4pt,
+  breaklines=true,
+  showstringspaces=false,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{navyblue!40},
+  backgroundcolor=\color{black!4},
+  xleftmargin=1em,
+  framexleftmargin=0.8em,
+  tabsize=4,
+}
+
+% ── title block ──────────────────────────────────────────────
+\title[Diffusion Models]{Advanced Machine Learning and Data Analysis\\
+       for the Physical Sciences}
+\subtitle{Week 15: Deep Generative Models — Diffusion Models}
+\author[M.~Hjorth-Jensen]{Morten Hjorth-Jensen}
+\institute[UiO]{Department of Physics and Center for Computing in Science Education\\
+  University of Oslo, Norway\\[2pt]
+  {\tiny \copyright\ 1999–present, CC BY-NC}}
+\date{April 30, 2026}
+
+% ── convenience macros ───────────────────────────────────────
+\newcommand{\bx}{\bm{x}}
+\newcommand{\bh}{\bm{h}}
+\newcommand{\bphi}{\bm{\phi}}
+\newcommand{\btheta}{\bm{\theta}}
+\newcommand{\bmu}{\bm{\mu}}
+\newcommand{\bSigma}{\bm{\Sigma}}
+
+% ============================================================
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ── table of contents ────────────────────────────────────────
+\begin{frame}{Outline}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Readings}
+  \begin{block}{Reading on Diffusion Models}
+    \begin{enumerate}
+      \item Sohl-Dickstein et al.,
+            \emph{Deep Unsupervised Learning using Nonequilibrium Thermodynamics}
+            (\href{https://arxiv.org/abs/1503.03585}{arXiv:1503.03585})
+      \item Calvin Luo,
+            \href{https://arxiv.org/abs/2208.11970}{arXiv:2208.11970}
+      \item Kingma, Salimans, Poole, Ho,
+            \emph{Variational Diffusion Models}
+            (\href{https://arxiv.org/abs/2107.00630}{arXiv:2107.00630})
+      \item David Foster, \emph{Generative Deep Learning}, Chapter~8
+            on diffusion models
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+% ============================================================
+\section{Motivation}
+% ============================================================
+
+\begin{frame}{Diffusion Models — Basics}
+  Diffusion models are inspired by \textbf{non-equilibrium thermodynamics}.
+  \begin{itemize}
+    \item They define a \textbf{Markov chain of diffusion steps} that slowly adds
+          random noise to data.
+    \item They then learn to \textbf{reverse} the diffusion process to reconstruct
+          desired data samples from the noise.
+    \item Unlike VAEs or flow models, diffusion models are learned with a
+          \textbf{fixed procedure}.
+    \item The latent variable has \textbf{high dimensionality} — the same as
+          the original data.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Why Diffusion Models?}
+  \begin{itemize}
+    \item Prominent in generating high-quality \textbf{images, video, sound}, etc.
+    \item Named for their similarity to the \textbf{natural diffusion process in
+          physics}: molecules moving from high- to low-concentration areas.
+    \item Generate new data by \textbf{reversing a diffusion process} —
+          i.e., undoing information loss due to noise.
+    \item Main idea: add random noise to data, then undo the process to
+          recover the original data distribution.
+  \end{itemize}
+  \vspace{4pt}
+  \begin{alertblock}{Famous examples}
+    DALL-E~2, Midjourney, and open-source Stable Diffusion — all diffusion models
+    that create realistic images from text input.
+  \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{What Are Diffusion Models?}
+  Diffusion models are advanced machine learning algorithms that:
+  \begin{enumerate}
+    \item \textbf{Progressively add noise} to a dataset.
+    \item \textbf{Learn to reverse} this process to generate high-quality data.
+  \end{enumerate}
+  \vspace{6pt}
+  Central concept: \emph{gradually degrading data quality, only to reconstruct
+  it to its original form or transform it into something new.}
+  \vspace{6pt}
+  \begin{block}{Applications}
+    \begin{itemize}
+      \item Medical imaging
+      \item Autonomous vehicles
+      \item Personalised AI assistants
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% ============================================================
+\section{Problems with Probabilistic Models}
+% ============================================================
+
+\begin{frame}{Problems with Probabilistic Models}
+  Historically, probabilistic models suffer from a tradeoff between two
+  conflicting objectives:
+  \vspace{4pt}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Tractable models}
+        \begin{itemize}
+          \item Can be analytically evaluated and easily fit to data
+                (e.g.\ Gaussian, Laplace).
+          \item \textbf{Limitation:} unable to describe rich structure in
+                complex datasets.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Flexible models}
+        \begin{itemize}
+          \item Can be moulded to fit structure in arbitrary data:
+                \[
+                  p\!\left(\bx\right) = \frac{\phi\!\left(\bx\right)}{Z}
+                \]
+          \item \textbf{Limitation:} computing $Z$ is generally intractable;
+                training/sampling requires expensive Monte Carlo methods.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Diffusion Models — Key Features}
+  Diffusion models offer several attractive properties:
+  \begin{itemize}
+    \item \textbf{Extreme flexibility} in model structure
+    \item \textbf{Exact sampling}
+    \item \textbf{Easy multiplication} with other distributions
+          (e.g.\ for computing a posterior)
+    \item \textbf{Cheap evaluation} of the model log-likelihood and
+          individual state probabilities
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Original Idea and Diffusion Learning}
+% ============================================================
+
+\begin{frame}{Original Idea}
+  \begin{itemize}
+    \item Use a \textbf{Markov chain} to gradually convert one distribution into
+          another — an idea from non-equilibrium statistical physics and
+          sequential Monte Carlo.
+    \item Build a \textbf{generative Markov chain} that converts a simple known
+          distribution (e.g.\ Gaussian) into a target data distribution via a
+          diffusion process.
+    \item Rather than use this chain to approximately evaluate a separately
+          defined model, one \textbf{explicitly defines} the probabilistic model
+          as the endpoint of the Markov chain.
+    \item Since each step has an analytically evaluable probability,
+          the \textbf{full chain can also be analytically evaluated}.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Diffusion Learning}
+  \begin{itemize}
+    \item Learning involves estimating \textbf{small perturbations} to a
+          diffusion process.
+    \item Estimating small, analytically tractable perturbations is more
+          tractable than describing the full distribution with a single
+          non-analytically-normalizable potential function.
+    \item Since a diffusion process exists for \textbf{any smooth target
+          distribution}, this method can capture data distributions of
+          arbitrary form.
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{How Diffusion Models Work}
+% ============================================================
+
+\begin{frame}{How Diffusion Models Work}
+  Diffusion models operate in a \textbf{dual-phase mechanism}:
+  \begin{enumerate}
+    \item \textbf{Forward process:} train a neural network to introduce
+          noise into the dataset (the forward diffusion process).
+    \item \textbf{Reverse process:} methodically reverse the forward
+          diffusion to recover clean data.
+  \end{enumerate}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Data Preprocessing}
+  Before the diffusion process begins:
+  \begin{itemize}
+    \item \textbf{Data cleaning:} remove outliers.
+    \item \textbf{Data normalisation:} scale features consistently.
+    \item \textbf{Data augmentation:} increase dataset diversity
+          (especially for image data).
+    \item \textbf{Standardisation:} achieve normal data distribution —
+          important for noisy image data.
+    \item Different data types (text, images, \ldots) may require specific
+          preprocessing steps, e.g.\ addressing class-imbalance issues.
+  \end{itemize}
+  Well-executed data processing ensures high-quality training data and
+  contributes to the model's ability to generate high-quality outputs
+  during inference.
+\end{frame}
+
+% ============================================================
+\section{Mathematics of Diffusion Models}
+% ============================================================
+
+\begin{frame}{Mathematics of Diffusion Models}
+  We return to our discussion of Variational Autoencoders (VAEs) from
+  \href{https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week14/ipynb/week14.ipynb}{Week 14}.
+
+  \vspace{6pt}
+  As a first step toward understanding diffusion models, we can think of them
+  as \textbf{stacked (recursive) VAEs}.
+
+  \vspace{6pt}
+  Intermediate step: \textbf{hierarchical VAEs} — a generalisation of VAEs
+  that include multiple hierarchies of latent spaces.
+
+  \vspace{4pt}
+  \begin{alertblock}{Note}
+    Many of the derivations and figures here follow the excellent exposition by
+    Calvin Luo (\href{https://arxiv.org/abs/2208.11970}{arXiv:2208.11970}).
+  \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Chains of VAEs}
+  \textbf{Markovian VAEs} represent a generative process where a Markov chain
+  builds a hierarchy of VAEs.
+  \begin{itemize}
+    \item Each transition down the hierarchy is Markovian: we decode each latent
+          set of variables $\bh_t$ in terms of the previous latent variable
+          $\bh_{t-1}$.
+    \item Visually, this is simply VAEs stacked on top of each other
+          (see next slide).
+    \item One can think of such a model as a \textbf{recursive VAE}.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Mathematical Representation}
+  The \textbf{joint distribution} and \textbf{posterior} of a Markovian VAE:
+  \begin{align*}
+    p(\bx, \bh_{1:T})
+    &= p(\bh_T)\,p_{\btheta}(\bx|\bh_1)
+       \prod_{t=2}^{T} p_{\btheta}(\bh_{t-1}|\bh_t) \\[4pt]
+    q_{\bphi}(\bh_{1:T}|\bx)
+    &= q_{\bphi}(\bh_1|\bx)
+       \prod_{t=2}^{T} q_{\bphi}(\bh_t|\bh_{t-1})
+  \end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Back to the Marginal Probability}
+  We optimise the marginal log-probability:
+  \begin{align*}
+    \log p(\bx)
+    &= \log \int p(\bx, \bh_{1:T})\,d\bh_{1:T} \\
+    &= \log \int \frac{p(\bx, \bh_{1:T})\,q_{\bphi}(\bh_{1:T}|\bx)}
+                      {q_{\bphi}(\bh_{1:T}|\bx)}
+                      \,d\bh_{1:T}
+      \quad \scriptstyle\left(\text{multiply by }
+            \tfrac{q_{\bphi}}{q_{\bphi}}=1\right) \\
+    &= \log\,\mathbb{E}_{q_{\bphi}(\bh_{1:T}|\bx)}
+       \!\left[\frac{p(\bx, \bh_{1:T})}{q_{\bphi}(\bh_{1:T}|\bx)}\right]
+      \quad \scriptstyle(\text{definition of expectation}) \\
+    &\geq \mathbb{E}_{q_{\bphi}(\bh_{1:T}|\bx)}
+       \!\left[\log\frac{p(\bx, \bh_{1:T})}{q_{\bphi}(\bh_{1:T}|\bx)}\right]
+      \quad \scriptstyle(\text{Jensen's inequality})
+  \end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Markovian Hierarchical VAE (from Luo 2022)}
+  A Markovian hierarchical VAE with $T$ hierarchical latents.
+  The generative process is modelled as a Markov chain: each latent
+  $\bh_t$ is generated only from the previous latent $\bh_{t+1}$.
+  Here $\bm{z}$ denotes the latent variable $\bh$.
+
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{figures/figure1.png}
+  \end{center}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{ELBO for the Markovian Hierarchical VAE}
+  We obtain:
+  \begin{align*}
+    &\mathbb{E}_{q_{\bphi}(\bh_{1:T}|\bx)}
+      \!\left[\log\frac{p(\bx,\bh_{1:T})}{q_{\bphi}(\bh_{1:T}|\bx)}\right] \\
+    &= \mathbb{E}_{q_{\bphi}(\bh_{1:T}|\bx)}
+      \!\left[\log\frac{p(\bh_T)\,p_{\btheta}(\bx|\bh_1)
+        \prod_{t=2}^{T}p_{\btheta}(\bh_{t-1}|\bh_t)}
+        {q_{\bphi}(\bh_1|\bx)\prod_{t=2}^{T}q_{\bphi}(\bh_t|\bh_{t-1})}
+      \right]
+  \end{align*}
+  \vspace{4pt}
+  We will modify this equation when we discuss
+  \textbf{Variational Diffusion Models}.
+\end{frame}
+
+% ============================================================
+\section{Variational Diffusion Models}
+% ============================================================
+
+\begin{frame}{Variational Diffusion Models (VDM)}
+  The easiest way to think of a VDM is as a Markovian Hierarchical VAE
+  with \textbf{three key restrictions}:
+  \begin{enumerate}
+    \item The latent dimension is \textbf{exactly equal} to the data dimension.
+    \item The latent encoder structure at each timestep is \textbf{not learned};
+          it is pre-defined as a linear Gaussian model — a Gaussian distribution
+          centred around the output of the previous timestep.
+    \item The Gaussian parameters of the latent encoders vary over time
+          such that the \textbf{distribution of the final latent $p(\bx_T)$
+          is a standard Gaussian}.
+  \end{enumerate}
+  \vspace{6pt}
+  The VDM posterior is
+  \[
+    q(\bx_{1:T}|\bx_0) = \prod_{t=1}^{T} q(\bx_t|\bx_{t-1})
+  \]
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Second Assumption: Fixed Gaussian Encoder}
+  \begin{itemize}
+    \item The distribution of each latent variable in the encoder is a
+          Gaussian centred around its previous hierarchical latent.
+    \item The encoder structure at each timestep $t$ is \textbf{not learned};
+          it is fixed as a linear Gaussian model.
+    \item The mean and standard deviation can be set as hyperparameters,
+          or learned as parameters.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Parameterising the Gaussian Encoder}
+  \begin{block}{Encoder parameterisation}
+    \begin{itemize}
+      \item Mean: $\bmu_t(\bx_t) = \sqrt{\alpha_t}\,\bx_{t-1}$
+      \item Variance: $\bSigma_t(\bx_t) = (1-\alpha_t)\,\mathbf{I}$
+    \end{itemize}
+    The coefficients are chosen so that the variance of the latent variables
+    stays at a similar scale — the encoding process is \textbf{variance-preserving}.
+  \end{block}
+  \begin{block}{Note}
+    Alternate Gaussian parameterisations are allowed and lead to similar
+    derivations. The key point is that $\alpha_t$ is a (potentially learnable)
+    coefficient that can vary with hierarchical depth $t$.
+  \end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Encoder Transitions}
+  Mathematically, the encoder transitions are defined as
+  \[
+    q(\bx_t|\bx_{t-1})
+    = \mathcal{N}\!\left(\bx_t;\,\sqrt{\alpha_t}\,\bx_{t-1},\;
+      (1-\alpha_t)\,\mathbf{I}\right)
+  \]
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Third Assumption: Schedule and Joint Distribution}
+  From the third assumption, $\alpha_t$ evolves according to a fixed or
+  learnable schedule such that the final latent is Gaussian.
+
+  The \textbf{joint distribution} for a VDM:
+  \begin{align*}
+    p(\bx_{0:T})
+    &= p(\bx_T)\prod_{t=1}^{T} p_{\btheta}(\bx_{t-1}|\bx_t) \\
+    \text{where} \quad
+    p(\bx_T) &= \mathcal{N}(\bx_T;\,\bm{0},\,\mathbf{I})
+  \end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Noisification}
+  Collectively, these assumptions describe a steady
+  \textbf{noisification} of an image input over time:
+  \begin{itemize}
+    \item An image is progressively corrupted by adding Gaussian noise.
+    \item Eventually it becomes completely identical to pure Gaussian noise.
+  \end{itemize}
+  \vspace{4pt}
+  See illustration on the next slide.
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Noisification Process (from Luo 2022)}
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{figures/figure2.png}
+  \end{center}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Gaussian Modelling and Sampling}
+  \begin{itemize}
+    \item Encoder distributions $q(\bx_t|\bx_{t-1})$ are \textbf{not
+          parameterised} by $\bphi$ — they are completely modelled as
+          Gaussians with defined mean and variance at each timestep.
+    \item In a VDM we only learn the
+          \textbf{conditionals $p_{\btheta}(\bx_{t-1}|\bx_t)$}
+          to simulate new data.
+    \item \textbf{Sampling procedure:}
+          \begin{enumerate}
+            \item Sample Gaussian noise from $p(\bx_T)$.
+            \item Iteratively run the denoising transitions
+                  $p_{\btheta}(\bx_{t-1}|\bx_t)$ for $T$ steps.
+            \item Obtain a novel $\bx_0$.
+          \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Optimising the VDM}
+% ============================================================
+
+\begin{frame}{Optimising the Variational Diffusion Model (1/2)}
+  \begin{align*}
+    \log p(\bx)
+    &= \log \int p(\bx_{0:T})\,d\bx_{1:T} \\
+    &= \log\,\mathbb{E}_{q(\bx_{1:T}|\bx_0)}
+       \!\left[\frac{p(\bx_{0:T})}{q(\bx_{1:T}|\bx_0)}\right] \\
+    &\geq \mathbb{E}_{q(\bx_{1:T}|\bx_0)}
+       \!\left[\log\frac{p(\bx_{0:T})}{q(\bx_{1:T}|\bx_0)}\right] \\
+    &= \mathbb{E}_{q}
+       \!\left[\log\frac{p(\bx_T)\prod_{t=1}^{T}p_{\btheta}(\bx_{t-1}|\bx_t)}
+                        {\prod_{t=1}^{T}q(\bx_t|\bx_{t-1})}\right]
+  \end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Optimising the Variational Diffusion Model (2/2)}
+  Continuing the derivation:
+  \begin{align*}
+    \log p(\bx)
+    &\geq \mathbb{E}_{q(\bx_{1}|\bx_0)}
+          \!\left[\log p_{\btheta}(\bx_0|\bx_1)\right] \\
+    &\quad + \mathbb{E}_{q(\bx_{T-1},\bx_T|\bx_0)}
+          \!\left[\log\frac{p(\bx_T)}{q(\bx_T|\bx_{T-1})}\right] \\
+    &\quad + \sum_{t=1}^{T-1}
+          \mathbb{E}_{q(\bx_{t-1},\bx_t,\bx_{t+1}|\bx_0)}
+          \!\left[\log\frac{p_{\btheta}(\bx_t|\bx_{t+1})}
+                           {q(\bx_t|\bx_{t-1})}\right]
+  \end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Interpretations of the Three Terms}
+  \begin{enumerate}
+    \item \textbf{Reconstruction term}
+          $\mathbb{E}_{q(\bx_1|\bx_0)}\!\left[\log p_{\btheta}(\bx_0|\bx_1)\right]$\\
+          Predicts the log probability of the original data given the
+          first-step latent. Appears in vanilla VAEs; trained similarly.
+
+    \vspace{6pt}
+    \item \textbf{Prior matching term}
+          $\mathbb{E}_{q(\bx_{T-1}|\bx_0)}\!\left[D_{\mathrm{KL}}(q(\bx_T|\bx_{T-1})
+          \,\|\, p(\bx_T))\right]$\\
+          Minimised when the final latent distribution matches the Gaussian
+          prior. Requires \emph{no optimisation} (no trainable parameters);
+          effectively zero for large enough $T$.
+  \end{enumerate}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{The Consistency Term}
+  \begin{block}{Consistency term}
+    \[
+      \mathbb{E}_{q(\bx_{t-1},\bx_{t+1}|\bx_0)}
+      \!\left[D_{\mathrm{KL}}\!\left(q(\bx_t|\bx_{t-1})\,\Big\|\,
+      p_{\btheta}(\bx_t|\bx_{t+1})\right)\right]
+    \]
+  \end{block}
+  \begin{itemize}
+    \item Attempts to make the distribution at $\bx_t$ \textbf{consistent}
+          from both forward and backward processes.
+    \item A denoising step from a noisier image should match the
+          corresponding noising step from a cleaner image at every
+          intermediate timestep.
+    \item Minimised when $p_{\btheta}(\bx_t|\bx_{t+1})$ is trained to match
+          the Gaussian $q(\bx_t|\bx_{t-1})$.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Diffusion Models — ELBO Structure (from Luo 2022)}
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{figures/figure3.png}
+  \end{center}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Optimisation Cost}
+  \begin{itemize}
+    \item The cost is dominated by the \textbf{consistency term}, which must
+          be optimised over all timesteps $t$.
+    \item All three terms are computed as expectations and can be
+          approximated via Monte Carlo.
+    \item \textbf{Issue:} the consistency term is an expectation over two
+          random variables $\{\bx_{t-1},\bx_{t+1}\}$ for every timestep —
+          potentially high Monte Carlo variance.
+    \item Summing $T-1$ consistency terms can yield high variance for
+          large $T$.
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Diffusion Models in Practice}
+% ============================================================
+
+\begin{frame}{Advantages: Image Quality and Training Stability}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Image quality}
+        \begin{itemize}
+          \item Simple, efficient loss functions.
+          \item Generate highly realistic images.
+          \item Excel at closely matching the distribution of real images,
+                outperforming GANs.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Training stability}
+        \begin{itemize}
+          \item GANs often suffer from \textbf{mode collapse}
+                (limited output variety).
+          \item Diffusion models avoid this through their
+                \textbf{gradual data smoothing process}, leading to
+                more diverse outputs.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Input Types and Denoising DDPMs}
+  \begin{block}{Input types}
+    Diffusion models handle various input types and perform diverse
+    generative tasks:
+    \begin{itemize}
+      \item Text-to-image synthesis
+      \item Layout-to-image generation
+      \item Inpainting and super-resolution
+    \end{itemize}
+  \end{block}
+  \begin{block}{Denoising Diffusion Probabilistic Models (DDPMs)}
+    \begin{itemize}
+      \item Probabilistically remove noise from data.
+      \item During training: learn how noise is added and how to reverse it.
+      \item Outputs are not just noise-free — they closely resemble the
+            original data.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Techniques for Speeding Up Diffusion Models}
+  \begin{itemize}
+    \item Reverse diffusion in DDPM is \textbf{slow}: possibly up to 1000
+          steps.  According to Song et al.\ (2020), generating 50\,000 small
+          images with DDPM takes $\approx 20$~hours on an Nvidia 2080~Ti,
+          whereas a GAN takes less than a minute.
+    \item \textbf{Denoising Diffusion Implicit Models (DDIM):}
+          \begin{itemize}
+            \item Alternative to standard DDPM.
+            \item Needs \textbf{far fewer steps} to produce clear images
+                  from noisy data.
+            \item Stands out for its \textbf{efficiency and quality}.
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Applications of Diffusion Models}
+  Very diverse applications — among the most exciting:
+  \begin{itemize}
+    \item \textbf{Digital art creation} (DALL-E, Midjourney, Stable Diffusion)
+    \item Medical image synthesis and enhancement
+    \item Text-to-image generation
+    \item Video generation
+    \item Audio and music synthesis
+    \item Drug discovery (molecular generation)
+  \end{itemize}
+  \vspace{4pt}
+  See \href{https://www.superannotate.com/blog/diffusion-models}{SuperAnnotate blog}
+  for many application examples.
+\end{frame}
+
+% ============================================================
+\section{PyTorch Implementation (DDPM on MNIST)}
+% ============================================================
+
+\begin{frame}{PyTorch DDPM on MNIST — Overview}
+  \begin{block}{What the code covers}
+    \begin{enumerate}
+      \item Model definition (lightweight U-Net-style convolutional network)
+      \item Forward diffusion (adding noise over $T$ timesteps)
+      \item Reverse denoising process
+      \item Training loop
+      \item Sampling from the trained model
+    \end{enumerate}
+  \end{block}
+  A full diffusion model in under 200 lines of PyTorch.\\[4pt]
+  Adapted from:
+  \begin{itemize}
+    \item Jackson-Kang's PyTorch diffusion tutorial
+          (\href{https://github.com/Jackson-Kang/Pytorch-Diffusion-Model-Tutorial}{GitHub})
+    \item awjuliani's PyTorch DDPM implementation
+          (\href{https://github.com/awjuliani/pytorch-diffusion}{GitHub})
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Problem Statement}
+  \begin{itemize}
+    \item Diffusion models \textbf{gradually corrupt data} by adding
+          Gaussian noise over a sequence of timesteps.
+    \item They then learn to \textbf{reverse} this noising process with a
+          neural network.
+    \item The corruption schedule is typically \textbf{linear or cosine}
+          in variance.
+    \item During training, the network is optimised to
+          \textbf{predict the original noise} added at each timestep,
+          using a mean-squared error loss.
+    \item At inference: start from random noise and iteratively apply
+          the learned denoising steps.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{What is a U-Net?}
+  \begin{itemize}
+    \item UNet is a type of \textbf{convolutional neural network (CNN)}
+          architecture primarily used for image segmentation tasks.
+    \item Features an \textbf{encoder–decoder} structure with skip
+          connections that preserve spatial information.
+    \item Widely adopted in diffusion models as the backbone
+          \textbf{noise-prediction network}.
+  \end{itemize}
+  \vspace{4pt}
+  References:
+  \href{https://en.wikipedia.org/wiki/U-Net}{Wikipedia — U-Net},
+  \href{https://www.sciencedirect.com/topics/computer-science/u-net}{ScienceDirect — U-Net}
+\end{frame}
+\end{document}
+
