@@ -188,13 +188,15 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Diffusion models, discussion of codes and reminder from last week
 - GANs
 - Jupyter-notebook at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/ipynb/week15.ipynb, see also PDF file at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/pdf/week15.pdf  
-- Video of lecture and whiteboard notes to be added
+- Video of lecture at https://youtu.be/lT0lLXLOw-4
+- Whiteboard notes at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/HandwrittenNotes/2026/Notesweek15.pdf
 
 
 ## May 11-15:  Discussion of projects and summary of course
 - Thursday May 14 is a public holiday in Norway, no lecture
 
 ## May 18-22:  Discussion of projects
+- GANs, firs lecture, see slides from week 15 at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/pdf/week15.pdf
 - Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
 
 
