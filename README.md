@@ -196,8 +196,8 @@ https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week1/i
 - Thursday May 14 is a public holiday in Norway, no lecture
 
 ## May 18-22:  Discussion of projects
-- GANs, firs lecture, see slides from week 15 at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week15/pdf/week15.pdf
-- Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb/week16.ipynb  
+- GANs, first lecture
+- Summary slides at https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/pdf and jupyter-notebook https://github.com/CompPhysics/AdvancedMachineLearning/blob/main/doc/pub/week16/ipynb
 
 
 ## Recommended textbooks:
