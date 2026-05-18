@@ -56,7 +56,7 @@
 
 % ============================================================
 \title{Advanced Machine Learning for the Physical Sciences}
-\subtitle{FYS5429/9429}
+\subtitle{Summary FYS5429/9429}
 \author{Morten Hjorth-Jensen}
 \institute{Department of Physics, University of Oslo, Norway}
 \date{Spring semester 2026}
@@ -267,12 +267,11 @@
         \end{itemize}
       \end{block}
     \column{0.48\textwidth}
-      \begin{block}{Week 5: Architectures \& Codes}
+      \begin{block}{Week 5: Architectures }
         \begin{itemize}\itemsep1pt
           \item Classic architectures: LeNet, ResNet, U-Net
           \item Skip connections and residual learning
           \item CNNs for physics: images, fields, spectra
-          \item Code walkthrough and tuning
         \end{itemize}
       \end{block}
   \end{columns}
@@ -332,7 +331,6 @@
           \item Latent space visualisation
           \item Applications: order parameters,
                 phase classification, compression
-          \item Code walkthrough (Week 9)
         \end{itemize}
       \end{block}
   \end{columns}
@@ -408,7 +406,7 @@
 \end{frame}
 
 % ---- Week 12 -----------------------------------------------
-\begin{frame}{{\color{mlgold}\textbf{Week 12 (Apr 13--17)}\;---\;Energy-Based Models \& BM Codes}}
+\begin{frame}{{\color{mlgold}\textbf{Week 12 (Apr 13--17)}\;---\;Energy-Based Models}}
   \begin{columns}[T]
     \column{0.54\textwidth}
       \begin{block}{Energy-Based Models (Deeper Dive)}
@@ -565,11 +563,11 @@
   1    & Jan 19--23    & \disctext{Discriminative}
        & Course intro, NN basics, backpropagation, project discussion \\
   2    & Jan 26--30    & \disctext{Discriminative}
-       & NN codes, optimisers, regularisation, solving ODEs with NNs \\
+       & NN, optimisers, regularisation, solving ODEs with NNs \\
   3    & Feb 2--6      & \disctext{Discriminative}
        & Physics-Informed Neural Networks (PINNs) \\
   4--5 & Feb 9--20     & \disctext{Discriminative}
-       & Convolutional NNs: mathematics, architectures, codes \\
+       & Convolutional NNs: mathematics, architectures \\
   6--7 & Feb 23--Mar 6 & \disctext{Discriminative}
        & Recurrent NNs, LSTMs, backprop through time \\
   8--9 & Mar 9--20     & \disctext{Discriminative}
@@ -593,7 +591,7 @@
   11   & Apr 6--10     & \gentext{Generative}
        & Generative models overview, Boltzmann machines, MCMC, Gibbs \\
   12   & Apr 13--17    & \gentext{Generative}
-       & Energy-based models, RBM codes, wave-function ansatz \\
+       & Energy-based models, wave-function ansatz \\
   13   & Apr 20--24    & \gentext{Generative}
        & Variational autoencoders (VAEs), ELBO, reparameterisation \\
   14   & Apr 27--May 1 & \gentext{Generative}
@@ -637,6 +635,250 @@
     \textbf{practical implementation skills} to apply state-of-the-art
     deep learning methods to open problems in the physical sciences.
   \end{alertblock}
+\end{frame}
+
+% ============================================================
+%  PERSPECTIVES — FUTURE DIRECTIONS
+% ============================================================
+
+% ---- Perspectives: section divider -------------------------
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{1.4cm}
+    {\Huge\bfseries\color{mlred} Perspectives}\\[0.5em]
+    {\Large\color{mldark} Future Directions in Advanced ML}\\[0.3em]
+    {\normalsize\color{gray} For the Physical Sciences and Beyond}
+  \end{center}
+\end{frame}
+
+% ---- Perspectives: Physics & Chemistry ---------------------
+\begin{frame}{Perspectives --- Physics and Chemistry}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{Physics}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Many-body quantum systems:}
+                neural-network quantum states (NQS)
+                as variational ans\"{a}tze for ground
+                and excited states
+          \item \textbf{High-energy physics:}
+                jet tagging, event generation,
+                fast detector simulation with
+                GANs and diffusion models
+          \item \textbf{Astro- and cosmological data:}
+                field-level inference, gravitational-wave
+                denoising, CMB analysis with
+                score-based generative models
+          \item \textbf{Condensed matter:}
+                phase classification with CNNs,
+                ML interatomic potentials for MD
+        \end{itemize}
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{Chemistry}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Molecular generation:}
+                VAEs, diffusion models, and flow-matching
+                for de-novo drug and catalyst design
+          \item \textbf{Property prediction:}
+                graph neural networks (GNNs) on
+                molecular graphs: energies, spectra,
+                reaction rates
+          \item \textbf{Quantum chemistry:}
+                ML surrogates for DFT and CCSD(T);
+                PINNs for the electronic
+                Schr\"{o}dinger equation
+          \item \textbf{Reaction pathways:}
+                transformers for retrosynthesis and
+                transition-state prediction
+        \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Perspectives: Mathematics & Geoscience ----------------
+\begin{frame}{Perspectives --- Mathematics and Geoscience}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{Mathematics}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Operator learning:}
+                DeepONet and Fourier Neural Operators
+                for mesh-free, resolution-independent
+                PDE solvers
+          \item \textbf{Inverse problems:}
+                posterior sampling with score-based
+                diffusion; learned regularisers
+                replacing hand-crafted priors
+          \item \textbf{Symbolic regression:}
+                discovering equations and conservation
+                laws directly from data
+          \item \textbf{Uncertainty quantification:}
+                Bayesian deep learning and conformal
+                prediction for rigorous error bounds
+        \end{itemize}
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{Geoscience}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Weather and climate:}
+                data-driven emulators (GraphCast,
+                FourCastNet) for fast global forecasts;
+                hybrid physics--ML climate models
+          \item \textbf{Seismology:}
+                CNNs and RNNs for earthquake detection,
+                waveform inversion, and
+                induced-seismicity monitoring
+          \item \textbf{Remote sensing:}
+                multi-modal transformers for land use,
+                ice-sheet dynamics, and
+                ocean surface reconstruction
+          \item \textbf{Subsurface imaging:}
+                generative models for reservoir
+                characterisation and seismic
+                interpretation
+        \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Perspectives: Bioscience ------------------------------
+\begin{frame}{Perspectives --- Bioscience}
+  \begin{columns}[T]
+    \column{0.54\textwidth}
+      \begin{block}{Structural and Molecular Biology}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Protein structure prediction:}
+                AlphaFold2 and successors combine
+                transformers with equivariant GNNs;
+                diffusion models (RFDiffusion) for
+                \emph{de-novo} protein design
+          \item \textbf{RNA and DNA:}
+                sequence-to-function models,
+                splicing prediction, epigenomics
+          \item \textbf{Drug discovery:}
+                generative molecular design,
+                binding affinity prediction,
+                multi-target optimisation
+        \end{itemize}
+      \end{block}
+    \column{0.43\textwidth}
+      \begin{block}{Systems and Medical Biology}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Single-cell genomics:}
+                VAEs and diffusion for cell-type
+                discovery and trajectory inference
+          \item \textbf{Medical imaging:}
+                segmentation and anomaly detection
+                with CNNs and score-based models;
+                synthetic data for rare-disease
+                augmentation
+          \item \textbf{Biophysical simulations:}
+                ML force fields (ANI, NequIP)
+                and coarse-grained MD for proteins
+                and membranes
+        \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% ---- Perspectives: Agentic AI & RL -------------------------
+\begin{frame}{Perspectives --- Agentic AI and Reinforcement Learning}
+  \begin{columns}[T]
+    \column{0.54\textwidth}
+      \begin{block}{Reinforcement Learning for the Physical Sciences}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Quantum control:}
+                RL agents learn pulse sequences for
+                high-fidelity gate synthesis and
+                robust quantum error correction
+          \item \textbf{Experiment design:}
+                active learning with RL for
+                adaptive data acquisition in
+                particle physics and materials science
+          \item \textbf{Molecular design:}
+                RL-driven exploration of chemical
+                space guided by property reward
+                functions
+          \item \textbf{Plasma and fusion:}
+                real-time magnetic confinement
+                via deep RL policies
+                (DeepMind / ITER)
+        \end{itemize}
+      \end{block}
+    \column{0.43\textwidth}
+      \begin{block}{Agentic AI in Science}
+        \begin{itemize}\itemsep2pt
+          \item \textbf{Autonomous research loops:}
+                LLM-based agents that formulate
+                hypotheses, run simulations, interpret
+                results, and iterate without
+                human intervention
+          \item \textbf{Multi-agent systems:}
+                specialised agents for literature
+                search, code generation, data
+                analysis, and experimental
+                planning collaborate in a shared
+                scientific workflow
+          \item \textbf{Human-in-the-loop science:}
+                agentic pipelines as co-pilots
+                for accelerating discovery
+                in drug design, materials screening,
+                and climate modelling
+        \end{itemize}
+      \end{block}
+  \end{columns}
+  \vspace{3pt}
+  \begin{alertblock}{Key Challenge}
+    Reliability, interpretability, and physical consistency
+    remain active research frontiers for RL and agentic systems.
+  \end{alertblock}
+\end{frame}
+
+% ---- Perspectives: GNNs & Foundation Models ----------------
+\begin{frame}{Perspectives --- Graph Networks and Foundation Models}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{Graph Neural Networks}
+        \begin{itemize}\itemsep2pt
+          \item Natural representation of molecules,
+                crystals, interaction networks,
+                and complex systems
+          \item \textbf{Equivariant GNNs}
+                (SE(3)-Transformers, NequIP, MACE)
+                enforce physical symmetries exactly
+          \item Applications: molecular force fields,
+                particle-physics event reconstruction,
+                social and biological networks
+          \item \textbf{Open challenge:}
+                scaling equivariant architectures
+                to very large systems efficiently
+        \end{itemize}
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{Foundation Models and Transfer Learning}
+        \begin{itemize}\itemsep2pt
+          \item Large pre-trained models (ESM-2,
+                ChemBERTa, ClimaX, AstroCLIP)
+                transfer to downstream science tasks
+                with little labelled data
+          \item \textbf{Scientific LLMs:}
+                models fine-tuned on papers, code,
+                and experimental data for literature
+                synthesis and hypothesis generation
+          \item \textbf{Multi-modal learning:}
+                joint text, structure, spectrum, and
+                image representations for universal
+                scientific models
+        \end{itemize}
+      \end{block}
+  \end{columns}
+  \vspace{3pt}
+  \begin{exampleblock}{Outlook}
+    The frontier: models that are simultaneously
+    \textbf{data-efficient}, \textbf{physically interpretable},
+    and \textbf{generalisable} across scientific disciplines.
+  \end{exampleblock}
 \end{frame}
 
 \end{document}
